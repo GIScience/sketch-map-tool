@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <script src="../static/scripts/progress.js"></script>
+        <link rel="stylesheet" href="../static/style/progress.css"/>
+        {% if RESULTS|length == 0 %}
+            <title>
+                Sketch Map Tool | Status
+            </title>
+        {% else %}
+            <title>
+                FINISHED | Sketch Map Tool
+            </title>
+        {% endif %}
+
+    </head>
+    <body onload="refresh(5000);">
+        <h1>Status for request <span style="color:Crimson;">{{ NAME }}</span>
+        {% if BBOX != '' %}
+            For area <span style="color:Crimson;">{{BBOX}}</span>
+        {% endif %}
+        :</h1>
+        {% if RESULTS|length == 0 %}
+            <progress max="{{ NR_OF_STEPS }}" value="{{ STEPS_COMPLETED }}"> {{PERCENTAGE}} </progress>
+        {% else %}
+            <progress max="{{ NR_OF_STEPS }}" value="{{ NR_OF_STEPS }}"> 100% </progress>
+        {% endif %}
+        <hr>
+        {% if ERROR is not none %}
+            <script>
+                    stopRefresh();
+            </script>
+            <h2 style="color:red">Failed | {{ ERROR }}</h2>
+            We are working on improving the processes to avoid such errors in the future.<br>
+            For the moment, you can check your inputs and try it again - in some cases it will work then. 
+        {% else %}
+            {% if RESULTS|length == 0 %}
+                <div>Your request is still being processed. Please stay on this page or save the URL/create a bookmark
+                    in your browser to come back later.</div>
+            {% else %}
+                <script>
+                    stopRefresh();
+                </script>
+                <div>Your result files are ready:<br/></div>
+                {% for result in RESULTS %}
+                    <h2>• <a href="{{result.link}}" target="_blank">{{ result.name }}</a></h2>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+        <hr>
+        <div class="console">
+            <code>
+                {% for output in OUTPUTS %}
+                    {{output}}<br/>
+                {% endfor %}
+            </code>
+        </div>
+    </body>
+</html>

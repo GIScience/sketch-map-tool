@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sketch Map Tool Prototype</title>
+    <link rel="stylesheet" href="./static/style/style.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+           integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+           crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css"
+          integrity="sha384-TFSI7AIdQ9zVb3hHsvwWiDI8qbCF4+Bu/KUwawU1WGf9gVOwTBKz4exUQehTrxKE"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.3.2/dist/geosearch.css"
+          integrity="sha384-+I1aZAR/YsofuqHbw/Ex307aT6jhgTJ6hFBfK2MNspx5WFjrvsbYtC8l0ugf1/zq"
+          crossorigin="anonymous">
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"
+            integrity="sha384-nKbugTwvdlM597uQWI7vPF0jEBd1IekNb16CPijHapeOFyqXmpvwYISwiZmyhg7m"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet-geosearch@3.3.2/dist/geosearch.umd.js"
+            integrity="sha384-1QUvBElQH3hRjI9+M4FwD47Qf/UoxnmEYk032eA3zts7OCxGPOoMhR3TKeu5rL4C"
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="./static/scripts/map_management.js"></script>
+    <script src="./static/scripts/feature_not_available.js"></script>
+</head>
+<body style="text-align: center">
+    <h1>Sketch Map Tool Prototype - Analyses</h1>
+    <div class="container border">
+        <header class="d-flex justify-content-center" style="margin: 10px;">
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a href="../" class="nav-link">Info</a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Analyses</a></li>
+                <li class="nav-item" style="background:lightgrey;">
+                    <a href="#" onclick="showMsgNotAvailable();" class="nav-link">Map generation</a>
+                </li>
+                <li class="nav-item" style="background:lightgrey;">
+                    <a  href="#" onclick="showMsgNotAvailable();"  class="nav-link">Upload sketch maps</a>
+                </li>
+            </ul>
+        </header>
+    </div>
+    <br><br>
+    {% if msg|length != 0 %}
+        <div class="card text-dark bg-warning mb-3" style="max-width: 18rem; margin: 0 auto;">
+          <div class="card-header">Info</div>
+          <div class="card-body">
+            <p class="card-text">{{ msg }}</p>
+          </div>
+        </div>
+    {% endif %}
+    <div class="card" style="width: 70%; margin:0 auto; text-align: left">
+        <div class="card-body">
+            <div style="display: grid;">
+              <div class="row">
+                <div style="width: 40%;">
+                  <div id="map"></div>
+                  <script>initMap();</script>
+                </div>
+                <div style="width: 20%;">
+                </div>
+                <div style="width: 40%;">
+                   <form method="post" enctype="multipart/form-data">
+                       <div style="display: inline-flex;">
+                           <h2>Study Area</h2>&nbsp;&nbsp;
+                           <button class="btn btn-secondary btn-lg" type="button" data-toggle="modal"
+                                   data-target="#bboxInputInfo">?</button>
+                       </div>
+                       <br><br>
+                       {{bbox_form.bbox_input(rows=7, cols=50)}}
+                      <br><br>
+                      <button type="button" class="btn btn-secondary" onclick="zoomToSelection(mapContainer)">
+                          Zoom to selected area</button>
+                      <br><br>
+                       <div class="form-check" style="display: inline-flex;">
+                          <input class="form-check-input" type="checkbox" value="" id="adjustToPaperFormat" checked>
+                          <label class="form-check-label" for="adjustToPaperFormat">
+                            Adjust the bounding box ratio to a certain paper format
+                              <button class="btn btn-secondary btn-sm" type="button" data-toggle="modal"
+                                   data-target="#formatAdjustmentInfo">?</button>
+                          </label>
+                       </div>
+                       <select id="paperFormatSelection" class="form-select" aria-label="Choose a paper format">
+                          <option value="a0">A0</option>
+                          <option value="a1">A1</option>
+                          <option value="a2">A2</option>
+                          <option value="a3">A3</option>
+                          <option value="a4" selected>A4</option>
+                          <option value="a5">A5</option>
+                          <option value="letter">Letter</option>
+                          <option value="legal">Legal</option>
+                          <option value="tabloid">Tabloid</option>
+                       </select>
+                       <br><br>
+                       <button type="submit" class="btn btn-primary btn-lg">Analyse</button>
+                   </form>
+                </div>
+              </div>
+            </div>
+            {% if outputs|length != 0 %}
+                <br><br>
+                <div class="card text-white bg-success mb-3" style="max-width: 18rem; margin: 0 auto;">
+                  <div class="card-header">Result Status</div>
+                  <div class="card-body">
+                    <ul id="resultList" style="list-style-type:none;">
+                      {% for key, value in outputs.items() %}
+                        <li><a href="{{value}}" target="_blank"> {{key}} </a> </li>
+                      {% endfor %}
+                    </ul>
+                </div>
+                <script>
+                    // Automatically scroll to status page links:
+                    document.getElementById("resultList").scrollIntoView();
+                </script>
+              {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Infobox bbox input -->
+    <div class="modal fade" id="bboxInputInfo" tabindex="-1" role="dialog" aria-labelledby="bboxInputInfoTitle"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="bboxInputInfoTitle">Bounding Box Input</h5>
+          </div>
+          <div class="modal-body" style="text-align: left">
+              Enter here the <a href="https://wiki.openstreetmap.org/wiki/Bounding_Box" target="_blank">bounding boxes</a>
+              you want to analyse. Please use the following format:<br>
+              <pre>lon1,lat1,lon2,lat2;</pre>
+              If you want to analyse multiple bboxes, separate them with ';'.<br>
+              E.g.:
+              <pre>8.69142561,49.4102821,8.69372067,49.4115517;8.68125891,50.1068951,8.68857374,50.1108835;</pre>
+              <br>
+              If you do not have exact coordinates, you can also simply draw a bounding box on the map and the coordinates
+              will be added automatically for you.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Infobox paper format adjustment -->
+    <div class="modal fade" id="formatAdjustmentInfo" tabindex="-1" role="dialog" aria-labelledby="formatAdjustmentInfoTittle"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formatAdjustmentInfoTittle">Adjustment to paper format</h5>
+          </div>
+          <div class="modal-body" style="text-align: left">
+              If you want to analyse the same bounding boxes for which you will print sketch maps, it might make sense to
+              adjust the ratio of the bounding box to optimally fill the paper format, your sketch maps will be printed on.
+              <br><br>
+              This only affects bounding boxes drawn on the map, you can still enter different coordinates by hand.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Infobox custom message -->
+    <div class="modal fade" id="customMessage" tabindex="-1" role="dialog" aria-labelledby="customMessageTitle"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="customMessageTitle">Info</h5>
+          </div>
+          <div class="modal-body" style="text-align: left">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</body>
+</html>
