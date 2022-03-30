@@ -61,7 +61,17 @@ choice.
 To make the installation more easy, we created a [Dockerfile](Dockerfile) based on which you can build a container 
 running the tool. 
 #### 1a. Install Docker
-If you do not have Docker installed, you can, for example, install it with [Docker Desktop](https://www.docker.com/get-started/).
+If you do not have Docker installed, you can, for example, install it with [Docker Desktop](https://www.docker.com/get-started/).  
+
+If you click on Docker Desktop under Windows and get an error message like `Access denied`, do the following (otherwise
+start Docker and skip to 1b.)  
+  
+[Here](https://docs.docker.com/desktop/windows/install/#install-docker-desktop-on-windows) you see the Docker Desktop 
+installation guide for Windows (the guides for other operating systems are linked on the page as well). Relevant for the
+the error is point 5 under "*Install Docker Desktop on Windows*": You need to open Computer Management as an 
+administrator and add the user you want to start docker with to `Local Users and Groups` -> `Groups` -> `docker-users`.
+You find the Computer Management in Windows by doing a right-click on the Windows symbol or by pressing 
+`Windows key` + `R` and pasting `lusrmgr.msc` before clicking `OK`
 
 #### 1b. Build the image
 Start your commandline/terminal and go to the directory in which the file `Dockerfile` is stored.  
