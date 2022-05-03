@@ -7,9 +7,7 @@ Welcome to this repository containing the code of a prototype of the Sketch Map 
 While we are working on a more polished and advanced version (including additional features, a better design, 
 translations and a cleaner code base, tests for all features), we want to give you the opportunity to already use the 
 core features of the Sketch Map Tool and build your own projects based on it. Therefore, we published this prototype 
-version. Feel free to use it as permitted by the [GNU Affero General Public License v3.0](LICENSE). This license only
-covers the Sketch Map Tool code and original resources, other parts might be licensed differently. You are, for example,
-not allowed to use the included logos in any way without permission of the respective owner.
+version. Feel free to use it as permitted by the [GNU Affero General Public License v3.0](LICENSE).
   
 If you use this tool or parts of it for scientific purposes, please cite the paper in which the tool
 was originally presented:  
@@ -21,7 +19,7 @@ was originally presented:
 2. [Structure](#structure-of-the-project)
 3. [How to install](#how-to-install)
 4. [How to contribute](#how-to-contribute)
-5. [Funders](#funders)
+5. [Funding](#funding)
 6. [Possible problems and their solutions](#possible-problems-and-their-solutions)
 
 
@@ -30,7 +28,7 @@ was originally presented:
 This tool has been developed in the 
 [Waterproofing Data Project](https://warwick.ac.uk/fac/arts/schoolforcross-facultystudies/igsd/research/waterproofingdata/)
 at [GIScience of Heidelberg University](https://www.geog.uni-heidelberg.de/gis/index_en.html) with the support of 
-multiple [funders](#funders). 
+multiple [funders](#funding). 
 It was developed to provide a tool that supports the whole workflow of using sketch maps in the field, e.g. for flood 
 mapping. This workflow typically consists of three parts:  
 * Before a study is conducted, the data on which the maps are based are inspected to assess whether using maps based on
@@ -107,14 +105,18 @@ docker rm sketch-maps
 ```
 
 
-## Funders  
-![](static/img/logo_fona.png)
-![](static/img/logo_bmbf.png)
-![](static/img/logo_belmont_forum.png)
-![](static/img/logo_norface.png)
-![](static/img/logo_drk.png)
+## Funding
+This tool has been developed in the project T2S Waterproofing Data which is financially supported by the Belmont Forum
+and NORFACE Joint Research Programme on Transformations to Sustainability, co-funded by DLR/BMBF (Federal Ministry of
+Education and Research) as part of its Social-Ecological Research funding priority, ESRC/Global Challenges Research
+Fund (ES/S006982/1), FAPESP and the European Commission through Horizon 2020. Additional work on the Sketch Map Tool has
+been financially supported by the German Red Cross. The ongoing work takes place in the Heidelberg Institute for
+Geoinformation Technology.
 
-
+## How to contribute
+We are currently working on adding the remaining features concerning the map creation and uploading of marked sketch 
+maps. If you discover any bugs or want to refactor something, we are of course very happy about your pull request. We 
+are also grateful, if you discover a bug or other problems and notify us through an issue.
 
 ## Possible problems and their solutions
 If the map is not displayed correctly, please check the browser console whether `leaflet-geoman.min.js` could not be 
