@@ -20,7 +20,6 @@ was originally presented:
 3. [How to install](#how-to-install)
 4. [How to contribute](#how-to-contribute)
 5. [Funding](#funding)
-6. [Possible problems and their solutions](#possible-problems-and-their-solutions)
 
 
 ## Information about the project
@@ -117,8 +116,3 @@ Geoinformation Technology.
 We are currently working on adding the remaining features concerning the map creation and uploading of marked sketch 
 maps. If you discover any bugs or want to refactor something, we are of course very happy about your pull request. We 
 are also grateful, if you discover a bug or other problems and notify us through an issue.
-
-## Possible problems and their solutions
-If the map is not displayed correctly, please check the browser console whether `leaflet-geoman.min.js` could not be 
-loaded. This might be caused by an update changing the hash of the file.  
-In this case you need to update the integrity attribute (or of course simply remove it if you want)
