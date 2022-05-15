@@ -25,7 +25,7 @@ def get_general_score(results: List[AnalysisResult]) -> QualityLevel:
     return QualityLevel(avg_score)
 
 
-def results_to_html(results: List[AnalysisResult], pdf_link: str, bbox: Bbox) -> str:
+def results_to_html(results: List[AnalysisResult], pdf_link: str, bbox: Bbox) -> str:  # noqa: C901
     """
     Generate an HTML page presenting the given results.
 

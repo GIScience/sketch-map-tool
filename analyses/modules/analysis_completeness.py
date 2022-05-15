@@ -133,7 +133,7 @@ class CompletenessAnalysis(Analysis):
         output_path = self.plot_location + self.plot_name
         fig.savefig(output_path)
 
-    def run(self, queue: multiprocessing.Queue = None) -> AnalysisResult:
+    def run(self, queue: multiprocessing.Queue = None) -> AnalysisResult:  # noqa: C901
         """
         Inspect the saturation, i.e. completeness of OSM feature mapping
 

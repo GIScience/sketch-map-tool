@@ -26,7 +26,7 @@ class BboxForm(Form):
                                )
 
 
-def create_app():
+def create_app():  # noqa: C901
     """
     Create the Flask app
     """
