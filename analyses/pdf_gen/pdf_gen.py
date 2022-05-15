@@ -87,7 +87,7 @@ def add_result_page(result: AnalysisResult,
     canv.setFont(TEXT_FONT, TEXT_FONT_SIZE)
     style = ParagraphStyle(name="_", fontSize=TEXT_FONT_SIZE, fontName=TEXT_FONT)
     text_par = Paragraph(text, style=style)
-    w, h = text_par.wrapOn(canv, RESULT_TEXT_WIDTH, RESULT_TEXT_HEIGHT)  # noqa
+    w, h = text_par.wrapOn(canv, RESULT_TEXT_WIDTH, RESULT_TEXT_HEIGHT)  # pylint: disable=unused-variable,line-too-long  # noqa
     text_par.drawOn(canv, RESULT_TEXT_X, RESULT_TEXT_Y-h)
     canv.setStrokeColorRGB(*INFO_BOX_RGB)
     canv.setLineWidth(INFO_BOX_MARGIN)
@@ -218,7 +218,7 @@ def add_contents_page(canv: canvas.Canvas, contents: List[Tuple[str, int]]) -> N
         chapter_count += 1
     style = ParagraphStyle(name="_", fontSize=ITEMS_FONT_SIZE, fontName=ITEMS_FONT)
     contents_par = Paragraph(contents_str, style=style)
-    w, h = contents_par.wrapOn(canv, ITEMS_PARAGRAPH_WIDTH, ITEMS_PARAGRAPH_HEIGHT)  # noqa
+    w, h = contents_par.wrapOn(canv, ITEMS_PARAGRAPH_WIDTH, ITEMS_PARAGRAPH_HEIGHT)  # pylint: disable=unused-variable,line-too-long  # noqa
     contents_par.drawOn(canv, CONTENTS_X, ITEMS_PARAGRAPH_Y-h)
 
 

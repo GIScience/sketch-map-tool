@@ -118,7 +118,7 @@ class CurrentnessAnalysis(Analysis):
         ... "properties" : {
         ... "@osmId" : "way/135681294",
         ... "@validFrom" : "2016-01-01T00:00:00Z",
-        ... "@validTo" : "2016-02-09T19:58:33Z", # Time shorter than maximum validTo -> deleted -> not considered  # noqa
+        ... "@validTo" : "2016-02-09T19:58:33Z", # Time shorter than maximum validTo -> deleted -> not considered  # pylint: disable=line-too-long  # noqa
         ... "building" : "contact_line"
         ... }
         ... }, {
