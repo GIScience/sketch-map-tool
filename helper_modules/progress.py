@@ -79,7 +79,7 @@ def get_status_updates(result_path: str) -> List[str]:
     """
     if "." not in result_path:
         raise InvalidResultPathException()
-    status_path = result_path[:result_path.rindex('.')] + ".status"
+    status_path = result_path[:result_path.rindex(".")] + ".status"
     if not os.path.exists(status_path):
         raise NoStatusFileException()
     with open(status_path, "r", encoding="utf8") as status_file:

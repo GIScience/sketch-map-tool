@@ -150,8 +150,8 @@ class SourcesAnalysis(Analysis):
         df.rename({"@validTo": "validTo"}, axis=1, inplace=True)
         df["validTo"] = df.apply(lambda row: np.datetime64(str(row.validTo).replace("Z", "")),
                                  axis=1)
-        max_validTo = max(df["validTo"])  # noqa
-        df.drop(df[df.validTo < max_validTo].index, inplace=True)
+        max_validto = max(df["validTo"])
+        df.drop(df[df.validTo < max_validto].index, inplace=True)
 
         if "source" not in df.keys():
             result = AnalysisResult("No source information found. Thus, inspection of sources is "

@@ -27,6 +27,9 @@ class BboxForm(Form):
 
 
 def create_app():
+    """
+    Create the Flask app
+    """
     app = Flask(__name__)
 
     @app.route("/", methods=["GET", "POST"])

@@ -168,11 +168,11 @@ class CurrentnessAnalysis(Analysis):
                                  axis=1)
         df["validFrom"] = df.apply(lambda row: np.datetime64(str(row.validFrom).replace("Z", "")),
                                    axis=1)
-        max_validTo = max(df["validTo"])  # noqa
+        max_validto = max(df["validTo"])
 
         # Remove all features that have been deleted (are not valid at the time of the analysis
         # anymore) from the dataframe
-        df.drop(df[df.validTo < max_validTo].index, inplace=True)
+        df.drop(df[df.validTo < max_validto].index, inplace=True)
 
         if len(df.index) == 0:
             if self.key is None:
