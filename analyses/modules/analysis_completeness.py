@@ -16,6 +16,7 @@
                 (Barron, Neis, & Zipf, 2014,
                 https://onlinelibrary.wiley.com/doi/full/10.1111/tgis.12073)
 """
+# pylint: disable=duplicate-code
 import multiprocessing
 import matplotlib.pyplot as plt
 from typing import List, Tuple
@@ -142,11 +143,11 @@ class CompletenessAnalysis(Analysis):
         """
         if self.key:
             update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES['saturation_s'] +
+                            update=STATUS_UPDATES_ANALYSES["saturation_s"] +
                             f" for key: {self.key}")
         else:
             update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES['saturation_s'])
+                            update=STATUS_UPDATES_ANALYSES["saturation_s"])
         if self.key:
             ohsome_response = self.request(self.measure, bboxes=str(self.bbox), time=self.time,
                                            keys=self.key, types="node,way").json()
@@ -266,9 +267,9 @@ class CompletenessAnalysis(Analysis):
             queue.put(result)
         if self.key:
             update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES['saturation_f'] +
+                            update=STATUS_UPDATES_ANALYSES["saturation_f"] +
                             f" for key: {self.key}")
         else:
             update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES['saturation_f'])
+                            update=STATUS_UPDATES_ANALYSES["saturation_f"])
         return result

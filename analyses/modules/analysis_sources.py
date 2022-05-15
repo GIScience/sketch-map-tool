@@ -6,7 +6,7 @@
              Mapping." (Klonner, Hartmann, Dischl, Djami, Anderson, Raifer, Lima-Silva, Castro
              Degrossi, Zipf, Porto de Albuquerque, 2021, https://doi.org/10.3390/ijgi10030130)
 """
-
+# pylint: disable=duplicate-code
 import multiprocessing
 from typing import List
 import matplotlib.pyplot as plt
@@ -92,8 +92,8 @@ class SourcesAnalysis(Analysis):
 
         fig = plt.figure(figsize=(7, 7))
         plot = fig.add_subplot(111)
-        plot.pie(values, autopct='%.2f', textprops={'color': 'w', 'fontsize': 'xx-large'})
-        lgd = plot.legend(labels, title='Names', loc='lower right', bbox_to_anchor=(.8, 0, 0.5, 1),
+        plot.pie(values, autopct="%.2f", textprops={"color": "w", "fontsize": "xx-large"})
+        lgd = plot.legend(labels, title="Names", loc="lower right", bbox_to_anchor=(.8, 0, 0.5, 1),
                           fontsize=12)
         plot.set_title("Shares of specified sources among all features")
         fig.savefig(self.plot_location + self.plot_name, bbox_inches="tight",
@@ -137,20 +137,20 @@ class SourcesAnalysis(Analysis):
         >>> result.level.value, result.importance
         (1, 0)
         >>> result.message # doctest: +ELLIPSIS
-        'There is at least one source accounting for a substantial share of all features, which you might want to inspect...
-        >>> result.suggestion
-        "You might want to check the following sources, which account for a substantial share of all features: 'brain' (50.0 %)."
+        'There is at least one source accounting for a substantial share of all features,...
+        >>> result.suggestion[65:]
+        "a substantial share of all features: 'brain' (50.0 %)."
         """
         update_progress(self.status_file_path, STATUS_UPDATES_ANALYSES["sources_s"])
         df = pd.DataFrame([i["properties"] for i in self.data])
 
         # Remove older versions of features and features that have been deleted:
         df = df.apply(pd.Series)
-        df = df.drop_duplicates(subset=['@osmId'], keep='last')
+        df = df.drop_duplicates(subset=["@osmId"], keep="last")
         df.rename({"@validTo": "validTo"}, axis=1, inplace=True)
-        df["validTo"] = df.apply(lambda row: np.datetime64(str(row.validTo).replace('Z', '')),
+        df["validTo"] = df.apply(lambda row: np.datetime64(str(row.validTo).replace("Z", "")),
                                  axis=1)
-        max_validTo = max(df['validTo'])
+        max_validTo = max(df["validTo"])  # noqa
         df.drop(df[df.validTo < max_validTo].index, inplace=True)
 
         if "source" not in df.keys():
@@ -161,7 +161,7 @@ class SourcesAnalysis(Analysis):
                 queue.put(result)
             return result
 
-        source_shares = df['source'].value_counts(normalize=True, dropna=False) * 100
+        source_shares = df["source"].value_counts(normalize=True, dropna=False) * 100
         source_shares_dict = source_shares.to_dict()
         relevant_sources = ""
         for source, share in source_shares_dict.items():

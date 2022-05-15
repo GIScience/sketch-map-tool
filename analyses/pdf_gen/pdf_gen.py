@@ -3,6 +3,7 @@
 Functions to create a pdf file containing information and plots regarding sketch map analyses'
 results
 """
+# pylint: disable=too-many-locals,invalid-name
 
 import os
 import json
@@ -86,7 +87,7 @@ def add_result_page(result: AnalysisResult,
     canv.setFont(TEXT_FONT, TEXT_FONT_SIZE)
     style = ParagraphStyle(name="_", fontSize=TEXT_FONT_SIZE, fontName=TEXT_FONT)
     text_par = Paragraph(text, style=style)
-    w, h = text_par.wrapOn(canv, RESULT_TEXT_WIDTH, RESULT_TEXT_HEIGHT)
+    w, h = text_par.wrapOn(canv, RESULT_TEXT_WIDTH, RESULT_TEXT_HEIGHT)  # noqa
     text_par.drawOn(canv, RESULT_TEXT_X, RESULT_TEXT_Y-h)
     canv.setStrokeColorRGB(*INFO_BOX_RGB)
     canv.setLineWidth(INFO_BOX_MARGIN)
@@ -172,7 +173,7 @@ def add_overview_page(results: List[AnalysisResult],
     for line in lines:
         if len(line.words[0].text) == 0:
             continue
-        if line.words[0].text[0] == '•':
+        if line.words[0].text[0] == "•":
             continue
         line.words[0].text = "   "+line.words[0].text
     sugg_y = SUGGESTIONS_Y-h
@@ -194,7 +195,7 @@ def add_contents_page(canv: canvas.Canvas, contents: List[Tuple[str, int]]) -> N
     TITLE_Y = 750
     CONTENTS_X = 50
 
-    ITEMS_FILLER = '.'
+    ITEMS_FILLER = "."
     ITEMS_FILLER_LENGTH = 150
     ITEMS_FONT = "Times-Roman"
     ITEMS_FONT_SIZE = 12
@@ -213,11 +214,11 @@ def add_contents_page(canv: canvas.Canvas, contents: List[Tuple[str, int]]) -> N
         str_width = stringWidth(first_part, ITEMS_FONT, ITEMS_FONT_SIZE)
         nr_fill_chars = ITEMS_FILLER_LENGTH - round(str_width/fill_char_width)
         contents_str += f"{first_part} {str(content[1]).rjust(nr_fill_chars, ITEMS_FILLER)}"\
-                        .replace(' ', "&nbsp;")+"<br/><br/>"
+                        .replace(" ", "&nbsp;")+"<br/><br/>"
         chapter_count += 1
     style = ParagraphStyle(name="_", fontSize=ITEMS_FONT_SIZE, fontName=ITEMS_FONT)
     contents_par = Paragraph(contents_str, style=style)
-    w, h = contents_par.wrapOn(canv, ITEMS_PARAGRAPH_WIDTH, ITEMS_PARAGRAPH_HEIGHT)
+    w, h = contents_par.wrapOn(canv, ITEMS_PARAGRAPH_WIDTH, ITEMS_PARAGRAPH_HEIGHT)  # noqa
     contents_par.drawOn(canv, CONTENTS_X, ITEMS_PARAGRAPH_Y-h)
 
 

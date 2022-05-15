@@ -31,6 +31,7 @@
              Mapping." (Klonner, Hartmann, Dischl, Djami, Anderson, Raifer, Lima-Silva, Castro
              Degrossi, Zipf, Porto de Albuquerque, 2021, https://doi.org/10.3390/ijgi10030130)
 """
+# pylint: disable=duplicate-code
 import json
 import multiprocessing
 from typing import Union, Dict
@@ -193,7 +194,7 @@ class LandmarkAnalysis(Analysis):
             percentage = round(100 * self.density[key] / self.density_sum, 2)
             shares_with_labels.append((percentage, f"{self.plot_labels[key]} ({percentage}%)"))
 
-        for pair in shares_with_labels:
+        for pair in shares_with_labels.copy():
             if pair[0] < self.percent_threshold_for_plot:
                 shares_with_labels.remove(pair)
 
@@ -203,8 +204,8 @@ class LandmarkAnalysis(Analysis):
 
         fig = plt.figure(figsize=(7, 7))
         plot = fig.add_subplot(111)
-        plot.pie(data, autopct='%.0f%%', textprops={'color': 'w', 'fontsize': 'xx-large'})
-        lgd = plot.legend(labels, title='Landmark Categories', loc='lower right',
+        plot.pie(data, autopct="%.0f%%", textprops={"color": "w", "fontsize": "xx-large"})
+        lgd = plot.legend(labels, title="Landmark Categories", loc="lower right",
                           bbox_to_anchor=(.8, 0, 0.5, 1), fontsize=12)
         plot.set_title("Shares of different Landmark Categories")
         fig.savefig(self.plot_location + self.plot_name, bbox_inches="tight",
@@ -217,7 +218,7 @@ class LandmarkAnalysis(Analysis):
         :param queue: Queue to which the result is appended
         """
         update_progress(result_path=self.status_file_path,
-                        update=STATUS_UPDATES_ANALYSES['landmark_s'])
+                        update=STATUS_UPDATES_ANALYSES["landmark_s"])
 
         self.add_density_for_tag(keys="railway", values="station", category="public_transport")
         self.add_density_for_tag(keys="shop", values=None, category="shops")
@@ -289,5 +290,5 @@ class LandmarkAnalysis(Analysis):
         if queue is not None:
             queue.put(result)
         update_progress(result_path=self.status_file_path,
-                        update=STATUS_UPDATES_ANALYSES['landmark_f'])
+                        update=STATUS_UPDATES_ANALYSES["landmark_f"])
         return result

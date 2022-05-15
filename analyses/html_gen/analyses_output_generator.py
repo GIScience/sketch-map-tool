@@ -79,11 +79,11 @@ def results_to_html(results: List[AnalysisResult], pdf_link: str, bbox: Bbox) ->
 
     def get_message_block(messages: dict):
         block = ""
-        if len(messages['very important']) > 0:
+        if len(messages["very important"]) > 0:
             block += f"<b>Very Important</b><br>{messages['very important']}"
-        if len(messages['important']) > 0:
+        if len(messages["important"]) > 0:
             block += f"<b>Important</b><br>{messages['important']}"
-        if len(messages['less important']) > 0:
+        if len(messages["less important"]) > 0:
             block += f"<b>Less Important</b><br>{messages['less important']}"
         return block
 
