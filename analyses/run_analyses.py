@@ -145,7 +145,7 @@ def run_preparations_and_analyses(bboxes_input: List[Bbox], output_path: str) ->
     for bbox in bboxes_input:
         session_id = datetime.now().strftime("%d_%m_%Y_%H_%M_") + \
                      bbox.get_str(mode="minus") + \
-                     str(random.randint(10000, 99000)) + "_"
+                     str(random.randint(10000, 99000)) + "_"  # nosec
         analyses_process = Process(target=run_for_single_bbox, args=(bbox, session_id,
                                                                      output_path,
                                                                      time_str_whole_time,
