@@ -61,7 +61,7 @@ class AnalysisResult:
     """
     The results of an OSM quality analysis
     """
-    def __init__(self, message: str, level: QualityLevel, importance: int = 1,
+    def __init__(self, message: str, level: QualityLevel, importance: float = 1,
                  suggestion: str = "", corresponding_plot_name: str = "",
                  title_for_report: str = ""):
         """
