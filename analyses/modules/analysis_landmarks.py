@@ -212,7 +212,7 @@ class LandmarkAnalysis(Analysis):
                     bbox_extra_artists=(lgd,))
 
     def run(self,
-            queue: Union[None, multiprocessing.Queue[AnalysisResult]] = None) -> AnalysisResult:
+            queue: Union[None, "multiprocessing.Queue[AnalysisResult]"] = None) -> AnalysisResult:
         """
         Analyze the density of landmark features
 

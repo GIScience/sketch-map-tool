@@ -64,7 +64,7 @@ class Analysis(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def run(self, queue: Union[None, multiprocessing.Queue[AnalysisResult]]) -> AnalysisResult:
+    def run(self, queue: Union[None, "multiprocessing.Queue[AnalysisResult]"]) -> AnalysisResult:
         """
         Run the analysis
 

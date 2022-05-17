@@ -100,7 +100,7 @@ class SourcesAnalysis(Analysis):
                     bbox_extra_artists=(lgd,))
 
     def run(self,
-            queue: Union[None, multiprocessing.Queue[AnalysisResult]] = None) -> AnalysisResult:
+            queue: Union[None, "multiprocessing.Queue[AnalysisResult]"] = None) -> AnalysisResult:
         """
         Retrieve important sources of OSM features
 

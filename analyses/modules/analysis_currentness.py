@@ -93,7 +93,7 @@ class CurrentnessAnalysis(Analysis):
         fig.savefig(self.plot_location + self.plot_name, bbox_inches="tight",
                     bbox_extra_artists=(lgd,))
 
-    def run(self, queue: Union[None, multiprocessing.Queue[AnalysisResult]] = None) \
+    def run(self, queue: Union[None, "multiprocessing.Queue[AnalysisResult]"] = None) \
             -> AnalysisResult:  # noqa: C901
         """
         Inspect the currentness of OSM features
