@@ -79,7 +79,7 @@ class AnalysisResult:
         self.corresponding_plot_name = corresponding_plot_name
         self.title_for_report = title_for_report
 
-    def to_dict(self) -> Dict[str, Union[str, int, QualityLevel]]:
+    def to_dict(self) -> Dict[str, Union[str, float, QualityLevel]]:
         """
         Get a dict containing all attributes of this AnalysisResult object
 
@@ -92,7 +92,7 @@ class AnalysisResult:
             "suggestion": self.suggestion
         }
 
-    def to_tuple(self) -> Tuple[int, int, str, str]:
+    def to_tuple(self) -> Tuple[int, float, str, str]:
         """
         Get a Tuple containing all attributes of this AnalysisResult object
 
