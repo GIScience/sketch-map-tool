@@ -69,8 +69,8 @@ class SourcesAnalysis(Analysis):
         :param source_shares_dict: Dict containing source names as keys and their shares as values
         """
         sources_for_plot = []
-        below_threshold_share = 0
-        not_tagged_share = 0
+        below_threshold_share = 0.0
+        not_tagged_share = 0.0
 
         for source, share in source_shares_dict.items():
             if share < self.threshold_yellow * 100:
@@ -100,7 +100,7 @@ class SourcesAnalysis(Analysis):
                     bbox_extra_artists=(lgd,))
 
     def run(self,
-            queue: multiprocessing.Queue[Union[None, AnalysisResult]] = None) -> AnalysisResult:
+            queue: Union[None, multiprocessing.Queue[AnalysisResult]] = None) -> AnalysisResult:
         """
         Retrieve important sources of OSM features
 

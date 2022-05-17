@@ -7,7 +7,7 @@
 """
 # pylint: disable=duplicate-code
 import multiprocessing
-from typing import Union, List, Dict
+from typing import Union, List, Dict, Any
 
 import pandas as pd
 import numpy as np
@@ -29,7 +29,7 @@ class CurrentnessAnalysis(Analysis):
     threshold_red = 8  # years
 
     def __init__(self,
-                 ohsome_export: List[Dict[str, Union[str, int, float]]],
+                 ohsome_export: List[Dict[str, Any]],
                  plot_location: str = "./",
                  status_file_path: str = "analyses.status",
                  key: Union[str, None] = None):
@@ -93,7 +93,7 @@ class CurrentnessAnalysis(Analysis):
         fig.savefig(self.plot_location + self.plot_name, bbox_inches="tight",
                     bbox_extra_artists=(lgd,))
 
-    def run(self, queue: multiprocessing.Queue[Union[None, AnalysisResult]] = None) \
+    def run(self, queue: Union[None, multiprocessing.Queue[AnalysisResult]] = None) \
             -> AnalysisResult:  # noqa: C901
         """
         Inspect the currentness of OSM features

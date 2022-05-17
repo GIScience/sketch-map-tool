@@ -3,6 +3,7 @@ Abstract base class for all analyses
 """
 import multiprocessing
 from abc import ABC, abstractmethod
+from typing import Union
 
 from analyses.helpers import AnalysisResult
 
@@ -26,7 +27,7 @@ class Analysis(ABC):
 
     @property
     @abstractmethod
-    def threshold_yellow(self) -> float:
+    def threshold_yellow(self) -> Union[None, float]:
         """
         If this threshold is surpassed, the level changes from green (good fitness) to yellow
         (potential problems)
@@ -37,7 +38,7 @@ class Analysis(ABC):
 
     @property
     @abstractmethod
-    def threshold_red(self) -> float:
+    def threshold_red(self) -> Union[None, float]:
         """
         If this threshold is surpassed, the level changes from yellow (potential problems) to red
         (probable problems)
@@ -63,7 +64,7 @@ class Analysis(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def run(self, queue: multiprocessing.Queue) -> AnalysisResult:
+    def run(self, queue: Union[None, multiprocessing.Queue[AnalysisResult]]) -> AnalysisResult:
         """
         Run the analysis
 
