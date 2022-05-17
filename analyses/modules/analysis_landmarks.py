@@ -33,7 +33,7 @@
 """
 # pylint: disable=duplicate-code
 import json
-import multiprocessing
+import multiprocessing  # noqa  # pylint: disable=unused-import
 from typing import Union, Dict
 
 import requests

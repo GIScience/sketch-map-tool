@@ -1,7 +1,7 @@
 """
 Abstract base class for all analyses
 """
-import multiprocessing
+import multiprocessing  # noqa  # pylint: disable=unused-import
 from abc import ABC, abstractmethod
 from typing import Union
 

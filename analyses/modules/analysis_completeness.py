@@ -17,7 +17,7 @@
                 https://onlinelibrary.wiley.com/doi/full/10.1111/tgis.12073)
 """
 # pylint: disable=duplicate-code
-import multiprocessing
+import multiprocessing  # noqa  # pylint: disable=unused-import
 import matplotlib.pyplot as plt
 from typing import List, Tuple, Union, Any
 import requests

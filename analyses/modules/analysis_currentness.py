@@ -6,7 +6,7 @@
              Neis, & Zipf, 2014, https://onlinelibrary.wiley.com/doi/full/10.1111/tgis.12073)
 """
 # pylint: disable=duplicate-code
-import multiprocessing
+import multiprocessing  # noqa  # pylint: disable=unused-import
 from typing import Union, List, Dict, Any
 
 import pandas as pd

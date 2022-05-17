@@ -7,7 +7,7 @@
              Degrossi, Zipf, Porto de Albuquerque, 2021, https://doi.org/10.3390/ijgi10030130)
 """
 # pylint: disable=duplicate-code
-import multiprocessing
+import multiprocessing  # noqa  # pylint: disable=unused-import
 from typing import List, Dict, Union
 import matplotlib.pyplot as plt
 import numpy as np
