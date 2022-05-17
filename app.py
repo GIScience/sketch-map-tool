@@ -13,7 +13,7 @@ from helper_modules.progress import get_status_updates, get_nr_of_completed_step
     NoStatusFileException
 
 
-class BboxForm(Form):
+class BboxForm(Form):  # type: ignore
     """
     Enables access to the input field bbox_input of the HTML template
     """

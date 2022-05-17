@@ -34,10 +34,10 @@ class CompletenessAnalysis(Analysis):
     """
     Check how complete, i.e. saturated the mapping of OSM features is
     """
-    importance = 1
+    importance = 1.0
     special_importance_completion = {"amenity": 0.5}  # otherwise, the general importance is used
     special_importance_lack_of_data = {  # when threshold_major_change is never surpassed
-        "highway": 2
+        "highway": 2.0
     }
     threshold_yellow = 5  # percent yearly change in feature length/density
     threshold_red = 10  # percent yearly change in feature length/density
