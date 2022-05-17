@@ -1,6 +1,7 @@
 """
 Execute the analyses scripts and create output files
 """
+# pylint: disable=too-many-locals
 
 import os
 
@@ -135,7 +136,7 @@ def run_preparations_and_analyses(bboxes_input: List[Bbox], output_path: str) ->
         "/" + metadata["extractRegion"]["temporalExtent"]["toTimestamp"][0:10] + "/P1Y"
     time_str_full_yearly = add_one_day(time_str_full_yearly)  # necessary in case the data available
     #                                                           does not start at 0:00 this day
-    time_str_whole_time = time_str_full_yearly.replace("/P1Y", '').replace('/', ',')
+    time_str_whole_time = time_str_full_yearly.replace("/P1Y", "").replace("/", ",")
 
     # Adjust time_str for the analysis of the current situation
     # Format: 2018-08-29/2018-08-29/P1Y
@@ -144,7 +145,7 @@ def run_preparations_and_analyses(bboxes_input: List[Bbox], output_path: str) ->
     for bbox in bboxes_input:
         session_id = datetime.now().strftime("%d_%m_%Y_%H_%M_") + \
                      bbox.get_str(mode="minus") + \
-                     str(random.randint(10000, 99000)) + "_"
+                     str(random.randint(10000, 99000)) + "_"  # nosec
         analyses_process = Process(target=run_for_single_bbox, args=(bbox, session_id,
                                                                      output_path,
                                                                      time_str_whole_time,
@@ -168,5 +169,5 @@ def run(bboxes_input: List[Bbox], output_path: str) -> Dict[str, str]:
     for bbox in bboxes_input:
         results[str(bbox)] = f"../status?mode=analyses&bbox={str(bbox)}"
         status_path = get_result_path(bbox, output_path)
-        update_progress(result_path=status_path, update=STATUS_UPDATES_ANALYSES['start'])
+        update_progress(result_path=status_path, update=STATUS_UPDATES_ANALYSES["start"])
     return results

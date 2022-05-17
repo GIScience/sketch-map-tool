@@ -16,9 +16,10 @@
                 (Barron, Neis, & Zipf, 2014,
                 https://onlinelibrary.wiley.com/doi/full/10.1111/tgis.12073)
 """
-import multiprocessing
+# pylint: disable=duplicate-code
+import multiprocessing  # noqa  # pylint: disable=unused-import
 import matplotlib.pyplot as plt
-from typing import List, Tuple
+from typing import List, Tuple, Union, Any
 import requests
 
 from analyses.helpers import AnalysisResult, QualityLevel
@@ -33,10 +34,10 @@ class CompletenessAnalysis(Analysis):
     """
     Check how complete, i.e. saturated the mapping of OSM features is
     """
-    importance = 1
+    importance = 1.0
     special_importance_completion = {"amenity": 0.5}  # otherwise, the general importance is used
     special_importance_lack_of_data = {  # when threshold_major_change is never surpassed
-        "highway": 2
+        "highway": 2.0
     }
     threshold_yellow = 5  # percent yearly change in feature length/density
     threshold_red = 10  # percent yearly change in feature length/density
@@ -52,7 +53,7 @@ class CompletenessAnalysis(Analysis):
                  time: str,
                  plot_location: str = "./",
                  status_file_path: str = "analyses.status",
-                 key: str = None,
+                 key: Union[None, str] = None,
                  measure: str = "density",
                  measure_unit: str = "features per km²"):
         """
@@ -80,15 +81,15 @@ class CompletenessAnalysis(Analysis):
             self.plot_name = "_plot_saturation_general.png"
 
     @property
-    def plot_location(self):
+    def plot_location(self) -> str:
         return self._plot_location
 
     @property
-    def status_file_path(self):
+    def status_file_path(self) -> str:
         return self._status_file_path
 
     @staticmethod
-    def request(aggregation: str, **params) -> requests.Response:
+    def request(aggregation: str, **params: Any) -> requests.Response:
         """
         Send a request with a given aggregation and parameters to the Ohsome API
 
@@ -132,7 +133,8 @@ class CompletenessAnalysis(Analysis):
         output_path = self.plot_location + self.plot_name
         fig.savefig(output_path)
 
-    def run(self, queue: multiprocessing.Queue = None) -> AnalysisResult:
+    def run(self, queue: Union[None, "multiprocessing.Queue[AnalysisResult]"] = None) \
+            -> AnalysisResult:  # noqa: C901
         """
         Inspect the saturation, i.e. completeness of OSM feature mapping
 
@@ -142,11 +144,11 @@ class CompletenessAnalysis(Analysis):
         """
         if self.key:
             update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES['saturation_s'] +
+                            update=STATUS_UPDATES_ANALYSES["saturation_s"] +
                             f" for key: {self.key}")
         else:
             update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES['saturation_s'])
+                            update=STATUS_UPDATES_ANALYSES["saturation_s"])
         if self.key:
             ohsome_response = self.request(self.measure, bboxes=str(self.bbox), time=self.time,
                                            keys=self.key, types="node,way").json()
@@ -266,9 +268,9 @@ class CompletenessAnalysis(Analysis):
             queue.put(result)
         if self.key:
             update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES['saturation_f'] +
+                            update=STATUS_UPDATES_ANALYSES["saturation_f"] +
                             f" for key: {self.key}")
         else:
             update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES['saturation_f'])
+                            update=STATUS_UPDATES_ANALYSES["saturation_f"])
         return result

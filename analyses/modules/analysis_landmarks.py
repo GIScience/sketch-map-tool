@@ -31,8 +31,9 @@
              Mapping." (Klonner, Hartmann, Dischl, Djami, Anderson, Raifer, Lima-Silva, Castro
              Degrossi, Zipf, Porto de Albuquerque, 2021, https://doi.org/10.3390/ijgi10030130)
 """
+# pylint: disable=duplicate-code
 import json
-import multiprocessing
+import multiprocessing  # noqa  # pylint: disable=unused-import
 from typing import Union, Dict
 
 import requests
@@ -111,11 +112,11 @@ class LandmarkAnalysis(Analysis):
         self.density_sum = 0
 
     @property
-    def plot_location(self):
+    def plot_location(self) -> str:
         return self._plot_location
 
     @property
-    def status_file_path(self):
+    def status_file_path(self) -> str:
         return self._status_file_path
 
     def add_density_for_tag(self, keys: Union[str, None], values: Union[str, None],
@@ -193,7 +194,7 @@ class LandmarkAnalysis(Analysis):
             percentage = round(100 * self.density[key] / self.density_sum, 2)
             shares_with_labels.append((percentage, f"{self.plot_labels[key]} ({percentage}%)"))
 
-        for pair in shares_with_labels:
+        for pair in shares_with_labels.copy():
             if pair[0] < self.percent_threshold_for_plot:
                 shares_with_labels.remove(pair)
 
@@ -203,21 +204,22 @@ class LandmarkAnalysis(Analysis):
 
         fig = plt.figure(figsize=(7, 7))
         plot = fig.add_subplot(111)
-        plot.pie(data, autopct='%.0f%%', textprops={'color': 'w', 'fontsize': 'xx-large'})
-        lgd = plot.legend(labels, title='Landmark Categories', loc='lower right',
+        plot.pie(data, autopct="%.0f%%", textprops={"color": "w", "fontsize": "xx-large"})
+        lgd = plot.legend(labels, title="Landmark Categories", loc="lower right",
                           bbox_to_anchor=(.8, 0, 0.5, 1), fontsize=12)
         plot.set_title("Shares of different Landmark Categories")
         fig.savefig(self.plot_location + self.plot_name, bbox_inches="tight",
                     bbox_extra_artists=(lgd,))
 
-    def run(self, queue: multiprocessing.Queue = None) -> AnalysisResult:
+    def run(self,
+            queue: Union[None, "multiprocessing.Queue[AnalysisResult]"] = None) -> AnalysisResult:
         """
         Analyze the density of landmark features
 
         :param queue: Queue to which the result is appended
         """
         update_progress(result_path=self.status_file_path,
-                        update=STATUS_UPDATES_ANALYSES['landmark_s'])
+                        update=STATUS_UPDATES_ANALYSES["landmark_s"])
 
         self.add_density_for_tag(keys="railway", values="station", category="public_transport")
         self.add_density_for_tag(keys="shop", values=None, category="shops")
@@ -289,5 +291,5 @@ class LandmarkAnalysis(Analysis):
         if queue is not None:
             queue.put(result)
         update_progress(result_path=self.status_file_path,
-                        update=STATUS_UPDATES_ANALYSES['landmark_f'])
+                        update=STATUS_UPDATES_ANALYSES["landmark_f"])
         return result

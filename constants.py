@@ -1,4 +1,6 @@
-import os
+"""
+Constants like messages shown to the user for the whole tool and its different parts
+"""
 from types import MappingProxyType
 
 # Notes: ------------------------------------------------------------------------------------------

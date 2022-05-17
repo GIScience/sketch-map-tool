@@ -17,10 +17,13 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pylint flake8 bandit
+        pip install pylint flake8 bandit mypy
         pip install -r requirements.txt
     - name: Analysing the code with pylint, flake8 and bandit
       run: |
         pylint $(git ls-files '*.py')
         flake8 $(git ls-files '*.py')
         bandit $(git ls-files '*.py')
+    - name: Static type checking with mypy
+      run: |
+        mypy --strict $(git ls-files '*.py')

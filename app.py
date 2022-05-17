@@ -1,46 +1,55 @@
+"""
+Configuration of the Flask app routes and, thus, the interface between backend and frontend
+"""
 from flask import Flask, render_template, request
 from wtforms import Form, TextAreaField, validators
 from typing import List
-from helper_modules.bbox_utils import (is_bbox_str, BboxTooLargeException, Bbox)
-from analyses import run_analyses
 from constants import (ANALYSES_OUTPUT_PATH, INVALID_STATUS_LINK_MESSAGE,
                        TEMPLATE_ANALYSES, NO_STATUS_FILE_MESSAGE, NR_OF_ANALYSES_STEPS)
+from analyses import run_analyses
 from analyses.helpers import get_result_path
+from helper_modules.bbox_utils import (is_bbox_str, BboxTooLargeException, Bbox)
 from helper_modules.progress import get_status_updates, get_nr_of_completed_steps, \
     NoStatusFileException
 
 
-class BboxForm(Form):
+class BboxForm(Form):  # type: ignore
     """
     Enables access to the input field bbox_input of the HTML template
     """
-    bbox_input = TextAreaField(id='bbox_input', validators=[validators.InputRequired(), is_bbox_str],
-                               render_kw=
-                               {"placeholder": "E.g.: 8.69142561,49.4102821,8.69372067,49.4115517;"}
+    bbox_input = TextAreaField(id="bbox_input", validators=[validators.InputRequired(),
+                                                            is_bbox_str],
+                               render_kw={
+                                   "placeholder":
+                                       "E.g.: 8.69142561,49.4102821,8.69372067,49.4115517;"
+                               }
                                )
 
 
-def create_app():
+def create_app() -> Flask:  # noqa: C901
+    """
+    Create the Flask app
+    """
     app = Flask(__name__)
 
-    @app.route('/', methods=['GET', 'POST'])
-    def index():
-        return render_template('index.html')
+    @app.route("/", methods=["GET", "POST"])
+    def index() -> str:
+        return render_template("index.html")
 
-    @app.route('/analyses', methods=['GET', 'POST'])
-    def analyses():
+    @app.route("/analyses", methods=["GET", "POST"])
+    def analyses() -> str:
         bbox_form = BboxForm(request.form)
-        if request.method == 'POST':
+        if request.method == "POST":
             bbox_str = bbox_form.bbox_input.data
             if not is_bbox_str(bbox_str):
                 return render_template(TEMPLATE_ANALYSES, bbox_form=bbox_form, outputs=dict(),
-                                       msg="Invalid input. Please take a look at the bounding box/-es "
-                                           "you entered.")
+                                       msg="Invalid input. Please take a look at the bounding "
+                                           "box/-es you entered.")
             return load_analyses(bbox_form, bbox_str.split(";"), ANALYSES_OUTPUT_PATH)
         return render_template(TEMPLATE_ANALYSES, bbox_form=bbox_form, outputs=dict(), msg="")
 
-    @app.route('/status')
-    def status():
+    @app.route("/status")
+    def status() -> str:
         """
         Show status page for process specified by given parameters
 
@@ -82,9 +91,9 @@ def create_app():
         else:
             return render_template(TEMPLATE_ANALYSES, bbox_form=BboxForm(), outputs=dict(),
                                    msg=INVALID_STATUS_LINK_MESSAGE)
-        return render_template('progress.html', NAME=name, BBOX=bbox, NR_OF_STEPS=nr_of_steps,
-                               STEPS_COMPLETED=steps_completed, PERCENTAGE=percentage, OUTPUTS=outputs,
-                               RESULTS=results, ERROR=error)
+        return render_template("progress.html", NAME=name, BBOX=bbox, NR_OF_STEPS=nr_of_steps,
+                               STEPS_COMPLETED=steps_completed, PERCENTAGE=percentage,
+                               OUTPUTS=outputs, RESULTS=results, ERROR=error)
     return app
 
 
@@ -113,8 +122,5 @@ def load_analyses(bbox_form: BboxForm, bboxes: List[str], output_path: str) -> s
 
 
 if __name__ == "__main__":
-    app = create_app()
-    app.run()
-
-
-
+    flask_app = create_app()
+    flask_app.run()

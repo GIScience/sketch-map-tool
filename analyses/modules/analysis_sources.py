@@ -6,9 +6,9 @@
              Mapping." (Klonner, Hartmann, Dischl, Djami, Anderson, Raifer, Lima-Silva, Castro
              Degrossi, Zipf, Porto de Albuquerque, 2021, https://doi.org/10.3390/ijgi10030130)
 """
-
-import multiprocessing
-from typing import List
+# pylint: disable=duplicate-code
+import multiprocessing  # noqa  # pylint: disable=unused-import
+from typing import List, Dict, Union
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -40,7 +40,7 @@ class SourcesAnalysis(Analysis):
     #                                        the plot.
 
     def __init__(self,
-                 ohsome_export: List[dict],
+                 ohsome_export: List[Dict[str, Union[str, int, float]]],
                  plot_location: str = "./",
                  status_file_path: str = "analyses.status"):
         """
@@ -54,14 +54,14 @@ class SourcesAnalysis(Analysis):
         self._status_file_path = status_file_path
 
     @property
-    def plot_location(self):
+    def plot_location(self) -> str:
         return self._plot_location
 
     @property
-    def status_file_path(self):
+    def status_file_path(self) -> str:
         return self._status_file_path
 
-    def plot_results(self, source_shares_dict: dict) -> None:
+    def plot_results(self, source_shares_dict: Dict[str, float]) -> None:
         """
         Create a pie plot showing the shares of the different sources with shares above the
         threshold
@@ -69,8 +69,8 @@ class SourcesAnalysis(Analysis):
         :param source_shares_dict: Dict containing source names as keys and their shares as values
         """
         sources_for_plot = []
-        below_threshold_share = 0
-        not_tagged_share = 0
+        below_threshold_share = 0.0
+        not_tagged_share = 0.0
 
         for source, share in source_shares_dict.items():
             if share < self.threshold_yellow * 100:
@@ -92,14 +92,15 @@ class SourcesAnalysis(Analysis):
 
         fig = plt.figure(figsize=(7, 7))
         plot = fig.add_subplot(111)
-        plot.pie(values, autopct='%.2f', textprops={'color': 'w', 'fontsize': 'xx-large'})
-        lgd = plot.legend(labels, title='Names', loc='lower right', bbox_to_anchor=(.8, 0, 0.5, 1),
+        plot.pie(values, autopct="%.2f", textprops={"color": "w", "fontsize": "xx-large"})
+        lgd = plot.legend(labels, title="Names", loc="lower right", bbox_to_anchor=(.8, 0, 0.5, 1),
                           fontsize=12)
         plot.set_title("Shares of specified sources among all features")
         fig.savefig(self.plot_location + self.plot_name, bbox_inches="tight",
                     bbox_extra_artists=(lgd,))
 
-    def run(self, queue: multiprocessing.Queue = None) -> AnalysisResult:
+    def run(self,
+            queue: Union[None, "multiprocessing.Queue[AnalysisResult]"] = None) -> AnalysisResult:
         """
         Retrieve important sources of OSM features
 
@@ -137,21 +138,21 @@ class SourcesAnalysis(Analysis):
         >>> result.level.value, result.importance
         (1, 0)
         >>> result.message # doctest: +ELLIPSIS
-        'There is at least one source accounting for a substantial share of all features, which you might want to inspect...
-        >>> result.suggestion
-        "You might want to check the following sources, which account for a substantial share of all features: 'brain' (50.0 %)."
+        'There is at least one source accounting for a substantial share of all features,...
+        >>> result.suggestion[65:]
+        "a substantial share of all features: 'brain' (50.0 %)."
         """
         update_progress(self.status_file_path, STATUS_UPDATES_ANALYSES["sources_s"])
         df = pd.DataFrame([i["properties"] for i in self.data])
 
         # Remove older versions of features and features that have been deleted:
         df = df.apply(pd.Series)
-        df = df.drop_duplicates(subset=['@osmId'], keep='last')
+        df = df.drop_duplicates(subset=["@osmId"], keep="last")
         df.rename({"@validTo": "validTo"}, axis=1, inplace=True)
-        df["validTo"] = df.apply(lambda row: np.datetime64(str(row.validTo).replace('Z', '')),
+        df["validTo"] = df.apply(lambda row: np.datetime64(str(row.validTo).replace("Z", "")),
                                  axis=1)
-        max_validTo = max(df['validTo'])
-        df.drop(df[df.validTo < max_validTo].index, inplace=True)
+        max_validto = max(df["validTo"])
+        df.drop(df[df.validTo < max_validto].index, inplace=True)
 
         if "source" not in df.keys():
             result = AnalysisResult("No source information found. Thus, inspection of sources is "
@@ -161,7 +162,7 @@ class SourcesAnalysis(Analysis):
                 queue.put(result)
             return result
 
-        source_shares = df['source'].value_counts(normalize=True, dropna=False) * 100
+        source_shares = df["source"].value_counts(normalize=True, dropna=False) * 100
         source_shares_dict = source_shares.to_dict()
         relevant_sources = ""
         for source, share in source_shares_dict.items():

@@ -1,7 +1,7 @@
 """
 Functions to generate a webpage based on analyses' results
 """
-from typing import List
+from typing import List, Dict
 from analyses.helpers import AnalysisResult, QualityLevel
 from helper_modules.bbox_utils import Bbox
 
@@ -16,8 +16,8 @@ def get_general_score(results: List[AnalysisResult]) -> QualityLevel:
     :param results: Results of which the weighted average level should be calculated
     :return: Weighted average level
     """
-    sum_scores = 0
-    sum_weights = 0
+    sum_scores = 0.0
+    sum_weights = 0.0
     for result in results:
         sum_scores += result.level.value * result.importance
         sum_weights += result.importance
@@ -25,7 +25,7 @@ def get_general_score(results: List[AnalysisResult]) -> QualityLevel:
     return QualityLevel(avg_score)
 
 
-def results_to_html(results: List[AnalysisResult], pdf_link: str, bbox: Bbox) -> str:
+def results_to_html(results: List[AnalysisResult], pdf_link: str, bbox: Bbox) -> str:  # noqa: C901
     """
     Generate an HTML page presenting the given results.
 
@@ -77,13 +77,13 @@ def results_to_html(results: List[AnalysisResult], pdf_link: str, bbox: Bbox) ->
         elif result.level == QualityLevel.GREEN:
             messages_green[importance] += f"- {result.message}<br>"
 
-    def get_message_block(messages: dict):
+    def get_message_block(messages: Dict[str, str]) -> str:
         block = ""
-        if len(messages['very important']) > 0:
+        if len(messages["very important"]) > 0:
             block += f"<b>Very Important</b><br>{messages['very important']}"
-        if len(messages['important']) > 0:
+        if len(messages["important"]) > 0:
             block += f"<b>Important</b><br>{messages['important']}"
-        if len(messages['less important']) > 0:
+        if len(messages["less important"]) > 0:
             block += f"<b>Less Important</b><br>{messages['less important']}"
         return block
 

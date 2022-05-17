@@ -5,9 +5,9 @@
 - Reference: ''A comprehensive framework for intrinsic OpenStreetMap quality analysis.'' (Barron,
              Neis, & Zipf, 2014, https://onlinelibrary.wiley.com/doi/full/10.1111/tgis.12073)
 """
-
-import multiprocessing
-from typing import Union, List
+# pylint: disable=duplicate-code
+import multiprocessing  # noqa  # pylint: disable=unused-import
+from typing import Union, List, Dict, Any
 
 import pandas as pd
 import numpy as np
@@ -29,7 +29,7 @@ class CurrentnessAnalysis(Analysis):
     threshold_red = 8  # years
 
     def __init__(self,
-                 ohsome_export: List[dict],
+                 ohsome_export: List[Dict[str, Any]],
                  plot_location: str = "./",
                  status_file_path: str = "analyses.status",
                  key: Union[str, None] = None):
@@ -52,11 +52,11 @@ class CurrentnessAnalysis(Analysis):
             self.plot_name = "_plot_last_edit_general.png"
 
     @property
-    def plot_location(self):
+    def plot_location(self) -> str:
         return self._plot_location
 
     @property
-    def status_file_path(self):
+    def status_file_path(self) -> str:
         return self._status_file_path
 
     def plot_results(self, df: pd.DataFrame) -> None:
@@ -82,8 +82,8 @@ class CurrentnessAnalysis(Analysis):
                   "Edited in the last five years", "Not edited in the last five years"]
         fig = plt.figure(figsize=(7, 7))
         plot = fig.add_subplot(111)
-        plot.pie(values, autopct='%.2f%%', textprops={'color': 'w', 'fontsize': 'xx-large'})
-        lgd = plot.legend(legend, loc='lower right', bbox_to_anchor=(.8, 0, 0.5, 1),
+        plot.pie(values, autopct="%.2f%%", textprops={"color": "w", "fontsize": "xx-large"})
+        lgd = plot.legend(legend, loc="lower right", bbox_to_anchor=(.8, 0, 0.5, 1),
                           fontsize=12)
         if self.key is not None:
             key = " " + self.key + " "
@@ -93,7 +93,8 @@ class CurrentnessAnalysis(Analysis):
         fig.savefig(self.plot_location + self.plot_name, bbox_inches="tight",
                     bbox_extra_artists=(lgd,))
 
-    def run(self, queue: multiprocessing.Queue = None) -> AnalysisResult:
+    def run(self, queue: Union[None, "multiprocessing.Queue[AnalysisResult]"] = None) \
+            -> AnalysisResult:  # noqa: C901
         """
         Inspect the currentness of OSM features
 
@@ -118,7 +119,7 @@ class CurrentnessAnalysis(Analysis):
         ... "properties" : {
         ... "@osmId" : "way/135681294",
         ... "@validFrom" : "2016-01-01T00:00:00Z",
-        ... "@validTo" : "2016-02-09T19:58:33Z", # Time shorter than maximum validTo -> deleted -> not considered
+        ... "@validTo" : "2016-02-09T19:58:33Z", # Time shorter than maximum validTo -> deleted -> not considered  # pylint: disable=line-too-long  # noqa
         ... "building" : "contact_line"
         ... }
         ... }, {
@@ -130,17 +131,19 @@ class CurrentnessAnalysis(Analysis):
         ... "@validTo" : "2016-02-28T21:50:18Z", # 8d -> average=(6+8)/2=7
         ... "building" : "contact_line"}}]
         >>> result = CurrentnessAnalysis(features).run()
-        >>> result.message
-        'The average feature has been edited in the last 4 years, indicating that the data are not outdated. The average last edit was 0 years, 0 months and 7 days ago'
+        >>> result.message[:76]
+        'The average feature has been edited in the last 4 years, indicating that the'
+        >>> result.message[76:]
+        ' data are not outdated. The average last edit was 0 years, 0 months and 7 days ago'
         """
         if self.key is not None:
             update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES['last_edit_s'] + f" for key: {self.key}")
+                            update=STATUS_UPDATES_ANALYSES["last_edit_s"] + f" for key: {self.key}")
             df = pd.DataFrame([i["properties"] for i in self.data
                                if self.key in i["properties"].keys()])
         else:
             update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES['last_edit_s'])
+                            update=STATUS_UPDATES_ANALYSES["last_edit_s"])
             df = pd.DataFrame([i["properties"] for i in self.data])
         df["@validFrom"].dropna(inplace=True)  # All features need to have a validFrom attribute to
         #                                        calculate their age (validTo - validFrom)
@@ -162,15 +165,15 @@ class CurrentnessAnalysis(Analysis):
         df.rename({"@validTo": "validTo", "@validFrom": "validFrom"}, axis=1, inplace=True)
 
         # Transform validTo and validFrom values into datetime objects
-        df["validTo"] = df.apply(lambda row: np.datetime64(str(row.validTo).replace('Z', '')),
+        df["validTo"] = df.apply(lambda row: np.datetime64(str(row.validTo).replace("Z", "")),
                                  axis=1)
-        df["validFrom"] = df.apply(lambda row: np.datetime64(str(row.validFrom).replace('Z', '')),
+        df["validFrom"] = df.apply(lambda row: np.datetime64(str(row.validFrom).replace("Z", "")),
                                    axis=1)
-        max_validTo = max(df['validTo'])
+        max_validto = max(df["validTo"])
 
         # Remove all features that have been deleted (are not valid at the time of the analysis
         # anymore) from the dataframe
-        df.drop(df[df.validTo < max_validTo].index, inplace=True)
+        df.drop(df[df.validTo < max_validto].index, inplace=True)
 
         if len(df.index) == 0:
             if self.key is None:
@@ -184,7 +187,7 @@ class CurrentnessAnalysis(Analysis):
 
         # Add column containing the features' ages in days
         df["TimeDelta"] = df.apply(lambda row:
-                                   floor((row.validTo - row.validFrom) / np.timedelta64(1, 'D')),
+                                   floor((row.validTo - row.validFrom) / np.timedelta64(1, "D")),
                                    axis=1)
 
         # Calculate the average values
@@ -232,8 +235,8 @@ class CurrentnessAnalysis(Analysis):
             queue.put(result)
         if self.key is None:
             update_progress(result_path=self. status_file_path,
-                            update=STATUS_UPDATES_ANALYSES['last_edit_f'])
+                            update=STATUS_UPDATES_ANALYSES["last_edit_f"])
         else:
             update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES['last_edit_f'] + f" for key: {key}")
+                            update=STATUS_UPDATES_ANALYSES["last_edit_f"] + f" for key: {key}")
         return result

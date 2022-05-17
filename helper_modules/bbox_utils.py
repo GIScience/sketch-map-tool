@@ -8,7 +8,10 @@ from math import sin, sqrt, cos, asin, pi
 
 
 class BboxTooLargeException(Exception):
-    def __init__(self):
+    """
+    Exception indicating that a selected bounding box is too large to be processed
+    """
+    def __init__(self) -> None:
         super().__init__("Bounding box selection is too large")
 
 
@@ -23,7 +26,7 @@ class Bbox(object):
         self.lat2 = lat2
 
     @classmethod
-    def bbox_from_str(cls, bbox_str: str) -> 'Bbox':
+    def bbox_from_str(cls, bbox_str: str) -> "Bbox":
         """
         Get a Bbox object from a string containing comma separated values for the coordinates
 
@@ -112,10 +115,10 @@ class Bbox(object):
             return f"{self.lon1},{self.lat1},{self.lon2},{self.lat2}"
         raise ValueError("'mode' needs to be either 'minus' or 'comma'")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.get_str(mode="comma")
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.get_str(mode="comma")
 
 
@@ -139,7 +142,8 @@ def is_bbox_str(bbox_str: str) -> bool:
 
 def calculate_distance(point_a: Tuple[float, float], point_b: Tuple[float, float]) -> float:
     """
-    Calculate the distance between two points (lat,lon-format!) in metres using the Haversine formula
+    Calculate the distance between two points (lat,lon-format!) in metres using the Haversine
+    formula
 
     :param point_a: First point of the two points of which the distance will be calculated
     :param point_b: Second point of the two points of which the distance will be calculated
