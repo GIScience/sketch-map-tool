@@ -1,0 +1,15 @@
+name: HTML-CSS-JavaScript-Linting
+
+on: [push]
+
+jobs:
+  linting:
+    name: Run linters for HTML, CSS and JavaScript
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Linters
+      run: |
+          npm install eslint@8.10.0  
+    - name: Run ESLint
+      run: npx eslint .
