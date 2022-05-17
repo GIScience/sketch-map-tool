@@ -9,7 +9,7 @@ class NoStatusFileException(Exception):
     """
     Exception raised when a status file is expected but not found
     """
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Status file not available. Probably the process has not been started")
 
 
@@ -18,12 +18,12 @@ class InvalidResultPathException(ValueError):
     Exception representing an invalid result path, i.e. a result path that is not of the form
     some/path/file.format
     """
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("'result_path' must contain the whole path to the file, ending with "
                          "name.format")
 
 
-def update_progress(result_path: str, update: str):
+def update_progress(result_path: str, update: str) -> None:
     """
     Update the status file for a process by adding an update about the current state.
     The update file is stored in the same location as the result file (result_path)

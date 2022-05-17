@@ -7,7 +7,7 @@ from enum import Enum
 from helper_modules.bbox_utils import Bbox
 
 
-def add_one_day(time_str):
+def add_one_day(time_str: str) -> str:
     """
     Roughly adds one day to the start time of a given time string
     When the new date would be the 29th, the month is increased,
@@ -79,7 +79,7 @@ class AnalysisResult:
         self.corresponding_plot_name = corresponding_plot_name
         self.title_for_report = title_for_report
 
-    def to_dict(self) -> Dict[str, Union[str, int]]:
+    def to_dict(self) -> Dict[str, Union[str, int, QualityLevel]]:
         """
         Get a dict containing all attributes of this AnalysisResult object
 

@@ -112,11 +112,11 @@ class LandmarkAnalysis(Analysis):
         self.density_sum = 0
 
     @property
-    def plot_location(self):
+    def plot_location(self) -> str:
         return self._plot_location
 
     @property
-    def status_file_path(self):
+    def status_file_path(self) -> str:
         return self._status_file_path
 
     def add_density_for_tag(self, keys: Union[str, None], values: Union[str, None],
@@ -211,7 +211,8 @@ class LandmarkAnalysis(Analysis):
         fig.savefig(self.plot_location + self.plot_name, bbox_inches="tight",
                     bbox_extra_artists=(lgd,))
 
-    def run(self, queue: multiprocessing.Queue = None) -> AnalysisResult:
+    def run(self,
+            queue: Union[None, multiprocessing.Queue[AnalysisResult]] = None) -> AnalysisResult:
         """
         Analyze the density of landmark features
 

@@ -1,7 +1,7 @@
 """
 Functions to generate a webpage based on analyses' results
 """
-from typing import List
+from typing import List, Dict
 from analyses.helpers import AnalysisResult, QualityLevel
 from helper_modules.bbox_utils import Bbox
 
@@ -77,7 +77,7 @@ def results_to_html(results: List[AnalysisResult], pdf_link: str, bbox: Bbox) ->
         elif result.level == QualityLevel.GREEN:
             messages_green[importance] += f"- {result.message}<br>"
 
-    def get_message_block(messages: dict):
+    def get_message_block(messages: Dict[str, str]) -> str:
         block = ""
         if len(messages["very important"]) > 0:
             block += f"<b>Very Important</b><br>{messages['very important']}"

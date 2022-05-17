@@ -8,7 +8,7 @@
 """
 # pylint: disable=duplicate-code
 import multiprocessing
-from typing import List
+from typing import List, Dict, Union
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -40,7 +40,7 @@ class SourcesAnalysis(Analysis):
     #                                        the plot.
 
     def __init__(self,
-                 ohsome_export: List[dict],
+                 ohsome_export: List[Dict[str, Union[str, int, float]]],
                  plot_location: str = "./",
                  status_file_path: str = "analyses.status"):
         """
@@ -54,14 +54,14 @@ class SourcesAnalysis(Analysis):
         self._status_file_path = status_file_path
 
     @property
-    def plot_location(self):
+    def plot_location(self) -> str:
         return self._plot_location
 
     @property
-    def status_file_path(self):
+    def status_file_path(self) -> str:
         return self._status_file_path
 
-    def plot_results(self, source_shares_dict: dict) -> None:
+    def plot_results(self, source_shares_dict: Dict[str, float]) -> None:
         """
         Create a pie plot showing the shares of the different sources with shares above the
         threshold
@@ -99,7 +99,8 @@ class SourcesAnalysis(Analysis):
         fig.savefig(self.plot_location + self.plot_name, bbox_inches="tight",
                     bbox_extra_artists=(lgd,))
 
-    def run(self, queue: multiprocessing.Queue = None) -> AnalysisResult:
+    def run(self,
+            queue: multiprocessing.Queue[Union[None, AnalysisResult]] = None) -> AnalysisResult:
         """
         Retrieve important sources of OSM features
 

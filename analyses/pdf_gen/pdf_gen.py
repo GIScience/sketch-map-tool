@@ -7,7 +7,7 @@ results
 
 import os
 import json
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 from reportlab.platypus import Paragraph
 from reportlab.pdfgen import canvas
@@ -30,7 +30,7 @@ def add_result_page(result: AnalysisResult,
                     title: str,
                     infotext: str,
                     move_info_up: int = 0,
-                    chapter_nr: int = None) -> None:
+                    chapter_nr: Union[int, None] = None) -> None:
     """
     Add a result page to the Sketch Map Fitness Report
 
@@ -328,7 +328,8 @@ def create_title(canv: canvas.Canvas, bbox: Bbox) -> None:
     canv.drawString(CONTENTS_X, META_INFO_Y, "PDF created: "+str(strftime("%Y-%m-%d %H:%M:%S")))
 
 
-def create_report(results: List[AnalysisResult], plots_path: str, output_path: str, bbox: Bbox):
+def create_report(results: List[AnalysisResult], plots_path: str, output_path: str,
+                  bbox: Bbox) -> None:
     """
     Generate a PDF file containing information and plots from Analyses' results
 

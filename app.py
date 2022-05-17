@@ -26,18 +26,18 @@ class BboxForm(Form):
                                )
 
 
-def create_app():  # noqa: C901
+def create_app() -> Flask:  # noqa: C901
     """
     Create the Flask app
     """
     app = Flask(__name__)
 
     @app.route("/", methods=["GET", "POST"])
-    def index():
+    def index() -> str:
         return render_template("index.html")
 
     @app.route("/analyses", methods=["GET", "POST"])
-    def analyses():
+    def analyses() -> str:
         bbox_form = BboxForm(request.form)
         if request.method == "POST":
             bbox_str = bbox_form.bbox_input.data
@@ -49,7 +49,7 @@ def create_app():  # noqa: C901
         return render_template(TEMPLATE_ANALYSES, bbox_form=bbox_form, outputs=dict(), msg="")
 
     @app.route("/status")
-    def status():
+    def status() -> str:
         """
         Show status page for process specified by given parameters
 

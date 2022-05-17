@@ -19,7 +19,7 @@
 # pylint: disable=duplicate-code
 import multiprocessing
 import matplotlib.pyplot as plt
-from typing import List, Tuple
+from typing import List, Tuple, Union, Any
 import requests
 
 from analyses.helpers import AnalysisResult, QualityLevel
@@ -53,7 +53,7 @@ class CompletenessAnalysis(Analysis):
                  time: str,
                  plot_location: str = "./",
                  status_file_path: str = "analyses.status",
-                 key: str = None,
+                 key: Union[None, str] = None,
                  measure: str = "density",
                  measure_unit: str = "features per km²"):
         """
@@ -81,15 +81,15 @@ class CompletenessAnalysis(Analysis):
             self.plot_name = "_plot_saturation_general.png"
 
     @property
-    def plot_location(self):
+    def plot_location(self) -> str:
         return self._plot_location
 
     @property
-    def status_file_path(self):
+    def status_file_path(self) -> str:
         return self._status_file_path
 
     @staticmethod
-    def request(aggregation: str, **params) -> requests.Response:
+    def request(aggregation: str, **params: Any) -> requests.Response:
         """
         Send a request with a given aggregation and parameters to the Ohsome API
 
@@ -133,7 +133,8 @@ class CompletenessAnalysis(Analysis):
         output_path = self.plot_location + self.plot_name
         fig.savefig(output_path)
 
-    def run(self, queue: multiprocessing.Queue = None) -> AnalysisResult:  # noqa: C901
+    def run(self, queue: Union[None, multiprocessing.Queue[AnalysisResult]] = None) \
+            -> AnalysisResult:  # noqa: C901
         """
         Inspect the saturation, i.e. completeness of OSM feature mapping
 

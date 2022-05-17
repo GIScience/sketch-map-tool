@@ -11,7 +11,7 @@ class BboxTooLargeException(Exception):
     """
     Exception indicating that a selected bounding box is too large to be processed
     """
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Bounding box selection is too large")
 
 
@@ -115,10 +115,10 @@ class Bbox(object):
             return f"{self.lon1},{self.lat1},{self.lon2},{self.lat2}"
         raise ValueError("'mode' needs to be either 'minus' or 'comma'")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.get_str(mode="comma")
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.get_str(mode="comma")
 
 

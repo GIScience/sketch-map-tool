@@ -1,7 +1,7 @@
 """
 Abstract base class for all analyses
 """
-
+import multiprocessing
 from abc import ABC, abstractmethod
 
 from analyses.helpers import AnalysisResult
@@ -37,7 +37,7 @@ class Analysis(ABC):
 
     @property
     @abstractmethod
-    def threshold_red(self):
+    def threshold_red(self) -> float:
         """
         If this threshold is surpassed, the level changes from yellow (potential problems) to red
         (probable problems)
@@ -48,7 +48,7 @@ class Analysis(ABC):
 
     @property
     @abstractmethod
-    def plot_location(self):
+    def plot_location(self) -> str:
         """
         :return: Path to the directory in which the generated plots are stored
         """
@@ -56,14 +56,14 @@ class Analysis(ABC):
 
     @property
     @abstractmethod
-    def status_file_path(self):
+    def status_file_path(self) -> str:
         """
         :return: Path to the file the status updates should be written to
         """
         raise NotImplementedError()
 
     @abstractmethod
-    def run(self, queue) -> AnalysisResult:
+    def run(self, queue: multiprocessing.Queue) -> AnalysisResult:
         """
         Run the analysis
 
