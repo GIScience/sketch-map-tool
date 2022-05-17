@@ -16,8 +16,8 @@ def get_general_score(results: List[AnalysisResult]) -> QualityLevel:
     :param results: Results of which the weighted average level should be calculated
     :return: Weighted average level
     """
-    sum_scores = 0
-    sum_weights = 0
+    sum_scores = 0.0
+    sum_weights = 0.0
     for result in results:
         sum_scores += result.level.value * result.importance
         sum_weights += result.importance
