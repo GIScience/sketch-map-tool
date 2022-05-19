@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Requires
  * - Leaflet: <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
@@ -12,12 +13,13 @@
  *             integrity="sha384-Uq80a0t9n6BA6vtncUS3TmlN2fAN/sTtyMUPxcHoWYyN3ady1FdqisXohEzMdGCR"
  *             crossorigin="anonymous"></script>
  */
-
+/* eslint-enable */
 /* global  L, GeoSearch */
 
 const EARTH_RADIUS = 6371000;
 const PI = 3.14159265359;
 let mapContainer;
+let oldCoords;
 
 /**
  * Calculate the distance between two points (lon,lat-format) in metres using the Haversine formula
@@ -70,26 +72,35 @@ function addToLon(fixPoint, width, lat1, lat2) {
  * @param oldCoords Bbox on which the new bbox should be based
  * @returns Bbox similar to 'oldCoords', but with 'ratio' as width-height-ratio
  */
-function getBbox(ratio, oldCoords) {
-    const oldWidth = calculateDistance(oldCoords[1], oldCoords[2]);
-    const oldHeight = calculateDistance(oldCoords[0], oldCoords[1]);
-    const newCoords = [oldCoords[0], oldCoords[1], oldCoords[2], oldCoords[3]];
+function getBbox(ratio, previousCoords) {
+    const oldWidth = calculateDistance(previousCoords[1], previousCoords[2]);
+    const oldHeight = calculateDistance(previousCoords[0], previousCoords[1]);
+    const newCoords = [previousCoords[0], previousCoords[1], previousCoords[2], previousCoords[3]];
     if (oldWidth > oldHeight) {
         const height = ratio * oldWidth;
-        const lat1 = oldCoords[0].lat;
+        const lat1 = previousCoords[0].lat;
         const lat2 = addToLat(lat1, height);
         newCoords[1].lat = lat2;
         newCoords[2].lat = lat2;
     } else {
         const width = ratio * oldHeight;
-        const lon1 = oldCoords[0].lng;
-        const lat1 = oldCoords[0].lat;
-        const lat2 = oldCoords[2].lat;
+        const lon1 = previousCoords[0].lng;
+        const lat1 = previousCoords[0].lat;
+        const lat2 = previousCoords[2].lat;
         const lon2 = addToLon(lon1, width, lat1, lat2);
         newCoords[2].lng = lon2;
         newCoords[3].lng = lon2;
     }
     return newCoords;
+}
+
+/**
+ * Get a bounding box as string of the format 'lon1,lat1,lon2,lat2;'
+ *
+ * @param bounds Bounds of a leaflet layer, containing attributes '_southWest' and '_northEast'
+ */
+function boundsToBboxStr(bounds) {
+    return `${bounds._southWest.lng.toPrecision(9)},${bounds._southWest.lat.toPrecision(9)},${bounds._northEast.lng.toPrecision(9)},${bounds._northEast.lat.toPrecision(9)};`;
 }
 
 /**
@@ -172,24 +183,20 @@ function initMap() {
         bboxInput.value += newBbox;
 
         // Change the bbox in the input field if the corresponding points on the map are edited
-        e.layer.on("pm:dragstart", (e) => {
-            pt = e.sourceTarget._bounds;
-            oldCoords = pt._southWest.lng.toPrecision(9) + "," + pt._southWest.lat.toPrecision(9) + "," + pt._northEast.lng.toPrecision(9) + "," + pt._northEast.lat.toPrecision(9) + ";";
-        });
-        e.layer.on("pm:dragend", (e) => {
-            pt = e.target._bounds;
-            newCoords = pt._southWest.lng.toPrecision(9) + "," + pt._southWest.lat.toPrecision(9) + "," + pt._northEast.lng.toPrecision(9) + "," + pt._northEast.lat.toPrecision(9) + ";";
+
+        const storeOldCoords = (evt) => {
+            oldCoords = boundsToBboxStr(evt.sourceTarget._bounds);
+        };
+
+        const enterNewCoords = (evt) => {
+            const newCoords = boundsToBboxStr(evt.target._bounds);
             bboxInput.value = bboxInput.value.replace(oldCoords, newCoords);
-        });
-        e.layer.on("pm:markerdragstart", (e) => {
-            pt = e.sourceTarget._bounds;
-            oldCoords = pt._southWest.lng.toPrecision(9) + "," + pt._southWest.lat.toPrecision(9) + "," + pt._northEast.lng.toPrecision(9) + "," + pt._northEast.lat.toPrecision(9) + ";";
-        });
-        e.layer.on("pm:markerdragend", (e) => {
-            pt = e.target._bounds;
-            newCoords = pt._southWest.lng.toPrecision(9) + "," + pt._southWest.lat.toPrecision(9) + "," + pt._northEast.lng.toPrecision(9) + "," + pt._northEast.lat.toPrecision(9) + ";";
-            bboxInput.value = bboxInput.value.replace(oldCoords, newCoords);
-        });
+        };
+
+        e.layer.on("pm:dragstart", storeOldCoords);
+        e.layer.on("pm:dragend", enterNewCoords);
+        e.layer.on("pm:markerdragstart", storeOldCoords);
+        e.layer.on("pm:markerdragend", enterNewCoords);
     });
 }
 
@@ -204,7 +211,7 @@ function clearMap(m) {
             try {
                 m.removeLayer(m._layers[i]);
             } catch (e) {
-                console.log("Cannot clear layer " + e + m._layers[i]);
+                console.log(`Cannot clear layer. Exception: '${e}'. Layer: '${m._layers[i]}'.`);
             }
         }
     }
