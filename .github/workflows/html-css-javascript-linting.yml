@@ -17,4 +17,4 @@ jobs:
     - name: Run ESLint
       run: npx eslint .
     - name: Run HtmlHint
-      run: npx htmlhint "**/*.html"
+      run: npx htmlhint "**/*.html" --ignore "analyses/html_gen/template.html"

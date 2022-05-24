@@ -6,3 +6,71 @@
 #bbox_input{
     width: 90%;
 }
+
+#result-list {
+    list-style-type:none;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.left-align-text {
+    text-align: left;
+}
+
+.msg-box {
+    max-width: 18rem;
+    margin: 0 auto;
+}
+
+.contents-card {
+    width: 70%;
+    margin:0 auto;
+    text-align: left;
+}
+
+.input-grid {
+    display: grid;
+}
+
+.input-row {
+    width: 40%;
+}
+
+.title-with-btn {
+    display: inline-flex;
+}
+
+.hspace {
+    width: 20%;
+}
+
+.small-margin {
+    margin: 10px;
+}
+
+.disabled-button {
+    background:lightgrey;
+}
+
+.half-width {
+    width: 50%;
+}
+
+.highlight-text {
+    color:Crimson;
+}
+
+.highlight-error {
+    color:red;
+}
+
+.console {
+    border: 1px solid gray;
+    background-color: #000000;
+    color: #21b300;
+    width: 500px;
+    overflow: auto;
+    padding: 10px;
+}

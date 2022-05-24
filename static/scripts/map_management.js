@@ -151,8 +151,8 @@ function initMap() {
         // Add bounding box selected on the map to the input field and (if activated) adjust its
         // ratio to the chosen paper format
         const bboxInput = document.getElementById("bbox_input");
-        const checkboxAdjust = document.getElementById("adjustToPaperFormat");
-        const selectPaperFormat = document.getElementById("paperFormatSelection");
+        const checkboxAdjust = document.getElementById("adjust-to-paper-format");
+        const selectPaperFormat = document.getElementById("paper-format-selection");
         const adjust = checkboxAdjust.checked;
         let coords = e.layer.getLatLngs()[0];
         if (adjust) {
@@ -243,3 +243,7 @@ function zoomToSelection(map) {
             + "Correct example: 8.69142561,49.4102821,8.69372067,49.4115517;");
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("btn-zoom-to-selection").onclick = () => zoomToSelection(mapContainer);
+});

@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <script src="../static/scripts/progress.js"></script>
-        <link rel="stylesheet" href="../static/style/progress.css"/>
+        <link href="../static/style/style.css" rel="stylesheet"/>
         {% if RESULTS|length == 0 %}
             <title>
                 Sketch Map Tool | Status
@@ -15,23 +15,23 @@
         {% endif %}
 
     </head>
-    <body onload="refresh(5000);">
-        <h1>Status for request <span style="color:Crimson;">{{ NAME }}</span>
+    <body>
+        <h1>Status for request <span class="highlight-text">{{ NAME }}</span>
         {% if BBOX != '' %}
-            For area <span style="color:Crimson;">{{BBOX}}</span>
+            For area <span class="highlight-text">{{BBOX}}</span>
         {% endif %}
         :</h1>
         {% if RESULTS|length == 0 %}
-            <progress max="{{ NR_OF_STEPS }}" value="{{ STEPS_COMPLETED }}"> {{PERCENTAGE}} </progress>
+            <progress value="{{ STEPS_COMPLETED }}" max="{{ NR_OF_STEPS }}"> {{PERCENTAGE}} </progress>
         {% else %}
-            <progress max="{{ NR_OF_STEPS }}" value="{{ NR_OF_STEPS }}"> 100% </progress>
+            <progress value="{{ NR_OF_STEPS }}" max="{{ NR_OF_STEPS }}"> 100% </progress>
         {% endif %}
         <hr>
         {% if ERROR is not none %}
             <script>
                     stopRefresh();
             </script>
-            <h2 style="color:red">Failed | {{ ERROR }}</h2>
+            <h2 class="highlight-error">Failed | {{ ERROR }}</h2>
             We are working on improving the processes to avoid such errors in the future.<br>
             For the moment, you can check your inputs and try it again - in some cases it will work then. 
         {% else %}
