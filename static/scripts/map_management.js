@@ -138,7 +138,7 @@ function initMap() {
 
     // If a bbox is removed on the map, delete it from the input field as well:
     mapContainer.on("pm:remove", (e) => {
-        const bboxInput = document.getElementById("bbox_input");
+        const bboxInput = document.getElementById("bbox-input");
         const coords = e.layer.getLatLngs();
         const point1 = coords[0][0];
         const point2 = coords[0][2];
@@ -150,7 +150,7 @@ function initMap() {
     mapContainer.on("pm:create", (e) => {
         // Add bounding box selected on the map to the input field and (if activated) adjust its
         // ratio to the chosen paper format
-        const bboxInput = document.getElementById("bbox_input");
+        const bboxInput = document.getElementById("bbox-input");
         const checkboxAdjust = document.getElementById("adjust-to-paper-format");
         const selectPaperFormat = document.getElementById("paper-format-selection");
         const adjust = checkboxAdjust.checked;
@@ -218,12 +218,12 @@ function clearMap(m) {
 }
 
 /**
- * Center a map on the coordinates entered in an input with the ID 'bbox_input' and zoom in
+ * Center a map on the coordinates entered in an input with the ID 'bbox-input' and zoom in
  *
  * @param map (Leaflet-) Map which should be zoomed to the bbox input
  */
 function zoomToSelection(map) {
-    const bboxInput = document.getElementById("bbox_input").value;
+    const bboxInput = document.getElementById("bbox-input").value;
     const pattern = /^(?:(-?[0-9]*\.[0-9]*,){3}-?[0-9]*\.[0-9]*;?)+$/;
 
     if (pattern.test(bboxInput)) {

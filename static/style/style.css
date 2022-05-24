@@ -3,12 +3,12 @@
     width: 100%;
 }
 
-#bbox_input{
+#bbox-input {
     width: 90%;
 }
 
 #result-list {
-    list-style-type:none;
+    list-style-type: none;
 }
 
 .center-text {
@@ -26,7 +26,7 @@
 
 .contents-card {
     width: 70%;
-    margin:0 auto;
+    margin: 0 auto;
     text-align: left;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .disabled-button {
-    background:lightgrey;
+    background: lightgrey;
 }
 
 .half-width {
@@ -59,16 +59,16 @@
 }
 
 .highlight-text {
-    color:Crimson;
+    color: crimson;
 }
 
 .highlight-error {
-    color:red;
+    color: red;
 }
 
 .console {
     border: 1px solid gray;
-    background-color: #000000;
+    background-color: #000;
     color: #21b300;
     width: 500px;
     overflow: auto;
