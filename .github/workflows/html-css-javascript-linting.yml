@@ -14,7 +14,11 @@ jobs:
           npm install eslint-config-airbnb-base@15.0.0
           npm install eslint-plugin-import@2.25.4
           npm install htmlhint@1.1.4
+          npm install stylelint@14.8.3
+          npm install stylelint-config-standard@25.0.0
     - name: Run ESLint
       run: npx eslint .
     - name: Run HtmlHint
       run: npx htmlhint "**/*.html" --ignore "analyses/html_gen/template.html"
+    - name: Run Stylelint
+      run: npx stylelint "**/*.css"
