@@ -3,28 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Sketch Map Tool Prototype</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          rel="stylesheet"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="./static/scripts/feature_not_available.js"></script>
+    <link href="../static/style/style.css" rel="stylesheet"/>
+    <script src="./static/scripts/header_menu.js"></script>
 </head>
-<body style="text-align: center">
+<body class="center-text">
     <h1>Sketch Map Tool Prototype</h1>
     <div class="container border">
-        <header class="d-flex justify-content-center" style="margin: 10px;">
+        <header class="d-flex justify-content-center small-margin">
             <ul class="nav nav-pills">
-                <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Info</a></li>
-                <li class="nav-item"><a href="./analyses" class="nav-link">Analyses</a></li>
-                <li class="nav-item" style="background:lightgrey;">
-                    <a href="#" onclick="showMsgNotAvailable();" class="nav-link">Map generation</a>
+                <li class="nav-item">
+                    <a class="nav-link active" id="btn-info" href="#" aria-current="page">Info</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" id="btn-analyses" href="./analyses">Analyses</a></li>
+                <li class="nav-item disabled-button">
+                    <a class="nav-link" id="btn-generation" href="#">Map generation</a>
                 </li>
-                <li class="nav-item" style="background:lightgrey;">
-                    <a  href="#" onclick="showMsgNotAvailable();"  class="nav-link">Upload sketch maps</a>
+                <li class="nav-item disabled-button">
+                    <a class="nav-link" id="btn-upload" href="#">Upload sketch maps</a>
                 </li>
             </ul>
         </header>
     </div>
     <br><br>
-    <div class="card" style="width: 70%; margin:0 auto; text-align: left">
+    <div class="card contents-card">
         <div class="card-body">
             <p>
                 This is a prototype of the Sketch Map Tool. While we are working on a more polished and advanced version
@@ -55,7 +59,7 @@
                         whether using maps based on them might cause any problems, e.g. they are outdated or incomplete.
                         In our case the maps are based on <a href="https://www.openstreetmap.org">OpenStreetMap</a>
                         Data <br>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 19">
+                        <svg class="bi bi-arrow-right-circle" xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 19">
                             <!-- Licence: MIT, Copyright (c) 2019-2021 The Bootstrap Authors, see https://github.com/twbs/icons/blob/main/LICENSE.md -->
                             <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
                         </svg>
@@ -64,7 +68,7 @@
                     <li>
                         To carry out the actual study, sketch maps need to be printed. This should be possible in small as well as large paper
                         formats to allow for group mappings. Thus generating maps in high resolution is necessary.<br>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 19">
+                        <svg class="bi bi-arrow-right-circle" xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 19">
                             <!-- Licence: MIT, Copyright (c) 2019-2021 The Bootstrap Authors, see https://github.com/twbs/icons/blob/main/LICENSE.md -->
                             <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
                         </svg>
@@ -73,7 +77,7 @@
                     </li>
                     <li>After participants have marked areas or points of interest on the sketch maps, the maps need to
                         be digitised, georeferenced, and the markings need to be detected.<br>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 19">
+                        <svg class="bi bi-arrow-right-circle" xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 19">
                             <!-- Licence: MIT, Copyright (c) 2019-2021 The Bootstrap Authors, see https://github.com/twbs/icons/blob/main/LICENSE.md -->
                             <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
                         </svg>
@@ -84,7 +88,7 @@
             <p>
                 For more information about the tool and its origin, you can take a look at the paper in which it was
                 presented:
-                <div class="card" style="width: 50%;">
+                <div class="card half-width">
                     <div class="card-body">
                         Klonner, C.; Hartmann, M.; Dischl, R.; Djami, L.; Anderson, L.; Raifer, M.; Lima-Silva, F.;
                         Castro Degrossi, L.; Zipf, A.; Porto de Albuquerque, J. The Sketch Map Tool Facilitates the

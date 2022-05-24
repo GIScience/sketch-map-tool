@@ -5,3 +5,8 @@ function showMsgNotAvailable() {
     alert("This feature is not available yet.\nWe want to fix some remaining bugs before publishing it, so you "
           + "have a good user experience from the start.\n\nThis feature will follow in the next weeks.");
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("btn-generation").onclick = () => showMsgNotAvailable();
+    document.getElementById("btn-upload").onclick = () => showMsgNotAvailable();
+});

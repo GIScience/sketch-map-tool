@@ -12,3 +12,7 @@ function refresh(timeoutPeriod) {
 function stopRefresh() {
     continueRefreshing = false;
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    refresh(5000);
+});

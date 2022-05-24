@@ -15,9 +15,9 @@ from helper_modules.progress import get_status_updates, get_nr_of_completed_step
 
 class BboxForm(Form):  # type: ignore
     """
-    Enables access to the input field bbox_input of the HTML template
+    Enables access to the input field bbox-input of the HTML template
     """
-    bbox_input = TextAreaField(id="bbox_input", validators=[validators.InputRequired(),
+    bbox_input = TextAreaField(id="bbox-input", validators=[validators.InputRequired(),
                                                             is_bbox_str],
                                render_kw={
                                    "placeholder":

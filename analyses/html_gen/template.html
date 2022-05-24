@@ -1,11 +1,13 @@
 <!DOCTYPE html>
+<!-- htmlhint "style-disabled":false -->
 <html lang="en">
 <head>
-    <meta charset='UTF-8'/>
+    <meta charset="UTF-8"/>
     <title>Sketch map fitness | Results</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-           integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-           crossorigin="anonymous"/>
+    <link href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          rel="stylesheet"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin="anonymous"/>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
             crossorigin="anonymous"></script>
@@ -23,38 +25,23 @@
         table {
             width: 100%;
         }
-        #left_column{
+        #left-column{
             max-width: 30%;height: auto;
         }
-        #right_column{
+        #right-column{
             padding-top: 50px;
             width: 75%;
             max-width:650px;
         }
-        .button{
-            float:right;
-            width: 80px;
-            height: 30px;
-            color: black;
-            background: none;
-            border: 1px solid #000;
-            transition-duration: 0.3s;
-        }
-        .button:hover{
-            color: #aaa;
-        }
-        .report_text{
-            display: none;
-        }
-        #red_block{
+        #red-block{
             width: 15px;
             background-color: #F44336;
         }
-        #yellow_block{
+        #yellow-block{
             width: 15px;
             background-color: #FFC107;
         }
-        #green_block{
+        #green-block{
             width: 15px;
             background-color: green;
         }
@@ -67,10 +54,6 @@
             height: auto;
             padding: 20px;
             border: none;
-        }
-        #suggestion{
-            padding:30px;
-            border:5px solid #eee;
         }
         p, li{
             font-family: sans-serif;
@@ -86,10 +69,10 @@
 </head>
 <body>
 <h1>OpenStreetMap Evaluation for Requested Area:</h1>
-<a href ='{{ PDF_LINK }}'><img alt='PDF Report' src='img/pdf_icon.png' height='150px'></a>
+<a href="{{ PDF_LINK }}"><img src="img/pdf_icon.png" alt="PDF Report" height="150px"></a>
 
 
-<div id='mapid'></div>
+<div id="mapid"></div>
 <script>
         let map = L.map('mapid').setView([{{ MAP_COORDINATES }}], 10);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -97,15 +80,15 @@
         let polygon = L.polygon({{ PLOYGON_COORDINATES }}).addTo(map);
     </script>
 <br>
-<div id='main' class='flex-container'>
-    <div id='left_column' class='box'>
-        <img class='img' src='./img/html_light_{{ LEVEL }}.jpg'>
+<div class="flex-container" id="main">
+    <div class="box" id="left-column">
+        <img class="img" src="./img/html_light_{{ LEVEL }}.jpg" alt="Traffic light with level {{ LEVEL }}. From 0 = red to 2 = green.">
     </div>
-    <div id='right_column' class='box graybox'>
+    <div class="box graybox" id="right-column">
         <table style="width:100%">
             <tbody>
             <tr>
-                <td id="red_block">&nbsp;</td>
+                <td id="red-block">&nbsp;</td>
                 <td style="border-bottom: #F44336 solid;">
                     <p style="display:inline">
                         {{ MSG_LEVEL_RED }}
@@ -113,7 +96,7 @@
                 </td>
             </tr>
             <tr>
-                <td id="yellow_block">&nbsp;</td>
+                <td id="yellow-block">&nbsp;</td>
                 <td style="border-bottom: #FFC107 solid;">
                     <p style="display:inline">
                         {{ MSG_LEVEL_YELLOW }}
@@ -121,7 +104,7 @@
                 </td>
             </tr>
             <tr>
-                <td id="green_block">&nbsp;</td>
+                <td id="green-block">&nbsp;</td>
                 <td style="border-bottom: green solid;">
                     <p style="display:inline">
                         {{ MSG_LEVEL_GREEN }}
@@ -133,21 +116,21 @@
     </div>
     <br>
 </div>
-<div id='suggestions'>
+<div id="suggestions">
     <h2>Recommendations:</h2>
-    <div id='suggestion-text' class='graybox'>
+    <div class="graybox" id="suggestion-text">
         <p>
             {{ SUGGESTION_LIST }}
         </p>
     </div>
 </div>
 <hr>
-This tool accesses OpenStreetMap data, which is partly aggregated, via the <a href='https://www.ohsome.org'>ohsome API
-</a> by the <a href='https://www.heigit.org/'>Heidelberg Institute for Geoinformation Technology (HeiGIT)</a>. The data
-and statistics are based on data by <a href='https://www.openstreetmap.org/copyright'>© OpenStreetMap contributors</a>.
-ohsome uses a database that contains <a href='https://www.opendatacommons.org/licenses/odbl/1-0/index.html'>ODbL 1.0</a>
-licensed <a href='https://planet.osm.org/planet/full-history/'>OSM data</a> and
-<a href='https://www.creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA 2.0</a> licensed
-<a href='https://planet.osm.org/cc-by-sa/'>OSM data</a>.
+This tool accesses OpenStreetMap data, which is partly aggregated, via the <a href="https://www.ohsome.org">ohsome API
+</a> by the <a href="https://www.heigit.org/">Heidelberg Institute for Geoinformation Technology (HeiGIT)</a>. The data
+and statistics are based on data by <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>.
+ohsome uses a database that contains <a href="https://www.opendatacommons.org/licenses/odbl/1-0/index.html">ODbL 1.0</a>
+licensed <a href="https://planet.osm.org/planet/full-history/">OSM data</a> and
+<a href="https://www.creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA 2.0</a> licensed
+<a href="https://planet.osm.org/cc-by-sa/">OSM data</a>.
 </body>
 </html>

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Requires
  * - Leaflet: <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
@@ -12,12 +13,13 @@
  *             integrity="sha384-Uq80a0t9n6BA6vtncUS3TmlN2fAN/sTtyMUPxcHoWYyN3ady1FdqisXohEzMdGCR"
  *             crossorigin="anonymous"></script>
  */
-
+/* eslint-enable */
 /* global  L, GeoSearch */
 
 const EARTH_RADIUS = 6371000;
 const PI = 3.14159265359;
 let mapContainer;
+let oldCoords;
 
 /**
  * Calculate the distance between two points (lon,lat-format) in metres using the Haversine formula
@@ -70,26 +72,35 @@ function addToLon(fixPoint, width, lat1, lat2) {
  * @param oldCoords Bbox on which the new bbox should be based
  * @returns Bbox similar to 'oldCoords', but with 'ratio' as width-height-ratio
  */
-function getBbox(ratio, oldCoords) {
-    const oldWidth = calculateDistance(oldCoords[1], oldCoords[2]);
-    const oldHeight = calculateDistance(oldCoords[0], oldCoords[1]);
-    const newCoords = [oldCoords[0], oldCoords[1], oldCoords[2], oldCoords[3]];
+function getBbox(ratio, previousCoords) {
+    const oldWidth = calculateDistance(previousCoords[1], previousCoords[2]);
+    const oldHeight = calculateDistance(previousCoords[0], previousCoords[1]);
+    const newCoords = [previousCoords[0], previousCoords[1], previousCoords[2], previousCoords[3]];
     if (oldWidth > oldHeight) {
         const height = ratio * oldWidth;
-        const lat1 = oldCoords[0].lat;
+        const lat1 = previousCoords[0].lat;
         const lat2 = addToLat(lat1, height);
         newCoords[1].lat = lat2;
         newCoords[2].lat = lat2;
     } else {
         const width = ratio * oldHeight;
-        const lon1 = oldCoords[0].lng;
-        const lat1 = oldCoords[0].lat;
-        const lat2 = oldCoords[2].lat;
+        const lon1 = previousCoords[0].lng;
+        const lat1 = previousCoords[0].lat;
+        const lat2 = previousCoords[2].lat;
         const lon2 = addToLon(lon1, width, lat1, lat2);
         newCoords[2].lng = lon2;
         newCoords[3].lng = lon2;
     }
     return newCoords;
+}
+
+/**
+ * Get a bounding box as string of the format 'lon1,lat1,lon2,lat2;'
+ *
+ * @param bounds Bounds of a leaflet layer, containing attributes '_southWest' and '_northEast'
+ */
+function boundsToBboxStr(bounds) {
+    return `${bounds._southWest.lng.toPrecision(9)},${bounds._southWest.lat.toPrecision(9)},${bounds._northEast.lng.toPrecision(9)},${bounds._northEast.lat.toPrecision(9)};`;
 }
 
 /**
@@ -127,7 +138,7 @@ function initMap() {
 
     // If a bbox is removed on the map, delete it from the input field as well:
     mapContainer.on("pm:remove", (e) => {
-        const bboxInput = document.getElementById("bbox_input");
+        const bboxInput = document.getElementById("bbox-input");
         const coords = e.layer.getLatLngs();
         const point1 = coords[0][0];
         const point2 = coords[0][2];
@@ -139,9 +150,9 @@ function initMap() {
     mapContainer.on("pm:create", (e) => {
         // Add bounding box selected on the map to the input field and (if activated) adjust its
         // ratio to the chosen paper format
-        const bboxInput = document.getElementById("bbox_input");
-        const checkboxAdjust = document.getElementById("adjustToPaperFormat");
-        const selectPaperFormat = document.getElementById("paperFormatSelection");
+        const bboxInput = document.getElementById("bbox-input");
+        const checkboxAdjust = document.getElementById("adjust-to-paper-format");
+        const selectPaperFormat = document.getElementById("paper-format-selection");
         const adjust = checkboxAdjust.checked;
         let coords = e.layer.getLatLngs()[0];
         if (adjust) {
@@ -172,24 +183,20 @@ function initMap() {
         bboxInput.value += newBbox;
 
         // Change the bbox in the input field if the corresponding points on the map are edited
-        e.layer.on("pm:dragstart", (e) => {
-            pt = e.sourceTarget._bounds;
-            oldCoords = pt._southWest.lng.toPrecision(9) + "," + pt._southWest.lat.toPrecision(9) + "," + pt._northEast.lng.toPrecision(9) + "," + pt._northEast.lat.toPrecision(9) + ";";
-        });
-        e.layer.on("pm:dragend", (e) => {
-            pt = e.target._bounds;
-            newCoords = pt._southWest.lng.toPrecision(9) + "," + pt._southWest.lat.toPrecision(9) + "," + pt._northEast.lng.toPrecision(9) + "," + pt._northEast.lat.toPrecision(9) + ";";
+
+        const storeOldCoords = (evt) => {
+            oldCoords = boundsToBboxStr(evt.sourceTarget._bounds);
+        };
+
+        const enterNewCoords = (evt) => {
+            const newCoords = boundsToBboxStr(evt.target._bounds);
             bboxInput.value = bboxInput.value.replace(oldCoords, newCoords);
-        });
-        e.layer.on("pm:markerdragstart", (e) => {
-            pt = e.sourceTarget._bounds;
-            oldCoords = pt._southWest.lng.toPrecision(9) + "," + pt._southWest.lat.toPrecision(9) + "," + pt._northEast.lng.toPrecision(9) + "," + pt._northEast.lat.toPrecision(9) + ";";
-        });
-        e.layer.on("pm:markerdragend", (e) => {
-            pt = e.target._bounds;
-            newCoords = pt._southWest.lng.toPrecision(9) + "," + pt._southWest.lat.toPrecision(9) + "," + pt._northEast.lng.toPrecision(9) + "," + pt._northEast.lat.toPrecision(9) + ";";
-            bboxInput.value = bboxInput.value.replace(oldCoords, newCoords);
-        });
+        };
+
+        e.layer.on("pm:dragstart", storeOldCoords);
+        e.layer.on("pm:dragend", enterNewCoords);
+        e.layer.on("pm:markerdragstart", storeOldCoords);
+        e.layer.on("pm:markerdragend", enterNewCoords);
     });
 }
 
@@ -204,19 +211,19 @@ function clearMap(m) {
             try {
                 m.removeLayer(m._layers[i]);
             } catch (e) {
-                console.log("Cannot clear layer " + e + m._layers[i]);
+                console.log(`Cannot clear layer. Exception: '${e}'. Layer: '${m._layers[i]}'.`);
             }
         }
     }
 }
 
 /**
- * Center a map on the coordinates entered in an input with the ID 'bbox_input' and zoom in
+ * Center a map on the coordinates entered in an input with the ID 'bbox-input' and zoom in
  *
  * @param map (Leaflet-) Map which should be zoomed to the bbox input
  */
 function zoomToSelection(map) {
-    const bboxInput = document.getElementById("bbox_input").value;
+    const bboxInput = document.getElementById("bbox-input").value;
     const pattern = /^(?:(-?[0-9]*\.[0-9]*,){3}-?[0-9]*\.[0-9]*;?)+$/;
 
     if (pattern.test(bboxInput)) {
@@ -236,3 +243,7 @@ function zoomToSelection(map) {
             + "Correct example: 8.69142561,49.4102821,8.69372067,49.4115517;");
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("btn-zoom-to-selection").onclick = () => zoomToSelection(mapContainer);
+});
