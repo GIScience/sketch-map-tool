@@ -244,6 +244,18 @@ function zoomToSelection(map) {
     }
 }
 
+/**
+ * Initialize the text field for bbox input, e.g. with autocorrections.
+ */
+function initBboxInput() {
+    const bboxInput = document.getElementById("bbox-input");
+    bboxInput.onkeyup = () => {
+        bboxInput.value = bboxInput.value.replace(/\s|\r?\n|\r/gi, "");
+    };
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btn-zoom-to-selection").onclick = () => zoomToSelection(mapContainer);
+    initMap();
+    initBboxInput();
 });
