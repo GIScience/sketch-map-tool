@@ -21,15 +21,16 @@ class Pylint(Stage):
             activate_env = [".\\pylint_env\\Scripts\\activate"]
         else:
             activate_env = ["source", "pylint_env/bin/activate"]
+        # pylint: disable=consider-using-with
+        process = Popen(["python", "-m", "venv", "pylint_env", "&&",  # nosec
+                         *activate_env, "&&",
+                         "pip", "install", "-r",
+                         f"{os.path.dirname(__file__)}{os.sep}pylint_requirements.txt"], shell=True)
+        process.communicate()
         for file in self.files:
             if file.split(".")[-1] in self.file_formats:
                 print(f"Running pylint for {file}")
-                # pylint: disable=consider-using-with
-                process = Popen(["python", "-m", "venv", "pylint_env", "&&",  # nosec
-                                 *activate_env, "&&",
-                                 "pip", "install", "-r",
-                                 f"{os.path.dirname(__file__)}{os.sep}pylint_requirements.txt",
-                                 "&&",
+                process = Popen([*activate_env, "&&",
                                  "python", "-m", "pylint", file], stdout=PIPE,
                                 stderr=PIPE, shell=True)
                 stdout, stderr = process.communicate()
