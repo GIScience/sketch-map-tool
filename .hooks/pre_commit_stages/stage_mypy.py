@@ -31,7 +31,7 @@ class Mypy(Stage):
         for file in self.files:
             if file.split(".")[-1] in self.file_formats:
                 print(f"Running mypy for {file}")
-                process = Popen([*activate_env, "&&",
+                process = Popen([*activate_env, "&&",  # nosec
                                  "python", "-m", "mypy", "--strict", file], stdout=PIPE,
                                 stderr=PIPE, shell=True)
                 stdout, stderr = process.communicate()

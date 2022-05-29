@@ -30,7 +30,7 @@ class Pylint(Stage):
         for file in self.files:
             if file.split(".")[-1] in self.file_formats:
                 print(f"Running pylint for {file}")
-                process = Popen([*activate_env, "&&",
+                process = Popen([*activate_env, "&&",  # nosec
                                  "python", "-m", "pylint", file], stdout=PIPE,
                                 stderr=PIPE, shell=True)
                 stdout, stderr = process.communicate()
