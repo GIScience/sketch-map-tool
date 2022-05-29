@@ -103,15 +103,6 @@ If you want to execute the `run` command again, at first remove the existing con
 docker rm sketch-maps
 ```
 
-
-## Funding
-This tool has been developed in the project T2S Waterproofing Data which is financially supported by the Belmont Forum
-and NORFACE Joint Research Programme on Transformations to Sustainability, co-funded by DLR/BMBF (Federal Ministry of
-Education and Research) as part of its Social-Ecological Research funding priority, ESRC/Global Challenges Research
-Fund (ES/S006982/1), FAPESP and the European Commission through Horizon 2020. Additional work on the Sketch Map Tool has
-been financially supported by the German Red Cross. The ongoing work takes place in the Heidelberg Institute for
-Geoinformation Technology.
-
 ## How to contribute
 We are currently working on adding the remaining features concerning the map creation and uploading of marked sketch 
 maps. If you discover any bugs or want to refactor something, we are of course very happy about your pull request (see 
@@ -130,3 +121,11 @@ If you discover any violations in the existing code, feel very welcome to fix th
 these conventions, please make sure that for your pull request all [checks](./actions) succeed. You can also set up git
 hooks to automatically run relevant linters before your code is committed, see [.hooks/README.MD](.hooks/README.MD) for 
 more info. Please also make sure that everything you modify or add is covered by [unit tests](test).
+
+## Funding
+This tool has been developed in the project T2S Waterproofing Data which is financially supported by the Belmont Forum
+and NORFACE Joint Research Programme on Transformations to Sustainability, co-funded by DLR/BMBF (Federal Ministry of
+Education and Research) as part of its Social-Ecological Research funding priority, ESRC/Global Challenges Research
+Fund (ES/S006982/1), FAPESP and the European Commission through Horizon 2020. Additional work on the Sketch Map Tool has
+been financially supported by the German Red Cross. The ongoing work takes place in the Heidelberg Institute for
+Geoinformation Technology.
