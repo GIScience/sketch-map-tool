@@ -21,10 +21,10 @@ class ESLint(Stage):
                                  "npx", "eslint", file], stdout=PIPE,
                                 stderr=PIPE, shell=True)
                 stdout, stderr = process.communicate()
-                stdout = stdout.decode("Windows-1252")
-                stderr = stderr.decode("Windows-1252")
-                print(f"ESLint Output: '{stdout}'")
-                print(f"ESLint Error(s)/Warning(s): '{stderr}'")
+                stdout_str = stdout.decode("Windows-1252")
+                stderr_str = stderr.decode("Windows-1252")
+                print(f"ESLint Output: '{stdout_str}'")
+                print(f"ESLint Error(s)/Warning(s): '{stderr_str}'")
                 if process.returncode != 0:
                     raise Exception("ESLint detected errors")
 

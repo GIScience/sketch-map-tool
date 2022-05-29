@@ -7,12 +7,14 @@ from pre_commit_stages.stage_base import Stage
 from pre_commit_stages.stage_eslint import ESLint
 from pre_commit_stages.stage_htmlhint import HTMLHint
 from pre_commit_stages.stage_pylint import Pylint
+from pre_commit_stages.stage_mypy import Mypy
 from pre_commit_stages.stage_stylelint import StyleLint
 
 # TODO: Uncomment the ones you want to activate:
 STAGES: List[Type[Stage]] = [
     # ---------- Python ----------
     Pylint,
+    Mypy,
     # ---------- JavaScript ----------
     ESLint,
     # ---------- HTML ----------

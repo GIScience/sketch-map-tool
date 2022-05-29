@@ -20,10 +20,10 @@ class HTMLHint(Stage):
                                  "npx", "htmlhint", file],
                                 stdout=PIPE, stderr=PIPE, shell=True)
                 stdout, stderr = process.communicate()
-                stdout = stdout.decode("utf8")
-                stderr = stderr.decode("utf8")
-                print(f"HTMLHint Output: '{stdout}'")
-                print(f"HTMLHint Error(s)/Warning(s): '{stderr}'")
+                stdout_str = stdout.decode("utf8")
+                stderr_str = stderr.decode("utf8")
+                print(f"HTMLHint Output: '{stdout_str}'")
+                print(f"HTMLHint Error(s)/Warning(s): '{stderr_str}'")
                 if process.returncode != 0:
                     raise Exception("HTMLHint detected issues")
 

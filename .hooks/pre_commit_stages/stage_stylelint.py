@@ -21,10 +21,10 @@ class StyleLint(Stage):
                                  "npx", "stylelint", file],
                                 stdout=PIPE, stderr=PIPE, shell=True)
                 stdout, stderr = process.communicate()
-                stdout = stdout.decode("utf8")
-                stderr = stderr.decode("utf8")
-                print(f"StyleLint Output: '{stdout}'")
-                print(f"StyleLint Error(s)/Warning(s): '{stderr}'")
+                stdout_str = stdout.decode("utf8")
+                stderr_str = stderr.decode("utf8")
+                print(f"StyleLint Output: '{stdout_str}'")
+                print(f"StyleLint Error(s)/Warning(s): '{stderr_str}'")
                 if process.returncode != 0:
                     raise Exception("StyleLint detected issues")
 

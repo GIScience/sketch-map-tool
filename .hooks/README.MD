@@ -108,6 +108,10 @@ STAGES: List[Type[Stage]] = [
   * Create and activate a virtual Python environment
   * Install [Pylint](https://pylint.org/) there
   * Run it on modified Python files
+* **Mypy**
+  * Create and activate a virtual Python environment
+  * Install [mypy](http://mypy-lang.org/) there
+  * Run it on modified Python files
 * **ESLint**
   * Install [ESLint](https://eslint.org/) with the airbnb-base-style
   * Run it on modified JavaScript files

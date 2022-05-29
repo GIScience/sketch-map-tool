@@ -110,7 +110,7 @@ below, Development). We are also grateful, if you discover a bug or other proble
 
 ### Development
 If you change or add code, please pay attention that everything is according to the conventions used in this project:  
-* **Python**: [PEP 8](https://peps.python.org/pep-0008/)
+* **Python**: [PEP 8](https://peps.python.org/pep-0008/), [PEP 484 (Type Hints)](https://peps.python.org/pep-0484/)
 * **HTML**: See [.htmlhintrc](.htmlhintrc) and the [documentation of these rules](https://github.com/htmlhint/HTMLHint/tree/master/docs/user-guide/rules)
 * **JavaScript**: [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) with some modifications (see 
 [.eslintrc.json](.eslintrc.json))
