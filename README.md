@@ -118,7 +118,7 @@ If you change or add code, please pay attention that everything is according to 
 [.stylelintrc.json](.stylelintrc.json))  
 
 If you discover any violations in the existing code, feel very welcome to fix them. To facilitate paying attention to 
-these conventions, please make sure that for your pull request all [checks](./actions) succeed. You can also set up git
+these conventions, please make sure that for your pull request all checks succeed. You can also set up git
 hooks to automatically run relevant linters before your code is committed, see [.hooks/README.MD](.hooks/README.MD) for 
 more info. Please also make sure that everything you modify or add is covered by [unit tests](test).
 
