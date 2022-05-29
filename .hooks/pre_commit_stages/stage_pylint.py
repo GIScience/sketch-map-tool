@@ -3,7 +3,7 @@ Contains class 'Pylint' to run Pylint on Python files
 """
 import os
 from .stage_base import Stage
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE  # nosec
 
 
 class Pylint(Stage):
@@ -25,7 +25,7 @@ class Pylint(Stage):
             if file.split(".")[-1] in self.file_formats:
                 print(f"Running pylint for {file}")
                 # pylint: disable=consider-using-with
-                process = Popen(["python", "-m", "venv", "pylint_env", "&&",
+                process = Popen(["python", "-m", "venv", "pylint_env", "&&",  # nosec
                                  *activate_env, "&&",
                                  "pip", "install", "-r",
                                  f"{os.path.dirname(__file__)}{os.sep}pylint_requirements.txt",

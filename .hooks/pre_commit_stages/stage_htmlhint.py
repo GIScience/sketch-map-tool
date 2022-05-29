@@ -1,7 +1,7 @@
 """
 Contains class 'HTMLHint' to run HTMLHint on HTML files
 """
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE  # nosec
 from .stage_base import Stage
 
 
@@ -16,7 +16,7 @@ class HTMLHint(Stage):
             if file.split(".")[-1] in self.file_formats:
                 print(f"Running HTMLHint for {file}")
                 # pylint: disable=consider-using-with
-                process = Popen(["npm", "install", "htmlhint@1.1.4", "&&",
+                process = Popen(["npm", "install", "htmlhint@1.1.4", "&&",  # nosec
                                  "npx", "htmlhint", file],
                                 stdout=PIPE, stderr=PIPE, shell=True)
                 stdout, stderr = process.communicate()

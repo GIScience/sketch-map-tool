@@ -2,7 +2,7 @@
 Contains class 'ESLint' to run ESLint on JavaScript files
 """
 from .stage_base import Stage
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE  # nosec
 
 
 class ESLint(Stage):
@@ -16,7 +16,7 @@ class ESLint(Stage):
             if file.split(".")[-1] in self.file_formats:
                 print(f"Running ESLint for {file}")
                 # pylint: disable=consider-using-with
-                process = Popen(["npm", "install", "eslint@8.10.0", "&&",
+                process = Popen(["npm", "install", "eslint@8.10.0", "&&",    # nosec
                                  "npm", "install", "eslint-config-airbnb-base@15.0.0", "&&",
                                  "npx", "eslint", file], stdout=PIPE,
                                 stderr=PIPE, shell=True)

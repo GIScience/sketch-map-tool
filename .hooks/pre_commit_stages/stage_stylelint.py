@@ -2,7 +2,7 @@
 Contains class 'StyleLint' to run StyleLint on CSS files
 """
 from .stage_base import Stage
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE  # nosec
 
 
 class StyleLint(Stage):
@@ -16,7 +16,7 @@ class StyleLint(Stage):
             if file.split(".")[-1] in self.file_formats:
                 print(f"Running StyleLint for {file}")
                 # pylint: disable=consider-using-with
-                process = Popen(["npm", "install", "stylelint@14.8.3", "&&",
+                process = Popen(["npm", "install", "stylelint@14.8.3", "&&",  # nosec
                                  "npm", "install", "stylelint-config-standard@25.0.0", "&&",
                                  "npx", "stylelint", file],
                                 stdout=PIPE, stderr=PIPE, shell=True)
