@@ -17,6 +17,7 @@ class Mypy(Stage):
 
     def run(self) -> None:
         print()
+        # pylint:disable=duplicate-code  # Potentially contains duplicates of pylint stage
         if os.name == "nt":
             activate_env = [".\\pylint_env\\Scripts\\activate"]
         else:
