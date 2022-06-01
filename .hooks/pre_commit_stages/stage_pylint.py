@@ -25,7 +25,8 @@ class Pylint(Stage):
         process = Popen(["python", "-m", "venv", "pylint_env", "&&",  # nosec
                          *activate_env, "&&",
                          "pip", "install", "-r",
-                         f"{os.path.dirname(__file__)}{os.sep}pylint_requirements.txt"], shell=True)
+                         f"{os.path.dirname(__file__)}{os.sep}pylint_requirements.txt", "&&",
+                         "pip", "install", "-r", "requirements.txt"], shell=True)
         process.communicate()
         for file in self.files:
             if file.split(".")[-1] in self.file_formats:
