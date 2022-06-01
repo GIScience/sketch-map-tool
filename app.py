@@ -43,7 +43,6 @@ def create_app() -> Flask:  # noqa: C901
         if (query_bbox is not None and (bbox_form.bbox_input.data is None or
                                         bbox_form.bbox_input.data == "") and
                 is_bbox_str(query_bbox)):
-            print(is_bbox_str(query_bbox))
             bbox_form.bbox_input.data = query_bbox
         if request.method == "POST":
             bbox_str = bbox_form.bbox_input.data
