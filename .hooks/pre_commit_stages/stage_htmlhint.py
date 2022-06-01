@@ -10,11 +10,15 @@ class HTMLHint(Stage):
     Stage for running HTMLHint on HTML files
     """
     file_formats = ["html", "vm"]
+    ignore_files = ["analyses/html_gen/template.html"]
 
     def run(self) -> None:
         for file in self.files:
             if file.split(".")[-1] in self.file_formats:
                 print(f"Running HTMLHint for {file}")
+                if file in self.ignore_files:
+                    print("Skipping file listed in 'ignore_files'")
+                    continue
                 # pylint: disable=consider-using-with
                 process = Popen(["npm", "install", "htmlhint@1.1.4", "&&",  # nosec
                                  "npx", "htmlhint", file],

@@ -2,6 +2,7 @@
 Functions to generate a webpage based on analyses' results
 """
 from typing import List, Dict
+from datetime import datetime
 from analyses.helpers import AnalysisResult, QualityLevel
 from helper_modules.bbox_utils import Bbox
 
@@ -37,6 +38,10 @@ def results_to_html(results: List[AnalysisResult], pdf_link: str, bbox: Bbox) ->
     with open(TEMPLATE_PATH, "r", encoding="utf8") as fr:
         template_code = fr.read()
     template_code = template_code.replace("{{ PDF_LINK }}", pdf_link)
+    template_code = template_code.replace("{{ CREATION_DATE }}",
+                                          datetime.today().date().strftime("%Y-%m-%d"))
+    link_for_restart = f"../../analyses?bbox={bbox.get_str(mode='comma')}"
+    template_code = template_code.replace("{{ RESTART_LINK }}", link_for_restart)
     center_point = bbox.get_center_point()
     template_code = template_code.replace("{{ MAP_COORDINATES }}",
                                           f"{center_point[0]},{center_point[1]}")
