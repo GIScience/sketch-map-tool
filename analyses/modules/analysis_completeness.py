@@ -150,11 +150,12 @@ class CompletenessAnalysis(Analysis):
             update_progress(result_path=self.status_file_path,
                             update=STATUS_UPDATES_ANALYSES["saturation_s"])
         if self.key:
-            ohsome_response = self.request(self.measure, bboxes=str(self.bbox), time=self.time,
-                                           keys=self.key, types="node,way").json()
+            ohsome_response = self.request(
+                self.measure, bboxes=str(self.bbox), time=self.time,
+                filter=f"({self.key}=*) and (type:node or type:way)").json()
         else:
             ohsome_response = self.request(self.measure, bboxes=str(self.bbox), time=self.time,
-                                           types="node,way").json()
+                                           filter="type:node or type:way").json()
 
         values = [data_point["value"] for data_point in ohsome_response["result"]]
 
