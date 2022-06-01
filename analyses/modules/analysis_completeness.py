@@ -19,7 +19,7 @@
 # pylint: disable=duplicate-code
 import multiprocessing  # noqa  # pylint: disable=unused-import
 import matplotlib.pyplot as plt
-from typing import List, Tuple, Union, Any
+from typing import List, Tuple, Any, Optional
 import requests
 
 from analyses.helpers import AnalysisResult, QualityLevel
@@ -53,7 +53,7 @@ class CompletenessAnalysis(Analysis):
                  time: str,
                  plot_location: str = "./",
                  status_file_path: str = "analyses.status",
-                 key: Union[None, str] = None,
+                 key: Optional[str] = None,
                  measure: str = "density",
                  measure_unit: str = "features per km²"):
         """
@@ -133,7 +133,7 @@ class CompletenessAnalysis(Analysis):
         output_path = self.plot_location + self.plot_name
         fig.savefig(output_path)
 
-    def run(self, queue: Union[None, "multiprocessing.Queue[AnalysisResult]"] = None) \
+    def run(self, queue: Optional["multiprocessing.Queue[AnalysisResult]"] = None) \
             -> AnalysisResult:  # noqa: C901
         """
         Inspect the saturation, i.e. completeness of OSM feature mapping

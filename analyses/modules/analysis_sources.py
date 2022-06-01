@@ -8,7 +8,7 @@
 """
 # pylint: disable=duplicate-code
 import multiprocessing  # noqa  # pylint: disable=unused-import
-from typing import List, Dict, Union
+from typing import List, Dict, Union, Optional
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -100,7 +100,7 @@ class SourcesAnalysis(Analysis):
                     bbox_extra_artists=(lgd,))
 
     def run(self,
-            queue: Union[None, "multiprocessing.Queue[AnalysisResult]"] = None) -> AnalysisResult:
+            queue: Optional["multiprocessing.Queue[AnalysisResult]"] = None) -> AnalysisResult:
         """
         Retrieve important sources of OSM features
 
