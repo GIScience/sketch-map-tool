@@ -119,7 +119,6 @@ class LandmarkAnalysis(Analysis):
     def status_file_path(self) -> str:
         return self._status_file_path
 
-
     def add_density_for_tag(self, key: Optional[str], value: Optional[str],
                             category: str) -> None:
         """
