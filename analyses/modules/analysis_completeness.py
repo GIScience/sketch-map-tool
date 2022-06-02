@@ -97,7 +97,7 @@ class CompletenessAnalysis(Analysis):
                             E.g.: 'length'
         :param params: Parameters to be added to the Ohsome request
                        E.g.: bboxes='1.23,2.34,3.45,4.56', time='2014-01-01/2017-01-01/P1Y',
-                       keys='amenity', types='node,way'
+                       filter='amenity=* and (type:node or type:way)'
         :return: Response from ohsome
         """
         aggregation = aggregation.replace("density", "count/density")
@@ -150,11 +150,12 @@ class CompletenessAnalysis(Analysis):
             update_progress(result_path=self.status_file_path,
                             update=STATUS_UPDATES_ANALYSES["saturation_s"])
         if self.key:
-            ohsome_response = self.request(self.measure, bboxes=str(self.bbox), time=self.time,
-                                           keys=self.key, types="node,way").json()
+            ohsome_response = self.request(
+                self.measure, bboxes=str(self.bbox), time=self.time,
+                filter=f"({self.key}=*) and (type:node or type:way)").json()
         else:
             ohsome_response = self.request(self.measure, bboxes=str(self.bbox), time=self.time,
-                                           types="node,way").json()
+                                           filter="type:node or type:way").json()
 
         values = [data_point["value"] for data_point in ohsome_response["result"]]
 

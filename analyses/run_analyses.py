@@ -55,7 +55,7 @@ def run_for_single_bbox(bbox: Bbox,
     # Get Full-History-Data (used in multiple analyses):
 
     params = {"bboxes": str(bbox),
-              "types": "node,way",
+              "filter": "type:node or type:way",
               "properties": "tags",
               "time": time_str_whole_time
               }

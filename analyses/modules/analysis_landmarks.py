@@ -119,30 +119,35 @@ class LandmarkAnalysis(Analysis):
     def status_file_path(self) -> str:
         return self._status_file_path
 
-    def add_density_for_tag(self, keys: Optional[str], values: Optional[str],
+    def add_density_for_tag(self, key: Optional[str], value: Optional[str],
                             category: str) -> None:
         """
         Send a request to the ohsome API to get the density of features with the given keys and
         values. Update the instance variables 'density' and 'density_sum' with the obtained value.
 
-        :param keys: Parameter 'keys' to be used in the request to the ohsome API. Give None to not
-                     use this parameter.
-        :param values: Parameter 'values' to be used in the request to the ohsome API. Give None to
-                       not use this parameter.
+        :param key: OSM feature key to be used in the request to the ohsome API, e.g. 'amenity'.
+                    Give None to not use this parameter
+        :param value: OSM feature value for the given 'key' to be used in the request to the ohsome
+                      API. Give None to not use this parameter (key=*)
         :param category: Key of the value in the instance variable 'density' (dict) to which the
-                             density value should be added
+                         density value should be added
         """
         if category not in self.density.keys():
             raise ValueError(f"Category '{category}' is not a key in the dictionary 'density'.")
+        if value is not None and key is None:
+            raise ValueError("If a 'value' is given, 'key' cannot be None, as allowed tags have the"
+                             " form key=value or key=*, but not *=value")
         url = "/elements/count/density"
         params = {"bboxes": self.bbox.get_str(mode="comma"),
-                  "types": "node,way",
                   "time": self.time_str
                   }
-        if keys is not None:
-            params.update({"keys": keys})
-        if values is not None:
-            params.update({"values": values})
+        filter_param = "(type:node or type:way)"
+        if key is not None:
+            if value is not None:
+                filter_param += f" and {key}={value}"
+            else:
+                filter_param += f" and {key}=*"
+        params.update({"filter": filter_param})
 
         result = requests.get(OHSOME_API + url, params)
         result = json.loads(result.text)["result"][0]
@@ -168,7 +173,7 @@ class LandmarkAnalysis(Analysis):
                                  f"is no such key in the dictionary 'density'.")
         url = "/elements/count/density/groupBy/tag"
         params = {"bboxes": self.bbox.get_str(mode="comma"),
-                  "types": "node,way",
+                  "filter": "type:node or type:way",
                   "time": self.time_str,
                   "groupByKey": key,
                   "groupByValues": ", ".join(values_categories.keys())
@@ -221,8 +226,8 @@ class LandmarkAnalysis(Analysis):
         update_progress(result_path=self.status_file_path,
                         update=STATUS_UPDATES_ANALYSES["landmark_s"])
 
-        self.add_density_for_tag(keys="railway", values="station", category="public_transport")
-        self.add_density_for_tag(keys="shop", values=None, category="shops")
+        self.add_density_for_tag(key="railway", value="station", category="public_transport")
+        self.add_density_for_tag(key="shop", value=None, category="shops")
 
         amenity_categories = {
             "place_of_worship": "places_of_worship",
@@ -239,7 +244,7 @@ class LandmarkAnalysis(Analysis):
         }
         self.add_density_for_tag_aggregated(key="amenity", values_categories=amenity_categories)
 
-        self.add_density_for_tag(keys="highway", values="bus_stop", category="public_transport")
+        self.add_density_for_tag(key="highway", value="bus_stop", category="public_transport")
 
         tourism_categories = {
             "hotel": "hotels",
@@ -247,8 +252,8 @@ class LandmarkAnalysis(Analysis):
         }
         self.add_density_for_tag_aggregated(key="tourism", values_categories=tourism_categories)
 
-        self.add_density_for_tag(keys="leisure", values="park", category="parks")
-        self.add_density_for_tag(keys="boundary", values="national_park", category="parks")
+        self.add_density_for_tag(key="leisure", value="park", category="parks")
+        self.add_density_for_tag(key="boundary", value="national_park", category="parks")
 
         natural_categories = {
             "water": "waterways",
@@ -256,7 +261,7 @@ class LandmarkAnalysis(Analysis):
         }
         self.add_density_for_tag_aggregated(key="natural", values_categories=natural_categories)
 
-        self.add_density_for_tag(keys="waterway", values=None, category="waterways")
+        self.add_density_for_tag(key="waterway", value=None, category="waterways")
 
         density_rounded = round(self.density_sum, 2)
         level = QualityLevel.GREEN
