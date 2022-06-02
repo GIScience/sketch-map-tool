@@ -141,12 +141,13 @@ class LandmarkAnalysis(Analysis):
         params = {"bboxes": self.bbox.get_str(mode="comma"),
                   "time": self.time_str
                   }
-        filter_prefix = "(type:node or type:way) and "
+        filter_param = "(type:node or type:way)"
         if key is not None:
             if value is not None:
-                params.update({"filter": filter_prefix+f"{key}={value}"})
+                filter_param += f" and {key}={value}"
             else:
-                params.update({"filter": filter_prefix+f"{key}=*"})
+                filter_param += f" and {key}=*"
+        params.update({"filter": filter_param})
 
         result = requests.get(OHSOME_API + url, params)
         result = json.loads(result.text)["result"][0]
