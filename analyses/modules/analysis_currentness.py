@@ -7,7 +7,7 @@
 """
 # pylint: disable=duplicate-code
 import multiprocessing  # noqa  # pylint: disable=unused-import
-from typing import Union, List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 import pandas as pd
 import numpy as np
@@ -32,7 +32,7 @@ class CurrentnessAnalysis(Analysis):
                  ohsome_export: List[Dict[str, Any]],
                  plot_location: str = "./",
                  status_file_path: str = "analyses.status",
-                 key: Union[str, None] = None):
+                 key: Optional[str] = None):
         """
         :param ohsome_export: Full history OSM data from ohsome in form of a list of features with
                               their attributes
@@ -93,7 +93,7 @@ class CurrentnessAnalysis(Analysis):
         fig.savefig(self.plot_location + self.plot_name, bbox_inches="tight",
                     bbox_extra_artists=(lgd,))
 
-    def run(self, queue: Union[None, "multiprocessing.Queue[AnalysisResult]"] = None) \
+    def run(self, queue: Optional["multiprocessing.Queue[AnalysisResult]"] = None) \
             -> AnalysisResult:  # noqa: C901
         """
         Inspect the currentness of OSM features

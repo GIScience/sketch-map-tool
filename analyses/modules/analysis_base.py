@@ -3,7 +3,7 @@ Abstract base class for all analyses
 """
 import multiprocessing  # noqa  # pylint: disable=unused-import
 from abc import ABC, abstractmethod
-from typing import Union
+from typing import Optional
 
 from analyses.helpers import AnalysisResult
 
@@ -27,7 +27,7 @@ class Analysis(ABC):
 
     @property
     @abstractmethod
-    def threshold_yellow(self) -> Union[None, float]:
+    def threshold_yellow(self) -> Optional[float]:
         """
         If this threshold is surpassed, the level changes from green (good fitness) to yellow
         (potential problems)
@@ -38,7 +38,7 @@ class Analysis(ABC):
 
     @property
     @abstractmethod
-    def threshold_red(self) -> Union[None, float]:
+    def threshold_red(self) -> Optional[float]:
         """
         If this threshold is surpassed, the level changes from yellow (potential problems) to red
         (probable problems)
@@ -64,7 +64,7 @@ class Analysis(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def run(self, queue: Union[None, "multiprocessing.Queue[AnalysisResult]"]) -> AnalysisResult:
+    def run(self, queue: Optional["multiprocessing.Queue[AnalysisResult]"]) -> AnalysisResult:
         """
         Run the analysis
 

@@ -34,7 +34,7 @@
 # pylint: disable=duplicate-code
 import json
 import multiprocessing  # noqa  # pylint: disable=unused-import
-from typing import Union, Dict
+from typing import Dict, Optional
 
 import requests
 from matplotlib import pyplot as plt
@@ -119,7 +119,8 @@ class LandmarkAnalysis(Analysis):
     def status_file_path(self) -> str:
         return self._status_file_path
 
-    def add_density_for_tag(self, key: Union[str, None], value: Union[str, None],
+
+    def add_density_for_tag(self, key: Optional[str], value: Optional[str],
                             category: str) -> None:
         """
         Send a request to the ohsome API to get the density of features with the given keys and
@@ -216,7 +217,7 @@ class LandmarkAnalysis(Analysis):
                     bbox_extra_artists=(lgd,))
 
     def run(self,
-            queue: Union[None, "multiprocessing.Queue[AnalysisResult]"] = None) -> AnalysisResult:
+            queue: Optional["multiprocessing.Queue[AnalysisResult]"] = None) -> AnalysisResult:
         """
         Analyze the density of landmark features
 

@@ -7,7 +7,7 @@ results
 
 import os
 import json
-from typing import List, Tuple, Union
+from typing import List, Tuple, Optional
 
 from reportlab.platypus import Paragraph
 from reportlab.pdfgen import canvas
@@ -30,7 +30,7 @@ def add_result_page(result: AnalysisResult,
                     title: str,
                     infotext: str,
                     move_info_up: int = 0,
-                    chapter_nr: Union[int, None] = None) -> None:
+                    chapter_nr: Optional[int] = None) -> None:
     """
     Add a result page to the Sketch Map Fitness Report
 
