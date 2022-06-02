@@ -97,7 +97,7 @@ class CompletenessAnalysis(Analysis):
                             E.g.: 'length'
         :param params: Parameters to be added to the Ohsome request
                        E.g.: bboxes='1.23,2.34,3.45,4.56', time='2014-01-01/2017-01-01/P1Y',
-                       keys='amenity', types='node,way'
+                       filter='amenity=* and (type:node or type:way)'
         :return: Response from ohsome
         """
         aggregation = aggregation.replace("density", "count/density")
