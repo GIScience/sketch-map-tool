@@ -196,7 +196,9 @@ class LandmarkAnalysis(Analysis):
         """
         shares_with_labels = []
         for key in self.density.keys():
-            percentage = round(100 * self.density[key] / self.density_sum, 2)
+            percentage = 0.0
+            if self.density_sum > 0:
+                percentage = round(100 * self.density[key] / self.density_sum, 2)
             shares_with_labels.append((percentage, f"{self.plot_labels[key]} ({percentage}%)"))
 
         for pair in shares_with_labels.copy():
