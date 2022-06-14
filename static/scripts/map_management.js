@@ -20,6 +20,7 @@ const EARTH_RADIUS = 6371000;
 const PI = 3.14159265359;
 let mapContainer;
 let oldCoords;
+let bboxInput;
 
 /**
  * Calculate the distance between two points (lon,lat-format) in metres using the Haversine formula
@@ -104,6 +105,38 @@ function boundsToBboxStr(bounds) {
 }
 
 /**
+ * Store the current coordinates of the target of an event, e.g. a layer that is being moved.
+ *
+ * @param evt Event in which a Leaflet layer is edited.
+ */
+function storeOldCoords(evt) {
+    oldCoords = boundsToBboxStr(evt.sourceTarget._bounds);
+}
+
+/**
+ * Write the new coordinates of a layer after an event to the bounding box input field and replace
+ * the old coordinates.
+ *
+ * @param evt Event in which a Leaflet layer has been edited.
+ */
+function enterNewCoords(evt) {
+    const newCoords = boundsToBboxStr(evt.target._bounds);
+    bboxInput.value = bboxInput.value.replace(oldCoords, newCoords);
+}
+
+/**
+ * Change the bbox coordinates in the input field if the corresponding points on the map are edited.
+ *
+ * @param layer Leaflet layer for which point dragging is being enabled.
+ */
+function addDraggingToLayer(layer) {
+    layer.on("pm:dragstart", storeOldCoords);
+    layer.on("pm:dragend", enterNewCoords);
+    layer.on("pm:markerdragstart", storeOldCoords);
+    layer.on("pm:markerdragend", enterNewCoords);
+}
+
+/**
  * Initialize a leaflet map container to show a world map with OSM tiles and a corresponding
  * copyright notice. Add buttons for bbox selection and search
  */
@@ -138,7 +171,6 @@ function initMap() {
 
     // If a bbox is removed on the map, delete it from the input field as well:
     mapContainer.on("pm:remove", (e) => {
-        const bboxInput = document.getElementById("bbox-input");
         const coords = e.layer.getLatLngs();
         const point1 = coords[0][0];
         const point2 = coords[0][2];
@@ -150,7 +182,6 @@ function initMap() {
     mapContainer.on("pm:create", (e) => {
         // Add bounding box selected on the map to the input field and (if activated) adjust its
         // ratio to the chosen paper format
-        const bboxInput = document.getElementById("bbox-input");
         const checkboxAdjust = document.getElementById("adjust-to-paper-format");
         const selectPaperFormat = document.getElementById("paper-format-selection");
         const adjust = checkboxAdjust.checked;
@@ -181,22 +212,7 @@ function initMap() {
         const newBbox = `${point1.lng.toPrecision(9)},${point1.lat.toPrecision(9)}`
             + `,${point2.lng.toPrecision(9)},${point2.lat.toPrecision(9)};`;
         bboxInput.value += newBbox;
-
-        // Change the bbox in the input field if the corresponding points on the map are edited
-
-        const storeOldCoords = (evt) => {
-            oldCoords = boundsToBboxStr(evt.sourceTarget._bounds);
-        };
-
-        const enterNewCoords = (evt) => {
-            const newCoords = boundsToBboxStr(evt.target._bounds);
-            bboxInput.value = bboxInput.value.replace(oldCoords, newCoords);
-        };
-
-        e.layer.on("pm:dragstart", storeOldCoords);
-        e.layer.on("pm:dragend", enterNewCoords);
-        e.layer.on("pm:markerdragstart", storeOldCoords);
-        e.layer.on("pm:markerdragend", enterNewCoords);
+        addDraggingToLayer(e.layer);
     });
 }
 
@@ -223,18 +239,19 @@ function clearMap(m) {
  * @param map (Leaflet-) Map which should be zoomed to the bbox input
  */
 function zoomToSelection(map) {
-    const bboxInput = document.getElementById("bbox-input").value;
     const pattern = /^(?:(-?[0-9]*\.[0-9]*,){3}-?[0-9]*\.[0-9]*;?)+$/;
 
-    if (pattern.test(bboxInput)) {
+    if (pattern.test(bboxInput.value)) {
         clearMap(map);
-        const bboxStrings = bboxInput.split(";");
+        const bboxStrings = bboxInput.value.split(";");
 
         for (const bboxStr of bboxStrings) {
             if (bboxStr.length > 3) {
                 const bbox = bboxStr.split(",");
                 const bboxFormatted = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
-                L.rectangle(bboxFormatted).addTo(map);
+                const layer = L.rectangle(bboxFormatted);
+                layer.addTo(map);
+                addDraggingToLayer(layer);
                 map.fitBounds(bboxFormatted);
             }
         }
@@ -248,7 +265,7 @@ function zoomToSelection(map) {
  * Initialize the text field for bbox input, e.g. with autocorrections.
  */
 function initBboxInput() {
-    const bboxInput = document.getElementById("bbox-input");
+    bboxInput = document.getElementById("bbox-input");
     bboxInput.onkeyup = () => {
         bboxInput.value = bboxInput.value.replace(/\s|\r?\n|\r/gi, "");
     };
@@ -256,6 +273,6 @@ function initBboxInput() {
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btn-zoom-to-selection").onclick = () => zoomToSelection(mapContainer);
-    initMap();
     initBboxInput();
+    initMap();
 });
