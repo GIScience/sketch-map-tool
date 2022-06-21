@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Sketch map fitness | Results</title>
+    <link href="../style/style_analyses_result.css" rel="stylesheet"/>
+    <link href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          rel="stylesheet"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin="anonymous"/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<h1>OpenStreetMap Evaluation for Requested Area:</h1>
+<a href="{{ PDF_LINK }}"><img src="img/pdf_icon.png" alt="PDF Report" height="150px"></a>
+<div>
+    <p>
+        Results from {{ CREATION_DATE }}. <a href="{{ RESTART_LINK }}">Start new analyses for the same bounding box.</a>
+    </p>
+</div>
+<br>
+
+
+<div id="mapid"></div>
+<script>
+        let map = L.map('mapid').setView([{{ MAP_COORDINATES }}], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                {attribution: '&copy; <a href=https://www.openstreetmap.org/copyright>OpenStreetMap</a> contributors'}).addTo(map);
+        let polygon = L.polygon({{ PLOYGON_COORDINATES }}).addTo(map);
+    </script>
+<br>
+<div class="flex-container" id="main">
+    <div class="box" id="left-column">
+        <img class="img" src="./img/html_light_{{ LEVEL }}.jpg" alt="Traffic light with level {{ LEVEL }}. From 0 = red to 2 = green.">
+    </div>
+    <div class="box graybox" id="right-column">
+        <table>
+            <tbody>
+            <tr>
+                <td id="red-block">&nbsp;</td>
+                <td id="red-contents">
+                    <p>
+                        {% for key, value in MSG_LEVEL_RED.items() %}
+                            {% if key == "very important" %}
+                                {% if value|length != 0 %}
+                                    <h3>Very Important</h3>
+                                    <ul>
+                                        {% for msg in value %}
+                                            <li>{{ msg }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% for key, value in MSG_LEVEL_RED.items() %}
+                            {% if key == "important" %}
+                                {% if value|length != 0 %}
+                                    <h3>Important</h3>
+                                    <ul>
+                                        {% for msg in value %}
+                                            <li>{{ msg }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% for key, value in MSG_LEVEL_RED.items() %}
+                            {% if key == "less important" %}
+                                {% if value|length != 0 %}
+                                    <h3>Less Important</h3>
+                                    <ul>
+                                        {% for msg in value %}
+                                            <li>{{ msg }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td id="yellow-block">&nbsp;</td>
+                <td id="yellow-contents">
+                    <p>
+                        {% for key, value in MSG_LEVEL_YELLOW.items() %}
+                            {% if key == "very important" %}
+                                {% if value|length != 0 %}
+                                    <h3>Very Important</h3>
+                                    <ul>
+                                        {% for msg in value %}
+                                            <li>{{ msg }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% for key, value in MSG_LEVEL_YELLOW.items() %}
+                            {% if key == "important" %}
+                                {% if value|length != 0 %}
+                                    <h3>Important</h3>
+                                    <ul>
+                                        {% for msg in value %}
+                                            <li>{{ msg }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% for key, value in MSG_LEVEL_YELLOW.items() %}
+                            {% if key == "less important" %}
+                                {% if value|length != 0 %}
+                                    <h3>Less Important</h3>
+                                    <ul>
+                                        {% for msg in value %}
+                                            <li>{{ msg }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td id="green-block">&nbsp;</td>
+                <td id="green-contents">
+                    <p>
+                        {% for key, value in MSG_LEVEL_GREEN.items() %}
+                            {% if key == "very important" %}
+                                {% if value|length != 0 %}
+                                    <h3>Very Important</h3>
+                                    <ul>
+                                        {% for msg in value %}
+                                            <li>{{ msg }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% for key, value in MSG_LEVEL_GREEN.items() %}
+                            {% if key == "important" %}
+                                {% if value|length != 0 %}
+                                    <h3>Important</h3>
+                                    <ul>
+                                        {% for msg in value %}
+                                            <li>{{ msg }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% for key, value in MSG_LEVEL_GREEN.items() %}
+                            {% if key == "less important" %}
+                                {% if value|length != 0 %}
+                                    <h3>Less Important</h3>
+                                    <ul>
+                                        {% for msg in value %}
+                                            <li>{{ msg }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+</div>
+<div id="suggestions">
+    <h2>Recommendations:</h2>
+    <div class="graybox" id="suggestion-text">
+        <p>
+            {% if SUGGESTION_LIST|length != 0 %}
+                <ul>
+                    {% for suggestion in SUGGESTION_LIST %}
+                        <li>{{ suggestion }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+    </div>
+</div>
+<hr>
+This tool accesses OpenStreetMap data, which is partly aggregated, via the <a href="https://www.ohsome.org">ohsome API
+</a> by the <a href="https://www.heigit.org/">Heidelberg Institute for Geoinformation Technology (HeiGIT)</a>. The data
+and statistics are based on data by <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>.
+ohsome uses a database that contains <a href="https://www.opendatacommons.org/licenses/odbl/1-0/index.html">ODbL 1.0</a>
+licensed <a href="https://planet.osm.org/planet/full-history/">OSM data</a> and
+<a href="https://www.creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA 2.0</a> licensed
+<a href="https://planet.osm.org/cc-by-sa/">OSM data</a>.
+</body>
+</html>

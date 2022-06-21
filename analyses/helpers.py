@@ -41,10 +41,10 @@ def get_result_path(bbox: Bbox, output_path: str) -> str:
 
     :param bbox: Bounding box of which the result file will be generated
     :param output_path: The location where the analyses' output files will be saved
-    :return: Path to the HTML file which will be generated when the analyses are carried out
+    :return: Path to the JSON file which will be generated when the analyses are carried out
              for the given bbox
     """
-    return f"{output_path}/{bbox.get_str(mode='minus')}_output.html"
+    return f"{output_path}/{bbox.get_str(mode='minus')}_output.json"
 
 
 class QualityLevel(Enum):

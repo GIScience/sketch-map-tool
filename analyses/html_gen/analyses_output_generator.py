@@ -1,12 +1,11 @@
 """
 Functions to generate a webpage based on analyses' results
 """
-from typing import List, Dict
 from datetime import datetime
+from typing import List, Dict, Tuple
 from analyses.helpers import AnalysisResult, QualityLevel
 from helper_modules.bbox_utils import Bbox
-
-TEMPLATE_PATH = "analyses/html_gen/template.html"
+import json
 
 
 def get_general_score(results: List[AnalysisResult]) -> QualityLevel:
@@ -26,80 +25,71 @@ def get_general_score(results: List[AnalysisResult]) -> QualityLevel:
     return QualityLevel(avg_score)
 
 
-def results_to_html(results: List[AnalysisResult], pdf_link: str, bbox: Bbox) -> str:  # noqa: C901
+def get_result_texts(results: List[AnalysisResult]) \
+        -> Tuple[Dict[QualityLevel, Dict[str, List[str]]], List[str]]:
     """
-    Generate an HTML page presenting the given results.
+    Get result texts based on analyses results to be added to result pages.
 
-    :param results: The results to be presented on the webpage
-    :param pdf_link: Link to a PDF report to be included on the page
-    :param bbox: Bounding box to be shown on the page
-    :return: Relative path to the generated file
+    :param results: Results based on which the texts will be created
+    :return: Messages for the different levels and importances, suggestions
     """
-    with open(TEMPLATE_PATH, "r", encoding="utf8") as fr:
-        template_code = fr.read()
-    template_code = template_code.replace("{{ PDF_LINK }}", pdf_link)
-    template_code = template_code.replace("{{ CREATION_DATE }}",
-                                          datetime.today().date().strftime("%Y-%m-%d"))
-    link_for_restart = f"../../analyses?bbox={bbox.get_str(mode='comma')}"
-    template_code = template_code.replace("{{ RESTART_LINK }}", link_for_restart)
-    center_point = bbox.get_center_point()
-    template_code = template_code.replace("{{ MAP_COORDINATES }}",
-                                          f"{center_point[0]},{center_point[1]}")
-
-    polygon = f"[[{bbox.lat1},{bbox.lon1}],[{bbox.lat2},{bbox.lon1}],[{bbox.lat2},{bbox.lon2}]," \
-              f"[{bbox.lat1},{bbox.lon2}]]"
-    template_code = template_code.replace("{{ PLOYGON_COORDINATES }}", polygon)
-    template_code = template_code.replace("{{ LEVEL }}", str(get_general_score(results).value))
-
-    suggestions = ""
-    messages_red = {
-        "very important": "",
-        "important": "",
-        "less important": ""
-    }
-    messages_yellow = {
-        "very important": "",
-        "important": "",
-        "less important": ""
-    }
-    messages_green = {
-        "very important": "",
-        "important": "",
-        "less important": ""
+    suggestions = []
+    messages: Dict[QualityLevel, Dict[str, List[str]]] = {
+        QualityLevel.RED: {
+            "very important": [],
+            "important": [],
+            "less important": []
+        },
+        QualityLevel.YELLOW: {
+            "very important": [],
+            "important": [],
+            "less important": []
+        },
+        QualityLevel.GREEN: {
+            "very important": [],
+            "important": [],
+            "less important": []
+        }
     }
     for result in results:
         if result.suggestion != "":
-            suggestions += f"<li>{result.suggestion}</li>"
+            suggestions.append(result.suggestion)
         importance = "important"
         if result.importance < 1:
             importance = "less important"
         elif result.importance >= 1.5:
             importance = "very important"
-        if result.level == QualityLevel.RED:
-            messages_red[importance] += f"- {result.message}<br>"
-        elif result.level == QualityLevel.YELLOW:
-            messages_yellow[importance] += f"- {result.message}<br>"
-        elif result.level == QualityLevel.GREEN:
-            messages_green[importance] += f"- {result.message}<br>"
+        messages[result.level][importance].append(result.message)
+    return messages, suggestions
 
-    def get_message_block(messages: Dict[str, str]) -> str:
-        block = ""
-        if len(messages["very important"]) > 0:
-            block += f"<b>Very Important</b><br>{messages['very important']}"
-        if len(messages["important"]) > 0:
-            block += f"<b>Important</b><br>{messages['important']}"
-        if len(messages["less important"]) > 0:
-            block += f"<b>Less Important</b><br>{messages['less important']}"
-        return block
 
-    msg_red = get_message_block(messages_red)
-    msg_yellow = get_message_block(messages_yellow)
-    msg_green = get_message_block(messages_green)
+def write_results_to_json(bbox: Bbox,
+                          results: List[AnalysisResult],
+                          pdf_link: str,
+                          json_path: str) -> None:
+    """
+    Write the results of analyses for a bbox to a JSON file. The information from this file can be
+    used to render a jinja template to present the results
 
-    template_code = template_code.replace("{{ MSG_LEVEL_RED }}", msg_red)
-    template_code = template_code.replace("{{ MSG_LEVEL_YELLOW }}", msg_yellow)
-    template_code = template_code.replace("{{ MSG_LEVEL_GREEN }}", msg_green)
-    if suggestions != "":
-        suggestions = f"<ul>{suggestions}</ul>"
-    template_code = template_code.replace("{{ SUGGESTION_LIST }}", suggestions)
-    return template_code
+    :param bbox: Bounding box for which the analyses were executed
+    :param results: Results from the analyses
+    :param pdf_link: Link to the PDF report for the results
+    :param json_path: Path under which the JSON file should be stored
+    """
+    center_point = bbox.get_center_point()
+    messages, suggestions = get_result_texts(results)
+    results_for_template = {
+        "PDF_LINK": pdf_link,
+        "CREATION_DATE": datetime.today().date().strftime("%Y-%m-%d"),
+        "RESTART_LINK": f"../../analyses?bbox={bbox.get_str(mode='comma')}",
+        "MAP_COORDINATES": f"{center_point[0]},{center_point[1]}",
+        "PLOYGON_COORDINATES": f"[[{bbox.lat1},{bbox.lon1}],[{bbox.lat2},{bbox.lon1}],[{bbox.lat2},"
+                               f"{bbox.lon2}],[{bbox.lat1},{bbox.lon2}]]",
+        "LEVEL": str(get_general_score(results).value),
+        "MSG_LEVEL_RED": messages[QualityLevel.RED],
+        "MSG_LEVEL_YELLOW": messages[QualityLevel.YELLOW],
+        "MSG_LEVEL_GREEN": messages[QualityLevel.GREEN],
+        "SUGGESTION_LIST": suggestions
+    }
+    with open(json_path, "w", encoding="utf8") as fw:
+        json.dump(results_for_template, fw)

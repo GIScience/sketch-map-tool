@@ -1,11 +1,15 @@
 """
 Configuration of the Flask app routes and, thus, the interface between backend and frontend
 """
-from flask import Flask, render_template, request
+import json
+import os
+
+from flask import Flask, render_template, request, redirect, Response
 from wtforms import Form, TextAreaField, validators
-from typing import List
-from constants import (ANALYSES_OUTPUT_PATH, INVALID_STATUS_LINK_MESSAGE,
-                       TEMPLATE_ANALYSES, NO_STATUS_FILE_MESSAGE, NR_OF_ANALYSES_STEPS)
+from typing import List, Union
+from constants import (ANALYSES_OUTPUT_PATH, INVALID_STATUS_LINK_MESSAGE, TEMPLATE_ANALYSES,
+                       NR_OF_ANALYSES_STEPS, TEMPLATE_ANALYSES_RESULTS, ErrorCode,
+                       ERROR_MSG_FOR_CODE)
 from analyses import run_analyses
 from analyses.helpers import get_result_path
 from helper_modules.bbox_utils import (is_bbox_str, BboxTooLargeException, Bbox)
@@ -40,6 +44,11 @@ def create_app() -> Flask:  # noqa: C901
     def analyses() -> str:
         query_bbox = request.args.get("bbox")
         bbox_form = BboxForm(request.form)
+        error_nr = request.args.get("error")
+        if error_nr is not None and bbox_form.bbox_input.data is None:
+            error_msg = ERROR_MSG_FOR_CODE.get(ErrorCode(int(error_nr)), "Unknown Error Code")
+            return render_template(TEMPLATE_ANALYSES, bbox_form=BboxForm(), outputs=dict(),
+                                   msg=error_msg)
         if (query_bbox is not None and (bbox_form.bbox_input.data is None or
                                         bbox_form.bbox_input.data == "") and
                 is_bbox_str(query_bbox)):
@@ -54,7 +63,7 @@ def create_app() -> Flask:  # noqa: C901
         return render_template(TEMPLATE_ANALYSES, bbox_form=bbox_form, outputs=dict(), msg="")
 
     @app.route("/status")
-    def status() -> str:
+    def status() -> Union[str, Response]:
         """
         Show status page for process specified by given parameters
 
@@ -88,17 +97,33 @@ def create_app() -> Flask:  # noqa: C901
                     results.append(result)
                 bbox = query_bbox
             except ValueError:
-                return render_template(TEMPLATE_ANALYSES, bbox_form=BboxForm(), outputs=dict(),
-                                       msg=INVALID_STATUS_LINK_MESSAGE)
+                return redirect(
+                    f"../../analyses?error={ErrorCode.INVALID_STATUS_LINK_MESSAGE.value}")
             except NoStatusFileException:
-                return render_template(TEMPLATE_ANALYSES, bbox_form=BboxForm(), outputs=dict(),
-                                       msg=NO_STATUS_FILE_MESSAGE)
+                return redirect(f"../../analyses?error={ErrorCode.NO_STATUS_FILE_MESSAGE.value}")
         else:
-            return render_template(TEMPLATE_ANALYSES, bbox_form=BboxForm(), outputs=dict(),
-                                   msg=INVALID_STATUS_LINK_MESSAGE)
+            return redirect(f"../../analyses?error={ErrorCode.INVALID_STATUS_LINK_MESSAGE.value}")
         return render_template("progress.html", NAME=name, BBOX=bbox, NR_OF_STEPS=nr_of_steps,
                                STEPS_COMPLETED=steps_completed, PERCENTAGE=percentage,
                                OUTPUTS=outputs, RESULTS=results, ERROR=error)
+
+    @app.route(f"/{ANALYSES_OUTPUT_PATH}/<output_name>.html")
+    def result(output_name: str) -> Union[str, Response]:
+        """
+        Render analyses result page based on JSON contents stored under 'output_name'
+
+        :param output_name: Name of the JSON file stored in 'ANALYSES_OUTPUT_PATH' containing the
+                            results that should be displayed
+        :return: HTML code of the result page or, in case the JSON could not be found, a redirection
+                 to the analyses page with a fitting error message
+        """
+        try:
+            with open(f"{ANALYSES_OUTPUT_PATH}{os.sep}{output_name}.json", "r",
+                      encoding="utf8") as fr:
+                results = json.load(fr)
+        except FileNotFoundError:
+            return redirect(f"../../analyses?error={ErrorCode.RESULT_COULD_NOT_BE_LOADED.value}")
+        return render_template(TEMPLATE_ANALYSES_RESULTS, **results)
     return app
 
 
