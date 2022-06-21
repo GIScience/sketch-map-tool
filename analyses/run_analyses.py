@@ -14,12 +14,12 @@ from typing import List, Dict, Union
 from datetime import datetime
 
 from analyses.helpers import add_one_day, get_result_path
+from analyses.html_gen.analyses_output_generator import write_results_to_json
 from analyses.modules.analysis_completeness import CompletenessAnalysis
 from analyses.modules.analysis_landmarks import LandmarkAnalysis
 from analyses.modules.analysis_sources import SourcesAnalysis
 from analyses.modules.analysis_currentness import CurrentnessAnalysis
 from analyses.helpers import AnalysisResult
-from analyses.html_gen import analyses_output_generator
 from analyses.pdf_gen.pdf_gen import create_report
 from helper_modules.bbox_utils import Bbox
 from helper_modules.progress import update_progress
@@ -102,16 +102,14 @@ def run_for_single_bbox(bbox: Bbox,
         results.append(result)
     result_queue.close()
     update_progress(result_path=status_path, update=STATUS_UPDATES_ANALYSES["results"])
-    export_path_html = get_result_path(bbox, output_path)
-    export_path_pdf = export_path_html.replace(".html", ".pdf")
+    export_path_json = get_result_path(bbox, output_path)
+    export_path_pdf = export_path_json.replace(".json", ".pdf")
     create_report(results, session_id+"/", export_path_pdf, bbox)
-    html_code = analyses_output_generator.results_to_html(results,
-                                                          export_path_pdf.replace(output_path+"/",
-                                                                                  ""), bbox)
-    with open(export_path_html, "w", encoding="utf8") as fw:
-        fw.write(html_code)
+
+    write_results_to_json(bbox, results, export_path_pdf.replace(output_path + "/", ""),
+                          export_path_json)
     shutil.rmtree(session_id + "/")  # Delete temporary folder for plots
-    update_progress(result_path=status_path, update=export_path_html)
+    update_progress(result_path=status_path, update=export_path_json.replace(".json", ".html"))
 
 
 def run_preparations_and_analyses(bboxes_input: List[Bbox], output_path: str) -> None:

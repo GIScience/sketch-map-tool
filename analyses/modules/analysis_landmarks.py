@@ -270,7 +270,7 @@ class LandmarkAnalysis(Analysis):
 
         message_prefix = "The density of landmarks (points of reference, e.g. waterbodies, " \
                          f"supermarkets, churches, bus stops) is {density_rounded} features per " \
-                         f"km&#x00B2. "
+                         f"km^2. "
 
         message = message_prefix + "It is probably easy to orientate on OSM-based sketch maps " \
                                    "of this region."
