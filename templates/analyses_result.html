@@ -44,7 +44,7 @@
                     <p>
                         {% for key, value in MSG_LEVEL_RED.items() %}
                             {% if key == "very important" %}
-                                {% if value|length > 0 %}
+                                {% if value|length != 0 %}
                                     <h3>Very Important</h3>
                                     <ul>
                                         {% for msg in value %}
@@ -56,7 +56,7 @@
                         {% endfor %}
                         {% for key, value in MSG_LEVEL_RED.items() %}
                             {% if key == "important" %}
-                                {% if value|length > 0 %}
+                                {% if value|length != 0 %}
                                     <h3>Important</h3>
                                     <ul>
                                         {% for msg in value %}
@@ -68,7 +68,7 @@
                         {% endfor %}
                         {% for key, value in MSG_LEVEL_RED.items() %}
                             {% if key == "less important" %}
-                                {% if value|length > 0 %}
+                                {% if value|length != 0 %}
                                     <h3>Less Important</h3>
                                     <ul>
                                         {% for msg in value %}
@@ -87,7 +87,7 @@
                     <p>
                         {% for key, value in MSG_LEVEL_YELLOW.items() %}
                             {% if key == "very important" %}
-                                {% if value|length > 0 %}
+                                {% if value|length != 0 %}
                                     <h3>Very Important</h3>
                                     <ul>
                                         {% for msg in value %}
@@ -99,7 +99,7 @@
                         {% endfor %}
                         {% for key, value in MSG_LEVEL_YELLOW.items() %}
                             {% if key == "important" %}
-                                {% if value|length > 0 %}
+                                {% if value|length != 0 %}
                                     <h3>Important</h3>
                                     <ul>
                                         {% for msg in value %}
@@ -111,7 +111,7 @@
                         {% endfor %}
                         {% for key, value in MSG_LEVEL_YELLOW.items() %}
                             {% if key == "less important" %}
-                                {% if value|length > 0 %}
+                                {% if value|length != 0 %}
                                     <h3>Less Important</h3>
                                     <ul>
                                         {% for msg in value %}
@@ -130,7 +130,7 @@
                     <p>
                         {% for key, value in MSG_LEVEL_GREEN.items() %}
                             {% if key == "very important" %}
-                                {% if value|length > 0 %}
+                                {% if value|length != 0 %}
                                     <h3>Very Important</h3>
                                     <ul>
                                         {% for msg in value %}
@@ -142,7 +142,7 @@
                         {% endfor %}
                         {% for key, value in MSG_LEVEL_GREEN.items() %}
                             {% if key == "important" %}
-                                {% if value|length > 0 %}
+                                {% if value|length != 0 %}
                                     <h3>Important</h3>
                                     <ul>
                                         {% for msg in value %}
@@ -154,7 +154,7 @@
                         {% endfor %}
                         {% for key, value in MSG_LEVEL_GREEN.items() %}
                             {% if key == "less important" %}
-                                {% if value|length > 0 %}
+                                {% if value|length != 0 %}
                                     <h3>Less Important</h3>
                                     <ul>
                                         {% for msg in value %}
@@ -176,7 +176,7 @@
     <h2>Recommendations:</h2>
     <div class="graybox" id="suggestion-text">
         <p>
-            {% if SUGGESTION_LIST|length > 0 %}
+            {% if SUGGESTION_LIST|length != 0 %}
                 <ul>
                     {% for suggestion in SUGGESTION_LIST %}
                         <li>{{ suggestion }}</li>
