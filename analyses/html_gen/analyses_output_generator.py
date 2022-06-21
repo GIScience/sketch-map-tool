@@ -68,10 +68,10 @@ def write_results_to_json(bbox: Bbox,
                           pdf_link: str,
                           json_path: str) -> None:
     """
-    Write the results of an analysis to a JSON file. The information from this file can be used
-    to render a jinja template to present the results
+    Write the results of analyses for a bbox to a JSON file. The information from this file can be
+    used to render a jinja template to present the results
 
-    :param bbox: Bounding box for which the analyses where executed
+    :param bbox: Bounding box for which the analyses were executed
     :param results: Results from the analyses
     :param pdf_link: Link to the PDF report for the results
     :param json_path: Path under which the JSON file should be stored
