@@ -60,9 +60,9 @@ function addToLat(fixPoint, height) {
  * @returns New longitude value
  */
 function addToLon(fixPoint, width, lat1, lat2) {
-    return (Math.asin(Math.sqrt((Math.sin(width / 2 / EARTH_RADIUS) ** 2)
+    return ((Math.asin(Math.sqrt((Math.sin(width / 2 / EARTH_RADIUS) ** 2)
         / (Math.cos((lat1 * PI) / 180) * Math.cos((lat2 * PI)
-            / 180)))) * 2 + ((fixPoint * PI) / 180) * 180) / PI;
+            / 180)))) * 2 + (fixPoint * PI) / 180) * 180) / PI;
 }
 
 /**
