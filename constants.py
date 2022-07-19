@@ -39,6 +39,10 @@ STATUS_ERROR_OHSOME_NOT_AVAILABLE = "ERROR: The ohsome API " \
 RESULT_COULD_NOT_BE_LOADED = "ERROR: The result file could not be loaded. Please make sure the " \
                              "URL is correct."
 
+BBOX_TOO_BIG = "Invalid input: Selected bounding box is bigger than 50 km^2. Please select a " \
+               "smaller one. The Sketch Map Tool is not meant for analyzing large areas - for " \
+               "this purpose you might use https://hex.ohsome.org for example."
+
 NR_OF_ANALYSES_STEPS = len(STATUS_UPDATES_ANALYSES) + 2  # Some analyses are run for multiple keys
 
 ANALYSES_OUTPUT_PATH = "static/output"

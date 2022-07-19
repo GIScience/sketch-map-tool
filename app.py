@@ -9,7 +9,7 @@ from wtforms import Form, TextAreaField, validators
 from typing import List, Union
 from constants import (ANALYSES_OUTPUT_PATH, INVALID_STATUS_LINK_MESSAGE, TEMPLATE_ANALYSES,
                        NR_OF_ANALYSES_STEPS, TEMPLATE_ANALYSES_RESULTS, ErrorCode,
-                       ERROR_MSG_FOR_CODE)
+                       ERROR_MSG_FOR_CODE, BBOX_TOO_BIG)
 from analyses import run_analyses
 from analyses.helpers import get_result_path
 from helper_modules.bbox_utils import (is_bbox_str, BboxTooLargeException, Bbox)
@@ -59,7 +59,11 @@ def create_app() -> Flask:  # noqa: C901
                 return render_template(TEMPLATE_ANALYSES, bbox_form=bbox_form, outputs=dict(),
                                        msg="Invalid input. Please take a look at the bounding "
                                            "box/-es you entered.")
-            return load_analyses(bbox_form, bbox_str.split(";"), ANALYSES_OUTPUT_PATH)
+            try:
+                return load_analyses(bbox_form, bbox_str.split(";"), ANALYSES_OUTPUT_PATH)
+            except BboxTooLargeException:
+                return render_template(TEMPLATE_ANALYSES, bbox_form=bbox_form, outputs=dict(),
+                                       msg=BBOX_TOO_BIG)
         return render_template(TEMPLATE_ANALYSES, bbox_form=bbox_form, outputs=dict(), msg="")
 
     @app.route("/status")
@@ -137,6 +141,7 @@ def load_analyses(bbox_form: BboxForm, bboxes: List[str], output_path: str) -> s
     :param bboxes: List of bboxes to analyse
     :param output_path: The location where the analyses' results will be saved
     :return: The generated HTML code including links to the analyses' status pages
+    :raises BboxTooLargeException: Selected bounding box is bigger than 50 km^2
     """
     print("Loading analyses...")
     bbox_objects = []
