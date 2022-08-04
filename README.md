@@ -1,6 +1,5 @@
 # Prototype release of the Sketch Map Tool
-*Note: The sketch map generation and upload processing parts of the tool are not yet ready, but will follow in the 
-coming weeks. For the moment you can already use the analyses part.*
+*Note: The sketch map generation and upload processing parts of the tool are not yet ready. For the moment you can already use the analyses part.*
 
 Welcome to this repository containing the code of a prototype of the Sketch Map Tool.  
   
