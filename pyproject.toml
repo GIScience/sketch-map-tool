@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "sketch_map_tool"
+version = "0.1.0"
+description = ""
+authors = ["ohsome team <ohsome@heigit.org>"]
+license = "GNU Affero General Public License v3.0"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Flask = "^2.2.2"
+waitress = "^2.1.2"
+requests = "^2.28.1"
+WTForms = "^3.0.1"
+matplotlib = "^3.5.3"
+numpy = "^1.23.2"
+pandas = "^1.4.3"
+reportlab = "^3.6.11"
+
+[tool.poetry.group.dev.dependencies]
+bandit = "^1.7.4"
+mypy = "^0.971"
+flake8 = "^5.0.4"
+pylint = "^2.14.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
