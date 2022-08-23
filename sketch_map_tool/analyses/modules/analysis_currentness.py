@@ -13,11 +13,11 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from math import floor
-from analyses.helpers import AnalysisResult, QualityLevel
-from analyses.modules.analysis_base import Analysis
+from sketch_map_tool.analyses.helpers import AnalysisResult, QualityLevel
+from sketch_map_tool.analyses.modules.analysis_base import Analysis
 
-from constants import STATUS_UPDATES_ANALYSES
-from helper_modules.progress import update_progress
+from sketch_map_tool.constants import STATUS_UPDATES_ANALYSES
+from sketch_map_tool.helper_modules.progress import update_progress
 
 
 class CurrentnessAnalysis(Analysis):

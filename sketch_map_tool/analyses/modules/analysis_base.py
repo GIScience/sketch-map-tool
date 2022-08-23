@@ -5,7 +5,7 @@ import multiprocessing  # noqa  # pylint: disable=unused-import
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from analyses.helpers import AnalysisResult
+from sketch_map_tool.analyses.helpers import AnalysisResult
 
 
 class Analysis(ABC):
