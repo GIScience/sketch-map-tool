@@ -25,12 +25,13 @@ The [CHANGELOG.md](CHANGELOG.md) describes changes made in a pull request. It sh
 #### Review Process
 
 1. Dev makes a PR.
-2. Rev reviews and raises some comments.
+2. Rev reviews and raises some comments if necessary.
 3. Dev addresses the comments and leaves responses explaining what has to be done. In cases where Dev just implemented Rev's suggestion, a simple "Done" is sufficient.
 4. Rev reviews the changes and
     - If Rev is happy with a change, then Rev resolves the comment.
     - If Rev is still unsatisfied with a change, then Rev adds another comment explaining what is still missing.
 5. Restart from 3 until all comments are resolved.
+6. If all issues are resolved the PR gets marked as approved and can be merged.
 
 ### Git Workflow
 
