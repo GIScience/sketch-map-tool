@@ -43,25 +43,29 @@ All development work is based on the main branch (`main`). Pull requests are exp
 
 In short:
 - Guideline: [PEP8](https://peps.python.org/pep-0008/), [PEP 484 (Type Hints)](https://peps.python.org/pep-0484/)
-- Linter: [flake8](https://flake8.pycqa.org), [Pylint](https://pylint.pycqa.org/)
+- Linter: [flake8](https://flake8.pycqa.org), [Pylint](https://pylint.pycqa.org/), [mypy](http://mypy-lang.org/), [bandit](https://github.com/PyCQA/bandit)
 
 #### Linters
 
-This project uses [flake8](https://flake8.pycqa.org) and [Pylint](https://pylint.pycqa.org/) to ensure consistent code style.
+This project uses [flake8](https://flake8.pycqa.org), [Pylint](https://pylint.pycqa.org/), [mypy](http://mypy-lang.org/) and [bandit](https://github.com/PyCQA/bandit) to ensure consistent code style.
 
-Run flake8 and Pylint with following commands:
+Run those linter's with following commands:
 
 ```bash
 flake8 .
 pylint .
+mypy --strict .
+bandit .
 ```
 
 *Tips:*
 - Mark in-line that flake8 should not raise any error: `print()  # noqa`
+- Mark in-line that pylint should not raise any error: `# pylint: disable=rule-name`
+- Mark in-line that bandit should not raise any error: `# nosec`
 
 ### HTML
 
-[.htmlhintrc](.htmlhintrc) and the [documentation of these rules](https://github.com/htmlhint/HTMLHint/tree/master/docs/user-guide/rules)
+See [.htmlhintrc](.htmlhintrc) and the [documentation of these rules](https://github.com/htmlhint/HTMLHint/tree/master/docs/user-guide/rules)
 
 ### JavaScript
 
