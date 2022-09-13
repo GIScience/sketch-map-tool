@@ -53,7 +53,7 @@ Run those linter's with following commands:
 
 ```bash
 flake8 .
-pylint .
+pylint sketch_map_tool
 mypy --strict .
 bandit .
 ```
