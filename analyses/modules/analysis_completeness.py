@@ -25,7 +25,7 @@ import requests
 from analyses.helpers import AnalysisResult, QualityLevel
 from analyses.modules.analysis_base import Analysis
 
-from constants import STATUS_UPDATES_ANALYSES, OHSOME_API
+from constants import STATUS_UPDATES_ANALYSES, OHSOME_API, TIMEOUT_REQUESTS
 from helper_modules.bbox_utils import Bbox
 from helper_modules.progress import update_progress
 
@@ -101,7 +101,8 @@ class CompletenessAnalysis(Analysis):
         :return: Response from ohsome
         """
         aggregation = aggregation.replace("density", "count/density")
-        return requests.get(f"{OHSOME_API}/elements/{aggregation}", params)
+        return requests.get(f"{OHSOME_API}/elements/{aggregation}", params,
+                            timeout=TIMEOUT_REQUESTS)
 
     def plot_results(self, data: List[Tuple[str, float]], title: str, y_label: str) -> None:
         """

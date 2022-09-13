@@ -43,7 +43,7 @@ from analyses.helpers import AnalysisResult, QualityLevel
 from analyses.modules.analysis_base import Analysis
 from helper_modules.bbox_utils import Bbox
 from helper_modules.progress import update_progress
-from constants import STATUS_UPDATES_ANALYSES, OHSOME_API
+from constants import STATUS_UPDATES_ANALYSES, OHSOME_API, TIMEOUT_REQUESTS
 
 
 class LandmarkAnalysis(Analysis):
@@ -149,7 +149,7 @@ class LandmarkAnalysis(Analysis):
                 filter_param += f" and {key}=*"
         params.update({"filter": filter_param})
 
-        result = requests.get(OHSOME_API + url, params)
+        result = requests.get(OHSOME_API + url, params, timeout=TIMEOUT_REQUESTS)
         result = json.loads(result.text)["result"][0]
         self.density_sum += result["value"]
         self.density[category] += result["value"]
@@ -179,7 +179,7 @@ class LandmarkAnalysis(Analysis):
                   "groupByValues": ", ".join(values_categories.keys())
                   }
 
-        result = requests.get(OHSOME_API + url, params)
+        result = requests.get(OHSOME_API + url, params, timeout=TIMEOUT_REQUESTS)
         result = json.loads(result.text)["groupByResult"]
 
         for group_by_result in result:

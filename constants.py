@@ -15,7 +15,8 @@ TOOL_URL = "https://www.geog.uni-heidelberg.de/gis/sketchmaptool.html"
 TEMPLATE_ANALYSES = "analyses.html"
 TEMPLATE_ANALYSES_RESULTS = "analyses_result.html"
 
-TIMEOUT_OHSOME_METADATA = 50  # seconds
+TIMEOUT_REQUESTS = 50  # seconds, see
+#                        https://requests.readthedocs.io/en/stable/user/advanced/#timeouts
 
 # Analyses: ---------------------------------------------------------------------------------------
 STATUS_UPDATES_ANALYSES = MappingProxyType({
