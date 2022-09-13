@@ -25,7 +25,7 @@ from helper_modules.bbox_utils import Bbox
 from helper_modules.progress import update_progress
 from constants import (STATUS_UPDATES_ANALYSES, OHSOME_API,
                        STATUS_ERROR_OHSOME_NOT_AVAILABLE,
-                       TIMEOUT_OHSOME_METADATA)
+                       TIMEOUT_REQUESTS)
 
 
 def run_for_single_bbox(bbox: Bbox,
@@ -60,7 +60,8 @@ def run_for_single_bbox(bbox: Bbox,
               "time": time_str_whole_time
               }
 
-    result = json.loads(requests.get(OHSOME_API + "/elementsFullHistory/bbox", params).text)
+    result = json.loads(requests.get(OHSOME_API + "/elementsFullHistory/bbox", params,
+                        timeout=TIMEOUT_REQUESTS).text)
     if "status" in result.keys() and result["status"] == 503:
         update_progress(result_path=status_path, update=STATUS_ERROR_OHSOME_NOT_AVAILABLE)
         return
@@ -121,7 +122,7 @@ def run_preparations_and_analyses(bboxes_input: List[Bbox], output_path: str) ->
     :param output_path: The location where the analyses' output files will be saved
     """
     try:
-        metadata = requests.get(OHSOME_API + "/metadata", timeout=TIMEOUT_OHSOME_METADATA).json()
+        metadata = requests.get(OHSOME_API + "/metadata", timeout=TIMEOUT_REQUESTS).json()
     except requests.exceptions.ReadTimeout:
         print("ERROR Timeout: Ohsome API not available")
         for bbox in bboxes_input:
