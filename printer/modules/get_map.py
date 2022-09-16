@@ -2,7 +2,7 @@
 Retrieve a map image from a Web Map Service
 (see https://wiki.openstreetmap.org/wiki/WMS for further information on WMS)
 """
-from constants import WMS_BASE_URL, WMS_LAYERS
+from constants import WMS_BASE_URL, WMS_LAYERS, TIMEOUT_REQUESTS
 from helper_modules.bbox_utils import Bbox
 from PIL import Image
 import requests
@@ -30,4 +30,6 @@ def get_map_image(bbox: Bbox, height_px: int, width_px: int,
         "STYLES": "",
         "BBOX": bbox.get_str(mode="comma")
     }
-    return Image.open(requests.get(wms_service_base_url, params, stream=True).raw)
+    return Image.open(
+        requests.get(wms_service_base_url, params, stream=True, timeout=TIMEOUT_REQUESTS).raw
+    )

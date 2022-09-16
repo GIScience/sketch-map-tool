@@ -6,9 +6,10 @@ from typing import BinaryIO
 from unittest.mock import patch
 from helper_modules.bbox_utils import Bbox
 from printer.modules.get_map import get_map_image
+from constants import TIMEOUT_REQUESTS
 
 
-class DummyResponse:
+class DummyResponse:  # pylint: disable=R0903
     """
     Dummy response to be used in mocks for request.get, which require a response with the attribute
     'raw'
@@ -23,7 +24,8 @@ def test_get_map_image() -> None:
     """
     bbox = Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373")
     with patch("requests.get") as mock:
-        mock.return_value = DummyResponse(open("../test_data/dummy_map_img.jpg", "rb"))
+        mock.return_value = DummyResponse(
+            open("../test_data/dummy_map_img.jpg", "rb"))  # pylint: disable=R1732
         img = get_map_image(bbox, 500, 500,
                             wms_service_base_url="https://my_wms.com/wms?SERVICE=WMS&VERSION=2.0",
                             wms_layers="coolest_layer")
@@ -38,6 +40,6 @@ def test_get_map_image() -> None:
                                      "SRS": "EPSG%3A4326",
                                      "STYLES": "",
                                      "BBOX": "8.66100311,49.3957813,8.7166214,49.4265373",
-                                 }, stream=True
+                                 }, stream=True, timeout=TIMEOUT_REQUESTS
                                  )
     assert isinstance(img, PIL.PngImagePlugin.PngImageFile)
