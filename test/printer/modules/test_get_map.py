@@ -32,12 +32,12 @@ def test_get_map_image() -> None:
     mock.assert_called_once_with("https://my_wms.com/wms?SERVICE=WMS&VERSION=2.0",
                                  {
                                      "REQUEST": "GetMap",
-                                     "FORMAT": "image%2Fpng",
+                                     "FORMAT": "image/png",
                                      "TRANSPARENT": "FALSE",
                                      "LAYERS": "coolest_layer",
                                      "WIDTH": 500,
                                      "HEIGHT": 500,
-                                     "SRS": "EPSG%3A4326",
+                                     "SRS": "EPSG:4326",
                                      "STYLES": "",
                                      "BBOX": "8.66100311,49.3957813,8.7166214,49.4265373",
                                  }, stream=True, timeout=TIMEOUT_REQUESTS
