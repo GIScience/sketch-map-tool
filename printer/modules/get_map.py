@@ -21,15 +21,20 @@ def get_map_image(bbox: Bbox, height_px: int, width_px: int,
     """
     params = {
         "REQUEST": "GetMap",
-        "FORMAT": "image%2Fpng",
+        "FORMAT": "image/png",
         "TRANSPARENT": "FALSE",
         "LAYERS": wms_layers,
         "WIDTH": width_px,
         "HEIGHT": height_px,
-        "SRS": "EPSG%3A4326",
+        "SRS": "EPSG:4326",
         "STYLES": "",
         "BBOX": bbox.get_str(mode="comma")
     }
     return Image.open(
         requests.get(wms_service_base_url, params, stream=True, timeout=TIMEOUT_REQUESTS).raw
     )
+
+
+if __name__ == "__main__":
+    img = get_map_image(Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373"), 500, 500)
+    img.show()
