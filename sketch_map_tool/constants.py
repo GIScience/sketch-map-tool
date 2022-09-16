@@ -66,6 +66,14 @@ NO_STATUS_FILE_MESSAGE = (
     "Process not found, it might have been cancelled or is still being started."
 )
 
+
+# Sketch Map Generation: --------------------------------------------------------------------------
+
+WMS_BASE_URL = "https://maps.heigit.org/osm-wms/service?SERVICE=WMS&VERSION=1.1.1"
+WMS_LAYERS = "osm_auto%3Aall"
+# TODO: Replace with stable HeiGIT-Maps with the correct style  # pylint: disable=W0511
+
+
 # Error Codes: -----------------------------------------------------------------------------------
 
 
