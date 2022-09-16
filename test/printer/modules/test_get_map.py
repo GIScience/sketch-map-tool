@@ -2,11 +2,10 @@
 Tests for the module printer/modules/get_map.py
 """
 import PIL
+from typing import BinaryIO
 from unittest.mock import patch
-
 from helper_modules.bbox_utils import Bbox
 from printer.modules.get_map import get_map_image
-from typing import BinaryIO
 
 
 class DummyResponse:
