@@ -42,4 +42,4 @@ def test_get_map_image() -> None:
                                      "BBOX": "8.66100311,49.3957813,8.7166214,49.4265373",
                                  }, stream=True, timeout=TIMEOUT_REQUESTS
                                  )
-    assert isinstance(img, PIL.PngImagePlugin.PngImageFile)
+    assert isinstance(img, PIL.PngImagePlugin.PngImageFile)  # nosec
