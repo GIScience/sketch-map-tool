@@ -3,32 +3,45 @@ Configuration of the Flask app routes and, thus, the interface between backend a
 """
 import json
 import os
-
-from flask import Flask, render_template, request, redirect, Response
-from wtforms import Form, TextAreaField, validators
 from typing import List, Union
-from sketch_map_tool.constants import (ANALYSES_OUTPUT_PATH, INVALID_STATUS_LINK_MESSAGE,
-                                       TEMPLATE_ANALYSES, NR_OF_ANALYSES_STEPS,
-                                       TEMPLATE_ANALYSES_RESULTS, ErrorCode,
-                                       ERROR_MSG_FOR_CODE, BBOX_TOO_BIG)
+
+from flask import Flask, Response, redirect, render_template, request
+from wtforms import Form, TextAreaField, validators
+
 from sketch_map_tool.analyses import run_analyses
 from sketch_map_tool.analyses.helpers import get_result_path
-from sketch_map_tool.helper_modules.bbox_utils import (is_bbox_str, BboxTooLargeException, Bbox)
-from sketch_map_tool.helper_modules.progress import get_status_updates, get_nr_of_completed_steps, \
-    NoStatusFileException
+from sketch_map_tool.constants import (
+    ANALYSES_OUTPUT_PATH,
+    BBOX_TOO_BIG,
+    ERROR_MSG_FOR_CODE,
+    INVALID_STATUS_LINK_MESSAGE,
+    NR_OF_ANALYSES_STEPS,
+    TEMPLATE_ANALYSES,
+    TEMPLATE_ANALYSES_RESULTS,
+    ErrorCode,
+)
+from sketch_map_tool.helper_modules.bbox_utils import (
+    Bbox,
+    BboxTooLargeException,
+    is_bbox_str,
+)
+from sketch_map_tool.helper_modules.progress import (
+    NoStatusFileException,
+    get_nr_of_completed_steps,
+    get_status_updates,
+)
 
 
 class BboxForm(Form):  # type: ignore
     """
     Enables access to the input field bbox-input of the HTML template
     """
-    bbox_input = TextAreaField(id="bbox-input", validators=[validators.InputRequired(),
-                                                            is_bbox_str],
-                               render_kw={
-                                   "placeholder":
-                                       "E.g.: 8.69142561,49.4102821,8.69372067,49.4115517;"
-                               }
-                               )
+
+    bbox_input = TextAreaField(
+        id="bbox-input",
+        validators=[validators.InputRequired(), is_bbox_str],
+        render_kw={"placeholder": "E.g.: 8.69142561,49.4102821,8.69372067,49.4115517;"},
+    )
 
 
 def create_app() -> Flask:  # noqa: C901
@@ -47,25 +60,42 @@ def create_app() -> Flask:  # noqa: C901
         bbox_form = BboxForm(request.form)
         error_nr = request.args.get("error")
         if error_nr is not None and bbox_form.bbox_input.data is None:
-            error_msg = ERROR_MSG_FOR_CODE.get(ErrorCode(int(error_nr)), "Unknown Error Code")
-            return render_template(TEMPLATE_ANALYSES, bbox_form=BboxForm(), outputs=dict(),
-                                   msg=error_msg)
-        if (query_bbox is not None and (bbox_form.bbox_input.data is None or
-                                        bbox_form.bbox_input.data == "") and
-                is_bbox_str(query_bbox)):
+            error_msg = ERROR_MSG_FOR_CODE.get(
+                ErrorCode(int(error_nr)), "Unknown Error Code"
+            )
+            return render_template(
+                TEMPLATE_ANALYSES, bbox_form=BboxForm(), outputs=dict(), msg=error_msg
+            )
+        if (
+            query_bbox is not None
+            and (bbox_form.bbox_input.data is None or bbox_form.bbox_input.data == "")
+            and is_bbox_str(query_bbox)
+        ):
             bbox_form.bbox_input.data = query_bbox
         if request.method == "POST":
             bbox_str = bbox_form.bbox_input.data
             if not is_bbox_str(bbox_str):
-                return render_template(TEMPLATE_ANALYSES, bbox_form=bbox_form, outputs=dict(),
-                                       msg="Invalid input. Please take a look at the bounding "
-                                           "box/-es you entered.")
+                return render_template(
+                    TEMPLATE_ANALYSES,
+                    bbox_form=bbox_form,
+                    outputs=dict(),
+                    msg="Invalid input. Please take a look at the bounding "
+                    "box/-es you entered.",
+                )
             try:
-                return load_analyses(bbox_form, bbox_str.split(";"), ANALYSES_OUTPUT_PATH)
+                return load_analyses(
+                    bbox_form, bbox_str.split(";"), ANALYSES_OUTPUT_PATH
+                )
             except BboxTooLargeException:
-                return render_template(TEMPLATE_ANALYSES, bbox_form=bbox_form, outputs=dict(),
-                                       msg=BBOX_TOO_BIG)
-        return render_template(TEMPLATE_ANALYSES, bbox_form=bbox_form, outputs=dict(), msg="")
+                return render_template(
+                    TEMPLATE_ANALYSES,
+                    bbox_form=bbox_form,
+                    outputs=dict(),
+                    msg=BBOX_TOO_BIG,
+                )
+        return render_template(
+            TEMPLATE_ANALYSES, bbox_form=bbox_form, outputs=dict(), msg=""
+        )
 
     @app.route("/status")
     def status() -> Union[str, Response]:
@@ -79,10 +109,16 @@ def create_app() -> Flask:  # noqa: C901
             name = "OSM Analyses"
             query_bbox = request.args.get("bbox")
             if query_bbox is None:
-                return render_template(TEMPLATE_ANALYSES, bbox_form=BboxForm(), outputs=dict(),
-                                       msg=INVALID_STATUS_LINK_MESSAGE)
-            result_path = get_result_path(Bbox.bbox_from_str(query_bbox), ANALYSES_OUTPUT_PATH)
-            nr_of_steps = NR_OF_ANALYSES_STEPS+1  # +1 because link is in last line
+                return render_template(
+                    TEMPLATE_ANALYSES,
+                    bbox_form=BboxForm(),
+                    outputs=dict(),
+                    msg=INVALID_STATUS_LINK_MESSAGE,
+                )
+            result_path = get_result_path(
+                Bbox.bbox_from_str(query_bbox), ANALYSES_OUTPUT_PATH
+            )
+            nr_of_steps = NR_OF_ANALYSES_STEPS + 1  # +1 because link is in last line
             try:
                 steps_completed = get_nr_of_completed_steps(result_path)
                 percentage = str(round(steps_completed / nr_of_steps * 100, 2)) + "%"
@@ -98,19 +134,35 @@ def create_app() -> Flask:  # noqa: C901
                         break
                 results = []
                 if download_link is not None:
-                    result = {"name": "Open your analyses' results", "link": download_link}
+                    result = {
+                        "name": "Open your analyses' results",
+                        "link": download_link,
+                    }
                     results.append(result)
                 bbox = query_bbox
             except ValueError:
                 return redirect(
-                    f"../../analyses?error={ErrorCode.INVALID_STATUS_LINK_MESSAGE.value}")
+                    f"../../analyses?error={ErrorCode.INVALID_STATUS_LINK_MESSAGE.value}"
+                )
             except NoStatusFileException:
-                return redirect(f"../../analyses?error={ErrorCode.NO_STATUS_FILE_MESSAGE.value}")
+                return redirect(
+                    f"../../analyses?error={ErrorCode.NO_STATUS_FILE_MESSAGE.value}"
+                )
         else:
-            return redirect(f"../../analyses?error={ErrorCode.INVALID_STATUS_LINK_MESSAGE.value}")
-        return render_template("progress.html", NAME=name, BBOX=bbox, NR_OF_STEPS=nr_of_steps,
-                               STEPS_COMPLETED=steps_completed, PERCENTAGE=percentage,
-                               OUTPUTS=outputs, RESULTS=results, ERROR=error)
+            return redirect(
+                f"../../analyses?error={ErrorCode.INVALID_STATUS_LINK_MESSAGE.value}"
+            )
+        return render_template(
+            "progress.html",
+            NAME=name,
+            BBOX=bbox,
+            NR_OF_STEPS=nr_of_steps,
+            STEPS_COMPLETED=steps_completed,
+            PERCENTAGE=percentage,
+            OUTPUTS=outputs,
+            RESULTS=results,
+            ERROR=error,
+        )
 
     @app.route(f"/{ANALYSES_OUTPUT_PATH}/<output_name>.html")
     def result(output_name: str) -> Union[str, Response]:
@@ -123,12 +175,18 @@ def create_app() -> Flask:  # noqa: C901
                  to the analyses page with a fitting error message
         """
         try:
-            with open(f"{ANALYSES_OUTPUT_PATH}{os.sep}{output_name}.json", "r",
-                      encoding="utf8") as fr:
+            with open(
+                f"{ANALYSES_OUTPUT_PATH}{os.sep}{output_name}.json",
+                "r",
+                encoding="utf8",
+            ) as fr:
                 results = json.load(fr)
         except FileNotFoundError:
-            return redirect(f"../../analyses?error={ErrorCode.RESULT_COULD_NOT_BE_LOADED.value}")
+            return redirect(
+                f"../../analyses?error={ErrorCode.RESULT_COULD_NOT_BE_LOADED.value}"
+            )
         return render_template(TEMPLATE_ANALYSES_RESULTS, **results)
+
     return app
 
 
@@ -154,7 +212,9 @@ def load_analyses(bbox_form: BboxForm, bboxes: List[str], output_path: str) -> s
             raise BboxTooLargeException()
         bbox_objects.append(bbox)
     outputs = run_analyses.run(bbox_objects, output_path)
-    return render_template(TEMPLATE_ANALYSES, bbox_form=bbox_form, outputs=outputs, msg="")
+    return render_template(
+        TEMPLATE_ANALYSES, bbox_form=bbox_form, outputs=outputs, msg=""
+    )
 
 
 if __name__ == "__main__":

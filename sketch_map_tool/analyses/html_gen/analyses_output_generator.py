@@ -1,11 +1,12 @@
 """
 Functions to generate a webpage based on analyses' results
 """
+import json
 from datetime import datetime
-from typing import List, Dict, Tuple
+from typing import Dict, List, Tuple
+
 from sketch_map_tool.analyses.helpers import AnalysisResult, QualityLevel
 from sketch_map_tool.helper_modules.bbox_utils import Bbox
-import json
 
 
 def get_general_score(results: List[AnalysisResult]) -> QualityLevel:
@@ -25,8 +26,9 @@ def get_general_score(results: List[AnalysisResult]) -> QualityLevel:
     return QualityLevel(avg_score)
 
 
-def get_result_texts(results: List[AnalysisResult]) \
-        -> Tuple[Dict[QualityLevel, Dict[str, List[str]]], List[str]]:
+def get_result_texts(
+    results: List[AnalysisResult],
+) -> Tuple[Dict[QualityLevel, Dict[str, List[str]]], List[str]]:
     """
     Get result texts based on analyses results to be added to result pages.
 
@@ -35,21 +37,17 @@ def get_result_texts(results: List[AnalysisResult]) \
     """
     suggestions = []
     messages: Dict[QualityLevel, Dict[str, List[str]]] = {
-        QualityLevel.RED: {
-            "very important": [],
-            "important": [],
-            "less important": []
-        },
+        QualityLevel.RED: {"very important": [], "important": [], "less important": []},
         QualityLevel.YELLOW: {
             "very important": [],
             "important": [],
-            "less important": []
+            "less important": [],
         },
         QualityLevel.GREEN: {
             "very important": [],
             "important": [],
-            "less important": []
-        }
+            "less important": [],
+        },
     }
     for result in results:
         if result.suggestion != "":
@@ -63,10 +61,9 @@ def get_result_texts(results: List[AnalysisResult]) \
     return messages, suggestions
 
 
-def write_results_to_json(bbox: Bbox,
-                          results: List[AnalysisResult],
-                          pdf_link: str,
-                          json_path: str) -> None:
+def write_results_to_json(
+    bbox: Bbox, results: List[AnalysisResult], pdf_link: str, json_path: str
+) -> None:
     """
     Write the results of analyses for a bbox to a JSON file. The information from this file can be
     used to render a jinja template to present the results
@@ -78,18 +75,21 @@ def write_results_to_json(bbox: Bbox,
     """
     center_point = bbox.get_center_point()
     messages, suggestions = get_result_texts(results)
+    polygon_coord = (
+        f"[[{bbox.lat1},{bbox.lon1}],[{bbox.lat2},{bbox.lon1}],"
+        f"[{bbox.lat2},{bbox.lon2}],[{bbox.lat1},{bbox.lon2}]]"
+    )
     results_for_template = {
         "PDF_LINK": pdf_link,
         "CREATION_DATE": datetime.today().date().strftime("%Y-%m-%d"),
         "RESTART_LINK": f"../../analyses?bbox={bbox.get_str(mode='comma')}",
         "MAP_COORDINATES": f"{center_point[0]},{center_point[1]}",
-        "PLOYGON_COORDINATES": f"[[{bbox.lat1},{bbox.lon1}],[{bbox.lat2},{bbox.lon1}],[{bbox.lat2},"
-                               f"{bbox.lon2}],[{bbox.lat1},{bbox.lon2}]]",
+        "PLOYGON_COORDINATES": polygon_coord,
         "LEVEL": str(get_general_score(results).value),
         "MSG_LEVEL_RED": messages[QualityLevel.RED],
         "MSG_LEVEL_YELLOW": messages[QualityLevel.YELLOW],
         "MSG_LEVEL_GREEN": messages[QualityLevel.GREEN],
-        "SUGGESTION_LIST": suggestions
+        "SUGGESTION_LIST": suggestions,
     }
     with open(json_path, "w", encoding="utf8") as fw:
         json.dump(results_for_template, fw)

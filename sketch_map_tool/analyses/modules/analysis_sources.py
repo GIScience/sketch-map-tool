@@ -8,14 +8,14 @@
 """
 # pylint: disable=duplicate-code
 import multiprocessing  # noqa  # pylint: disable=unused-import
-from typing import List, Dict, Union, Optional
+from typing import Dict, List, Optional, Union
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 from sketch_map_tool.analyses.helpers import AnalysisResult, QualityLevel
 from sketch_map_tool.analyses.modules.analysis_base import Analysis
-
 from sketch_map_tool.constants import STATUS_UPDATES_ANALYSES
 from sketch_map_tool.helper_modules.progress import update_progress
 
@@ -24,25 +24,46 @@ class SourcesAnalysis(Analysis):
     """
     Check if there are sources accountable for a substantial share of all features
     """
+
     importance = 0  # Manual inspection needed to estimate the trustworthiness
     threshold_yellow = 0.02  # i.e. 2 %
-    threshold_red = None  # A red level cannot be reached as manual inspection is necessary
+    # A red level cannot be reached as manual inspection is necessary
+    threshold_red = None
 
     title = "Source Analysis"
     plot_name = "_plot_sources.png"
 
-    white_list = ("BAG", "Bing", "bing", "digitalglobe", "Mapbox", "cuzk:km", "Fugro 2005",
-                  "landsat", "uhul:ortofoto", "yahoo", "AGIV", "aerial imagery", "survey", "image",
-                  "mapillary", "local knowledge", "GPS", "common knowledge", "geoimage.at",
-                  "HiRes aerial imagery")  # Typical sources that are either known for sufficient
-    #                                        quality or where inspection is impossible. These
-    #                                        sources are ignored in the suggestions, but shown in
-    #                                        the plot.
+    white_list = (
+        "BAG",
+        "Bing",
+        "bing",
+        "digitalglobe",
+        "Mapbox",
+        "cuzk:km",
+        "Fugro 2005",
+        "landsat",
+        "uhul:ortofoto",
+        "yahoo",
+        "AGIV",
+        "aerial imagery",
+        "survey",
+        "image",
+        "mapillary",
+        "local knowledge",
+        "GPS",
+        "common knowledge",
+        "geoimage.at",
+        "HiRes aerial imagery",
+    )
+    # Typical sources that are either known for sufficient quality or where inspection
+    # is impossible. These sources are ignored in the suggestions, but shown in the plot
 
-    def __init__(self,
-                 ohsome_export: List[Dict[str, Union[str, int, float]]],
-                 plot_location: str = "./",
-                 status_file_path: str = "analyses.status"):
+    def __init__(
+        self,
+        ohsome_export: List[Dict[str, Union[str, int, float]]],
+        plot_location: str = "./",
+        status_file_path: str = "analyses.status",
+    ):
         """
         :param ohsome_export: Full history OSM data from ohsome in form of a list of features with
                               their attributes
@@ -82,25 +103,39 @@ class SourcesAnalysis(Analysis):
             else:
                 sources_for_plot.append((str(source)[:75], share))
 
-        sources_for_plot.append((f"Below {self.threshold_yellow * 100} % threshold",
-                                 below_threshold_share))
+        sources_for_plot.append(
+            (f"Below {self.threshold_yellow * 100} % threshold", below_threshold_share)
+        )
         sources_for_plot.append(("Not tagged", not_tagged_share))
         sources_for_plot.sort(key=lambda x: x[1], reverse=True)
 
-        labels = [f"{source[0]} ({round(source[1], 2)} %)" for source in sources_for_plot]
+        labels = [
+            f"{source[0]} ({round(source[1], 2)} %)" for source in sources_for_plot
+        ]
         values = [source[1] for source in sources_for_plot]
 
         fig = plt.figure(figsize=(7, 7))
         plot = fig.add_subplot(111)
-        plot.pie(values, autopct="%.2f", textprops={"color": "w", "fontsize": "xx-large"})
-        lgd = plot.legend(labels, title="Names", loc="lower right", bbox_to_anchor=(.8, 0, 0.5, 1),
-                          fontsize=12)
+        plot.pie(
+            values, autopct="%.2f", textprops={"color": "w", "fontsize": "xx-large"}
+        )
+        lgd = plot.legend(
+            labels,
+            title="Names",
+            loc="lower right",
+            bbox_to_anchor=(0.8, 0, 0.5, 1),
+            fontsize=12,
+        )
         plot.set_title("Shares of specified sources among all features")
-        fig.savefig(self.plot_location + self.plot_name, bbox_inches="tight",
-                    bbox_extra_artists=(lgd,))
+        fig.savefig(
+            self.plot_location + self.plot_name,
+            bbox_inches="tight",
+            bbox_extra_artists=(lgd,),
+        )
 
-    def run(self,
-            queue: Optional["multiprocessing.Queue[AnalysisResult]"] = None) -> AnalysisResult:
+    def run(
+        self, queue: Optional["multiprocessing.Queue[AnalysisResult]"] = None
+    ) -> AnalysisResult:
         """
         Retrieve important sources of OSM features
 
@@ -149,15 +184,20 @@ class SourcesAnalysis(Analysis):
         df = df.apply(pd.Series)
         df = df.drop_duplicates(subset=["@osmId"], keep="last")
         df.rename({"@validTo": "validTo"}, axis=1, inplace=True)
-        df["validTo"] = df.apply(lambda row: np.datetime64(str(row.validTo).replace("Z", "")),
-                                 axis=1)
+        df["validTo"] = df.apply(
+            lambda row: np.datetime64(str(row.validTo).replace("Z", "")), axis=1
+        )
         max_validto = max(df["validTo"])
         df.drop(df[df.validTo < max_validto].index, inplace=True)
 
         if "source" not in df.keys():
-            result = AnalysisResult("No source information found. Thus, inspection of sources is "
-                                    "not possible.", QualityLevel.GREEN, self.importance,
-                                    title_for_report=self.title)
+            result = AnalysisResult(
+                "No source information found. Thus, inspection of sources is "
+                "not possible.",
+                QualityLevel.GREEN,
+                self.importance,
+                title_for_report=self.title,
+            )
             if queue is not None:
                 queue.put(result)
             return result
@@ -166,24 +206,37 @@ class SourcesAnalysis(Analysis):
         source_shares_dict = source_shares.to_dict()
         relevant_sources = ""
         for source, share in source_shares_dict.items():
-            if str(source) != "nan" and str(source) not in self.white_list and \
-                    share >= self.threshold_yellow * 100:
+            if (
+                str(source) != "nan"
+                and str(source) not in self.white_list
+                and share >= self.threshold_yellow * 100
+            ):
                 relevant_sources += f", '{source}' ({round(share, 2)} %)"
         relevant_sources = relevant_sources.strip(" ,")
 
         self.plot_results(source_shares_dict)
 
         if len(relevant_sources) > 0:
-            result = AnalysisResult("There is at least one source accounting for a substantial "
-                                    "share of all features, which you might want to inspect ("
-                                    "See recommendations for more details).", QualityLevel.YELLOW,
-                                    self.importance,
-                                    "You might want to check the following sources, which account "
-                                    f"for a substantial share of all features: {relevant_sources}.",
-                                    self.plot_name, self.title)
+            result = AnalysisResult(
+                "There is at least one source accounting for a substantial "
+                "share of all features, which you might want to inspect ("
+                "See recommendations for more details).",
+                QualityLevel.YELLOW,
+                self.importance,
+                "You might want to check the following sources, which account "
+                f"for a substantial share of all features: {relevant_sources}.",
+                self.plot_name,
+                self.title,
+            )
         else:
-            result = AnalysisResult("No source relevant for inspection found.", QualityLevel.GREEN,
-                                    self.importance, "", self.plot_name, self.title)
+            result = AnalysisResult(
+                "No source relevant for inspection found.",
+                QualityLevel.GREEN,
+                self.importance,
+                "",
+                self.plot_name,
+                self.title,
+            )
         if queue is not None:
             queue.put(result)
         update_progress(self.status_file_path, STATUS_UPDATES_ANALYSES["sources_f"])

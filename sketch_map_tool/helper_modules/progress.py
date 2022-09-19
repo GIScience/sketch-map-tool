@@ -9,8 +9,11 @@ class NoStatusFileException(Exception):
     """
     Exception raised when a status file is expected but not found
     """
+
     def __init__(self) -> None:
-        super().__init__("Status file not available. Probably the process has not been started")
+        super().__init__(
+            "Status file not available. Probably the process has not been started"
+        )
 
 
 class InvalidResultPathException(ValueError):
@@ -18,9 +21,12 @@ class InvalidResultPathException(ValueError):
     Exception representing an invalid result path, i.e. a result path that is not of the form
     some/path/file.format
     """
+
     def __init__(self) -> None:
-        super().__init__("'result_path' must contain the whole path to the file, ending with "
-                         "name.format")
+        super().__init__(
+            "'result_path' must contain the whole path to the file, ending with "
+            "name.format"
+        )
 
 
 def update_progress(result_path: str, update: str) -> None:
@@ -34,7 +40,7 @@ def update_progress(result_path: str, update: str) -> None:
     """
     if "." not in result_path:
         raise InvalidResultPathException()
-    status_path = result_path[:result_path.rindex(".")]+".status"
+    status_path = result_path[: result_path.rindex(".")] + ".status"
     if os.path.exists(status_path):
         with open(status_path, "r", encoding="utf8") as status_file:
             lines = status_file.readlines()
@@ -43,10 +49,12 @@ def update_progress(result_path: str, update: str) -> None:
                 os.remove(status_path)
                 break
     folder_structure = result_path.split(os.sep)
-    if len(folder_structure) > 1 and not os.path.exists(os.sep.join(folder_structure[:-1])):
+    if len(folder_structure) > 1 and not os.path.exists(
+        os.sep.join(folder_structure[:-1])
+    ):
         os.mkdir(os.sep.join(folder_structure[:-1]))
     with open(status_path, "a+", encoding="utf8") as status_file:
-        status_file.write(update+"\n")
+        status_file.write(update + "\n")
 
 
 def get_nr_of_completed_steps(result_path: str) -> int:
@@ -60,7 +68,7 @@ def get_nr_of_completed_steps(result_path: str) -> int:
     """
     if "." not in result_path:
         raise InvalidResultPathException()
-    status_path = result_path[:result_path.rindex(".")] + ".status"
+    status_path = result_path[: result_path.rindex(".")] + ".status"
     if not os.path.exists(status_path):
         raise NoStatusFileException()
     with open(status_path, "r", encoding="utf8") as status_file:
@@ -79,7 +87,7 @@ def get_status_updates(result_path: str) -> List[str]:
     """
     if "." not in result_path:
         raise InvalidResultPathException()
-    status_path = result_path[:result_path.rindex(".")] + ".status"
+    status_path = result_path[: result_path.rindex(".")] + ".status"
     if not os.path.exists(status_path):
         raise NoStatusFileException()
     with open(status_path, "r", encoding="utf8") as status_file:
@@ -98,7 +106,7 @@ def has_failed(result_path: str) -> bool:
     """
     if "." not in result_path:
         raise InvalidResultPathException()
-    status_path = result_path[:result_path.rindex(".")] + ".status"
+    status_path = result_path[: result_path.rindex(".")] + ".status"
     if not os.path.exists(status_path):
         raise NoStatusFileException()
     with open(status_path, "r", encoding="utf8") as status_file:
