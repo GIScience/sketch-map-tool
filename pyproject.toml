@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sketch_map_tool"
-version = "0.1.0"
+version = "0.9.0"
 description = ""
 authors = ["HeiGIT <info@heigit.org>"]
 license = "GNU Affero General Public License v3.0"
@@ -15,6 +15,7 @@ matplotlib = "^3.5.3"
 numpy = "^1.23.2"
 pandas = "^1.4.3"
 reportlab = "^3.6.11"
+toml = "^0.10.2"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit

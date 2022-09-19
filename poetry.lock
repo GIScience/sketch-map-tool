@@ -663,7 +663,7 @@ pbr = ">=2.0.0,<2.1.0 || >2.1.0"
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
@@ -768,7 +768,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "e26b824e7bebb48ba099179176a0c4814a64ea49e36282417500c444a54b1c4b"
+content-hash = "ab6816739e1660fdee50c3395fe0e2b9bec5757a7ae86e10497b12fcb36490c7"
 
 [metadata.files]
 attrs = [
