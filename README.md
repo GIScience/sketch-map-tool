@@ -108,7 +108,7 @@ We are currently working on adding the remaining features concerning the map cre
 maps. If you discover any bugs or want to refactor something, we are of course very happy about your pull request (see 
 below, Development). We are also grateful, if you discover a bug or other problems and notify us through an issue.
 
-Please read the [contribution guideline](CONTRIBUTING.md).
+Please read the [contribution guideline](CONTRIBUTING.md). For the development setup please refer to [this document](docs/development-setup.md)
 
 
 ## Funding
