@@ -103,23 +103,13 @@ docker rm sketch-maps
 ```
 
 ## How to contribute
+
 We are currently working on adding the remaining features concerning the map creation and uploading of marked sketch 
 maps. If you discover any bugs or want to refactor something, we are of course very happy about your pull request (see 
 below, Development). We are also grateful, if you discover a bug or other problems and notify us through an issue.
 
-### Development
-If you change or add code, please pay attention that everything is according to the conventions used in this project:  
-* **Python**: [PEP 8](https://peps.python.org/pep-0008/), [PEP 484 (Type Hints)](https://peps.python.org/pep-0484/)
-* **HTML**: See [.htmlhintrc](.htmlhintrc) and the [documentation of these rules](https://github.com/htmlhint/HTMLHint/tree/master/docs/user-guide/rules)
-* **JavaScript**: [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) with some modifications (see 
-[.eslintrc.json](.eslintrc.json))
-* **CSS**: [stylelint-config-standard](https://github.com/stylelint/stylelint-config-standard) with some modifications (see 
-[.stylelintrc.json](.stylelintrc.json))  
+Please read the [contribution guideline](CONTRIBUTING.md).
 
-If you discover any violations in the existing code, feel very welcome to fix them. To facilitate paying attention to 
-these conventions, please make sure that for your pull request all checks succeed. You can also set up git
-hooks to automatically run relevant linters before your code is committed, see [.hooks/README.MD](.hooks/README.MD) for 
-more info. Please also make sure that everything you modify or add is covered by [unit tests](test).
 
 ## Funding
 This tool has been developed in the project T2S Waterproofing Data which is financially supported by the Belmont Forum
