@@ -7,15 +7,15 @@
 """
 # pylint: disable=duplicate-code
 import multiprocessing  # noqa  # pylint: disable=unused-import
-from typing import List, Dict, Any, Optional
-
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 from math import floor
+from typing import Any, Dict, List, Optional
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
 from sketch_map_tool.analyses.helpers import AnalysisResult, QualityLevel
 from sketch_map_tool.analyses.modules.analysis_base import Analysis
-
 from sketch_map_tool.constants import STATUS_UPDATES_ANALYSES
 from sketch_map_tool.helper_modules.progress import update_progress
 
@@ -24,15 +24,18 @@ class CurrentnessAnalysis(Analysis):
     """
     Check how up-to-date features are by inspecting the average time since their last edit
     """
+
     importance = 1
     threshold_yellow = 4  # years
     threshold_red = 8  # years
 
-    def __init__(self,
-                 ohsome_export: List[Dict[str, Any]],
-                 plot_location: str = "./",
-                 status_file_path: str = "analyses.status",
-                 key: Optional[str] = None):
+    def __init__(
+        self,
+        ohsome_export: List[Dict[str, Any]],
+        plot_location: str = "./",
+        status_file_path: str = "analyses.status",
+        key: Optional[str] = None,
+    ):
         """
         :param ohsome_export: Full history OSM data from ohsome in form of a list of features with
                               their attributes
@@ -67,34 +70,54 @@ class CurrentnessAnalysis(Analysis):
         :param df: Dataframe containing a column 'TimeDelta' indicating how old the features are
         """
         if "TimeDelta" not in df.keys():
-            raise ValueError("'df' must contain a column 'TimeDelta' indicating the features' age")
+            raise ValueError(
+                "'df' must contain a column 'TimeDelta' indicating the features' age"
+            )
         # Categorize features by their age in years
         nr_1y = len(df[df["TimeDelta"] <= 365.25])
         nr_2y = len(df[(df["TimeDelta"] > 365.25) & (df["TimeDelta"] <= 2 * 365.25)])
-        nr_3y = len(df[(df["TimeDelta"] > 2 * 365.25) & (df["TimeDelta"] <= 3 * 365.25)])
-        nr_4y = len(df[(df["TimeDelta"] > 3 * 365.25) & (df["TimeDelta"] <= 4 * 365.25)])
-        nr_5y = len(df[(df["TimeDelta"] > 4 * 365.25) & (df["TimeDelta"] <= 5 * 365.25)])
+        nr_3y = len(
+            df[(df["TimeDelta"] > 2 * 365.25) & (df["TimeDelta"] <= 3 * 365.25)]
+        )
+        nr_4y = len(
+            df[(df["TimeDelta"] > 3 * 365.25) & (df["TimeDelta"] <= 4 * 365.25)]
+        )
+        nr_5y = len(
+            df[(df["TimeDelta"] > 4 * 365.25) & (df["TimeDelta"] <= 5 * 365.25)]
+        )
         nr_5plus = len(df[df["TimeDelta"] > 5 * 365.25])
 
         values = [nr_1y, nr_2y, nr_3y, nr_4y, nr_5y, nr_5plus]
-        legend = ["Edited in the last year", "Edited in the last two years",
-                  "Edited in the last three years", "Edited in the last four years",
-                  "Edited in the last five years", "Not edited in the last five years"]
+        legend = [
+            "Edited in the last year",
+            "Edited in the last two years",
+            "Edited in the last three years",
+            "Edited in the last four years",
+            "Edited in the last five years",
+            "Not edited in the last five years",
+        ]
         fig = plt.figure(figsize=(7, 7))
         plot = fig.add_subplot(111)
-        plot.pie(values, autopct="%.2f%%", textprops={"color": "w", "fontsize": "xx-large"})
-        lgd = plot.legend(legend, loc="lower right", bbox_to_anchor=(.8, 0, 0.5, 1),
-                          fontsize=12)
+        plot.pie(
+            values, autopct="%.2f%%", textprops={"color": "w", "fontsize": "xx-large"}
+        )
+        lgd = plot.legend(
+            legend, loc="lower right", bbox_to_anchor=(0.8, 0, 0.5, 1), fontsize=12
+        )
         if self.key is not None:
             key = " " + self.key + " "
         else:
             key = " "
         plot.set_title(f"Currentness of{key}data in the bbox:")
-        fig.savefig(self.plot_location + self.plot_name, bbox_inches="tight",
-                    bbox_extra_artists=(lgd,))
+        fig.savefig(
+            self.plot_location + self.plot_name,
+            bbox_inches="tight",
+            bbox_extra_artists=(lgd,),
+        )
 
-    def run(self, queue: Optional["multiprocessing.Queue[AnalysisResult]"] = None) \
-            -> AnalysisResult:  # noqa: C901
+    def run(  # noqa: C901
+        self, queue: Optional["multiprocessing.Queue[AnalysisResult]"] = None
+    ) -> AnalysisResult:
         """
         Inspect the currentness of OSM features
 
@@ -137,23 +160,36 @@ class CurrentnessAnalysis(Analysis):
         ' data are not outdated. The average last edit was 0 years, 0 months and 7 days ago'
         """
         if self.key is not None:
-            update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES["last_edit_s"] + f" for key: {self.key}")
-            df = pd.DataFrame([i["properties"] for i in self.data
-                               if self.key in i["properties"].keys()])
+            update_progress(
+                result_path=self.status_file_path,
+                update=STATUS_UPDATES_ANALYSES["last_edit_s"] + f" for key: {self.key}",
+            )
+            df = pd.DataFrame(
+                [
+                    i["properties"]
+                    for i in self.data
+                    if self.key in i["properties"].keys()
+                ]
+            )
         else:
-            update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES["last_edit_s"])
+            update_progress(
+                result_path=self.status_file_path,
+                update=STATUS_UPDATES_ANALYSES["last_edit_s"],
+            )
             df = pd.DataFrame([i["properties"] for i in self.data])
-        df["@validFrom"].dropna(inplace=True)  # All features need to have a validFrom attribute to
-        #                                        calculate their age (validTo - validFrom)
-
+        # All features need to have a validFrom attribute to calculate their age
+        # (validTo - validFrom)
+        df["@validFrom"].dropna(inplace=True)
         if len(df.index) == 0:
             if self.key is None:
                 message = "No features for last-edit analysis found"
             else:
-                message = f"No features with key {self.key} for last-edit analysis found"
-            result = AnalysisResult(message, QualityLevel.YELLOW, 0, title_for_report=self.title)
+                message = (
+                    f"No features with key {self.key} for last-edit analysis found"
+                )
+            result = AnalysisResult(
+                message, QualityLevel.YELLOW, 0, title_for_report=self.title
+            )
             if queue is not None:
                 queue.put(result)
             return result
@@ -162,13 +198,17 @@ class CurrentnessAnalysis(Analysis):
         df.drop_duplicates(subset=["@osmId"], keep="last", inplace=True)
 
         # Remove '@' from column names for easier access with the dot syntax
-        df.rename({"@validTo": "validTo", "@validFrom": "validFrom"}, axis=1, inplace=True)
+        df.rename(
+            {"@validTo": "validTo", "@validFrom": "validFrom"}, axis=1, inplace=True
+        )
 
         # Transform validTo and validFrom values into datetime objects
-        df["validTo"] = df.apply(lambda row: np.datetime64(str(row.validTo).replace("Z", "")),
-                                 axis=1)
-        df["validFrom"] = df.apply(lambda row: np.datetime64(str(row.validFrom).replace("Z", "")),
-                                   axis=1)
+        df["validTo"] = df.apply(
+            lambda row: np.datetime64(str(row.validTo).replace("Z", "")), axis=1
+        )
+        df["validFrom"] = df.apply(
+            lambda row: np.datetime64(str(row.validFrom).replace("Z", "")), axis=1
+        )
         max_validto = max(df["validTo"])
 
         # Remove all features that have been deleted (are not valid at the time of the analysis
@@ -179,16 +219,21 @@ class CurrentnessAnalysis(Analysis):
             if self.key is None:
                 message = "No features for last-edit analysis found"
             else:
-                message = f"No features with key {self.key} for last-edit analysis found"
-            result = AnalysisResult(message, QualityLevel.YELLOW, 0, title_for_report=self.title)
+                message = (
+                    f"No features with key {self.key} for last-edit analysis found"
+                )
+            result = AnalysisResult(
+                message, QualityLevel.YELLOW, 0, title_for_report=self.title
+            )
             if queue is not None:
                 queue.put(result)
             return result
 
         # Add column containing the features' ages in days
-        df["TimeDelta"] = df.apply(lambda row:
-                                   floor((row.validTo - row.validFrom) / np.timedelta64(1, "D")),
-                                   axis=1)
+        df["TimeDelta"] = df.apply(
+            lambda row: floor((row.validTo - row.validFrom) / np.timedelta64(1, "D")),
+            axis=1,
+        )
 
         # Calculate the average values
         average_passed_days = df["TimeDelta"].mean()
@@ -204,21 +249,38 @@ class CurrentnessAnalysis(Analysis):
 
         if passed_years >= self.threshold_red:
             level = QualityLevel.RED
-            message = "The average" + key + "feature has not been updated in the last " + \
-                      str(self.threshold_red) + " years, so the data could be outdated."
+            message = (
+                "The average"
+                + key
+                + "feature has not been updated in the last "
+                + str(self.threshold_red)
+                + " years, so the data could be outdated."
+            )
             suggestion = "Be aware, that the" + key + "data could be outdated."
         elif passed_years >= self.threshold_yellow:
             level = QualityLevel.YELLOW
-            message = "The average" + key + "feature has not been updated in the last " + \
-                      str(self.threshold_yellow) + " years, so the data could be outdated."
+            message = (
+                "The average"
+                + key
+                + "feature has not been updated in the last "
+                + str(self.threshold_yellow)
+                + " years, so the data could be outdated."
+            )
         else:
-            message = "The average" + key + "feature has been edited in the last " + \
-                      str(self.threshold_yellow) + " years, indicating that the data are not " \
-                                                   "outdated."
+            message = (
+                "The average"
+                + key
+                + "feature has been edited in the last "
+                + str(self.threshold_yellow)
+                + " years, indicating that the data are not "
+                "outdated."
+            )
             level = QualityLevel.GREEN
 
-        info_string = f"{int(passed_years)} years, {int(passed_months)} months and " \
-                      f"{int(passed_days)} days"
+        info_string = (
+            f"{int(passed_years)} years, {int(passed_months)} months and "
+            f"{int(passed_days)} days"
+        )
         if passed_years == 1:
             info_string = info_string.replace("years", "year")
         if passed_months == 1:
@@ -229,14 +291,24 @@ class CurrentnessAnalysis(Analysis):
         message += " The average last edit was " + info_string + " ago"
 
         self.plot_results(df)
-        result = AnalysisResult(message, QualityLevel(level), self.importance, suggestion,
-                                self.plot_name, self.title)
+        result = AnalysisResult(
+            message,
+            QualityLevel(level),
+            self.importance,
+            suggestion,
+            self.plot_name,
+            self.title,
+        )
         if queue is not None:
             queue.put(result)
         if self.key is None:
-            update_progress(result_path=self. status_file_path,
-                            update=STATUS_UPDATES_ANALYSES["last_edit_f"])
+            update_progress(
+                result_path=self.status_file_path,
+                update=STATUS_UPDATES_ANALYSES["last_edit_f"],
+            )
         else:
-            update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES["last_edit_f"] + f" for key: {key}")
+            update_progress(
+                result_path=self.status_file_path,
+                update=STATUS_UPDATES_ANALYSES["last_edit_f"] + f" for key: {key}",
+            )
         return result

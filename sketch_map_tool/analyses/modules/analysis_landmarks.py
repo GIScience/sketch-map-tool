@@ -41,15 +41,20 @@ from matplotlib import pyplot as plt
 
 from sketch_map_tool.analyses.helpers import AnalysisResult, QualityLevel
 from sketch_map_tool.analyses.modules.analysis_base import Analysis
+from sketch_map_tool.constants import (
+    OHSOME_API,
+    STATUS_UPDATES_ANALYSES,
+    TIMEOUT_REQUESTS,
+)
 from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from sketch_map_tool.helper_modules.progress import update_progress
-from sketch_map_tool.constants import STATUS_UPDATES_ANALYSES, OHSOME_API, TIMEOUT_REQUESTS
 
 
 class LandmarkAnalysis(Analysis):
     """
     Inspect the density of orientation providing OSM features, i.e. landmarks
     """
+
     importance = 2
     threshold_yellow = 30  # POIs per km^2
     threshold_red = 10  # POIs per km^2
@@ -57,12 +62,14 @@ class LandmarkAnalysis(Analysis):
     title = "Landmark Density Analysis"
     plot_name = "_plot_poi.png"
 
-    def __init__(self,
-                 bbox: Bbox,
-                 time_str: str,
-                 plot_location: str = "./",
-                 status_file_path: str = "analyses.status",
-                 percent_threshold_for_plot: float = 0.01):
+    def __init__(
+        self,
+        bbox: Bbox,
+        time_str: str,
+        plot_location: str = "./",
+        status_file_path: str = "analyses.status",
+        percent_threshold_for_plot: float = 0.01,
+    ):
         """
         :param bbox: The bounding box for which the analysis is performed
         :param time_str: Timestamp as parameter for the ohsome API for which the landmark density
@@ -91,7 +98,7 @@ class LandmarkAnalysis(Analysis):
             "parks": 0,
             "mountains": 0,
             "waterways": 0,
-            "townhalls": 0
+            "townhalls": 0,
         }
         self.plot_labels = {
             "shops": "Shops",
@@ -107,7 +114,7 @@ class LandmarkAnalysis(Analysis):
             "parks": "Parks",
             "mountains": "Mountains",
             "waterways": "Waterways",
-            "townhalls": "Townhalls"
+            "townhalls": "Townhalls",
         }
         self.density_sum = 0
 
@@ -119,8 +126,9 @@ class LandmarkAnalysis(Analysis):
     def status_file_path(self) -> str:
         return self._status_file_path
 
-    def add_density_for_tag(self, key: Optional[str], value: Optional[str],
-                            category: str) -> None:
+    def add_density_for_tag(
+        self, key: Optional[str], value: Optional[str], category: str
+    ) -> None:
         """
         Send a request to the ohsome API to get the density of features with the given keys and
         values. Update the instance variables 'density' and 'density_sum' with the obtained value.
@@ -133,14 +141,16 @@ class LandmarkAnalysis(Analysis):
                          density value should be added
         """
         if category not in self.density.keys():
-            raise ValueError(f"Category '{category}' is not a key in the dictionary 'density'.")
+            raise ValueError(
+                f"Category '{category}' is not a key in the dictionary 'density'."
+            )
         if value is not None and key is None:
-            raise ValueError("If a 'value' is given, 'key' cannot be None, as allowed tags have the"
-                             " form key=value or key=*, but not *=value")
+            raise ValueError(
+                "If a 'value' is given, 'key' cannot be None, as allowed tags have the"
+                " form key=value or key=*, but not *=value"
+            )
         url = "/elements/count/density"
-        params = {"bboxes": self.bbox.get_str(mode="comma"),
-                  "time": self.time_str
-                  }
+        params = {"bboxes": self.bbox.get_str(mode="comma"), "time": self.time_str}
         filter_param = "(type:node or type:way)"
         if key is not None:
             if value is not None:
@@ -154,7 +164,9 @@ class LandmarkAnalysis(Analysis):
         self.density_sum += result["value"]
         self.density[category] += result["value"]
 
-    def add_density_for_tag_aggregated(self, key: str, values_categories: Dict[str, str]) -> None:
+    def add_density_for_tag_aggregated(
+        self, key: str, values_categories: Dict[str, str]
+    ) -> None:
         """
         Send a request to the ohsome API to get the aggregated density of features with the given
         key and values. Update the instance variables 'density' and 'density_sum' with the obtained
@@ -169,15 +181,18 @@ class LandmarkAnalysis(Analysis):
         """
         for value in values_categories.values():
             if value not in self.density.keys():
-                raise ValueError(f"Invalid value '{value}' in argument 'values_categories'. There "
-                                 f"is no such key in the dictionary 'density'.")
+                raise ValueError(
+                    f"Invalid value '{value}' in argument 'values_categories'. There "
+                    f"is no such key in the dictionary 'density'."
+                )
         url = "/elements/count/density/groupBy/tag"
-        params = {"bboxes": self.bbox.get_str(mode="comma"),
-                  "filter": "type:node or type:way",
-                  "time": self.time_str,
-                  "groupByKey": key,
-                  "groupByValues": ", ".join(values_categories.keys())
-                  }
+        params = {
+            "bboxes": self.bbox.get_str(mode="comma"),
+            "filter": "type:node or type:way",
+            "time": self.time_str,
+            "groupByKey": key,
+            "groupByValues": ", ".join(values_categories.keys()),
+        }
 
         result = requests.get(OHSOME_API + url, params, timeout=TIMEOUT_REQUESTS)
         result = json.loads(result.text)["groupByResult"]
@@ -185,8 +200,11 @@ class LandmarkAnalysis(Analysis):
         for group_by_result in result:
             if group_by_result["groupByObject"] != "remainder":
                 self.density_sum += group_by_result["result"][0]["value"]
-                self.density[values_categories[group_by_result["groupByObject"]
-                             .replace(f"{key}=", "")]] += group_by_result["result"][0]["value"]
+                self.density[
+                    values_categories[
+                        group_by_result["groupByObject"].replace(f"{key}=", "")
+                    ]
+                ] += group_by_result["result"][0]["value"]
 
     def create_plot(self) -> None:
         """
@@ -199,7 +217,9 @@ class LandmarkAnalysis(Analysis):
             percentage = 0.0
             if self.density_sum > 0:
                 percentage = round(100 * self.density[key] / self.density_sum, 2)
-            shares_with_labels.append((percentage, f"{self.plot_labels[key]} ({percentage}%)"))
+            shares_with_labels.append(
+                (percentage, f"{self.plot_labels[key]} ({percentage}%)")
+            )
 
         for pair in shares_with_labels.copy():
             if pair[0] < self.percent_threshold_for_plot:
@@ -211,24 +231,39 @@ class LandmarkAnalysis(Analysis):
 
         fig = plt.figure(figsize=(7, 7))
         plot = fig.add_subplot(111)
-        plot.pie(data, autopct="%.0f%%", textprops={"color": "w", "fontsize": "xx-large"})
-        lgd = plot.legend(labels, title="Landmark Categories", loc="lower right",
-                          bbox_to_anchor=(.8, 0, 0.5, 1), fontsize=12)
+        plot.pie(
+            data, autopct="%.0f%%", textprops={"color": "w", "fontsize": "xx-large"}
+        )
+        lgd = plot.legend(
+            labels,
+            title="Landmark Categories",
+            loc="lower right",
+            bbox_to_anchor=(0.8, 0, 0.5, 1),
+            fontsize=12,
+        )
         plot.set_title("Shares of different Landmark Categories")
-        fig.savefig(self.plot_location + self.plot_name, bbox_inches="tight",
-                    bbox_extra_artists=(lgd,))
+        fig.savefig(
+            self.plot_location + self.plot_name,
+            bbox_inches="tight",
+            bbox_extra_artists=(lgd,),
+        )
 
-    def run(self,
-            queue: Optional["multiprocessing.Queue[AnalysisResult]"] = None) -> AnalysisResult:
+    def run(
+        self, queue: Optional["multiprocessing.Queue[AnalysisResult]"] = None
+    ) -> AnalysisResult:
         """
         Analyze the density of landmark features
 
         :param queue: Queue to which the result is appended
         """
-        update_progress(result_path=self.status_file_path,
-                        update=STATUS_UPDATES_ANALYSES["landmark_s"])
+        update_progress(
+            result_path=self.status_file_path,
+            update=STATUS_UPDATES_ANALYSES["landmark_s"],
+        )
 
-        self.add_density_for_tag(key="railway", value="station", category="public_transport")
+        self.add_density_for_tag(
+            key="railway", value="station", category="public_transport"
+        )
         self.add_density_for_tag(key="shop", value=None, category="shops")
 
         amenity_categories = {
@@ -242,61 +277,82 @@ class LandmarkAnalysis(Analysis):
             "college": "education",
             "townhall": "townhalls",
             "police": "public_safety",
-            "fire_station": "public_safety"
+            "fire_station": "public_safety",
         }
-        self.add_density_for_tag_aggregated(key="amenity", values_categories=amenity_categories)
+        self.add_density_for_tag_aggregated(
+            key="amenity", values_categories=amenity_categories
+        )
 
-        self.add_density_for_tag(key="highway", value="bus_stop", category="public_transport")
+        self.add_density_for_tag(
+            key="highway", value="bus_stop", category="public_transport"
+        )
 
-        tourism_categories = {
-            "hotel": "hotels",
-            "attraction": "attractions"
-        }
-        self.add_density_for_tag_aggregated(key="tourism", values_categories=tourism_categories)
+        tourism_categories = {"hotel": "hotels", "attraction": "attractions"}
+        self.add_density_for_tag_aggregated(
+            key="tourism", values_categories=tourism_categories
+        )
 
         self.add_density_for_tag(key="leisure", value="park", category="parks")
-        self.add_density_for_tag(key="boundary", value="national_park", category="parks")
+        self.add_density_for_tag(
+            key="boundary", value="national_park", category="parks"
+        )
 
-        natural_categories = {
-            "water": "waterways",
-            "peak": "mountains"
-        }
-        self.add_density_for_tag_aggregated(key="natural", values_categories=natural_categories)
+        natural_categories = {"water": "waterways", "peak": "mountains"}
+        self.add_density_for_tag_aggregated(
+            key="natural", values_categories=natural_categories
+        )
 
         self.add_density_for_tag(key="waterway", value=None, category="waterways")
 
         density_rounded = round(self.density_sum, 2)
         level = QualityLevel.GREEN
 
-        message_prefix = "The density of landmarks (points of reference, e.g. waterbodies, " \
-                         f"supermarkets, churches, bus stops) is {density_rounded} features per " \
-                         f"km^2. "
+        message_prefix = (
+            "The density of landmarks (points of reference, e.g. waterbodies, "
+            f"supermarkets, churches, bus stops) is {density_rounded} features per "
+            f"km^2. "
+        )
 
-        message = message_prefix + "It is probably easy to orientate on OSM-based sketch maps " \
-                                   "of this region."
+        message = (
+            message_prefix
+            + "It is probably easy to orientate on OSM-based sketch maps "
+            "of this region."
+        )
         suggestion = ""
 
         if self.density_sum < self.threshold_yellow:
             level = QualityLevel.YELLOW
-            message = message_prefix + "It might be difficult to orientate on OSM-based sketch " \
-                                       "maps of this region."
-            suggestion = "There are not many orientation providing features available, you " \
-                         "should explore, if participants can orientate properly."
+            message = (
+                message_prefix
+                + "It might be difficult to orientate on OSM-based sketch "
+                "maps of this region."
+            )
+            suggestion = (
+                "There are not many orientation providing features available, you "
+                "should explore, if participants can orientate properly."
+            )
 
         if self.density_sum < self.threshold_red:
             level = QualityLevel.RED
-            message = message_prefix + "It is probably hard to orientate on OSM-based sketch " \
-                                       "maps of this region."
-            suggestion = "There are just few orientation providing features available, you " \
-                         "should explore, if participants can orientate properly."
+            message = (
+                message_prefix + "It is probably hard to orientate on OSM-based sketch "
+                "maps of this region."
+            )
+            suggestion = (
+                "There are just few orientation providing features available, you "
+                "should explore, if participants can orientate properly."
+            )
 
         if self.density_sum > 0:
             self.create_plot()
 
-        result = AnalysisResult(message, level, self.importance, suggestion, self.plot_name,
-                                self.title)
+        result = AnalysisResult(
+            message, level, self.importance, suggestion, self.plot_name, self.title
+        )
         if queue is not None:
             queue.put(result)
-        update_progress(result_path=self.status_file_path,
-                        update=STATUS_UPDATES_ANALYSES["landmark_f"])
+        update_progress(
+            result_path=self.status_file_path,
+            update=STATUS_UPDATES_ANALYSES["landmark_f"],
+        )
         return result

@@ -18,14 +18,18 @@
 """
 # pylint: disable=duplicate-code
 import multiprocessing  # noqa  # pylint: disable=unused-import
+from typing import Any, List, Optional, Tuple
+
 import matplotlib.pyplot as plt
-from typing import List, Tuple, Any, Optional
 import requests
 
 from sketch_map_tool.analyses.helpers import AnalysisResult, QualityLevel
 from sketch_map_tool.analyses.modules.analysis_base import Analysis
-
-from sketch_map_tool.constants import STATUS_UPDATES_ANALYSES, OHSOME_API, TIMEOUT_REQUESTS
+from sketch_map_tool.constants import (
+    OHSOME_API,
+    STATUS_UPDATES_ANALYSES,
+    TIMEOUT_REQUESTS,
+)
 from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from sketch_map_tool.helper_modules.progress import update_progress
 
@@ -34,11 +38,14 @@ class CompletenessAnalysis(Analysis):
     """
     Check how complete, i.e. saturated the mapping of OSM features is
     """
+
     importance = 1.0
-    special_importance_completion = {"amenity": 0.5}  # otherwise, the general importance is used
-    special_importance_lack_of_data = {  # when threshold_major_change is never surpassed
+    special_importance_completion = {
+        "amenity": 0.5
+    }  # otherwise, the general importance is used
+    special_importance_lack_of_data = {
         "highway": 2.0
-    }
+    }  # when threshold_major_change is never surpassed
     threshold_yellow = 5  # percent yearly change in feature length/density
     threshold_red = 10  # percent yearly change in feature length/density
     threshold_major_change = 25  # percent yearly change in feature length/density
@@ -48,14 +55,16 @@ class CompletenessAnalysis(Analysis):
         "density": 375,  # features per km^2, no major change check when surpassed
     }
 
-    def __init__(self,
-                 bbox: Bbox,
-                 time: str,
-                 plot_location: str = "./",
-                 status_file_path: str = "analyses.status",
-                 key: Optional[str] = None,
-                 measure: str = "density",
-                 measure_unit: str = "features per km²"):
+    def __init__(
+        self,
+        bbox: Bbox,
+        time: str,
+        plot_location: str = "./",
+        status_file_path: str = "analyses.status",
+        key: Optional[str] = None,
+        measure: str = "density",
+        measure_unit: str = "features per km²",
+    ):
         """
         :param bbox: Bounding box the OSM data of which should be inspected
         :param time: time string covering the time span and steps to be analyzed
@@ -101,10 +110,13 @@ class CompletenessAnalysis(Analysis):
         :return: Response from ohsome
         """
         aggregation = aggregation.replace("density", "count/density")
-        return requests.get(f"{OHSOME_API}/elements/{aggregation}", params,
-                            timeout=TIMEOUT_REQUESTS)
+        return requests.get(
+            f"{OHSOME_API}/elements/{aggregation}", params, timeout=TIMEOUT_REQUESTS
+        )
 
-    def plot_results(self, data: List[Tuple[str, float]], title: str, y_label: str) -> None:
+    def plot_results(
+        self, data: List[Tuple[str, float]], title: str, y_label: str
+    ) -> None:
         """
         Visualize the analysis' results in a plot
 
@@ -134,8 +146,9 @@ class CompletenessAnalysis(Analysis):
         output_path = self.plot_location + self.plot_name
         fig.savefig(output_path)
 
-    def run(self, queue: Optional["multiprocessing.Queue[AnalysisResult]"] = None) \
-            -> AnalysisResult:  # noqa: C901
+    def run(  # noqa: C901
+        self, queue: Optional["multiprocessing.Queue[AnalysisResult]"] = None
+    ) -> AnalysisResult:
         """
         Inspect the saturation, i.e. completeness of OSM feature mapping
 
@@ -144,19 +157,30 @@ class CompletenessAnalysis(Analysis):
         :return: Result object
         """
         if self.key:
-            update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES["saturation_s"] +
-                            f" for key: {self.key}")
+            update_progress(
+                result_path=self.status_file_path,
+                update=STATUS_UPDATES_ANALYSES["saturation_s"]
+                + f" for key: {self.key}",
+            )
         else:
-            update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES["saturation_s"])
+            update_progress(
+                result_path=self.status_file_path,
+                update=STATUS_UPDATES_ANALYSES["saturation_s"],
+            )
         if self.key:
             ohsome_response = self.request(
-                self.measure, bboxes=str(self.bbox), time=self.time,
-                filter=f"({self.key}=*) and (type:node or type:way)").json()
+                self.measure,
+                bboxes=str(self.bbox),
+                time=self.time,
+                filter=f"({self.key}=*) and (type:node or type:way)",
+            ).json()
         else:
-            ohsome_response = self.request(self.measure, bboxes=str(self.bbox), time=self.time,
-                                           filter="type:node or type:way").json()
+            ohsome_response = self.request(
+                self.measure,
+                bboxes=str(self.bbox),
+                time=self.time,
+                filter="type:node or type:way",
+            ).json()
 
         values = [data_point["value"] for data_point in ohsome_response["result"]]
 
@@ -165,23 +189,32 @@ class CompletenessAnalysis(Analysis):
             if values[i - 1] > 0:
                 slopes.append(100 * ((values[i] - values[i - 1]) / values[i - 1]))
 
-        values_with_timestamps = [(data_point["timestamp"], data_point["value"])
-                                  for data_point in ohsome_response["result"]]
+        values_with_timestamps = [
+            (data_point["timestamp"], data_point["value"])
+            for data_point in ohsome_response["result"]
+        ]
         if self.key:
             title = f"Development of {self.key} length"
-            y_label = f"{self.measure.capitalize()} of features with '{self.key}' tag " \
-                      f"({self.measure_unit})"
+            y_label = (
+                f"{self.measure.capitalize()} of features with '{self.key}' tag "
+                f"({self.measure_unit})"
+            )
         else:
             title = "Development of feature length"
-            y_label = f"{self.measure.capitalize()} of features tag ({self.measure_unit})"
+            y_label = (
+                f"{self.measure.capitalize()} of features tag ({self.measure_unit})"
+            )
         self.plot_results(values_with_timestamps, title, y_label)
         recommendation = ""
         importance = self.importance
         if self.key:
-            importance = self.special_importance_completion.get(self.key, self.importance)
+            importance = self.special_importance_completion.get(
+                self.key, self.importance
+            )
         level = QualityLevel.GREEN
-        baseline_index = 0  # Find the first yearly value greater than 0 (the baseline, as
-        # percentage increase from 0 to x cannot be determined)
+        # Find the first yearly value greater than 0 (the baseline, as percentage
+        # increase from 0 to x cannot be determined))
+        baseline_index = 0
         for value in values:
             if value > 0:
                 break
@@ -191,23 +224,37 @@ class CompletenessAnalysis(Analysis):
         baseline = values[baseline_index] / self.bbox.get_area()
         baseline_threshold_surpassed = False
         if self.measure in self.baseline_thresholds.keys():
-            baseline_threshold_surpassed = baseline > self.baseline_thresholds[self.measure]
-        if max(slopes) < self.threshold_major_change and not baseline_threshold_surpassed:
+            baseline_threshold_surpassed = (
+                baseline > self.baseline_thresholds[self.measure]
+            )
+        if (
+            max(slopes) < self.threshold_major_change
+            and not baseline_threshold_surpassed
+        ):
             level = QualityLevel.RED
             if self.key:
-                importance = self.special_importance_lack_of_data.get(self.key, self.importance)
-                message = f"There has never been a yearly increase of feature {self.measure} " \
-                          f"bigger than {self.threshold_major_change}% in this region for " \
-                          f"{self.key} features. There might be a lack of data in this area."
-                recommendation = f"Be aware that there might be a lack of data regarding " \
-                                 f"{self.key} features."
+                importance = self.special_importance_lack_of_data.get(
+                    self.key, self.importance
+                )
+                message = (
+                    f"There has never been a yearly increase of feature {self.measure} "
+                    f"bigger than {self.threshold_major_change}% in this region for "
+                    f"{self.key} features. There might be a lack of data in this area."
+                )
+                recommendation = (
+                    "Be aware that there might be a lack of data regarding "
+                    f"{self.key} features."
+                )
             else:
-                message = f"There has never been a yearly increase of feature {self.measure} " \
-                          f"bigger than {self.threshold_major_change}% in this region " \
-                          f"for all features. There might be a lack of data in this area."
+                message = (
+                    f"There has never been a yearly increase of feature {self.measure} "
+                    f"bigger than {self.threshold_major_change}% in this region "
+                    "for all features. There might be a lack of data in this area."
+                )
                 recommendation = "Be aware that there might be a general lack of data."
-            result = AnalysisResult(message, level, importance, recommendation, self.plot_name,
-                                    self.title)
+            result = AnalysisResult(
+                message, level, importance, recommendation, self.plot_name, self.title
+            )
             if queue is not None:
                 queue.put(result)
             return result
@@ -215,64 +262,93 @@ class CompletenessAnalysis(Analysis):
         last_slope = round(slopes[-1], 4)
         last_slope_display = abs(round(last_slope, 2))
         if self.key:
-            message = f"The mapping of {self.key} features seems to be saturated. " \
-                      f"There was just an increase of {last_slope_display}% in feature " \
-                      f"{self.measure} during the last year."
+            message = (
+                f"The mapping of {self.key} features seems to be saturated. "
+                f"There was just an increase of {last_slope_display}% in feature "
+                f"{self.measure} during the last year."
+            )
         else:
-            message = f"The general mapping of features seems to be near to a saturated state. " \
-                      f"There was just an increase of {last_slope_display}% in feature " \
-                      f"{self.measure} during the last year."
+            message = (
+                "The general mapping of features seems to be near to a saturated state. "
+                f"There was just an increase of {last_slope_display}% in feature "
+                f"{self.measure} during the last year."
+            )
         if last_slope == 0:
             if self.key:
-                message = f"The mapping of {self.key} features seems to be saturated. There was " \
-                          f"no change of feature {self.measure} in the last year."
+                message = (
+                    f"The mapping of {self.key} features seems to be saturated. There was "
+                    f"no change of feature {self.measure} in the last year."
+                )
             else:
-                message = f"The general mapping of features seems to be near to a saturated" \
-                          f" state. There was no change of feature {self.measure} in the last year."
+                message = (
+                    "The general mapping of features seems to be near to a saturated"
+                    f" state. There was no change of feature {self.measure} in the last year."
+                )
         elif last_slope < 0:
             if self.key:
-                message = f"The mapping of {self.key} features seems to be saturated. There even" \
-                          f" was a decrease of {last_slope_display}% in feature {self.measure}" \
-                          f" during the last year."
+                message = (
+                    f"The mapping of {self.key} features seems to be saturated. There even"
+                    f" was a decrease of {last_slope_display}% in feature {self.measure}"
+                    " during the last year."
+                )
             else:
-                message = f"The general mapping of features seems to be near to a saturated " \
-                          f"state. There even was a decrease of {last_slope_display}% in feature " \
-                          f"{self.measure} during the last year."
+                message = (
+                    "The general mapping of features seems to be near to a saturated "
+                    f"state. There even was a decrease of {last_slope_display}% in feature "
+                    f"{self.measure} during the last year."
+                )
 
         elif last_slope > self.threshold_yellow:
             level = QualityLevel.YELLOW
             if self.key:
-                message = f"The mapping of {self.key} features might not be saturated yet. There " \
-                          f"was an increase of {last_slope_display}% in feature {self.measure} " \
-                          f"during the last year."
+                message = (
+                    f"The mapping of {self.key} features might not be saturated yet. There "
+                    f"was an increase of {last_slope_display}% in feature {self.measure} "
+                    "during the last year."
+                )
             else:
-                message = f"The general mapping of features might not be saturated yet. There " \
-                          f"was an increase of {last_slope_display}% in feature {self.measure}" \
-                          f" during the last year."
+                message = (
+                    "The general mapping of features might not be saturated yet. There "
+                    f"was an increase of {last_slope_display}% in feature {self.measure}"
+                    " during the last year."
+                )
         elif last_slope > self.threshold_red:
             level = QualityLevel.RED
             if self.key:
-                message = f"The mapping of {self.key} features seems to be far from a saturated " \
-                          f"state. There was an increase of {last_slope_display}% in feature " \
-                          f"{self.measure} during the last year."
-                recommendation = f"Be aware that the mapping of {self.key} features does not " \
-                                 f"seem to be saturated and is therefore possibly not complete yet."
+                message = (
+                    f"The mapping of {self.key} features seems to be far from a saturated "
+                    f"state. There was an increase of {last_slope_display}% in feature "
+                    f"{self.measure} during the last year."
+                )
+                recommendation = (
+                    f"Be aware that the mapping of {self.key} features does not "
+                    "seem to be saturated and is therefore possibly not complete yet."
+                )
             else:
-                message = f"The general mapping of features seems to be far from a saturated " \
-                          f"state. There was an increase of {last_slope_display}% in feature" \
-                          f" {self.measure} during the last year."
-                recommendation = "Be aware that the general mapping of features does not seem to" \
-                                 " be saturated and is therefore possibly not complete yet."
-        result = AnalysisResult(message, level, importance, recommendation, self.plot_name,
-                                self.title)
+                message = (
+                    "The general mapping of features seems to be far from a saturated "
+                    f"state. There was an increase of {last_slope_display}% in feature"
+                    f" {self.measure} during the last year."
+                )
+                recommendation = (
+                    "Be aware that the general mapping of features does not seem to"
+                    " be saturated and is therefore possibly not complete yet."
+                )
+        result = AnalysisResult(
+            message, level, importance, recommendation, self.plot_name, self.title
+        )
 
         if queue is not None:
             queue.put(result)
         if self.key:
-            update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES["saturation_f"] +
-                            f" for key: {self.key}")
+            update_progress(
+                result_path=self.status_file_path,
+                update=STATUS_UPDATES_ANALYSES["saturation_f"]
+                + f" for key: {self.key}",
+            )
         else:
-            update_progress(result_path=self.status_file_path,
-                            update=STATUS_UPDATES_ANALYSES["saturation_f"])
+            update_progress(
+                result_path=self.status_file_path,
+                update=STATUS_UPDATES_ANALYSES["saturation_f"],
+            )
         return result

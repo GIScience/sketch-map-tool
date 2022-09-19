@@ -2,14 +2,16 @@
 Contains class 'Mypy' to run mypy on Python files
 """
 import os
+from subprocess import PIPE, Popen  # nosec
+
 from .stage_base import Stage
-from subprocess import Popen, PIPE  # nosec
 
 
 class Mypy(Stage):
     """
     Stage for running mypy on Python files
     """
+
     file_formats = ["py"]
 
     def __str__(self) -> str:
@@ -23,17 +25,40 @@ class Mypy(Stage):
         else:
             activate_env = ["source", "pylint_env/bin/activate"]
         # pylint: disable=consider-using-with
-        process = Popen(["python", "-m", "venv", "pylint_env", "&&",  # nosec
-                         *activate_env, "&&",
-                         "pip", "install", "-r",
-                         f"{os.path.dirname(__file__)}{os.sep}mypy_requirements.txt"], shell=True)
+        process = Popen(
+            [
+                "python",
+                "-m",
+                "venv",
+                "pylint_env",
+                "&&",
+                *activate_env,
+                "&&",
+                "pip",
+                "install",
+                "-r",
+                f"{os.path.dirname(__file__)}{os.sep}mypy_requirements.txt",
+            ],
+            shell=True,  # nosec
+        )
         process.communicate()
         for file in self.files:
             if file.split(".")[-1] in self.file_formats:
                 print(f"Running mypy for {file}")
-                process = Popen([*activate_env, "&&",  # nosec
-                                 "python", "-m", "mypy", "--strict", file], stdout=PIPE,
-                                stderr=PIPE, shell=True)
+                process = Popen(
+                    [
+                        *activate_env,
+                        "&&",
+                        "python",
+                        "-m",
+                        "mypy",
+                        "--strict",
+                        file,
+                    ],
+                    stdout=PIPE,
+                    stderr=PIPE,
+                    shell=True,  # nosec
+                )
                 stdout, stderr = process.communicate()
                 stdout_str = stdout.decode("utf8")
                 stderr_str = stderr.decode("utf8")

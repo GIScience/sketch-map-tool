@@ -1,8 +1,8 @@
 """
 Helper functions for the analyses of OSM data and the handling of their result files
 """
-from typing import Dict, Tuple, Union
 from enum import Enum
+from typing import Dict, Tuple, Union
 
 from sketch_map_tool.helper_modules.bbox_utils import Bbox
 
@@ -28,11 +28,13 @@ def add_one_day(time_str: str) -> str:
     >>> add_one_day(time_str)
     '2008-01-01/2020-06-29/P1Y'
     """
-    if int(time_str[8:10])+1 < 29:
-        return time_str[0:8] + str(int(time_str[8:10])+1).zfill(2) + time_str[10:]
-    if int(time_str[5:7])+1 < 13:
-        return time_str[0:5] + str(int(time_str[5:7])+1).zfill(2) + "-01" + time_str[10:]
-    return str(int(time_str[0:4])+1) + "-01-01" + time_str[10:]
+    if int(time_str[8:10]) + 1 < 29:
+        return time_str[0:8] + str(int(time_str[8:10]) + 1).zfill(2) + time_str[10:]
+    if int(time_str[5:7]) + 1 < 13:
+        return (
+            time_str[0:5] + str(int(time_str[5:7]) + 1).zfill(2) + "-01" + time_str[10:]
+        )
+    return str(int(time_str[0:4]) + 1) + "-01-01" + time_str[10:]
 
 
 def get_result_path(bbox: Bbox, output_path: str) -> str:
@@ -52,6 +54,7 @@ class QualityLevel(Enum):
     Sketch Map Fitness quality level in the traffic light system (RED meaning "potential problems",
     YELLOW meaning "mediocre fitness", GREEN meaning "good fitness")
     """
+
     RED = 0
     YELLOW = 1
     GREEN = 2
@@ -61,9 +64,16 @@ class AnalysisResult:
     """
     The results of an OSM quality analysis
     """
-    def __init__(self, message: str, level: QualityLevel, importance: float = 1,
-                 suggestion: str = "", corresponding_plot_name: str = "",
-                 title_for_report: str = ""):
+
+    def __init__(
+        self,
+        message: str,
+        level: QualityLevel,
+        importance: float = 1,
+        suggestion: str = "",
+        corresponding_plot_name: str = "",
+        title_for_report: str = "",
+    ):
         """
         :param message: Result message containing relevant values to be presented to the user
         :param level: The quality level indicated by the results
@@ -89,7 +99,7 @@ class AnalysisResult:
             "message": self.message,
             "level": self.level,
             "importance": self.importance,
-            "suggestion": self.suggestion
+            "suggestion": self.suggestion,
         }
 
     def to_tuple(self) -> Tuple[int, float, str, str]:

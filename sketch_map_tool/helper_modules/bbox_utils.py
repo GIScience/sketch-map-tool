@@ -3,14 +3,15 @@ Functions and classes to support work with bounding boxes and coordinates
 """
 
 import re
-from typing import Tuple, Dict
-from math import sin, sqrt, cos, asin, pi
+from math import asin, cos, pi, sin, sqrt
+from typing import Dict, Tuple
 
 
 class BboxTooLargeException(Exception):
     """
     Exception indicating that a selected bounding box is too large to be processed
     """
+
     def __init__(self) -> None:
         super().__init__("Bounding box selection is too large")
 
@@ -19,6 +20,7 @@ class Bbox(object):
     """
     Bounding box (https://wiki.openstreetmap.org/w/index.php?title=Bounding_Box&oldid=2079213)
     """
+
     def __init__(self, lon1: float, lat1: float, lon2: float, lat2: float):
         self.lon1 = lon1
         self.lat1 = lat1
@@ -35,11 +37,17 @@ class Bbox(object):
         """
         bbox_str = bbox_str.strip("; ")
         if not is_bbox_str(bbox_str) or len(bbox_str.split(";")) > 1:
-            raise ValueError("Parameter bbox_str is expected to contain the coordinates for one "
-                             "bounding box in the format 1.123,1.123,1.123,1.123")
+            raise ValueError(
+                "Parameter bbox_str is expected to contain the coordinates for one "
+                "bounding box in the format 1.123,1.123,1.123,1.123"
+            )
         coordinates = bbox_str.split(",")
-        return Bbox(float(coordinates[0]), float(coordinates[1]), float(coordinates[2]),
-                    float(coordinates[3]))
+        return Bbox(
+            float(coordinates[0]),
+            float(coordinates[1]),
+            float(coordinates[2]),
+            float(coordinates[3]),
+        )
 
     def get_height(self) -> float:
         """
@@ -94,7 +102,7 @@ class Bbox(object):
             "lon1": self.lon1,
             "lat1": self.lat1,
             "lon2": self.lon2,
-            "lat2": self.lat2
+            "lat2": self.lat2,
         }
 
     def get_str(self, mode: str = "minus") -> str:
@@ -134,13 +142,17 @@ def is_bbox_str(bbox_str: str) -> bool:
     >>> is_bbox_str("10,6721131 53,8588041 10,6982375 53.8769225;")
     False
     """
-    regex = re.compile(r"\A((-?\d+\.\d+,){3}-?\d+\.\d+)|(((-?\d+\.\d+,){3}-?\d+\.\d+;)+)\Z")
+    regex = re.compile(
+        r"\A((-?\d+\.\d+,){3}-?\d+\.\d+)|(((-?\d+\.\d+,){3}-?\d+\.\d+;)+)\Z"
+    )
     if not regex.fullmatch(bbox_str):
         return False
     return True
 
 
-def calculate_distance(point_a: Tuple[float, float], point_b: Tuple[float, float]) -> float:
+def calculate_distance(
+    point_a: Tuple[float, float], point_b: Tuple[float, float]
+) -> float:
     """
     Calculate the distance between two points (lat,lon-format!) in metres using the Haversine
     formula
@@ -155,10 +167,18 @@ def calculate_distance(point_a: Tuple[float, float], point_b: Tuple[float, float
     True
     """
     earth_rad = 6371000
-    lat_a = point_a[0]*pi/180
-    lat_b = point_b[0]*pi/180
-    lon_a = point_a[1]*pi/180
-    lon_b = point_b[1]*pi/180
-    distance = 2*earth_rad*asin(sqrt(sin((lat_b-lat_a)/2)**2 +
-                                     cos(lat_a)*cos(lat_b)*sin((lon_b-lon_a)/2)**2))
+    lat_a = point_a[0] * pi / 180
+    lat_b = point_b[0] * pi / 180
+    lon_a = point_a[1] * pi / 180
+    lon_b = point_b[1] * pi / 180
+    distance = (
+        2
+        * earth_rad
+        * asin(
+            sqrt(
+                sin((lat_b - lat_a) / 2) ** 2
+                + cos(lat_a) * cos(lat_b) * sin((lon_b - lon_a) / 2) ** 2
+            )
+        )
+    )
     return distance
