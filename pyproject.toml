@@ -21,6 +21,8 @@ bandit = "^1.7.4"
 mypy = "^0.971"
 flake8 = "^5.0.4"
 pylint = "^2.14.5"
+black = "^22.8.0"
+isort = "^5.10.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
