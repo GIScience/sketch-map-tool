@@ -18,9 +18,9 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from time import strftime
 
-from analyses.helpers import AnalysisResult, QualityLevel
-from analyses.html_gen.analyses_output_generator import get_general_score
-from helper_modules.bbox_utils import Bbox
+from sketch_map_tool.analyses.helpers import AnalysisResult, QualityLevel
+from sketch_map_tool.analyses.html_gen.analyses_output_generator import get_general_score
+from sketch_map_tool.helper_modules.bbox_utils import Bbox
 
 RESOURCE_FOLDER = "analyses/pdf_gen/res/"
 

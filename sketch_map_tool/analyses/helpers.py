@@ -4,7 +4,7 @@ Helper functions for the analyses of OSM data and the handling of their result f
 from typing import Dict, Tuple, Union
 from enum import Enum
 
-from helper_modules.bbox_utils import Bbox
+from sketch_map_tool.helper_modules.bbox_utils import Bbox
 
 
 def add_one_day(time_str: str) -> str:

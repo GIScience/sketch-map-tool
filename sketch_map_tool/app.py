@@ -7,13 +7,14 @@ import os
 from flask import Flask, render_template, request, redirect, Response
 from wtforms import Form, TextAreaField, validators
 from typing import List, Union
-from constants import (ANALYSES_OUTPUT_PATH, INVALID_STATUS_LINK_MESSAGE, TEMPLATE_ANALYSES,
-                       NR_OF_ANALYSES_STEPS, TEMPLATE_ANALYSES_RESULTS, ErrorCode,
-                       ERROR_MSG_FOR_CODE, BBOX_TOO_BIG)
-from analyses import run_analyses
-from analyses.helpers import get_result_path
-from helper_modules.bbox_utils import (is_bbox_str, BboxTooLargeException, Bbox)
-from helper_modules.progress import get_status_updates, get_nr_of_completed_steps, \
+from sketch_map_tool.constants import (ANALYSES_OUTPUT_PATH, INVALID_STATUS_LINK_MESSAGE,
+                                       TEMPLATE_ANALYSES, NR_OF_ANALYSES_STEPS,
+                                       TEMPLATE_ANALYSES_RESULTS, ErrorCode,
+                                       ERROR_MSG_FOR_CODE, BBOX_TOO_BIG)
+from sketch_map_tool.analyses import run_analyses
+from sketch_map_tool.analyses.helpers import get_result_path
+from sketch_map_tool.helper_modules.bbox_utils import (is_bbox_str, BboxTooLargeException, Bbox)
+from sketch_map_tool.helper_modules.progress import get_status_updates, get_nr_of_completed_steps, \
     NoStatusFileException
 
 

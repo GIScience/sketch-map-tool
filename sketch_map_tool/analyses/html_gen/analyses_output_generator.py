@@ -3,8 +3,8 @@ Functions to generate a webpage based on analyses' results
 """
 from datetime import datetime
 from typing import List, Dict, Tuple
-from analyses.helpers import AnalysisResult, QualityLevel
-from helper_modules.bbox_utils import Bbox
+from sketch_map_tool.analyses.helpers import AnalysisResult, QualityLevel
+from sketch_map_tool.helper_modules.bbox_utils import Bbox
 import json
 
 

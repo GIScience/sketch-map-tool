@@ -13,19 +13,19 @@ from multiprocessing import Process, Queue
 from typing import List, Dict, Union
 from datetime import datetime
 
-from analyses.helpers import add_one_day, get_result_path
-from analyses.html_gen.analyses_output_generator import write_results_to_json
-from analyses.modules.analysis_completeness import CompletenessAnalysis
-from analyses.modules.analysis_landmarks import LandmarkAnalysis
-from analyses.modules.analysis_sources import SourcesAnalysis
-from analyses.modules.analysis_currentness import CurrentnessAnalysis
-from analyses.helpers import AnalysisResult
-from analyses.pdf_gen.pdf_gen import create_report
-from helper_modules.bbox_utils import Bbox
-from helper_modules.progress import update_progress
-from constants import (STATUS_UPDATES_ANALYSES, OHSOME_API,
-                       STATUS_ERROR_OHSOME_NOT_AVAILABLE,
-                       TIMEOUT_REQUESTS)
+from sketch_map_tool.analyses.helpers import add_one_day, get_result_path
+from sketch_map_tool.analyses.html_gen.analyses_output_generator import write_results_to_json
+from sketch_map_tool.analyses.modules.analysis_completeness import CompletenessAnalysis
+from sketch_map_tool.analyses.modules.analysis_landmarks import LandmarkAnalysis
+from sketch_map_tool.analyses.modules.analysis_sources import SourcesAnalysis
+from sketch_map_tool.analyses.modules.analysis_currentness import CurrentnessAnalysis
+from sketch_map_tool.analyses.helpers import AnalysisResult
+from sketch_map_tool.analyses.pdf_gen.pdf_gen import create_report
+from sketch_map_tool.helper_modules.bbox_utils import Bbox
+from sketch_map_tool.helper_modules.progress import update_progress
+from sketch_map_tool.constants import (STATUS_UPDATES_ANALYSES, OHSOME_API,
+                                       STATUS_ERROR_OHSOME_NOT_AVAILABLE,
+                                       TIMEOUT_REQUESTS)
 
 
 def run_for_single_bbox(bbox: Bbox,
