@@ -49,12 +49,14 @@ jobs:
         run: |
           poetry install
       # Analyse code
-      - name: Analysing the code with pylint, flake8 and bandit
+      - name: Analysing the Python code
         run: |
-          poetry run pylint $(git ls-files '*.py')
-          poetry run flake8 $(git ls-files '*.py')
-          poetry run bandit $(git ls-files '*.py')
+          poetry run pylint sketch_map_tool
+          poetry run flake8 sketch_map_tool
+          poetry run bandit --recursive sketch_map_tool
+          poetry run black --check --diff sketch_map_tool
+          poetry run isort --check --diff sketch_map_tool
 
       - name: Static type checking with mypy
         run: |
-          poetry run mypy --strict $(git ls-files '*.py')
+          poetry run mypy --strict sketch_map_tool
