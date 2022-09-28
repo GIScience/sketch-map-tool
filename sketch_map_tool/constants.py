@@ -73,6 +73,16 @@ WMS_BASE_URL = "https://maps.heigit.org/osm-wms/service?SERVICE=WMS&VERSION=1.1.
 WMS_LAYERS = "osm_auto:all"
 # TODO: Replace with stable HeiGIT-Maps with the correct style  # pylint: disable=W0511
 
+STATUS_UPDATES_GENERATION = {
+    "loading_osm_data": "Loading OSM data...",
+    "create_db": "Creating database...",
+    "render": "Rendering map image...",
+    "create_pdf": "Generating Sketch Map PDF file...",
+    "completed": "Completed"
+}
+
+STATUS_ERROR_GENERATION_GET_MAP = "ERROR: The map image could not be generated"
+
 
 # Error Codes: -----------------------------------------------------------------------------------
 
