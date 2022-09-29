@@ -54,24 +54,30 @@ Run those linter's with following commands:
 ```bash
 flake8 .
 mypy --strict .
-bandit .
+bandit -r .
 ```
 
 *Tips:*
 - Mark in-line that flake8 should not raise any error: `print()  # noqa`
 - Mark in-line that bandit should not raise any error: `# nosec`
 
-### JavaScript
+### JavaScript and CSS
 
-[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) with some modifications (see [.eslintrc.json](.eslintrc.json))
+In short:
+- Guide: [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
+- Linter: [eslint](https://eslint.org/) and [stylelint](https://stylelint.io/)
 
-### CSS
+#### Linters
 
-[stylelint-config-standard](https://github.com/stylelint/stylelint-config-standard) with some modifications (see [.stylelintrc.json](.stylelintrc.json))  
+This project uses [eslint](https://eslint.org/) (see `.eslintrc.json`) and [stylelint](https://stylelint.io/) (see `stylelintrc.json`)
 
-## Commit Hooks
 
-If you discover any violations in the existing code, feel very welcome to fix them. To facilitate paying attention to these conventions, please make sure that for your pull request all checks succeed. You can also set up git hooks to automatically run relevant linters before your code is committed, see [.hooks/README.MD](.hooks/README.MD) for more info. Please also make sure that everything you modify or add is covered by [unit tests](test).
+### Pre-Commit Hooks
+
+[pre-commit](https://pre-commit.com/) is set up to run above mentioned tools (linters and formatters) prior to any git commit. In contrast to above described commands running these hooks will not apply any changes to the code base. Instead, 'pre-commit' checks if there would be any changes to be made.
+
+Tip: To run all hooks once execute `pre-commit run --all-files`
+
 
 ## Tests
 

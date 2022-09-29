@@ -12,7 +12,8 @@ This project uses [Poetry](https://python-poetry.org/docs/) for packaging and de
 ```bash
 # Git clone repository
 poetry install
-poetry shell
+poetry shell  # Spawns a shell within the virtual environment
+pre-commit install  # Install pre-commit hooks
 # Hack away
 flask --app sketch_map_tool/app.py --debug run
 ```
