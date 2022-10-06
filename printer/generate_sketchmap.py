@@ -3,16 +3,15 @@ Generate sketch map PDFs
 """
 
 import os
-import traceback
 from datetime import datetime
-from typing import Tuple, Optional
+from typing import Tuple
 
 from helper_modules.bbox_utils import Bbox
 from helper_modules.progress import update_progress, has_failed
 from .modules.get_map import get_map_image
 from .modules import generate_pdf
 from .modules.paper_formats.paper_formats import PaperFormat, A4
-from constants import (STATUS_UPDATES_GENERATION, STATUS_ERROR_GENERATION_GET_MAP)
+from constants import STATUS_UPDATES_GENERATION
 
 
 def generate(paper_format: PaperFormat,
@@ -35,13 +34,7 @@ def generate(paper_format: PaperFormat,
         os.makedirs(directory)
     elif os.path.exists(pdf_path) and not has_failed(pdf_path):  # PDF has already been generated
         return pdf_path
-    try:
-        map_image = get_map_image(bbox, resolution[1], resolution[0])
-    except Exception:  # ToDo: Specify possible exceptions
-        traceback.print_exc()
-        update_progress(result_path=pdf_path, update=STATUS_ERROR_GENERATION_GET_MAP)
-        return "ERROR"
-
+    map_image = get_map_image(bbox, resolution[1], resolution[0])
     update_progress(result_path=pdf_path, update=STATUS_UPDATES_GENERATION["create_pdf"])
     generate_pdf.generate_pdf(directory, map_image, bbox, date, paper_format)
     update_progress(result_path=pdf_path, update=STATUS_UPDATES_GENERATION["completed"])
