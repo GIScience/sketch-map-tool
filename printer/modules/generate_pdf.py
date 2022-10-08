@@ -22,7 +22,7 @@ Image.MAX_IMAGE_PIXELS = None
 RESOURCE_PATH = "printer/modules/resources/"
 
 
-def generate_pdf(output_dir_path: str,  # pylint: disable=R0914  # noqa: C901
+def generate_pdf(output_path: str,  # pylint: disable=R0914  # noqa: C901
                  map_image: Image,
                  bbox: Bbox,
                  current_date: str,
@@ -32,7 +32,7 @@ def generate_pdf(output_dir_path: str,  # pylint: disable=R0914  # noqa: C901
     georeferencing, a scale, copyright information, and objects to help the feature detection
     during the upload processing.
 
-    :output_dir_path: Path to the directory in which the output PDF should be stored.
+    :output_path: Path under which the output PDF should be stored.
     :param map_image: Image of the map to be used as sketch map.
     :param bbox: Bounding box, needed for naming, scale calculation and  the code for
                  georeferencing.
@@ -65,8 +65,6 @@ def generate_pdf(output_dir_path: str,  # pylint: disable=R0914  # noqa: C901
     map_image_reportlab = utils.ImageReader(map_image_raw)
 
     # Set-up everything for the reportlab pdf:
-    output_path = f"{output_dir_path}{current_date}__{bbox.get_str(mode='minus')}__" \
-                  f"{paper_format}.pdf"
     canv = canvas.Canvas(output_path)
     template_pdf_path = output_path.replace(".pdf", "_template.pdf")
     template = canvas.Canvas(template_pdf_path)

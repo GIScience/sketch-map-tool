@@ -39,7 +39,7 @@
     <script src="./static/scripts/header_menu.js"></script>
 </head>
 <body class="center-text">
-    <h1>Sketch Map Tool Prototype - Analyses</h1>
+    <h1>Sketch Map Tool Prototype - Generation</h1>
     <div class="container border">
         <header class="d-flex justify-content-center small-margin">
             <ul class="nav nav-pills">
@@ -47,10 +47,10 @@
                     <a class="nav-link" id="btn-info" href="../">Info</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" id="btn-analyses" href="#" aria-current="page">Analyses</a>
+                    <a class="nav-link" id="btn-analyses" href="./analyses" aria-current="page">Analyses</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="btn-generation" href="./generation">Map generation</a>
+                    <a class="nav-link active" id="btn-generation" href="#">Map generation</a>
                 </li>
                 <li class="nav-item disabled-button">
                     <a class="nav-link" id="btn-upload" href="#">Upload sketch maps</a>
@@ -102,7 +102,10 @@
                                 </button>
                             </label>
                         </div>
-                        <select class="form-select" id="paper-format-selection" aria-label="Choose a paper format">
+                        <select class="form-select"
+                                id="paper-format-selection"
+                                name="format"
+                                aria-label="Choose a paper format">
                             <option value="a0">A0</option>
                             <option value="a1">A1</option>
                             <option value="a2">A2</option>
@@ -113,8 +116,17 @@
                             <option value="legal">Legal</option>
                             <option value="tabloid">Tabloid</option>
                         </select>
+                        <br>
+                        <div class="form-group">
+                            <label for="input-width">Width of the map image in pixels (will be automatically determined by
+                                the future client):</label>
+                            <input class="form-control" id="input-width" name="width" type="number" value="1400">
+                            <label for="input-height">Height of the map image in pixels (will be automatically determined
+                                by the future client):</label>
+                            <input class="form-control" id="input-height" name="height" type="number" value="1200">
+                        </div>
                         <br><br>
-                        <button class="btn btn-primary btn-lg" type="submit">Analyse</button>
+                        <button class="btn btn-primary btn-lg" type="submit">Generate</button>
                     </form>
                 </div>
                 </div>
@@ -150,7 +162,7 @@
                 </div>
                 <div class="modal-body left-align-text">
                     Enter here the <a href="https://wiki.openstreetmap.org/wiki/Bounding_Box" target="_blank">bounding boxes</a>
-                    you want to analyse. Please use the following format:<br>
+                    you want to generate sketch maps of. Please use the following format:<br>
                     <pre>lon1,lat1,lon2,lat2;</pre>
                     If you want to analyse multiple bboxes, separate them with ';'.<br>
                     E.g.:

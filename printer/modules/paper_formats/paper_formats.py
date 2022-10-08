@@ -2,7 +2,7 @@
 Instances representing all possible paper formats in the sketch map tool
 """
 
-from typing import Tuple
+from typing import Tuple, Optional
 
 
 class PaperFormat:  # pylint: disable=R0903
@@ -61,6 +61,26 @@ class PaperFormat:  # pylint: disable=R0903
         self.indent = indent
         self.qr_contents_distances_not_rotated = qr_contents_distances_not_rotated
         self.qr_contents_distance_rotated = qr_contents_distance_rotated
+
+    @staticmethod
+    def from_str(paper_format_str: str) -> "Optional[PaperFormat]":
+        """
+        Get a paper format object based on the name of it's format
+
+        :return: PaperFormat object in case the name is known, otherwise None
+        """
+        return {
+            "a0": A0,
+            "a1": A1,
+            "a2": A2,
+            "a3": A3,
+            "a4": A4,
+            "a5": A5,
+            "legal": LEGAL,
+            "tabloid": TABLOID,
+            "ledger": LEDGER,
+            "letter": LETTER,
+        }.get(paper_format_str.lower().strip(), None)
 
     def __str__(self) -> str:
         """

@@ -14,6 +14,7 @@ TOOL_URL = "https://www.geog.uni-heidelberg.de/gis/sketchmaptool.html"
 
 TEMPLATE_ANALYSES = "analyses.html"
 TEMPLATE_ANALYSES_RESULTS = "analyses_result.html"
+TEMPLATE_GENERATION = "generation.html"
 
 TIMEOUT_REQUESTS = 50  # seconds, see
 #                        https://requests.readthedocs.io/en/stable/user/advanced/#timeouts
@@ -56,7 +57,7 @@ NR_OF_ANALYSES_STEPS = (
     len(STATUS_UPDATES_ANALYSES) + 2
 )  # Some analyses are run for multiple keys
 
-ANALYSES_OUTPUT_PATH = "static/output"
+ANALYSES_OUTPUT_PATH = "static/output/analyses"
 OHSOME_API = "https://api.ohsome.org/stable"
 
 
@@ -74,14 +75,14 @@ WMS_LAYERS = "osm_auto:all"
 # TODO: Replace with stable HeiGIT-Maps with the correct style  # pylint: disable=W0511
 
 STATUS_UPDATES_GENERATION = {
-    "loading_osm_data": "Loading OSM data...",
-    "create_db": "Creating database...",
-    "render": "Rendering map image...",
+    "load_map": "Loading map image...",
     "create_pdf": "Generating Sketch Map PDF file...",
     "completed": "Completed"
 }
 
 STATUS_ERROR_GENERATION_GET_MAP = "ERROR: The map image could not be generated"
+
+GENERATION_OUTPUT_PATH = "static/output/sketch_maps"
 
 
 # Error Codes: -----------------------------------------------------------------------------------

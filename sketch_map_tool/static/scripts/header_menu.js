@@ -7,6 +7,5 @@ function showMsgNotAvailable() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("btn-generation").onclick = () => showMsgNotAvailable();
     document.getElementById("btn-upload").onclick = () => showMsgNotAvailable();
 });
