@@ -2,8 +2,8 @@
 Retrieve a map image from a Web Map Service
 (see https://wiki.openstreetmap.org/wiki/WMS for further information on WMS)
 """
-from constants import WMS_BASE_URL, WMS_LAYERS, TIMEOUT_REQUESTS
-from helper_modules.bbox_utils import Bbox
+from sketch_map_tool.constants import WMS_BASE_URL, WMS_LAYERS, TIMEOUT_REQUESTS
+from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from PIL import Image
 import requests
 

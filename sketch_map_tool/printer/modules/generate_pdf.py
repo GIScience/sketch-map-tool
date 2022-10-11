@@ -13,13 +13,13 @@ import qrcode
 import qrcode.image.svg
 import os
 import io
-from helper_modules.bbox_utils import Bbox
+from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from .paper_formats.paper_formats import PaperFormat, A0, A1, A2, A4
 
 # PIL should be able to open high resolution PNGs of large Maps:
 Image.MAX_IMAGE_PIXELS = None
 
-RESOURCE_PATH = "printer/modules/resources/"
+RESOURCE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources")
 
 
 def generate_pdf(output_path: str,  # pylint: disable=R0914  # noqa: C901
@@ -96,12 +96,12 @@ def generate_pdf(output_path: str,  # pylint: disable=R0914  # noqa: C901
     svg_qr.scale(paper_format.qr_scale, paper_format.qr_scale)
 
     # Import compass and globes:
-    compass = svg2rlg(RESOURCE_PATH+"north.svg")
+    compass = svg2rlg(os.path.join(RESOURCE_PATH, "north.svg"))
     compass.scale(paper_format.compass_scale, paper_format.compass_scale)
-    svg_globe_1 = svg2rlg(RESOURCE_PATH+"globe_1.svg")
-    svg_globe_2 = svg2rlg(RESOURCE_PATH+"globe_2.svg")
-    svg_globe_3 = svg2rlg(RESOURCE_PATH+"globe_3.svg")
-    svg_globe_4 = svg2rlg(RESOURCE_PATH+"globe_4.svg")
+    svg_globe_1 = svg2rlg(os.path.join(RESOURCE_PATH, "globe_1.svg"))
+    svg_globe_2 = svg2rlg(os.path.join(RESOURCE_PATH, "globe_2.svg"))
+    svg_globe_3 = svg2rlg(os.path.join(RESOURCE_PATH, "globe_3.svg"))
+    svg_globe_4 = svg2rlg(os.path.join(RESOURCE_PATH, "globe_4.svg"))
     svg_globe_1.scale(paper_format.globe_scale, paper_format.globe_scale)
     svg_globe_2.scale(paper_format.globe_scale, paper_format.globe_scale)
     svg_globe_3.scale(paper_format.globe_scale, paper_format.globe_scale)

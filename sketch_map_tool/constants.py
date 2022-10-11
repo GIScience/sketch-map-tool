@@ -57,7 +57,7 @@ NR_OF_ANALYSES_STEPS = (
     len(STATUS_UPDATES_ANALYSES) + 2
 )  # Some analyses are run for multiple keys
 
-ANALYSES_OUTPUT_PATH = "static/output/analyses"
+ANALYSES_OUTPUT_PATH = "sketch_map_tool/static/output/analyses"
 OHSOME_API = "https://api.ohsome.org/stable"
 
 
@@ -82,7 +82,7 @@ STATUS_UPDATES_GENERATION = {
 
 STATUS_ERROR_GENERATION_GET_MAP = "ERROR: The map image could not be generated"
 
-GENERATION_OUTPUT_PATH = "static/output/sketch_maps"
+GENERATION_OUTPUT_PATH = "sketch_map_tool/static/output/sketch_maps"
 
 
 # Error Codes: -----------------------------------------------------------------------------------

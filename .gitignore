@@ -235,3 +235,4 @@ pylint_env/*
 node_modules/*
 package-lock.json
 package.json
+.idea/inspectionProfiles/Project_Default.xml

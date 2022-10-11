@@ -6,12 +6,12 @@ import os
 from datetime import datetime
 from typing import Tuple
 
-from helper_modules.bbox_utils import Bbox
-from helper_modules.progress import update_progress, has_failed
+from sketch_map_tool.helper_modules.bbox_utils import Bbox
+from sketch_map_tool.helper_modules.progress import update_progress, has_failed
 from .modules.get_map import get_map_image
 from .modules import generate_pdf
 from .modules.paper_formats.paper_formats import PaperFormat, A4
-from constants import STATUS_UPDATES_GENERATION
+from sketch_map_tool.constants import STATUS_UPDATES_GENERATION
 
 
 def generate(paper_format: PaperFormat,

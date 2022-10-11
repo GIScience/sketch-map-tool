@@ -15,6 +15,11 @@ matplotlib = "^3.5.3"
 numpy = "^1.23.2"
 pandas = "^1.4.3"
 reportlab = "^3.6.11"
+Pillow = "^9.2"
+svglib = "^1.4.1"
+PyMuPDF = "^1.20.2"
+qrcode = "^7.3.1"
+
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.7.4"
