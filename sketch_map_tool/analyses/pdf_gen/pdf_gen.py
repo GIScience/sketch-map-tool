@@ -24,7 +24,7 @@ from sketch_map_tool.analyses.html_gen.analyses_output_generator import (
 )
 from sketch_map_tool.helper_modules.bbox_utils import Bbox
 
-RESOURCE_FOLDER = "analyses/pdf_gen/res/"
+RESOURCE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "res")
 
 
 def add_result_page(
@@ -87,7 +87,7 @@ def add_result_page(
 
     if result.suggestion != "":
         text += "<br/><br/><b>Suggestion:</b><br/>" + result.suggestion
-    image = RESOURCE_FOLDER + f"light_{result.level.value}.jpg"
+    image = os.path.join(RESOURCE_PATH, f"light_{result.level.value}.jpg")
     canv.drawImage(
         image,
         CONTENTS_X,
@@ -154,7 +154,7 @@ def add_overview_page(results: List[AnalysisResult], canv: canvas.Canvas) -> Non
     canv.drawString(
         CONTENTS_X, RESULT_STRING_1_Y, "The general Sketch Map Fitness Score is: "
     )
-    image = RESOURCE_FOLDER + f"light_{general_score.value}.jpg"
+    image = os.path.join(RESOURCE_PATH, f"light_{general_score.value}.jpg")
     canv.drawImage(
         image,
         CONTENTS_X,
@@ -377,7 +377,7 @@ def create_title(canv: canvas.Canvas, bbox: Bbox) -> None:
     license_information.drawOn(canv, CONTENTS_X, NOTES_Y)
 
     canv.drawImage(
-        RESOURCE_FOLDER + "world_map.jpg",
+        os.path.join(RESOURCE_PATH, "world_map.jpg"),
         CONTENTS_X,
         MAP_Y,
         MAP_WIDTH,
@@ -423,7 +423,7 @@ def create_report(
     page_count += 1
     c.showPage()
     chapter_count = 2
-    with open(RESOURCE_FOLDER + "info_texts.json", encoding="utf-8") as infos:
+    with open(os.path.join(RESOURCE_PATH, "info_texts.json"), encoding="utf-8") as infos:
         info_dict = json.loads(infos.read())
 
     for result in results:

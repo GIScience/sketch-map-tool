@@ -31,6 +31,7 @@ from sketch_map_tool.constants import (
     STATUS_ERROR_OHSOME_NOT_AVAILABLE,
     STATUS_UPDATES_ANALYSES,
     TIMEOUT_REQUESTS,
+    ANALYSES_OUTPUT_LINK,
 )
 from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from sketch_map_tool.helper_modules.progress import update_progress
@@ -145,7 +146,8 @@ def run_for_single_bbox(
     )
     shutil.rmtree(session_id + "/")  # Delete temporary folder for plots
     update_progress(
-        result_path=status_path, update=export_path_json.replace(".json", ".html")
+        result_path=status_path,
+        update=get_result_path(bbox, ANALYSES_OUTPUT_LINK).replace(".json", ".html")
     )
 
 
