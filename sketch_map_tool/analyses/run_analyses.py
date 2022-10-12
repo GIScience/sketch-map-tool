@@ -147,7 +147,7 @@ def run_for_single_bbox(
     shutil.rmtree(session_id + "/")  # Delete temporary folder for plots
     update_progress(
         result_path=status_path,
-        update=get_result_path(bbox, ANALYSES_OUTPUT_LINK).replace(".json", ".html")
+        update=get_result_path(bbox, ANALYSES_OUTPUT_LINK).replace(".json", ".html"),
     )
 
 

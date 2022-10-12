@@ -183,9 +183,7 @@ def add_overview_page(results: List[AnalysisResult], canv: canvas.Canvas) -> Non
     )
     canv.setFont(RESULT_STRING_FONT, RESULT_STRING_FONT_SIZE)
     canv.drawString(
-        CONTENTS_X
-        + str_width
-        + str_width_2,
+        CONTENTS_X + str_width + str_width_2,
         RESULT_STRING_2_Y,
         " for usage in sketch maps.",
     )
@@ -423,7 +421,9 @@ def create_report(
     page_count += 1
     c.showPage()
     chapter_count = 2
-    with open(os.path.join(RESOURCE_PATH, "info_texts.json"), encoding="utf-8") as infos:
+    with open(
+        os.path.join(RESOURCE_PATH, "info_texts.json"), encoding="utf-8"
+    ) as infos:
         info_dict = json.loads(infos.read())
 
     for result in results:
