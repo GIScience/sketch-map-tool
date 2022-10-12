@@ -27,11 +27,11 @@ from sketch_map_tool.analyses.modules.analysis_landmarks import LandmarkAnalysis
 from sketch_map_tool.analyses.modules.analysis_sources import SourcesAnalysis
 from sketch_map_tool.analyses.pdf_gen.pdf_gen import create_report
 from sketch_map_tool.constants import (
+    ANALYSES_OUTPUT_LINK,
     OHSOME_API,
     STATUS_ERROR_OHSOME_NOT_AVAILABLE,
     STATUS_UPDATES_ANALYSES,
     TIMEOUT_REQUESTS,
-    ANALYSES_OUTPUT_LINK,
 )
 from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from sketch_map_tool.helper_modules.progress import update_progress

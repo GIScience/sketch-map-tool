@@ -11,8 +11,8 @@ from wtforms import Form, TextAreaField, validators
 from sketch_map_tool.analyses import run_analyses
 from sketch_map_tool.analyses.helpers import get_result_path
 from sketch_map_tool.constants import (
-    ANALYSES_OUTPUT_PATH,
     ANALYSES_OUTPUT_LINK,
+    ANALYSES_OUTPUT_PATH,
     BBOX_TOO_BIG,
     ERROR_MSG_FOR_CODE,
     INVALID_STATUS_LINK_MESSAGE,
