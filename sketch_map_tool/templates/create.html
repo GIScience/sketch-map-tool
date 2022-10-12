@@ -1,6 +1,18 @@
 {% extends "base.html" %}
 {% block body %}
-<main>
-    <h1>Hello, world!</h1>
-</main>
+    <main>
+        <h1>Select AOI</h1>
+        <div>MAP</div>
+        <form action="/create/results" method="post">
+            <select name="format">
+                <option>A4</option>
+            </select>
+            <select name="orientation">
+                <option>landscape</option>
+            </select>
+            <input type="hidden" name="bbox" value="1,1,5,5">
+            <input type="hidden" name="size" value='{"width": 6055, "height": 8658}'>
+            <button type="submit">NEXT</button>
+        </form>
+    </main>
 {% endblock body %}
