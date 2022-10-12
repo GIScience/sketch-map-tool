@@ -9,19 +9,25 @@ def client():
     return app.test_client()
 
 
-def test_create_get(client):
+def test_create(client):
     resp = client.get("/create")
     assert resp.status_code == 200
 
 
-def test_create_post(client):
+def test_create_result_get(client):
+    resp = client.get("/create/results")
+    assert resp.status_code == 302
+
+
+def test_create_result_post(client):
     data = {
         "bbox": "",
-        "paper_format": "A4",
-        "paper_orientation": "landscape",
+        "format": "A4",
+        "orientation": "landscape",
+        "size": {"width": 6055, "height": 8658},
     }
-    resp = client.post("/create", data=data)
-    assert resp.status_code == 302
+    resp = client.post("/create/results", data=data)
+    assert resp.status_code == 200
 
 
 def test_create_results_uuid(client):
@@ -42,11 +48,6 @@ def test_create_results_invalid_uuid(client):
     uuid = "foo"
     resp = client.get("/create/results/{0}".format(uuid))
     assert resp.status_code == 500
-
-
-def test_create_results_no_uuid(client):
-    resp = client.get("/create/results")
-    assert resp.status_code == 302
 
 
 def test_create_results_status(client):
