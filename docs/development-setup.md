@@ -14,4 +14,5 @@ This project uses [Poetry](https://python-poetry.org/docs/) for packaging and de
 poetry install
 poetry shell
 # Hack away
+flask --app sketch_map_tool/app.py --debug run
 ```
