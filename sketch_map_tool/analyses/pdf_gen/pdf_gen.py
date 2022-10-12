@@ -185,9 +185,9 @@ def add_overview_page(results: List[AnalysisResult], canv: canvas.Canvas) -> Non
     canv.drawString(
         CONTENTS_X
         + str_width
-        + str_width_2
-        + RESULT_STRING_2_Y
-        + " for usage in sketch maps.",
+        + str_width_2,
+        RESULT_STRING_2_Y,
+        " for usage in sketch maps.",
     )
     canv.drawString(
         CONTENTS_X,
