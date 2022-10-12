@@ -2,14 +2,20 @@
 Retrieve a map image from a Web Map Service
 (see https://wiki.openstreetmap.org/wiki/WMS for further information on WMS)
 """
-from sketch_map_tool.constants import WMS_BASE_URL, WMS_LAYERS, TIMEOUT_REQUESTS
-from sketch_map_tool.helper_modules.bbox_utils import Bbox
-from PIL import Image
 import requests
+from PIL import Image
+
+from sketch_map_tool.constants import TIMEOUT_REQUESTS, WMS_BASE_URL, WMS_LAYERS
+from sketch_map_tool.helper_modules.bbox_utils import Bbox
 
 
-def get_map_image(bbox: Bbox, height_px: int, width_px: int,
-                  wms_service_base_url: str = WMS_BASE_URL, wms_layers: str = WMS_LAYERS) -> Image:
+def get_map_image(
+    bbox: Bbox,
+    height_px: int,
+    width_px: int,
+    wms_service_base_url: str = WMS_BASE_URL,
+    wms_layers: str = WMS_LAYERS,
+) -> Image:
     """
     Request a map image from the given WMS with the given arguments.
 
@@ -28,13 +34,17 @@ def get_map_image(bbox: Bbox, height_px: int, width_px: int,
         "HEIGHT": height_px,
         "SRS": "EPSG:4326",
         "STYLES": "",
-        "BBOX": bbox.get_str(mode="comma")
+        "BBOX": bbox.get_str(mode="comma"),
     }
     return Image.open(
-        requests.get(wms_service_base_url, params, stream=True, timeout=TIMEOUT_REQUESTS).raw
+        requests.get(
+            wms_service_base_url, params, stream=True, timeout=TIMEOUT_REQUESTS
+        ).raw
     )
 
 
 if __name__ == "__main__":
-    img = get_map_image(Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373"), 500, 500)
+    img = get_map_image(
+        Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373"), 500, 500
+    )
     img.show()

@@ -3,9 +3,8 @@ Configuration of the Flask app routes and, thus, the interface between backend a
 """
 import json
 import os
-from typing import List, Union, Tuple
-
 from multiprocessing import Process
+from typing import List, Tuple, Union
 
 from flask import Flask, Response, redirect, render_template, request
 from wtforms import Form, TextAreaField, validators
@@ -16,14 +15,14 @@ from sketch_map_tool.constants import (
     ANALYSES_OUTPUT_PATH,
     BBOX_TOO_BIG,
     ERROR_MSG_FOR_CODE,
+    GENERATION_OUTPUT_PATH,
     INVALID_STATUS_LINK_MESSAGE,
     NR_OF_ANALYSES_STEPS,
+    STATUS_UPDATES_GENERATION,
     TEMPLATE_ANALYSES,
     TEMPLATE_ANALYSES_RESULTS,
+    TEMPLATE_GENERATION,
     ErrorCode,
-    TEMPLATE_GENERATION, 
-    GENERATION_OUTPUT_PATH,
-    STATUS_UPDATES_GENERATION,
 )
 from sketch_map_tool.helper_modules.bbox_utils import (
     Bbox,
@@ -37,7 +36,6 @@ from sketch_map_tool.helper_modules.progress import (
 )
 from sketch_map_tool.printer import generate_sketchmap
 from sketch_map_tool.printer.modules.paper_formats.paper_formats import PaperFormat
-
 
 
 class BboxForm(Form):  # type: ignore
@@ -106,55 +104,85 @@ def create_app() -> Flask:  # noqa: C901
         )
 
     @app.route("/generation", methods=["GET", "POST"])
-    def generation() -> str:
+    def generation() -> str:  # pylint: disable=R0911
         query_bbox = request.args.get("bbox")
         bbox_form = BboxForm(request.form)
         error_nr = request.args.get("error")
         if error_nr is not None and bbox_form.bbox_input.data is None:
-            error_msg = ERROR_MSG_FOR_CODE.get(ErrorCode(int(error_nr)), "Unknown Error Code")
-            return render_template(TEMPLATE_GENERATION, bbox_form=BboxForm(), outputs=dict(),
-                                   msg=error_msg)
-        if (query_bbox is not None and (bbox_form.bbox_input.data is None or
-                                        bbox_form.bbox_input.data == "") and
-                is_bbox_str(query_bbox)):
+            error_msg = ERROR_MSG_FOR_CODE.get(
+                ErrorCode(int(error_nr)), "Unknown Error Code"
+            )
+            return render_template(
+                TEMPLATE_GENERATION, bbox_form=BboxForm(), outputs=dict(), msg=error_msg
+            )
+        if (
+            query_bbox is not None
+            and (bbox_form.bbox_input.data is None or bbox_form.bbox_input.data == "")
+            and is_bbox_str(query_bbox)
+        ):
             bbox_form.bbox_input.data = query_bbox
         if request.method == "POST":
             bbox_str = bbox_form.bbox_input.data
             if not is_bbox_str(bbox_str):
-                return render_template(TEMPLATE_GENERATION, bbox_form=bbox_form, outputs=dict(),
-                                       msg="Invalid input. Please take a look at the bounding "
-                                           "box/-es you entered.")
+                return render_template(
+                    TEMPLATE_GENERATION,
+                    bbox_form=bbox_form,
+                    outputs=dict(),
+                    msg="Invalid input. Please take a look at the bounding "
+                    "box/-es you entered.",
+                )
             if "format" in request.form.keys() and "height" in request.form.keys():
                 paper_format_str = request.form["format"]
                 try:
-                    resolution = (int(request.form["width"].strip()),
-                                  int(request.form["height"].strip()))
+                    resolution = (
+                        int(request.form["width"].strip()),
+                        int(request.form["height"].strip()),
+                    )
                 except ValueError:
-                    return render_template(TEMPLATE_GENERATION, bbox_form=bbox_form, outputs=dict(),
-                                           msg="Invalid resolution. Only integer values are "
-                                               "allowed.")
+                    return render_template(
+                        TEMPLATE_GENERATION,
+                        bbox_form=bbox_form,
+                        outputs=dict(),
+                        msg="Invalid resolution. Only integer values are " "allowed.",
+                    )
             else:
-                return render_template(TEMPLATE_GENERATION, bbox_form=bbox_form, outputs=dict(),
-                                       msg="The paper format selection and/or resolution seem to "
-                                           "be missing.")
+                return render_template(
+                    TEMPLATE_GENERATION,
+                    bbox_form=bbox_form,
+                    outputs=dict(),
+                    msg="The paper format selection and/or resolution seem to "
+                    "be missing.",
+                )
             try:
-                bboxes = [Bbox.bbox_from_str(bbox) for bbox in bbox_str.split(";") if len(bbox) > 0]
+                bboxes = [
+                    Bbox.bbox_from_str(bbox)
+                    for bbox in bbox_str.split(";")
+                    if len(bbox) > 0
+                ]
                 paper_format = PaperFormat.from_str(paper_format_str)
                 if paper_format is None:
-                    return render_template(TEMPLATE_GENERATION, bbox_form=bbox_form, outputs=dict(),
-                                           msg="Invalid paper format selection, try 'a4'.")
-                return load_printing(bbox_form,
-                                     bboxes,
-                                     GENERATION_OUTPUT_PATH,
-                                     paper_format,
-                                     resolution)
+                    return render_template(
+                        TEMPLATE_GENERATION,
+                        bbox_form=bbox_form,
+                        outputs=dict(),
+                        msg="Invalid paper format selection, try 'a4'.",
+                    )
+                return load_printing(
+                    bbox_form, bboxes, GENERATION_OUTPUT_PATH, paper_format, resolution
+                )
             except BboxTooLargeException:
-                return render_template(TEMPLATE_GENERATION, bbox_form=bbox_form, outputs=dict(),
-                                       msg=BBOX_TOO_BIG)
-        return render_template(TEMPLATE_GENERATION, bbox_form=bbox_form, outputs=dict(), msg="")
+                return render_template(
+                    TEMPLATE_GENERATION,
+                    bbox_form=bbox_form,
+                    outputs=dict(),
+                    msg=BBOX_TOO_BIG,
+                )
+        return render_template(
+            TEMPLATE_GENERATION, bbox_form=bbox_form, outputs=dict(), msg=""
+        )
 
     @app.route("/status")
-    def status() -> Union[str, Response]:
+    def status() -> Union[str, Response]:  # pylint: disable=R0911
         """
         Show status page for process specified by given parameters
 
@@ -210,19 +238,29 @@ def create_app() -> Flask:  # noqa: C901
             query_format = request.args.get("format")
             query_date = request.args.get("d")
             if query_bbox is None or query_date is None or query_format is None:
-                return render_template(TEMPLATE_GENERATION, bbox_form=BboxForm(), outputs=dict(),
-                                       msg=INVALID_STATUS_LINK_MESSAGE)
+                return render_template(
+                    TEMPLATE_GENERATION,
+                    bbox_form=BboxForm(),
+                    outputs=dict(),
+                    msg=INVALID_STATUS_LINK_MESSAGE,
+                )
             paper_format = PaperFormat.from_str(query_format)
             if paper_format is None:
-                return render_template(TEMPLATE_GENERATION, bbox_form=BboxForm(), outputs=dict(),
-                                       msg=INVALID_STATUS_LINK_MESSAGE)
+                return render_template(
+                    TEMPLATE_GENERATION,
+                    bbox_form=BboxForm(),
+                    outputs=dict(),
+                    msg=INVALID_STATUS_LINK_MESSAGE,
+                )
             result_path = generate_sketchmap.get_result_path(
                 paper_format,
                 Bbox.bbox_from_str(query_bbox),
                 GENERATION_OUTPUT_PATH,
-                query_date
+                query_date,
             )
-            nr_of_steps = len(STATUS_UPDATES_GENERATION) + 1  # +1 because link is in last line
+            nr_of_steps = (
+                len(STATUS_UPDATES_GENERATION) + 1
+            )  # +1 because link is in last line
             try:
                 steps_completed = get_nr_of_completed_steps(result_path)
                 percentage = str(round(steps_completed / nr_of_steps * 100, 2)) + "%"
@@ -243,9 +281,12 @@ def create_app() -> Flask:  # noqa: C901
                 bbox = query_bbox
             except ValueError:
                 return redirect(
-                    f"../../generation?error={ErrorCode.INVALID_STATUS_LINK_MESSAGE.value}")
+                    f"../../generation?error={ErrorCode.INVALID_STATUS_LINK_MESSAGE.value}"
+                )
             except NoStatusFileException:
-                return redirect(f"../../generation?error={ErrorCode.NO_STATUS_FILE_MESSAGE.value}")
+                return redirect(
+                    f"../../generation?error={ErrorCode.NO_STATUS_FILE_MESSAGE.value}"
+                )
         else:
             return redirect(
                 f"../../analyses?error={ErrorCode.INVALID_STATUS_LINK_MESSAGE.value}"
@@ -315,11 +356,13 @@ def load_analyses(bbox_form: BboxForm, bboxes: List[str], output_path: str) -> s
     )
 
 
-def load_printing(bbox_form: BboxForm,
-                  bboxes: List[Bbox],
-                  output_path: str,
-                  paper_format: PaperFormat,
-                  resolution: Tuple[int, int]) -> str:
+def load_printing(
+    bbox_form: BboxForm,
+    bboxes: List[Bbox],
+    output_path: str,
+    paper_format: PaperFormat,
+    resolution: Tuple[int, int],
+) -> str:
     """
     Execute the sketch map fitness (PDF) generation and load a page containing
     links to the status pages.
@@ -338,12 +381,16 @@ def load_printing(bbox_form: BboxForm,
     for bbox in bboxes:
         if bbox.get_area() > 50:
             raise BboxTooLargeException()
-        p_printing = Process(target=generate_sketchmap.generate,
-                             args=(paper_format, bbox, resolution, output_path))
+        p_printing = Process(
+            target=generate_sketchmap.generate,
+            args=(paper_format, bbox, resolution, output_path),
+        )
         p_printing.start()
         name = f"Sketch Map for area {bbox}"
         outputs[name] = generate_sketchmap.get_status_link(paper_format, bbox)
-    return render_template(TEMPLATE_GENERATION, bbox_form=bbox_form, outputs=outputs, msg="")
+    return render_template(
+        TEMPLATE_GENERATION, bbox_form=bbox_form, outputs=outputs, msg=""
+    )
 
 
 if __name__ == "__main__":

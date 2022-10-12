@@ -77,7 +77,7 @@ WMS_LAYERS = "osm_auto:all"
 STATUS_UPDATES_GENERATION = {
     "load_map": "Loading map image...",
     "create_pdf": "Generating Sketch Map PDF file...",
-    "completed": "Completed"
+    "completed": "Completed",
 }
 
 STATUS_ERROR_GENERATION_GET_MAP = "ERROR: The map image could not be generated"

@@ -2,7 +2,7 @@
 Instances representing all possible paper formats in the sketch map tool
 """
 
-from typing import Tuple, Optional
+from typing import Optional, Tuple
 
 
 class PaperFormat:  # pylint: disable=R0903
@@ -10,21 +10,22 @@ class PaperFormat:  # pylint: disable=R0903
     Properties of sketch maps to be printed on a certain paper format
     """
 
-    def __init__(self,
-                 title: str,
-                 width: float,
-                 height: float,
-                 right_margin: float,
-                 font_size: int,
-                 qr_scale: float,
-                 compass_scale: float,
-                 globe_scale: float,
-                 scale_height: float,
-                 qr_y: float,
-                 indent: float,
-                 qr_contents_distances_not_rotated: Tuple[int, int],
-                 qr_contents_distance_rotated: int,
-                 ):  # pylint: disable=R0913
+    def __init__(
+        self,
+        title: str,
+        width: float,
+        height: float,
+        right_margin: float,
+        font_size: int,
+        qr_scale: float,
+        compass_scale: float,
+        globe_scale: float,
+        scale_height: float,
+        qr_y: float,
+        indent: float,
+        qr_contents_distances_not_rotated: Tuple[int, int],
+        qr_contents_distance_rotated: int,
+    ):  # pylint: disable=R0913
         """
         :param title: Name of the paper format
         :param width: Width of the paper in cm.
