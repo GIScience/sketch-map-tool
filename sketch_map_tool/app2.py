@@ -11,26 +11,27 @@ def index():
 
 
 @app.get('/create')
-def create_get():
+def create():
     """Serve forms for creating a sketch map"""
     return render_template('create.html')
 
 
-@app.post('/create')
-def create_post():
+@app.post('/create/results')
+def create_results_post():
     """Create the sketch map"""
     request.form['bbox']
-    request.form['paper_format']
-    request.form['paper_orientation']
+    request.form['format']
+    request.form['orientation']
+    request.form['size']
     uuid = uuid4()
-    return redirect(url_for('create_results', uuid=str(uuid)))
+    return render_template("create-results.html")
 
 
 @app.get('/create/results')
 @app.get('/create/results/<uuid>')
-def create_results(uuid=None):
+def create_results_get(uuid=None):
     if uuid is None:
-        return redirect(url_for('create_get'))
+        return redirect(url_for('create'))
 
     try:
         uuid = UUID(uuid, version=4)
