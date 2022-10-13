@@ -1,4 +1,4 @@
-name: Python-Linting
+name: Python
 
 on: [push]
 
@@ -59,3 +59,7 @@ jobs:
       - name: Static type checking with mypy
         run: |
           poetry run mypy --strict sketch_map_tool
+
+      - name: Running tests
+        run: |
+          poetry run pytest tests
