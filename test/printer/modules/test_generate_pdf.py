@@ -6,10 +6,10 @@ import os
 
 import fitz
 import pytest
-from helper_modules.bbox_utils import Bbox
+from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from PIL import Image
-from printer.modules import generate_pdf
-from printer.modules.paper_formats.paper_formats import (
+from sketch_map_tool.printer.modules import generate_pdf
+from sketch_map_tool.printer.modules.paper_formats.paper_formats import (
     A0,
     A1,
     A2,
@@ -23,10 +23,10 @@ from printer.modules.paper_formats.paper_formats import (
     PaperFormat,
 )
 
-OUTPUT_DIR = "./test_output/"
+OUTPUT_PATH = "./test_output/sketch_map.pdf"
 DUMMY_BBOX = Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373")
 
-generate_pdf.RESOURCE_PATH = "../../../printer/modules/resources/"
+generate_pdf.RESOURCE_PATH = "../../../sketch_map_tool/printer/modules/resources/"
 
 
 @pytest.mark.parametrize(
@@ -40,7 +40,7 @@ def test_generate_pdf(paper_format: PaperFormat, orientation: str) -> None:
     """
     map_image = Image.open(f"../test_data/dummy_map_img_{orientation}.jpg")
     result_path = generate_pdf.generate_pdf(
-        OUTPUT_DIR, map_image, DUMMY_BBOX, "2021-12-24", paper_format
+        OUTPUT_PATH, map_image, DUMMY_BBOX, "2021-12-24", paper_format
     )
     result_template_path = result_path.replace(".pdf", "_template.jpg")
     fitz_pdf = fitz.open(result_path)
