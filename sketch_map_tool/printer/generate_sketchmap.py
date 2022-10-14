@@ -6,7 +6,7 @@ import os
 from datetime import datetime
 from typing import Tuple
 
-from sketch_map_tool.constants import STATUS_UPDATES_GENERATION
+from sketch_map_tool.constants import STATUS_UPDATES_GENERATION, GENERATION_OUTPUT_LINK
 from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from sketch_map_tool.helper_modules.progress import has_failed, update_progress
 
@@ -29,6 +29,7 @@ def generate(
     :return: Path to the generated sketch map PDF file"""
     date = str(datetime.date(datetime.now()))
     pdf_path = get_result_path(paper_format, bbox, output_path, date)
+    pdf_link = get_result_path(paper_format, bbox, GENERATION_OUTPUT_LINK, date)
     if os.path.exists(pdf_path) and not has_failed(
         pdf_path
     ):  # PDF has already been generated
@@ -40,7 +41,7 @@ def generate(
     )
     generate_pdf.generate_pdf(pdf_path, map_image, bbox, date, paper_format)
     update_progress(result_path=pdf_path, update=STATUS_UPDATES_GENERATION["completed"])
-    update_progress(result_path=pdf_path, update=pdf_path)
+    update_progress(result_path=pdf_path, update=pdf_link)
     return pdf_path
 
 

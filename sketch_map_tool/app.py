@@ -16,6 +16,7 @@ from sketch_map_tool.constants import (
     BBOX_TOO_BIG,
     ERROR_MSG_FOR_CODE,
     GENERATION_OUTPUT_PATH,
+    GENERATION_OUTPUT_LINK,
     INVALID_STATUS_LINK_MESSAGE,
     NR_OF_ANALYSES_STEPS,
     STATUS_UPDATES_GENERATION,
@@ -271,7 +272,7 @@ def create_app() -> Flask:  # noqa: C901
                     if "ERROR:" in output:
                         error = output
                         break
-                    if GENERATION_OUTPUT_PATH in output:
+                    if GENERATION_OUTPUT_LINK in output:
                         download_link = output
                         break
                 results = []

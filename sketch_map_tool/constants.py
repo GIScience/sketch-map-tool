@@ -83,6 +83,7 @@ STATUS_UPDATES_GENERATION = {
 STATUS_ERROR_GENERATION_GET_MAP = "ERROR: The map image could not be generated"
 
 GENERATION_OUTPUT_PATH = "sketch_map_tool/static/output/sketch_maps"
+GENERATION_OUTPUT_LINK = "./static/output/sketch_maps"
 
 
 # Error Codes: -----------------------------------------------------------------------------------
