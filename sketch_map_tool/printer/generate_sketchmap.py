@@ -26,7 +26,7 @@ def generate(
     :param bbox: Bounding box for which the sketch map is created
     :param resolution: Resolution in pixels of the printed map image (width, height)
     :param output_path: Path under which the created sketch map is stored
-    :return: Link to the generated sketch map PDF file"""
+    :return: Path to the generated sketch map PDF file"""
     date = str(datetime.date(datetime.now()))
     pdf_path = get_result_path(paper_format, bbox, output_path, date)
     if os.path.exists(pdf_path) and not has_failed(
