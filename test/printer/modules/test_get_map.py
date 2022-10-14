@@ -5,9 +5,9 @@ from typing import BinaryIO
 from unittest.mock import patch
 
 import PIL
-from constants import TIMEOUT_REQUESTS
-from helper_modules.bbox_utils import Bbox
-from printer.modules.get_map import get_map_image
+from sketch_map_tool.constants import TIMEOUT_REQUESTS
+from sketch_map_tool.helper_modules.bbox_utils import Bbox
+from sketch_map_tool.printer.modules.get_map import get_map_image
 
 
 class DummyResponse:  # pylint: disable=R0903
@@ -27,7 +27,7 @@ def test_get_map_image() -> None:
     bbox = Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373")
     with patch("requests.get") as mock:
         mock.return_value = DummyResponse(
-            open("../test_data/dummy_map_img.jpg", "rb")
+            open("../test_data/dummy_map_img_landscape.jpg", "rb")
         )  # pylint: disable=R1732
         img = get_map_image(
             bbox,
@@ -52,4 +52,4 @@ def test_get_map_image() -> None:
         stream=True,
         timeout=TIMEOUT_REQUESTS,
     )
-    assert isinstance(img, PIL.PngImagePlugin.PngImageFile)  # nosec
+    assert isinstance(img, PIL.JpegImagePlugin.JpegImageFile)  # nosec

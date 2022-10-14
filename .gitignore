@@ -236,3 +236,8 @@ node_modules/*
 package-lock.json
 package.json
 .idea/inspectionProfiles/Project_Default.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/sketch-map-tool.iml
+.idea/vcs.xml
