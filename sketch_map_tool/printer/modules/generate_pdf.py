@@ -25,8 +25,8 @@ Image.MAX_IMAGE_PIXELS = None
 RESOURCE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources")
 
 
-def generate_pdf(
-    output_path: str,  # pylint: disable=R0914  # noqa: C901
+def generate_pdf(  # pylint: disable=R0914  # noqa: C901
+    output_path: str,
     map_image: Image,
     bbox: Bbox,
     current_date: str,

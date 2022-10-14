@@ -6,7 +6,7 @@ import os
 from datetime import datetime
 from typing import Tuple
 
-from sketch_map_tool.constants import STATUS_UPDATES_GENERATION, GENERATION_OUTPUT_LINK
+from sketch_map_tool.constants import GENERATION_OUTPUT_LINK, STATUS_UPDATES_GENERATION
 from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from sketch_map_tool.helper_modules.progress import has_failed, update_progress
 
