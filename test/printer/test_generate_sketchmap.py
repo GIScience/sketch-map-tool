@@ -52,8 +52,8 @@ generate_pdf.RESOURCE_PATH = "../../sketch_map_tool/printer/modules/resources/"
 #                                   the path should be returned directly
 def test_generate(paper_format: PaperFormat, second_run: bool) -> None:
     """
-    Test for the function generate_pdf with a map image causing the sketch map
-    to be in landscape or portrait orientation.
+    Test the function generate with different paper formats and starting a
+    new sketch map generation as well as repeating a call already completed.
     """
     with patch("requests.get") as mock:
 
@@ -109,7 +109,7 @@ Completed
 
 def test_get_result_path() -> None:
     """
-    Test for the function get_result_path.
+    Test the function get_result_path.
     """
     assert (
         get_result_path(A2, DUMMY_BBOX, "test/bla", "21-12-24")
@@ -119,7 +119,7 @@ def test_get_result_path() -> None:
 
 def test_get_status_link() -> None:
     """
-    Test for the function get_status_link.
+    Test the function get_status_link.
     """
     assert (
         get_status_link(A2, DUMMY_BBOX, "21-12-24")

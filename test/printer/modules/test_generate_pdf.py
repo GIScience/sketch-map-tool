@@ -35,7 +35,7 @@ generate_pdf.RESOURCE_PATH = "../../../sketch_map_tool/printer/modules/resources
 @pytest.mark.parametrize("orientation", ["landscape", "portrait"])
 def test_generate_pdf(paper_format: PaperFormat, orientation: str) -> None:
     """
-    Test for the function generate_pdf with a map image causing the sketch map
+    Test the function generate_pdf with a map image causing the sketch map
     to be in landscape or portrait orientation.
     """
     map_image = Image.open(f"../test_data/dummy_map_img_{orientation}.jpg")

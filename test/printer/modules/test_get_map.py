@@ -22,7 +22,7 @@ class DummyResponse:  # pylint: disable=R0903
 
 def test_get_map_image() -> None:
     """
-    Test for the function get_map_image() with a mock for the request to the WMS.
+    Test the function get_map_image() with a mock for the request to the WMS.
     """
     bbox = Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373")
     with patch("requests.get") as mock:
