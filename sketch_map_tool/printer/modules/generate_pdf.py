@@ -16,8 +16,13 @@ from reportlab.pdfgen import canvas
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool.helper_modules.bbox_utils import Bbox
-
-from .paper_formats.paper_formats import A0, A1, A2, A4, PaperFormat
+from sketch_map_tool.printer.modules.paper_formats.paper_formats import (
+    A0,
+    A1,
+    A2,
+    A4,
+    PaperFormat,
+)
 
 # PIL should be able to open high resolution PNGs of large Maps:
 Image.MAX_IMAGE_PIXELS = None
