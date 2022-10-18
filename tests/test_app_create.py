@@ -22,10 +22,10 @@ def test_create_result_get(client):
 
 def test_create_result_post(client):
     data = {
-        "bbox": "",
+        "bbox": "[965172.1534546925,6343953.965425534,966970.2550592694,6345482.705991237]",
         "format": "A4",
         "orientation": "landscape",
-        "size": {"width": 6055, "height": 8658},
+        "size": "{\"width\":1867,\"height\":1587}"
     }
     resp = client.post("/create/results", data=data)
     assert resp.status_code == 200
