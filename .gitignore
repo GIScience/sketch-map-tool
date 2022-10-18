@@ -10,7 +10,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
+# dist/
 downloads/
 eggs/
 .eggs/
@@ -233,5 +233,5 @@ fabric.properties
 # Custom
 pylint_env/*
 node_modules/*
-package-lock.json
-package.json
+# package-lock.json
+# package.json
