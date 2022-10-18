@@ -21,12 +21,13 @@ def create() -> str:
 @app.post("/create/results")
 def create_results_post() -> str:
     """Create the sketch map"""
-    request.form["bbox"]
+    bbox = json.loads(request.form["bbox"])
     request.form["format"]
     request.form["orientation"]
     size = json.loads(request.form["size"])
     print(request.form)
     print(size)
+    print(bbox)
     uuid = uuid4()
     return render_template("create-results.html", uuid=str(uuid))
 
