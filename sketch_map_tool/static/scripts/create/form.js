@@ -1,9 +1,11 @@
 function fillSelectOptions(selectElementId, optionsMap) {
     const selectElement = document.getElementById(selectElementId);
     for (const paperformatKey in optionsMap) {
-        const option = document.createElement("option");
-        option.text = optionsMap[paperformatKey];
-        selectElement.appendChild(option);
+        if (Object.prototype.hasOwnProperty.call(optionsMap, paperformatKey)) {
+            const option = document.createElement("option");
+            option.text = optionsMap[paperformatKey];
+            selectElement.appendChild(option);
+        }
     }
 }
 
@@ -18,7 +20,9 @@ document.getElementById("format").addEventListener("change", (event) => {
     const format = event.target.value;
     const orientation = printLayoutControl.getOrientation();
     printLayoutControl.setFormat(format);
-    printLayoutControl.setMargin(new ol.control.PrintLayout.Margin(SKETCH_MAP_MARGINS[format][orientation]));
+    printLayoutControl.setMargin(
+        new ol.control.PrintLayout.Margin(SKETCH_MAP_MARGINS[format][orientation])
+    );
 });
 
 // property: orientation
@@ -32,7 +36,9 @@ document.getElementById("orientation").addEventListener("change", (event) => {
     const orientation = event.target.value;
     const format = printLayoutControl.getFormat();
     printLayoutControl.setOrientation(orientation);
-    printLayoutControl.setMargin(new ol.control.PrintLayout.Margin(SKETCH_MAP_MARGINS[format][orientation]));
+    printLayoutControl.setMargin(
+        new ol.control.PrintLayout.Margin(SKETCH_MAP_MARGINS[format][orientation])
+    );
 });
 
 // property: bbox (in webmercator)
