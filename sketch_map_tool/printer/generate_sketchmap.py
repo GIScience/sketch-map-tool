@@ -33,6 +33,8 @@ def generate(
         pdf_path
     ):  # PDF has already been generated
         return pdf_path
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
     update_progress(result_path=pdf_path, update=STATUS_UPDATES_GENERATION["load_map"])
     map_image = get_map_image(bbox, resolution[1], resolution[0])
     update_progress(

@@ -50,6 +50,8 @@ def generate_pdf(  # pylint: disable=R0914  # noqa: C901
     :param paper_format: Paper format of the PDF document.
     :return: Path to the generated PDF file.
     """
+    # TODO: Factor out code parts to separate functions
+
     map_width_px, map_height_px = map_image.size
 
     # Adjust map orientation and scaling:
@@ -132,6 +134,7 @@ def generate_pdf(  # pylint: disable=R0914  # noqa: C901
 
     # Calculate scale:
     scale = adjusted_width / bbox.get_width()  # cm per meter
+    # TODO: Use scale from OL component
 
     if scale * 10000 <= paper_format.right_margin - 1:
         scale_length = scale * 10000
