@@ -11,6 +11,7 @@ from wtforms import Form, TextAreaField, validators
 from sketch_map_tool.analyses import run_analyses
 from sketch_map_tool.analyses.helpers import get_result_path
 from sketch_map_tool.constants import (
+    ANALYSES_OUTPUT_LINK,
     ANALYSES_OUTPUT_PATH,
     BBOX_TOO_BIG,
     ERROR_MSG_FOR_CODE,
@@ -129,7 +130,7 @@ def create_app() -> Flask:  # noqa: C901
                     if "ERROR:" in output:
                         error = output
                         break
-                    if ANALYSES_OUTPUT_PATH in output:
+                    if ANALYSES_OUTPUT_LINK in output:
                         download_link = output
                         break
                 results = []
@@ -164,7 +165,7 @@ def create_app() -> Flask:  # noqa: C901
             ERROR=error,
         )
 
-    @app.route(f"/{ANALYSES_OUTPUT_PATH}/<output_name>.html")
+    @app.route(f"/{ANALYSES_OUTPUT_LINK}/<output_name>.html")
     def result(output_name: str) -> Union[str, Response]:
         """
         Render analyses result page based on JSON contents stored under 'output_name'

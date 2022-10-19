@@ -56,7 +56,8 @@ NR_OF_ANALYSES_STEPS = (
     len(STATUS_UPDATES_ANALYSES) + 2
 )  # Some analyses are run for multiple keys
 
-ANALYSES_OUTPUT_PATH = "static/output"
+ANALYSES_OUTPUT_LINK = "static/output"
+ANALYSES_OUTPUT_PATH = f"sketch_map_tool/{ANALYSES_OUTPUT_LINK}"
 OHSOME_API = "https://api.ohsome.org/stable"
 
 
