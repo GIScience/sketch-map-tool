@@ -51,7 +51,6 @@ jobs:
       # Analyse code
       - name: Analysing the Python code
         run: |
-          poetry run pylint sketch_map_tool
           poetry run flake8 sketch_map_tool
           poetry run bandit --recursive sketch_map_tool
           poetry run black --check --diff sketch_map_tool
