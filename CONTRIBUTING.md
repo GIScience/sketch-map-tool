@@ -63,10 +63,6 @@ bandit .
 - Mark in-line that pylint should not raise any error: `# pylint: disable=rule-name`
 - Mark in-line that bandit should not raise any error: `# nosec`
 
-### HTML
-
-See [.htmlhintrc](.htmlhintrc) and the [documentation of these rules](https://github.com/htmlhint/HTMLHint/tree/master/docs/user-guide/rules)
-
 ### JavaScript
 
 [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) with some modifications (see [.eslintrc.json](.eslintrc.json))
