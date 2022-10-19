@@ -43,7 +43,6 @@ All development work is based on the main branch (`main`). Pull requests are exp
 
 In short:
 - Guideline: [PEP8](https://peps.python.org/pep-0008/), [PEP 484 (Type Hints)](https://peps.python.org/pep-0484/)
-
 - Linter: [flake8](https://flake8.pycqa.org), [mypy](http://mypy-lang.org/), [bandit](https://github.com/PyCQA/bandit)
 
 #### Linters
