@@ -30,8 +30,8 @@ def create_results_post():
     return render_template("create-results.html", uuid=uuid)
 
 
-@app.get('/create/results')
-@app.get('/create/results/<uuid>')
+@app.get("/create/results")
+@app.get("/create/results/<uuid>")
 def create_results_get(uuid=None):
     if uuid is None:
         return redirect(url_for("create"))
