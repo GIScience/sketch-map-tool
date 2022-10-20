@@ -21,7 +21,7 @@ document.getElementById("format").addEventListener("change", (event) => {
     const orientation = printLayoutControl.getOrientation();
     printLayoutControl.setFormat(format);
     printLayoutControl.setMargin(
-        new ol.control.PrintLayout.Margin(SKETCH_MAP_MARGINS[format][orientation])
+        new ol.control.PrintLayout.Margin(SKETCH_MAP_MARGINS[format][orientation]),
     );
 });
 
@@ -37,7 +37,7 @@ document.getElementById("orientation").addEventListener("change", (event) => {
     const format = printLayoutControl.getFormat();
     printLayoutControl.setOrientation(orientation);
     printLayoutControl.setMargin(
-        new ol.control.PrintLayout.Margin(SKETCH_MAP_MARGINS[format][orientation])
+        new ol.control.PrintLayout.Margin(SKETCH_MAP_MARGINS[format][orientation]),
     );
 });
 
