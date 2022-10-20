@@ -1,8 +1,5 @@
 {
   "extends": "stylelint-config-standard",
-  "ignoreFiles": [
-        "venv/**/*.css"
-    ],
   "rules": {
     "indentation": 4
   }
