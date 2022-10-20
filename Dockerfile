@@ -3,7 +3,7 @@ FROM python:3.8
 # within docker container: run without root privileges
 RUN useradd -md /home/smt smt
 WORKDIR /opt/smt
-RUN chown smt:smt. -R
+RUN chown smt:smt . -R
 USER smt:smt
 
 # make poetry binaries available to the docker container user
