@@ -4,7 +4,6 @@ from typing import Dict, Optional, Union
 from uuid import UUID, uuid4
 
 from flask import (
-    Flask,
     Response,
     redirect,
     render_template,
@@ -13,7 +12,7 @@ from flask import (
     url_for,
 )
 
-app = Flask(__name__)
+from sketch_map_tool import flask_app as app
 
 
 @app.get("/")
