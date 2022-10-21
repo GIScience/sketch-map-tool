@@ -1,5 +1,11 @@
-"""Please refer to the documentation provided in the README.md
+from flask import Flask
 
-https://github.com/GIScience/sketch-map-tool
-"""
 __version__ = "0.9.0"
+
+
+def make_flask():
+    flask_app = Flask(__name__)
+    return flask_app
+
+
+flask_app = make_flask()
