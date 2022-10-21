@@ -3,12 +3,12 @@
 ## Current Main
 
 ### New Features
-
-- endpoint(/create): add UI for map-based area-of-interest and print-layout control ([#42]() [#47]())
-- define new endpoints & add templates for creating a new sketch map ([#55])
+- add (responsive) header to base template and introduce a header-message block 
 
 ### Other Changes
 
+- endpoint(/create): add UI for map-based area-of-interest and print-layout control ([#42]() [#47]())
+- define new endpoints & add templates for creating a new sketch map ([#55])
 - add auto-formatters black and isort ([#39])
 - use pre-commit package for managing git hooks ([#52])
 - run all linters and formatters as pre-commit hook ([#52])
