@@ -3,6 +3,7 @@
 ## Current Main
 
 ### New Features
+- add package.json to configure JS and CSS linters
 - add (responsive) header to base template and introduce a header-message block 
 
 ### Other Changes
