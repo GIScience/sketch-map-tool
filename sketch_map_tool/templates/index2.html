@@ -1,17 +1,41 @@
 {% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="style/index.css") }}">
+{% endblock head %}
+
 {% block header_message %}
     Create re-digitizable paper maps for offline data collection in the field
 {% endblock header_message %}
 {% block body %}
-    <main class="container">
+    <main>
 
-        <div class="grid">
+        <div id="main-grid" class="grid">
+            {# row 1#}
+            <div class="sketchy circle">1</div>
+            <div id="then">THEN</div>
+            <div class="sketchy circle">2</div>
+
+            {#row 2#}
+            <div class="h1 center-text">Create paper maps to collect data</div>
+            <div></div>
+            <div class="h1 center-text">Paper to GIS:<br>Automagically create Geotiffs, Vector data or All-In-One-QGIS projects</div>
+
+            {#row 3#}
+            <img alt="create steps" src="{{ url_for("static", filename="assets/CreateSteps.svg") }}">
+            <div></div>
+            <img alt="digitize steps" src="{{ url_for("static", filename="assets/DigitizeSteps.svg") }}">
+
+            {#row 4#}
             <a href="/create">
                 <button type="button">Create a SketchMap</button>
             </a>
+            <div></div>
             <a href="#TODO">
                 <button type="button">Digitize a SketchMap</button>
             </a>
+
+
         </div>
     </main>
 {% endblock body %}

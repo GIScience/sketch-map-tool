@@ -23,12 +23,16 @@
     height: var(--logo-text-size);
     line-height: var(--logo-text-size);
     border-radius: 50%;
-
-    /* font-size: 50px; */
+    font-size: 2rem;
+    font-weight: bold;
     color: white;
     text-align: center;
     background: var(--heigit-red);
     margin-right: 0.5rem;
+}
+
+.center-text {
+    text-align: center;
 }
 
 nav {
