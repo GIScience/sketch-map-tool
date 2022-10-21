@@ -1,17 +1,17 @@
 @font-face {
-    font-family: 'Architects Daughter';
-    src: url('/static/assets/fonts/ArchitectsDaughter/ArchitectsDaughter-Regular.ttf'); /*URL to font*/
+    font-family: "Architects Daughter";
+    src: url("/static/assets/fonts/ArchitectsDaughter/ArchitectsDaughter-Regular.ttf");
 }
 
 @font-face {
-    font-family: 'D-DIN';
-    src: url('/static/assets/fonts/D_DIN/D-DIN-Bold.woff2');
+    font-family: D-DIN;
+    src: url("/static/assets/fonts/D_DIN/D-DIN-Bold.woff2");
 }
 
 :root {
     --heigit-red: #ca2334;
     --dark-red: #7a000a;
-    --logo-text-size: 2.8rem
+    --logo-text-size: 2.8rem;
 }
 
 .sketchy {
@@ -21,9 +21,10 @@
 .circle {
     width: var(--logo-text-size);
     height: var(--logo-text-size);
-    line-height: var(--logo-text-size);;
+    line-height: var(--logo-text-size);
     border-radius: 50%;
-    /*font-size: 50px;*/
+
+    /* font-size: 50px; */
     color: white;
     text-align: center;
     background: var(--heigit-red);
@@ -38,13 +39,13 @@ nav {
 }
 
 #nav-left {
-    /*give at least 450px width to nav-left, if screen is narrower the next flex items (About-Button) will wrap*/
+    /* give at least 450px width to nav-left, if screen is narrower the next flex items (About-Button) will wrap */
     flex: 1 1 450px;
 
-    /*keep logo text and header-message text on the same line*/
+    /* keep logo text and header-message text on the same line */
     align-items: last baseline;
 
-    /* let the header-message wrap on small screens*/
+    /* let the header-message wrap on small screens */
     flex-wrap: wrap;
 }
 
