@@ -6,8 +6,9 @@ import os
 
 import fitz
 import pytest
-from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from PIL import Image
+
+from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from sketch_map_tool.printer.modules import generate_pdf
 from sketch_map_tool.printer.modules.paper_formats.paper_formats import (
     A0,
@@ -29,18 +30,32 @@ DUMMY_BBOX = Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373")
 generate_pdf.RESOURCE_PATH = "../../../sketch_map_tool/printer/modules/resources/"
 
 
+@pytest.fixture
+def outfile(request):
+    paper_format = request.getfixturevalue("paper_format")
+    orientation = request.getfixturevalue("orientation")
+    return "test_data/expected/{0}/{1}.jpg".format(paper_format, orientation)
+
+
+@pytest.fixture
+def infile(request):
+    orientation = request.getfixturevalue("orientation")
+    return Image.open(f"test_data/dummy_map_img_{orientation}.jpg")
+
+
 @pytest.mark.parametrize(
     "paper_format", [A0, A1, A2, A3, A4, A5, LEGAL, LETTER, LEDGER, TABLOID]
 )
 @pytest.mark.parametrize("orientation", ["landscape", "portrait"])
-def test_generate_pdf(paper_format: PaperFormat, orientation: str) -> None:
+def test_generate_pdf(
+    infile, outfile, paper_format: PaperFormat, orientation: str
+) -> None:
     """
     Test the function generate_pdf with a map image causing the sketch map
     to be in landscape or portrait orientation.
     """
-    map_image = Image.open(f"../test_data/dummy_map_img_{orientation}.jpg")
     result_path = generate_pdf.generate_pdf(
-        OUTPUT_PATH, map_image, DUMMY_BBOX, "2021-12-24", paper_format
+        OUTPUT_PATH, infile, DUMMY_BBOX, "2021-12-24", paper_format
     )
     result_template_path = result_path.replace(".pdf", "_template.jpg")
     fitz_pdf = fitz.open(result_path)
@@ -49,12 +64,12 @@ def test_generate_pdf(paper_format: PaperFormat, orientation: str) -> None:
     fitz_pdf.close()
     assert filecmp.cmp(
         pdf_img_path,
-        f"../test_data/expected/{orientation}/{paper_format}.jpg",
+        outfile,
         shallow=False,
     )
     assert filecmp.cmp(
         result_template_path,
-        f"../test_data/expected/{orientation}/{paper_format}_template.jpg",
+        outfile,
         shallow=False,
     )
     os.remove(result_path)
