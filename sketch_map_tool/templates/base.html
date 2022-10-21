@@ -1,14 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Sketch Map Tool</title>
-        <link rel="icon" type="image/x-icon" href="../static/assets/favicon.ico">
-        <link rel="stylesheet" href="../static/libs/pico/pico-1.5.6/css/pico.min.css">
-        {% block head %} {% endblock head %}
-    </head>
-    <body>
-        {% block body %} {% endblock body %}
-    </body>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Sketch Map Tool</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for("static", filename="assets/favicon.ico") }}">
+    <link rel="stylesheet" href="{{ url_for("static", filename="style/base.css") }}">
+    <link rel="stylesheet" href="{{ url_for("static", filename="libs/pico/pico-1.5.6/css/pico.min.css") }}">
+    {% block head %} {% endblock head %}
+</head>
+<body>
+<nav>
+    <ul id="nav-left">
+        <li id="logo-item">
+            <a href="{{ url_for("index") }}">
+                <img alt="SketchMap Logo"
+                     src="{{ url_for('static', filename='assets/SketchMap_Logo_Icon.svg') }}">
+                <span style="color: var(--heigit-red)">SketchMap</span><span style="color: var(--dark-red)">Tool</span>
+            </a>
+        </li>
+        <li id="header-message-item">
+            <span class="sketchy">{% block header_message %}{% endblock header_message %}</span>
+        </li>
+    </ul>
+    <ul id="nav-right">
+        <li><a href="#" role="button">About</a></li>
+    </ul>
+</nav>
+{% block body %} {% endblock body %}
+</body>
 </html>

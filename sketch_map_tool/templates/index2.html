@@ -1,6 +1,10 @@
-{% extends "base.html" %} {% block body %}
+{% extends "base.html" %}
+{% block header_message %}
+    Create re-digitizable paper maps for offline data collection in the field
+{% endblock header_message %}
+{% block body %}
     <main class="container">
-        <h1>SketchMapTool</h1>
+
         <div class="grid">
             <a href="/create">
                 <button type="button">Create a SketchMap</button>
