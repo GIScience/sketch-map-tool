@@ -20,5 +20,5 @@
 [#55]: https://github.com/GIScience/sketch-map-tool/pull/55
 [#42]: https://github.com/GIScience/sketch-map-tool/issues/42
 [#47]: https://github.com/GIScience/sketch-map-tool/issues/47
-[#70]: https://github.com/GIScience/sketch-map-tool/pull/71
+[#70]: https://github.com/GIScience/sketch-map-tool/pull/70
 [#71]: https://github.com/GIScience/sketch-map-tool/pull/71
