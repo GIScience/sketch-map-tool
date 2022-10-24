@@ -2,7 +2,7 @@ from uuid import UUID
 
 import pytest
 
-from sketch_map_tool.app2 import app
+from sketch_map_tool.routes import app
 
 
 @pytest.fixture()
@@ -17,7 +17,7 @@ def test_create(client):
 
 def test_create_result_get(client):
     resp = client.get("/create/results")
-    assert resp.status_code == 302
+    assert resp.status_code == 302  # Redirect
 
 
 def test_create_result_post(client):
