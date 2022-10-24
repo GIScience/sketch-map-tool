@@ -21,3 +21,10 @@ def test_create_results_status(client):
         assert "invalid uuid"
 
     assert isinstance(resp.json["status"], str)
+
+
+def test_download(client):
+    resp = client.get("/api/download")
+    assert resp.status_code == 200
+    assert resp.mimetype == "application/pdf"
+    assert resp.data == b"Mock PDF\n"

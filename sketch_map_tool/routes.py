@@ -1,8 +1,17 @@
 import json
+from pathlib import Path
 from typing import Optional, Union
 from uuid import UUID, uuid4
 
-from flask import Flask, Response, redirect, render_template, request, url_for
+from flask import (
+    Flask,
+    Response,
+    redirect,
+    render_template,
+    request,
+    send_from_directory,
+    url_for,
+)
 
 app = Flask(__name__)
 
@@ -46,6 +55,8 @@ def create_results_get(uuid: Optional[str] = None) -> Union[Response, str]:
     return render_template("create-results.html")
 
 
+# TODO
+# Define status endpoints for creation of sketch maps, quality reports and detection
 @app.get("/api/status/<uuid>")
 def status(uuid: str) -> dict:
     # TODO validate uuid
@@ -55,3 +66,15 @@ def status(uuid: str) -> dict:
         return {"id": uuid, "status": "finished"}
     else:
         return {"id": uuid, "status": "computing"}
+
+
+# TODO
+# Define status endpoints for creation of sketch maps, quality reports and detection
+@app.route("/api/download")
+def download():
+    return send_from_directory(
+        str(Path(__file__).parent / "data"),
+        "mock.pdf",
+        as_attachment=True,
+        mimetype="application/pdf",
+    )
