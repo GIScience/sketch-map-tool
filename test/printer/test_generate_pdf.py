@@ -3,6 +3,7 @@ Tests for the module printer/modules/generate_pdf.py
 """
 import filecmp
 import os
+from pathlib import Path
 
 import fitz
 import pytest
@@ -24,23 +25,30 @@ from sketch_map_tool.printer.modules.paper_formats.paper_formats import (
     PaperFormat,
 )
 
-OUTPUT_PATH = "./test_output/sketch_map.pdf"
-DUMMY_BBOX = Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373")
-
-generate_pdf.RESOURCE_PATH = "../../../sketch_map_tool/printer/modules/resources/"
+# TODO: Remove once certain that it is not needed
+# generate_pdf.RESOURCE_PATH = "../../../sketch_map_tool/printer/modules/resources/"
 
 
 @pytest.fixture
-def outfile(request):
+def bbox():
+    Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373")
+
+
+@pytest.fixture
+def sketch_map(request):
+    orientation = request.getfixturevalue("orientation")
     paper_format = request.getfixturevalue("paper_format")
-    orientation = request.getfixturevalue("orientation")
-    return "test_data/expected/{0}/{1}.jpg".format(paper_format, orientation)
+    p = Path(__file__).parent / "test_data/expected/{0}/{1}.jpg".format(
+        orientation, paper_format
+    )
+    return p
 
 
 @pytest.fixture
-def infile(request):
+def scan(request):
     orientation = request.getfixturevalue("orientation")
-    return Image.open(f"test_data/dummy_map_img_{orientation}.jpg")
+    p = Path(__file__).parent / "test_data/dummy_map_img_{0}.jpg".format(orientation)
+    return Image.open(p)
 
 
 @pytest.mark.parametrize(
@@ -48,14 +56,24 @@ def infile(request):
 )
 @pytest.mark.parametrize("orientation", ["landscape", "portrait"])
 def test_generate_pdf(
-    infile, outfile, paper_format: PaperFormat, orientation: str
+    bbox,
+    sketch_map,
+    scan,
+    paper_format: PaperFormat,
+    orientation: str,
+    tmp_path: Path,
 ) -> None:
     """
     Test the function generate_pdf with a map image causing the sketch map
     to be in landscape or portrait orientation.
     """
+    output_path = str(tmp_path / "sketch_map.pdf")
     result_path = generate_pdf.generate_pdf(
-        OUTPUT_PATH, infile, DUMMY_BBOX, "2021-12-24", paper_format
+        output_path,
+        scan,
+        bbox,
+        "2021-12-24",
+        paper_format,
     )
     result_template_path = result_path.replace(".pdf", "_template.jpg")
     fitz_pdf = fitz.open(result_path)
@@ -64,12 +82,12 @@ def test_generate_pdf(
     fitz_pdf.close()
     assert filecmp.cmp(
         pdf_img_path,
-        outfile,
+        sketch_map,
         shallow=False,
     )
     assert filecmp.cmp(
         result_template_path,
-        outfile,
+        sketch_map,
         shallow=False,
     )
     os.remove(result_path)
