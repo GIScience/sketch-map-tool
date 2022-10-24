@@ -235,3 +235,7 @@ pylint_env/*
 
 # JS
 **/node_modules/
+# package-lock.json
+# package.json
+config/*
+!config/sample.config.yaml
