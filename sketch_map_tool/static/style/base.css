@@ -74,3 +74,66 @@ nav {
     text-align: center;
     font-size: 1.5rem;
 }
+
+.step-arrows {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.step-arrows > div {
+    background-repeat: no-repeat;
+    background-attachment: local;
+    background-size: 100% 100%;
+
+    /* center the text node inside a div */
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.step-arrows > div.active {
+    color: white;
+    font-weight: bolder;
+}
+
+.horizontal.step-arrows > div {
+    background-image: url("/static/assets/step_arrow.svg");
+    padding: 0.5rem 1.5rem;
+    min-height: 7rem;
+    min-width: 5rem;
+}
+
+.horizontal.step-arrows > div.active {
+    background-image: url("/static/assets/active_step_arrow.svg");
+}
+
+.vertical.step-arrows {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.vertical.step-arrows > div {
+    background-image: url("/static/assets/step_arrow_vertical.svg");
+    padding: 0.5rem 1.5rem;
+    min-height: 5rem;
+    min-width: 8rem;
+}
+
+.vertical.step-arrows > div.active {
+    background-image: url("/static/assets/active_step_arrow_vertical.svg");
+}
+
+@media screen and (max-width: 999px) {
+    .horizontal.step-arrows {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .vertical.step-arrows {
+        display: none;
+    }
+}

@@ -19,12 +19,35 @@
             {#row 2#}
             <div class="h1 center-text">Create paper maps to collect data</div>
             <div></div>
-            <div class="h1 center-text">Paper to GIS:<br>Automagically create Geotiffs, Vector data or All-In-One-QGIS projects</div>
+            <div class="h1 center-text">Paper to GIS:<br>Automagically create Geotiffs, Vector data or All-In-One-QGIS
+                projects
+            </div>
 
             {#row 3#}
-            <img alt="create steps" src="{{ url_for("static", filename="assets/CreateSteps.svg") }}">
-            <div></div>
-            <img alt="digitize steps" src="{{ url_for("static", filename="assets/DigitizeSteps.svg") }}">
+
+            {#for larger screens use horizontal arrows#}
+            <div class="horizontal step-arrows" style="grid-column: 1 / 4">
+                <div class="active">Define your Area of Interest</div>
+                <div class="">OSM Quality Check</div>
+                <div class="">PDF Export of SketchMap</div>
+                <div style="background: none; flex:0.25;"></div>
+                <div class="active">Scan or photograph your scribbled SketchMaps</div>
+                <div class="">Upload your SketchMaps</div>
+                <div class="">Download sketches as Geodata</div>
+            </div>
+
+            {#for small screens use horizontal arrows#}
+            <div class="vertical step-arrows">
+                <div class="active">Define your Area of Interest</div>
+                <div class="">OSM Quality Check</div>
+                <div class="">PDF Export of SketchMap</div>
+            </div>
+            <div class="vertical step-arrows"></div>
+            <div class="vertical step-arrows">
+                <div class="active">Scan or photograph your scribbled SketchMaps</div>
+                <div class="">Upload your SketchMaps</div>
+                <div class="">Download sketches as Geodata</div>
+            </div>
 
             {#row 4#}
             <a href="/create">
@@ -37,5 +60,6 @@
 
 
         </div>
+
     </main>
 {% endblock body %}
