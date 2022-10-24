@@ -49,17 +49,3 @@ def test_create_results_invalid_uuid(client):
     uuid = "foo"
     resp = client.get("/create/results/{0}".format(uuid))
     assert resp.status_code == 500
-
-
-def test_create_results_status(client):
-    uuid = "16fd2706-8baf-433b-82eb-8c7fada847da"
-    resp = client.get("/create/results/status/{0}".format(uuid))
-    assert resp.status_code == 200
-
-    try:
-        UUID(resp.json["id"])
-    except ValueError:
-        assert "invalid uuid"
-
-    assert isinstance(resp.json["progress"], float)
-    assert isinstance(resp.json["status"], str)

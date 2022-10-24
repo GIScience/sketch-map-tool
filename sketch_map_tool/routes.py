@@ -1,5 +1,5 @@
 import json
-from typing import Dict, Optional, Union
+from typing import Optional, Union
 from uuid import UUID, uuid4
 
 from flask import Flask, Response, redirect, render_template, request, url_for
@@ -46,6 +46,12 @@ def create_results_get(uuid: Optional[str] = None) -> Union[Response, str]:
     return render_template("create-results.html")
 
 
-@app.get("/create/results/status/<uuid>")
-def create_results_status(uuid: str) -> Dict[str, Union[str, float]]:
-    return {"id": uuid, "status": "computing", "progress": 0.5}
+@app.get("/api/status/<uuid>")
+def status(uuid: str) -> dict:
+    # TODO validate uuid
+    # TODO check task queue of task is finished
+    state = "finished"
+    if state == "finished":
+        return {"id": uuid, "status": "finished"}
+    else:
+        return {"id": uuid, "status": "computing"}
