@@ -1,6 +1,23 @@
-{% extends "base.html" %}
-{% block body %}
-<main>
-    <h1>CREATE RESULTS</h1>
-</main>
+{% extends "base.html" %} {% block body %}
+<div class="container">
+  <h1>CREATE RESULTS</h1>
+  <div class="grid">
+    <div>
+      <article>
+        <header>OSM Quality Report</header>
+        <a href="#" aria-busy="true">Generating, please wait…</a>
+        <br /><br />
+        <a href="#" role="button">Download PDF</a>
+      </article>
+    </div>
+    <div>
+      <article>
+        <header>Sketch Map</header>
+        <a href="#" aria-busy="true">Generating, please wait…</a>
+        <br /><br />
+        <a href="#" role="button">Download PDF</a>
+      </article>
+    </div>
+  </div>
+</div>
 {% endblock body %}

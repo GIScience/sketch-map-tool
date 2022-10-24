@@ -12,6 +12,9 @@
     --heigit-red: #ca2334;
     --dark-red: #7a000a;
     --logo-text-size: 2.8rem;
+    /* TODO: important should not be necessary */
+    --primary: var(--heigit-red) !important;
+    --primary-hover: var(--dark-red) !important;
 }
 
 .sketchy {
