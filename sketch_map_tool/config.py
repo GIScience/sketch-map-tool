@@ -2,7 +2,7 @@
 
 import os
 from types import MappingProxyType
-from typing import Union
+from typing import Dict
 
 import toml
 
@@ -19,14 +19,14 @@ def get_config_path() -> str:
     return os.getenv("SMT-CONFIG", default=default)
 
 
-def load_config_default() -> dict:
+def load_config_default() -> Dict[str, str]:
     return {
         "data-dir": get_default_data_dir(),
         "user-agent": "sketch-map-tool/{}".format(smt_version),
     }
 
 
-def load_config_from_file(path: str) -> dict:
+def load_config_from_file(path: str) -> Dict[str, str]:
     """Load configuration from file on disk."""
     if os.path.isfile(path):
         with open(path, "r") as f:
@@ -35,7 +35,7 @@ def load_config_from_file(path: str) -> dict:
         return {}
 
 
-def load_config_from_env() -> dict:
+def load_config_from_env() -> Dict[str, str]:
     """Load configuration from environment variables."""
     cfg = {
         "data-dir": os.getenv("SMT-DATA-DIR"),
@@ -44,7 +44,7 @@ def load_config_from_env() -> dict:
     return {k: v for k, v in cfg.items() if v is not None}
 
 
-def get_config() -> MappingProxyType:
+def get_config() -> MappingProxyType[str, str]:
     """Get configuration variables from environment and file.
 
     Configuration values from file will be given precedence over default vaules.
@@ -59,7 +59,7 @@ def get_config() -> MappingProxyType:
     return MappingProxyType(cfg)
 
 
-def get_config_value(key: str) -> Union[str, int, dict]:
+def get_config_value(key: str) -> str:
     config = get_config()
     return config[key]
 
