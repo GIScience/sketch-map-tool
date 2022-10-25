@@ -232,6 +232,6 @@ fabric.properties
 
 # Custom
 pylint_env/*
-node_modules/*
-# package-lock.json
-# package.json
+
+# JS
+**/node_modules/

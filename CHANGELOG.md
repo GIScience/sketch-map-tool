@@ -3,10 +3,12 @@
 ## Current Main
 
 ### New Features
-- add (responsive) header to base template and introduce a header-message block 
+
+- add package.json to configure JS and CSS linters ([#71])
 
 ### Other Changes
 
+- add (responsive) header to base template and introduce a header-message block ([#70])
 - endpoint(/create): add UI for map-based area-of-interest and print-layout control ([#42]() [#47]())
 - define new endpoints & add templates for creating a new sketch map ([#55])
 - add auto-formatters black and isort ([#39])
@@ -18,3 +20,5 @@
 [#55]: https://github.com/GIScience/sketch-map-tool/pull/55
 [#42]: https://github.com/GIScience/sketch-map-tool/issues/42
 [#47]: https://github.com/GIScience/sketch-map-tool/issues/47
+[#70]: https://github.com/GIScience/sketch-map-tool/pull/70
+[#71]: https://github.com/GIScience/sketch-map-tool/pull/71

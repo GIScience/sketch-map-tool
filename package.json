@@ -1,0 +1,31 @@
+{
+  "name": "sketch-map-tool",
+  "version": "0.9.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint-css": "stylelint --config .stylelintrc.json 'sketch_map_tool/static/**/*.css'",
+    "lint-js": "eslint .",
+    "lint": "npm run lint-css && npm run lint-js",
+    "lint-css:fix": "npm run lint-css -- --fix",
+    "lint-js:fix": "npm run lint-js -- --fix",
+    "lint:fix": "npm run lint-css:fix && npm run lint-js:fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GIScience/sketch-map-tool.git"
+  },
+  "author": "HeiGIT <info@heigit.org>",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/GIScience/sketch-map-tool/issues"
+  },
+  "homepage": "https://github.com/GIScience/sketch-map-tool#readme",
+  "devDependencies": {
+    "eslint": "8.10.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-plugin-import": "2.25.4",
+    "stylelint": "14.8.3",
+    "stylelint-config-standard": "25.0.0"
+  }
+}

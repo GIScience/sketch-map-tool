@@ -71,6 +71,15 @@ In short:
 
 This project uses [eslint](https://eslint.org/) (see `.eslintrc.json`) and [stylelint](https://stylelint.io/) (see `stylelintrc.json`)
 
+Run those linter's with following commands:
+
+```bash
+# print linting errors to the console
+npm run lint
+
+# try to fix the above mentioned problems
+npm run lint:fix
+```
 
 ### Pre-Commit Hooks
 
