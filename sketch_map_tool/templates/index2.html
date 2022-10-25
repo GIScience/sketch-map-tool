@@ -9,7 +9,7 @@
 {% endblock header_message %}
 
 {% block body %}
-    <main>
+    <main class="container">
 
         <div id="main-grid" class="grid">
             {# row 1#}
@@ -25,39 +25,42 @@
             </div>
 
             {#row 3#}
-
             {#for larger screens use horizontal arrows#}
-            <div class="horizontal step-arrows" style="grid-column: 1 / 4">
+            <div class="horizontal step-arrows" style="grid-column: 1 / 2">
                 <div class="active">Define your Area of Interest</div>
                 <div class="">OSM Quality Check</div>
                 <div class="">PDF Export of SketchMap</div>
-                <div style="background: none; flex:0.25;"></div>
+            </div>
+            <div class="horizontal step-arrows" style="grid-column: 3 / 4">
                 <div class="active">Scan or photograph your scribbled SketchMaps</div>
                 <div class="">Upload your SketchMaps</div>
                 <div class="">Download sketches as Geodata</div>
             </div>
 
             {#for small screens use horizontal arrows#}
-            <div class="vertical step-arrows">
+            <div class="vertical step-arrows" style="grid-column: 1 / 2">
                 <div class="active">Define your Area of Interest</div>
                 <div class="">OSM Quality Check</div>
                 <div class="">PDF Export of SketchMap</div>
             </div>
-            <div class="vertical step-arrows"></div>
-            <div class="vertical step-arrows">
+            <div class="vertical step-arrows" style="grid-column: 3 / 4">
                 <div class="active">Scan or photograph your scribbled SketchMaps</div>
                 <div class="">Upload your SketchMaps</div>
                 <div class="">Download sketches as Geodata</div>
             </div>
 
             {#row 4#}
-            <a href="/create">
-                <button type="button">Create a SketchMap</button>
-            </a>
+            <div>
+                <a href="/create">
+                    <button type="button">Create a SketchMap</button>
+                </a>
+            </div>
             <div></div>
-            <a href="#TODO">
-                <button type="button">Digitize a SketchMap</button>
-            </a>
+            <div>
+                <a href="#TODO">
+                    <button type="button">Digitize a SketchMap</button>
+                </a>
+            </div>
 
         </div>
 

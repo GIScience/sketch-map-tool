@@ -1,13 +1,14 @@
 #main-grid {
+    /* vertical center line */
     background: linear-gradient(#000, #000) center/2px 100% no-repeat;
-    grid-template-columns: 1fr 4rem 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     justify-items: center;
     align-items: center;
     grid-row-gap: 3.5rem;
-    padding: 0 3rem;
 }
 
 #then {
+    /* the word THEN inline of the vertical center line */
     font-size: larger;
     background-color: white;
     color: var(--heigit-red);
