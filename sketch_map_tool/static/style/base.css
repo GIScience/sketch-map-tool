@@ -12,9 +12,10 @@
     --heigit-red: #ca2334;
     --dark-red: #7a000a;
     --logo-text-size: 2.8rem;
+
     /* TODO: important should not be necessary */
-    --primary: var(--heigit-red) !important;
-    --primary-hover: var(--dark-red) !important;
+    --primary: #2344ca !important;  /* blue */
+    --primary-hover: #162b83 !important;  /* dark blue */
 }
 
 .sketchy {
