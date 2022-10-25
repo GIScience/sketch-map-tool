@@ -19,5 +19,5 @@ RUN python -m poetry install --no-ansi --no-interaction --no-root
 COPY --chown=smt:smt sketch_map_tool sketch_map_tool
 RUN python -m poetry install --no-ansi --no-interaction
 
-WORKDIR /opt/smt/sketch_map_tool
-CMD poetry run waitress-serve --call app2:create_app
+WORKDIR /opt/smt/sketch_map_tool/
+CMD poetry run waitress-serve app2:app
