@@ -37,7 +37,8 @@
     position: relative;
 }
 
-.h1 {
-    font-size: 1.5rem;
-    font-weight: bold;
+/*customization of arrows for index*/
+.horizontal.step-arrows > div {
+    min-height: 7rem;
+    max-width: 15rem;
 }

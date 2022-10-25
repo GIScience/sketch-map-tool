@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
         version="1.1"
-        viewBox="-0.5 -0.5 231 123.95103"
+        viewBox="-1.5 -0.5 233 123.95103"
         preserveAspectRatio="none"
         id="svg22"
         width="231"
@@ -21,7 +21,8 @@
             stroke-linejoin="round"
             stroke-linecap="round"
             stroke-miterlimit="10"
-            stroke-width="2px"
+            stroke-width="1px"
+            vector-effect="non-scaling-stroke"
             pointer-events="all"
             id="path18"
             style="fill:none"/>

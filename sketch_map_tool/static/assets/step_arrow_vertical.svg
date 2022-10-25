@@ -21,7 +21,8 @@
             stroke-linejoin="round"
             stroke-linecap="round"
             stroke-miterlimit="10"
-            stroke-width="2px"
+            stroke-width="1px"
+            vector-effect="non-scaling-stroke"
             pointer-events="all"
             id="path18"
     />
