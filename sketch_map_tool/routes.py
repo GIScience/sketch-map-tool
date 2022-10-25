@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Optional, Union
+from typing import Dict, Optional, Union
 from uuid import UUID, uuid4
 
 from flask import (
@@ -58,7 +58,7 @@ def create_results_get(uuid: Optional[str] = None) -> Union[Response, str]:
 # TODO
 # Define status endpoints for creation of sketch maps, quality reports and detection
 @app.get("/api/status/<uuid>")
-def status(uuid: str) -> dict:
+def status(uuid: str) -> Dict[str, str]:
     # TODO validate uuid
     # TODO check task queue of task is finished
     state = "finished"
@@ -71,7 +71,7 @@ def status(uuid: str) -> dict:
 # TODO
 # Define status endpoints for creation of sketch maps, quality reports and detection
 @app.route("/api/download")
-def download():
+def download() -> Response:
     return send_from_directory(
         str(Path(__file__).parent / "data"),
         "mock.pdf",
