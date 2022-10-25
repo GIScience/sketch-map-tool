@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <script src="../static/libs/ol/v7.1.0-package/dist/ol.js"></script>
-    <link rel="stylesheet" href="../static/libs/ol/v7.1.0-package/ol.css">
+    <script src="{{ url_for("static", filename="libs/ol/v7.1.0-package/dist/ol.js") }}"></script>
+    <link rel="stylesheet" href="{{ url_for("static", filename="libs/ol/v7.1.0-package/ol.css") }}">
 
-    <script src="../static/libs/@giscience/ol-print-layout-control/dist/ol-print-layout-control.js"></script>
-    <link rel="stylesheet" href="../static/libs/@giscience/ol-print-layout-control/dist/ol-print-layout-control.css">
+    <script src="{{ url_for("static", filename="libs/@giscience/ol-print-layout-control/dist/ol-print-layout-control.js") }}"></script>
+    <link rel="stylesheet" href="{{ url_for("static", filename="libs/@giscience/ol-print-layout-control/dist/ol-print-layout-control.css") }}">
+
+    <link rel="stylesheet" href="{{ url_for("static", filename="style/create.css") }}">
 {% endblock head %}
 
 {% block header_message %}
@@ -13,16 +15,21 @@
 {% endblock %}
 
 {% block body %}
-    <main>
+    <div class="container-fluid horizontal step-arrows">
+        <div class="active">Define your Area of Interest</div>
+        <div>OSM Quality Check</div>
+        <div>PDF Export of SketchMap</div>
+    </div>
+    <main class="container-fluid">
 
-        <div class="grid">
+        <div id="main-grid" class="grid">
             <div id="left">
-                <h1>Area of Interest</h1>
-                <div id="map" style="width: 100%; height: 400px;"></div>
+                <div class="sketchy h1 center-text">Area of Interest</div>
+                <div id="map"></div>
             </div>
 
             <div id="right">
-                <h1>Page & Map Setup</h1>
+                <div class="sketchy h1 center-text">Page Setup</div>
                 <form action="/create/results" method="post">
                     <label for="format">Paper Format</label>
                     <select id="format" name="format"></select>
@@ -32,7 +39,7 @@
 
                     <input type="hidden" id="bbox" name="bbox" value="1,1,5,5">
                     <input type="hidden" id="size" name="size" value='{"width": 6055, "height": 8658}'>
-                    <button type="submit">NEXT</button>
+                    <button id="next-button" type="submit">NEXT &rarr;</button>
                 </form>
             </div>
 

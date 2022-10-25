@@ -18,6 +18,11 @@
     --primary-hover: #162b83 !important;  /* dark blue */
 }
 
+.h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
 .sketchy {
     font-family: "Architects Daughter", cursive;
 }
@@ -43,7 +48,7 @@ nav {
     padding: 0 1rem;
     flex-wrap: wrap-reverse;
     align-items: first baseline;
-    border-bottom: var(--dark-red) 1px solid;
+    /*border-bottom: var(--dark-red) 1px solid;*/
 }
 
 #nav-left {
@@ -102,12 +107,11 @@ nav {
     font-weight: bolder;
 }
 
+
 .horizontal.step-arrows > div {
     background-image: url("/static/assets/step_arrow.svg");
     padding: 0.5rem 1.5rem;
-    min-height: 7rem;
     min-width: 5rem;
-    max-width: 15rem;
 }
 
 .horizontal.step-arrows > div.active {
