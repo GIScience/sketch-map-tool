@@ -1,3 +1,15 @@
+@media screen and (max-width: 999px) {
+    .horizontal.step-arrows {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .vertical.step-arrows {
+        display: none;
+    }
+}
+
 #main-grid {
     background: linear-gradient(#000, #000) center/2px 100% no-repeat;
     grid-template-columns: 1fr 4rem 1fr;
@@ -5,6 +17,16 @@
     align-items: center;
     grid-row-gap: 3.5rem;
     padding: 0 3rem;
+}
+
+#span-grid-row-for-arrows {
+    grid-column: 1 / 4;
+    justify-self: stretch;
+}
+
+#row-grid {
+    grid-template-columns: 1fr 4rem 1fr;
+    justify-items: center;
 }
 
 #then {

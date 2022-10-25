@@ -27,14 +27,20 @@
             {#row 3#}
 
             {#for larger screens use horizontal arrows#}
-            <div class="horizontal step-arrows" style="grid-column: 1 / 4">
-                <div class="active">Define your Area of Interest</div>
-                <div class="">OSM Quality Check</div>
-                <div class="">PDF Export of SketchMap</div>
-                <div style="background: none; flex:0.25;"></div>
-                <div class="active">Scan or photograph your scribbled SketchMaps</div>
-                <div class="">Upload your SketchMaps</div>
-                <div class="">Download sketches as Geodata</div>
+            <div id="span-grid-row-for-arrows">
+                <div id="row-grid" class="grid">
+                    <div id="left-arrows" class="horizontal step-arrows">
+                        <div class="active">Define your Area of Interest</div>
+                        <div class="">OSM Quality Check</div>
+                        <div class="">PDF Export of SketchMap</div>
+                    </div>
+                    <div id="middle_blank"></div>
+                    <div id="right-arrows" class="horizontal step-arrows">
+                        <div class="active">Scan or photograph your scribbled SketchMaps</div>
+                        <div class="">Upload your SketchMaps</div>
+                        <div class="">Download sketches as Geodata</div>
+                    </div>
+                </div>
             </div>
 
             {#for small screens use horizontal arrows#}

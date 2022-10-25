@@ -107,6 +107,7 @@ nav {
     padding: 0.5rem 1.5rem;
     min-height: 7rem;
     min-width: 5rem;
+    max-width: 15rem;
 }
 
 .horizontal.step-arrows > div.active {
@@ -128,16 +129,4 @@ nav {
 
 .vertical.step-arrows > div.active {
     background-image: url("/static/assets/active_step_arrow_vertical.svg");
-}
-
-@media screen and (max-width: 999px) {
-    .horizontal.step-arrows {
-        display: none;
-    }
-}
-
-@media screen and (min-width: 1000px) {
-    .vertical.step-arrows {
-        display: none;
-    }
 }
