@@ -37,7 +37,7 @@
     position: relative;
 }
 
-/*customization of arrows for index*/
+/* customization of arrows for index */
 .horizontal.step-arrows > div {
     min-height: 7rem;
     max-width: 15rem;
