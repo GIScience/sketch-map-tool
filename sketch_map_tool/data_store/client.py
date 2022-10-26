@@ -5,14 +5,14 @@ The data store in use is Redis (Remote Dictionary Service).
 Redis is also used as result backend of celery.
 """
 
-from redis import Redis
+import redis
 
-# from sketch_map_tool.config import get_config
+from sketch_map_tool.config import get_config_value
 
 
 def _get_client():
     # TODO configure
-    return Redis(host="localhost", port="6379")
+    return redis.from_url(get_config_value("data-store"))
 
 
 def set(data: dict):

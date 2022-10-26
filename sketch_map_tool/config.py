@@ -6,7 +6,6 @@ from typing import Dict
 
 import toml
 
-from sketch_map_tool import __version__ as smt_version
 from sketch_map_tool.helper_modules.helper import get_project_root
 
 
@@ -22,7 +21,10 @@ def get_config_path() -> str:
 def load_config_default() -> Dict[str, str]:
     return {
         "data-dir": get_default_data_dir(),
-        "user-agent": "sketch-map-tool/{}".format(smt_version),
+        "user-agent": "sketch-map-tool",
+        "broker-url": "redis://localhost:6379",
+        "result-backend": "redis://localhost:6379",
+        "data-store": "redis://localhost:6379",
     }
 
 
@@ -40,6 +42,9 @@ def load_config_from_env() -> Dict[str, str]:
     cfg = {
         "data-dir": os.getenv("SMT-DATA-DIR"),
         "user-agent": os.getenv("SMT-USER-AGENT"),
+        "broker-url": os.getenv("SMT-BROKER-URL"),
+        "result-backend": os.getenv("SMT-RESULT-BACKEND"),
+        "data-store": os.getenv("SMT-DATA-STORE"),
     }
     return {k: v for k, v in cfg.items() if v is not None}
 
