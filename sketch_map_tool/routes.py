@@ -51,8 +51,8 @@ def create_results_post() -> Response:
     request_task = {
         str(uuid): json.dumps(
             {
-                "sketch_map": str(task_sketch_map.id),
-                "quality_report": str(task_quality_report.id),
+                "sketch-map": str(task_sketch_map.id),
+                "quality-report": str(task_quality_report.id),
             }
         )
     }
@@ -75,7 +75,7 @@ def create_results_get(uuid: Optional[str] = None) -> Union[Response, str]:
 
 
 @app.get("/api/status/<uuid>/<type_>")
-def status(uuid: str, type_: Literal["quality_report", "sketch_map"]) -> Dict[str, str]:
+def status(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Dict[str, str]:
     """Get the status of a request by uuid and type."""
     # Map request id and type to tasks id
     raw = ds_client.get(str(uuid))
@@ -86,7 +86,7 @@ def status(uuid: str, type_: Literal["quality_report", "sketch_map"]) -> Dict[st
 
 
 @app.route("/api/download/<uuid>/<type>")
-def download(uuid: str, type_: Literal["quality_report", "sketch_map"]) -> Response:
+def download(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Response:
     # Map request id and type to tasks id
     raw = ds_client.get(str(uuid))
     request_task = json.loads(raw)
