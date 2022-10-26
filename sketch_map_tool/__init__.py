@@ -1,6 +1,8 @@
 from celery import Celery
 from flask import Flask
 
+from sketch_map_tool.config import get_config_value
+
 __version__ = "0.9.0"
 
 
@@ -9,8 +11,8 @@ def make_flask():
 
     flask_app.config.update(
         CELERY_CONFIG={
-            "broker_url": "redis://localhost:6379",
-            "result_backend": "redis://localhost:6379",
+            "broker_url": get_config_value("broker-url"),
+            "result_backend": get_config_value("result-backend"),
         }
     )
 
