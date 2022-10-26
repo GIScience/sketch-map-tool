@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Dict, Optional, Union
+from typing import Dict, Literal, Optional, Union
 from uuid import UUID, uuid4
 
 from flask import (
@@ -12,7 +12,10 @@ from flask import (
     url_for,
 )
 
+from sketch_map_tool import celery_app
 from sketch_map_tool import flask_app as app
+from sketch_map_tool import tasks
+from sketch_map_tool.data_store import client as ds_client
 
 
 @app.get("/")
@@ -29,15 +32,31 @@ def create() -> str:
 @app.post("/create/results")
 def create_results_post() -> Response:
     """Create the sketch map"""
+    # Request parameters
     bbox = json.loads(request.form["bbox"])
-    request.form["format"]
-    request.form["orientation"]
+    format_ = request.form["format"]
+    orientation = request.form["orientation"]
     size = json.loads(request.form["size"])
-    print(request.form)
-    print(size)
-    print(bbox)
+
+    # Tasks
+    task_sketch_map = tasks.generate_sketch_map.apply_async(
+        args=(bbox, format_, orientation, size)
+    )
+    task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox,))
+
+    # Unique id for current request
     uuid = uuid4()
-    # return render_template("create-results.html", uuid=str(uuid))
+
+    # Mapping of request id to multiple tasks id's
+    request_task = {
+        str(uuid): json.dumps(
+            {
+                "sketch_map": str(task_sketch_map.id),
+                "quality_report": str(task_quality_report.id),
+            }
+        )
+    }
+    ds_client.set(request_task)
     return redirect(url_for("create_results_get", uuid=uuid))
 
 
@@ -55,26 +74,32 @@ def create_results_get(uuid: Optional[str] = None) -> Union[Response, str]:
     return render_template("create-results.html")
 
 
-# TODO
-# Define status endpoints for creation of sketch maps, quality reports and detection
-@app.get("/api/status/<uuid>")
-def status(uuid: str) -> Dict[str, str]:
-    # TODO validate uuid
-    # TODO check task queue of task is finished
-    state = "finished"
-    if state == "finished":
-        return {"id": uuid, "status": "finished"}
+@app.get("/api/status/<uuid>/<type_>")
+def status(uuid: str, type_: Literal["quality_report", "sketch_map"]) -> Dict[str, str]:
+    """Get the status of a request by uuid and type."""
+    # Map request id and type to tasks id
+    raw = ds_client.get(str(uuid))
+    request_task = json.loads(raw)
+    task_id = request_task[type_]
+    task = celery_app.AsyncResult(task_id)
+    return {"id": uuid, "status": task.status}
+
+
+@app.route("/api/download/<uuid>/<type>")
+def download(uuid: str, type_: Literal["quality_report", "sketch_map"]) -> Response:
+    # Map request id and type to tasks id
+    raw = ds_client.get(str(uuid))
+    request_task = json.loads(raw)
+    task_id = request_task[type_]
+    task = celery_app.AsyncResult(task_id)
+    if task.ready():
+        path = task.get()
+        return send_from_directory(
+            str(Path(__file__).parent / "data"),
+            path,
+            as_attachment=True,
+            mimetype="application/pdf",
+        )
     else:
-        return {"id": uuid, "status": "computing"}
-
-
-# TODO
-# Define status endpoints for creation of sketch maps, quality reports and detection
-@app.route("/api/download")
-def download() -> Response:
-    return send_from_directory(
-        str(Path(__file__).parent / "data"),
-        "mock.pdf",
-        as_attachment=True,
-        mimetype="application/pdf",
-    )
+        # TODO
+        pass
