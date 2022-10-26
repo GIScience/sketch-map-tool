@@ -16,11 +16,13 @@ def test_create(client):
 
 
 def test_create_result_get(client):
+    """Redirect to /create"""
     resp = client.get("/create/results")
     assert resp.status_code == 302  # Redirect
 
 
 def test_create_result_post(client):
+    """Redirect to /create/results/<uuid>"""
     data = {
         "bbox": "[965172.1534546925,6343953.965425534,966970.2550592694,6345482.705991237]",
         "format": "A4",
@@ -28,7 +30,7 @@ def test_create_result_post(client):
         "size": "{\"width\":1867,\"height\":1587}"
     }
     resp = client.post("/create/results", data=data)
-    assert resp.status_code == 200
+    assert resp.status_code == 302
 
 
 def test_create_results_uuid(client):
