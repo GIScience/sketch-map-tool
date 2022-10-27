@@ -6,7 +6,7 @@ from sketch_map_tool.config import get_config_value
 __version__ = "0.9.0"
 
 
-def make_flask():
+def make_flask() -> Flask:
     flask_app = Flask(__name__)
 
     flask_app.config.update(
@@ -19,12 +19,12 @@ def make_flask():
     return flask_app
 
 
-def make_celery(flask_app):
+def make_celery(flask_app: Flask) -> Celery:
     celery_app = Celery(flask_app.import_name)
     celery_app.conf.update(flask_app.config["CELERY_CONFIG"])
 
-    class ContextTask(celery_app.Task):
-        def __call__(self, *args, **kwargs):
+    class ContextTask(celery_app.Task):  # type: ignore
+        def __call__(self, *args, **kwargs):  # type: ignore
             with flask_app.app_context():
                 return self.run(*args, **kwargs)
 

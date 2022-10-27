@@ -49,7 +49,7 @@ def load_config_from_env() -> Dict[str, str]:
     return {k: v for k, v in cfg.items() if v is not None}
 
 
-def get_config() -> MappingProxyType[str, str]:
+def get_config() -> MappingProxyType:
     """Get configuration variables from environment and file.
 
     Configuration values from file will be given precedence over default vaules.
