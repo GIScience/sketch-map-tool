@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  flask:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - celery
+      - redis
+    environment:
+      SMT-DATA-STORE: "redis://redis:6379"
+      SMT-BROKER-URL: "redis://redis:6379"
+      SMT-RESULT-BACKEND: "redis://redis:6379"
+    ports:
+      - "127.0.0.1:8080:8080"
+    entrypoint: ["poetry", "run", "waitress-serve", "sketch_map_tool.routes:app"]
+  celery:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    environment:
+      SMT-DATA-STORE: "redis://redis:6379"
+      SMT-BROKER-URL: "redis://redis:6379"
+      SMT-RESULT-BACKEND: "redis://redis:6379"
+    entrypoint: ["poetry", "run", "celery", "--app", "sketch_map_tool.tasks", "worker"]
+  redis:
+    image: redis # TODO: specify version
