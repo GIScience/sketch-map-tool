@@ -13,6 +13,9 @@ def make_flask() -> Flask:
         CELERY_CONFIG={
             "broker_url": get_config_value("broker-url"),
             "result_backend": get_config_value("result-backend"),
+            "task_serializer": "pickle",
+            "result_serializer": "pickle",
+            "accept_content": ["application/json", "application/x-python-serialize"],
         }
     )
 

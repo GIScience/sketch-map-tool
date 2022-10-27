@@ -1,16 +1,9 @@
 import json
-from pathlib import Path
+from io import BytesIO
 from typing import Dict, Literal, Optional, Union
 from uuid import UUID, uuid4
 
-from flask import (
-    Response,
-    redirect,
-    render_template,
-    request,
-    send_from_directory,
-    url_for,
-)
+from flask import Response, redirect, render_template, request, send_file, url_for
 
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
@@ -116,13 +109,10 @@ def download(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Respo
     else:
         # Unreachable
         pass
-
     if task.ready():
-        path = task.get()
-        return send_from_directory(
-            str(Path(__file__).parent / "data"),
-            path,
-            as_attachment=True,
+        pdf: BytesIO = task.get()
+        return send_file(
+            pdf,
             mimetype="application/pdf",
         )
     else:
