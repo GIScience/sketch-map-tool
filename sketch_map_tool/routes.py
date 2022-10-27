@@ -14,7 +14,7 @@ from flask import (
 
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
-from sketch_map_tool.data_store import client as ds_client
+from sketch_map_tool.data_store import client as ds_client  # type: ignore
 
 
 @app.get("/")
