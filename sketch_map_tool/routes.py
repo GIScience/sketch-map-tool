@@ -12,7 +12,6 @@ from flask import (
     url_for,
 )
 
-from sketch_map_tool import celery_app
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
 from sketch_map_tool.data_store import client as ds_client
@@ -80,18 +79,44 @@ def status(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Dict[st
     # Map request id and type to tasks id
     raw = ds_client.get(str(uuid))
     request_task = json.loads(raw)
-    task_id = request_task[type_]
-    task = celery_app.AsyncResult(task_id)
+    # TODO: Factor out to own function (data store module)
+    try:
+        task_id = request_task[type_]
+    except KeyError as error:
+        raise KeyError("Type has to be either quality-report or sketch-map") from error
+
+    # TODO: Factor out to own function (tasks module)
+    if type_ == "quality-report":
+        task = tasks.generate_quality_report.AsyncResult(task_id)
+    elif type_ == "sketch-map":
+        task = tasks.generate_sketch_map.AsyncResult(task_id)
+    else:
+        # Unreachable
+        pass
+
     return {"id": uuid, "status": task.status}
 
 
-@app.route("/api/download/<uuid>/<type>")
+@app.route("/api/download/<uuid>/<type_>")
 def download(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Response:
     # Map request id and type to tasks id
     raw = ds_client.get(str(uuid))
     request_task = json.loads(raw)
-    task_id = request_task[type_]
-    task = celery_app.AsyncResult(task_id)
+    # TODO: Factor out to own function (data store module)
+    try:
+        task_id = request_task[type_]
+    except KeyError as error:
+        raise KeyError("Type has to be either quality-report or sketch-map") from error
+
+    # TODO: Factor out to own function (tasks module)
+    if type_ == "quality-report":
+        task = tasks.generate_quality_report.AsyncResult(task_id)
+    elif type_ == "sketch-map":
+        task = tasks.generate_sketch_map.AsyncResult(task_id)
+    else:
+        # Unreachable
+        pass
+
     if task.ready():
         path = task.get()
         return send_from_directory(
