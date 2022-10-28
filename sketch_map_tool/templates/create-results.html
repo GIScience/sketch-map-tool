@@ -73,7 +73,7 @@
 
         const validateFn = (response) => {
             // valid once the status is 200
-            return response.status !== 200
+            return response.status === 200
         };
         const onProgress = async function (response) {
             console.log("onProgress");
@@ -106,7 +106,7 @@
 
 
         try {
-            let response = await PollUntilValid.poll(sketchMapUrl, validateFn, onProgress, onValid, onError, 1000);
+            let response = await PollUntilValid.poll(sketchMapUrl, validateFn, 1000, onValid, onProgress, onError);
         } catch (e) {
             //Network Error or other reason why the request could not be completed
             console.log(e)
