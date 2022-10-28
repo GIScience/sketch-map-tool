@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block head %}
-    {#<script type="module" src="https://unpkg.com/poll-until-promise@4.1.0/lib/index.js"></script>#}
+    <script type="module" src="{{ url_for("static", filename="scripts/create-results/index.js") }}"></script>
 {% endblock head %}
 
 {% block header_message %}
-    <div class="circle" style="display: inline-block" ;>1</div>Create paper maps to collect data
+    <div class="circle" style="display: inline-block;">1</div>Create paper maps to collect data
 {% endblock %}
 
 {% block body %}
@@ -15,7 +15,8 @@
         <div class="active">PDF Export of SketchMap</div>
     </div>
     <main class="container">
-        <div class="sketchy h1 center-text">Your results are being processed ...</div>
+        <div id="main-message" class="sketchy h1 center-text">Your results are being processed ...
+        </div>
 
         <div class="grid">
             <div>
@@ -23,7 +24,8 @@
                     <header>OSM Quality Report</header>
                     <span id="quality-report-status"></span>
                     <br/><br/>
-                    <a id="quality-report-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">Download
+                    <a id="quality-report-download-button" href="#" download aria-busy="true"
+                       role="button" disabled="disabled">Download
                         PDF</a>
                 </article>
             </div>
@@ -32,86 +34,11 @@
                     <header>Sketch Map</header>
                     <span id="sketch-map-status"></span>
                     <br/><br/>
-                    <a id="sketch-map-download-button" href="#" download aria-busy="true" role="button"
+                    <a id="sketch-map-download-button" href="#" download aria-busy="true"
+                       role="button"
                        disabled="disabled">Download PDF</a>
                 </article>
             </div>
         </div>
     </main>
-
-    <script>
-        function setIsBusy(elementId, isBusy) {
-            console.log("setIsBusy", isBusy);
-            const element = document.getElementById(elementId);
-            element.setAttribute('aria-busy', isBusy);
-        }
-
-        function setDisabled(elementId, isDisabled) {
-            const element = document.getElementById(elementId);
-            if (isDisabled) {
-                element.setAttribute("disabled", "disabled");
-            } else {
-                element.removeAttribute("disabled");
-            }
-        }
-
-        function setDownloadLink(linkElementId, url){
-            const linkElement = document.getElementById(linkElementId);
-            linkElement.setAttribute("href", url);
-        }
-
-
-
-    </script>
-
-    <script type="module">
-        import {getUUIDFromURL, PollUntilValid} from "{{ url_for("static", filename="scripts/shared/index.js") }}"
-
-
-        const sketchMapUrl = `/api/status/${getUUIDFromURL()}/sketch-map`;
-        const qualityReportUrl = `/api/status/${getUUIDFromURL()}/sketch-map`;
-
-        const validateFn = (response) => {
-            // valid once the status is 200
-            return response.status === 200
-        };
-        const onProgress = async function (response) {
-            console.log("onProgress");
-            const result = await response.json();
-            const status = result.status;
-            document.getElementById("sketch-map-status").innerText = `Generating, please wait… ${status}`;
-        }
-        const onValid = async function (response) {
-            console.log("onValid");
-            const url = `/api/download/${getUUIDFromURL()}/sketch-map`
-            setDownloadLink("sketch-map-download-button", url);
-            setIsBusy("sketch-map-download-button", false);
-            setDisabled("sketch-map-download-button", false);
-            const result = await response.json();
-            const status = result.status;
-            document.getElementById("sketch-map-status").innerText = status;
-        }
-
-        function displaySketchMapError() {
-            document.getElementById("sketch-map-status").innerHTML = "Sorry! <br>Something went wrong while trying to generate the SketchMap. Please try again later.";
-            document.getElementById("sketch-map-download-button").style.display = "none";
-        }
-
-        const onError = async function (response) {
-            console.log("onError");
-            const errorText = await response.text();
-            console.log(response.status, response.statusText, errorText)
-            displaySketchMapError();
-        }
-
-
-        try {
-            let response = await PollUntilValid.poll(sketchMapUrl, validateFn, 1000, onValid, onProgress, onError);
-        } catch (e) {
-            //Network Error or other reason why the request could not be completed
-            console.log(e)
-            displaySketchMapError();
-        }
-
-    </script>
 {% endblock body %}
