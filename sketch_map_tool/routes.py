@@ -1,6 +1,6 @@
 import json
 from io import BytesIO
-from typing import Dict, Literal, Optional, Union, Tuple, Any
+from typing import Any, Literal, Optional, Union
 from uuid import UUID, uuid4
 
 from flask import Response, redirect, render_template, request, send_file, url_for
@@ -67,7 +67,9 @@ def create_results_get(uuid: Optional[str] = None) -> Union[Response, str]:
 
 
 @app.get("/api/status/<uuid>/<type_>")
-def status(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> tuple[dict[str, str | Any], int]:
+def status(
+    uuid: str, type_: Literal["quality-report", "sketch-map"]
+) -> tuple[dict[str, str | Any], int]:
     """Get the status of a request by uuid and type."""
     # Map request id and type to tasks id
     raw = ds_client.get(str(uuid))
@@ -90,7 +92,7 @@ def status(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> tuple[d
     http_status = 200 if task.ready() else 202
 
     print(task.status)
-    return {"id": uuid, "status": task.status}, 500
+    return {"id": uuid, "status": task.status}, http_status
 
 
 @app.route("/api/download/<uuid>/<type_>")
