@@ -26,26 +26,25 @@ class PollUntilValid {
         onProgress = () => {},
         onError = () => {},
     ) {
-        let response = await fetch(url);
+        do {
+            /* eslint-disable no-await-in-loop */
+            const response = await fetch(url);
 
-        // if response code is not between 200-299
-        if (!response.ok) {
-            if (onError instanceof Function) {
+            // if response code is not between 200-299
+            if (!response.ok) {
                 await onError(response);
                 return response;
             }
-            throw new Error(`The server responded with an Error: ${response.status} ${response.statusText}`);
-        }
 
-        while (!validateFn(response)) {
-            /* eslint-disable no-await-in-loop */
-            await onProgress(response);
-            await PollUntilValid.wait(intervalInMilliseconds);
-            response = await fetch(url);
+            if (!validateFn(response)) {
+                await onProgress(response);
+                await PollUntilValid.wait(intervalInMilliseconds);
+            } else {
+                await onValid(response);
+                return response;
+            }
             /* eslint-enable */
-        }
-        await onValid(response);
-        return response;
+        } while (true);
     }
 
     static async wait(ms = 1000) {
