@@ -3,6 +3,16 @@ from io import BytesIO
 from typing import Any, Literal, Optional, Union
 from uuid import UUID, uuid4
 
+from celery.states import (
+    FAILURE,
+    PENDING,
+    RECEIVED,
+    REJECTED,
+    RETRY,
+    REVOKED,
+    STARTED,
+    SUCCESS,
+)
 from flask import Response, redirect, render_template, request, send_file, url_for
 
 from sketch_map_tool import flask_app as app
@@ -89,10 +99,20 @@ def status(
         # Unreachable
         raise ValueError
 
-    http_status = 200 if task.ready() else 202
+    # see celery states and their precedence here:
+    # https://docs.celeryq.dev/en/stable/_modules/celery/states.html#precedence
+    body = {"id": uuid, "status": task.status, "type": type_}
+    if task.status == SUCCESS:
+        http_status = 200
+        body["href"] = "/api/download/" + uuid + "/" + type_
+    elif task.status in [PENDING, RETRY, RECEIVED, STARTED]:
+        http_status = 202
+    elif task.status in [REJECTED, REVOKED, None, FAILURE]:
+        http_status = 500
+    else:
+        http_status = 500
 
-    print(task.status)
-    return {"id": uuid, "status": task.status}, http_status
+    return body, http_status
 
 
 @app.route("/api/download/<uuid>/<type_>")
