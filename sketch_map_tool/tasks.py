@@ -17,7 +17,7 @@ def generate_sketch_map(
     size: Dict[str, float],
 ) -> Union[BytesIO, AsyncResult]:
     """Generate a sketch map as PDF."""
-    sleep(10)  # simulate long running task (10s)
+    sleep(5)  # simulate long running task (5s)
     buffer = BytesIO()
     canv = canvas.Canvas(buffer, pagesize=A4)
     canv.drawString(100, 100, "Sketch Map")
