@@ -29,9 +29,11 @@ class PollUntilValid {
         }
 
         while (fnCondition(response)) {
+            /* eslint-disable no-await-in-loop */
             await onProgress(response);
             await PollUntilValid.wait(intervalInMilliseconds);
             response = await fetch(url);
+            /* eslint-enable */
         }
         await onValid(response);
         return response;
