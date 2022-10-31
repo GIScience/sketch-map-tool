@@ -20,6 +20,8 @@
         "prefer-template": "warn",
         "no-undef": "warn",
         "no-restricted-syntax": "warn",
-        "no-restricted-globals": "warn"
+        "no-restricted-globals": "warn",
+        "import/prefer-default-export": "off",
+        "import/extensions": "off"
     }
 }

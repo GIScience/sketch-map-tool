@@ -23,6 +23,6 @@ def set(data: Dict[str, str]):
     client.mset(data)
 
 
-def get(key: str) -> Dict[str, str]:
+def get(key: str) -> str:
     client = _get_client()
     return client.get(key)

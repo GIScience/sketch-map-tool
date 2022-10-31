@@ -1,8 +1,18 @@
 import json
 from io import BytesIO
-from typing import Dict, Literal, Optional, Union
+from typing import Any, Literal, Optional, Union
 from uuid import UUID, uuid4
 
+from celery.states import (
+    FAILURE,
+    PENDING,
+    RECEIVED,
+    REJECTED,
+    RETRY,
+    REVOKED,
+    STARTED,
+    SUCCESS,
+)
 from flask import Response, redirect, render_template, request, send_file, url_for
 
 from sketch_map_tool import flask_app as app
@@ -67,7 +77,9 @@ def create_results_get(uuid: Optional[str] = None) -> Union[Response, str]:
 
 
 @app.get("/api/status/<uuid>/<type_>")
-def status(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Dict[str, str]:
+def status(
+    uuid: str, type_: Literal["quality-report", "sketch-map"]
+) -> tuple[dict[str, str | Any], int]:
     """Get the status of a request by uuid and type."""
     # Map request id and type to tasks id
     raw = ds_client.get(str(uuid))
@@ -85,9 +97,20 @@ def status(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Dict[st
         task = tasks.generate_sketch_map.AsyncResult(task_id)
     else:
         # Unreachable
-        pass
+        raise ValueError
 
-    return {"id": uuid, "status": task.status}
+    # see celery states and their precedence here:
+    # https://docs.celeryq.dev/en/stable/_modules/celery/states.html#precedence
+    body = {"id": uuid, "status": task.status, "type": type_}
+    if task.status == SUCCESS:
+        http_status = 200
+        body["href"] = "/api/download/" + uuid + "/" + type_
+    elif task.status in [PENDING, RETRY, RECEIVED, STARTED]:
+        http_status = 202
+    else:  # Incl. REJECTED, REVOKED, FAILURE
+        http_status = 500
+
+    Response(body, status=http_status, mimetype='application/json')
 
 
 @app.route("/api/download/<uuid>/<type_>")

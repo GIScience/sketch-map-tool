@@ -1,23 +1,44 @@
-{% extends "base.html" %} {% block body %}
-<div class="container">
-  <h1>CREATE RESULTS</h1>
-  <div class="grid">
-    <div>
-      <article>
-        <header>OSM Quality Report</header>
-        <a href="#" aria-busy="true">Generating, please wait…</a>
-        <br /><br />
-        <a href="#" role="button" disabled="disabled">Download PDF</a>
-      </article>
+{% extends "base.html" %}
+
+{% block head %}
+    <script type="module" src="{{ url_for("static", filename="scripts/create-results/index.js") }}"></script>
+{% endblock head %}
+
+{% block header_message %}
+    <div class="circle" style="display: inline-block;">1</div>Create paper maps to collect data
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid horizontal step-arrows">
+        <div>Define your Area of Interest</div>
+        <div class="active">OSM Quality Check</div>
+        <div class="active">PDF Export of SketchMap</div>
     </div>
-    <div>
-      <article>
-        <header>Sketch Map</header>
-        <a href="#" aria-busy="true">Generating, please wait…</a>
-        <br /><br />
-        <a href="/api/download" role="button">Download PDF</a>
-      </article>
-    </div>
-  </div>
-</div>
+    <main class="container">
+        <div id="main-message" class="sketchy h1 center-text">Your results are being processed ...
+        </div>
+
+        <div class="grid">
+            <div>
+                <article>
+                    <header>OSM Quality Report</header>
+                    <span id="quality-report-status"></span>
+                    <br/><br/>
+                    <a id="quality-report-download-button" href="#" download aria-busy="true"
+                       role="button" disabled="disabled">Download
+                        PDF</a>
+                </article>
+            </div>
+            <div>
+                <article>
+                    <header>Sketch Map</header>
+                    <span id="sketch-map-status"></span>
+                    <br/><br/>
+                    <a id="sketch-map-download-button" href="#" download aria-busy="true"
+                       role="button"
+                       disabled="disabled">Download PDF</a>
+                </article>
+            </div>
+        </div>
+    </main>
 {% endblock body %}
