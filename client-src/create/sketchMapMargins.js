@@ -39,3 +39,7 @@ const SKETCH_MAP_MARGINS = {
         portrait: { bottom: 5 },
     },
 };
+
+export {
+    SKETCH_MAP_MARGINS,
+};
