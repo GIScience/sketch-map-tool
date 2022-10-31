@@ -18,7 +18,7 @@ def mock_env_missing(monkeypatch):
 
 @pytest.fixture
 def config_keys():
-    return ("data-dir", "user-agent")
+    return ("data-dir", "user-agent", "broker-url", "result-backend", "data-store")
 
 
 def test_get_config_path_empty_env(monkeypatch):
