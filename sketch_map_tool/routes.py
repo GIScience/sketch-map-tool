@@ -1,6 +1,6 @@
 import json
 from io import BytesIO
-from typing import Any, Literal, Optional, Union
+from typing import Literal, Optional, Union
 from uuid import UUID, uuid4
 
 from celery.states import PENDING, RECEIVED, RETRY, STARTED, SUCCESS
@@ -68,9 +68,7 @@ def create_results_get(uuid: Optional[str] = None) -> Union[Response, str]:
 
 
 @app.get("/api/status/<uuid>/<type_>")
-def status(
-    uuid: str, type_: Literal["quality-report", "sketch-map"]
-) -> tuple[dict[str, str | Any], int]:
+def status(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Response:
     """Get the status of a request by uuid and type."""
     # Map request id and type to tasks id
     raw = ds_client.get(str(uuid))
@@ -100,7 +98,7 @@ def status(
         http_status = 202
     else:  # Incl. REJECTED, REVOKED, FAILURE
         http_status = 500
-    return (body, http_status)
+    return Response(json.dumps(body), status=http_status, mimetype="application/json")
 
 
 @app.route("/api/download/<uuid>/<type_>")
