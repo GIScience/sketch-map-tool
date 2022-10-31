@@ -100,8 +100,7 @@ def status(
         http_status = 202
     else:  # Incl. REJECTED, REVOKED, FAILURE
         http_status = 500
-
-    Response(body, status=http_status, mimetype="application/json")
+    return (body, http_status)
 
 
 @app.route("/api/download/<uuid>/<type_>")
