@@ -3,16 +3,7 @@ from io import BytesIO
 from typing import Any, Literal, Optional, Union
 from uuid import UUID, uuid4
 
-from celery.states import (
-    FAILURE,
-    PENDING,
-    RECEIVED,
-    REJECTED,
-    RETRY,
-    REVOKED,
-    STARTED,
-    SUCCESS,
-)
+from celery.states import PENDING, RECEIVED, RETRY, STARTED, SUCCESS
 from flask import Response, redirect, render_template, request, send_file, url_for
 
 from sketch_map_tool import flask_app as app
@@ -110,7 +101,7 @@ def status(
     else:  # Incl. REJECTED, REVOKED, FAILURE
         http_status = 500
 
-    Response(body, status=http_status, mimetype='application/json')
+    Response(body, status=http_status, mimetype="application/json")
 
 
 @app.route("/api/download/<uuid>/<type_>")
