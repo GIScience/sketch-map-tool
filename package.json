@@ -9,7 +9,9 @@
     "lint": "npm run lint-css && npm run lint-js",
     "lint-css:fix": "npm run lint-css -- --fix",
     "lint-js:fix": "npm run lint-js -- --fix",
-    "lint:fix": "npm run lint-css:fix && npm run lint-js:fix"
+    "lint:fix": "npm run lint-css:fix && npm run lint-js:fix",
+    "clean": "rimraf ./sketch_map_tool/static/bundles",
+    "build": "npm run clean && node esbuild.js"
   },
   "repository": {
     "type": "git",
@@ -22,10 +24,16 @@
   },
   "homepage": "https://github.com/GIScience/sketch-map-tool#readme",
   "devDependencies": {
+    "esbuild": "^0.15.12",
     "eslint": "8.10.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-plugin-import": "2.25.4",
+    "rimraf": "^3.0.2",
     "stylelint": "14.8.3",
     "stylelint-config-standard": "25.0.0"
+  },
+  "dependencies": {
+    "@giscience/ol-print-layout-control": "^1.0.2",
+    "ol": "^7.1.0"
   }
 }

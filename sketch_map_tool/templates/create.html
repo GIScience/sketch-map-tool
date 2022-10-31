@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <script src="{{ url_for("static", filename="libs/ol/v7.1.0-package/dist/ol.js") }}"></script>
-    <link rel="stylesheet" href="{{ url_for("static", filename="libs/ol/v7.1.0-package/ol.css") }}">
+{#    <script src="{{ url_for("static", filename="libs/ol/v7.1.0-package/dist/ol.js") }}"></script>#}
+{#    <link rel="stylesheet" href="{{ url_for("static", filename="libs/ol/v7.1.0-package/ol.css") }}">#}
 
-    <script src="{{ url_for("static", filename="libs/@giscience/ol-print-layout-control/dist/ol-print-layout-control.js") }}"></script>
-    <link rel="stylesheet" href="{{ url_for("static", filename="libs/@giscience/ol-print-layout-control/dist/ol-print-layout-control.css") }}">
+{#    <script src="{{ url_for("static", filename="libs/@giscience/ol-print-layout-control/dist/ol-print-layout-control.js") }}"></script>#}
+{#    <link rel="stylesheet" href="{{ url_for("static", filename="libs/@giscience/ol-print-layout-control/dist/ol-print-layout-control.css") }}">#}
 
-    <link rel="stylesheet" href="{{ url_for("static", filename="style/create.css") }}">
+    <link rel="stylesheet" href="{{ url_for("static", filename="bundles/create.css") }}">
+
+    <script type="module" src="{{ url_for("static", filename="bundles/create.js") }}"></script>
 {% endblock head %}
 
 {% block header_message %}
@@ -46,7 +48,7 @@
         </div>
     </main>
 
-    <script src="{{ url_for('static', filename='scripts/create/sketchMapMargins.js') }}"></script>
-    <script src="{{ url_for('static', filename='scripts/create/map.js') }}"></script>
-    <script src="{{ url_for('static', filename='scripts/create/form.js') }}"></script>
+{#    <script src="{{ url_for('static', filename='scripts/create/sketchMapMargins.js') }}"></script>#}
+{#    <script src="{{ url_for('static', filename='scripts/create/map.js') }}"></script>#}
+{#    <script src="{{ url_for('static', filename='scripts/create/form.js') }}"></script>#}
 {% endblock body %}
