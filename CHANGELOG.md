@@ -7,6 +7,10 @@
 - add content and style to index ([#73])
 - use celery as queue to run background tasks ([#72])
 
+### Bug Fixes
+
+- fix analyses after project layout change (Issue: [#58], PR: [#59])
+
 ### Other Changes
 
 - add package.json to configure JS and CSS linters ([#71])
@@ -24,6 +28,8 @@
 [#47]: https://github.com/GIScience/sketch-map-tool/issues/47
 [#52]: https://github.com/GIScience/sketch-map-tool/pull/52
 [#55]: https://github.com/GIScience/sketch-map-tool/pull/55
+[#58]: https://github.com/GIScience/sketch-map-tool/issues/58
+[#59]: https://github.com/GIScience/sketch-map-tool/pull/59
 [#70]: https://github.com/GIScience/sketch-map-tool/pull/70
 [#71]: https://github.com/GIScience/sketch-map-tool/pull/71
 [#72]: https://github.com/GIScience/sketch-map-tool/pull/72
