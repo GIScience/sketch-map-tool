@@ -107,9 +107,7 @@ def status(
         body["href"] = "/api/download/" + uuid + "/" + type_
     elif task.status in [PENDING, RETRY, RECEIVED, STARTED]:
         http_status = 202
-    elif task.status in [REJECTED, REVOKED, None, FAILURE]:
-        http_status = 500
-    else:
+    else:  # Incl. REJECTED, REVOKED, FAILURE
         http_status = 500
 
     Response(body, status=http_status, mimetype='application/json')
