@@ -112,7 +112,7 @@ def status(
     else:
         http_status = 500
 
-    return body, http_status
+    Response(body, status=http_status, mimetype='application/json')
 
 
 @app.route("/api/download/<uuid>/<type_>")
