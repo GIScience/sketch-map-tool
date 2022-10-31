@@ -1,4 +1,4 @@
-import { getUUIDFromURL, poll, handleMainMessage } from "../shared/index.js";
+import { getUUIDFromURL, poll, handleMainMessage } from "../shared";
 
 const sketchMapUrl = `/api/status/${getUUIDFromURL()}/sketch-map`;
 const qualityReportUrl = `/api/status/${getUUIDFromURL()}/quality-report`;

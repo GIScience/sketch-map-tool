@@ -8,6 +8,23 @@ function getUUIDFromURL() {
 }
 
 /**
+ * Fills the options of an HTMLSelectElement with the values of a simple key-value Object
+ * @param {string} selectElementId - the id of an HTMLSelectElement
+ * @param { {[key:string] : string|number}} optionsMap - a key-value Object, values will be used as
+ *     options text and value
+ */
+function fillSelectOptions(selectElementId, optionsMap) {
+    const selectElement = document.getElementById(selectElementId);
+    for (const paperformatKey in optionsMap) {
+        if (Object.prototype.hasOwnProperty.call(optionsMap, paperformatKey)) {
+            const option = document.createElement("option");
+            option.text = optionsMap[paperformatKey];
+            selectElement.appendChild(option);
+        }
+    }
+}
+
+/**
  * set the aria-busy HTMLAttribute on the given HTMLElement
  * @param elementId
  * @param isBusy
@@ -43,6 +60,7 @@ function setDownloadLink(linkElementId, url) {
 
 export {
     getUUIDFromURL,
+    fillSelectOptions,
     setDisabled,
     setDownloadLink,
     setIsBusy,

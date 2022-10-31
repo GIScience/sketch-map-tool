@@ -2,14 +2,15 @@
 require("esbuild")
     .build({
         entryPoints: [
+            "./client-src/index/index.css",
             "./client-src/create/index.js",
             "./client-src/create-results/index.js",
         ],
-        entryNames: "[dir]",
+        entryNames: "[dir]", // will name the result files by their folder names
         outbase: "./client-src",
         bundle: true,
+        minify: true,
         outdir: "./sketch_map_tool/static/bundles",
         format: "esm",
-        minify: true,
     }).catch(() => process.exit(1));
 /* eslint-enable */
