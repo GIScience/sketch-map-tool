@@ -56,9 +56,9 @@ jobs:
           poetry run black --check --diff sketch_map_tool
           poetry run isort --check --diff sketch_map_tool
 
-      - name: Static type checking with mypy
-        run: |
-          poetry run mypy --strict sketch_map_tool
+      # - name: Static type checking with mypy
+      #   run: |
+      #     poetry run mypy --strict sketch_map_tool
 
       - name: Running tests
         run: |
