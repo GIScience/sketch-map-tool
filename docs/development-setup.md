@@ -18,7 +18,7 @@ This project uses [Poetry](https://python-poetry.org/docs/) for packaging and de
 poetry install
 poetry shell  # Spawns a shell within the virtual environment
 pre-commit install  # Install pre-commit hooks
-npm install # Install local versions of eslint and stylelint to check JS and CSS
+npm install # Install local versions of esbuild, eslint and stylelint to build and check JS and CSS
 # Hack away
 ```
 
@@ -34,4 +34,21 @@ docker run --name redis -d -p 6379:6379 redis
 celery --app sketch_map_tool.tasks worker --loglevel=INFO
 flask --app sketch_map_tool/app.py --debug run
 # Go to http://127.0.0.1:5000
+```
+
+## JS and CSS
+
+For the individual html pages the js and css code should be developed in `client-src/**` as 
+ES6 modules. 
+
+To use the code in the HTML Templates it must be build (bundled). The bundler 
+([esbuild](https://esbuild.github.io/)) will write the result to `static/bundles/**` 
+such that it will be provided by Flask to the web and can be referenced from the HTML Templates.
+
+If you want to add new code for additional HTML pages add entry-points in the build script 
+[esbuild.js](../esbuild.js)
+
+Bundle the code with:
+```bash
+npm run build
 ```
