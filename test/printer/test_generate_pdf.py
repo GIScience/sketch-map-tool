@@ -7,7 +7,6 @@ import fitz
 import pytest
 from PIL import Image
 
-from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from sketch_map_tool.printer.modules import generate_pdf
 from sketch_map_tool.printer.modules.paper_formats.paper_formats import (
     A0,
@@ -22,11 +21,6 @@ from sketch_map_tool.printer.modules.paper_formats.paper_formats import (
     TABLOID,
     PaperFormat,
 )
-
-
-@pytest.fixture
-def bbox():
-    return Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373")
 
 
 @pytest.fixture

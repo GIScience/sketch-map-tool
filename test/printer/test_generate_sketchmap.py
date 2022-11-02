@@ -5,7 +5,7 @@ import os
 from unittest.mock import patch
 
 import pytest
-from modules.test_get_map import DummyResponse
+from test_get_map import DummyResponse
 
 from sketch_map_tool.constants import (
     GENERATION_OUTPUT_LINK,
@@ -13,13 +13,11 @@ from sketch_map_tool.constants import (
     WMS_BASE_URL,
     WMS_LAYERS,
 )
-from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from sketch_map_tool.printer.generate_sketchmap import (
     generate,
     get_result_path,
     get_status_link,
 )
-from sketch_map_tool.printer.modules.generate_pdf import generate_pdf
 from sketch_map_tool.printer.modules.paper_formats.paper_formats import (
     A0,
     A1,
@@ -38,10 +36,6 @@ OUTPUT_PATH = "./test_output/"
 if not os.path.exists(OUTPUT_PATH):
     os.mkdir(OUTPUT_PATH)
 
-DUMMY_BBOX = Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373")
-
-generate_pdf.RESOURCE_PATH = "../../sketch_map_tool/printer/modules/resources/"
-
 
 @pytest.mark.parametrize(
     "paper_format", [A0, A1, A2, A3, A4, A5, LEGAL, LETTER, LEDGER, TABLOID]
@@ -50,7 +44,7 @@ generate_pdf.RESOURCE_PATH = "../../sketch_map_tool/printer/modules/resources/"
     "second_run", [False, True]
 )  # When result files already exist for a given date,
 #                                   the path should be returned directly
-def test_generate(paper_format: PaperFormat, second_run: bool) -> None:
+def test_generate(paper_format: PaperFormat, second_run: bool, bbox) -> None:
     """
     Test the function generate with different paper formats and starting a
     new sketch map generation as well as repeating a call already completed.
@@ -59,12 +53,17 @@ def test_generate(paper_format: PaperFormat, second_run: bool) -> None:
 
         mock.return_value = DummyResponse(
             open(  # pylint: disable=R1732
-                "./test_data/dummy_map_img_landscape.jpg", "rb"
+                os.path.join(
+                    os.path.dirname(os.path.abspath(__file__)),
+                    "test_data",
+                    "dummy_map_img_landscape.jpg",
+                ),
+                "rb",
             )
         )
         result_path = generate(
             paper_format=paper_format,
-            bbox=DUMMY_BBOX,
+            bbox=bbox,
             resolution=(500, 600),
             output_path=OUTPUT_PATH,
         )
@@ -107,21 +106,21 @@ Completed
         os.remove(status_path)
 
 
-def test_get_result_path() -> None:
+def test_get_result_path(bbox) -> None:
     """
     Test the function get_result_path.
     """
     assert (
-        get_result_path(A2, DUMMY_BBOX, "test/bla", "21-12-24")
-        == f"test/bla/21-12-24__{DUMMY_BBOX.get_str(mode='minus')}__a2.pdf"
+        get_result_path(A2, bbox, "test/bla", "21-12-24")
+        == f"test/bla/21-12-24__{bbox.get_str(mode='minus')}__a2.pdf"
     )
 
 
-def test_get_status_link() -> None:
+def test_get_status_link(bbox) -> None:
     """
     Test the function get_status_link.
     """
     assert (
-        get_status_link(A2, DUMMY_BBOX, "21-12-24")
-        == f"../status?mode=generation&format=a2&bbox={DUMMY_BBOX.get_str(mode='comma')}&d=21-12-24"
+        get_status_link(A2, bbox, "21-12-24")
+        == f"../status?mode=generation&format=a2&bbox={bbox.get_str(mode='comma')}&d=21-12-24"
     )
