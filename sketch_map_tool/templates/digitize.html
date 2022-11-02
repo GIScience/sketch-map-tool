@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="bundles/digitize.css") }}">
+    <script type="module" src="{{ url_for("static", filename="bundles/digitize.js") }}"></script>
+{% endblock head %}
+
+{% block header_message %}
+    <div class="circle" style="display: inline-block";>2</div>Paper to GIS:<br>
+    Automagically create Geotiffs, Vector data or All-In-One-QGIS projects
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid horizontal step-arrows">
+        <div>Scan or photograph your scribbled SketchMaps</div>
+        <div class="active">Upload your SketchMaps</div>
+        <div>Download sketches as Geodata</div>
+    </div>
+    <main class="container-fluid">
+        <div id="main-message" class="sketchy h1 center-text">
+            Upload one or more scribbled SketchMaps
+        </div>
+
+        <form action="#">
+
+            <div class="filebokz js-enabled is-advanced is-draggable" data-max-size="524288000" data-filebokz-id="3" id="filebokz-3" data-file-count="0" data-size="0">
+                <input type="file" id="file-3" name="file" multiple="">
+                <label for="file-3">
+                    <strong class="no-files">Choose file(s)</strong>
+                    <span class="no-files is-draggable">or drag them here</span>
+                    <div class="files file-previews" data-content="<span>{name}</span> <span>({size})</span> <span class=&quot;fa fa-trash remove&quot; aria-hidden=&quot;true&quot;></span>" data-content-before="<i class=&quot;fa fa-file-o&quot; aria-hidden=&quot;true&quot;></i>" data-content-before-audio="<i class=&quot;fa fa-file-audio-o&quot; aria-hidden=&quot;true&quot;></i>" data-content-before-image="<img src=&quot;{url}&quot;>" data-content-before-text="<i class=&quot;fa fa-file-text-o&quot; aria-hidden=&quot;true&quot;></i>" data-content-before-video="<i class=&quot;fa fa-file-video-o&quot; aria-hidden=&quot;true&quot;></i>"></div>
+                    <span class="error-msg"></span>
+                </label>
+                <span class="info">Files: <span class="file-count">0</span> (<span class="size">0 B</span>) Max total size: 500 MB</span>
+            </div>
+
+            <button type="submit" class="btn btn-light">Submit</button>
+            <button type="reset" class="btn btn-light">Reset</button>
+        </form>
+    </main>
+{% endblock body %}
