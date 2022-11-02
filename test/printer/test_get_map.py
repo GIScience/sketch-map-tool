@@ -3,6 +3,7 @@ Tests for the module printer/modules/get_map.py
 """
 from typing import BinaryIO
 from unittest.mock import patch
+from pathlib import Path
 
 import PIL
 from sketch_map_tool.constants import TIMEOUT_REQUESTS
@@ -27,7 +28,7 @@ def test_get_map_image() -> None:
     bbox = Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373")
     with patch("requests.get") as mock:
         mock.return_value = DummyResponse(
-            open("../test_data/dummy_map_img_landscape.jpg", "rb")
+            open(Path(__file__).parent / "test_data/dummy_map_img_landscape.jpg", "rb")
         )  # pylint: disable=R1732
         img = get_map_image(
             bbox,

@@ -27,7 +27,9 @@ from sketch_map_tool.printer.modules.paper_formats.paper_formats import (
 # PIL should be able to open high resolution PNGs of large Maps:
 Image.MAX_IMAGE_PIXELS = None
 
-RESOURCE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources")
+RESOURCE_PATH = os.path.abspath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources")
+)
 
 
 def generate_pdf(  # pylint: disable=R0914  # noqa: C901
