@@ -1,6 +1,4 @@
-"""
-Tests for the module printer/modules/generate_pdf.py
-"""
+"""Tests for the module printer/modules/generate_pdf.py"""
 import filecmp
 import os
 from pathlib import Path
@@ -25,27 +23,27 @@ from sketch_map_tool.printer.modules.paper_formats.paper_formats import (
     PaperFormat,
 )
 
-# TODO: Remove once certain that it is not needed
-# generate_pdf.RESOURCE_PATH = "../../../sketch_map_tool/printer/modules/resources/"
-
 
 @pytest.fixture
 def bbox():
-    Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373")
+    return Bbox.bbox_from_str("8.66100311,49.3957813,8.71662140,49.4265373")
 
 
 @pytest.fixture
-def sketch_map(request):
+def expected_sketch_map(request) -> tuple:
+    """Return paths of complete Sketch Map and the Sketch Map template (Map Area)."""
     orientation = request.getfixturevalue("orientation")
     paper_format = request.getfixturevalue("paper_format")
-    p = Path(__file__).parent / "test_data/expected/{0}/{1}.jpg".format(
-        orientation, paper_format
+    directory = Path(__file__).parent / "test_data" / "expected" / orientation
+    return (
+        directory / f"{paper_format}.jpg",
+        directory / f"{paper_format}_template.jpg",
     )
-    return p
 
 
 @pytest.fixture
-def scan(request):
+def map_image(request):
+    """Map image from WMS."""
     orientation = request.getfixturevalue("orientation")
     p = Path(__file__).parent / "test_data/dummy_map_img_{0}.jpg".format(orientation)
     return Image.open(p)
@@ -57,8 +55,8 @@ def scan(request):
 @pytest.mark.parametrize("orientation", ["landscape", "portrait"])
 def test_generate_pdf(
     bbox,
-    sketch_map,
-    scan,
+    expected_sketch_map,
+    map_image,
     paper_format: PaperFormat,
     orientation: str,
     tmp_path: Path,
@@ -70,7 +68,7 @@ def test_generate_pdf(
     output_path = str(tmp_path / "sketch_map.pdf")
     result_path = generate_pdf.generate_pdf(
         output_path,
-        scan,
+        map_image,
         bbox,
         "2021-12-24",
         paper_format,
@@ -82,12 +80,12 @@ def test_generate_pdf(
     fitz_pdf.close()
     assert filecmp.cmp(
         pdf_img_path,
-        sketch_map,
+        expected_sketch_map[0],
         shallow=False,
     )
     assert filecmp.cmp(
         result_template_path,
-        sketch_map,
+        expected_sketch_map[1],
         shallow=False,
     )
     os.remove(result_path)
