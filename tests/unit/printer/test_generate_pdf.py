@@ -28,7 +28,7 @@ def expected_sketch_map(request) -> tuple:
     """Return paths of complete Sketch Map and the Sketch Map template (Map Area)."""
     orientation = request.getfixturevalue("orientation")
     paper_format = request.getfixturevalue("paper_format")
-    directory = Path(__file__).parent / "test_data" / "expected" / orientation
+    directory = Path(__file__).parent / "fixtures" / "expected" / orientation
     return (
         directory / f"{paper_format}.jpg",
         directory / f"{paper_format}_template.jpg",
@@ -39,7 +39,7 @@ def expected_sketch_map(request) -> tuple:
 def map_image(request):
     """Map image from WMS."""
     orientation = request.getfixturevalue("orientation")
-    p = Path(__file__).parent / "test_data/dummy_map_img_{0}.jpg".format(orientation)
+    p = Path(__file__).parent / "fixtures/dummy_map_img_{0}.jpg".format(orientation)
     return Image.open(p)
 
 

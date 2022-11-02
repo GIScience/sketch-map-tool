@@ -55,7 +55,7 @@ def test_generate(paper_format: PaperFormat, second_run: bool, bbox) -> None:
             open(  # pylint: disable=R1732
                 os.path.join(
                     os.path.dirname(os.path.abspath(__file__)),
-                    "test_data",
+                    "fixtures",
                     "dummy_map_img_landscape.jpg",
                 ),
                 "rb",
