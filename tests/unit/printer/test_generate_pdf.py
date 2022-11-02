@@ -7,8 +7,8 @@ import fitz
 import pytest
 from PIL import Image
 
-from sketch_map_tool.printer.modules import generate_pdf
-from sketch_map_tool.printer.modules.paper_formats.paper_formats import (
+from sketch_map_tool.printer import generate_pdf
+from sketch_map_tool.printer.paper_formats.paper_formats import (
     A0,
     A1,
     A2,

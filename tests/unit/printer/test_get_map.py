@@ -8,7 +8,7 @@ from pathlib import Path
 import PIL
 from sketch_map_tool.constants import TIMEOUT_REQUESTS
 from sketch_map_tool.helper_modules.bbox_utils import Bbox
-from sketch_map_tool.printer.modules.get_map import get_map_image
+from sketch_map_tool.printer.get_map import get_map_image
 
 
 class DummyResponse:  # pylint: disable=R0903
