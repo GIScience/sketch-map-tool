@@ -5,9 +5,9 @@ from io import BytesIO
 from sketch_map_tool import tasks
 
 
-def test_generate_sketch_map(monkeypatch):
+def test_generate_map(monkeypatch):
     monkeypatch.setattr("sketch_map_tool.tasks.sleep", lambda x: None)
-    result = tasks.generate_sketch_map([], "", "", {})
+    result = tasks.generate_map([], "", "", {})
     assert isinstance(result, BytesIO)
 
 

@@ -4,7 +4,7 @@ from sketch_map_tool import tasks
 
 
 def test_generate_sketch_map(celery_worker):
-    task = tasks.generate_sketch_map.apply_async(args=([], "", "", {}))
+    task = tasks.generate_map.apply_async(args=([], "", "", {}))
     result = task.wait()
     assert isinstance(result, BytesIO)
 

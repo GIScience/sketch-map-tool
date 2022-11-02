@@ -32,7 +32,7 @@ def create_results_post() -> Response:
     size = json.loads(request.form["size"])
 
     # Tasks
-    task_sketch_map = tasks.generate_sketch_map.apply_async(
+    task_sketch_map = tasks.generate_map.apply_async(
         args=(bbox, format_, orientation, size)
     )
     task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox,))
@@ -83,7 +83,7 @@ def status(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Respons
     if type_ == "quality-report":
         task = tasks.generate_quality_report.AsyncResult(task_id)
     elif type_ == "sketch-map":
-        task = tasks.generate_sketch_map.AsyncResult(task_id)
+        task = tasks.generate_map.AsyncResult(task_id)
     else:
         # Unreachable
         raise ValueError
@@ -116,7 +116,7 @@ def download(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Respo
     if type_ == "quality-report":
         task = tasks.generate_quality_report.AsyncResult(task_id)
     elif type_ == "sketch-map":
-        task = tasks.generate_sketch_map.AsyncResult(task_id)
+        task = tasks.generate_map.AsyncResult(task_id)
     else:
         # Unreachable
         pass

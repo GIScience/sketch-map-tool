@@ -48,7 +48,7 @@ def mock_async_results(request, monkeypatch):
         lambda x: mock_task,
     )
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.generate_sketch_map.AsyncResult",
+        "sketch_map_tool.routes.tasks.generate_map.AsyncResult",
         lambda x: mock_task,
     )
 

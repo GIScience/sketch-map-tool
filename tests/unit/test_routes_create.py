@@ -23,7 +23,7 @@ def mock_tasks(monkeypatch):
         lambda args: mock_task,
     )
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.generate_sketch_map.apply_async",
+        "sketch_map_tool.routes.tasks.generate_map.apply_async",
         lambda args: mock_task,
     )
 

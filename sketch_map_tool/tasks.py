@@ -10,7 +10,7 @@ from sketch_map_tool import celery_app as celery
 
 
 @celery.task(bind=True)
-def generate_sketch_map(
+def generate_map(
     self,
     bbox: List[float],
     format_: str,
