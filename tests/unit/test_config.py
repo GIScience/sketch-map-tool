@@ -27,6 +27,7 @@ def test_get_config_path_empty_env(monkeypatch):
         os.path.join(
             os.path.dirname(__file__),
             "..",
+            "..",
             "config",
             "config.toml",
         )
@@ -104,6 +105,7 @@ def test_get_data_dir_unset_env(config_keys):
             os.path.dirname(
                 os.path.abspath(__file__),
             ),
+            "..",
             "..",
             "data",
         )
