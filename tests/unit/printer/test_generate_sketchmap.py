@@ -18,7 +18,7 @@ from sketch_map_tool.printer.generate_sketchmap import (
     get_result_path,
     get_status_link,
 )
-from sketch_map_tool.printer.modules.paper_formats.paper_formats import (
+from sketch_map_tool.printer.paper_formats.paper_formats import (
     A0,
     A1,
     A2,

@@ -9,9 +9,9 @@ from typing import Tuple
 from sketch_map_tool.constants import GENERATION_OUTPUT_LINK, STATUS_UPDATES_GENERATION
 from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from sketch_map_tool.helper_modules.progress import has_failed, update_progress
-from sketch_map_tool.printer.modules import generate_pdf
-from sketch_map_tool.printer.modules.get_map import get_map_image
-from sketch_map_tool.printer.modules.paper_formats.paper_formats import A4, PaperFormat
+from sketch_map_tool.printer import generate_pdf
+from sketch_map_tool.printer.get_map import get_map_image
+from sketch_map_tool.printer.paper_formats.paper_formats import A4, PaperFormat
 
 
 def generate(
