@@ -3,11 +3,12 @@
 {% block head %}
     <link rel="stylesheet" href="{{ url_for("static", filename="bundles/digitize.css") }}">
     <script type="module" src="{{ url_for("static", filename="bundles/digitize.js") }}"></script>
+
 {% endblock head %}
 
 {% block header_message %}
-    <div class="circle" style="display: inline-block";>2</div>Paper to GIS:<br>
-    Automagically create Geotiffs, Vector data or All-In-One-QGIS projects
+    <div class="circle" style="display: inline-block" ;>2</div>Paper to GIS:
+    <span style="font-size: smaller">Create Geotiffs, Vector data or All-In-One-QGIS projects</span>
 {% endblock %}
 
 {% block body %}
@@ -23,19 +24,28 @@
 
         <form action="#">
 
-            <div class="filebokz js-enabled is-advanced is-draggable" data-max-size="524288000" data-filebokz-id="3" id="filebokz-3" data-file-count="0" data-size="0">
-                <input type="file" id="file-3" name="file" multiple="">
+            <div class="filebokz" data-max-size="524288000" data-allowed-extensions="jpeg,jpg,png">
+                <input type="file" id="file-3" name="file" multiple/>
                 <label for="file-3">
+                    <img id="cloud" class="no-files" src="/static/assets/upload_cloud.svg">
                     <strong class="no-files">Choose file(s)</strong>
                     <span class="no-files is-draggable">or drag them here</span>
-                    <div class="files file-previews" data-content="<span>{name}</span> <span>({size})</span> <span class=&quot;fa fa-trash remove&quot; aria-hidden=&quot;true&quot;></span>" data-content-before="<i class=&quot;fa fa-file-o&quot; aria-hidden=&quot;true&quot;></i>" data-content-before-audio="<i class=&quot;fa fa-file-audio-o&quot; aria-hidden=&quot;true&quot;></i>" data-content-before-image="<img src=&quot;{url}&quot;>" data-content-before-text="<i class=&quot;fa fa-file-text-o&quot; aria-hidden=&quot;true&quot;></i>" data-content-before-video="<i class=&quot;fa fa-file-video-o&quot; aria-hidden=&quot;true&quot;></i>"></div>
+                    <div
+                            class="files file-previews"
+                            data-content='<span>{name}</span> <span>({size})</span> <span class="fa fa-trash remove" aria-hidden="true">✗</span>'
+                            data-content-before='<i class="fa fa-file-o" aria-hidden="true"></i>'
+                            data-content-before-audio='<i class="fa fa-file-audio-o" aria-hidden="true"></i>'
+                            data-content-before-image='<img src="{url}">'
+                            data-content-before-text='<i class="fa fa-file-text-o" aria-hidden="true"></i>'
+                            data-content-before-video='<i class="fa fa-file-video-o" aria-hidden="true"></i>'>
+
+                    </div>
                     <span class="error-msg"></span>
                 </label>
-                <span class="info">Files: <span class="file-count">0</span> (<span class="size">0 B</span>) Max total size: 500 MB</span>
+                <span class="info">Files: <span class="file-count"></span> (<span
+                        class="size"></span>)&nbsp;&nbsp;&nbsp; Max total size: 500 MB</span>
             </div>
-
-            <button type="submit" class="btn btn-light">Submit</button>
-            <button type="reset" class="btn btn-light">Reset</button>
+            <button type="submit" class="">Upload...</button>
         </form>
     </main>
 {% endblock body %}

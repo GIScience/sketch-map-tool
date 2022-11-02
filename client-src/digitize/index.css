@@ -1,0 +1,40 @@
+form {
+    width: fit-content;
+    margin: 0 auto;
+    text-align: center;
+    min-width: 33%;
+}
+
+.filebokz {
+    --color: var(--primary);
+    padding: 2rem;
+
+}
+
+.filebokz label {
+    transition: background-color linear 0.3s;
+}
+
+.filebokz label:hover {
+    background-color: var(--drag-bg-color);
+}
+
+.filebokz.is-draggable label::after {
+    background: none;
+    border-style: dotted;
+}
+
+
+.filebokz.is-draggable label:hover::after, .filebokz.is-draggable.is-dragging label::after, .filebokz.is-draggable.in-focus label::after {
+    animation: none;
+}
+
+.filebokz #cloud {
+    height: 7rem;
+}
+
+button {
+    display: inline;
+    width: fit-content;
+    min-width: 30%;
+}
