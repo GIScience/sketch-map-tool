@@ -26,4 +26,10 @@ services:
       SMT-RESULT-BACKEND: "redis://redis:6379"
     entrypoint: ["poetry", "run", "celery", "--app", "sketch_map_tool.tasks", "worker"]
   redis:
-    image: redis # TODO: specify version
+    image: redis:7
+    # Start with persistent storage
+    entrypoint: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    volumes:
+        - redis_data:/data
+volumes:
+    redis_data:
