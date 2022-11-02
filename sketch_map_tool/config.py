@@ -25,6 +25,8 @@ def load_config_default() -> Dict[str, str]:
         "broker-url": "redis://localhost:6379",
         "result-backend": "redis://localhost:6379",
         "data-store": "redis://localhost:6379",
+        "wms-url": "https://maps.heigit.org/osm-wms/service?SERVICE=WMS&VERSION=1.1.1",
+        "wms-layers": "osm_auto:all",
     }
 
 
@@ -45,6 +47,8 @@ def load_config_from_env() -> Dict[str, str]:
         "broker-url": os.getenv("SMT-BROKER-URL"),
         "result-backend": os.getenv("SMT-RESULT-BACKEND"),
         "data-store": os.getenv("SMT-DATA-STORE"),
+        "wms-url": os.getenv("SMT-WMS-URL"),
+        "wms-layers": os.getenv("SMT-WMS-LAYERS"),
     }
     return {k: v for k, v in cfg.items() if v is not None}
 
