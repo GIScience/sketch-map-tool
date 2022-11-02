@@ -1,11 +1,12 @@
 """
 Tests for the module printer/modules/get_map.py
 """
+from pathlib import Path
 from typing import BinaryIO
 from unittest.mock import patch
-from pathlib import Path
 
 import PIL
+
 from sketch_map_tool.constants import TIMEOUT_REQUESTS
 from sketch_map_tool.helper_modules.bbox_utils import Bbox
 from sketch_map_tool.printer.get_map import get_map_image
