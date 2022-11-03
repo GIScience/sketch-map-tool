@@ -1,5 +1,5 @@
 """
-Tests for the module printer/modules/get_map.py
+Tests for the module printer/get_map.py
 """
 from pathlib import Path
 from typing import BinaryIO

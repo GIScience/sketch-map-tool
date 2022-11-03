@@ -36,7 +36,7 @@ from sketch_map_tool.helper_modules.progress import (
     get_status_updates,
 )
 from sketch_map_tool.printer import generate_sketchmap
-from sketch_map_tool.printer.modules.paper_formats.paper_formats import PaperFormat
+from sketch_map_tool.printer.paper_formats.paper_formats import PaperFormat
 
 
 class BboxForm(Form):  # type: ignore
