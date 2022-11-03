@@ -3,14 +3,16 @@
 from io import BytesIO
 
 from sketch_map_tool import tasks
+from tests import vcr_app as vcr
 
 
-def test_generate_sketch_map(monkeypatch):
-    monkeypatch.setattr("sketch_map_tool.tasks.sleep", lambda x: None)
-    result = tasks.generate_sketch_map([], "", "", {})
+@vcr.use_cassette()
+def test_generate_sketch_map(monkeypatch, bbox, size):
+    result = tasks.generate_sketch_map(bbox, "", "", size)
     assert isinstance(result, BytesIO)
 
 
+@vcr.use_cassette()
 def test_generate_quality_report(monkeypatch):
     monkeypatch.setattr("sketch_map_tool.tasks.sleep", lambda x: None)
     result = tasks.generate_quality_report([])
