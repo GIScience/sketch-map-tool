@@ -6,6 +6,7 @@
 
 - add content and style to index ([#73])
 - use celery as queue to run background tasks ([#72])
+- implement web map service client ([#95])
 
 ### Bug Fixes
 
@@ -34,3 +35,4 @@
 [#71]: https://github.com/GIScience/sketch-map-tool/pull/71
 [#72]: https://github.com/GIScience/sketch-map-tool/pull/72
 [#73]: https://github.com/GIScience/sketch-map-tool/pull/73
+[#95]: https://github.com/GIScience/sketch-map-tool/pull/95
