@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint-css": "stylelint --config .stylelintrc.json 'sketch_map_tool/static/**/*.css'",
+    "lint-css": "stylelint '**/*.css'",
     "lint-js": "eslint .",
     "lint": "npm run lint-css && npm run lint-js",
     "lint-css:fix": "npm run lint-css -- --fix",

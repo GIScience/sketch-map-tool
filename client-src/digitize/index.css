@@ -7,8 +7,8 @@ form {
 
 .filebokz {
     --color: var(--primary);
-    padding: 2rem;
 
+    padding: 2rem;
 }
 
 .filebokz label {
@@ -24,8 +24,9 @@ form {
     border-style: dotted;
 }
 
-
-.filebokz.is-draggable label:hover::after, .filebokz.is-draggable.is-dragging label::after, .filebokz.is-draggable.in-focus label::after {
+.filebokz.is-draggable label:hover::after,
+.filebokz.is-draggable.is-dragging label::after,
+.filebokz.is-draggable.in-focus label::after {
     animation: none;
 }
 
