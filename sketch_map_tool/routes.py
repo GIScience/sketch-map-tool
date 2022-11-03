@@ -67,6 +67,12 @@ def create_results_get(uuid: Optional[str] = None) -> Union[Response, str]:
     return render_template("create-results.html")
 
 
+@app.get("/digitize")
+def digitize() -> str:
+    """Serve a file upload form for sketch map processing"""
+    return render_template("digitize.html")
+
+
 @app.get("/api/status/<uuid>/<type_>")
 def status(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Response:
     """Get the status of a request by uuid and type."""
