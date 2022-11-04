@@ -9,6 +9,7 @@
 - implement web map service client ([#95])
 - add resources (compass and globes as SVG graphics) for map generation ([#101])
 - add module containing the paper format specs ([#99])
+- add module to generate qr-codes as svg & rlg ([#98])
 
 ### Bug Fixes
 
@@ -39,6 +40,7 @@
 [#72]: https://github.com/GIScience/sketch-map-tool/pull/72
 [#73]: https://github.com/GIScience/sketch-map-tool/pull/73
 [#95]: https://github.com/GIScience/sketch-map-tool/pull/95
+[#98]: https://github.com/GIScience/sketch-map-tool/pull/98
 [#99]: https://github.com/GIScience/sketch-map-tool/pull/99
 [#101]: https://github.com/GIScience/sketch-map-tool/pull/101
 [#102]: https://github.com/GIScience/sketch-map-tool/pull/102
