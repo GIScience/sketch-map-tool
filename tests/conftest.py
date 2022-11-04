@@ -1,5 +1,6 @@
 import pytest
 
+from sketch_map_tool.map_generation.paper_format import A4
 from sketch_map_tool.models import Bbox, Size
 
 
@@ -13,6 +14,11 @@ def bbox():
 @pytest.fixture
 def size():
     return Size(width=1867, height=1587)
+
+
+@pytest.fixture
+def format_():
+    return A4
 
 
 @pytest.fixture

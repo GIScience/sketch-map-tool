@@ -9,6 +9,7 @@
 - implement web map service client ([#95])
 - add module containing the paper format specs ([#99])
 - include map scale as request parameter to the backend ([#107])
+- add module to generate qr-codes as svg & rlg ([#98])
 
 ### Bug Fixes
 
@@ -39,6 +40,7 @@
 [#72]: https://github.com/GIScience/sketch-map-tool/pull/72
 [#73]: https://github.com/GIScience/sketch-map-tool/pull/73
 [#95]: https://github.com/GIScience/sketch-map-tool/pull/95
+[#98]: https://github.com/GIScience/sketch-map-tool/pull/98
 [#99]: https://github.com/GIScience/sketch-map-tool/pull/99
 [#102]: https://github.com/GIScience/sketch-map-tool/pull/102
 [#107]: https://github.com/GIScience/sketch-map-tool/pull/107
