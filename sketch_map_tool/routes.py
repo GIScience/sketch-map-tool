@@ -73,6 +73,48 @@ def digitize() -> str:
     return render_template("digitize.html")
 
 
+@app.post("/digitize/results")
+def digitize_results_post() -> Response:
+    """Upload files to create geodata results"""
+    # Request parameters
+    # check if the post request has the file part
+    if "file" not in request.files:
+        # flash('No file part')
+        print("No files")
+        print(request.url)
+        return redirect(url_for("digitize"))
+    files = request.files.getlist("file")
+    print(files)
+    # TODO store the files for processing
+    return redirect(url_for("digitize"))
+
+    # files = json.loads(request.form["bbox"])
+    # format_ = request.form["format"]
+    # orientation = request.form["orientation"]
+    # size = json.loads(request.form["size"])
+    #
+    # # Tasks
+    # task_sketch_map = tasks.generate_sketch_map.apply_async(
+    #     args=(bbox, format_, orientation, size)
+    # )
+    # task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox,))
+    #
+    # # Unique id for current request
+    # uuid = uuid4()
+    #
+    # # Mapping of request id to multiple tasks id's
+    # request_task = {
+    #     str(uuid): json.dumps(
+    #         {
+    #             "sketch-map": str(task_sketch_map.id),
+    #             "quality-report": str(task_quality_report.id),
+    #         }
+    #     )
+    # }
+    # ds_client.set(request_task)
+    # return redirect(url_for("create_results_get", uuid=uuid))
+
+
 @app.get("/api/status/<uuid>/<type_>")
 def status(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Response:
     """Get the status of a request by uuid and type."""
