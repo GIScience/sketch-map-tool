@@ -24,6 +24,7 @@
 - use pre-commit package for managing git hooks ([#52])
 - run all linters and formatters as pre-commit hook ([#52])
 - run tests in CI ([#32])
+- make Python 3.10 the minimal required Python version ([#102])
 
 [#32]: https://github.com/GIScience/sketch-map-tool/pull/32
 [#39]: https://github.com/GIScience/sketch-map-tool/pull/39
@@ -40,3 +41,4 @@
 [#95]: https://github.com/GIScience/sketch-map-tool/pull/95
 [#99]: https://github.com/GIScience/sketch-map-tool/pull/99
 [#101]: https://github.com/GIScience/sketch-map-tool/pull/101
+[#102]: https://github.com/GIScience/sketch-map-tool/pull/102
