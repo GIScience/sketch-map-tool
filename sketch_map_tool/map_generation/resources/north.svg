@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="150" height="150" viewBox="0 0 2000 2000">
+
+<path id="N" d="M 720 285 l 0 -245 1 0 178 230 1 0 0 -245" style="stroke:#80b3cd;stroke-width:30;fill:none"/>
+
+<g id="windrose">
+  <path id="tips" d="M 800 300 1000 900 1600 1100 1000 1300 800 1900 600 1300 0 1100 600 900 800 300" style="stroke:none;stroke-width:0;fill:#80b3cd"/>
+
+  <ellipse id="circle" cx="800" cy="1100" rx="600" ry="600" style="stroke:none;stroke-width:0;fill:#80b3cd"/>
+</g>
+
+<g id="arrow" transform="rotate(0, 800, 1100)">
+  <path d="M 800,1100 300,1600 800,400 1300,1600 800,1100" style="stroke:none;fill:black"/>
+
+  <path d="M 800,1060 375,1490 800,470 800,1060" style="stroke:none;fill:white"/>
+</g>
+</svg>
