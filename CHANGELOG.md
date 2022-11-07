@@ -10,6 +10,7 @@
 - add module containing the paper format specs ([#99])
 - include map scale as request parameter to the backend ([#107])
 - add module to generate qr-codes as svg & rlg ([#98])
+- add resources (compass and globes as SVG graphics) for map generation ([#101])
 
 ### Bug Fixes
 
@@ -42,5 +43,6 @@
 [#95]: https://github.com/GIScience/sketch-map-tool/pull/95
 [#98]: https://github.com/GIScience/sketch-map-tool/pull/98
 [#99]: https://github.com/GIScience/sketch-map-tool/pull/99
+[#101]: https://github.com/GIScience/sketch-map-tool/pull/101
 [#102]: https://github.com/GIScience/sketch-map-tool/pull/102
 [#107]: https://github.com/GIScience/sketch-map-tool/pull/107
