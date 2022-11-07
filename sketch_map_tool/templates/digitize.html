@@ -22,11 +22,11 @@
             Upload one or more scribbled SketchMaps
         </div>
 
-        <form action="#">
+        <form name="upload" action="/digitize/results" method="post" enctype=multipart/form-data>
 
             <div class="filebokz" data-max-size="524288000" data-allowed-extensions="jpeg,jpg,png">
-                <input type="file" id="file-3" name="file" multiple/>
-                <label for="file-3">
+                <input type="file" id="file" name="file" multiple/>
+                <label for="file">
                     <img id="cloud" class="no-files" src="/static/assets/upload_cloud.svg">
                     <strong class="no-files">Choose file(s)</strong>
                     <span class="no-files is-draggable">or drag them here</span>
@@ -45,7 +45,10 @@
                 <span class="info">Files: <span class="file-count"></span> (<span
                         class="size"></span>)&nbsp;&nbsp;&nbsp; Max total size: 500 MB</span>
             </div>
-            <button type="submit" class="">Upload...</button>
+            <button id="submitBtn" type="submit" class="">Upload...</button>
         </form>
+    <script>
+
+    </script>
     </main>
 {% endblock body %}
