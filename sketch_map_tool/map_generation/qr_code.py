@@ -16,6 +16,7 @@ def generate_qr_code(
     format_: str,
     orientation: str,
     size: Dict[str, int],
+    scale: float,
     version: str = __version__,
     timestamp: datetime = datetime.now(timezone.utc),
 ) -> BytesIO:
@@ -26,7 +27,7 @@ def generate_qr_code(
     """
     data: list = _to_text(version, timestamp, uuid, bbox, format_, orientation, size)
     qr_code = _make_qr_code(data)
-    return _as_report_lab_graphic(qr_code, format_)
+    return _as_report_lab_graphic(qr_code, scale)
 
 
 def _to_text(
@@ -63,8 +64,8 @@ def _make_qr_code(data: List[str]) -> BytesIO:
     return buffer
 
 
-def _as_report_lab_graphic(svg, format_):
+def _as_report_lab_graphic(svg, scale):
     rlg = svg2rlg(svg)
     # TODO: Use scale of PaperFormat class
-    rlg.scale(0.75, 0.75)
+    rlg.scale(scale, scale)
     return rlg

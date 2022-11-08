@@ -130,8 +130,7 @@ def download(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Respo
         pdf: BytesIO = task.get()
         return send_file(
             pdf,
-            # mimetype="application/pdf",
-            mimetype="image/png",
+            mimetype="application/pdf",
         )
     else:
         # TODO

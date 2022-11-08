@@ -7,6 +7,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
 from sketch_map_tool import celery_app as celery
+from sketch_map_tool.map_generation import generate_pdf
 from sketch_map_tool.wms import client as wms_client
 
 
@@ -22,11 +23,15 @@ def generate_sketch_map(
     print(size)
     raw = wms_client.get_map_image(bbox, size["width"], size["height"])
     map_image = wms_client.as_image(raw)
-
-    buffer = BytesIO()
-    map_image.save(buffer, format="png")
-    buffer.seek(0)
-    return buffer
+    map_pdf, _ = generate_pdf(
+        map_image,
+        self.request.id,
+        bbox,
+        format_,
+        orientation,
+        size,
+    )
+    return map_pdf
 
 
 @celery.task(bind=True)
