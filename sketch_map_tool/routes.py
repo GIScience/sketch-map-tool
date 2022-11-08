@@ -1,6 +1,6 @@
 import json
 from io import BytesIO
-from typing import Literal, Optional, Union
+from typing import Optional, Union
 from uuid import UUID, uuid4
 
 from celery.states import PENDING, RECEIVED, RETRY, STARTED, SUCCESS
@@ -10,6 +10,30 @@ from werkzeug.utils import secure_filename
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
 from sketch_map_tool.data_store import client as ds_client  # type: ignore
+
+CREATE_TYPES = ["quality-report", "sketch-map"]
+DIGITIZE_TYPES = ["digitized-data"]
+
+
+def validate_result_types(type_):
+    """validaton function for endpoint parameter result <type_>"""
+    allowed_types = CREATE_TYPES + DIGITIZE_TYPES
+
+    if type_ not in allowed_types:
+        raise NameError(
+            type_
+            + " is not a valid download type. Allowed values are: "
+            + allowed_types
+        )
+    pass
+
+
+def validate_uuid(uuid: str):
+    """validation function for endpoint parameter <uuid>"""
+    try:
+        _ = UUID(uuid, version=4)
+    except ValueError as error:
+        raise error
 
 
 @app.get("/")
@@ -60,11 +84,12 @@ def create_results_get(uuid: Optional[str] = None) -> Union[Response, str]:
     if uuid is None:
         return redirect(url_for("create"))
 
-    # TODO: validate uuid and notify use
     try:
-        _ = UUID(uuid, version=4)
+        validate_uuid(uuid)
     except ValueError:
-        raise
+        # TODO: notify user in an error template page
+        raise "The provided URL does not contain a valid UUID"
+
     return render_template("create-results.html")
 
 
@@ -118,31 +143,38 @@ def digitize_results_get(uuid: Optional[str] = None) -> Union[Response, str]:
     if uuid is None:
         return redirect(url_for("digitize"))
 
-    # TODO: validate uuid and notify use
     try:
-        _ = UUID(uuid, version=4)
+        validate_uuid(uuid)
     except ValueError:
-        raise
+        # TODO: notify user in an error template page
+        raise "The provided URL does not contain a valid UUID"
+
     return render_template("digitize-results.html")
 
 
 @app.get("/api/status/<uuid>/<type_>")
-def status(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Response:
-    """Get the status of a request by uuid and type."""
-    # Map request id and type to tasks id
-    raw = ds_client.get(str(uuid))
-    request_task = json.loads(raw)
-    # TODO: Factor out to own function (data store module)
+def status(uuid: str, type_: CREATE_TYPES + DIGITIZE_TYPES) -> Response:
     try:
-        task_id = request_task[type_]
-    except KeyError as error:
-        raise KeyError("Type has to be either quality-report or sketch-map") from error
+        validate_uuid(uuid)
+    except ValueError:
+        # TODO: notify user in an error template page
+        raise "The provided URL does not contain a valid UUID"
+
+    try:
+        validate_result_types(type_)
+    except NameError as error:
+        # TODO: notify user in an error template page
+        raise error
+
+    task_id = get_task_id(uuid, type_)
 
     # TODO: Factor out to own function (tasks module)
     if type_ == "quality-report":
         task = tasks.generate_quality_report.AsyncResult(task_id)
     elif type_ == "sketch-map":
         task = tasks.generate_sketch_map.AsyncResult(task_id)
+    elif type_ == "digitized-data":
+        task = tasks.generate_digitized_results.AsyncResult(task_id)
     else:
         # Unreachable
         raise ValueError
@@ -160,22 +192,64 @@ def status(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Respons
     return Response(json.dumps(body), status=http_status, mimetype="application/json")
 
 
-@app.route("/api/download/<uuid>/<type_>")
-def download(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Response:
+def get_task_id(uuid, type_):
+    # get task-id
+    # either from datastore (/create/results)
+    # or directly use uuid from celery (/digitize/results)
+    if type_ in CREATE_TYPES:
+        task_id = get_create_result_task_id(uuid, type_)
+    else:
+        task_id = get_digitize_result_task_id(uuid, type_)
+    return task_id
+
+
+def get_create_result_task_id(uuid, type_):
+    """Get celery task id from the sketchmap data store"""
+
     # Map request id and type to tasks id
     raw = ds_client.get(str(uuid))
+    if raw is None:
+        raise KeyError("There are no entries in the database for UUID: " + str(uuid))
     request_task = json.loads(raw)
     # TODO: Factor out to own function (data store module)
     try:
         task_id = request_task[type_]
+        return task_id
     except KeyError as error:
-        raise KeyError("Type has to be either quality-report or sketch-map") from error
+        raise KeyError("Type has to one of " + "string".join(CREATE_TYPES)) from error
+
+
+def get_digitize_result_task_id(uuid, type_):
+    return uuid
+
+
+@app.route("/api/download/<uuid>/<type_>")
+def download(uuid: str, type_: CREATE_TYPES + DIGITIZE_TYPES) -> Response:
+
+    # TODO catch and notify user in error template
+    validate_uuid(uuid)
+    validate_result_types(type_)
+
+    # get task-id
+    # either from datastore (/create/results)
+    # or directly use uuid from celery (/digitize/results)
+    if type_ in CREATE_TYPES:
+        task_id = get_create_result_task_id(uuid, type_)
+    else:
+        task_id = get_digitize_result_task_id(uuid, type_)
 
     # TODO: Factor out to own function (tasks module)
+    mimetype = "application/pdf"
     if type_ == "quality-report":
         task = tasks.generate_quality_report.AsyncResult(task_id)
+        mimetype = ""
     elif type_ == "sketch-map":
         task = tasks.generate_sketch_map.AsyncResult(task_id)
+        mimetype = "image/png"
+    elif type_ == "digitized-data":
+        task = tasks.generate_digitized_results.AsyncResult(task_id)
+        # TODO will be zip in the future, but now pdf for testing
+        # mimetype = "application/zip"
     else:
         # Unreachable
         pass
@@ -184,7 +258,7 @@ def download(uuid: str, type_: Literal["quality-report", "sketch-map"]) -> Respo
         return send_file(
             pdf,
             # mimetype="application/pdf",
-            mimetype="image/png",
+            mimetype,
         )
     else:
         # TODO
