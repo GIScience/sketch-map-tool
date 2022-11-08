@@ -16,10 +16,10 @@ import { SKETCH_MAP_MARGINS } from "./sketchMapMargins.js";
  */
 function createMap(target = "map", lonLat = [8.68, 49.41], zoom = 15) {
     const map = new Map({
-        target: "map",
+        target,
         view: new View({
-            center: fromLonLat([8.68, 49.41]),
-            zoom: 15,
+            center: fromLonLat(lonLat),
+            zoom,
         }),
         layers: [
             new Tile({
