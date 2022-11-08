@@ -5,6 +5,7 @@ from uuid import UUID, uuid4
 
 from celery.states import PENDING, RECEIVED, RETRY, STARTED, SUCCESS
 from flask import Response, redirect, render_template, request, send_file, url_for
+from werkzeug.utils import secure_filename
 
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
@@ -81,38 +82,48 @@ def digitize_results_post() -> Response:
     if "file" not in request.files:
         # flash('No file part')
         print("No files")
-        print(request.url)
         return redirect(url_for("digitize"))
     files = request.files.getlist("file")
     print(files)
-    # TODO store the files for processing
-    return redirect(url_for("digitize"))
+    # TODO FileStorage seems not to be serializable -> Error too much Recursion
+    # the map function transforms the list of FileStorage Objects to a list of bytes
+    # not sure if this is the best approach but is accepted by celery task
+    # if we want the filenames we must construct a list of tuples or dicts
+    new_files = list(
+        map(
+            lambda item: {
+                "filename": secure_filename(item.filename),
+                "mimetype": item.mimetype,
+                "bytes": BytesIO(item.read()),
+            },
+            files,
+        )
+    )
+    # close the temporary files in the FileStorage objects
+    map(lambda item: item.close(), files)
 
-    # files = json.loads(request.form["bbox"])
-    # format_ = request.form["format"]
-    # orientation = request.form["orientation"]
-    # size = json.loads(request.form["size"])
-    #
-    # # Tasks
-    # task_sketch_map = tasks.generate_sketch_map.apply_async(
-    #     args=(bbox, format_, orientation, size)
-    # )
-    # task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox,))
-    #
-    # # Unique id for current request
-    # uuid = uuid4()
-    #
-    # # Mapping of request id to multiple tasks id's
-    # request_task = {
-    #     str(uuid): json.dumps(
-    #         {
-    #             "sketch-map": str(task_sketch_map.id),
-    #             "quality-report": str(task_quality_report.id),
-    #         }
-    #     )
-    # }
-    # ds_client.set(request_task)
-    # return redirect(url_for("create_results_get", uuid=uuid))
+    print(new_files)
+    # TODO process the files
+    task_digitize = tasks.generate_digitized_results.apply_async(args=(new_files,))
+
+    # Unique id for current request created by celery
+    uuid = task_digitize.id
+
+    return redirect(url_for("digitize_results_get", uuid=uuid))
+
+
+@app.get("/digitize/results")
+@app.get("/digitize/results/<uuid>")
+def digitize_results_get(uuid: Optional[str] = None) -> Union[Response, str]:
+    if uuid is None:
+        return redirect(url_for("digitize"))
+
+    # TODO: validate uuid and notify use
+    try:
+        _ = UUID(uuid, version=4)
+    except ValueError:
+        raise
+    return render_template("digitize-results.html")
 
 
 @app.get("/api/status/<uuid>/<type_>")
