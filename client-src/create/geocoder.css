@@ -1,0 +1,11 @@
+.ol-geocoder.gcd-gl-container {
+    --line-height: 1em;
+}
+
+.ol-geocoder ul.gcd-gl-result {
+    max-height: 15.75em;
+}
+
+.gcd-gl-control {
+    background-color: unset;
+}

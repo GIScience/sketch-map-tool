@@ -2,6 +2,7 @@ import { Map, View } from "ol";
 import { Tile } from "ol/layer";
 import { fromLonLat } from "ol/proj";
 import { OSM } from "ol/source";
+import Geocoder from "@kirtandesai/ol-geocoder";
 import { PrintLayout, PAPER_FORMAT, ORIENTATION } from "@giscience/ol-print-layout-control";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins.js";
 
@@ -46,7 +47,26 @@ function addPrintLayoutControl(map) {
     return printLayoutControl;
 }
 
+/**
+ * Add a geocoder (place search) service to an Openlayers Map
+ * @param map
+ * @returns {Geocoder}
+ */
+function addGeocoderControl(map) {
+    const geocoder = new Geocoder("nominatim", {
+        provider: "osm",
+        lang: "en-US", // en-US, fr-FR
+        placeholder: "Search for ...",
+        targetType: "glass-button",
+        limit: 10,
+        keepOpen: true,
+    });
+    map.addControl(geocoder);
+    return geocoder;
+}
+
 export {
     createMap,
     addPrintLayoutControl,
+    addGeocoderControl,
 };
