@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block head %}
+{#    <script type="module" src="{{ url_for("static", filename="bundles/create-results.js") }}"></script>#}
+{% endblock head %}
+
+{% block header_message %}
+    <div class="circle" style="display: inline-block" ;>2</div>Paper to GIS:
+    <span style="font-size: smaller">Create Geotiffs, Vector data or All-In-One-QGIS projects</span>
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid horizontal step-arrows">
+        <div>Scan or photograph your scribbled SketchMaps</div>
+        <div>Upload your SketchMaps</div>
+        <div class="active">Download sketches as Geodata</div>
+    </div>
+    <main class="container">
+        <div id="main-message" class="sketchy h1 center-text">Your results are being processed ...
+        </div>
+
+        <div class="grid">
+            <div>
+                <article>
+                    <header>Raster</header>
+                    <span id="raster-data-status"></span>
+                    <br/><br/>
+                    <a id="raster-data-download-button" href="#" download aria-busy="true"
+                       role="button" disabled="disabled">Download ZIP</a>
+                </article>
+            </div>
+            <div>
+                <article>
+                    <header>Vector</header>
+                    <span id="vector-data-status"></span>
+                    <br/><br/>
+                    <a id="vector-data-download-button" href="#" download aria-busy="true"
+                       role="button"
+                       disabled="disabled">Download ZIP</a>
+                </article>
+            </div>
+            <div>
+                <article>
+                    <header>QQIS</header>
+                    <span id="qgis-data-status"></span>
+                    <br/><br/>
+                    <a id="qgis-data-download-button" href="#" download aria-busy="true"
+                       role="button"
+                       disabled="disabled">Download ZIP</a>
+                </article>
+            </div>
+        </div>
+    </main>
+{% endblock body %}
