@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Python: `^3.8`
+- Python: `^3.10`
 - Poetry: `1.2`
 - Node: `>=14`
 - Redis: `^7.0`
