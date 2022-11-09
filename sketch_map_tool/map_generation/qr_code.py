@@ -10,8 +10,7 @@ from reportlab.graphics.shapes import Drawing
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool import __version__
-from sketch_map_tool.map_generation.paper_format import PaperFormat
-from sketch_map_tool.models import Bbox, Size
+from sketch_map_tool.models import Bbox, PaperFormat, Size
 
 
 def qr_code(
