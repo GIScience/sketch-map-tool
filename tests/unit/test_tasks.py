@@ -54,11 +54,6 @@ def test_clip(sketch_map, map_frame):
     assert isinstance(result, np.ndarray)
 
 
-def test_georeference(map_frame, bbox):
-    result = tasks.georeference(map_frame, bbox)
-    assert isinstance(result, np.ndarray)
-
-
-def test_detect(map_frame):
-    result = tasks.detect(sketch_map_frame=map_frame)
-    assert isinstance(result, np.ndarray)
+def test_img_to_geotiff(map_frame, bbox):
+    result = tasks.img_to_geotiff(map_frame, bbox)
+    assert isinstance(result, BytesIO)

@@ -1,7 +1,7 @@
 import cv2
 import pytest
 
-from sketch_map_tool.upload_processing import map_cutter
+from sketch_map_tool.upload_processing.clipper import clip
 from tests import FIXTURE_DIR
 
 MAP_CUTTING_FIXTURE_DIR = FIXTURE_DIR / "map-cutting"
@@ -53,13 +53,13 @@ def get_correlation_of_histograms(img_1, img_2):
 
 def test_cut_out_map(template_upload_expected_easy):
     template, upload, expected = template_upload_expected_easy
-    result = map_cutter.cut_out_map(upload, template)
+    result = clip(upload, template)
     assert get_correlation_of_histograms(expected, result) >= 0.8
 
 
 def test_cut_out_low_resolution(template_upload_expected_low_resolution):
     template, upload, expected = template_upload_expected_low_resolution
-    result = map_cutter.cut_out_map(upload, template)
+    result = clip(upload, template)
     assert get_correlation_of_histograms(expected, result) >= 0.8
 
 
