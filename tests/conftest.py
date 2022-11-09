@@ -1,6 +1,6 @@
 import pytest
 
-from sketch_map_tool.map_generation.paper_format import A4
+from sketch_map_tool.definitions import A4
 from sketch_map_tool.models import Bbox, Size
 
 
