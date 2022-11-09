@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
 from sketch_map_tool.data_store import client as ds_client  # type: ignore
+from sketch_map_tool.models import Bbox, Size
 
 CREATE_TYPES = ["quality-report", "sketch-map"]
 DIGITIZE_TYPES = ["digitized-data"]
@@ -51,10 +52,12 @@ def create() -> str:
 def create_results_post() -> Response:
     """Create the sketch map"""
     # Request parameters
-    bbox = json.loads(request.form["bbox"])
+    bbox_raw = json.loads(request.form["bbox"])
+    bbox = Bbox(*bbox_raw)
     format_ = request.form["format"]
     orientation = request.form["orientation"]
-    size = json.loads(request.form["size"])
+    size_raw = json.loads(request.form["size"])
+    size = Size(**size_raw)
 
     # Tasks
     task_sketch_map = tasks.generate_sketch_map.apply_async(

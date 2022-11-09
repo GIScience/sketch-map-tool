@@ -1,6 +1,7 @@
 import os
 
 import toml
+
 from sketch_map_tool import __version__ as version
 
 
