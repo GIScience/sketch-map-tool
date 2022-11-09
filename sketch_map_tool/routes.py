@@ -58,10 +58,11 @@ def create_results_post() -> Response:
     orientation = request.form["orientation"]
     size_raw = json.loads(request.form["size"])
     size = Size(**size_raw)
+    scale = request.form["scale"]
 
     # Tasks
     task_sketch_map = tasks.generate_sketch_map.apply_async(
-        args=(bbox, format_, orientation, size)
+        args=(bbox, format_, orientation, size, scale)
     )
     task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox,))
 
