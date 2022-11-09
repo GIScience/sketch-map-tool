@@ -7,11 +7,12 @@ from celery.states import PENDING, RECEIVED, RETRY, STARTED, SUCCESS
 from flask import Response, redirect, render_template, request, send_file, url_for
 from werkzeug.utils import secure_filename
 
+from sketch_map_tool import definitions
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
 from sketch_map_tool.data_store import client as ds_client  # type: ignore
 from sketch_map_tool.definitions import ALLOWED_TYPES, DIGITIZE_TYPES
-from sketch_map_tool.models import Bbox, Size
+from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.validators import validate_type, validate_uuid
 
 
@@ -32,11 +33,12 @@ def create_results_post() -> Response:
     # Request parameters
     bbox_raw = json.loads(request.form["bbox"])
     bbox = Bbox(*bbox_raw)
-    format_ = request.form["format"]
+    format_raw = request.form["format"]
+    format_: PaperFormat = getattr(definitions, format_raw.upper())
     orientation = request.form["orientation"]
     size_raw = json.loads(request.form["size"])
     size = Size(**size_raw)
-    scale = request.form["scale"]
+    scale = float(request.form["scale"])
 
     # Tasks
     task_sketch_map = tasks.generate_sketch_map.apply_async(
@@ -183,7 +185,8 @@ def download(uuid: str, type_: ALLOWED_TYPES) -> Response:
         case "digitized-data":
             task = tasks.generate_digitized_results.AsyncResult(task_id)
             mimetype = "application/pdf"
-
+            # TODO:
+            # mimetype = "application/zip"
     if task.ready():
         file: BytesIO = task.get()
         return send_file(file, mimetype)
