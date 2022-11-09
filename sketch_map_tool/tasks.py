@@ -5,12 +5,10 @@ from celery.result import AsyncResult
 from numpy.typing import NDArray
 
 from sketch_map_tool import celery_app as celery
-from sketch_map_tool.map_generation import generate_pdf as generate_map_pdf
-from sketch_map_tool.map_generation.qr_code import qr_code
+from sketch_map_tool import map_generation, upload_processing
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
 from sketch_map_tool.oqt_analyses import get_report
-from sketch_map_tool.upload_processing import map_cutter
 from sketch_map_tool.wms import client as wms_client
 
 
@@ -26,7 +24,7 @@ def generate_sketch_map(
     """Generate a sketch map as PDF."""
     raw = wms_client.get_map_image(bbox, size)
     map_image = wms_client.as_image(raw)
-    qr_code_ = qr_code(
+    qr_code_ = map_generation.qr_code(
         self.request.id,
         bbox,
         format_,
@@ -34,7 +32,7 @@ def generate_sketch_map(
         size,
         scale,
     )
-    map_pdf, map_img = generate_map_pdf(
+    map_pdf, map_img = map_generation.generate_pdf(
         map_image,
         qr_code_,
         format_,
@@ -54,23 +52,12 @@ def generate_quality_report(bbox: Bbox) -> Union[BytesIO, AsyncResult]:
 
 
 @celery.task()
-def clip(
-    sketch_map: NDArray,
-    map_frame: NDArray,
-) -> Union[AsyncResult, NDArray]:
-    return map_cutter.cut_out_map(sketch_map, map_frame)
+def clip(sketch_map: NDArray, map_frame: NDArray) -> Union[AsyncResult, NDArray]:
+    return upload_processing.clip(sketch_map, map_frame)
 
 
 @celery.task()
-def georeference(
-    sketch_map_frame: NDArray,
-    bbox: Bbox,
-) -> Union[AsyncResult, NDArray]:
-    return sketch_map_frame
-
-
-@celery.task()
-def detect(
-    sketch_map_frame: NDArray,
-) -> Union[AsyncResult, NDArray]:
-    return sketch_map_frame
+def img_to_geotiff(
+    sketch_map_frame: NDArray, bbox: Bbox
+) -> Union[AsyncResult, BytesIO]:
+    return upload_processing.img_to_geotiff(sketch_map_frame, bbox)

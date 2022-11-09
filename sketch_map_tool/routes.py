@@ -144,11 +144,7 @@ def digitize_results_post() -> Response:
 
     task_group = group(
         [
-            (
-                tasks.clip.s(_to_cv2_img(file), map_frame)
-                | tasks.georeference.s(bbox)
-                | tasks.detect.s()
-            )
+            (tasks.clip.s(_to_cv2_img(file), map_frame) | tasks.img_to_geotiff.s(bbox))
             for file in files
         ]
     )
@@ -237,9 +233,7 @@ def download(uuid: str, type_: ALLOWED_TYPES) -> Response:
                 file: BytesIO = task.get()[0]  # return only the sketch map
         case "digitized-data":
             task = celery_app.GroupResult.restore(task_id)
-            mimetype = "text/plain"
+            mimetype = "image/tiff"
             if task.ready():
-                file: BytesIO = json.dumps({"results": str(task.get())})
-            # TODO:
-            # mimetype = "application/zip"
+                file: BytesIO = task.get()[0]
     return send_file(file, mimetype)

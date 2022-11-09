@@ -7,8 +7,9 @@ import numpy as np
 from numpy.typing import NDArray
 
 
-def cut_out_map(photo: NDArray, template: NDArray) -> NDArray:
-    """
+def clip(photo: NDArray, template: NDArray) -> NDArray:
+    """Clip out the map frame from the photo of the map using the original map frame.
+
     Use the BRISK implementation in OpenCV to detect a map on a given
     photo based on a given template with the map. The detected area of the
     image is warped to have the same alignment as the template.

@@ -36,15 +36,15 @@ def mock_tasks(
 
     mock_signature = MockSignature()
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.georeference.s",
+        "sketch_map_tool.routes.tasks.img_to_geotiff.s",
         lambda *args: mock_signature,
     )
 
-    mock_signature = MockSignature()
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.detect.s",
-        lambda *args: mock_signature,
-    )
+    # mock_signature = MockSignature()
+    # monkeypatch.setattr(
+    #     "sketch_map_tool.routes.tasks.detect.s",
+    #     lambda *args: mock_signature,
+    # )
 
     class MockTask:
         def __init__(self, uuid):
