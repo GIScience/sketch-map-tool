@@ -14,7 +14,12 @@ from sketch_map_tool.wms import client as wms_client
 
 @celery.task(bind=True)
 def generate_sketch_map(
-    self, bbox: Bbox, format_: str, orientation: str, size: Size
+    self,
+    bbox: Bbox,
+    format_: str,
+    orientation: str,
+    size: Size,
+    scale: float,
 ) -> Union[BytesIO, AsyncResult]:
     """Generate a sketch map as PDF."""
     raw = wms_client.get_map_image(bbox, size)
