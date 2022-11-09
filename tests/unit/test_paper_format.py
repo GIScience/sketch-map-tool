@@ -1,17 +1,7 @@
 import pytest
+from sketch_map_tool.models import PaperFormat
 
-from sketch_map_tool.map_generation.paper_format import (
-    A0,
-    A1,
-    A2,
-    A3,
-    A4,
-    A5,
-    LEGAL,
-    LETTER,
-    TABLOID,
-    PaperFormat,
-)
+from sketch_map_tool.definitions import A0, A1, A2, A3, A4, A5, LEGAL, LETTER, TABLOID
 
 
 @pytest.mark.parametrize(
