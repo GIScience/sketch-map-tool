@@ -22,6 +22,18 @@ npm install # Install local versions of esbuild, eslint and stylelint to build a
 # Hack away
 ```
 
+Under Linux and Mac OS you also need to install the zbar library:  
+  
+Mac OS X:
+```
+brew install zbar
+```
+
+Linux:
+```
+sudo apt-get install libzbar0
+```
+
 ### Redis
 
 ```bash
