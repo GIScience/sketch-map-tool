@@ -72,11 +72,7 @@ def test_digitize_result_post_no_files(client, mock_tasks, monkeypatch):
     #     # TODO: Should be 404
     #     # assert resp.status_code == 404
 
-    # TODO
-    # def test_digitize_results_invalid_uuid(client):
-    #     uuid = "foo"
-    #     resp = client.get("/digitize/results/{0}".format(uuid))def test_digitize_results_invalid_uuid(client):
+def test_digitize_results_invalid_uuid(client):
     uuid = "foo"
     resp = client.get("/digitize/results/{0}".format(uuid))
     assert resp.status_code == 500
-#     assert resp.status_code == 500
