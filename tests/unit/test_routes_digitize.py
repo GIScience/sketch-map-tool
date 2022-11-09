@@ -73,6 +73,7 @@ def test_digitize_results_uuid_not_found(client):
     # TODO: Should be 404
     # assert resp.status_code == 404
 
+
 def test_digitize_results_invalid_uuid(client):
     """A wrong uuid format should result in an error"""
     uuid = "foo"

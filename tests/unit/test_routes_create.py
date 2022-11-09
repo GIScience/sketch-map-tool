@@ -47,6 +47,7 @@ def test_create_result_post(client, mock_tasks, monkeypatch):
         "format": "A4",
         "orientation": "landscape",
         "size": '{"width":1867,"height":1587}',
+        "scale": "11545.36",
     }
     resp = client.post("/create/results", data=data)
     assert resp.status_code == 302

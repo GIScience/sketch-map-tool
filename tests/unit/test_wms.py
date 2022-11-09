@@ -6,12 +6,12 @@ from tests import vcr_app as vcr
 
 @vcr.use_cassette()
 def test_get_map_image(bbox, size):
-    response = client.get_map_image(bbox, size["width"], size["height"])
+    response = client.get_map_image(bbox, size)
     assert response.status_code == 200
 
 
 @vcr.use_cassette()
 def test_as_image(bbox, size):
-    response = client.get_map_image(bbox, size["width"], size["height"])
+    response = client.get_map_image(bbox, size)
     image = client.as_image(response)
     assert isinstance(image, PngImageFile)

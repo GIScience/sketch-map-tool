@@ -50,6 +50,13 @@ function bindFormToPrintLayoutControl(printLayoutControl) {
         const newSize = event.target.getPrintBoxSizeInDots(192);
         document.getElementById("size").value = JSON.stringify(newSize);
     });
+
+    // property: scale denominator
+    document.getElementById("scale").value = JSON.stringify(printLayoutControl.getScaleDenominator());
+    printLayoutControl.on("change", (event) => {
+        const newScale = event.target.getScaleDenominator();
+        document.getElementById("scale").value = JSON.stringify(newScale);
+    });
 }
 
 export {
