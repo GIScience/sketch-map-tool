@@ -3,8 +3,8 @@ from io import BytesIO
 from sketch_map_tool import tasks
 
 
-def test_generate_sketch_map(celery_worker, bbox, size):
-    task = tasks.generate_sketch_map.apply_async(args=(bbox, "", "", size, 0.0))
+def test_generate_sketch_map(celery_worker, bbox, format_, size):
+    task = tasks.generate_sketch_map.apply_async(args=(bbox, format_, "landscape", size, 0.0))
     result = task.wait()
     assert isinstance(result, BytesIO)
 
