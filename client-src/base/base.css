@@ -16,6 +16,7 @@
     /* TODO: important should not be necessary */
     --primary: #2344ca !important;  /* blue */
     --primary-hover: #162b83 !important;  /* dark blue */
+    --spacing: 0.5rem;
 }
 
 .h1 {
@@ -85,6 +86,25 @@ nav {
     font-size: 1.5rem;
 }
 
+.nav-link {
+    position: relative;
+}
+
+.nav-link::before {
+    position: absolute;
+    bottom: 2px;
+    width: 0;
+    height: 2px;
+    background-color: var(--heigit-red);
+    content: "";
+    transition: width 200ms;
+}
+
+.nav-link:hover::before {
+    width: 25px;
+    font-weight: bold;
+}
+
 .step-arrows {
     display: flex;
     flex-wrap: nowrap;
@@ -133,4 +153,45 @@ nav {
 
 .vertical.step-arrows > div.active {
     background-image: url("/static/assets/active_step_arrow_vertical.svg");
+}
+
+footer {
+    display: grid;
+    justify-items: center;
+    padding: 0 1rem;
+    background: #2e2e2e;
+
+    --color: #cbcbcb;
+}
+
+footer a {
+    color: var(--heigit-red);
+    transition: background-color 1s;
+}
+
+footer a:hover {
+    background-color: darkgray;
+}
+
+footer .widget-title {
+    position: relative;
+    padding-top: 1rem;
+    color: #cbcbcb;
+}
+
+footer .widget-title::before {
+    position: absolute;
+    bottom: -5px;
+    content: "";
+    width: 25px;
+    height: 2px;
+    background-color: var(--heigit-red);
+}
+
+footer #further-info ul {
+    margin-left: 1rem;
+}
+
+footer #further-info li {
+    line-height: 1rem;
 }
