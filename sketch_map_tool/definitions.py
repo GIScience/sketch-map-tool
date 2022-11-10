@@ -1,4 +1,11 @@
+from typing import Literal
+
 from sketch_map_tool.models import PaperFormat
+
+CREATE_TYPES = Literal["quality-report", "sketch-map"]
+DIGITIZE_TYPES = Literal["digitized-data"]
+ALLOWED_TYPES = Literal[CREATE_TYPES, DIGITIZE_TYPES]
+
 
 A0 = PaperFormat(
     "a0",
