@@ -51,10 +51,14 @@ def mock_async_results(request, monkeypatch):
         "sketch_map_tool.routes.tasks.generate_sketch_map.AsyncResult",
         lambda x: mock_task,
     )
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.tasks.generate_digitized_results.AsyncResult",
+        lambda x: mock_task,
+    )
 
 
 @pytest.mark.parametrize("status", (SUCCESS,))
-@pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
+@pytest.mark.parametrize("type_", ("sketch-map", "quality-report", "digitized-data"))
 def test_status_success(
     client,
     uuid,
@@ -72,7 +76,7 @@ def test_status_success(
 
 
 @pytest.mark.parametrize("status", (PENDING, RETRY, RECEIVED, STARTED))
-@pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
+@pytest.mark.parametrize("type_", ("sketch-map", "quality-report", "digitized-data"))
 def test_status_processing(
     client,
     uuid,
@@ -89,7 +93,7 @@ def test_status_processing(
 
 
 @pytest.mark.parametrize("status", (REJECTED, REVOKED, FAILURE))
-@pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
+@pytest.mark.parametrize("type_", ("sketch-map", "quality-report", "digitized-data"))
 def test_status_failure(
     client,
     uuid,
