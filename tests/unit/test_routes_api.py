@@ -62,12 +62,7 @@ def mock_async_results(request, monkeypatch):
 def test_status_success(
     client,
     uuid,
-    type_,# def test_digitize_results_uuid_not_found(client):
-    #     uuid = "16fd2706-8baf-433b-82eb-8c7fada847db"
-    #     resp = client.get("/digitize/results/{0}".format(uuid))
-    #     assert resp.status_code == 200
-    #     # TODO: Should be 404
-
+    type_,
     status,
     mock_request_task_mapping,
     mock_async_results,
