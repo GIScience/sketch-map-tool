@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import pytest
 
 from sketch_map_tool.definitions import A4
@@ -19,6 +21,11 @@ def size():
 @pytest.fixture
 def format_():
     return A4
+
+
+@pytest.fixture
+def uuid():
+    return str(uuid4())
 
 
 @pytest.fixture

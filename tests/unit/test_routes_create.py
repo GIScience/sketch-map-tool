@@ -53,14 +53,12 @@ def test_create_result_post(client, mock_tasks, monkeypatch):
     assert resp.status_code == 302
 
 
-def test_create_results_uuid(client):
-    uuid = "16fd2706-8baf-433b-82eb-8c7fada847da"
+def test_create_results_uuid(client, uuid):
     resp = client.get("/create/results/{0}".format(uuid))
     assert resp.status_code == 200
 
 
-def test_create_results_uuid_not_found(client):
-    uuid = "16fd2706-8baf-433b-82eb-8c7fada847db"
+def test_create_results_uuid_not_found(client, uuid):
     resp = client.get("/create/results/{0}".format(uuid))
     assert resp.status_code == 200
     # TODO: Should be 404
