@@ -1,3 +1,5 @@
+@import url("footer.css");
+
 @font-face {
     font-family: "Architects Daughter";
     src: url("/static/assets/fonts/ArchitectsDaughter/ArchitectsDaughter-Regular.ttf");
@@ -16,6 +18,18 @@
     /* TODO: important should not be necessary */
     --primary: #2344ca !important;  /* blue */
     --primary-hover: #162b83 !important;  /* dark blue */
+    --spacing: 0.5rem;
+}
+
+/* wrap whole page in a flexbox to fill up whitespace between main and footer */
+body {
+    height: 100vh;
+}
+
+#main-flex-box {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
 }
 
 .h1 {
@@ -83,6 +97,25 @@ nav {
     flex: 1 1 30rem;
     text-align: center;
     font-size: 1.5rem;
+}
+
+.nav-link {
+    position: relative;
+}
+
+.nav-link::before {
+    position: absolute;
+    bottom: 2px;
+    width: 0;
+    height: 2px;
+    background-color: var(--heigit-red);
+    content: "";
+    transition: width 200ms;
+}
+
+.nav-link:hover::before {
+    width: 25px;
+    font-weight: bold;
 }
 
 .step-arrows {
