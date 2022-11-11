@@ -17,6 +17,7 @@
     align-items: center;
     grid-row-gap: 3.5rem;
     padding: 0 3rem;
+    margin-bottom: 3rem;
 }
 
 #span-grid-row-for-arrows {

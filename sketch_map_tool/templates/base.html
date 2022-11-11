@@ -4,52 +4,59 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Sketch Map Tool</title>
-    <link rel="icon" type="image/x-icon" href="{{ url_for("static", filename="assets/favicon.ico") }}">
+    <link rel="icon" type="image/x-icon"
+          href="{{ url_for("static", filename="assets/favicon.ico") }}">
     <link rel="stylesheet" href="{{ url_for("static", filename="bundles/pico.css") }}">
     <link rel="stylesheet" href="{{ url_for("static", filename="bundles/base.css") }}">
     {% block head %} {% endblock head %}
 </head>
 <body>
-<nav>
-    <ul id="nav-left">
-        <li id="logo-item">
-            <a href="{{ url_for("index") }}">
-                <img alt="SketchMap Logo"
-                     src="{{ url_for('static', filename='assets/SketchMap_Logo_Icon.svg') }}">
-                <span style="color: var(--heigit-red)">SketchMap</span><span style="color: var(--dark-red)">Tool</span>
-            </a>
-        </li>
-        <li id="header-message-item">
-            <span class="sketchy">{% block header_message %}{% endblock header_message %}</span>
-        </li>
-    </ul>
-    <ul id="nav-right">
-        <li><a href="#" class="nav-link secondary">Help</a></li>
-        <li><a href="#" class="nav-link secondary">About</a></li>
-    </ul>
-</nav>
-{% block body %} {% endblock body %}
-<hr>
-<footer class="grid">
-    <div class="center-text">
-        <h4 class="widget-title">Contact</h4>
-        <p>
-            HeiGIT gGmbH<br>
-            Heidelberg, Germany<br>
-            Email: <a href="mailto:info@heigit.org">info@heigit.org</a><br>
-            Web: <a href="https://heigit.org" target="_blank">heigit.org</a><br><br>
-        </p>
-    </div>
-    <a href="https://heigit.org" target="_blank"><img src="/static/assets/logos_HeiGIT/HeiGIT_Logo_compact_white.svg"></a>
-    <div id="further-info">
-        <h4 class="widget-title">Further Information</h4>
-        <ul>
-            <li><a href="/help.html">Help / FAQs</a></li>
-            <li><a href="/about.html">About</a></li>
-            <li><a href="https://heigit.org/privacy-policy/" target="_blank">Privacy Policy</a></li>
-            <li><a href="https://heigit.org/imprint/" target="_blank">Imprint</a></li>
+<div id="main-flex-box">
+    <nav>
+        <ul id="nav-left">
+            <li id="logo-item">
+                <a href="{{ url_for("index") }}">
+                    <img alt="SketchMap Logo"
+                         src="{{ url_for('static', filename='assets/SketchMap_Logo_Icon.svg') }}">
+                    <span style="color: var(--heigit-red)">SketchMap</span><span
+                        style="color: var(--dark-red)">Tool</span>
+                </a>
+            </li>
+            <li id="header-message-item">
+                <span class="sketchy">{% block header_message %}{% endblock header_message %}</span>
+            </li>
         </ul>
+        <ul id="nav-right">
+            <li><a href="#" class="nav-link secondary">Help</a></li>
+            <li><a href="#" class="nav-link secondary">About</a></li>
+        </ul>
+    </nav>
+    <div id="flex-content">
+        {% block body %} {% endblock body %}
     </div>
-</footer>
+    <footer tabindex="0" class="grid">
+        <div class="center-text">
+            <h4 class="widget-title">Contact</h4>
+            <p>
+                HeiGIT gGmbH<br>
+                Heidelberg, Germany<br>
+                Email: <a href="mailto:info@heigit.org">info@heigit.org</a><br>
+                Web: <a href="https://heigit.org" target="_blank">heigit.org</a><br><br>
+            </p>
+        </div>
+        <a href="https://heigit.org" target="_blank"><img
+                src="/static/assets/logos_HeiGIT/HeiGIT_Logo_compact.svg"></a>
+        <div id="further-info">
+            <h4 class="widget-title">Further Information</h4>
+            <ul>
+                <li><a href="/help.html">Help / FAQs</a></li>
+                <li><a href="/about.html">About</a></li>
+                <li><a href="https://heigit.org/privacy-policy/" target="_blank">Privacy Policy</a>
+                </li>
+                <li><a href="https://heigit.org/imprint/" target="_blank">Imprint</a></li>
+            </ul>
+        </div>
+    </footer>
+</div>
 </body>
 </html>

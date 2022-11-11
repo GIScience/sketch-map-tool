@@ -1,3 +1,5 @@
+@import url("footer.css");
+
 @font-face {
     font-family: "Architects Daughter";
     src: url("/static/assets/fonts/ArchitectsDaughter/ArchitectsDaughter-Regular.ttf");
@@ -17,6 +19,17 @@
     --primary: #2344ca !important;  /* blue */
     --primary-hover: #162b83 !important;  /* dark blue */
     --spacing: 0.5rem;
+}
+
+/* wrap whole page in a flexbox to fill up whitespace between main and footer */
+body {
+    height: 100vh;
+}
+
+#main-flex-box {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
 }
 
 .h1 {
@@ -153,45 +166,4 @@ nav {
 
 .vertical.step-arrows > div.active {
     background-image: url("/static/assets/active_step_arrow_vertical.svg");
-}
-
-footer {
-    display: grid;
-    justify-items: center;
-    padding: 0 1rem;
-    background: #2e2e2e;
-
-    --color: #cbcbcb;
-}
-
-footer a {
-    color: var(--heigit-red);
-    transition: background-color 1s;
-}
-
-footer a:hover {
-    background-color: darkgray;
-}
-
-footer .widget-title {
-    position: relative;
-    padding-top: 1rem;
-    color: #cbcbcb;
-}
-
-footer .widget-title::before {
-    position: absolute;
-    bottom: -5px;
-    content: "";
-    width: 25px;
-    height: 2px;
-    background-color: var(--heigit-red);
-}
-
-footer #further-info ul {
-    margin-left: 1rem;
-}
-
-footer #further-info li {
-    line-height: 1rem;
 }
