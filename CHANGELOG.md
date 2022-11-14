@@ -11,6 +11,7 @@
 - include map scale as request parameter to the backend ([#107])
 - add module to generate qr-codes as svg & rlg ([#98])
 - add resources (compass and globes as SVG graphics) for map generation ([#101])
+- use postgres as celery result backend ([#116)]
 
 ### Bug Fixes
 
@@ -46,3 +47,4 @@
 [#101]: https://github.com/GIScience/sketch-map-tool/pull/101
 [#102]: https://github.com/GIScience/sketch-map-tool/pull/102
 [#107]: https://github.com/GIScience/sketch-map-tool/pull/107
+[#116]: https://github.com/GIScience/sketch-map-tool/pull/116
