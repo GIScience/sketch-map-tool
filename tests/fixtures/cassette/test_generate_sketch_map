@@ -11,7 +11,7 @@ interactions:
       User-Agent:
       - python-requests/2.28.1
     method: GET
-    uri: https://maps.heigit.org/osm-wms/service?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=FALSE&LAYERS=osm_auto%3Aall&WIDTH=1867&HEIGHT=1587&SRS=EPSG%3A3857&STYLES=&BBOX=964598.2387041415%2C6343922.275917276%2C967350.9272435782%2C6346262.602545459
+    uri: https://maps.heigit.org/osm-carto/service?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=FALSE&LAYERS=heigit%3Aosm-carto%402xx&WIDTH=1867&HEIGHT=1587&SRS=EPSG%3A3857&STYLES=&BBOX=964598.2387041415%2C6343922.275917276%2C967350.9272435782%2C6346262.602545459
   response:
     body:
       string: !!binary |
@@ -25,13 +25,13 @@ interactions:
       Connection:
       - Upgrade, Keep-Alive
       Content-length:
-      - '710535'
+      - '842207'
       Content-type:
       - image/png
       Date:
-      - Thu, 03 Nov 2022 12:58:08 GMT
+      - Mon, 14 Nov 2022 14:46:53 GMT
       Expires:
-      - Fri, 04 Nov 2022 12:58:08 GMT
+      - Tue, 15 Nov 2022 14:46:53 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
