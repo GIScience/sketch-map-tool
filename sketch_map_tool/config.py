@@ -23,7 +23,7 @@ def load_config_default() -> Dict[str, str]:
         "data-dir": get_default_data_dir(),
         "user-agent": "sketch-map-tool",
         "broker-url": "redis://localhost:6379",
-        "result-backend": "redis://localhost:6379",
+        "result-backend": "db+postgresql://smt:smt@localhost:5432",
         "data-store": "redis://localhost:6379",
         "wms-url": "https://maps.heigit.org/osm-carto/service?SERVICE=WMS&VERSION=1.1.1",
         "wms-layers": "heigit:osm-carto@2xx",
