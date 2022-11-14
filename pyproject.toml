@@ -16,11 +16,12 @@ numpy = "^1.23.2"
 pandas = "^1.4.3"
 reportlab = "^3.6.11"
 toml = "^0.10.2"
-celery = {extras = ["redis"], version = "^5.2.7"}
+celery = {extras = ["SQLAlchemy", "redis"], version = "^5.2.7"}
 redis = "^4.3.4"
 qrcode = "^7.3.1"
 svglib = "^1.4.1"
 PyMuPDF = {extras = ["Pillow"], version = "^1.21.0"}
+psycopg2 = "^2.9.5"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
