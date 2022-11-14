@@ -9,8 +9,8 @@ from reportlab.pdfgen import canvas
 
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool.map_generation import generate_pdf
-from sketch_map_tool.map_generation.qr_code import qr_code
 from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.qr_code import qr_code
 from sketch_map_tool.wms import client as wms_client
 
 

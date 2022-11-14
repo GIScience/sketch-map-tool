@@ -4,7 +4,7 @@ from uuid import uuid4
 
 from reportlab.graphics.shapes import Drawing
 
-from sketch_map_tool.map_generation.qr_code import (
+from sketch_map_tool.qr_code.qr_code import (
     _make_qr_code,
     _to_report_lab_graphic,
     _to_text,
@@ -45,7 +45,11 @@ def test_to_report_lab_graphic():
     assert isinstance(result, Drawing)
 
 
-def test_qr_code(bbox, format_, size,):
+def test_qr_code(
+    bbox,
+    format_,
+    size,
+):
     result = qr_code(
         str(uuid4()),
         bbox,
