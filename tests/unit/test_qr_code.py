@@ -2,6 +2,7 @@ from datetime import datetime
 from io import BytesIO, StringIO
 from uuid import uuid4
 
+import cv2
 from reportlab.graphics.shapes import Drawing
 
 from sketch_map_tool.qr_code.qr_code import (
@@ -9,7 +10,9 @@ from sketch_map_tool.qr_code.qr_code import (
     _to_report_lab_graphic,
     _to_text,
     qr_code,
+    read,
 )
+from tests import FIXTURE_DIR
 
 
 def test_to_text(bbox, format_, size):
@@ -59,3 +62,12 @@ def test_qr_code(
         75,
     )
     assert isinstance(result, Drawing)
+
+
+def test_read():
+    path = str(FIXTURE_DIR / "qrcode.png")
+    img = cv2.imread(path)
+    # cv2.imshow('image', img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+    read(img)

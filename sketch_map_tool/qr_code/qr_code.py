@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from io import BytesIO
 from typing import List
 
+import cv2
 import qrcode
 import qrcode.image.svg
 from reportlab.graphics.shapes import Drawing
@@ -38,6 +39,17 @@ def qr_code(
     qr_code_svg = _make_qr_code(data)
     qr_code_rlg = _to_report_lab_graphic(qr_code_svg, format_.qr_scale)
     return qr_code_rlg
+
+
+def read(img):
+    detector = cv2.QRCodeDetector()
+    success, points = detector.detect(img)
+    if success:
+        data, _ = detector.decode(img, points)
+        breakpoint()
+    else:
+        # TODO
+        raise Exception("Could not detect QR-Code.")
 
 
 def _to_text(
