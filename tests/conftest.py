@@ -24,6 +24,11 @@ def format_():
 
 
 @pytest.fixture
+def scale():
+    return 1000
+
+
+@pytest.fixture
 def uuid():
     return str(uuid4())
 
