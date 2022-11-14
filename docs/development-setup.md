@@ -6,6 +6,7 @@
 - Poetry: `1.2`
 - Node: `>=14`
 - Redis: `^7.0`
+- Postgres: `^15.0`
 
 This project uses [Poetry](https://python-poetry.org/docs/) for packaging and dependencies management. Please make sure it is installed on your system.
 
@@ -22,10 +23,11 @@ npm install # Install local versions of esbuild, eslint and stylelint to build a
 # Hack away
 ```
 
-### Redis
+### Celery Backend (Postgres) and Brocker (Redis)
 
 ```bash
 docker run --name redis -d -p 6379:6379 redis
+docker run --name postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres
 ```
 
 ## Usage
