@@ -25,7 +25,7 @@ def format_():
 
 @pytest.fixture
 def scale():
-    return 1000
+    return 1283.129
 
 
 @pytest.fixture
