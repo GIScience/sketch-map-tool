@@ -103,34 +103,7 @@ def generate_pdf(  # noqa: C901
     compass = get_compass(format_.compass_scale)
     globe_1, globe_2, globe_3, globe_4 = get_globes(format_.globe_scale)
     globe_length = 150 * format_.globe_scale
-
-    if scale * 10000 <= format_.right_margin - 1:
-        scale_length = scale * 10000
-        scale_text = ["5km", "10km"]
-    elif scale * 5000 <= format_.right_margin - 1:
-        scale_length = scale * 5000
-        scale_text = ["2.5km", "5km"]
-    elif scale * 2000 <= format_.right_margin - 1:
-        scale_length = scale * 2000
-        scale_text = ["1km", "2km"]
-    elif scale * 1000 <= format_.right_margin - 1:
-        scale_length = scale * 1000
-        scale_text = ["500m", "1km"]
-    elif scale * 500 <= format_.right_margin - 1:
-        scale_length = scale * 500
-        scale_text = ["250m", "500m"]
-    elif scale * 200 <= format_.right_margin - 1:
-        scale_length = scale * 200
-        scale_text = ["100m", "200m"]
-    elif scale * 100 <= format_.right_margin - 1:
-        scale_length = scale * 100
-        scale_text = ["50m", "100m"]
-    elif scale * 50 <= format_.right_margin - 1:
-        scale_length = scale * 50
-        scale_text = ["25m", "50m"]
-    else:
-        scale_length = scale * 10
-        scale_text = ["5m", "10m"]
+    scale_length, scale_text = get_scale(scale, width_max=(format_.right_margin - 1))
 
     # Add a border around the map
     canv_map.rect(0, 0, adjusted_width * cm, adjusted_height * cm, fill=0)
@@ -310,6 +283,46 @@ def get_compass(scale_factor: float) -> Drawing:
     compass = svg2rlg(RESOURCE_PATH / "north.svg")
     compass.scale(scale_factor, scale_factor)
     return compass
+
+
+def get_scale(scale: float, width_max: float) -> tuple[float, tuple[str, str]]:
+    """Get scale length [cm] and scale text.
+
+    :scale: Scale denominator
+    :width_max: Maximal width of the scale bar [cm]
+
+    E.g.
+    (scale bar) 1 cm = 11545.36 cm (scale denominator)
+    (scale bar) ? cm = 50000 cm    (factor)
+    """
+    for factor in (
+        1000000,  # 10 km
+        500000,
+        200000,
+        100000,  # 1 km
+        50000,
+        20000,
+        10000,  # 100 m
+        5000,
+        1000,  # 10 m
+    ):
+        scale_length = factor / scale
+        if scale_length <= width_max:
+            # Two parts of the black and white scale bar
+            if factor >= 100000:
+                # In kilometer
+                scale_text = (
+                    str((factor / 100000) / 2) + "km",
+                    str(factor / 100000) + "km",
+                )
+            else:
+                # In meter
+                scale_text = (
+                    str((factor / 100) / 2) + "m",
+                    str(factor / 100) + "m",
+                )
+            break
+    return (scale_length, scale_text)
 
 
 def pdf_page_to_img(pdf: BytesIO, page_id=0) -> BytesIO:
