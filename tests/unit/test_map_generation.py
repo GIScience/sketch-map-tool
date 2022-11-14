@@ -9,7 +9,6 @@ from reportlab.graphics.shapes import Drawing
 from reportlab.pdfgen import canvas
 
 from sketch_map_tool.definitions import A0, A1, A2, A3, A4, LEGAL, LETTER, TABLOID
-from sketch_map_tool.qr_code import qr_code as generate_qr_code
 from sketch_map_tool.map_generation.generate_pdf import (
     generate_pdf,
     get_compass,
@@ -17,6 +16,7 @@ from sketch_map_tool.map_generation.generate_pdf import (
     pdf_page_to_img,
 )
 from sketch_map_tool.models import PaperFormat
+from sketch_map_tool.qr_code import write as generate_qr_code
 from tests import FIXTURE_DIR
 
 

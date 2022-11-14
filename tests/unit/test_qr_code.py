@@ -3,20 +3,37 @@ from io import BytesIO, StringIO
 from uuid import uuid4
 
 import cv2
+import pytest
 from reportlab.graphics.shapes import Drawing
 
 from sketch_map_tool.qr_code.qr_code import (
-    _make_qr_code,
+    _endcode_data,
+    _make,
+    _resize,
     _to_report_lab_graphic,
-    _to_text,
-    qr_code,
-    read,
+    detect_and_decode,
+    generate,
 )
 from tests import FIXTURE_DIR
 
 
-def test_to_text(bbox, format_, size):
-    result = _to_text(
+@pytest.fixture
+def sketch_map():
+    return cv2.imread(str(FIXTURE_DIR / "sketch-map.png"))
+
+
+@pytest.fixture
+def qr_code_img():
+    return cv2.imread(str(FIXTURE_DIR / "qr-code.png"))
+
+
+@pytest.fixture
+def qr_code_img_big():
+    return cv2.imread(str(FIXTURE_DIR / "qr-code-big.png"))
+
+
+def test_encode_data(bbox, format_, size):
+    result = _endcode_data(
         str(uuid4()),
         bbox,
         format_,
@@ -29,8 +46,8 @@ def test_to_text(bbox, format_, size):
         assert isinstance(element, str)
 
 
-def test_make_qr_code():
-    result = _make_qr_code(["foo", "bar"])
+def test_make():
+    result = _make(["foo", "bar"])
     assert isinstance(result, BytesIO)
 
 
@@ -48,12 +65,12 @@ def test_to_report_lab_graphic():
     assert isinstance(result, Drawing)
 
 
-def test_qr_code(
+def test_generate(
     bbox,
     format_,
     size,
 ):
-    result = qr_code(
+    result = generate(
         str(uuid4()),
         bbox,
         format_,
@@ -64,10 +81,32 @@ def test_qr_code(
     assert isinstance(result, Drawing)
 
 
-def test_read():
-    path = str(FIXTURE_DIR / "qrcode.png")
-    img = cv2.imread(path)
-    # cv2.imshow('image', img)
+def test_resize(qr_code_img):
+    qr_code_resized = _resize(qr_code_img)
+    assert int(qr_code_img.shape[0] * 0.75) == qr_code_resized.shape[0]
+    assert int(qr_code_img.shape[1] * 0.75) == qr_code_resized.shape[1]
+
+
+def test_detect_and_decode(qr_code_img):
+    # Too manually check the image uncomment following code.
+    # cv2.imshow('image', qr_code_img)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
-    read(img)
+    detect_and_decode(qr_code_img)
+
+
+def test_detect_and_decode_sketch_map(sketch_map):
+    detect_and_decode(sketch_map)
+
+
+def test_read_detect_and_decode_success(qr_code_img_big):
+    """Test reading a QR-Code image which size is too big and need to be down-scaled ...
+
+    ... before content can be detected.
+    """
+    detect_and_decode(qr_code_img_big)
+
+
+def test_read_detect_and_decode_failure(qr_code_img_big):
+    with pytest.raises(Exception):
+        detect_and_decode(qr_code_img_big, depth=11)

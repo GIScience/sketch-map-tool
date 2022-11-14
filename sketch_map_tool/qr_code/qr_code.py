@@ -14,7 +14,7 @@ from sketch_map_tool import __version__
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 
 
-def qr_code(
+def generate(
     uuid: str,
     bbox: Bbox,
     format_: PaperFormat,
@@ -27,7 +27,7 @@ def qr_code(
 
     :uuid: The uuid of a celery task associated with the creation of the PDF map.
     """
-    data: list = _to_text(
+    data: list = _endcode_data(
         uuid,
         bbox,
         format_,
@@ -36,23 +36,39 @@ def qr_code(
         version,
         timestamp,
     )
-    qr_code_svg = _make_qr_code(data)
+    qr_code_svg = _make(data)
     qr_code_rlg = _to_report_lab_graphic(qr_code_svg, format_.qr_scale)
     return qr_code_rlg
 
 
-def read(img):
+def detect_and_decode(img, depth=0):
+    """Detect and decode QR-Code.
+
+    If QR-Code is falsely detected but no data exists recursively down scale QR-Code
+    image until data exists or maximal recursively depth is reached.
+
+    :img:
+    :depth: Maximal recursion depth
+    """
     detector = cv2.QRCodeDetector()
     success, points = detector.detect(img)
     if success:
         data, _ = detector.decode(img, points)
-        breakpoint()
+        if data != "":
+            return _decode_data(data)
+        elif data == "" and depth <= 10:
+            detect_and_decode(_resize(img), depth=depth + 1)
+        else:
+            raise Exception("Could not detect QR-Code.")
     else:
         # TODO
-        raise Exception("Could not detect QR-Code.")
+        if depth <= 13:
+            detect_and_decode(_resize(img), depth=depth + 1)
+        else:
+            raise Exception("Could not detect QR-Code.")
 
 
-def _to_text(
+def _endcode_data(
     uuid: str,
     bbox: Bbox,
     format_: PaperFormat,
@@ -61,6 +77,7 @@ def _to_text(
     version: str,
     timestamp: datetime,
 ) -> List[str]:
+    """Encode data as text."""
     return [
         uuid,
         json.dumps(asdict(bbox)),
@@ -72,7 +89,12 @@ def _to_text(
     ]
 
 
-def _make_qr_code(data: List[str]) -> BytesIO:
+def _decode_data(data):
+    """Decode data as Python objects."""
+    return data
+
+
+def _make(data: List[str]) -> BytesIO:
     """Generate a QR code with given arguments as encoded information."""
     buffer = BytesIO()
     qr = qrcode.QRCode(image_factory=qrcode.image.svg.SvgPathImage)
@@ -88,3 +110,10 @@ def _to_report_lab_graphic(svg: BytesIO, scale_factor: float) -> Drawing:
     rlg = svg2rlg(svg)
     rlg.scale(scale_factor, scale_factor)
     return rlg
+
+
+def _resize(img, scale: float = 0.75):
+    width = int(img.shape[1] * scale)
+    height = int(img.shape[0] * scale)
+    # resize image
+    return cv2.resize(img, (width, height), interpolation=cv2.INTER_AREA)

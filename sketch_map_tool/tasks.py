@@ -26,7 +26,7 @@ def generate_sketch_map(
     """Generate a sketch map as PDF."""
     raw = wms_client.get_map_image(bbox, size)
     map_image = wms_client.as_image(raw)
-    qr_code_ = qr_code(
+    qr_code_ = qr_code.generate(
         self.request.id,
         bbox,
         format_,
