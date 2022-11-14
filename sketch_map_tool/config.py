@@ -25,8 +25,8 @@ def load_config_default() -> Dict[str, str]:
         "broker-url": "redis://localhost:6379",
         "result-backend": "redis://localhost:6379",
         "data-store": "redis://localhost:6379",
-        "wms-url": "https://maps.heigit.org/osm-wms/service?SERVICE=WMS&VERSION=1.1.1",
-        "wms-layers": "osm_auto:all",
+        "wms-url": "https://maps.heigit.org/osm-carto/service?SERVICE=WMS&VERSION=1.1.1",
+        "wms-layers": "heigit:osm-carto@2xx",
     }
 
 

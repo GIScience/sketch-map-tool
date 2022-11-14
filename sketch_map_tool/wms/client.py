@@ -33,7 +33,7 @@ def get_map_image(bbox: Bbox, size: Size) -> Response:
         "STYLES": "",
         "BBOX": ",".join([str(cord) for cord in astuple(bbox)]),
     }
-    return requests.get(url, params, stream=True, timeout=50)
+    return requests.get(url, params, stream=True, timeout=600)
 
 
 def as_image(response: Response) -> PngImageFile:
