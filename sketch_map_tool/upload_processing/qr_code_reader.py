@@ -23,8 +23,7 @@ def read(img: "np.ndarray[Any, np.dtype[np.int64]]", depth=0) -> str:
     :raises QRCodeError: If no QR-code could be detected or if multiple QR-codes have
         been detected.
     """
-    decoded_objects = pyzbar.decode(img)
-
+    decoded_objects: list = pyzbar.decode(img)
     match len(decoded_objects):
         case 0:
             if depth <= 5:
