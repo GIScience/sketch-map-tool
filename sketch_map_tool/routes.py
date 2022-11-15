@@ -12,6 +12,7 @@ from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
 from sketch_map_tool.data_store import client as ds_client  # type: ignore
 from sketch_map_tool.definitions import ALLOWED_TYPES, DIGITIZE_TYPES
+from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.validators import validate_type, validate_uuid
 
@@ -172,9 +173,18 @@ def status(uuid: str, type_: ALLOWED_TYPES) -> Response:
         http_status = 200
         body["href"] = "/api/download/" + uuid + "/" + type_
     elif task.status in [PENDING, RETRY, RECEIVED, STARTED]:
-        http_status = 202
+        # Accepted for processing, but has not been completed
+        http_status = 202  # Accepted
     else:  # Incl. REJECTED, REVOKED, FAILURE
-        http_status = 500
+        try:
+            task.get(propagate=True)
+        except QRCodeError as error:
+            # The request was well-formed but was unable to be followed due to semantic
+            # errors.
+            http_status = 422  # Unprocessable Entity
+            body["error"] = str(error)
+        else:
+            http_status = 500  # Internal Server Error
     return Response(json.dumps(body), status=http_status, mimetype="application/json")
 
 
