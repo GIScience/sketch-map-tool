@@ -21,6 +21,16 @@ def index() -> str:
     return render_template("index2.html")
 
 
+@app.get("/help")
+def help() -> str:
+    return render_template("help.html")
+
+
+@app.get("/about")
+def about() -> str:
+    return render_template("about.html")
+
+
 @app.get("/create")
 def create() -> str:
     """Serve forms for creating a sketch map"""
