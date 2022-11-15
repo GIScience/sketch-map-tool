@@ -52,6 +52,7 @@ body {
     text-align: center;
     background: var(--heigit-red);
     margin-right: 0.5rem;
+    display: inline-block;
 }
 
 .center-text {
