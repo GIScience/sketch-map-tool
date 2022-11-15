@@ -12,6 +12,7 @@ from celery.states import (
     SUCCESS,
 )
 
+from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.routes import app
 
 
@@ -40,6 +41,36 @@ def mock_async_results(request, monkeypatch):
     class MockTask:
         def __init__(self, status):
             self.status = status
+
+        def get(*args, **kwargs):
+            pass
+
+    status = request.getfixturevalue("status")
+    mock_task = MockTask(status)
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.tasks.generate_quality_report.AsyncResult",
+        lambda x: mock_task,
+    )
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.tasks.generate_sketch_map.AsyncResult",
+        lambda x: mock_task,
+    )
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.tasks.generate_digitized_results.AsyncResult",
+        lambda x: mock_task,
+    )
+
+
+@pytest.fixture()
+def mock_async_results_error(request, monkeypatch):
+    """Mock celery tasks results."""
+
+    class MockTask:
+        def __init__(self, status):
+            self.status = status
+
+        def get(*args, **kwargs):
+            raise QRCodeError("Mock error")
 
     status = request.getfixturevalue("status")
     mock_task = MockTask(status)
@@ -92,9 +123,27 @@ def test_status_processing(
     assert "href" not in resp.json.keys()
 
 
-@pytest.mark.parametrize("status", (REJECTED, REVOKED, FAILURE))
+@pytest.mark.parametrize("status", (FAILURE,))
 @pytest.mark.parametrize("type_", ("sketch-map", "quality-report", "digitized-data"))
 def test_status_failure(
+    client,
+    uuid,
+    type_,
+    status,
+    mock_request_task_mapping,
+    mock_async_results_error,
+):
+    resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
+    assert resp.status_code == 422
+    assert resp.json["id"] == uuid
+    assert resp.json["status"] == str(status)
+    assert resp.json["error"] == "Mock error"
+    assert "href" not in resp.json.keys()
+
+
+@pytest.mark.parametrize("status", (REJECTED, REVOKED))
+@pytest.mark.parametrize("type_", ("sketch-map", "quality-report", "digitized-data"))
+def test_status_rejected_revoked(
     client,
     uuid,
     type_,
