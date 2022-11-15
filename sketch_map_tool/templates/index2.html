@@ -10,6 +10,27 @@
 
 {% block body %}
     <main>
+        <div id="teaser-message" class="flex-container">
+            <article class="center-text">
+                <div class="container">
+                    <p>
+                        The <strong>Sketch Map Tool</strong> is an
+                        easy-to-use tool for <strong>offline</strong> collection,
+                        digitization and
+                        georeferencing of <strong>spatial field data</strong>.
+                        <br>
+                        The tool facilitates <strong>participatory mapping</strong>, a
+                        process designed to integrate local knowledge in disaster risk management
+                        and
+                        communication.
+                    </p>
+                    <p>
+                        Get started right away, or read more about the project on the <a
+                            href="{{ url_for('about') }}">About</a> page!
+                    </p>
+                </div>
+            </article>
+        </div>
 
         <div id="main-grid" class="grid">
             {# row 1#}
@@ -20,7 +41,8 @@
             {#row 2#}
             <div class="h1 center-text">Create paper maps to collect data</div>
             <div></div>
-            <div class="h1 center-text">Paper to GIS:<br>Automagically create Geotiffs, Vector data or All-In-One-QGIS
+            <div class="h1 center-text">Paper to GIS:<br>Automagically create Geotiffs, Vector data
+                or All-In-One-QGIS
                 projects
             </div>
 

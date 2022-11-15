@@ -10,13 +10,34 @@
     }
 }
 
+#teaser-message {
+    margin-bottom: 3rem;
+}
+
+#teaser-message article {
+    background-image: url("/static/assets/images/old-black-background-grunge-texture-dark-wallpaper-blackboard-chalkboard-concrete_1258-48225.jpg");
+    background-color: #631017;
+    background-blend-mode: color-dodge;
+
+    --color: white;
+    --primary: var(--heigit-red);
+    --primary-hover: var(--heigit-red);
+
+    border-radius: unset;
+    margin-top: 0;
+}
+
+#teaser-message p:last-child {
+    margin: 0;
+}
+
 #main-grid {
     background: linear-gradient(#000, #000) center/2px 100% no-repeat;
     grid-template-columns: 1fr 4rem 1fr;
     justify-items: center;
     align-items: center;
     grid-row-gap: 3.5rem;
-    padding: 0 3rem;
+    padding: 1rem 3rem 0;
     margin-bottom: 3rem;
 }
 
