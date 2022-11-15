@@ -6,8 +6,14 @@
 - Poetry: `1.2`
 - Node: `>=14`
 - Redis: `^7.0`
+- zbar
+  - Mac OS X: `brew install zbar`
+  - Debian derivatives: `sudo apt-get install libzbar0`
+  - Fedora: `sudo dnf install zbar-devel`
+  - Windows: DLLs are included with the Windows Python wheels
 
 This project uses [Poetry](https://python-poetry.org/docs/) for packaging and dependencies management. Please make sure it is installed on your system.
+[ZBar](https://zbar.sourceforge.net/) is used to detect and decode QR-Codes and need to be installed on the system as well.
 
 ## Installation
 
@@ -20,18 +26,6 @@ poetry shell  # Spawns a shell within the virtual environment
 pre-commit install  # Install pre-commit hooks
 npm install # Install local versions of esbuild, eslint and stylelint to build and check JS and CSS
 # Hack away
-```
-
-Under Linux and Mac OS you also need to install the zbar library:  
-  
-Mac OS X:
-```
-brew install zbar
-```
-
-Linux:
-```
-sudo apt-get install libzbar0
 ```
 
 ### Redis
