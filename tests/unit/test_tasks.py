@@ -7,8 +7,8 @@ from tests import vcr_app as vcr
 
 
 @vcr.use_cassette()
-def test_generate_sketch_map(monkeypatch, bbox, size):
-    result = tasks.generate_sketch_map(bbox, "", "", size)
+def test_generate_sketch_map(monkeypatch, bbox, format_, size, scale):
+    result = tasks.generate_sketch_map(bbox, format_, "landscape", size, scale)
     assert isinstance(result, BytesIO)
 
 

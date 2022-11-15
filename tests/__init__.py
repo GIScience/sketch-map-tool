@@ -2,8 +2,8 @@ from pathlib import Path
 
 import vcr
 
-CASSETT_DIR = str(Path(__file__).parent / "fixtures" / "cassette")
 FIXTURE_DIR = Path(__file__).parent.resolve() / "fixtures"
+CASSETT_DIR = FIXTURE_DIR / "cassette"
 
 # dummy_png created with PIL and this command:
 # >>> output = io.BytesIO()
@@ -34,7 +34,7 @@ def replace_body(content_types, replacement):
 
 
 vcr_app = vcr.VCR(
-    cassette_library_dir=FIXTURE_DIR,
+    cassette_library_dir=str(CASSETT_DIR),
     record_mode="new_episodes",
     match_on=["uri", "method"],
     before_record_response=replace_body(["image/png"], DUMMY_PNG),

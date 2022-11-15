@@ -10,7 +10,7 @@ services:
     environment:
       SMT-DATA-STORE: "redis://redis:6379"
       SMT-BROKER-URL: "redis://redis:6379"
-      SMT-RESULT-BACKEND: "redis://redis:6379"
+      SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
     ports:
       - "127.0.0.1:8080:8080"
     entrypoint: ["poetry", "run", "waitress-serve", "sketch_map_tool.routes:app"]
@@ -23,7 +23,7 @@ services:
     environment:
       SMT-DATA-STORE: "redis://redis:6379"
       SMT-BROKER-URL: "redis://redis:6379"
-      SMT-RESULT-BACKEND: "redis://redis:6379"
+      SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
     entrypoint: ["poetry", "run", "celery", "--app", "sketch_map_tool.tasks", "worker"]
   redis:
     image: redis:7
@@ -31,5 +31,13 @@ services:
     entrypoint: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
     volumes:
         - redis_data:/data
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: smt
+      POSTGRES_USER: smt
+    volumes:
+        - pg_data:/var/lib/postgresql/data/pgdata
 volumes:
     redis_data:
+    pg_data:

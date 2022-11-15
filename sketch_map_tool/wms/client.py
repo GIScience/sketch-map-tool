@@ -1,6 +1,6 @@
 """Web Map Service Client"""
 
-from typing import List
+from dataclasses import astuple
 
 import requests
 from PIL import Image
@@ -8,11 +8,12 @@ from PIL.PngImagePlugin import PngImageFile
 from requests import Response
 
 from sketch_map_tool.config import get_config_value
+from sketch_map_tool.models import Bbox, Size
 
 
 # TODO: request errors in a response format which can be parsed.
 # Currently errors are rendered into the image.
-def get_map_image(bbox: List[float], width: float, height: float) -> Response:
+def get_map_image(bbox: Bbox, size: Size) -> Response:
     """Request a map image from the given WMS with the given arguments.
 
     :param bbox: Bounding box (EPSG: 3857)
@@ -26,13 +27,13 @@ def get_map_image(bbox: List[float], width: float, height: float) -> Response:
         "FORMAT": "image/png",
         "TRANSPARENT": "FALSE",
         "LAYERS": layers,
-        "WIDTH": width,
-        "HEIGHT": height,
+        "WIDTH": size.width,
+        "HEIGHT": size.height,
         "SRS": "EPSG:3857",
         "STYLES": "",
-        "BBOX": ",".join([str(cord) for cord in bbox]),
+        "BBOX": ",".join([str(cord) for cord in astuple(bbox)]),
     }
-    return requests.get(url, params, stream=True, timeout=50)
+    return requests.get(url, params, stream=True, timeout=600)
 
 
 def as_image(response: Response) -> PngImageFile:

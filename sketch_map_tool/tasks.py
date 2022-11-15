@@ -1,6 +1,6 @@
 from io import BytesIO
 from time import sleep
-from typing import Dict, List, Union
+from typing import List, Union
 
 from celery.result import AsyncResult
 from reportlab.lib.pagesizes import A4
@@ -8,26 +8,38 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
 from sketch_map_tool import celery_app as celery
+from sketch_map_tool.map_generation import generate_pdf
+from sketch_map_tool.map_generation.qr_code import qr_code
+from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.wms import client as wms_client
 
 
 @celery.task(bind=True)
 def generate_sketch_map(
     self,
-    bbox: List[float],
-    format_: str,
+    bbox: Bbox,
+    format_: PaperFormat,
     orientation: str,
-    size: Dict[str, float],
+    size: Size,
+    scale: float,
 ) -> Union[BytesIO, AsyncResult]:
     """Generate a sketch map as PDF."""
-    print(size)
-    raw = wms_client.get_map_image(bbox, size["width"], size["height"])
+    raw = wms_client.get_map_image(bbox, size)
     map_image = wms_client.as_image(raw)
-
-    buffer = BytesIO()
-    map_image.save(buffer, format="png")
-    buffer.seek(0)
-    return buffer
+    qr_code_ = qr_code(
+        self.request.id,
+        bbox,
+        format_,
+        orientation,
+        size,
+    )
+    map_pdf, _ = generate_pdf(
+        map_image,
+        qr_code_,
+        format_,
+        scale,
+    )
+    return map_pdf
 
 
 @celery.task(bind=True)
