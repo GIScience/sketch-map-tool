@@ -4,7 +4,6 @@ from datetime import datetime, timezone
 from io import BytesIO
 from typing import List
 
-import cv2
 import qrcode
 import qrcode.image.svg
 from reportlab.graphics.shapes import Drawing
@@ -14,7 +13,7 @@ from sketch_map_tool import __version__
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 
 
-def generate(
+def generate_qr_code(
     uuid: str,
     bbox: Bbox,
     format_: PaperFormat,
@@ -27,7 +26,7 @@ def generate(
 
     :uuid: The uuid of a celery task associated with the creation of the PDF map.
     """
-    data: list = _endcode_data(
+    data: list = _to_text(
         uuid,
         bbox,
         format_,
@@ -41,34 +40,7 @@ def generate(
     return qr_code_rlg
 
 
-def detect_and_decode(img, depth=0):
-    """Detect and decode QR-Code.
-
-    If QR-Code is falsely detected but no data exists recursively down scale QR-Code
-    image until data exists or maximal recursively depth is reached.
-
-    :img:
-    :depth: Maximal recursion depth
-    """
-    detector = cv2.QRCodeDetector()
-    success, points = detector.detect(img)
-    if success:
-        data, _ = detector.decode(img, points)
-        if data != "":
-            return _decode_data(data)
-        elif data == "" and depth <= 10:
-            detect_and_decode(_resize(img), depth=depth + 1)
-        else:
-            raise Exception("Could not detect QR-Code.")
-    else:
-        # TODO
-        if depth <= 13:
-            detect_and_decode(_resize(img), depth=depth + 1)
-        else:
-            raise Exception("Could not detect QR-Code.")
-
-
-def _endcode_data(
+def _to_text(
     uuid: str,
     bbox: Bbox,
     format_: PaperFormat,
@@ -89,11 +61,6 @@ def _endcode_data(
     ]
 
 
-def _decode_data(data):
-    """Decode data as Python objects."""
-    return data
-
-
 def _make(data: List[str]) -> BytesIO:
     """Generate a QR code with given arguments as encoded information."""
     buffer = BytesIO()
@@ -110,10 +77,3 @@ def _to_report_lab_graphic(svg: BytesIO, scale_factor: float) -> Drawing:
     rlg = svg2rlg(svg)
     rlg.scale(scale_factor, scale_factor)
     return rlg
-
-
-def _resize(img, scale: float = 0.75):
-    width = int(img.shape[1] * scale)
-    height = int(img.shape[0] * scale)
-    # resize image
-    return cv2.resize(img, (width, height), interpolation=cv2.INTER_AREA)
