@@ -1,51 +1,73 @@
-import pathlib
-
 import cv2
 import pytest
 
+from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.upload_processing import qr_reader
 from tests import FIXTURE_DIR
 
-
-@pytest.fixture
-def img_one_code():
-    return cv2.imread(str(FIXTURE_DIR / "qr-code-1-code.jpg"))
+QR_CODES_FIXTURE_DIR = FIXTURE_DIR / "qr-codes"
 
 
 @pytest.fixture
-def img_two_equal_codes():
-    return cv2.imread(str(FIXTURE_DIR / "qr-code-2-same-codes.jpg"))
+def qr_code_img():
+    return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code.png"))
 
 
 @pytest.fixture
-def img_two_different_codes():
-    return cv2.imread(str(FIXTURE_DIR / "qr-code-2-different-codes.jpg"))
+def qr_code_img_big():
+    return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code-big.png"))
 
 
 @pytest.fixture
-def img_no_code():
-    return cv2.imread(str(FIXTURE_DIR / "qr-code-no-code.jpg"))
+def qr_code_img_mutliple():
+    return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code-multiple.png"))
 
 
-def test_read(img_one_code):
+@pytest.fixture
+def qr_code_img_no():
+    return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code-no.png"))
+
+
+@pytest.fixture
+def qr_code_sketch_map():
+    return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code-sketch-map.png"))
+
+
+def test_read_qr_code(qr_code_img):
+    # Too manually check the image uncomment following code.
+    # cv2.imshow('image', qr_code_img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+    assert qr_reader.read(qr_code_img) == "Sketch Map Tool"
+
+
+def test_read_qr_code_sketch_map(qr_code_sketch_map):
     assert (
-        qr_reader.read(img_one_code)
-        == "-67.8323439,-9.99624296,-67.7974215,-9.96700015;2022-11-10;a4"
+        qr_reader.read(qr_code_sketch_map)
+        == '90b3345b-36cf-42ef-8bcc-c1b4cf0f8473{"lat_min": 965015.9352927138, "lon_min": 6344342.122209794, "lat_max": 967072.4894825463, "lon_max": 6346090.619231817}a4landscape{"width": 1867, "height": 1587}0.9.02022-11-14T15:54:36.109466+00:00'
     )
 
 
-def test_read_2_equal_codes(img_two_equal_codes):
-    assert (
-        qr_reader.read(img_two_equal_codes)
-        == "-67.8323439,-9.99624296,-67.7974215,-9.96700015;2022-11-10;a4"
-    )
+# TODO: Fixture does not need to be down scaled.
+def test_read_qr_code_big(qr_code_img_big):
+    """Test reading a QR-Code image which size is too big and need to be down-scaled ...
+
+    ... before content can be detected.
+    """
+    assert qr_reader.read(qr_code_img_big) == "Sketch Map Tool"
 
 
-def test_read_2_different_codes(img_two_different_codes):
-    with pytest.raises(qr_reader.MultipleDifferentQRCodesException):
-        qr_reader.read(img_two_different_codes)
+def test_read_qr_code_multiple(qr_code_img_mutliple):
+    with pytest.raises(QRCodeError):
+        qr_reader.read(qr_code_img_mutliple)
 
 
-def test_read_no_codes(img_no_code):
-    with pytest.raises(qr_reader.NoQRCodeException):
-        qr_reader.read(img_no_code)
+def test_read_qr_code_no(qr_code_img_no):
+    with pytest.raises(QRCodeError):
+        qr_reader.read(qr_code_img_no)
+
+
+def test_resize(qr_code_sketch_map):
+    resized = qr_reader._resize(qr_code_sketch_map)
+    assert int(qr_code_sketch_map.shape[0] * 0.75) == resized.shape[0]
+    assert int(qr_code_sketch_map.shape[1] * 0.75) == resized.shape[1]
