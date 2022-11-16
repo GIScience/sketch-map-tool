@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from io import BytesIO, StringIO
 from uuid import uuid4
@@ -5,16 +6,16 @@ from uuid import uuid4
 from reportlab.graphics.shapes import Drawing
 
 from sketch_map_tool.map_generation.qr_code import (
+    _encode_data,
     _make_qr_code,
     _to_report_lab_graphic,
-    _to_text,
     qr_code,
 )
 
 
-def test_to_text(bbox, format_, size):
-    result = _to_text(
-        str(uuid4()),
+def test_to_text(bbox, format_, size, uuid):
+    result = _encode_data(
+        uuid,
         bbox,
         format_,
         "landscape",
@@ -22,8 +23,8 @@ def test_to_text(bbox, format_, size):
         "0.1.0",
         datetime.now(),
     )
-    for element in result:
-        assert isinstance(element, str)
+    assert isinstance(result, str)
+    assert isinstance(json.loads(result), dict)
 
 
 def test_make_qr_code():
@@ -45,7 +46,11 @@ def test_to_report_lab_graphic():
     assert isinstance(result, Drawing)
 
 
-def test_qr_code(bbox, format_, size,):
+def test_qr_code(
+    bbox,
+    format_,
+    size,
+):
     result = qr_code(
         str(uuid4()),
         bbox,
