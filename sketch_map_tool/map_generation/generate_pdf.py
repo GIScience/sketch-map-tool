@@ -312,14 +312,14 @@ def get_scale(scale: float, width_max: float) -> tuple[float, tuple[str, str]]:
             if factor >= 100000:
                 # In kilometer
                 scale_text = (
-                    str((factor / 100000) / 2) + "km",
-                    str(factor / 100000) + "km",
+                    str(int((factor / 100000) / 2)) + "km",
+                    str(int(factor / 100000)) + "km",
                 )
             else:
                 # In meter
                 scale_text = (
-                    str((factor / 100) / 2) + "m",
-                    str(factor / 100) + "m",
+                    str(int((factor / 100) / 2)) + "m",
+                    str(int(factor / 100)) + "m",
                 )
             break
     return (scale_length, scale_text)
