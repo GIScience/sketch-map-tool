@@ -5,6 +5,8 @@ require("esbuild")
             "./client-src/pico/pico.css",
             "./client-src/base/base.css",
             "./client-src/index/index.css",
+            "./client-src/help/index.css",
+            "./client-src/about/index.css",
             "./client-src/create/index.js",
             "./client-src/create-results/index.js",
             "./client-src/digitize/index.js",

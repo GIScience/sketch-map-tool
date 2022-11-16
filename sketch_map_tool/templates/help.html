@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-    {#    <link rel="stylesheet" href="{{ url_for("static", filename="bundles/index.css") }}">#}
+    <link rel="stylesheet" href="{{ url_for("static", filename="bundles/help.css") }}">
 {% endblock head %}
 
 {% block header_message %}
@@ -32,70 +32,253 @@
             </summary>
             <details>
                 <summary>1.1 Define your Area of Interest</summary>
-                <p>
-                    Select your area of interest either by zooming into the map preview or with the
-                    search function in the sidebar.
-                </p>
-                <p>
-                    Choose from different paper formats and a suitable page orientation. The
-                    dashed red line represents the boundaries of your area of interest, which will
-                    be printed on the Sketch Map.
-                </p>
-                <p>
-                    <em>Recommendations:</em>
-                <ul>
-                    <li>Adapt the extent of your selected area to your use case. The following
-                        questions should be kept in mind:
-                    </li>
-                    <ul>
-                        <li>What should be mapped by the participants?</li>
-                        <li>What should be visible on the map and in what level of detail?</li>
-                        <li>Which areas should the map cover?</li>
-                    </ul>
-                    <li>Adapt the area extent to the paper size you want to use.</li>
-                    <li>The area is too big? Create multiple Sketch Maps.</li>
-                    <li>Aspects you might want to consider for the selection of the area of
-                        interest:
-                    </li>
-                    <ul>
-                        <li>Ensure orientation on the map: streets (and their names) and some points
-                            of interest (POIs) should be visible.
-                        </li>
-                        <li>Cover all relevant areas for your use case: e.g. if studying flooding,
-                            cover especially those areas near rivers, creeks and sinkholes as well
-                            as critical infrastructure which might be affected by the flood event.
-                        </li>
-                    </ul>
-                </ul>
+                <article>
+                    <p>
+                        Select your area of interest either by zooming into the map preview or with
+                        the
+                        search function in the sidebar.
+                    </p>
+                    <p>
+                        Choose from different paper formats and a suitable page orientation. The
+                        dashed red line represents the boundaries of your area of interest, which
+                        will
+                        be printed on the Sketch Map.
+                    </p>
 
-                </p>
+                    <h6><em>Recommendations:</em></h6>
+                    <ul>
+                        <li>Adapt the extstrongent of your selected area to your use case. The
+                            following
+                            questions should be kept in mind:
+                            <ul>
+                                <li>What should be mapped by the participants?</li>
+                                <li>What should be visible on the map and in what level of detail?
+                                </li>
+                                <li>Which areas should the map cover?</li>
+                            </ul>
+                        </li>
+                        <li>Adapt the area extent to the paper size you want to use.</li>
+                        <li>The area is too big? Create multiple Sketch Maps.</li>
+                        <li>Aspects you might want to consider for the selection of the area of
+                            interest:
+                            <ul>
+                                <li>Ensure orientation on the map: streets (and their names) and
+                                    some
+                                    points
+                                    of interest (POIs) should be visible.
+                                </li>
+                                <li>Cover all relevstrongant areas for your use case: e.g. if
+                                    studying
+                                    flooding,
+                                    cover especially those areas near rivers, creeks and sinkholes
+                                    as
+                                    well
+                                    as critical infrastructure which might be affected by the flood
+                                    event.
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </article>
 
             </details>
             <details>
                 <summary>1.2 Map Quality Check</summary>
-                <p>
+                <article>
+                    <p>
+                        The generated Sketch Map uses a base map layer of OpenStreetMap (OSM). The
+                        Map
+                        Quality Check helps to evaluate the fitness of the area of interest for the
+                        purpose of participatory mapping based on a quality analysis of the
+                        OpenStreetMap data with the HeiGIT
+                        <a href="https://oqt.ohsome.org">ohsome quality analyst - OQT</a>. The
+                        fitness
+                        report can be downloaded as PDF file by clicking on the blue button. It
+                        includes
+                        an evaluation of the suitability of the local OSM data and recommendations
+                        for
+                        the subsequent field data collection.
+                    </p>
 
-                </p>
+                    <h6><em>Recommendations:</em></h6>
+                    <ul>
+                        <li>
+                            Before you use these OSM based maps of your area of interest for
+                            participatory mapping, please have a look at the analysis of the Map
+                            Quality Check to ensure that participants can orientate properly on the
+                            paper maps.
+                        </li>
+                        <li>
+                            The analyses are focused on the Point of Interest (POI) density, the
+                            last-edit of amenities and streets, the used sources, as well as the
+                            saturation of amenity and the road network mapping. You can learn more
+                            about the analysis and each indicator in the generated PDF report.
+                        </li>
+                        <li>
+                            The report includes useful recommendations to ensure that the generated
+                            maps are suitable for participatory mapping.
+                        </li>
+                        {#                        TODO Check Missing Maps Link#}
+                        <li>
+                            In case the OSM data of your area of interest is not sufficient for the
+                            purpose of participatory mapping, you can consult the Missing Maps
+                            project (ADD HYPERLINK) to improve the OSM data before using the Sketch
+                            Map Tool.
+                        </li>
+                    </ul>
+                </article>
             </details>
             <details>
-                <summary>1.3. Export Sketch Map as PDF</summary>
+                <summary>1.3 Export Sketch Map as PDF</summary>
+                <article>
+                    <p>
+                        The generated Sketch Map for your selected area of interest can be
+                        downloaded as PDF file by clicking on the blue button.
+                    </p>
+                </article>
             </details>
         </details>
         <details>
             <summary><strong class="sketchy" style="color: var(--heigit-red)">THEN: </strong> &nbsp;Data
                 collection in the field
             </summary>
+            <article>
+                <p>
+                    At the moment the Sketch Map Tool detects red, blue and black markings. The tool
+                    does not differentiate between blue and black marking and combines these to one
+                    output result. The detection works best if the marked areas are filled out
+                    entirely. The tool cannot detect overlapping markings.
+                </p>
+                <h6><em>Recommendations:</em></h6>
+                <ul>
+                    <li>
+                        Use thick felt-tip pens with intense colours.
+                    </li>
+                    <li>
+                        If you have many participants or you want participants to provide a lot of
+                        different information, it is recommended to use individual Sketch Maps for
+                        each purpose/topic or per participant.
+                    </li>
+                    <li>
+                        Prepare the same set of pens for all participants/groups for better
+                        comparison of the results.
+                    </li>
+                    <li>
+                        If you collect additional information from the participants with other data
+                        collection methods such as Kobo Collect or ODK, add a number on the Sketch
+                        Map and save this number in the data collection questionnaire.
+                    </li>
+                </ul>
+            </article>
         </details>
         <details>
             <summary>
                 <div class="sketchy circle">2</div>
                 Paper to Geodata: Automatically digitize collected data
             </summary>
+            <details>
+                <summary>2.1 Scan or photograph your marked Sketch Maps</summary>
+                <article>
+                    {#                TODO: check max file size#}
+                    <p>
+                        After the field data collection, scan or photograph the marked Sketch Maps.
+                        The
+                        colour detection works best when scanning the Sketch Maps. When taking a
+                        picture
+                        instead, make sure that the QR-Code is complete and that all globes are
+                        visible
+                        on the image. The upload works for Jpg or png files and the files may not be
+                        larger than 50 MB.
+                    </p>
+                    <h6><em>Recommendations:</em></h6>
+                    <ul>
+                        <li>
+                            If you cannot scan, the photos must be taken from above in a 180-degree
+                            angle (parallel above the sketch map) to produce the best possible
+                            result.
+                        </li>
+                        <li>
+                            Please upload a complete image of the sketch map and do not try to cut
+                            out
+                            the map from the photo.
+                        </li>
+                        <li>
+                            Take care of the lighting conditions when taking a picture.
+                        </li>
+                    </ul>
+                </article>
+            </details>
+            <details>
+                <summary>2.2 Upload your Sketch Maps</summary>
+                <article>
+                    <p>
+                        Scan or photograph your marked Sketch Maps after data collection. Then,
+                        upload
+                        one or more marked Sketch Maps at once.
+                    </p>
+                    <ul>
+                        <li>
+                            It is also possible to upload more than one sketch map at the same time.
+                        </li>
+                        <li>
+                            If you are experiencing problems during the upload process, check out
+                            the
+                            FAQ section below.
+                        </li>
+                    </ul>
+                </article>
+            </details>
+            <details>
+                <summary>2.3 Download results as Geodata</summary>
+                <article>
+                    <p>
+                        Download the sketches in different geodata formats (Geotiffs, Vector data or
+                        All-In-One-QGIS projects).
+                    </p>
+                    <ul>
+                        <li>
+                            You can download the georeferenced Sketch Map as a GeoTIFF or the
+                            colour-detected shapefiles (for both red and blue/black markings) in one
+                            ZIP-folder.
+                        </li>
+                    </ul>
+                </article>
+            </details>
         </details>
         <details>
             <summary><strong class="sketchy" style="color: var(--heigit-red)">FINALLY: </strong>
                 Import Geodata in QGIS
             </summary>
+            <article>
+                <ul>
+                    <li>
+                        You can open the colour-detected shapefiles and the further analyses
+                        directly in a QGIS project.
+                    </li>
+                    <li>
+                        When you open the QGIS project it should look similar to this example and
+                        show all the markings on your sketch maps.
+                        <em>If anything looks strange, please check your uploaded sketch maps and
+                            if necessary, scan them again or take new pictures.</em>
+                    </li>
+                    <li>
+                        Opened as a new QGIS project the automatic colour-detected markings on the
+                        sketch map can be further analysed. One analysis is the count of overlapping
+                        areas between the markings.
+                        <em>
+                            The analysis should work automatically within the sketch map tool but if
+                            problems occur the analysis is a combination of the union and
+                            count-duplicates scripts → check Screenshots of Analysis tools
+                            (combined)
+                        </em>
+                    </li>
+                    <li>
+                        To finally see the analysed result of the count duplicates you need to adapt
+                        the <strong>symbology</strong> to your needs and the number of analysed sketch maps!
+                    </li>
+                </ul>
+            </article>
         </details>
         <h1 id="faq">FAQ</h1>
         <h1 id="additional-information">Additional Information</h1>
