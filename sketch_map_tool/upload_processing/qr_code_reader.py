@@ -5,10 +5,9 @@ Read QR codes from photos / scans
 import json
 from json import JSONDecodeError
 from types import MappingProxyType
-from typing import Any
 
 import cv2
-import numpy as np
+from numpy.typing import NDArray
 from pyzbar import pyzbar
 
 from sketch_map_tool import definitions
@@ -16,7 +15,7 @@ from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.models import Bbox, Size
 
 
-def read(img: "np.ndarray[Any, np.dtype[np.int64]]", depth=0) -> MappingProxyType:
+def read(img: NDArray, depth=0) -> MappingProxyType:
     """Detect and decode QR-Code.
 
     If QR-Code is falsely detected but no data exists recursively down scale QR-Code
