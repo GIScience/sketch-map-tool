@@ -275,12 +275,195 @@
                     </li>
                     <li>
                         To finally see the analysed result of the count duplicates you need to adapt
-                        the <strong>symbology</strong> to your needs and the number of analysed sketch maps!
+                        the <strong>symbology</strong> to your needs and the number of analysed
+                        sketch maps!
                     </li>
                 </ul>
             </article>
         </details>
+
+
         <h1 id="faq">FAQ</h1>
+        <details>
+            <summary>What are OSM data?</summary>
+            <article>
+                OpenStreetMap data are freely accessible geodata. You can find out more about it <a
+                    href="https://wiki.osm.org" target="_blank">here</a>.
+            </article>
+        </details>
+        <details>
+            <summary>What are the quality levels for OSM data used in the tool?</summary>
+            <article>
+                The OSM data are classified with a traffic light system. Green stands for good
+                suitability of the data, yellow for possible problems when carrying out a sketch map
+                study with OSM based sketch maps, and red for probable problems. Recommendations are
+                also given on what to consider based on the results.
+            </article>
+        </details>
+        <details>
+            <summary>Which analyses are performed and why?</summary>
+            <article>
+                You can read more about the analyses included in the Sketch Map Tool in <a
+                    href="https://doi.org/10.3390/ijgi10030130" target="_blank">this
+                paper</a>.
+            </article>
+        </details>
+        <details>
+            <summary>Why is it important to analyse the suitability of OSM data before creating a
+                sketch map?
+            </summary>
+            <article>
+                OSM data is used for the creation of the sketch map. If the OSM data in a study area
+                are lacking some important features, they are missing on the maps as well. Thus the
+                quality of the OSM data is directly related to the quality of the sketch maps. The
+                features might be relevant for participants to orientate on the map.
+            </article>
+        </details>
+        <details>
+            <summary>For which research questions can the Sketch Map Tool be used?</summary>
+            <article>
+                The Sketch Map Tool has been primarily developed for research questions related to
+                floodings. But as the quality indicators used like the density of landmarks,
+                currentness of the data, data completeness and important sources are also important
+                in other use cases, you can also use it to investigate a completely different
+                research question, as long as you check that it fits your purpose.
+            </article>
+        </details>
+        <details>
+            <summary>How does mapping work with the Sketch Map Tool?</summary>
+            <article>
+                The local population can for example draw flooded areas such as streets, parks, etc.
+                on the printed sketch map. The larger paper formats also allow to hold group
+                discussions about flooded areas. The maps with the markings can be photographed and
+                uploaded to the tool. The georeferenced TIFF and shape files can then be further
+                analysed or used.
+            </article>
+        </details>
+        <details>
+            <summary>How large can my study area be?</summary>
+            <article>
+                The study area needs to be smaller than 50km². If you need quality analyses for
+                larger areas, you can take a look at the
+                <a href="https://hex.ohsome.org" target="_blank">OSM History explorer</a>.
+            </article>
+        </details>
+        {#        TODO decription outdated?#}
+        <details>
+            <summary>Where can I find the results of my analysis?</summary>
+            <article>
+                When you start an analysis, a link to the status page for your request will be
+                shown. You can click on this link and either stay on this page or bookmark it and
+                return later. As soon as your results are ready, a download link will be shown on
+                this status page. If you click on it, you will see your results on a webpage, which
+                also includes a PDF download button that allows you to download the results as a
+                PDF.
+            </article>
+        </details>
+        <details>
+            <summary>Why are there a code and globes on the sketch maps?</summary>
+            <article>
+                These are required for geo-referencing. This is why it is important to have them on
+                the sketch maps. If the code cannot be detected by the tool, i.e. you see an error
+                message stating this; in this case you can also use the info next to 'code contents'
+                on the sketch map. This information can be entered manually under 'Problems with the
+                code detection?' on the upload page.
+            </article>
+        </details>
+        {#        TODO oudated#}
+        <details>
+            <summary>Where can I find the uploaded Sketch Maps?</summary>
+            <article>
+                As with the analyses, you will see a link to the status page for your request as
+                soon as the upload processing has started. When your result files are ready, you
+                will see download links on this status page.
+            </article>
+        </details>
+        {#        TODO check if needs update#}
+        <details>
+            <summary>Can I access my results at a later point of time?</summary>
+            <article>
+                Yes. If you bookmark the status page, you can go back to it later and still find a
+                working download link. But keep in mind that in future the results will likely be
+                regularly deleted, which is why you should always store your results locally as soon
+                as they are ready.
+            </article>
+        </details>
+        {#        TODO outdated#}
+        <details>
+            <summary>Can I see data that has been added to OSM just recently on the sketch maps and
+                in the analyses' results?
+            </summary>
+            <article>
+                For the sketch map generation the current OSM data are used and the new features
+                should appear on the maps, for the analyses the ohsome API by the HeiGIT is used,
+                which is updated regularly but might not contain very recently added data.
+            </article>
+        </details>
+        <details>
+            <summary>What do I have to pay attention to in the field?</summary>
+            <article>
+                Please make sure you do not accidentally mark the globes at the edge (they are
+                needed to improve the automatic map detection). But if someone accidentally marked
+                the globes, it is still possible to upload the sketch maps. Try the automatic
+                detection of the map boundaries first, and if this does not work, you can use the
+                workaround explained under 'Do the generated TIFF files look distorted?' on the
+                upload page. Use thicker felt tip pens with intense colours. Currently, for the
+                shapefile generation only red, blue and black are supported. Prepare the same set of
+                pens for all interviewers. Add a number on the sketch map and save this number in
+                the questionnaire as well, if you use one. You can find an overview of the important
+                points here.
+            </article>
+        </details>
+        <details>
+            <summary>How does the geo-referencing work?</summary>
+            <article>
+                You can find your answer in the
+                <a href="https://doi.org/10.3390/ijgi10030130"
+                   target="_blank">paper about the Sketch Map Tool
+                </a> in the paragraph about 'Image Processing'.
+            </article>
+        </details>
+        <details>
+            <summary>What do I have to consider when photographing the sketch maps to get the best
+                possible results?
+            </summary>
+            <article>
+                The images need to be in .jpg or .png format. The file may not be larger than 50MB.
+                The geo-referencing works best if you scan the marked sketch map with a resolution
+                of
+                300 dpi. The photos must be taken from above in a 180-degree angle (parallel above
+                the sketch map) to produce the best result. If the generated GeoTIFF files look
+                distorted, you can use the workaround explained under 'Do the generated TIFF files
+                look distorted?' on the upload page. An overview of important points can be found
+                here.
+            </article>
+        </details>
+        <details>
+            <summary>How do I check if the geo-referencing is correct?</summary>
+            <article>
+                You can open the TIFF file in a geographic information system (GIS), such as ArcGIS
+                or QGIS, to check this. If you load the file there and insert a basemap (for example
+                the OSM basemap) you can see if the geo-referencing has worked. The sketch map
+                should
+                match the base map. If this is not the case, you can find possible causes here.
+            </article>
+        </details>
+
+        <details>
+            <summary>Why does my generated TIFF file look strange?</summary>
+            <article>
+                Please first try to open the file in a geographic information system (GIS) such as
+                ArcGIS or QGIS. The georeferencing may have worked even if the TIFF file does not
+                look right. If it is still incorrect in the GIS, the map could not be properly
+                detected by the tool on the photo for which there are various possible reasons. For
+                example, the photo may have been taken from the wrong angle or the globes may have
+                been painted over. You can find a detailed list of possible sources of error here.
+                You can still upload your photo and digitize the markings without problems though.
+                Just follow the workaround explained under 'Do the generated TIFF files look
+                distorted?' on the upload page.
+            </article>
+        </details>
+
         <h1 id="additional-information">Additional Information</h1>
         <p>TODO</p>
 
