@@ -19,8 +19,6 @@ def cut_out_map(
 
     :param photo: Photograph of a sketch map
     :param template: Matching template of the sketch map
-    :param testing: If True, a visualization of the matches is
-                    being saved under visualization_matches.jpg
     :return: The resulting image (the cutout)
     """
     brisk = cv2.BRISK_create()
