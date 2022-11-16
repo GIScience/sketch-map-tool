@@ -18,7 +18,6 @@
     /* TODO: important should not be necessary */
     --primary: #2344ca !important;  /* blue */
     --primary-hover: #162b83 !important;  /* dark blue */
-    --spacing: 0.5rem;
 }
 
 /* wrap whole page in a flexbox to fill up whitespace between main and footer */
@@ -35,6 +34,7 @@ body {
 .h1 {
     font-size: 1.5rem;
     font-weight: bold;
+    margin-top: 1.5rem;
 }
 
 .sketchy {
@@ -52,6 +52,7 @@ body {
     text-align: center;
     background: var(--heigit-red);
     margin-right: 0.5rem;
+    display: inline-block;
 }
 
 .center-text {

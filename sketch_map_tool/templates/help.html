@@ -1,0 +1,475 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="bundles/help.css") }}">
+{% endblock head %}
+
+{% block header_message %}
+    Need some help?
+{% endblock header_message %}
+
+{% block body %}
+    <main class="container">
+        <p>
+            These <strong>step-by-step instructions</strong> guide you through the Sketch Map Tool
+            and provide useful recommendations.
+        </p>
+        <p>
+            Answers to the frequently asked questions can be found in the <a href="#faq">FAQ</a>
+            section below.
+        </p>
+        <p>
+            Learn more about possible applications and additional data collection methods that can
+            be linked to the tool in the Additonal Information section (INSERT ANCHOR TO ADDITONAL
+            INFORMATION).
+        </p>
+
+        <h1 id="step-by-step">Step-by-step instructions</h1>
+        <details>
+            <summary>
+                <div class="sketchy circle">1</div>
+                Create paper maps to collect data
+            </summary>
+            <details>
+                <summary>1.1 Define your Area of Interest</summary>
+                <article>
+                    <p>
+                        Select your area of interest either by zooming into the map preview or with
+                        the
+                        search function in the sidebar.
+                    </p>
+                    <p>
+                        Choose from different paper formats and a suitable page orientation. The
+                        dashed red line represents the boundaries of your area of interest, which
+                        will
+                        be printed on the Sketch Map.
+                    </p>
+
+                    <h6><em>Recommendations:</em></h6>
+                    <ul>
+                        <li>Adapt the extstrongent of your selected area to your use case. The
+                            following
+                            questions should be kept in mind:
+                            <ul>
+                                <li>What should be mapped by the participants?</li>
+                                <li>What should be visible on the map and in what level of detail?
+                                </li>
+                                <li>Which areas should the map cover?</li>
+                            </ul>
+                        </li>
+                        <li>Adapt the area extent to the paper size you want to use.</li>
+                        <li>The area is too big? Create multiple Sketch Maps.</li>
+                        <li>Aspects you might want to consider for the selection of the area of
+                            interest:
+                            <ul>
+                                <li>Ensure orientation on the map: streets (and their names) and
+                                    some
+                                    points
+                                    of interest (POIs) should be visible.
+                                </li>
+                                <li>Cover all relevstrongant areas for your use case: e.g. if
+                                    studying
+                                    flooding,
+                                    cover especially those areas near rivers, creeks and sinkholes
+                                    as
+                                    well
+                                    as critical infrastructure which might be affected by the flood
+                                    event.
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </article>
+
+            </details>
+            <details>
+                <summary>1.2 Map Quality Check</summary>
+                <article>
+                    <p>
+                        The generated Sketch Map uses a base map layer of OpenStreetMap (OSM). The
+                        Map
+                        Quality Check helps to evaluate the fitness of the area of interest for the
+                        purpose of participatory mapping based on a quality analysis of the
+                        OpenStreetMap data with the HeiGIT
+                        <a href="https://oqt.ohsome.org">ohsome quality analyst - OQT</a>. The
+                        fitness
+                        report can be downloaded as PDF file by clicking on the blue button. It
+                        includes
+                        an evaluation of the suitability of the local OSM data and recommendations
+                        for
+                        the subsequent field data collection.
+                    </p>
+
+                    <h6><em>Recommendations:</em></h6>
+                    <ul>
+                        <li>
+                            Before you use these OSM based maps of your area of interest for
+                            participatory mapping, please have a look at the analysis of the Map
+                            Quality Check to ensure that participants can orientate properly on the
+                            paper maps.
+                        </li>
+                        <li>
+                            The analyses are focused on the Point of Interest (POI) density, the
+                            last-edit of amenities and streets, the used sources, as well as the
+                            saturation of amenity and the road network mapping. You can learn more
+                            about the analysis and each indicator in the generated PDF report.
+                        </li>
+                        <li>
+                            The report includes useful recommendations to ensure that the generated
+                            maps are suitable for participatory mapping.
+                        </li>
+                        {#                        TODO Check Missing Maps Link#}
+                        <li>
+                            In case the OSM data of your area of interest is not sufficient for the
+                            purpose of participatory mapping, you can consult the Missing Maps
+                            project (ADD HYPERLINK) to improve the OSM data before using the Sketch
+                            Map Tool.
+                        </li>
+                    </ul>
+                </article>
+            </details>
+            <details>
+                <summary>1.3 Export Sketch Map as PDF</summary>
+                <article>
+                    <p>
+                        The generated Sketch Map for your selected area of interest can be
+                        downloaded as PDF file by clicking on the blue button.
+                    </p>
+                </article>
+            </details>
+        </details>
+        <details>
+            <summary><strong class="sketchy" style="color: var(--heigit-red)">THEN: </strong> &nbsp;Data
+                collection in the field
+            </summary>
+            <article>
+                <p>
+                    At the moment the Sketch Map Tool detects red, blue and black markings. The tool
+                    does not differentiate between blue and black marking and combines these to one
+                    output result. The detection works best if the marked areas are filled out
+                    entirely. The tool cannot detect overlapping markings.
+                </p>
+                <h6><em>Recommendations:</em></h6>
+                <ul>
+                    <li>
+                        Use thick felt-tip pens with intense colours.
+                    </li>
+                    <li>
+                        If you have many participants or you want participants to provide a lot of
+                        different information, it is recommended to use individual Sketch Maps for
+                        each purpose/topic or per participant.
+                    </li>
+                    <li>
+                        Prepare the same set of pens for all participants/groups for better
+                        comparison of the results.
+                    </li>
+                    <li>
+                        If you collect additional information from the participants with other data
+                        collection methods such as Kobo Collect or ODK, add a number on the Sketch
+                        Map and save this number in the data collection questionnaire.
+                    </li>
+                </ul>
+            </article>
+        </details>
+        <details>
+            <summary>
+                <div class="sketchy circle">2</div>
+                Paper to Geodata: Automatically digitize collected data
+            </summary>
+            <details>
+                <summary>2.1 Scan or photograph your marked Sketch Maps</summary>
+                <article>
+                    {#                TODO: check max file size#}
+                    <p>
+                        After the field data collection, scan or photograph the marked Sketch Maps.
+                        The
+                        colour detection works best when scanning the Sketch Maps. When taking a
+                        picture
+                        instead, make sure that the QR-Code is complete and that all globes are
+                        visible
+                        on the image. The upload works for Jpg or png files and the files may not be
+                        larger than 50 MB.
+                    </p>
+                    <h6><em>Recommendations:</em></h6>
+                    <ul>
+                        <li>
+                            If you cannot scan, the photos must be taken from above in a 180-degree
+                            angle (parallel above the sketch map) to produce the best possible
+                            result.
+                        </li>
+                        <li>
+                            Please upload a complete image of the sketch map and do not try to cut
+                            out
+                            the map from the photo.
+                        </li>
+                        <li>
+                            Take care of the lighting conditions when taking a picture.
+                        </li>
+                    </ul>
+                </article>
+            </details>
+            <details>
+                <summary>2.2 Upload your Sketch Maps</summary>
+                <article>
+                    <p>
+                        Scan or photograph your marked Sketch Maps after data collection. Then,
+                        upload
+                        one or more marked Sketch Maps at once.
+                    </p>
+                    <ul>
+                        <li>
+                            It is also possible to upload more than one sketch map at the same time.
+                        </li>
+                        <li>
+                            If you are experiencing problems during the upload process, check out
+                            the
+                            FAQ section below.
+                        </li>
+                    </ul>
+                </article>
+            </details>
+            <details>
+                <summary>2.3 Download results as Geodata</summary>
+                <article>
+                    <p>
+                        Download the sketches in different geodata formats (Geotiffs, Vector data or
+                        All-In-One-QGIS projects).
+                    </p>
+                    <ul>
+                        <li>
+                            You can download the georeferenced Sketch Map as a GeoTIFF or the
+                            colour-detected shapefiles (for both red and blue/black markings) in one
+                            ZIP-folder.
+                        </li>
+                    </ul>
+                </article>
+            </details>
+        </details>
+        <details>
+            <summary><strong class="sketchy" style="color: var(--heigit-red)">FINALLY: </strong>
+                Import Geodata in QGIS
+            </summary>
+            <article>
+                <ul>
+                    <li>
+                        You can open the colour-detected shapefiles and the further analyses
+                        directly in a QGIS project.
+                    </li>
+                    <li>
+                        When you open the QGIS project it should look similar to this example and
+                        show all the markings on your sketch maps.
+                        <em>If anything looks strange, please check your uploaded sketch maps and
+                            if necessary, scan them again or take new pictures.</em>
+                    </li>
+                    <li>
+                        Opened as a new QGIS project the automatic colour-detected markings on the
+                        sketch map can be further analysed. One analysis is the count of overlapping
+                        areas between the markings.
+                        <em>
+                            The analysis should work automatically within the sketch map tool but if
+                            problems occur the analysis is a combination of the union and
+                            count-duplicates scripts → check Screenshots of Analysis tools
+                            (combined)
+                        </em>
+                    </li>
+                    <li>
+                        To finally see the analysed result of the count duplicates you need to adapt
+                        the <strong>symbology</strong> to your needs and the number of analysed
+                        sketch maps!
+                    </li>
+                </ul>
+            </article>
+        </details>
+
+
+        <h1 id="faq">FAQ</h1>
+        <details>
+            <summary>What are OSM data?</summary>
+            <article>
+                OpenStreetMap data are freely accessible geodata. You can find out more about it <a
+                    href="https://wiki.osm.org" target="_blank">here</a>.
+            </article>
+        </details>
+        <details>
+            <summary>What are the quality levels for OSM data used in the tool?</summary>
+            <article>
+                The OSM data are classified with a traffic light system. Green stands for good
+                suitability of the data, yellow for possible problems when carrying out a sketch map
+                study with OSM based sketch maps, and red for probable problems. Recommendations are
+                also given on what to consider based on the results.
+            </article>
+        </details>
+        <details>
+            <summary>Which analyses are performed and why?</summary>
+            <article>
+                You can read more about the analyses included in the Sketch Map Tool in <a
+                    href="https://doi.org/10.3390/ijgi10030130" target="_blank">this
+                paper</a>.
+            </article>
+        </details>
+        <details>
+            <summary>Why is it important to analyse the suitability of OSM data before creating a
+                sketch map?
+            </summary>
+            <article>
+                OSM data is used for the creation of the sketch map. If the OSM data in a study area
+                are lacking some important features, they are missing on the maps as well. Thus the
+                quality of the OSM data is directly related to the quality of the sketch maps. The
+                features might be relevant for participants to orientate on the map.
+            </article>
+        </details>
+        <details>
+            <summary>For which research questions can the Sketch Map Tool be used?</summary>
+            <article>
+                The Sketch Map Tool has been primarily developed for research questions related to
+                floodings. But as the quality indicators used like the density of landmarks,
+                currentness of the data, data completeness and important sources are also important
+                in other use cases, you can also use it to investigate a completely different
+                research question, as long as you check that it fits your purpose.
+            </article>
+        </details>
+        <details>
+            <summary>How does mapping work with the Sketch Map Tool?</summary>
+            <article>
+                The local population can for example draw flooded areas such as streets, parks, etc.
+                on the printed sketch map. The larger paper formats also allow to hold group
+                discussions about flooded areas. The maps with the markings can be photographed and
+                uploaded to the tool. The georeferenced TIFF and shape files can then be further
+                analysed or used.
+            </article>
+        </details>
+        <details>
+            <summary>How large can my study area be?</summary>
+            <article>
+                The study area needs to be smaller than 50km². If you need quality analyses for
+                larger areas, you can take a look at the
+                <a href="https://hex.ohsome.org" target="_blank">OSM History explorer</a>.
+            </article>
+        </details>
+        {#        TODO decription outdated?#}
+        <details>
+            <summary>Where can I find the results of my analysis?</summary>
+            <article>
+                When you start an analysis, a link to the status page for your request will be
+                shown. You can click on this link and either stay on this page or bookmark it and
+                return later. As soon as your results are ready, a download link will be shown on
+                this status page. If you click on it, you will see your results on a webpage, which
+                also includes a PDF download button that allows you to download the results as a
+                PDF.
+            </article>
+        </details>
+        <details>
+            <summary>Why are there a code and globes on the sketch maps?</summary>
+            <article>
+                These are required for geo-referencing. This is why it is important to have them on
+                the sketch maps. If the code cannot be detected by the tool, i.e. you see an error
+                message stating this; in this case you can also use the info next to 'code contents'
+                on the sketch map. This information can be entered manually under 'Problems with the
+                code detection?' on the upload page.
+            </article>
+        </details>
+        {#        TODO oudated#}
+        <details>
+            <summary>Where can I find the uploaded Sketch Maps?</summary>
+            <article>
+                As with the analyses, you will see a link to the status page for your request as
+                soon as the upload processing has started. When your result files are ready, you
+                will see download links on this status page.
+            </article>
+        </details>
+        {#        TODO check if needs update#}
+        <details>
+            <summary>Can I access my results at a later point of time?</summary>
+            <article>
+                Yes. If you bookmark the status page, you can go back to it later and still find a
+                working download link. But keep in mind that in future the results will likely be
+                regularly deleted, which is why you should always store your results locally as soon
+                as they are ready.
+            </article>
+        </details>
+        {#        TODO outdated#}
+        <details>
+            <summary>Can I see data that has been added to OSM just recently on the sketch maps and
+                in the analyses' results?
+            </summary>
+            <article>
+                For the sketch map generation the current OSM data are used and the new features
+                should appear on the maps, for the analyses the ohsome API by the HeiGIT is used,
+                which is updated regularly but might not contain very recently added data.
+            </article>
+        </details>
+        <details>
+            <summary>What do I have to pay attention to in the field?</summary>
+            <article>
+                Please make sure you do not accidentally mark the globes at the edge (they are
+                needed to improve the automatic map detection). But if someone accidentally marked
+                the globes, it is still possible to upload the sketch maps. Try the automatic
+                detection of the map boundaries first, and if this does not work, you can use the
+                workaround explained under 'Do the generated TIFF files look distorted?' on the
+                upload page. Use thicker felt tip pens with intense colours. Currently, for the
+                shapefile generation only red, blue and black are supported. Prepare the same set of
+                pens for all interviewers. Add a number on the sketch map and save this number in
+                the questionnaire as well, if you use one. You can find an overview of the important
+                points here.
+            </article>
+        </details>
+        <details>
+            <summary>How does the geo-referencing work?</summary>
+            <article>
+                You can find your answer in the
+                <a href="https://doi.org/10.3390/ijgi10030130"
+                   target="_blank">paper about the Sketch Map Tool
+                </a> in the paragraph about 'Image Processing'.
+            </article>
+        </details>
+        <details>
+            <summary>What do I have to consider when photographing the sketch maps to get the best
+                possible results?
+            </summary>
+            <article>
+                The images need to be in .jpg or .png format. The file may not be larger than 50MB.
+                The geo-referencing works best if you scan the marked sketch map with a resolution
+                of
+                300 dpi. The photos must be taken from above in a 180-degree angle (parallel above
+                the sketch map) to produce the best result. If the generated GeoTIFF files look
+                distorted, you can use the workaround explained under 'Do the generated TIFF files
+                look distorted?' on the upload page. An overview of important points can be found
+                here.
+            </article>
+        </details>
+        <details>
+            <summary>How do I check if the geo-referencing is correct?</summary>
+            <article>
+                You can open the TIFF file in a geographic information system (GIS), such as ArcGIS
+                or QGIS, to check this. If you load the file there and insert a basemap (for example
+                the OSM basemap) you can see if the geo-referencing has worked. The sketch map
+                should
+                match the base map. If this is not the case, you can find possible causes here.
+            </article>
+        </details>
+
+        <details>
+            <summary>Why does my generated TIFF file look strange?</summary>
+            <article>
+                Please first try to open the file in a geographic information system (GIS) such as
+                ArcGIS or QGIS. The georeferencing may have worked even if the TIFF file does not
+                look right. If it is still incorrect in the GIS, the map could not be properly
+                detected by the tool on the photo for which there are various possible reasons. For
+                example, the photo may have been taken from the wrong angle or the globes may have
+                been painted over. You can find a detailed list of possible sources of error here.
+                You can still upload your photo and digitize the markings without problems though.
+                Just follow the workaround explained under 'Do the generated TIFF files look
+                distorted?' on the upload page.
+            </article>
+        </details>
+
+        <h1 id="additional-information">Additional Information</h1>
+        <p>
+            Learn more about possible applications and additional data collection methods that can
+            be linked to the tool, check out the Additional Information section
+        </p>
+
+
+    </main>
+{% endblock body %}

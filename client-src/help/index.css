@@ -1,0 +1,4 @@
+/* indent sub-accordeon */
+details > details {
+    margin-left: 4rem;
+}

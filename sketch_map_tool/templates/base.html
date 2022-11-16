@@ -27,8 +27,8 @@
             </li>
         </ul>
         <ul id="nav-right">
-            <li><a href="#" class="nav-link secondary">Help</a></li>
-            <li><a href="#" class="nav-link secondary">About</a></li>
+            <li><a href="{{ url_for('help') }}" class="nav-link secondary">Help</a></li>
+            <li><a href="{{ url_for('about') }}" class="nav-link secondary">About</a></li>
         </ul>
     </nav>
     <div id="flex-content">
@@ -49,8 +49,8 @@
         <div id="further-info">
             <h4 class="widget-title">Further Information</h4>
             <ul>
-                <li><a href="/help.html">Help / FAQs</a></li>
-                <li><a href="/about.html">About</a></li>
+                <li><a href="/templates/help.html">Help / FAQs</a></li>
+                <li><a href="/templates/about.html">About</a></li>
                 <li><a href="https://heigit.org/privacy-policy/" target="_blank">Privacy Policy</a>
                 </li>
                 <li><a href="https://heigit.org/imprint/" target="_blank">Imprint</a></li>
