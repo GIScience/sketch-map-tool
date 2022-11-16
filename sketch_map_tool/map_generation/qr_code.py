@@ -26,7 +26,7 @@ def qr_code(
 
     :uuid: The uuid of a celery task associated with the creation of the PDF map.
     """
-    data: list = _to_text(
+    data = _encode_data(
         uuid,
         bbox,
         format_,
@@ -40,7 +40,7 @@ def qr_code(
     return qr_code_rlg
 
 
-def _to_text(
+def _encode_data(
     uuid: str,
     bbox: Bbox,
     format_: PaperFormat,
@@ -49,23 +49,24 @@ def _to_text(
     version: str,
     timestamp: datetime,
 ) -> List[str]:
-    return [
-        uuid,
-        json.dumps(asdict(bbox)),
-        format_.title,
-        orientation,
-        json.dumps(asdict(size)),
-        version,
-        timestamp.isoformat(),
-    ]
+    return json.dumps(
+        {
+            "id": uuid,
+            "bbox": asdict(bbox),
+            "format": format_.title,
+            "orientation": orientation,
+            "size": asdict(size),
+            "version": version,
+            "timestamp": timestamp.isoformat(),
+        }
+    )
 
 
-def _make_qr_code(data: List[str]) -> BytesIO:
+def _make_qr_code(data: str) -> BytesIO:
     """Generate a QR code with given arguments as encoded information."""
     buffer = BytesIO()
     qr = qrcode.QRCode(image_factory=qrcode.image.svg.SvgPathImage)
-    for d in data:
-        qr.add_data(d)
+    qr.add_data(data)
     svg = qr.make_image()
     svg.save(buffer)
     buffer.seek(0)
