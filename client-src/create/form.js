@@ -3,8 +3,11 @@ import { SKETCH_MAP_MARGINS } from "./sketchMapMargins";
 import { fillSelectOptions } from "../shared";
 
 function bindFormToPrintLayoutControl(printLayoutControl) {
+    const paperFormats = { ...PAPER_FORMAT };
+    console.log(paperFormats);
+    delete paperFormats.BROADSHEET;
     // property: format
-    fillSelectOptions("format", PAPER_FORMAT);
+    fillSelectOptions("format", paperFormats);
 
     // set initial form value from ol-control
     document.getElementById("format").value = printLayoutControl.getFormat();
