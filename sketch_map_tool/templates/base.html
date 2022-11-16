@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -49,8 +49,8 @@
         <div id="further-info">
             <h4 class="widget-title">Further Information</h4>
             <ul>
-                <li><a href="/templates/help.html">Help / FAQs</a></li>
-                <li><a href="/templates/about.html">About</a></li>
+                <li><a href="{{ url_for('help') }}">Help / FAQs</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
                 <li><a href="https://heigit.org/privacy-policy/" target="_blank">Privacy Policy</a>
                 </li>
                 <li><a href="https://heigit.org/imprint/" target="_blank">Imprint</a></li>
