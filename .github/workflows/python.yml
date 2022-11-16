@@ -14,6 +14,9 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v3
+      - name: Install ZBar
+        run: |
+          sudo apt-get update && sudo apt-get install -y libzbar0
       # Setup Python and Poetry (Source Poetry GitHub Repository)
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4

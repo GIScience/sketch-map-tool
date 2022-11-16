@@ -2,7 +2,7 @@ from pathlib import Path
 
 import vcr
 
-FIXTURE_DIR = Path(__file__).parent / "fixtures"
+FIXTURE_DIR = Path(__file__).parent.resolve() / "fixtures"
 CASSETT_DIR = FIXTURE_DIR / "cassette"
 
 # dummy_png created with PIL and this command:

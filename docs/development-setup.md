@@ -7,8 +7,14 @@
 - Node: `>=14`
 - Redis: `^7.0`
 - Postgres: `^15.0`
+- zbar
+  - Mac OS X: `brew install zbar`
+  - Debian derivatives: `sudo apt-get install libzbar0`
+  - Fedora: `sudo dnf install zbar-devel`
+  - Windows: DLLs are included with the Windows Python wheels
 
 This project uses [Poetry](https://python-poetry.org/docs/) for packaging and dependencies management. Please make sure it is installed on your system.
+[ZBar](https://zbar.sourceforge.net/) is used to detect and decode QR-Codes and need to be installed on the system as well.
 
 ## Installation
 
