@@ -32,7 +32,7 @@ def cut_out_map(
     matcher = cv2.DescriptorMatcher_create(cv2.DESCRIPTOR_MATCHER_BRUTEFORCE_HAMMING)
     matches = list(matcher.match(desc1, desc2, None))
     matches.sort(key=lambda x: x.distance, reverse=False)
-    good_matches = matches[0: round(len(matches) * 0.05)]
+    good_matches = matches[0 : round(len(matches) * 0.05)]
     src_pts = np.float32([kpts1[m.queryIdx].pt for m in good_matches]).reshape(-1, 1, 2)
     dst_pts = np.float32([kpts2[m.trainIdx].pt for m in good_matches]).reshape(-1, 1, 2)
     homography_matrix, _ = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC)
