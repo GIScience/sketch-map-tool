@@ -82,37 +82,6 @@ A4 = PaperFormat(
     qr_contents_distances_not_rotated=(2, 3),
     qr_contents_distance_rotated=3,
 )
-# Not implemented in the web client
-# A5 = PaperFormat(
-#     "a5",
-#     width=21,
-#     height=14.8,
-#     right_margin=3,
-#     font_size=5,
-#     qr_scale=0.75,
-#     compass_scale=0.2,
-#     globe_scale=0.1,
-#     scale_height=0.25,
-#     qr_y=0.1,
-#     indent=0.1,
-#     qr_contents_distances_not_rotated=(2, 2),
-#     qr_contents_distance_rotated=2,
-# )
-LEGAL = PaperFormat(
-    "legal",
-    width=35.6,
-    height=21.6,
-    right_margin=5,
-    font_size=8,
-    qr_scale=0.75,
-    compass_scale=0.25,
-    globe_scale=0.125,
-    scale_height=0.33,
-    qr_y=0.1,
-    indent=0.25,
-    qr_contents_distances_not_rotated=(2, 3),
-    qr_contents_distance_rotated=3,
-)
 TABLOID = PaperFormat(
     "tabloid",
     width=43.2,
@@ -143,3 +112,34 @@ LETTER = PaperFormat(
     qr_contents_distances_not_rotated=(2, 3),
     qr_contents_distance_rotated=3,
 )
+# Not implemented in the web client
+# A5 = PaperFormat(
+#     "a5",
+#     width=21,
+#     height=14.8,
+#     right_margin=3,
+#     font_size=5,
+#     qr_scale=0.75,
+#     compass_scale=0.2,
+#     globe_scale=0.1,
+#     scale_height=0.25,
+#     qr_y=0.1,
+#     indent=0.1,
+#     qr_contents_distances_not_rotated=(2, 2),
+#     qr_contents_distance_rotated=2,
+# )
+# LEGAL = PaperFormat(
+#     "legal",
+#     width=35.6,
+#     height=21.6,
+#     right_margin=5,
+#     font_size=8,
+#     qr_scale=0.75,
+#     compass_scale=0.25,
+#     globe_scale=0.125,
+#     scale_height=0.33,
+#     qr_y=0.1,
+#     indent=0.25,
+#     qr_contents_distances_not_rotated=(2, 3),
+#     qr_contents_distance_rotated=3,
+# )
