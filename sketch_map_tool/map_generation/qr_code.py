@@ -2,7 +2,6 @@ import json
 from dataclasses import asdict
 from datetime import datetime, timezone
 from io import BytesIO
-from typing import List
 
 import qrcode
 import qrcode.image.svg
@@ -48,7 +47,7 @@ def _encode_data(
     size: Size,
     version: str,
     timestamp: datetime,
-) -> List[str]:
+) -> dict[str, str]:
     return json.dumps(
         {
             "id": uuid,
