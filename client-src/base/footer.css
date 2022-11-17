@@ -9,72 +9,38 @@ nav {
 footer {
     /* flex item */
     flex: 0 0 auto;
-    max-height: 5rem;
-    transition: max-height ease-in-out 200ms;
-    overflow: hidden;
 
-    /* grid container */
-    display: grid;
-    justify-items: center;
-    padding: 1.5rem 1rem 0;
-    background: #f0f3f5;
+    /* flex container */
+    display: flex;
+    gap: 1rem;
+    align-items: end;
+    line-height: 1rem;
+    padding: 0.3rem 1rem 0;
+    background-image: linear-gradient(to right, rgb(255 0 0 / 0%), #f0f3f5);
 
     --color: var(--dark-red);
     --font-size: 0.8rem;
 }
 
-footer:hover,
-footer:focus-within {
-    max-height: 80%;
-}
-
 footer img {
     height: 3em;
-    transition: height ease-in-out 200ms;
+
+    /* transition: height ease-in-out 200ms; */
 }
 
-footer:hover img,
-footer:focus-within img {
-    height: 100%;
-}
-
-@media (hover: none) and (pointer: coarse) {
-    footer {
-        max-height: unset;
-        overflow: visible;
-    }
-
-    footer img {
-        height: 6rem;
-    }
-}
-
-footer a {
-    color: var(--heigit-red);
-    transition: background-color 1s;
+footer > * {
+    /* flex: 1 1 auto; */
     text-align: center;
 }
 
-footer .widget-title {
-    position: relative;
-    padding-top: 1rem;
-    color: #a7a6a6;
-    font-size: calc(var(--font-size) * 0.8);
+footer a {
+    text-decoration: none;
 }
 
-footer .widget-title::before {
-    position: absolute;
-    bottom: -5px;
-    content: "";
-    width: 25px;
-    height: 2px;
-    background-color: var(--heigit-red);
+footer :first-child {
+    margin-left: auto;
 }
 
-footer #further-info ul {
-    margin-left: 1rem;
-}
-
-footer #further-info li {
-    margin-bottom: 0;
+footer :not(:last-child) {
+    padding-bottom: var(--nav-link-spacing-vertical);
 }

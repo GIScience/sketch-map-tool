@@ -13,11 +13,17 @@
 :root {
     --heigit-red: #ca2334;
     --dark-red: #7a000a;
-    --logo-text-size: 2.8rem;
+    --logo-text-size: 2rem;
 
     /* TODO: important should not be necessary */
     --primary: #2344ca !important;  /* blue */
     --primary-hover: #162b83 !important;  /* dark blue */
+}
+
+@media (min-width: 576px) {
+    :root {
+        --logo-text-size: 2.8rem;
+    }
 }
 
 /* wrap whole page in a flexbox to fill up whitespace between main and footer */
@@ -114,7 +120,8 @@ nav {
     transition: width 200ms;
 }
 
-.nav-link:hover::before {
+.nav-link:hover::before,
+.nav-link:focus::before {
     width: 25px;
     font-weight: bold;
 }
