@@ -8,7 +8,8 @@ from PIL import Image
 from reportlab.graphics.shapes import Drawing
 from reportlab.pdfgen import canvas
 
-from sketch_map_tool.definitions import A0, A1, A2, A3, A4, LEGAL, LETTER, TABLOID
+# TODO re-add LEGAL
+from sketch_map_tool.definitions import A0, A1, A2, A3, A4, LETTER, TABLOID
 from sketch_map_tool.map_generation import qr_code as generate_qr_code
 from sketch_map_tool.map_generation.generate_pdf import (
     generate_pdf,
@@ -66,7 +67,8 @@ def qr_code(bbox, format_, size):
     )
 
 
-@pytest.mark.parametrize("paper_format", [A0, A1, A2, A3, A4, LEGAL, LETTER, TABLOID])
+# TODO re-add LEGAL
+@pytest.mark.parametrize("paper_format", [A0, A1, A2, A3, A4, LETTER, TABLOID])
 @pytest.mark.parametrize("orientation", ["landscape", "portrait"])
 def test_generate_pdf(
     map_image,
