@@ -60,3 +60,29 @@ Bundle the code with:
 ```bash
 npm run build
 ```
+
+## Using PyCharm
+
+If you like to develop using an IDE like [PyCharm](https://www.jetbrains.com/pycharm/), you can use the PyCharm Run Configurations instead of running Python manually.
+
+1. Use the [Poetry builtin](https://www.jetbrains.com/help/pycharm/poetry.html) to create the virtual environment.
+2. If PyCharm asks, let it allow to install the npm and poetry/python packages.
+3. Run `pre-commit install` in the PyCharm terminal (see above).
+4. Add different configurations:
+   1. Docker Image Configuration:
+      * Image ID: `redis`
+      * Container name: `redis`
+      * Bind ports: `6379:6379`
+   2. Docker Image Configuration:
+      * Image ID: `postgres`
+      * Container name: `postgres`
+      * Bind ports: `5432:5432`
+   3. Flask server:
+      * Target type: Script path
+      * Target: `project_path/sketch_map_tool/routes.py`
+   4. Python:
+      * Module name: `celery`
+      * Parameters: `-A sketch_map_tool.tasks worker`
+      * Working directory: `project_path`
+      * Before launch: Run Another Configuration for both Docker Image Configurations
+5. For development: Run or Debug Celery and Flask Configurations
