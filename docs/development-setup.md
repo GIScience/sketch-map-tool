@@ -85,4 +85,13 @@ If you like to develop using an IDE like [PyCharm](https://www.jetbrains.com/pyc
       * Parameters: `-A sketch_map_tool.tasks worker`
       * Working directory: `project_path`
       * Before launch: Run Another Configuration for both Docker Image Configurations
+   5. Python tests — pytest:
+      * Script path: `project_path`
 5. For development: Run or Debug Celery and Flask Configurations
+
+### Testing
+
+To run all tests, run this command in the project path:
+```bash
+pytest .
+```
