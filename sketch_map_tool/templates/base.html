@@ -34,28 +34,14 @@
     <div id="flex-content">
         {% block body %} {% endblock body %}
     </div>
-    <footer tabindex="0" class="grid">
-        <div class="center-text">
-            <h4 class="widget-title">Contact</h4>
-            <p>
-                HeiGIT gGmbH<br>
-                Heidelberg, Germany<br>
-                Email: <a href="mailto:info@heigit.org">info@heigit.org</a><br>
-                Web: <a href="https://heigit.org" target="_blank">heigit.org</a><br><br>
-            </p>
-        </div>
+
+    <footer class="container-fluid">
+        <a class="nav-link secondary" href="https://heigit.org/privacy-policy/" target="_blank">Privacy
+            Policy</a>
+        <span>&middot;</span>
+        <a class="nav-link secondary" href="https://heigit.org/imprint/" target="_blank">Imprint</a>
         <a href="https://heigit.org" target="_blank"><img
-                src="/static/assets/logos_HeiGIT/HeiGIT_Logo_compact.svg"></a>
-        <div id="further-info">
-            <h4 class="widget-title">Further Information</h4>
-            <ul>
-                <li><a href="{{ url_for('help') }}">Help / FAQs</a></li>
-                <li><a href="{{ url_for('about') }}">About</a></li>
-                <li><a href="https://heigit.org/privacy-policy/" target="_blank">Privacy Policy</a>
-                </li>
-                <li><a href="https://heigit.org/imprint/" target="_blank">Imprint</a></li>
-            </ul>
-        </div>
+                src="/static/assets/logos_HeiGIT/HeiGIT_Logo_base.svg" alt="HeiGIT Logo"></a>
     </footer>
 </div>
 </body>
