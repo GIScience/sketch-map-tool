@@ -1,25 +1,23 @@
-from typing import List
-
 import requests
+
+from sketch_map_tool.models import Bbox
 
 OQT_API_URL = "https://oqt.ohsome.org/api"
 OQT_REPORT_NAME = "SketchmapFitness"
 
 
-def bbox_to_polygon(bbox: List[float]) -> dict:
-    if len(bbox) != 4:
-        raise ValueError("Bbox doesn't have 4 floating values.")
+def bbox_to_polygon(bbox: Bbox) -> dict:
     polygon = {
         "type": "Feature",
         "geometry": {
             "type": "Polygon",
             "coordinates": [
                 [
-                    [bbox[0], bbox[1]],
-                    [bbox[2], bbox[1]],
-                    [bbox[2], bbox[3]],
-                    [bbox[0], bbox[3]],
-                    [bbox[0], bbox[1]],
+                    [bbox.lon_min, bbox.lat_min],
+                    [bbox.lon_max, bbox.lat_min],
+                    [bbox.lon_max, bbox.lat_max],
+                    [bbox.lon_min, bbox.lat_max],
+                    [bbox.lon_min, bbox.lat_min],
                 ]
             ],
         },
@@ -27,7 +25,7 @@ def bbox_to_polygon(bbox: List[float]) -> dict:
     return polygon
 
 
-def get_report(bbox: List[float], include_svg: bool = True, include_html: bool = False):
+def get_report(bbox: Bbox, include_svg: bool = True, include_html: bool = False):
     url = OQT_API_URL + "/" + "report"
     parameters = {
         "name": OQT_REPORT_NAME,
