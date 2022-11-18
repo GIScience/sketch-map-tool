@@ -1,6 +1,6 @@
 from io import BytesIO
 from time import sleep
-from typing import List, Union
+from typing import Union
 
 from celery.result import AsyncResult
 from reportlab.lib.pagesizes import A4
@@ -11,6 +11,8 @@ from sketch_map_tool import celery_app as celery
 from sketch_map_tool.map_generation import generate_pdf as generate_map_pdf
 from sketch_map_tool.map_generation.qr_code import qr_code
 from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
+from sketch_map_tool.oqt_analyses import get_report
 from sketch_map_tool.wms import client as wms_client
 
 
@@ -45,20 +47,15 @@ def generate_sketch_map(
 @celery.task(bind=True)
 def generate_quality_report(
     self,
-    bbox: List[float],
+    bbox: Bbox,
 ) -> Union[BytesIO, AsyncResult]:
     """Generate a quality report as PDF.
 
     Fetch quality indicators from the OQT API
     """
     print(self.request.id)
-    sleep(10)  # simulate long running task (10s)
-    bytes_buffer = BytesIO()
-    canv = canvas.Canvas(bytes_buffer, pagesize=A4)
-    canv.drawString(100, 100, "Quality Report")
-    canv.save()
-    bytes_buffer.seek(0)
-    return bytes_buffer
+    report = get_report(bbox)
+    return generate_report_pdf(report)
 
 
 @celery.task(bind=True)
