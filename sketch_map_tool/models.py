@@ -5,10 +5,10 @@ from dataclasses import dataclass
 class Bbox:
     """Bounding Box in WGS 84 / Pseudo-Mercator (EPSG:3857)"""
 
-    lat_min: float
     lon_min: float
-    lat_max: float
+    lat_min: float
     lon_max: float
+    lat_max: float
 
 
 @dataclass(frozen=True, kw_only=True)
