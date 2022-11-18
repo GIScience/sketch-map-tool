@@ -8,7 +8,7 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
 from sketch_map_tool import celery_app as celery
-from sketch_map_tool.map_generation import generate_pdf
+from sketch_map_tool.map_generation import generate_pdf as generate_map_pdf
 from sketch_map_tool.map_generation.qr_code import qr_code
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.wms import client as wms_client
@@ -33,7 +33,7 @@ def generate_sketch_map(
         orientation,
         size,
     )
-    map_pdf, _ = generate_pdf(
+    map_pdf, _ = generate_map_pdf(
         map_image,
         qr_code_,
         format_,
