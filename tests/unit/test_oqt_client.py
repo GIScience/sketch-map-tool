@@ -18,5 +18,5 @@ def test_bbox_to_polygon():
 @vcr.use_cassette()
 def test_get_report():
     bbox = [8.625, 49.3711, 8.7334, 49.4397]
-    html = get_report(bbox)
-    assert html != ""
+    report = get_report(bbox)
+    assert isinstance(report, dict)
