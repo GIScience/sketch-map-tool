@@ -43,7 +43,9 @@ def create_results_post() -> Response:
     """Create the sketch map"""
     # Request parameters
     bbox_raw = json.loads(request.form["bbox"])
+    bbox_wgs84_raw = json.loads(request.form["bboxWGS84"])
     bbox = Bbox(*bbox_raw)
+    bbox_wgs84 = Bbox(*bbox_wgs84_raw)
     format_raw = request.form["format"]
     format_: PaperFormat = getattr(definitions, format_raw.upper())
     orientation = request.form["orientation"]
@@ -55,7 +57,7 @@ def create_results_post() -> Response:
     task_sketch_map = tasks.generate_sketch_map.apply_async(
         args=(bbox, format_, orientation, size, scale)
     )
-    task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox,))
+    task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox_wgs84,))
 
     # Unique id for current request
     uuid = str(uuid4())
