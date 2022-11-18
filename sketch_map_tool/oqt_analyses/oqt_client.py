@@ -27,13 +27,13 @@ def bbox_to_polygon(bbox: List[float]) -> dict:
     return polygon
 
 
-def get_report(bbox: List[float]):
+def get_report(bbox: List[float], include_svg: bool = False, include_html: bool = True):
     url = OQT_API_URL + "/" + "report"
     parameters = {
         "name": OQT_REPORT_NAME,
         "bpolys": bbox_to_polygon(bbox),
-        "includeSvg": False,
-        "includeHtml": True,
+        "includeSvg": include_svg,
+        "includeHtml": include_html,
         "flatten": False,
     }
     req = requests.post(url, json=parameters)
