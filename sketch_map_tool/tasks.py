@@ -53,12 +53,12 @@ def generate_quality_report(
     """
     print(self.request.id)
     sleep(10)  # simulate long running task (10s)
-    buffer = BytesIO()
-    canv = canvas.Canvas(buffer, pagesize=A4)
+    bytes_buffer = BytesIO()
+    canv = canvas.Canvas(bytes_buffer, pagesize=A4)
     canv.drawString(100, 100, "Quality Report")
     canv.save()
-    buffer.seek(0)
-    return buffer
+    bytes_buffer.seek(0)
+    return bytes_buffer
 
 
 @celery.task(bind=True)
@@ -67,10 +67,10 @@ def generate_digitized_results(self, files) -> Union[BytesIO, AsyncResult]:
     print(self.request.id)
     print(files[0]["filename"])
     sleep(3)  # simulate long running task (3s)
-    buffer = BytesIO()
-    canv = canvas.Canvas(buffer, pagesize=A4)
+    bytes_buffer = BytesIO()
+    canv = canvas.Canvas(bytes_buffer, pagesize=A4)
     canv.drawString(100, 100, "Digitized Results")
     canv.drawImage(ImageReader(files[0]["bytes"]), 100, 120, 400, None, None, True)
     canv.save()
-    buffer.seek(0)
-    return buffer
+    bytes_buffer.seek(0)
+    return bytes_buffer
