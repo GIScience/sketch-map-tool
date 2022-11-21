@@ -53,7 +53,6 @@ def generate_quality_report(
 
     Fetch quality indicators from the OQT API
     """
-    print(self.request.id)
     report = get_report(bbox)
     return generate_report_pdf(report)
 
