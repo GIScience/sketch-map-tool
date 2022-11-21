@@ -1,14 +1,120 @@
+import io
 from io import BytesIO
 
-from celery import canvas
+from reportlab.graphics.shapes import Circle, Drawing, Rect
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Table
+from svglib.svglib import svg2rlg
 
 
 def generate_pdf(report_properties: dict) -> BytesIO:
-    pdf_bytes = BytesIO()
-    canv_output = canvas.Canvas(pdf_bytes)
+    report_light_radius = 15
+    indicator_light_radius = 10
+    indicator_img_size = 200
+    indicator_table_margin = 10
 
-    text = canv_output.beginText()
-    text.textLines("New Quality Report")
-    canv_output.drawText(text)
+    metadata = report_properties["report"]["metadata"]
+    result = report_properties["report"]["result"]
 
-    return canv_output
+    bytes_output = BytesIO()
+    doc = SimpleDocTemplate(bytes_output)
+    styles = getSampleStyleSheet()
+
+    # Report Results
+    general_heading = Paragraph("Quality Report", styles["Heading1"])
+    general_heading.keepWithNext = True
+    report_description = Paragraph(metadata["description"])
+    report_heading = Paragraph("Report Result", styles["Heading2"])
+    report_heading.keepWithNext = True
+    report_traffic_light = generate_traffic_light(
+        result["label"], radius=report_light_radius
+    )
+    report_result_description = Paragraph(result["description"])
+    report_result_table = Table(
+        [[report_traffic_light, report_result_description]],
+        colWidths=[report_light_radius * 4, None],
+        style=[("VALIGN", (0, 0), (-1, -1), "MIDDLE")],
+    )
+    # Indicator Results
+    indicators_heading = Paragraph("Indicator Results", styles["Heading2"])
+    indicators_heading.keepWithNext = True
+    components = [
+        general_heading,
+        report_description,
+        report_heading,
+        report_result_table,
+        indicators_heading,
+    ]
+    for indicator in report_properties["indicators"]:
+        metadata = indicator["metadata"]
+        result = indicator["result"]
+
+        indicator_heading = Paragraph(
+            "{} ({})".format(indicator["metadata"]["name"], indicator["layer"]["name"]),
+            styles["Heading3"],
+        )
+        indicator_heading.keepWithNext = True
+        indicator_description = Paragraph(metadata["description"])
+        indicator_description.keepWithNext = True
+        # indicator_heading.keepWithNext = True
+        # convert svg string to bytes file-like object
+        svg_bytes = io.BytesIO(result["svg"].encode())
+        # fix width/height ratio because OQT only produces squared SVGs
+        indicator_traffic_light = generate_traffic_light(
+            result["label"], radius=indicator_light_radius
+        )
+        indicator_img = svg2rlg(svg_bytes)
+        indicator_img.scale(
+            indicator_img_size / indicator_img.width,
+            indicator_img_size / indicator_img.height,
+        )
+        indicator_img.width = indicator_img_size
+        indicator_img.height = indicator_img_size
+        indicator_result_description = Paragraph(result["description"])
+        indicator_result_table = Table(
+            [[indicator_traffic_light, indicator_img, indicator_result_description]],
+            colWidths=[
+                indicator_light_radius * 3 + indicator_table_margin,
+                indicator_img_size + indicator_table_margin,
+                None,
+            ],
+            style=[
+                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ],
+        )
+        indicator_components = [
+            indicator_heading,
+            indicator_description,
+            indicator_result_table,
+        ]
+        components += indicator_components
+
+    doc.build(components)
+    bytes_output.seek(0)
+    return bytes_output
+
+
+def generate_traffic_light(label, radius=10):
+    margin = radius / 2
+    width = radius * 2 + margin * 2
+    height = radius * 2 * 3 + margin * 4
+    light_colors = [colors.gray] * 3
+    match label:
+        case "green":
+            light_colors[0] = colors.green
+        case "yellow":
+            light_colors[1] = colors.yellow
+        case "red":
+            light_colors[2] = colors.red
+
+    drawing = Drawing(width, height)
+    drawing.add(Rect(0, 0, width, height, fillColor=colors.lightgrey))
+    x = radius + margin
+    y = radius + margin
+    for i, color in enumerate(light_colors):
+        drawing.add(Circle(x, y, radius, fillColor=color))
+        y += radius * 2 + margin
+
+    return drawing
