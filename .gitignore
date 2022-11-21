@@ -235,7 +235,10 @@ pylint_env/*
 
 # JS
 **/node_modules/
+sketch_map_tool/static/bundles
 # package-lock.json
 # package.json
+
+# config
 config/*
 !config/sample.config.yaml
