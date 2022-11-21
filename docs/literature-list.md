@@ -2,10 +2,12 @@
 
 On the `/about` page a list of "Related Publications" is displayed.
 
-To facilitate the maintenance of this list, its generation is automated by reading from a JSON-File
+To facilitate the maintenance of this list, it's generation is automated by reading from a JSON-File
 called 'literature.json'.
 
-This file can be found in the `./sketch_map_tool/data/` folder.
+This file can be found in the `data/` directory at the root of the Git repository.
+
+## Structure
 
 Each literature reference must at least have a `"citation"` text and can have an `"imgSrc"` and
 a `"url"` property.
@@ -22,11 +24,11 @@ Example:
 ]
 ```
 
-## citation
+### citation
 
 This is a mandatory plain-text, which should be formatted as to be displayed.
 
-## imgSrc
+### imgSrc
 
 Optionally a `"imgSrc"` can be given to be used as preview image next to the reference.
 
@@ -38,7 +40,7 @@ be put in the folder `./sketch_map_tool/static/assets/images/about/publications/
 
 A good size for the preview image would not be more than 300px in width.
 
-## url
+### url
 
 Optionally a `"url"` can be given that will be displayed as link and should point to the original
 article.
