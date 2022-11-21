@@ -1,10 +1,35 @@
+import json
+from pathlib import Path
 from typing import Literal
 
-from sketch_map_tool.models import PaperFormat
+from sketch_map_tool.config import get_config_value
+from sketch_map_tool.models import LiteratureReference, PaperFormat
 
 CREATE_TYPES = Literal["quality-report", "sketch-map"]
 DIGITIZE_TYPES = Literal["digitized-data"]
 ALLOWED_TYPES = Literal[CREATE_TYPES, DIGITIZE_TYPES]
+
+
+def get_literature_references() -> list[LiteratureReference]:
+    """Read a list of literature references from JSON stored on disk.
+
+    For image source either a web URL or a filename of a file in the publications folder
+    is expected.
+    """
+    p = Path(get_config_value("data-dir")) / "literature.json"
+    with open(p, "r") as f:
+        raw = json.load(f)
+    return [
+        LiteratureReference(
+            element["citation"],
+            element.get("imgSrc", None),
+            element.get("url", None),
+        )
+        for element in raw
+    ]
+
+
+LITERATURE_REFERENCES = get_literature_references()
 
 
 A0 = PaperFormat(

@@ -1,4 +1,7 @@
+import os
 from dataclasses import dataclass
+
+from werkzeug.utils import secure_filename
 
 
 @dataclass(frozen=True)
@@ -61,3 +64,21 @@ class PaperFormat:
     indent: float
     qr_contents_distances_not_rotated: tuple[int, int]
     qr_contents_distance_rotated: int
+
+
+@dataclass()
+class LiteratureReference:
+    citation: str
+    img_src: str | None = None
+    url: str | None = None
+
+    def __post_init__(self):
+        # if image is stored on disk
+        if self.img_src is not None and not self.img_src.strip().startswith("http"):
+            self.img_src = os.path.join(
+                "assets",
+                "images",
+                "about",
+                "publications",
+                secure_filename(self.img_src),
+            )

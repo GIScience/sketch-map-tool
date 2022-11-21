@@ -103,8 +103,8 @@
 
         {% for reference in literature %}
             <article>
-                {% if "imgSrc" in reference and reference.imgSrc|string|trim != "" %}
-                    <img class="preview" src="{{ reference.imgSrc }}" alt="Article preview image">
+                {% if reference.img_src %}
+                    <img class="preview" src="{{ reference.img_src }}" alt="Article preview image">
                 {% else %}
                     <div class="no preview"></div>
                 {% endif %}

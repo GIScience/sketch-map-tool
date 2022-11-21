@@ -1,12 +1,10 @@
 import json
-import os
 from io import BytesIO
-from typing import TypedDict, get_args
+from typing import get_args
 from uuid import uuid4
 
 from celery.states import PENDING, RECEIVED, RETRY, STARTED, SUCCESS
 from flask import Response, redirect, render_template, request, send_file, url_for
-from typing_extensions import NotRequired
 from werkzeug.utils import secure_filename
 
 from sketch_map_tool import definitions
@@ -15,9 +13,12 @@ from sketch_map_tool import tasks
 from sketch_map_tool.data_store import client as ds_client  # type: ignore
 from sketch_map_tool.definitions import ALLOWED_TYPES, DIGITIZE_TYPES
 from sketch_map_tool.exceptions import QRCodeError
-from sketch_map_tool.helper_modules.helper import get_project_root
 from sketch_map_tool.models import Bbox, PaperFormat, Size
-from sketch_map_tool.validators import validate_type, validate_uuid
+from sketch_map_tool.validators import (
+    validate_literature_reference,
+    validate_type,
+    validate_uuid,
+)
 
 
 @app.get("/")
@@ -32,44 +33,11 @@ def help() -> str:
 
 @app.get("/about")
 def about() -> str:
-    class LiteratureReference(TypedDict):
-        imgSrc: NotRequired[str]
-        citation: str
-        url: NotRequired[str]
-
-    def generate_literature_preview_url(
-        reference: LiteratureReference,
-    ) -> LiteratureReference:
-        """either use web url as is or expand simple filename to be searched in publications
-        folder"""
-        if "imgSrc" in reference and reference["imgSrc"].strip() == "":
-            del reference["imgSrc"]
-        if "url" in reference and reference["url"].strip() == "":
-            del reference["url"]
-        if "citation" not in reference:
-            reference["citation"] = ""
-
-        if "imgSrc" in reference and not reference["imgSrc"].strip().startswith("http"):
-            secure_img_src = secure_filename(reference["imgSrc"])
-            reference["imgSrc"] = url_for(
-                "static", filename="assets/images/about/publications/" + secure_img_src
-            )
-        return reference
-
-    file_dir = str(get_project_root() / "sketch_map_tool" / "data")
-    file_name = os.path.join(file_dir, "literature.json")
-
-    with open(file_name, "r") as f:
-        literature = json.load(f)
-
-    literature_ = list(
-        map(
-            generate_literature_preview_url,
-            literature,
-        )
-    )
-    print(literature_)
-    return render_template("about.html", literature=literature_)
+    for elem in definitions.LITERATURE_REFERENCES:
+        validate_literature_reference(elem)
+        if elem.img_src is not None and not elem.img_src.strip().startswith("http"):
+            elem.img_src = url_for("static", filename=elem.img_src)
+    return render_template("about.html", literature=definitions.LITERATURE_REFERENCES)
 
 
 @app.get("/create")
