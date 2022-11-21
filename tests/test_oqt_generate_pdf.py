@@ -15,8 +15,7 @@ def test_generate_traffic_light():
 
 # todo improve test
 @vcr.use_cassette('test_get_report')
-def test_generate_pdf():
-    bbox = Bbox(8.625, 49.3711, 8.7334, 49.4397)
-    report = get_report(bbox)
+def test_generate_pdf(bbox_wgs84):
+    report = get_report(bbox_wgs84)
     actual = generate_pdf(report)
     assert isinstance(actual, BytesIO)
