@@ -44,6 +44,13 @@ flask --app sketch_map_tool/app.py --debug run
 # Go to http://127.0.0.1:5000
 ```
 
+## Testing
+
+To run all unit tests, run this command in the project path:
+```bash
+pytest tests/unit
+```
+
 ## JS and CSS
 
 For the individual html pages the js and css code should be developed in `client-src/**` as 
@@ -61,7 +68,7 @@ Bundle the code with:
 npm run build
 ```
 
-## Using PyCharm
+## Project Setup for PyCharm
 
 If you like to develop using an IDE like [PyCharm](https://www.jetbrains.com/pycharm/), you can use the PyCharm Run Configurations instead of running Python manually.
 
@@ -89,10 +96,3 @@ If you like to develop using an IDE like [PyCharm](https://www.jetbrains.com/pyc
       * Script path: `project_path/tests/unit`
       * Working Directory: `project_path`
 5. For development: Run or Debug Celery and Flask Configurations
-
-### Testing
-
-To run all unit tests, run this command in the project path:
-```bash
-pytest tests/unit
-```
