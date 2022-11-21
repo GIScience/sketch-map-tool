@@ -2,17 +2,16 @@ from uuid import uuid4
 
 import pytest
 
-from sketch_map_tool.definitions import A4
-from sketch_map_tool.models import Bbox, Size
+from sketch_map_tool.models import Bbox, PaperFormat, Size
 
 
 @pytest.fixture
 def bbox():
     return Bbox(
-            966492.364208868,
-            6343445.659216596,
-            969486.2275163643,
-            6345991.012200175,
+        966492.364208868,
+        6343445.659216596,
+        969486.2275163643,
+        6345991.012200175,
     )
 
 
@@ -23,7 +22,21 @@ def size():
 
 @pytest.fixture
 def format_():
-    return A4
+    return PaperFormat(
+        "a4",
+        width=29.7,
+        height=21,
+        right_margin=5,
+        font_size=8,
+        qr_scale=0.6,
+        compass_scale=0.25,
+        globe_scale=0.125,
+        scale_height=0.33,
+        qr_y=0.1,
+        indent=0.25,
+        qr_contents_distances_not_rotated=(2, 3),
+        qr_contents_distance_rotated=3,
+    )
 
 
 @pytest.fixture
