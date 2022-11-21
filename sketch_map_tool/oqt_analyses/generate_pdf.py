@@ -1,4 +1,3 @@
-import io
 from io import BytesIO
 
 from reportlab.graphics.shapes import Circle, Drawing, Rect
@@ -59,7 +58,7 @@ def generate_pdf(report_properties: dict) -> BytesIO:
         indicator_description.keepWithNext = True
         # indicator_heading.keepWithNext = True
         # convert svg string to bytes file-like object
-        svg_bytes = io.BytesIO(result["svg"].encode())
+        svg_bytes = BytesIO(result["svg"].encode())
         # fix width/height ratio because OQT only produces squared SVGs
         indicator_traffic_light = generate_traffic_light(
             result["label"], radius=indicator_light_radius
