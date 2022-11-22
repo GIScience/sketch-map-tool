@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-    {#    <link rel="stylesheet" href="{{ url_for("static", filename="bundles/index.css") }}">#}
+        <link rel="stylesheet" href="{{ url_for("static", filename="bundles/about.css") }}">
 {% endblock head %}
 
 {% block header_message %}
@@ -12,50 +12,68 @@
     <main class="container">
         <h1>The Tool</h1>
         <p>
-            The Sketch Map Tool is an easy-to-use tool for offline collection, digitization and
-            georeferencing of spatial field data. The tool facilitates participatory mapping, a
-            process designed to integrate local knowledge in disaster risk management and
-            communication.
+            The Sketch Map Tool is an easy-to-use tool for participatory mapping through offline
+            collection, digitization and georeferencing of field data. The tool is designed to
+            simplify the collection and analysis of local spatial knowledge for the sake of engaging
+            non-experts in these processes.
+        </p>
+        <p>
+            It can for example be used by local stakeholders to engage communities in gathering
+            information about their experience and perception of previous flood events or other
+            hazards in their neighbourhood. Thus, the tool can support risk assessments, the design
+            of risk reduction measures, or risk communication by increasing risk awareness among
+            citizens.
         </p>
         <p>
             The Sketch Map Tool is an open-source web application with several functions, including
-            the creation of paper maps of an area of interest, the uploading of pictures of the
-            marked maps, and the downloading of the results in various geodata formats. The files
-            can then be used for further analysis in a Geographic Information System software. In
-            addition, based on a quality analysis of the OpenStreetMap base map data through the
-            HeiGIT ohsome dashboard, the tool can evaluate how well-suited an area is for
-            participatory mapping.
+            the creation of paper maps of an area of interest, the uploading of pictures and scans
+            of the marked sketch maps, the colour-detection of the markings, and the downloading of
+            the results in various geodata formats. The tool uses a machine learning approach, which
+            was particularly developed for the purpose of analysing sketch maps (→ IS THIS REALLY
+            THE CASE OR WILL THE AI/ML APPROACH BE A FUTURE DEVELOPMENT? IF YES, HOW COULD WE
+            DESCRIBE THE PROCESS IN EASY WORDS?). The results can then be used for further analysis
+            in a Geographic Information System software. In addition, the tool can evaluate how
+            well-suited an area is for participatory mapping based on a quality analysis of the
+            OpenStreetMap (OSM) base map data through the HeiGIT ohsome quality analyst.
         </p>
         <p>
-            The tool is designed to simplify the collection and analysis of local spatial knowledge
-            for the sake of engaging non-experts in these processes. Thus, for example, it can be
-            used by local stakeholders to gather information about previous flood events in a
-            specific area for the purpose of conducting a risk assessment, designing risk reduction
-            measures, or communicating risks and increasing risk awareness among citizens.
+            Learn more about the how to use the tool in the <a href="#learning-material">Learning
+            Material</a> section below or on
+            the <a href="/help">Help page</a>!
         </p>
         <figure>
             <img src="/static/assets/images/sketchmaptool_markiertekarte.png"
                  alt="SketchMap Preview">
         </figure>
 
-        <h1>The Project</h1>
+        <h1 id="the-project">The Project</h1>
         <p>
             The Sketch Map Tool project has been developed in close cooperation between the HeiGIT
-            and the GIScience Research Group from Heidelberg University. After the creation of the
-            first prototype within the Waterproofing Data project, the tool has been tested by
-            different organizations in Germany, Chile, Brazil, Mozambique and Madagascar in recent
-            years. Thanks to the generous contribution of the German Red Cross, the Sketch Map Tool
-            has been improved and extended in order to make it available for usage by the Red Cross
-            Red Crescent Movement and similar organizations.
+            and the GIScience Research Group from Heidelberg University with the generous
+            contributions of several sponsors and support by partner organizations.
         </p>
         <p>
-            As part of the HeiGIT tools, the Sketch Map Tool will be tested in other settings to
-            gather user feedback. Its functionalities will be further developed and adjusted to fit
-            the needs of the humanitarian and development sector.
+            After the creation of the first prototype within the Waterproofing Data project through
+            funding of the Federal Ministry of Education and Research, the tool has been tested by
+            different organizations in Germany, Chile, Brazil, Mozambique and Madagascar in recent
+            years. Thanks to the support of the German Red Cross and the financial contribution of
+            the German Federal Foreign Office within the frame of the <em>Globalprojekt II
+            "Stärkung und Weiterentwicklung der Internationalen Humanitären Hilfe und des
+            Internationalen Humanitären Systems"</em>, the Sketch Map Tool has been improved and
+            extended in order to make it available for usage by the Red Cross Red Crescent Movement
+            and similar organizations. The <em>Globalprojekt II</em> contributes to reducing the
+            negative consequences of disasters and crises for affected populations by extending
+            strategic humanitarian key topics and innovative approaches.
+        </p>
+        <p>
+            As part of the <a href="https://heigit.org/de/woran-wir-arbeiten/#projects">HeiGIT
+            tools</a>, the Sketch Map Tool will be tested in other settings to gather user feedback.
+            Its functionalities will be further developed and adjusted to fit the needs of the
+            humanitarian and development sector.
         </p>
         <p>
             If you have questions or would like to provide feedback, please reach out to the project
-            team: <a href="mailto:info@heigit.org">info@heigit.org</a>
+            team (<a href="#contact">&rarr; Contact</a>).
         </p>
         <figure>
             <img src="/static/assets/images/June2019MappingSaoPaulo.jpg">
@@ -63,7 +81,18 @@
             </figcaption>
         </figure>
 
-        <h1>Learning material</h1>
+        <h1 id="sponsors-and-partners">Former and current Sponsors and Partner Organisations</h1>
+<div class="logos">
+    <img src="/static/assets/logos/DRK/DRKLogokompaktEng_4c.jpg" alt="Logo German Red Cross">
+    <img src="/static/assets/logos/Logo_GIScience_HD_cropped.svg" alt="GIScience Research Group Heidelberg University">
+    <img src="/static/assets/logos/AA_logo_ELdZ_Uni_rgb_en.jpg" alt="Logo german humanitarian assistance">
+    <img src="/static/assets/logos/logo_fona.png" alt="Logo FONA">
+    <img src="/static/assets/logos/logo_bmbf.png" alt="Logo BMBF">
+    <img src="/static/assets/logos/logo_belmont_forum.png" alt="Logo Belmont">
+    <img src="/static/assets/logos/logo_norface.png" alt="Logo Norface">
+</div>
+
+        <h1 id="learning-material">Learning Material</h1>
         <p>
             The code of the Sketch Map Tool is released on GitHub (
             <a href="https://github.com/GIScience/sketch-map-tool">
@@ -93,12 +122,12 @@
             Heidelberg) discuss the role of maps in disaster management and the possibilities of
             using the Sketch Map Tool in humanitarian organizations.
         </p>
-        {#        TODO add link below #}
         <p>
-            The manual of the Sketch Map Tool can be downloaded here <a href="#TODO">TODO</a>
+            Detailed Step-by-Step Instructions about how to use the tool and FAQs can be found on
+            the <a href="/help">Help page</a>.
         </p>
 
-        <h1>Related publications</h1>
+        <h1>Related Publications</h1>
         <p>The following scientific articles have been published about the Sketch Map Tool:</p>
         <article>
             <img src="https://www.mdpi.com/ijgi/ijgi-10-00130/article_deploy/html/images/ijgi-10-00130-g002.png"
@@ -149,7 +178,7 @@
         <hr>
         <br><br>
         <div class="center-text">
-            <h4 class="widget-title">Contact</h4>
+            <h4 id="contact" class="widget-title">Contact</h4>
             <p>
                 HeiGIT gGmbH<br>
                 Heidelberg, Germany<br>
