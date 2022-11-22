@@ -13,13 +13,14 @@ from sketch_map_tool.map_generation.qr_code import (
 )
 
 
-def test_encode_data(bbox, format_, size, uuid):
+def test_encode_data(bbox, format_, size, scale, uuid):
     result = _encode_data(
         uuid,
         bbox,
         format_,
         "landscape",
         size,
+        scale,
         "0.1.0",
         datetime.now(),
     )
