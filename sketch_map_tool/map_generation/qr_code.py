@@ -18,6 +18,7 @@ def qr_code(
     format_: PaperFormat,
     orientation: str,
     size: Size,
+    scale: float,
     version: str = __version__,
     timestamp: datetime = datetime.now(timezone.utc),
 ) -> Drawing:
@@ -31,6 +32,7 @@ def qr_code(
         format_,
         orientation,
         size,
+        scale,
         version,
         timestamp,
     )
@@ -45,9 +47,10 @@ def _encode_data(
     format_: PaperFormat,
     orientation: str,
     size: Size,
+    scale: float,
     version: str,
     timestamp: datetime,
-) -> dict[str, str]:
+) -> str:
     return json.dumps(
         {
             "id": uuid,
@@ -55,6 +58,7 @@ def _encode_data(
             "format": format_.title,
             "orientation": orientation,
             "size": asdict(size),
+            "scale": str(scale),
             "version": version,
             "timestamp": timestamp.isoformat(),
         }

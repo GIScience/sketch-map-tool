@@ -34,6 +34,7 @@ def generate_sketch_map(
         format_,
         orientation,
         size,
+        scale,
     )
     map_pdf, _ = generate_map_pdf(
         map_image,
