@@ -109,8 +109,14 @@
                     <div class="no preview"></div>
                 {% endif %}
 
-                <span>{{ reference.citation }}<br>
-                <a href="{{ reference.url }}">{{ reference.url }}</a></span>
+                <span>
+                    {{ reference.citation }}
+
+                    {% if reference.url %}
+                        <br>
+                        <a href="{{ reference.url }}">{{ reference.url }}</a>
+                    {% endif %}
+                </span>
             </article>
         {% endfor %}
 
