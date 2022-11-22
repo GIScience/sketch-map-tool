@@ -14,11 +14,7 @@ from sketch_map_tool.data_store import client as ds_client  # type: ignore
 from sketch_map_tool.definitions import ALLOWED_TYPES, DIGITIZE_TYPES
 from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.models import Bbox, PaperFormat, Size
-from sketch_map_tool.validators import (
-    validate_literature_reference,
-    validate_type,
-    validate_uuid,
-)
+from sketch_map_tool.validators import validate_type, validate_uuid
 
 
 @app.get("/")
@@ -33,10 +29,6 @@ def help() -> str:
 
 @app.get("/about")
 def about() -> str:
-    for elem in definitions.LITERATURE_REFERENCES:
-        validate_literature_reference(elem)
-        if elem.img_src is not None and not elem.img_src.strip().startswith("http"):
-            elem.img_src = url_for("static", filename=elem.img_src)
     return render_template("about.html", literature=definitions.LITERATURE_REFERENCES)
 
 

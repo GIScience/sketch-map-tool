@@ -1,6 +1,9 @@
 import json
+import os
 from pathlib import Path
 from typing import Literal
+
+from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.models import LiteratureReference, PaperFormat
@@ -19,14 +22,26 @@ def get_literature_references() -> list[LiteratureReference]:
     p = Path(get_config_value("data-dir")) / "literature.json"
     with open(p, "r") as f:
         raw = json.load(f)
-    return [
-        LiteratureReference(
+
+    def create_literature_reference(element) -> LiteratureReference:
+        # if image is stored on disk
+        img_src = element.get("imgSrc", None)
+        if img_src is not None and not img_src.strip().startswith("http"):
+            img_src = os.path.join(
+                "/static",
+                "assets",
+                "images",
+                "about",
+                "publications",
+                secure_filename(img_src),
+            )
+        return LiteratureReference(
             element["citation"],
-            element.get("imgSrc", None),
+            img_src,
             element.get("url", None),
         )
-        for element in raw
-    ]
+
+    return [create_literature_reference(element) for element in raw]
 
 
 LITERATURE_REFERENCES = get_literature_references()

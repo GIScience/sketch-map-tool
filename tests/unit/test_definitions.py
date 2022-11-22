@@ -4,7 +4,7 @@ from sketch_map_tool import definitions
 def test_get_literatur_references():
     result = definitions.get_literature_references()
     assert (
-        result[0].img_src == "assets/images/about/publications/ijgi-10-00130-g002.webp"
+        result[0].img_src == "/static/assets/images/about/publications/ijgi-10-00130-g002.webp"
     )
     assert (
         result[0].citation
