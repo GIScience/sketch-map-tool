@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 import pytest
 
 from sketch_map_tool.definitions import A4
@@ -8,10 +6,12 @@ from sketch_map_tool.models import Bbox, Size
 
 @pytest.fixture
 def bbox():
-    return Bbox(lon_min=964472.1973848869,
-                lat_min=6343459.035638228,
-                lon_max=967434.6098457306,
-                lat_max=6345977.635778541)
+    return Bbox(
+        lon_min=964472.1973848869,
+        lat_min=6343459.035638228,
+        lon_max=967434.6098457306,
+        lat_max=6345977.635778541,
+    )
 
 
 @pytest.fixture
