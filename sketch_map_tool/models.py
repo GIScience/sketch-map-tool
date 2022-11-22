@@ -3,7 +3,11 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Bbox:
-    """Bounding Box in WGS 84 / Pseudo-Mercator (EPSG:3857)"""
+    """Bounding Box in WGS 84 / Pseudo-Mercator (EPSG:3857)
+
+    Be aware that the argument order is relevant to the API and the JavaScript client. Keep the
+    order in sync with the client.
+    """
 
     lon_min: float
     lat_min: float
