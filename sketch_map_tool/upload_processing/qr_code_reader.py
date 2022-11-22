@@ -57,6 +57,7 @@ def _decode_data(data) -> MappingProxyType:
                 "format_": getattr(definitions, d["format"].upper()),
                 "orientation": d["orientation"],
                 "size": Size(**d["size"]),
+                "scale": float(d["scale"]),
             }
         )
     except KeyError as error:

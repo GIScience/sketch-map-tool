@@ -33,17 +33,14 @@ def test_make_qr_code():
     assert isinstance(result, BytesIO)
 
 
-def test_to_report_lab_graphic():
-    buffer = StringIO()
-    buffer.write(
-        """
+def test_to_report_lab_graphic(format_):
+    input_string = """
 <svg width="100" height="100">
    <circle cx="50" cy="50" r="40"/>
 </svg>
 """
-    )
-    buffer.seek(0)
-    result = _to_report_lab_graphic(buffer, 0.75)
+    bytes_buffer = BytesIO(input_string.encode())
+    result = _to_report_lab_graphic(format_, bytes_buffer)
     assert isinstance(result, Drawing)
 
 

@@ -1,3 +1,5 @@
+import json
+from dataclasses import astuple
 from uuid import UUID, uuid4
 
 import pytest
@@ -39,11 +41,12 @@ def test_create_result_get(client):
     assert resp.status_code == 302  # Redirect
 
 
-def test_create_result_post(client, mock_tasks, monkeypatch):
+def test_create_result_post(client, mock_tasks, monkeypatch, bbox, bbox_wgs84):
     """Redirect to /create/results/<uuid>"""
     monkeypatch.setattr("sketch_map_tool.data_store.client.set", lambda x: None)
     data = {
-        "bbox": "[965172.1534546925,6343953.965425534,966970.2550592694,6345482.705991237]",
+        "bbox": json.dumps(astuple(bbox)),
+        "bboxWGS84": json.dumps(astuple(bbox_wgs84)),
         "format": "A4",
         "orientation": "landscape",
         "size": '{"width":1867,"height":1587}',
