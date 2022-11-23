@@ -1,5 +1,6 @@
 from io import BytesIO
 from typing import Union
+from functools import reduce
 
 from celery.result import AsyncResult
 from reportlab.lib.pagesizes import A4
@@ -11,7 +12,7 @@ from sketch_map_tool.map_generation.qr_code import qr_code
 from sketch_map_tool.models import Bbox, File, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
 from sketch_map_tool.oqt_analyses import get_report
-from sketch_map_tool.upload_processing import qr_code_reader
+from sketch_map_tool.upload_processing import qr_code_reader, map_cutter
 from sketch_map_tool.wms import client as wms_client
 
 
@@ -60,9 +61,13 @@ def generate_quality_report(
 @celery.task(bind=True)
 def generate_digitized_results(self, files: list[File]) -> Union[BytesIO, AsyncResult]:
     """Generate first raster data, then vector data and finally a QGIS project"""
-    for file in files:
-        args = qr_code_reader.read(file.image)
-        print(args)
+    args = [qr_code_reader.read(file.image) for file in files]
+
+    # All uploaded sketch maps should have the same uuid
+    uuid = reduce(lambda a, b: a if a == b else None, [arg["uuid"] for arg in args]) 
+    if uuid is None:
+        raise ValueError  # TODO
+    
     bytes_buffer = BytesIO()
     canv = canvas.Canvas(bytes_buffer, pagesize=A4)
     canv.drawString(100, 100, "Digitized Results")
