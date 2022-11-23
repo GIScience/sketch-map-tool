@@ -15,7 +15,7 @@ FROM ubuntu:22.04
 # install gdal
 # to reduce image size, clean up the apt cache by removing /var/lib/apt/lists.
 RUN apt-get update \
-    && apt-get install -y \
+    && apt-get install -y --no-upgrade \
         python3-pip \
         libzbar0 \
         libgdal-dev \
