@@ -6,6 +6,7 @@ require("esbuild")
             "./client-src/base/base.css",
             "./client-src/index/index.css",
             "./client-src/help/index.css",
+            "./client-src/help/index.js",
             "./client-src/about/index.css",
             "./client-src/create/index.js",
             "./client-src/create-results/index.js",

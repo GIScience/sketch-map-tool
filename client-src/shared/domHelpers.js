@@ -58,10 +58,40 @@ function setDownloadLink(linkElementId, url) {
     linkElement.setAttribute("href", url);
 }
 
+/**
+ * Recursivley open all DETAILElements towards parent direction in the DOM tree starting with the
+ * given element.
+ * This can, but must not, be a DETAILSElement.
+ *
+ * @param {HTMLElement} element
+ */
+function openDetailsParents(element) {
+    if (!element) return;
+
+    if (element.nodeName === "DETAILS") {
+        element.setAttribute("open", true);
+        openDetailsParents(element.parentElement.closest("details"));
+    } else {
+        openDetailsParents(element.closest("details"));
+    }
+}
+
+/**
+ * Close all existing DETAILSElements
+ */
+function closeAllDetailsElements() {
+    [...document.querySelectorAll("details")]
+        .forEach((details) => {
+            details.removeAttribute("open");
+        });
+}
+
 export {
     getUUIDFromURL,
     fillSelectOptions,
     setDisabled,
     setDownloadLink,
     setIsBusy,
+    openDetailsParents,
+    closeAllDetailsElements,
 };
