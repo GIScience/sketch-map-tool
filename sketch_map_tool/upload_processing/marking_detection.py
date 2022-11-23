@@ -83,7 +83,7 @@ def reduce_holes(img: NDArray, factor=4):
 
     :param img: Image in which the holes should be reduced
     :param factor: Kernel size (x*x) of the reduction
-    :return: 'img' with less and smaller holes
+    :return: 'img' with fewer and smaller holes
     """
     # See https://docs.opencv.org/4.x/d9/d61/tutorial_py_morphological_ops.html
     return cv2.morphologyEx(img, cv2.MORPH_CLOSE, np.ones((factor, factor), np.uint8))
