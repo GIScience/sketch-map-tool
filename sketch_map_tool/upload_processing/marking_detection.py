@@ -36,7 +36,8 @@ def detect_markings(img_base, img_markings, threshold_bgr=0.5, threshold_img_dif
               }
 
     img_base_height, img_base_width, _ = img_base.shape
-    img_markings = cv2.resize(img_markings, (img_base_width, img_base_height))
+    img_markings = cv2.resize(img_markings, (img_base_width, img_base_height), fx=4, fy=4, interpolation=cv2.INTER_NEAREST
+)
     img_markings_contrast = enhance_contrast(img_markings)
     img_diff = cv2.absdiff(img_base, img_markings_contrast)
 
