@@ -1,6 +1,5 @@
 import json
 from io import BytesIO
-from typing import get_args
 from uuid import uuid4
 
 import cv2
@@ -13,7 +12,7 @@ from sketch_map_tool import definitions
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
 from sketch_map_tool.data_store import client as ds_client  # type: ignore
-from sketch_map_tool.definitions import ALLOWED_TYPES, DIGITIZE_TYPES
+from sketch_map_tool.definitions import ALLOWED_TYPES
 from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.models import Bbox, File, PaperFormat, Size
 from sketch_map_tool.validators import validate_type, validate_uuid
@@ -126,29 +125,12 @@ def digitize_results_get(uuid: str | None = None) -> Response | str:
     return render_template("digitize-results.html")
 
 
-def get_task_id(uuid: str, type_: str) -> int:
-    """Get the celery task id from the data store using the request id and type."""
-    if type_ in list(get_args(DIGITIZE_TYPES)):
-        # Task id equals request uuid (/digitize/results)
-        return uuid
-    # Get task id from data-store (/create/results)
-    raw = ds_client.get(str(uuid))
-    if raw is None:
-        raise KeyError("There are no tasks in the broker for UUID: " + uuid)
-    request_task = json.loads(raw)
-    try:
-        task_id = request_task[type_]
-    except KeyError as error:
-        raise KeyError("There are no tasks in the broker for type: " + type_) from error
-    return task_id
-
-
 @app.get("/api/status/<uuid>/<type_>")
 def status(uuid: str, type_: ALLOWED_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    task_id = get_task_id(uuid, type_)
+    task_id = ds_client.get_task_id(uuid, type_)
 
     match type_:
         case "quality-report":
@@ -185,20 +167,24 @@ def download(uuid: str, type_: ALLOWED_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    task_id = get_task_id(uuid, type_)
+    task_id = ds_client.get_task_id(uuid, type_)
 
     match type_:
         case "quality-report":
             task = tasks.generate_quality_report.AsyncResult(task_id)
             mimetype = "application/pdf"
+            if task.ready():
+                file: BytesIO = task.get()
         case "sketch-map":
             task = tasks.generate_sketch_map.AsyncResult(task_id)
             mimetype = "application/pdf"
+            if task.ready():
+                file: BytesIO = task.get()[0]
         case "digitized-data":
             task = tasks.generate_digitized_results.AsyncResult(task_id)
             mimetype = "application/pdf"
+            if task.ready():
+                file: BytesIO = task.get()
             # TODO:
             # mimetype = "application/zip"
-    if task.ready():
-        file: BytesIO = task.get()
-        return send_file(file, mimetype)
+    return send_file(file, mimetype)
