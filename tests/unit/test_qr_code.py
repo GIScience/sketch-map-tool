@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from io import BytesIO, StringIO
+from io import BytesIO
 from uuid import uuid4
 
 from reportlab.graphics.shapes import Drawing

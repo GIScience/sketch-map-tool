@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from numpy.typing import NDArray
+
 
 @dataclass(frozen=True)
 class Bbox:
@@ -65,3 +67,17 @@ class PaperFormat:
     indent: float
     qr_contents_distances_not_rotated: tuple[int, int]
     qr_contents_distance_rotated: int
+
+
+@dataclass()
+class LiteratureReference:
+    citation: str
+    img_src: str | None = None
+    url: str | None = None
+
+
+@dataclass(frozen=True)
+class File:
+    filename: str
+    mimetype: str
+    image: NDArray

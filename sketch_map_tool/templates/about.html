@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-        <link rel="stylesheet" href="{{ url_for("static", filename="bundles/about.css") }}">
+    <link rel="stylesheet" href="{{ url_for("static", filename="bundles/about.css") }}">
 {% endblock head %}
 
 {% block header_message %}
@@ -42,7 +42,7 @@
             the <a href="/help">Help page</a>!
         </p>
         <figure>
-            <img src="/static/assets/images/sketchmaptool_markiertekarte.png"
+            <img src="{{ url_for("static", filename="assets/images/about/sketchmaptool_markiertekarte.webp") }}"
                  alt="SketchMap Preview">
         </figure>
 
@@ -76,7 +76,8 @@
             team (<a href="#contact">&rarr; Contact</a>).
         </p>
         <figure>
-            <img src="/static/assets/images/June2019MappingSaoPaulo.jpg">
+            <img src="{{ url_for("static", filename="assets/images/about/June2019MappingSaoPaulo.webp") }}"
+                 alt="Picture of a group mapping situation.">
             <figcaption>Group Mapping. Waterproofing Data Project. C. Klonner, June 2019
             </figcaption>
         </figure>
@@ -106,11 +107,9 @@
             2020.
         </p>
         <p>
-            <iframe width="560" height="315"
-                    src="https://www.youtube-nocookie.com/embed/Dmj41KRH-SA"
-                    title="YouTube video player" frameborder="0"
-                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
+            <a href="https://www.youtube-nocookie.com/embed/Dmj41KRH-SA" target="_blank"><img
+                    src="/static/assets/images/about/preview-GeOnG-LightningTalk_Klonner.webp"
+                    alt="Video preview image for Lightning Talk about Sketch Maps at GeOnG 2020"></a>
         </p>
         <p>
             Additionally, you can listen to<a
@@ -129,51 +128,26 @@
 
         <h1>Related Publications</h1>
         <p>The following scientific articles have been published about the Sketch Map Tool:</p>
-        <article>
-            <img src="https://www.mdpi.com/ijgi/ijgi-10-00130/article_deploy/html/images/ijgi-10-00130-g002.png"
-                 title="Sketch Map Tool Workflow" alt="Sketch Map Tool Workflow" width="450">
-            <span>
-                Klonner, C., Hartmann, M., Dischl, R., Djami, L., Anderson, L., Raifer, M.,
-                Lima-Silva, F., Degrossi, L. C., Zipf, A., de Albuquerque, J. P. (2021): The Sketch
-                Map Tool Facilitates the Assessment of OpenStreetMap Data for Participatory Mapping,
-                10(3): 130. ISPRS International Journal of Geo-Information. 10:130. <a
-                    href="https://doi.org/10.3390/ijgi10030130" class="blank"
-                    title="im neuen Fenster öffnen">https://doi.org/10.3390/ijgi10030130</a>
-            </span>
-        </article>
 
-        <img src="/md/chemgeo/geog/gis/publication_sketch_map_tool_workflow.jpg"
-             title="Sketch Map Tool Workflow" alt="Sketch Map Tool Workflow" width="450">
 
-        <p>Klonner, C., Hartmann, M., Dischl, R., Djami, L., Anderson, L., Raifer, M., Lima-Silva,
-            F., Degrossi, L. C., Zipf, A., de Albuquerque, J. P. (2021): The Sketch Map Tool
-            Facilitates the Assessment of OpenStreetMap Data for Participatory Mapping, 10(3): 130.
-            ISPRS International Journal of Geo-Information. 10:130. <a
-                    href="https://doi.org/10.3390/ijgi10030130" class="blank"
-                    title="im neuen Fenster öffnen">https://doi.org/10.3390/ijgi10030130</a></p><br><br>
+        {% for reference in literature %}
+            <article>
+                {% if reference.img_src %}
+                    <img class="preview" src="{{ reference.img_src }}" alt="Article preview image">
+                {% else %}
+                    <div class="no preview"></div>
+                {% endif %}
 
-        <a href="/md/chemgeo/geog/gis/publication_sketch_maps.jpg"><img
-                src="/md/chemgeo/geog/gis/publication_sketch_maps.jpg"
-                title="Sketch Maps in Group Discussions" alt="Sketch Maps in Group Discussions"
-                width="495"></a>
-        <p>Klonner, C. &amp; Blessing, L. (2019). Gathering Local Knowledge for Disaster Risk
-            Reduction: The Use of Sketch Maps in Group Discussions. In: Proceedings of the ISCRAM
-            2019 Conference. Valencia, Spain, pp. 1397–1398.</p><br><br>
+                <span>
+                    {{ reference.citation }}
 
-        <a href="/md/chemgeo/geog/gis/publication_osm_evaluation.jpg"><img
-                src="/md/chemgeo/geog/gis/publication_osm_evaluation.jpg" title="OSM Evaluation"
-                alt="OSM Evaluation" width="495"></a>
-        <p>Klonner, C., Hartmann, M., Djami, L., Zipf, A. (2019). Ohsome OpenStreetMap Data
-            Evaluation: Fitness of Field Papers for Participatory Mapping. In: Proceedings of the
-            Academic Track at the State of the Map 2019. Heidelberg, Germany, pp. 35-36.</p><br>
-
-        <a href="/md/chemgeo/geog/gis/publication_participatory_mapping.jpg"><img
-                src="/md/chemgeo/geog/gis/publication_participatory_mapping.jpg"
-                title="Parcipatory Mapping" alt="Parcipatory Mapping" width="495"></a>
-        <p>Klonner, C., Usón, T. J., Aeschbach, N., Höfle, B. (2021). Participatory Mapping and
-            Visualization of Local Knowledge: An Example from Eberbach, Germany. In: International
-            Journal of Disaster Risk. <a href="https://doi.org/10.1007/s13753-020-00312-8"
-                                         class="blank" title="im neuen Fenster öffnen">https://doi.org/10.1007/s13753-020-00312-8</a>
+                    {% if reference.url %}
+                        <br>
+                        <a href="{{ reference.url }}">{{ reference.url }}</a>
+                    {% endif %}
+                </span>
+            </article>
+        {% endfor %}
 
         <hr>
         <br><br>

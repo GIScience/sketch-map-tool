@@ -1,5 +1,5 @@
 import io
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 import pytest
 
@@ -30,7 +30,6 @@ def test_digitize(client):
     assert resp.status_code == 200
 
 
-
 def test_digitize_result_get(client):
     """GET /digitize/results without UUID should redirect to /digitize"""
     resp = client.get("/digitize/results")
@@ -45,9 +44,11 @@ def test_digitize_result_post(client, mock_tasks, monkeypatch):
     print(resp.headers.get("Location"))
     partial_redirect_path = "/digitize/results"
     location_header = resp.headers.get("Location")
-    assert resp.status_code == 302 \
-           and location_header is not None \
-           and partial_redirect_path in location_header
+    assert (
+        resp.status_code == 302
+        and location_header is not None
+        and partial_redirect_path in location_header
+    )
 
 
 def test_digitize_result_post_no_files(client, mock_tasks, monkeypatch):

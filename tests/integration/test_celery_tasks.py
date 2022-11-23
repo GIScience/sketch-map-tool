@@ -1,7 +1,5 @@
 from io import BytesIO
 
-import pytest
-
 from sketch_map_tool import tasks
 
 
