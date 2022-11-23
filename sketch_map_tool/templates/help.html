@@ -2,7 +2,7 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for("static", filename="bundles/help.css") }}">
-    <script href="{{ url_for("static", filename="bundles/help.js") }}"></script>
+    <script type="module" src="{{ url_for("static", filename="bundles/help.js") }}"></script>
 {% endblock head %}
 
 {% block header_message %}
@@ -13,7 +13,7 @@
     <main class="container">
         <p>
             These <strong>Step-by-Step instructions</strong> guide you through the Sketch Map Tool
-            and provide useful recommendations.<a href="#map-quality-check">MQC</a>
+            and provide useful recommendations.
         </p>
         <p>
             Answers to the frequently asked questions can be found in the <a href="#faq">FAQ</a>
@@ -91,8 +91,8 @@
 
             </details>
             <details>
-                <summary>1.2 Map Quality Check</summary>
-                <article id="map-quality-check">
+                <summary id="map-quality-check">1.2 Map Quality Check</summary>
+                <article>
                     <p>
                         The generated Sketch Map uses a base map layer of OpenStreetMap (OSM). The
                         Map
@@ -479,5 +479,4 @@
 
 
     </main>
-    <script href="{{ url_for("static", filename="bundles/help.js") }}"></script>
 {% endblock body %}

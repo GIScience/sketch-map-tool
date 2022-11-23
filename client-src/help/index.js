@@ -1,18 +1,19 @@
-console.log("HALLO");
+import { closeAllDetailsElements, openDetailsParents } from "../shared";
 
-function openDetailsParents(element) {
-    if (!element) return;
+// open details sections when anchor link is used
 
-    if (element.nodeName === "DETAILS") {
-        element.setAttribute("open", true);
-        openDetailsParents(element.parentElement.closest("details"));
-    } else {
-        openDetailsParents(element.closest("details"));
-    }
-}
-
+// if opened from other page
 const anchor = document.location.hash;
-console.log("anchor", anchor);
 if (anchor) {
-    openDetailsParents(document.getElementById(anchor));
+    openDetailsParents(document.querySelector(anchor));
 }
+
+// jump inside page
+[...document.querySelectorAll("[href^='#']")].forEach((anchorLink) => {
+    const anchor = anchorLink.getAttribute("href");
+    const onClick = () => {
+        closeAllDetailsElements();
+        openDetailsParents(document.querySelector(anchor));
+    };
+    anchorLink.addEventListener("click", onClick);
+});
