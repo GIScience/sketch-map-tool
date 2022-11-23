@@ -2,6 +2,7 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for("static", filename="bundles/help.css") }}">
+    <script href="{{ url_for("static", filename="bundles/help.js") }}"></script>
 {% endblock head %}
 
 {% block header_message %}
@@ -11,20 +12,26 @@
 {% block body %}
     <main class="container">
         <p>
-            These <strong>step-by-step instructions</strong> guide you through the Sketch Map Tool
-            and provide useful recommendations.
+            These <strong>Step-by-Step instructions</strong> guide you through the Sketch Map Tool
+            and provide useful recommendations.<a href="#map-quality-check">MQC</a>
         </p>
         <p>
             Answers to the frequently asked questions can be found in the <a href="#faq">FAQ</a>
             section below.
         </p>
         <p>
-            Learn more about possible applications and additional data collection methods that can
-            be linked to the tool in the Additonal Information section (INSERT ANCHOR TO ADDITONAL
-            INFORMATION).
+            Learn more about the combination of the Sketch Map Tool with additional data collection
+            methods in the <a href="#additional-information">Additonal Information</a> section.
+        </p>
+        <p>
+            As the current version of the Sketch Map Tool has only been released shortly, problems
+            might still occur during different steps of the process. We are sorry if this causes any
+            inconvenience for you! We strive to continuously improve the product, so kindly inform
+            us about the technical issues via your Sketch Map Tool focal point in your organization
+            or the Sketch Map Tool user support. (&rarr;<a href="/about#contact">Contact</a>)
         </p>
 
-        <h1 id="step-by-step">Step-by-step instructions</h1>
+        <h1 id="step-by-step">Step-by-Step instructions</h1>
         <details>
             <summary>
                 <div class="sketchy circle">1</div>
@@ -47,7 +54,7 @@
 
                     <h6><em>Recommendations:</em></h6>
                     <ul>
-                        <li>Adapt the extstrongent of your selected area to your use case. The
+                        <li>Adapt the extent of your selected area to your use case. The
                             following
                             questions should be kept in mind:
                             <ul>
@@ -85,14 +92,14 @@
             </details>
             <details>
                 <summary>1.2 Map Quality Check</summary>
-                <article>
+                <article id="map-quality-check">
                     <p>
                         The generated Sketch Map uses a base map layer of OpenStreetMap (OSM). The
                         Map
                         Quality Check helps to evaluate the fitness of the area of interest for the
                         purpose of participatory mapping based on a quality analysis of the
-                        OpenStreetMap data with the HeiGIT
-                        <a href="https://oqt.ohsome.org">ohsome quality analyst - OQT</a>. The
+                        OpenStreetMap data with the
+                        <a href="https://oqt.ohsome.org">HeiGIT ohsome quality analyst - OQT</a>. The
                         fitness
                         report can be downloaded as PDF file by clicking on the blue button. It
                         includes
@@ -472,4 +479,5 @@
 
 
     </main>
+    <script href="{{ url_for("static", filename="bundles/help.js") }}"></script>
 {% endblock body %}
