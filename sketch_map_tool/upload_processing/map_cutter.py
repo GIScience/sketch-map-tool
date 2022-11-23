@@ -2,16 +2,12 @@
 Functionality to cut a sketch map out of a photograph containing one,
 based on a matching template
 """
-from typing import Any
-
 import cv2
 import numpy as np
+from numpy.typing import NDArray
 
 
-def cut_out_map(
-    photo: "np.ndarray[Any, np.dtype[np.int64]]",
-    template: "np.ndarray[Any, np.dtype[np.int64]]",
-) -> "np.ndarray[Any, np.dtype[np.int64]]":
+def cut_out_map(photo: NDArray, template: NDArray) -> NDArray:
     """
     Use the BRISK implementation in OpenCV to detect a map on a given
     photo based on a given template with the map. The detected area of the
