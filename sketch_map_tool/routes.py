@@ -1,4 +1,5 @@
 import json
+from functools import reduce
 from io import BytesIO
 from uuid import uuid4
 
@@ -15,6 +16,7 @@ from sketch_map_tool.data_store import client as ds_client  # type: ignore
 from sketch_map_tool.definitions import ALLOWED_TYPES
 from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.models import Bbox, File, PaperFormat, Size
+from sketch_map_tool.upload_processing import qr_code_reader
 from sketch_map_tool.validators import validate_type, validate_uuid
 
 
@@ -111,9 +113,21 @@ def digitize_results_post() -> Response:
                 ),
             )
         )
-    task_digitize = tasks.generate_digitized_results.apply_async(args=(files,))
-    uuid = task_digitize.id
-    return redirect(url_for("digitize_results_get", uuid=uuid))
+
+    args = [qr_code_reader.read(file.image) for file in files]
+    # all uploaded sketch maps should have the same uuid
+    uuid = reduce(lambda a, b: a if a == b else None, [arg["uuid"] for arg in args])
+    if uuid is None:
+        raise ValueError  # TODO
+
+    # get original map image
+    map_img_buffer = tasks.generate_sketch_map.AsyncResult(uuid).get()[1]
+    map_img = cv2.imdecode(
+        np.fromstring(map_img_buffer.read(), dtype="uint8"), cv2.IMREAD_UNCHANGED
+    )
+
+    task_digitize = tasks.generate_digitized_results.apply_async(args=(files, map_img))
+    return redirect(url_for("digitize_results_get", uuid=task_digitize.id))
 
 
 @app.get("/digitize/results")
