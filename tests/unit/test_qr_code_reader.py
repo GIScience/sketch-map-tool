@@ -32,11 +32,6 @@ def qr_code_img_no():
 
 
 @pytest.fixture
-def qr_code_sketch_map():
-    return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code-sketch-map.png"))
-
-
-@pytest.fixture
 def decoded_content(uuid, format_, bbox, size, scale):
     return MappingProxyType(
         {
@@ -58,8 +53,8 @@ def test_read_qr_code(qr_code_img, decoded_content):
     assert qr_code_reader.read(qr_code_img) == decoded_content
 
 
-def test_read_qr_code_sketch_map(qr_code_sketch_map, decoded_content):
-    assert qr_code_reader.read(qr_code_sketch_map) == decoded_content
+def test_read_qr_code_sketch_map(sketch_map, decoded_content):
+    assert qr_code_reader.read(sketch_map) == decoded_content
 
 
 # TODO: Find fixture which need to be downscaled
@@ -81,7 +76,7 @@ def test_read_qr_code_no(qr_code_img_no):
         qr_code_reader.read(qr_code_img_no)
 
 
-def test_resize(qr_code_sketch_map):
-    resized = qr_code_reader._resize(qr_code_sketch_map)
-    assert int(qr_code_sketch_map.shape[0] * 0.75) == resized.shape[0]
-    assert int(qr_code_sketch_map.shape[1] * 0.75) == resized.shape[1]
+def test_resize(sketch_map):
+    resized = qr_code_reader._resize(sketch_map)
+    assert int(sketch_map.shape[0] * 0.75) == resized.shape[0]
+    assert int(sketch_map.shape[1] * 0.75) == resized.shape[1]
