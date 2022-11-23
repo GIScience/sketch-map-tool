@@ -14,9 +14,9 @@ def enhance_contrast(img: NDArray, factor: float = 2.0) -> NDArray:
     """
     Enhance the contrast of a given image
 
-    :param img: Image of which the contrast should be enhanced
-    :param factor: Factor for the contrast enhancement
-    :return: Image with enhanced contrast
+    :param img: Image of which the contrast should be enhanced.
+    :param factor: Factor for the contrast enhancement.
+    :return: Image with enhanced contrast.
     """
     input_img = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
     result = ImageEnhance.Contrast(input_img).enhance(factor)
@@ -32,18 +32,18 @@ def detect_markings(
     """
     Detect markings in the colours blue, green, red, pink, turquoise, white, and yellow.
     Note that there must be a sufficient difference between the colour of the markings and the background. White and
-    yellow markings might therefore be not detected on many sketch maps.
+    yellow markings might therefore not be detected on many sketch maps.
 
 
-    :param img_base: Map without markings
-    :param img_markings: Map with markings
+    :param img_base: Map without markings.
+    :param img_markings: Map with markings.
     :param threshold_bgr: Threshold for the colour detection. 0.5 means 50%, i.e. all BGR values above 50% * 255 will be
                           considered 255, all values below this threshold will be considered 0 for determining the
                           colour of the markings.
     :param threshold_img_diff: Threshold for the marking detection concerning the absolute grayscale difference between
                                corresponding pixels in 'img_base' and 'img_markings'.
     :return: A list of pairs of the colour name and the image object with the detected markings in this colour
-             [("colour name", img_array), ...]
+             [("colour name", img_array), ...].
     """
     threshold_bgr_abs = threshold_bgr * 255
 
@@ -102,9 +102,9 @@ def reduce_noise(img: NDArray, factor: int = 2) -> NDArray:
     """
     Reduce the noise, i.e. artifacts, in an image containing markings
 
-    :param img: Image in which the noise should be reduced
-    :param factor: Kernel size (x*x) for the noise reduction
-    :return: 'img' with less noise
+    :param img: Image in which the noise should be reduced.
+    :param factor: Kernel size (x*x) for the noise reduction.
+    :return: 'img' with less noise.
     """
     # See https://docs.opencv.org/4.x/d9/d61/tutorial_py_morphological_ops.html
     reduced_noise = cv2.morphologyEx(
@@ -117,9 +117,9 @@ def reduce_holes(img: NDArray, factor: int = 4) -> NDArray:
     """
     Reduce the holes in markings on a given image
 
-    :param img: Image in which the holes should be reduced
-    :param factor: Kernel size (x*x) of the reduction
-    :return: 'img' with fewer and smaller holes
+    :param img: Image in which the holes should be reduced.
+    :param factor: Kernel size (x*x) of the reduction.
+    :return: 'img' with fewer and smaller holes.
     """
     # See https://docs.opencv.org/4.x/d9/d61/tutorial_py_morphological_ops.html
     return cv2.morphologyEx(img, cv2.MORPH_CLOSE, np.ones((factor, factor), np.uint8))
