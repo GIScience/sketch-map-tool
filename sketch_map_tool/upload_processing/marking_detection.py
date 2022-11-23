@@ -69,19 +69,20 @@ def reduce_noise(img: NDArray, factor=2):
     Reduce the noise, i.e. artifacts, in an image containing markings
 
     :param img: Image in which the noise should be reduced
-    :param factor: Strength of the noise reduction
+    :param factor: Kernel size (x*x) for the noise reduction
     :return: 'img' with less noise
     """
     # See https://docs.opencv.org/4.x/d9/d61/tutorial_py_morphological_ops.html
-    return cv2.morphologyEx(img, cv2.MORPH_OPEN, np.ones((factor, factor), np.uint8))
+    reduced_noise = cv2.morphologyEx(img, cv2.MORPH_OPEN, np.ones((factor, factor), np.uint8))
+    return cv2.fastNlMeansDenoisingColored(reduced_noise, None, 30, 30, 20, 21)
 
 
-def reduce_holes(img: NDArray, factor=5):
+def reduce_holes(img: NDArray, factor=4):
     """
     Reduce the holes in markings on a given image
 
     :param img: Image in which the holes should be reduced
-    :param factor: Strength of the reduction
+    :param factor: Kernel size (x*x) of the reduction
     :return: 'img' with less and smaller holes
     """
     # See https://docs.opencv.org/4.x/d9/d61/tutorial_py_morphological_ops.html
