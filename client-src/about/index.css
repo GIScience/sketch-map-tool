@@ -1,3 +1,15 @@
+.logos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-evenly;
+}
+
+.logos > img {
+    flex: 0 0 auto;
+    max-height: 10rem;
+}
+
 /* style litetrature */
 article {
     display: flex;
