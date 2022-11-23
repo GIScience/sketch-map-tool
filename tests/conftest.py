@@ -1,6 +1,8 @@
+import cv2
 import pytest
 
-from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.models import Bbox, File, PaperFormat, Size
+from tests import FIXTURE_DIR
 
 
 @pytest.fixture
@@ -60,3 +62,19 @@ def bbox_wgs84():
 @pytest.fixture
 def size_as_dict():
     return {"width": 1867, "height": 1587}
+
+
+@pytest.fixture
+def sketch_map():
+    """Photo of a Sketch Map."""
+    return cv2.imread(str(FIXTURE_DIR / "sketch-map.png"))
+
+
+@pytest.fixture
+def file(sketch_map):
+    return File(filename="filename", mimetype="image/png", image=sketch_map)
+
+
+@pytest.fixture
+def files(file):
+    return [file, file]
