@@ -20,6 +20,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - redis
+      - postgres
     environment:
       SMT-DATA-STORE: "redis://redis:6379"
       SMT-BROKER-URL: "redis://redis:6379"
@@ -37,7 +38,7 @@ services:
       POSTGRES_PASSWORD: smt
       POSTGRES_USER: smt
     volumes:
-        - pg_data:/var/lib/postgresql/data/pgdata
+        - pg_data:/var/lib/postgresql/data
 volumes:
     redis_data:
     pg_data:

@@ -3,6 +3,8 @@ from io import BytesIO
 from typing import get_args
 from uuid import uuid4
 
+import cv2
+import numpy as np
 from celery.states import PENDING, RECEIVED, RETRY, STARTED, SUCCESS
 from flask import Response, redirect, render_template, request, send_file, url_for
 from werkzeug.utils import secure_filename
@@ -13,7 +15,7 @@ from sketch_map_tool import tasks
 from sketch_map_tool.data_store import client as ds_client  # type: ignore
 from sketch_map_tool.definitions import ALLOWED_TYPES, DIGITIZE_TYPES
 from sketch_map_tool.exceptions import QRCodeError
-from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.models import Bbox, File, PaperFormat, Size
 from sketch_map_tool.validators import validate_type, validate_uuid
 
 
@@ -43,7 +45,9 @@ def create_results_post() -> Response:
     """Create the sketch map"""
     # Request parameters
     bbox_raw = json.loads(request.form["bbox"])
+    bbox_wgs84_raw = json.loads(request.form["bboxWGS84"])
     bbox = Bbox(*bbox_raw)
+    bbox_wgs84 = Bbox(*bbox_wgs84_raw)
     format_raw = request.form["format"]
     format_: PaperFormat = getattr(definitions, format_raw.upper())
     orientation = request.form["orientation"]
@@ -55,7 +59,7 @@ def create_results_post() -> Response:
     task_sketch_map = tasks.generate_sketch_map.apply_async(
         args=(bbox, format_, orientation, size, scale)
     )
-    task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox,))
+    task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox_wgs84,))
 
     # Unique id for current request
     uuid = str(uuid4())
@@ -90,38 +94,26 @@ def digitize() -> str:
 @app.post("/digitize/results")
 def digitize_results_post() -> Response:
     """Upload files to create geodata results"""
-    # Request parameters
-    # check if the post request has the file part
     if "file" not in request.files:
-        # flash('No file part')
-        print("No files")
         return redirect(url_for("digitize"))
-    files = request.files.getlist("file")
-    print(files)
+    files_raw = request.files.getlist("file")
     # TODO FileStorage seems not to be serializable -> Error too much Recursion
     # the map function transforms the list of FileStorage Objects to a list of bytes
     # not sure if this is the best approach but is accepted by celery task
     # if we want the filenames we must construct a list of tuples or dicts
-    new_files = list(
-        map(
-            lambda item: {
-                "filename": secure_filename(item.filename),
-                "mimetype": item.mimetype,
-                "bytes": BytesIO(item.read()),
-            },
-            files,
+    files: list[File] = []
+    for file in files_raw:
+        files.append(
+            File(
+                secure_filename(file.filename),
+                file.mimetype,
+                cv2.imdecode(
+                    np.fromstring(file.read(), dtype="uint8"), cv2.IMREAD_UNCHANGED
+                ),
+            )
         )
-    )
-    # close the temporary files in the FileStorage objects
-    map(lambda item: item.close(), files)
-
-    print(new_files)
-    # TODO process the files
-    task_digitize = tasks.generate_digitized_results.apply_async(args=(new_files,))
-
-    # Unique id for current request created by celery
+    task_digitize = tasks.generate_digitized_results.apply_async(args=(files,))
     uuid = task_digitize.id
-
     return redirect(url_for("digitize_results_get", uuid=uuid))
 
 

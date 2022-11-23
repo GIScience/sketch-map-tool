@@ -37,14 +37,15 @@ def qr_code_sketch_map():
 
 
 @pytest.fixture
-def decoded_content(format_, bbox, size):
+def decoded_content(uuid, format_, bbox, size, scale):
     return MappingProxyType(
         {
-            "uuid": "5f3d1d79-833a-44a6-9ab0-840081e40d43",
+            "uuid": uuid,
             "bbox": bbox,
             "format_": format_,
             "orientation": "landscape",
             "size": size,
+            "scale": scale,
         }
     )
 

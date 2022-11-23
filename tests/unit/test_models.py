@@ -3,10 +3,10 @@ from sketch_map_tool import models
 
 def test_bbox(bbox_as_list):
     bbox = models.Bbox(*bbox_as_list)
-    assert bbox.lat_min == 964598.2387041415
-    assert bbox.lon_min == 6343922.275917276
-    assert bbox.lat_max == 967350.9272435782
-    assert bbox.lon_max == 6346262.602545459
+    assert bbox.lon_min == 964472.1973848869
+    assert bbox.lat_min == 6343459.035638228
+    assert bbox.lon_max == 967434.6098457306
+    assert bbox.lat_max == 6345977.635778541
 
 
 def test_size(size_as_dict):

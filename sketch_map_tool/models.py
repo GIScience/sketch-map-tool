@@ -1,14 +1,20 @@
 from dataclasses import dataclass
 
+from numpy.typing import NDArray
+
 
 @dataclass(frozen=True)
 class Bbox:
-    """Bounding Box in WGS 84 / Pseudo-Mercator (EPSG:3857)"""
+    """Bounding Box in WGS 84 / Pseudo-Mercator (EPSG:3857)
 
-    lat_min: float
+    Be aware that the argument order is relevant to the API and the JavaScript client. Keep the
+    order in sync with the client.
+    """
+
     lon_min: float
-    lat_max: float
+    lat_min: float
     lon_max: float
+    lat_max: float
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -68,3 +74,10 @@ class LiteratureReference:
     citation: str
     img_src: str | None = None
     url: str | None = None
+
+
+@dataclass(frozen=True)
+class File:
+    filename: str
+    mimetype: str
+    image: NDArray

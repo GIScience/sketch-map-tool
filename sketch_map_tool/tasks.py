@@ -1,16 +1,17 @@
 from io import BytesIO
-from time import sleep
-from typing import List, Union
+from typing import Union
 
 from celery.result import AsyncResult
 from reportlab.lib.pagesizes import A4
-from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
 from sketch_map_tool import celery_app as celery
-from sketch_map_tool.map_generation import generate_pdf
+from sketch_map_tool.map_generation import generate_pdf as generate_map_pdf
 from sketch_map_tool.map_generation.qr_code import qr_code
-from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.models import Bbox, File, PaperFormat, Size
+from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
+from sketch_map_tool.oqt_analyses import get_report
+from sketch_map_tool.upload_processing import qr_code_reader
 from sketch_map_tool.wms import client as wms_client
 
 
@@ -32,8 +33,9 @@ def generate_sketch_map(
         format_,
         orientation,
         size,
+        scale,
     )
-    map_pdf, _ = generate_pdf(
+    map_pdf, _ = generate_map_pdf(
         map_image,
         qr_code_,
         format_,
@@ -45,32 +47,25 @@ def generate_sketch_map(
 @celery.task(bind=True)
 def generate_quality_report(
     self,
-    bbox: List[float],
+    bbox: Bbox,
 ) -> Union[BytesIO, AsyncResult]:
     """Generate a quality report as PDF.
 
     Fetch quality indicators from the OQT API
     """
-    print(self.request.id)
-    sleep(10)  # simulate long running task (10s)
-    buffer = BytesIO()
-    canv = canvas.Canvas(buffer, pagesize=A4)
-    canv.drawString(100, 100, "Quality Report")
-    canv.save()
-    buffer.seek(0)
-    return buffer
+    report = get_report(bbox)
+    return generate_report_pdf(report)
 
 
 @celery.task(bind=True)
-def generate_digitized_results(self, files) -> Union[BytesIO, AsyncResult]:
+def generate_digitized_results(self, files: list[File]) -> Union[BytesIO, AsyncResult]:
     """Generate first raster data, then vector data and finally a QGIS project"""
-    print(self.request.id)
-    print(files[0]["filename"])
-    sleep(3)  # simulate long running task (3s)
-    buffer = BytesIO()
-    canv = canvas.Canvas(buffer, pagesize=A4)
+    for file in files:
+        args = qr_code_reader.read(file.image)
+        print(args)
+    bytes_buffer = BytesIO()
+    canv = canvas.Canvas(bytes_buffer, pagesize=A4)
     canv.drawString(100, 100, "Digitized Results")
-    canv.drawImage(ImageReader(files[0]["bytes"]), 100, 120, 400, None, None, True)
     canv.save()
-    buffer.seek(0)
-    return buffer
+    bytes_buffer.seek(0)
+    return bytes_buffer

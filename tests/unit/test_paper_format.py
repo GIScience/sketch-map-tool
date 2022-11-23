@@ -1,8 +1,8 @@
 import pytest
-from sketch_map_tool.models import PaperFormat
 
 # TODO re-add LEGAL
 from sketch_map_tool.definitions import A0, A1, A2, A3, A4, LETTER, TABLOID
+from sketch_map_tool.models import PaperFormat
 
 
 # TODO re-add LEGAL

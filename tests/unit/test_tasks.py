@@ -12,8 +12,7 @@ def test_generate_sketch_map(monkeypatch, bbox, format_, size, scale):
     assert isinstance(result, BytesIO)
 
 
-@vcr.use_cassette()
-def test_generate_quality_report(monkeypatch):
-    monkeypatch.setattr("sketch_map_tool.tasks.sleep", lambda x: None)
-    result = tasks.generate_quality_report([])
+@vcr.use_cassette("test_get_report")
+def test_generate_quality_report(bbox_wgs84):
+    result = tasks.generate_quality_report(bbox_wgs84)
     assert isinstance(result, BytesIO)

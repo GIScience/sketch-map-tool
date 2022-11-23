@@ -6,6 +6,7 @@ from io import BytesIO
 import qrcode
 import qrcode.image.svg
 from reportlab.graphics.shapes import Drawing
+from reportlab.lib.units import cm
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool import __version__
@@ -18,6 +19,7 @@ def qr_code(
     format_: PaperFormat,
     orientation: str,
     size: Size,
+    scale: float,
     version: str = __version__,
     timestamp: datetime = datetime.now(timezone.utc),
 ) -> Drawing:
@@ -31,11 +33,12 @@ def qr_code(
         format_,
         orientation,
         size,
+        scale,
         version,
         timestamp,
     )
     qr_code_svg = _make_qr_code(data)
-    qr_code_rlg = _to_report_lab_graphic(qr_code_svg, format_.qr_scale)
+    qr_code_rlg = _to_report_lab_graphic(format_, qr_code_svg)
     return qr_code_rlg
 
 
@@ -45,9 +48,10 @@ def _encode_data(
     format_: PaperFormat,
     orientation: str,
     size: Size,
+    scale: float,
     version: str,
     timestamp: datetime,
-) -> dict[str, str]:
+) -> str:
     return json.dumps(
         {
             "id": uuid,
@@ -55,6 +59,7 @@ def _encode_data(
             "format": format_.title,
             "orientation": orientation,
             "size": asdict(size),
+            "scale": str(scale),
             "version": version,
             "timestamp": timestamp.isoformat(),
         }
@@ -63,16 +68,18 @@ def _encode_data(
 
 def _make_qr_code(data: str) -> BytesIO:
     """Generate a QR code with given arguments as encoded information."""
-    buffer = BytesIO()
+    bytes_buffer = BytesIO()
     qr = qrcode.QRCode(image_factory=qrcode.image.svg.SvgPathImage)
     qr.add_data(data)
     svg = qr.make_image()
-    svg.save(buffer)
-    buffer.seek(0)
-    return buffer
+    svg.save(bytes_buffer)
+    bytes_buffer.seek(0)
+    return bytes_buffer
 
 
-def _to_report_lab_graphic(svg: BytesIO, scale_factor: float) -> Drawing:
+def _to_report_lab_graphic(format_: PaperFormat, svg: BytesIO) -> Drawing:
     rlg = svg2rlg(svg)
-    rlg.scale(scale_factor, scale_factor)
+    expected_width = 0.85 * format_.right_margin * cm
+    scale = expected_width / rlg.width
+    rlg.scale(scale, scale)
     return rlg

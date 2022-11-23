@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 import pytest
 
 from sketch_map_tool.models import Bbox, PaperFormat, Size
@@ -8,10 +6,10 @@ from sketch_map_tool.models import Bbox, PaperFormat, Size
 @pytest.fixture
 def bbox():
     return Bbox(
-        966492.364208868,
-        6343445.659216596,
-        969486.2275163643,
-        6345991.012200175,
+        lon_min=964472.1973848869,
+        lat_min=6343459.035638228,
+        lon_max=967434.6098457306,
+        lat_max=6345977.635778541,
     )
 
 
@@ -41,17 +39,22 @@ def format_():
 
 @pytest.fixture
 def scale():
-    return 1283.129
+    return 10231.143861780083
 
 
 @pytest.fixture
 def uuid():
-    return str(uuid4())
+    return "654dd0d3-7bb0-4a05-8a68-517f0d9fc98e"
 
 
 @pytest.fixture
 def bbox_as_list():
-    return [964598.2387041415, 6343922.275917276, 967350.9272435782, 6346262.602545459]
+    return [964472.1973848869, 6343459.035638228, 967434.6098457306, 6345977.635778541]
+
+
+@pytest.fixture
+def bbox_wgs84():
+    return Bbox(lon_min=8.625, lat_min=49.3711, lon_max=8.7334, lat_max=49.4397)
 
 
 @pytest.fixture

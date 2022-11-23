@@ -47,6 +47,13 @@ function bindFormToPrintLayoutControl(printLayoutControl) {
         document.getElementById("bbox").value = JSON.stringify(newBbox);
     });
 
+    // property: bboxWGS84 (in wgs84)
+    document.getElementById("bboxWGS84").value = JSON.stringify(printLayoutControl.getBboxAsLonLat());
+    printLayoutControl.on("change:bbox", (event) => {
+        const newBbox = event.target.getBboxAsLonLat();
+        document.getElementById("bboxWGS84").value = JSON.stringify(newBbox);
+    });
+
     // property: size (WMS request - width and height params)
     document.getElementById("size").value = JSON.stringify(printLayoutControl.getPrintBoxSizeInDots(192));
     printLayoutControl.on("change", (event) => {
