@@ -13,12 +13,14 @@ FROM ubuntu:22.04
 
 # install libzbar (neccessary for pyzbar to read the QR codes)
 # install gdal
+# install libgl1
 # to reduce image size, clean up the apt cache by removing /var/lib/apt/lists.
 RUN apt-get update \
     && apt-get install -y --no-upgrade \
         python3-pip \
         libzbar0 \
         libgdal-dev \
+        libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
 # update C env vars so compiler can find gdal
