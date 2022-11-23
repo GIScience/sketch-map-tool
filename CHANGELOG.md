@@ -13,6 +13,7 @@
 - add resources (compass and globes as SVG graphics) for map generation ([#101])
 - use postgres as celery result backend ([#116)]
 - add QR-Code reader ([#108])
+- add auto-generated literature list ([#131])
 
 ### Bug Fixes
 
@@ -50,3 +51,4 @@
 [#107]: https://github.com/GIScience/sketch-map-tool/pull/107
 [#108]: https://github.com/GIScience/sketch-map-tool/pull/108
 [#116]: https://github.com/GIScience/sketch-map-tool/pull/116
+[#131]: https://github.com/GIScience/sketch-map-tool/pull/131

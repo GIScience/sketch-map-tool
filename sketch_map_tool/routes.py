@@ -31,7 +31,7 @@ def help() -> str:
 
 @app.get("/about")
 def about() -> str:
-    return render_template("about.html")
+    return render_template("about.html", literature=definitions.LITERATURE_REFERENCES)
 
 
 @app.get("/create")

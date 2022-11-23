@@ -1,4 +1,27 @@
 /* style litetrature */
 article {
-    background-color: white;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1rem;
+}
+
+article > .preview {
+    flex: 1 1 25%;
+    max-width: 25%;
+    min-width: 0;
+    box-sizing: border-box;
+    height: fit-content;
+}
+
+article > span {
+    flex: 3 1 55%;
+    min-width: 55%;
+    text-indent: -3rem;
+    margin-left: 3rem;
+    text-align: justify;
+}
+
+.no.preview {
+    background-color: var(--secondary);
+    aspect-ratio: 1;
 }

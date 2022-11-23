@@ -69,6 +69,13 @@ class PaperFormat:
     qr_contents_distance_rotated: int
 
 
+@dataclass()
+class LiteratureReference:
+    citation: str
+    img_src: str | None = None
+    url: str | None = None
+
+
 @dataclass(frozen=True)
 class File:
     filename: str
