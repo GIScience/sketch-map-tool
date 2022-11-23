@@ -21,10 +21,7 @@ def test_literatur_reference():
         citation="Klonner, C., Hartmann, M., Dischl, R., Djami, L., Anderson, L., Raifer, M., Lima-Silva, F., Degrossi, L. C., Zipf, A., de Albuquerque, J. P. (2021): The Sketch Map Tool Facilitates the Assessment of OpenStreetMap Data for Participatory Mapping, 10(3): 130. ISPRS International Journal of Geo-Information. 10:130.",
         url="https://doi.org/10.3390/ijgi10030130",
     )
-    assert (
-        literature_reference.img_src
-        == "ijgi-10-00130-g002.webp"
-    )
+    assert literature_reference.img_src == "ijgi-10-00130-g002.webp"
     assert (
         literature_reference.citation
         == "Klonner, C., Hartmann, M., Dischl, R., Djami, L., Anderson, L., Raifer, M., Lima-Silva, F., Degrossi, L. C., Zipf, A., de Albuquerque, J. P. (2021): The Sketch Map Tool Facilitates the Assessment of OpenStreetMap Data for Participatory Mapping, 10(3): 130. ISPRS International Journal of Geo-Information. 10:130."
