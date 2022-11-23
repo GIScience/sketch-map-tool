@@ -16,3 +16,8 @@ def test_generate_sketch_map(monkeypatch, bbox, format_, size, scale):
 def test_generate_quality_report(bbox_wgs84):
     result = tasks.generate_quality_report(bbox_wgs84)
     assert isinstance(result, BytesIO)
+
+
+def test_generate_digitized_results(files):
+    result = tasks.generate_digitized_results(files)
+    assert isinstance(result, BytesIO)
