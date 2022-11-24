@@ -6,9 +6,9 @@ from uuid import uuid4
 
 import cv2
 import numpy as np
+from celery import group
 
 # from celery import chain, group
-from celery.states import PENDING, RECEIVED, RETRY, STARTED, SUCCESS
 from flask import Response, redirect, render_template, request, send_file, url_for
 
 from sketch_map_tool import celery_app, definitions
@@ -141,13 +141,20 @@ def digitize_results_post() -> Response:
     # get original map image
     map_frame_buffer = tasks.generate_sketch_map.AsyncResult(uuid).get()[1]
     map_frame = _to_cv2_img(map_frame_buffer)
-    task_chain = (
-        tasks.clip.s(sketch_map, map_frame)
-        | tasks.georeference.s(bbox)
-        | tasks.detect.s()
-    ).apply_async()
 
-    return redirect(url_for("digitize_results_get", uuid=task_chain.id))
+    task_group = group(
+        [
+            (
+                tasks.clip.s(_to_cv2_img(file), map_frame)
+                | tasks.georeference.s(bbox)
+                | tasks.detect.s()
+            )
+            for file in files
+        ]
+    )
+    result = task_group.apply_async()
+    result.save()
+    return redirect(url_for("digitize_results_get", uuid=result.id))
 
 
 @app.get("/digitize/results")
@@ -168,38 +175,45 @@ def status(uuid: str, type_: ALLOWED_TYPES) -> Response:
 
     match type_:
         case "quality-report":
-            task = tasks.generate_quality_report.AsyncResult(task_id)
-        case "sketch-map":
-            task = tasks.generate_sketch_map.AsyncResult(task_id)
-        case "digitized-data":
             task = celery_app.AsyncResult(task_id)
-            # task = tasks.generate_digitized_results.AsyncResult(task_id)
-            # buffer = BytesIO()
-            # with ZipFile(buffer, "w") as zip_file:
-            #     for file, map_frame in zip(files, map_frames):
-            #         zip_file.writestr(file.filename + ".txt", map_frame)
-            # buffer.seek(0)
-            # return buffer
+        case "sketch-map":
+            task = celery_app.AsyncResult(task_id)
+        case "digitized-data":
+            task = celery_app.GroupResult.restore(task_id)
 
     # see celery states and their precedence here:
     # https://docs.celeryq.dev/en/stable/_modules/celery/states.html#precedence
-    body = {"id": uuid, "status": task.status, "type": type_}
-    if task.status == SUCCESS:
-        http_status = 200
-        body["href"] = "/api/download/" + uuid + "/" + type_
-    elif task.status in [PENDING, RETRY, RECEIVED, STARTED]:
+    href = None
+    error = None
+    if task.ready():
+        if task.successful():  # SUCCESS
+            http_status = 200
+            status = "SUCCESSFUL"
+            href = "/api/download/" + uuid + "/" + type_
+        elif task.failed():  # REJECTED, REVOKED, FAILURE
+            try:
+                task.get(propagate=True)
+            except QRCodeError as err:
+                # The request was well-formed but was unable to be followed due to semantic
+                # errors.
+                http_status = 422  # Unprocessable Entity
+                status = "FAILED"
+                error = str(err)
+            else:
+                http_status = 500  # Internal Server Error
+                status = "FAILED"
+    else:  # PENDING, RETRY, RECEIVED, STARTED
         # Accepted for processing, but has not been completed
         http_status = 202  # Accepted
-    else:  # Incl. REJECTED, REVOKED, FAILURE
-        try:
-            task.get(propagate=True)
-        except QRCodeError as error:
-            # The request was well-formed but was unable to be followed due to semantic
-            # errors.
-            http_status = 422  # Unprocessable Entity
-            body["error"] = str(error)
-        else:
-            http_status = 500  # Internal Server Error
+        status = "PROCESSING"
+    body_raw = {
+        "id": uuid,
+        "status": status,
+        "type": type_,
+        "href": href,
+        "error": error,
+    }
+    body = {k: v for k, v in body_raw.items() if v is not None}
     return Response(json.dumps(body), status=http_status, mimetype="application/json")
 
 
@@ -212,20 +226,20 @@ def download(uuid: str, type_: ALLOWED_TYPES) -> Response:
 
     match type_:
         case "quality-report":
-            task = tasks.generate_quality_report.AsyncResult(task_id)
+            task = celery_app.AsyncResult(task_id)
             mimetype = "application/pdf"
             if task.ready():
                 file: BytesIO = task.get()
         case "sketch-map":
-            task = tasks.generate_sketch_map.AsyncResult(task_id)
+            task = celery_app.AsyncResult(task_id)
             mimetype = "application/pdf"
             if task.ready():
-                file: BytesIO = task.get()[0]
+                file: BytesIO = task.get()[0]  # return only the sketch map
         case "digitized-data":
-            task = celery_app.AsyncResult(task_id)
+            task = celery_app.GroupResult.restore(task_id)
             mimetype = "text/plain"
             if task.ready():
-                file: BytesIO = task.get()
+                file: BytesIO = json.dumps({"results": str(task.get())})
             # TODO:
             # mimetype = "application/zip"
     return send_file(file, mimetype)

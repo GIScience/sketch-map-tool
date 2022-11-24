@@ -1,16 +1,4 @@
-import json
-
 import pytest
-from celery.states import (
-    FAILURE,
-    PENDING,
-    RECEIVED,
-    REJECTED,
-    RETRY,
-    REVOKED,
-    STARTED,
-    SUCCESS,
-)
 
 from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.routes import app
@@ -22,129 +10,158 @@ def client():
 
 
 @pytest.fixture()
-def uuid():
-    return "16fd2706-8baf-433b-82eb-8c7fada847da"
-
-
-@pytest.fixture()
-def mock_request_task_mapping(request, monkeypatch):
+def mock_request_task_mapping(uuid, monkeypatch):
     """Mock request id to task id mapping."""
-    type_ = request.getfixturevalue("type_")
-    request_task = json.dumps({type_: "16fd2706-8baf-433b-82eb-8c7fada847da"})
-    monkeypatch.setattr("sketch_map_tool.routes.ds_client.get", lambda x: request_task)
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.ds_client.get_task_id", lambda uuid, type_: uuid
+    )
 
 
 @pytest.fixture()
-def mock_async_results(request, monkeypatch):
+def mock_async_results_successful(monkeypatch):
     """Mock celery tasks results."""
 
     class MockTask:
-        def __init__(self, status):
-            self.status = status
-
         def get(*args, **kwargs):
             pass
 
-    status = request.getfixturevalue("status")
-    mock_task = MockTask(status)
+        def ready(self):
+            return True
+
+        def failed(self):
+            return False
+
+        def successful(self):
+            return True
+
+    mock_task = MockTask()
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.generate_quality_report.AsyncResult",
-        lambda x: mock_task,
-    )
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.generate_sketch_map.AsyncResult",
+        "sketch_map_tool.routes.celery_app.AsyncResult",
         lambda x: mock_task,
     )
 
 
 @pytest.fixture()
-def mock_async_results_error(request, monkeypatch):
+def mock_async_results_processing(monkeypatch):
     """Mock celery tasks results."""
 
     class MockTask:
-        def __init__(self, status):
-            self.status = status
+        def get(*args, **kwargs):
+            pass
 
+        def ready(self):
+            return False
+
+    mock_task = MockTask()
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.AsyncResult",
+        lambda x: mock_task,
+    )
+
+
+@pytest.fixture()
+def mock_async_results_failed(request, monkeypatch):
+    """Mock celery tasks results."""
+
+    class MockTask:
         def get(*args, **kwargs):
             raise QRCodeError("Mock error")
 
-    status = request.getfixturevalue("status")
-    mock_task = MockTask(status)
+        def ready(self):
+            return True
+
+        def failed(self):
+            return True
+
+        def successful(self):
+            return False
+
+    mock_task = MockTask()
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.generate_quality_report.AsyncResult",
-        lambda x: mock_task,
-    )
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.generate_sketch_map.AsyncResult",
+        "sketch_map_tool.routes.celery_app.AsyncResult",
         lambda x: mock_task,
     )
 
 
-@pytest.mark.parametrize("status", (SUCCESS,))
+@pytest.fixture()
+def mock_async_results_failed_hard(request, monkeypatch):
+    """Mock celery tasks results."""
+
+    class MockTask:
+        def get(*args, **kwargs):
+            raise ValueError()
+            pass
+
+        def ready(self):
+            return True
+
+        def failed(self):
+            return True
+
+        def successful(self):
+            return False
+
+    mock_task = MockTask()
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.AsyncResult",
+        lambda x: mock_task,
+    )
+
+
 @pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
-def test_status_success(
+def test_status_successful(
     client,
     uuid,
     type_,
-    status,
     mock_request_task_mapping,
-    mock_async_results,
+    mock_async_results_successful,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 200
     assert resp.mimetype == "application/json"
     assert resp.json["id"] == uuid
-    assert resp.json["status"] == "SUCCESS"
+    assert resp.json["status"] == "SUCCESSFUL"
     assert resp.json["href"] == "/api/download/{0}/{1}".format(uuid, type_)
 
 
-@pytest.mark.parametrize("status", (PENDING, RETRY, RECEIVED, STARTED))
 @pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
 def test_status_processing(
     client,
     uuid,
     type_,
-    status,
     mock_request_task_mapping,
-    mock_async_results,
+    mock_async_results_processing,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 202
     assert resp.json["id"] == uuid
-    assert resp.json["status"] == str(status)
+    assert resp.json["status"] == "PROCESSING"
     assert "href" not in resp.json.keys()
 
 
-@pytest.mark.parametrize("status", (FAILURE,))
 @pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
-def test_status_failure(
+def test_status_failed(
     client,
     uuid,
     type_,
-    status,
     mock_request_task_mapping,
-    mock_async_results_error,
+    mock_async_results_failed,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 422
     assert resp.json["id"] == uuid
-    assert resp.json["status"] == str(status)
+    assert resp.json["status"] == "FAILED"
     assert resp.json["error"] == "Mock error"
     assert "href" not in resp.json.keys()
 
 
-@pytest.mark.parametrize("status", (REJECTED, REVOKED))
 @pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
-def test_status_rejected_revoked(
+def test_status_failed_hard(
     client,
     uuid,
     type_,
-    status,
     mock_request_task_mapping,
-    mock_async_results,
+    mock_async_results_failed_hard,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 500
-    assert resp.json["id"] == uuid
-    assert resp.json["status"] == str(status)
-    assert "href" not in resp.json.keys()
