@@ -1,23 +1,27 @@
 import json
-from functools import reduce
+
+# from functools import reduce
 from io import BytesIO
 from uuid import uuid4
 
 import cv2
 import numpy as np
+
+# from celery import chain, group
 from celery.states import PENDING, RECEIVED, RETRY, STARTED, SUCCESS
 from flask import Response, redirect, render_template, request, send_file, url_for
-from werkzeug.utils import secure_filename
 
-from sketch_map_tool import definitions
+from sketch_map_tool import celery_app, definitions
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
 from sketch_map_tool.data_store import client as ds_client  # type: ignore
 from sketch_map_tool.definitions import ALLOWED_TYPES
 from sketch_map_tool.exceptions import QRCodeError
-from sketch_map_tool.models import Bbox, File, PaperFormat, Size
+from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.upload_processing import qr_code_reader
 from sketch_map_tool.validators import validate_type, validate_uuid
+
+# from werkzeug.utils import secure_filename
 
 
 @app.get("/")
@@ -95,39 +99,55 @@ def digitize() -> str:
 @app.post("/digitize/results")
 def digitize_results_post() -> Response:
     """Upload files to create geodata results"""
+
+    def _to_cv2_img(buffer):
+        buffer.seek(0)
+        return cv2.imdecode(
+            np.fromstring(buffer.read(), dtype="uint8"), cv2.IMREAD_UNCHANGED
+        )
+
+    # No files uploaded
     if "file" not in request.files:
         return redirect(url_for("digitize"))
-    files_raw = request.files.getlist("file")
+    files = request.files.getlist("file")
     # TODO FileStorage seems not to be serializable -> Error too much Recursion
     # the map function transforms the list of FileStorage Objects to a list of bytes
     # not sure if this is the best approach but is accepted by celery task
     # if we want the filenames we must construct a list of tuples or dicts
-    files: list[File] = []
-    for file in files_raw:
-        files.append(
-            File(
-                secure_filename(file.filename),
-                file.mimetype,
-                cv2.imdecode(
-                    np.fromstring(file.read(), dtype="uint8"), cv2.IMREAD_UNCHANGED
-                ),
-            )
-        )
-
-    args = [qr_code_reader.read(file.image) for file in files]
+    # files: list[File] = []
+    # for file in files_raw:
+    #     files.append(
+    #         File(
+    #             secure_filename(file.filename),
+    #             file.mimetype,
+    #             cv2.imdecode(
+    #                 np.fromstring(file.read(), dtype="uint8"), cv2.IMREAD_UNCHANGED
+    #             ),
+    #         )
+    #     )
+    file = files[0]
+    # name = secure_filename(file.filename)
+    # mimetype = file.mimetype
+    sketch_map = _to_cv2_img(file)
+    args = qr_code_reader.read(sketch_map)
+    uuid = args["uuid"]
+    bbox = args["bbox"]
     # all uploaded sketch maps should have the same uuid
-    uuid = reduce(lambda a, b: a if a == b else None, [arg["uuid"] for arg in args])
-    if uuid is None:
-        raise ValueError  # TODO
+    # uuid = reduce(lambda a, b: a if a == b else None, [arg["uuid"] for arg in args])
+    # if uuid is None:
+    #     raise ValueError  # TODO
+    # return args
 
     # get original map image
-    map_img_buffer = tasks.generate_sketch_map.AsyncResult(uuid).get()[1]
-    map_img = cv2.imdecode(
-        np.fromstring(map_img_buffer.read(), dtype="uint8"), cv2.IMREAD_UNCHANGED
-    )
+    map_frame_buffer = tasks.generate_sketch_map.AsyncResult(uuid).get()[1]
+    map_frame = _to_cv2_img(map_frame_buffer)
+    task_chain = (
+        tasks.clip.s(sketch_map, map_frame)
+        | tasks.georeference.s(bbox)
+        | tasks.detect.s()
+    ).apply_async()
 
-    task_digitize = tasks.generate_digitized_results.apply_async(args=(files, map_img))
-    return redirect(url_for("digitize_results_get", uuid=task_digitize.id))
+    return redirect(url_for("digitize_results_get", uuid=task_chain.id))
 
 
 @app.get("/digitize/results")
@@ -152,7 +172,14 @@ def status(uuid: str, type_: ALLOWED_TYPES) -> Response:
         case "sketch-map":
             task = tasks.generate_sketch_map.AsyncResult(task_id)
         case "digitized-data":
-            task = tasks.generate_digitized_results.AsyncResult(task_id)
+            task = celery_app.AsyncResult(task_id)
+            # task = tasks.generate_digitized_results.AsyncResult(task_id)
+            # buffer = BytesIO()
+            # with ZipFile(buffer, "w") as zip_file:
+            #     for file, map_frame in zip(files, map_frames):
+            #         zip_file.writestr(file.filename + ".txt", map_frame)
+            # buffer.seek(0)
+            # return buffer
 
     # see celery states and their precedence here:
     # https://docs.celeryq.dev/en/stable/_modules/celery/states.html#precedence
@@ -195,8 +222,8 @@ def download(uuid: str, type_: ALLOWED_TYPES) -> Response:
             if task.ready():
                 file: BytesIO = task.get()[0]
         case "digitized-data":
-            task = tasks.generate_digitized_results.AsyncResult(task_id)
-            mimetype = "application/pdf"
+            task = celery_app.AsyncResult(task_id)
+            mimetype = "text/plain"
             if task.ready():
                 file: BytesIO = task.get()
             # TODO:

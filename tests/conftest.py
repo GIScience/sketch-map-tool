@@ -1,7 +1,9 @@
+from io import BytesIO
+
 import cv2
 import pytest
 
-from sketch_map_tool.models import Bbox, File, PaperFormat, Size
+from sketch_map_tool.models import Bbox, PaperFormat, Size
 from tests import FIXTURE_DIR
 
 
@@ -65,16 +67,36 @@ def size_as_dict():
 
 
 @pytest.fixture
+def sketch_map_buffer():
+    """Photo of a Sketch Map."""
+    with open(str(FIXTURE_DIR / "sketch-map.png"), "rb") as file:
+        return BytesIO(file.read())
+
+
+@pytest.fixture
+def map_frame_buffer():
+    """Map frame of original Sketch Map."""
+    with open(str(FIXTURE_DIR / "sketch-map-frame.png"), "rb") as file:
+        return BytesIO(file.read())
+
+
+@pytest.fixture
 def sketch_map():
     """Photo of a Sketch Map."""
     return cv2.imread(str(FIXTURE_DIR / "sketch-map.png"))
 
 
 @pytest.fixture
-def file(sketch_map):
-    return File(filename="filename", mimetype="image/png", image=sketch_map)
+def map_frame():
+    """Map frame of original Sketch Map."""
+    return cv2.imread(str(FIXTURE_DIR / "sketch-map-frame.png"))
 
 
-@pytest.fixture
-def files(file):
-    return [file, file]
+# @pytest.fixture
+# def file(sketch_map):
+#     return File(filename="filename", mimetype="image/png", image=sketch_map)
+
+
+# @pytest.fixture
+# def files(file):
+#     return [file, file]
