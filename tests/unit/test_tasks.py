@@ -2,6 +2,7 @@
 
 from io import BytesIO
 
+import numpy as np
 import pytest
 
 from sketch_map_tool import tasks
@@ -48,6 +49,16 @@ def test_generate_quality_report(bbox_wgs84):
     assert isinstance(result, BytesIO)
 
 
-def test_generate_digitized_results(files, mock_task, mock_get_task_id):
-    result = tasks.generate_digitized_results(files)
-    assert isinstance(result, BytesIO)
+def test_clip(sketch_map, map_frame):
+    result = tasks.clip(sketch_map, map_frame)
+    assert isinstance(result, np.ndarray)
+
+
+def test_georeference(map_frame, bbox):
+    result = tasks.georeference(map_frame, bbox)
+    assert isinstance(result, np.ndarray)
+
+
+def test_detect(map_frame):
+    result = tasks.detect(sketch_map_frame=map_frame)
+    assert isinstance(result, np.ndarray)
