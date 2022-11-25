@@ -20,8 +20,6 @@
     background-blend-mode: color-dodge;
 
     --color: white;
-    --primary: var(--heigit-red);
-    --primary-hover: var(--heigit-red);
 
     border-radius: unset;
     margin-top: 0;
@@ -29,6 +27,21 @@
 
 #teaser-message p:last-child {
     margin: 0;
+}
+
+#teaser-message a {
+    color: white;
+    text-decoration: underline;
+    text-shadow: 0 0 2px currentcolor;
+}
+
+#teaser-message a:hover,
+#teaser-message a:focus {
+    text-shadow: 0 0 4px currentcolor;
+}
+
+#teaser-message a:focus {
+    background-color: var(--heigit-red);
 }
 
 #main-grid {
