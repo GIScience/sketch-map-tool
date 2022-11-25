@@ -18,12 +18,21 @@
     /* TODO: important should not be necessary */
     --primary: #2344ca !important;  /* blue */
     --primary-hover: #162b83 !important;  /* dark blue */
+    --card-sectionning-background-color: #e6e6e6 !important;
 }
 
 @media (min-width: 576px) {
     :root {
         --logo-text-size: 2.8rem;
     }
+}
+
+.brand-font {
+    font-family: D-DIN, sans-serif;
+}
+
+.heigit-red {
+    color: var(--heigit-red);
 }
 
 /* wrap whole page in a flexbox to fill up whitespace between main and footer */
@@ -35,6 +44,8 @@ body {
     display: flex;
     flex-flow: column;
     height: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
 }
 
 .h1 {

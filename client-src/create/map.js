@@ -20,6 +20,7 @@ function createMap(target = "map", lonLat = [8.68, 49.41], zoom = 15) {
         view: new View({
             center: fromLonLat(lonLat),
             zoom,
+            maxZoom: 20,
         }),
         layers: [
             new Tile({
