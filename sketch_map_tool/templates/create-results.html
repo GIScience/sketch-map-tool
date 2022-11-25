@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for("static", filename="bundles/create-results.css") }}">
     <script type="module"
             src="{{ url_for("static", filename="bundles/create-results.js") }}"></script>
 {% endblock head %}
@@ -22,7 +21,7 @@
 
         <div class="grid">
             <div>
-                <article id="quality-report">
+                <article id="quality-report" class="result">
                     <header>
                         <img src="{{ url_for("static", filename="assets/images/create-results/quality-report-icon.svg") }}" alt="quality report icon"><br>
                         <img class="sub-icon" src="{{ url_for("static", filename="assets/logos/HeiGIT/ohsome-quality-analyst.svg") }}" alt="ohsome quality analyst logo">
@@ -53,7 +52,7 @@
                 </article>
             </div>
             <div>
-                <article id="sketch-map">
+                <article id="sketch-map" class="result">
                     <header>
                         <img src="{{ url_for("static", filename="assets/images/create-results/sketch-map-icon.svg") }}" alt="sketch map icon"><br>
                         <span class="brand-font heigit-red sub-icon">Sketch Map</span>

@@ -11,9 +11,9 @@
 
 {% block body %}
     <div class="container-fluid horizontal step-arrows">
-        <div>Scan or photograph your scribbled SketchMaps</div>
+        <div>Scan or photograph your marked SketchMaps</div>
         <div>Upload your SketchMaps</div>
-        <div class="active">Download sketches as Geodata</div>
+        <div class="active">Download collected Markings as Geodata</div>
     </div>
     <main class="container">
         <div id="main-message" class="sketchy h1 center-text">Your results are being processed ...
@@ -21,8 +21,12 @@
 
         <div class="grid">
             <div>
-                <article>
-                    <header>Raster</header>
+                <article class="result">
+                    <header>
+                        <img src="{{ url_for("static", filename="assets/images/create-results/map-icon.svg") }}"
+                             alt="raster data icon"><br>
+                        <span class="brand-font sub-icon">Raster</span>
+                    </header>
                     <span id="raster-data-status"></span>
                     <br/><br/>
                     <a id="raster-data-download-button" href="#" download aria-busy="true"
@@ -30,8 +34,12 @@
                 </article>
             </div>
             <div>
-                <article>
-                    <header>Vector</header>
+                <article class="result">
+                    <header>
+                        <img src="{{ url_for("static", filename="assets/images/create-results/map-icon.svg") }}"
+                             alt="vector data icon"><br>
+                        <span class="brand-font sub-icon">Vector</span>
+                    </header>
                     <span id="vector-data-status"></span>
                     <br/><br/>
                     <a id="vector-data-download-button" href="#" download aria-busy="true"
@@ -40,8 +48,12 @@
                 </article>
             </div>
             <div>
-                <article>
-                    <header>QQIS</header>
+                <article class="result">
+                    <header>
+                        <img src="{{ url_for("static", filename="assets/logos/qgis-logo.svg") }}"
+                             alt="QGIS logo"><br>
+                        <span class="brand-font sub-icon">All-in-One</span>
+                    </header>
                     <span id="qgis-data-status"></span>
                     <br/><br/>
                     <a id="qgis-data-download-button" href="#" download aria-busy="true"

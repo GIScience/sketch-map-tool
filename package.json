@@ -4,7 +4,7 @@
   "description": "",
   "watch": {
     "build": {
-      "patterns": ["client-src", "sketch_map_tool/templates"],
+      "patterns": ["client-src", "sketch_map_tool/templates", "esbuild.js"],
       "extensions": "js,css,html"
     }
   },
