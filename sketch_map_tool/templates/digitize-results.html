@@ -21,41 +21,80 @@
 
         <div class="grid">
             <div>
-                <article class="result">
+                <article id="raster-data" class="result">
                     <header>
                         <img src="{{ url_for("static", filename="assets/images/digitize-results/raster-marking-icon.svg") }}"
                              alt="raster data icon"><br>
                         <span class="brand-font sub-icon">Raster</span>
                     </header>
-                    <span id="raster-data-status"></span>
-                    <br/><br/>
+                    <h6>Geo-referenced markings as GeoTiffs</h6>
+                    <p class="pending">
+                        We are extracting and geo-referencing the color markings of your Sketch
+                        Maps.<br>
+                        Please be patient this can take 2-3 minutes.
+                    </p>
+                    <p class="success hidden">
+                        We have extracted and geo-referenced the color markings of your Sketch
+                        Maps.<br>
+                        You can download them as rasterized GeoTIFFs and use them for further
+                        analysis in your favorite GIS Software.
+                    </p>
+                    <p class="error hidden">
+                        "Sorry! <br>Something went wrong while trying to generate the Result. Please
+                        try again later."
+                    </p>
                     <a id="raster-data-download-button" href="#" download aria-busy="true"
                        role="button" disabled="disabled">Download ZIP</a>
                 </article>
             </div>
             <div>
-                <article class="result">
+                <article id="vector-data" class="result">
                     <header>
                         <img src="{{ url_for("static", filename="assets/images/digitize-results/vector-marking-icon.svg") }}"
                              alt="vector data icon"><br>
                         <span class="brand-font sub-icon">Vector</span>
                     </header>
-                    <span id="vector-data-status"></span>
-                    <br/><br/>
+                    <h6>Geo-referenced markings as GeoPackage</h6>
+                    <p class="pending">
+                        We are extracting and geo-referencing the color markings of your Sketch
+                        Maps.<br>
+                        Please be patient this can take 2-3 minutes.
+                    </p>
+                    <p class="success hidden">
+                        We have extracted and geo-referenced the color markings of your Sketch
+                        Maps.<br>
+                        You can download them as vectorized polygons and use them for further
+                        analysis in your favorite GIS Software.
+                    </p>
+                    <p class="error hidden">
+                        "Sorry! <br>Something went wrong while trying to generate the Result. Please
+                        try again later."
+                    </p>
                     <a id="vector-data-download-button" href="#" download aria-busy="true"
                        role="button"
                        disabled="disabled">Download ZIP</a>
                 </article>
             </div>
             <div>
-                <article class="result">
+                <article id="qgis-data" class="result">
                     <header>
                         <img src="{{ url_for("static", filename="assets/logos/qgis-logo.svg") }}"
                              alt="QGIS logo"><br>
                         <span class="brand-font sub-icon">All-in-One</span>
                     </header>
-                    <span id="qgis-data-status"></span>
-                    <br/><br/>
+                    <h6>All-in-One QGIS Project</h6>
+                    <p class="pending">
+                        We are packaging a QGIS project file, which contains all raster and vector
+                        data of the markings.
+                    </p>
+                    <p class="success hidden">
+                        We have packed a QGIS project file, which contains all raster and vector
+                        data of the markings.
+                    </p>
+                    <p class="error hidden">
+                        "Sorry! <br>Something went wrong while trying to generate the Result. Please
+                        try again later."
+                    </p>
                     <a id="qgis-data-download-button" href="#" download aria-busy="true"
                        role="button"
                        disabled="disabled">Download ZIP</a>
