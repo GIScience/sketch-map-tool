@@ -7,7 +7,7 @@ import "./create.css";
 import { createMap, addPrintLayoutControl, addGeocoderControl } from "./map.js";
 import { bindFormToPrintLayoutControl } from "./form.js";
 
-const map = createMap();
+const map = createMap("map", [8.68, 49.41], 15);
 const printLayoutControl = addPrintLayoutControl(map);
 bindFormToPrintLayoutControl(printLayoutControl);
 addGeocoderControl(map);

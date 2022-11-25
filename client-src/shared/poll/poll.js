@@ -24,7 +24,7 @@ async function poll(url, prefix) {
     }
 
     async function onProgress(response) {
-        document.getElementById(`${prefix}-status`).innerText = "Generating, please wait…";
+        console.log("progress", response);
     }
 
     async function onValid(response) {
@@ -34,7 +34,9 @@ async function poll(url, prefix) {
         setIsBusy(`${prefix}-download-button`, false);
         setDisabled(`${prefix}-download-button`, false);
 
-        document.getElementById(`${prefix}-status`).innerText = status;
+        // hide all .pending elements and show all .success elements
+        document.querySelectorAll(`#${prefix} .pending`).forEach((element) => element.classList.toggle("hidden"));
+        document.querySelectorAll(`#${prefix} .success`).forEach((element) => element.classList.toggle("hidden"));
     }
 
     /**
@@ -42,8 +44,9 @@ async function poll(url, prefix) {
      * @param _prefix sketch-map | quality-report
      */
     function handleError(_prefix) {
-        // a message text container
-        document.getElementById(`${_prefix}-status`).innerHTML = "Sorry! <br>Something went wrong while trying to generate the Result. Please try again later.";
+        document.querySelectorAll(`#${prefix} :is(.pending, .success)`).forEach((element) => element.classList.add("hidden"));
+        document.querySelectorAll(`#${prefix} .error`).forEach((element) => element.classList.remove("hidden"));
+
         // a button to disappear
         document.getElementById(`${_prefix}-download-button`).style.display = "none";
     }
