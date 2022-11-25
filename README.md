@@ -54,8 +54,7 @@ or simply download everything as a ZIP folder from the repository website and ex
 choice.
 
 ### 1. Installation using Docker
-To make the installation more easy, we created a [Dockerfile](Dockerfile) based on which you can build a container 
-running the tool. 
+
 #### 1a. Install Docker
 If you do not have Docker installed, you can, for example, install it with [Docker Desktop](https://www.docker.com/get-started/).  
 
@@ -69,38 +68,25 @@ administrator and add the user you want to start docker with to `Local Users and
 You find the Computer Management in Windows by doing a right-click on the Windows symbol or by pressing 
 `Windows key` + `R` and pasting `lusrmgr.msc` before clicking `OK`
 
-#### 1b. Build the image
+#### 1b. Run the tool
 Start your commandline/terminal and go to the directory in which the file `Dockerfile` is stored.  
 There, run:
 ```
-docker build -t sketch-map-tool .
+docker compose up
 ```
-This might take some time, as all dependencies are downloaded and installed.
+This might take some time the first time you use the tool, as all dependencies are downloaded and installed.
 
-#### 1c. Start a container
-To actually run the Sketch Map Tool on your localhost, execute the command
-```
-docker run -p 8000:8080 --name sketch-maps sketch-map-tool
-```
-After some time you should see the following , if not: Wait a minute and try it again  
+#### 2. Open the tool in your browser
+After some time you should see the following or something similar.  
 ```
 INFO:waitress:Serving on http://0.0.0.0:8080
 ```
-or something similar. As soon as you see these outputs, the Sketch Map Tool is ready:  
-Simply open [localhost:8000](localhost:8000) in a browser of your choice.  
+Note that there might be some other outputs of the form 
+`sketch-map-tool-celery-1  | [...]` below, so in case you see such outputs, you might need to scroll up a bit.
+As soon as you see these outputs, the Sketch Map Tool is ready:  
+Simply open [localhost:8080](localhost:8080) in a browser of your choice.  
   
-When you want to exit the sketch map tool, simply run (in another terminal / cmd window)
-```
-docker stop sketch-maps
-```  
-If you want to start the container again, you can do so with  
-```
-docker start sketch-maps
-```
-If you want to execute the `run` command again, at first remove the existing container with
-```
-docker rm sketch-maps
-```
+When you want to exit the sketch map tool, simply press `CTRL`+`c` in the terminal window in which you started the tool.
 
 ## How to contribute
 
