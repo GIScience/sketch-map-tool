@@ -110,6 +110,8 @@ def reduce_noise(img: NDArray, factor: int = 2) -> NDArray:
     reduced_noise = cv2.morphologyEx(
         img, cv2.MORPH_OPEN, np.ones((factor, factor), np.uint8)
     )
+    # TODO: Long running job in next line -> Does the slightly improved noise
+    #       reduction justify keeping it? 
     return cv2.fastNlMeansDenoisingColored(reduced_noise, None, 30, 30, 20, 21)
 
 
