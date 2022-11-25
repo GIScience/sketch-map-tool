@@ -1,0 +1,22 @@
+.result .hidden {
+    display: none;
+}
+
+.result header {
+    text-align: center;
+}
+
+.result header :is(h1, h2, h3, h4, h5, h6) {
+    margin: 0;
+}
+
+.result header img {
+    height: 4rem;
+    max-width: 67%;
+}
+
+.result header .sub-icon {
+    display: inline-block;
+    height: 3rem;
+    font-size: 2rem;
+}

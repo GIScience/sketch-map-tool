@@ -13,13 +13,13 @@
 
 {% block body %}
     <div class="container-fluid horizontal step-arrows">
-        <div>Scan or photograph your scribbled SketchMaps</div>
+        <div class="active">Scan or photograph your marked SketchMaps</div>
         <div class="active">Upload your SketchMaps</div>
-        <div>Download sketches as Geodata</div>
+        <div>Download collected Markings as Geodata</div>
     </div>
     <main class="container-fluid">
         <div id="main-message" class="sketchy h1 center-text">
-            Upload one or more scribbled SketchMaps
+            Scan or photograph your marked sketch maps after data collection.<br>Then, upload one or more marked SketchMaps at once
         </div>
 
         <form name="upload" action="/digitize/results" method="post" enctype=multipart/form-data>
