@@ -3,7 +3,7 @@ import "filebokz/dist/filebokz-theme.css";
 import "./index.css";
 
 import filebokz from "filebokz";
-import { setDisabled } from "../shared";
+import { setDisabled, setIsBusy } from "../shared";
 
 // initialize the drag and drop enabled file-uploader
 filebokz();
@@ -27,4 +27,5 @@ fileElement.addEventListener("file-removed", (e) => {
 // disable the submit button after submit to prevent multiple submissions
 document.forms.namedItem("upload").onsubmit = () => {
     setDisabled("submitBtn", true);
+    setIsBusy("submitBtn", true);
 };
