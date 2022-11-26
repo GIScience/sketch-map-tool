@@ -6,7 +6,7 @@ from typing import Dict
 
 import toml
 
-from sketch_map_tool.helper_modules.helper import get_project_root
+from sketch_map_tool.helpers import get_project_root
 
 
 def get_config_path() -> str:
