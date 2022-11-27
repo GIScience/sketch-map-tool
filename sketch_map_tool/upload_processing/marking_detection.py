@@ -94,7 +94,6 @@ def detect_markings(
         single_color_markings.append(
             (color, reduce_holes(reduce_noise(single_color_marking)))
         )
-
     return single_color_markings
 
 
