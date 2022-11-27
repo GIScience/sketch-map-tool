@@ -4,10 +4,6 @@ import json
 from io import BytesIO
 from uuid import uuid4
 
-import cv2
-import numpy as np
-from celery import group
-
 # from celery import chain, group
 from flask import Response, redirect, render_template, request, send_file, url_for
 
@@ -18,7 +14,6 @@ from sketch_map_tool.data_store import client as ds_client  # type: ignore
 from sketch_map_tool.definitions import ALLOWED_TYPES
 from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.models import Bbox, PaperFormat, Size
-from sketch_map_tool.upload_processing import qr_code_reader
 from sketch_map_tool.validators import validate_type, validate_uuid
 
 # from werkzeug.utils import secure_filename
@@ -99,58 +94,17 @@ def digitize() -> str:
 @app.post("/digitize/results")
 def digitize_results_post() -> Response:
     """Upload files to create geodata results"""
-
-    def _to_cv2_img(buffer):
-        buffer.seek(0)
-        return cv2.imdecode(
-            np.fromstring(buffer.read(), dtype="uint8"), cv2.IMREAD_UNCHANGED
-        )
-
     # No files uploaded
     if "file" not in request.files:
         return redirect(url_for("digitize"))
-    files = request.files.getlist("file")
     # TODO FileStorage seems not to be serializable -> Error too much Recursion
     # the map function transforms the list of FileStorage Objects to a list of bytes
     # not sure if this is the best approach but is accepted by celery task
     # if we want the filenames we must construct a list of tuples or dicts
-    # files: list[File] = []
-    # for file in files_raw:
-    #     files.append(
-    #         File(
-    #             secure_filename(file.filename),
-    #             file.mimetype,
-    #             cv2.imdecode(
-    #                 np.fromstring(file.read(), dtype="uint8"), cv2.IMREAD_UNCHANGED
-    #             ),
-    #         )
-    #     )
-    file = files[0]
-    # name = secure_filename(file.filename)
-    # mimetype = file.mimetype
-    sketch_map = _to_cv2_img(file)
-    args = qr_code_reader.read(sketch_map)
-    uuid = args["uuid"]
-    bbox = args["bbox"]
-    # all uploaded sketch maps should have the same uuid
-    # uuid = reduce(lambda a, b: a if a == b else None, [arg["uuid"] for arg in args])
-    # if uuid is None:
-    #     raise ValueError  # TODO
-    # return args
-
-    # get original map image
-    map_frame_buffer = tasks.generate_sketch_map.AsyncResult(uuid).get()[1]
-    map_frame = _to_cv2_img(map_frame_buffer)
-
-    task_group = group(
-        [
-            (tasks.clip.s(_to_cv2_img(file), map_frame) | tasks.img_to_geotiff.s(bbox))
-            for file in files
-        ]
-    )
-    result = task_group.apply_async()
-    result.save()
-    return redirect(url_for("digitize_results_get", uuid=result.id))
+    # TODO: Write files to database
+    files = request.files.getlist("file")
+    result = tasks.generate_digitized_results([BytesIO(file.read()) for file in files])
+    return redirect(url_for("digitize_results_get", uuid=result))
 
 
 @app.get("/digitize/results")
@@ -168,17 +122,8 @@ def status(uuid: str, type_: ALLOWED_TYPES) -> Response:
     validate_type(type_)
 
     task_id = ds_client.get_task_id(uuid, type_)
+    task = celery_app.AsyncResult(task_id)
 
-    match type_:
-        case "quality-report":
-            task = celery_app.AsyncResult(task_id)
-        case "sketch-map":
-            task = celery_app.AsyncResult(task_id)
-        case "digitized-data":
-            task = celery_app.GroupResult.restore(task_id)
-
-    # see celery states and their precedence here:
-    # https://docs.celeryq.dev/en/stable/_modules/celery/states.html#precedence
     href = None
     error = None
     if task.ready():
@@ -219,21 +164,19 @@ def download(uuid: str, type_: ALLOWED_TYPES) -> Response:
     validate_type(type_)
 
     task_id = ds_client.get_task_id(uuid, type_)
+    task = celery_app.AsyncResult(task_id)
 
     match type_:
         case "quality-report":
-            task = celery_app.AsyncResult(task_id)
             mimetype = "application/pdf"
-            if task.ready():
+            if task.successful():
                 file: BytesIO = task.get()
         case "sketch-map":
-            task = celery_app.AsyncResult(task_id)
             mimetype = "application/pdf"
-            if task.ready():
+            if task.successful():
                 file: BytesIO = task.get()[0]  # return only the sketch map
         case "digitized-data":
-            task = celery_app.GroupResult.restore(task_id)
-            mimetype = "image/tiff"
-            if task.ready():
-                file: BytesIO = task.get()[0]
+            mimetype = "text/plain"
+            if task.successful():
+                file: BytesIO = task.get()
     return send_file(file, mimetype)
