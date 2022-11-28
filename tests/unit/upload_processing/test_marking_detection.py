@@ -1,5 +1,3 @@
-from types import MappingProxyType
-
 import cv2
 import numpy as np
 import pytest
@@ -37,6 +35,17 @@ def test_marking_detection_screenshot(basemap_marking_img_screenshot):
     for colour, img in detected_markings:
         assert isinstance(colour, str)
         assert isinstance(img, np.ndarray)
+
+
+def test_marking_detection_map_frame(map_frame, map_frame_markings):
+    detected_markings = detect_markings(map_frame, map_frame_markings)
+    for colour, img in detected_markings:
+        assert isinstance(colour, str)
+        assert isinstance(img, np.ndarray)
+        # Too manually check the image uncomment following code.
+        # cv2.imshow("image", img)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
 
 
 def test_marking_detection_photo(basemap_marking_img_photo):
