@@ -11,37 +11,29 @@ from sketch_map_tool.models import Bbox
 def img_to_geotiff(img: NDArray, bbox: Bbox, BGR: bool = True) -> BytesIO:
     """Create a GeoTIFF from a image (numpy array) and bounding box coordinates.
 
-    The image (numpy array) has to have either a single color (1 channel)
-    or be in BGR (3 channels).
-
+    The image (numpy array) has to be in BGR (3 channels).
     The Bounding Box is in WGS 84 / Pseudo-Mercator.
     """
-    file = NamedTemporaryFile(suffix="GTiff", delete=True)
+    file = NamedTemporaryFile()
 
     width = img.shape[1]
     height = img.shape[0]
     pixel_width = abs(bbox.lon_max - bbox.lon_min) / width
     pixel_height = abs(bbox.lat_max - bbox.lat_min) / height
 
-    bands = img.shape[2]  # number of bands
-    if not bands == 1 or not bands == 3:
-        raise ValueError(
-            "Image to GeoTIFF conversion supports only image with 1 (single color) or "
-            + "3 (BGR) channels."
-        )
-
     # create dataset (destination raster)
     dataset = gdal.GetDriverByName("GTiff").Create(
         file.name,
         width,
         height,
-        bands,
+        3,
         gdal.GDT_Byte,
     )
 
-    for i in range(bands):
-        # write numpy array to destination raster in RGB (Reverse GBR image)
-        dataset.GetRasterBand(i + 1).WriteArray(img[:, :, bands - i - 1])
+    # write numpy array to destination raster in RGB (Reverse GBR image)
+    dataset.GetRasterBand(1).WriteArray(img[:, :, 2])  # Red
+    dataset.GetRasterBand(2).WriteArray(img[:, :, 1])  # Green
+    dataset.GetRasterBand(3).WriteArray(img[:, :, 0])  # Blue
 
     # set geo transform
     # fmt: off
