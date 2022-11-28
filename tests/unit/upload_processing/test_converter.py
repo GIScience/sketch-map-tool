@@ -22,8 +22,10 @@ def test_img_to_geotiff(map_frame, bbox):
     # Too manually check the image uncomment following code.
     # import cv2
     # import numpy as np
+
+    # buffer.seek(0)
     # img = cv2.imdecode(
-    #     np.fromstring(result.read(), dtype="uint8"), cv2.IMREAD_UNCHANGED
+    #     np.fromstring(buffer.read(), dtype="uint8"), cv2.IMREAD_UNCHANGED
     # )
     # cv2.imshow("image", img)
     # cv2.waitKey(0)

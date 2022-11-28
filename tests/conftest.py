@@ -83,7 +83,9 @@ def map_frame_buffer():
 @pytest.fixture
 def sketch_map():
     """Photo of a Sketch Map."""
-    return cv2.imread(str(FIXTURE_DIR / "sketch-map.png"))
+    return cv2.imread(
+        str(FIXTURE_DIR / "sketch-map.png"), cv2.IMREAD_COLOR
+    )  # BGR color format and no alpha channel
 
 
 @pytest.fixture
