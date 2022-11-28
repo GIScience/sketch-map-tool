@@ -40,6 +40,9 @@ ENV PATH=$PATH:/home/smt/.local/bin
 COPY --chown=smt:smt pyproject.toml pyproject.toml
 COPY --chown=smt:smt poetry.lock poetry.lock
 RUN pip3 install --no-cache-dir poetry
+# these versions have to be fixed for now, since poetry and (py)gdal packages can't work together
+RUN python3 -m poetry run pip install numpy==1.23.5
+RUN python3 -m poetry run pip install pygdal==3.4.1.10
 RUN python3 -m poetry install --no-ansi --no-interaction --no-root
 
 # copy all the other files and install the project
