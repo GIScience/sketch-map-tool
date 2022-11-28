@@ -81,6 +81,13 @@ def map_frame_buffer():
 
 
 @pytest.fixture
+def map_frame_markings_buffer():
+    """Map frame of original Sketch Map with detected markings."""
+    with open(str(FIXTURE_DIR / "map-frame-markings.geotiff"), "rb") as file:
+        return BytesIO(file.read())
+
+
+@pytest.fixture
 def sketch_map():
     """Photo of a Sketch Map."""
     return cv2.imread(
@@ -92,6 +99,26 @@ def sketch_map():
 def map_frame():
     """Map frame of original Sketch Map."""
     return cv2.imread(str(FIXTURE_DIR / "sketch-map-frame.png"))
+
+
+@pytest.fixture
+def map_frame_markings():
+    """Map frame of original Sketch Map."""
+    return cv2.imread(str(FIXTURE_DIR / "sketch-map-frame-markings.png"))
+
+
+@pytest.fixture
+def map_frame_markings_detected():
+    """Map frame of original Sketch Map."""
+    return cv2.imread(str(FIXTURE_DIR / "sketch-map-frame-markings-detected.png"))
+
+
+@pytest.fixture
+def map_frame_markings_detected_buffer():
+    """Map frame of original Sketch Map."""
+    path = str(FIXTURE_DIR / "sketch-map-frame-markings-detected.geotiff")
+    with open(path, "rb") as file:
+        return BytesIO(file.read())
 
 
 # @pytest.fixture
