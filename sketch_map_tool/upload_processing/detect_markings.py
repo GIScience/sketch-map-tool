@@ -10,22 +10,10 @@ from numpy.typing import NDArray
 from PIL import Image, ImageEnhance
 
 
-def enhance_contrast(img: NDArray, factor: float = 2.0) -> NDArray:
-    """
-    Enhance the contrast of a given image
-
-    :param img: Image of which the contrast should be enhanced.
-    :param factor: Factor for the contrast enhancement.
-    :return: Image with enhanced contrast.
-    """
-    input_img = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-    result = ImageEnhance.Contrast(input_img).enhance(factor)
-    return cv2.cvtColor(np.array(result), cv2.COLOR_RGB2BGR)
-
-
 def detect_markings(
     img_base: NDArray,
     img_markings: NDArray,
+    color: str,
     threshold_bgr: float = 0.5,
     threshold_img_diff: int = 100,
 ) -> List[Tuple[str, NDArray]]:
@@ -56,6 +44,7 @@ def detect_markings(
         "turquoise": (255, 255, 0),
         "pink": (255, 0, 255),
     }
+    bgr = colors[color]
 
     img_base_height, img_base_width, _ = img_base.shape
     img_markings = cv2.resize(
@@ -65,7 +54,7 @@ def detect_markings(
         fy=4,
         interpolation=cv2.INTER_NEAREST,
     )
-    img_markings_contrast = enhance_contrast(img_markings)
+    img_markings_contrast = _enhance_contrast(img_markings)
     img_diff = cv2.absdiff(img_base, img_markings_contrast)
 
     img_diff_gray = cv2.cvtColor(img_diff, cv2.COLOR_BGR2GRAY)
@@ -74,30 +63,39 @@ def detect_markings(
     markings_multicolor = np.zeros_like(img_markings, np.uint8)
     markings_multicolor[mask_markings] = img_markings[mask_markings]
 
-    single_color_markings = []
-    for color, bgr in colors.items():
-        single_color_marking = np.zeros_like(markings_multicolor, np.uint8)
-        single_color_marking[
-            (
-                (markings_multicolor[:, :, 0] < threshold_bgr_abs)
-                == (bgr[0] < threshold_bgr_abs)
-            )
-            & (
-                (markings_multicolor[:, :, 1] < threshold_bgr_abs)
-                == (bgr[1] < threshold_bgr_abs)
-            )
-            & (
-                (markings_multicolor[:, :, 2] < threshold_bgr_abs)
-                == (bgr[2] < threshold_bgr_abs)
-            )
-        ] = 255
-        single_color_markings.append(
-            (color, reduce_holes(reduce_noise(single_color_marking)))
+    # for color, bgr in colors.items():
+    single_color_marking = np.zeros_like(markings_multicolor, np.uint8)
+    single_color_marking[
+        (
+            (markings_multicolor[:, :, 0] < threshold_bgr_abs)
+            == (bgr[0] < threshold_bgr_abs)
         )
-    return single_color_markings
+        & (
+            (markings_multicolor[:, :, 1] < threshold_bgr_abs)
+            == (bgr[1] < threshold_bgr_abs)
+        )
+        & (
+            (markings_multicolor[:, :, 2] < threshold_bgr_abs)
+            == (bgr[2] < threshold_bgr_abs)
+        )
+    ] = 255
+    return single_color_marking
 
 
-def reduce_noise(img: NDArray, factor: int = 2) -> NDArray:
+def _enhance_contrast(img: NDArray, factor: float = 2.0) -> NDArray:
+    """
+    Enhance the contrast of a given image
+
+    :param img: Image of which the contrast should be enhanced.
+    :param factor: Factor for the contrast enhancement.
+    :return: Image with enhanced contrast.
+    """
+    input_img = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    result = ImageEnhance.Contrast(input_img).enhance(factor)
+    return cv2.cvtColor(np.array(result), cv2.COLOR_RGB2BGR)
+
+
+def _reduce_noise(img: NDArray, factor: int = 2) -> NDArray:
     """
     Reduce the noise, i.e. artifacts, in an image containing markings
 
@@ -114,7 +112,7 @@ def reduce_noise(img: NDArray, factor: int = 2) -> NDArray:
     return cv2.fastNlMeansDenoisingColored(reduced_noise, None, 30, 30, 20, 21)
 
 
-def reduce_holes(img: NDArray, factor: int = 4) -> NDArray:
+def _reduce_holes(img: NDArray, factor: int = 4) -> NDArray:
     """
     Reduce the holes in markings on a given image
 
