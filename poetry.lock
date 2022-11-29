@@ -728,17 +728,6 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
-name = "pygdal"
-version = "3.4.1.10"
-description = "Virtualenv and setuptools friendly version of standard GDAL python bindings"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-numpy = ">=1.0.0"
-
-[[package]]
 name = "pymupdf"
 version = "1.21.0"
 description = "Python bindings for the PDF toolkit and renderer MuPDF"
@@ -1183,7 +1172,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "3102e885a6724e129dba551478b83913bc40d3fd4d1a8879ccdc0521df040b3b"
+content-hash = "bb6f9bfad2df66e89a1f9323ff1bed273fb8815d85adce50d23386103c8ee7c5"
 
 [metadata.files]
 amqp = [
@@ -1975,9 +1964,6 @@ pycodestyle = [
 pyflakes = [
     {file = "pyflakes-2.5.0-py2.py3-none-any.whl", hash = "sha256:4579f67d887f804e67edb544428f264b7b24f435b263c4614f384135cea553d2"},
     {file = "pyflakes-2.5.0.tar.gz", hash = "sha256:491feb020dca48ccc562a8c0cbe8df07ee13078df59813b83959cbdada312ea3"},
-]
-pygdal = [
-    {file = "pygdal-3.4.1.10.tar.gz", hash = "sha256:13bce6389ff44f05012ed93698f9246af4233fc31ad7544fbad0927f1b42d586"},
 ]
 pymupdf = [
     {file = "PyMuPDF-1.21.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:af8f0ba66eb989a5ce2a319bfbc3d1b2b62219242ab91cf8b8c9c7e6a7ff4799"},

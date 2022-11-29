@@ -13,6 +13,7 @@
   - Fedora: `sudo dnf install zbar-devel`
   - Windows: DLLs are included with the Windows Python wheels
 - GDAL: `>=3.4.1, <3.5`
+  - Debian derivates: `sudo apt install python3-gdal`
 - QGIS: `3.22`
 
 This project uses [Poetry](https://python-poetry.org/docs/) for packaging and dependencies management. Please make sure it is installed on your system.
@@ -24,9 +25,6 @@ This project uses [Poetry](https://python-poetry.org/docs/) for packaging and de
 
 ```bash
 # Git clone repository
-# these versions have to be fixed for now, since poetry and (py)gdal packages can't work together
-poetry run pip install numpy==1.23.5
-poetry run pip install pygdal==3.4.1.10
 poetry install
 poetry shell  # Spawns a shell within the virtual environment
 pre-commit install  # Install pre-commit hooks
