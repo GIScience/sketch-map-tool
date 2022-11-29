@@ -1,7 +1,7 @@
 # import sqlite3
 from io import BytesIO
 
-from sketch_map_tool.upload_processing.vectorization import polygonize
+from sketch_map_tool.upload_processing import polygonize
 
 
 def test_polygonize(map_frame_markings_detected_buffer):
