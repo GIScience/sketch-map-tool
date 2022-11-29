@@ -1,13 +1,13 @@
-from . import qr_code_reader
-from .clipper import clip
+from .clip import clip
 from .detect_markings import detect_markings
 from .georeference import georeference
 from .polygonize import polygonize
+from .qr_code_reader import read as read_qr_code
 
 __all__ = (
     "clip",
     "detect_markings",
     "georeference",
-    "qr_code_reader",
+    "read_qr_code",
     "polygonize",
 )

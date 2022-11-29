@@ -1,7 +1,7 @@
 import cv2
 import pytest
 
-from sketch_map_tool.upload_processing.clipper import clip
+from sketch_map_tool.upload_processing.clip import clip
 from tests import FIXTURE_DIR
 
 MAP_CUTTING_FIXTURE_DIR = FIXTURE_DIR / "map-cutting"
