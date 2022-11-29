@@ -50,10 +50,10 @@ def test_generate_quality_report(bbox_wgs84):
 
 
 def test_clip(sketch_map, map_frame):
-    result = tasks.clip(sketch_map, map_frame)
+    result = tasks.t_clip(sketch_map, map_frame)
     assert isinstance(result, np.ndarray)
 
 
 def test_img_to_geotiff(map_frame, bbox):
-    result = tasks.img_to_geotiff(map_frame, bbox)
+    result = tasks.t_georeference(map_frame, bbox)
     assert isinstance(result, BytesIO)
