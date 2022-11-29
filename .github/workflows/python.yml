@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install ZBar, GDAL, GL1, QGIS
         run: |
-          sudo apt-get update && sudo apt-get install -y --no-upgrade libzbar0 libgdal-dev libgl1 qgis python3-numpy python3-gdal
+          sudo apt-get update && sudo apt-get install -y --no-upgrade libzbar0 libgdal-dev libgl1 qgis python3-qgis python3-numpy python3-gdal
       # Setup Python and Poetry (Source Poetry GitHub Repository)
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
@@ -47,12 +47,6 @@ jobs:
       - name: Ensure cache is healthy
         if: steps.cache.outputs.cache-hit == 'true'
         run: timeout 10s poetry run pip --version || rm -rf .venv
-
-      - name: Install dependencies (workaround numpy and gdal)
-        run: |
-          # these versions have to be fixed for now, since poetry and (py)gdal packages can't work together
-          poetry run pip install numpy==1.23.5
-          poetry run pip install pygdal==3.4.1.10
 
       - name: Install dependencies
         run: |
