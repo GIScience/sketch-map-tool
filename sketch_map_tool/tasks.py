@@ -74,6 +74,9 @@ def generate_digitized_results(files) -> AsyncResult:
     #
     def c_digitize(color: str) -> chain:
         """Digitize one color of a Sketch Map."""
+        # TODO: Avoid redundant code execution.
+        # If detect markings is executed for the same image but different colors,
+        # steps like contrast enhancements are executed multiple times.
         return (
                 t_detect.s(map_frame, color)
                 | t_georeference.s(bbox)
