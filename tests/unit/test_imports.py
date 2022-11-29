@@ -7,7 +7,6 @@ def test_gdal_array():
 
 def test_qgis():
     try:
-        import processing  # noqa
         import qgis.analysis  # noqa
         import qgis.core  # noqa
     except ImportError:
