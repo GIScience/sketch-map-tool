@@ -1,7 +1,7 @@
 from . import qr_code_reader
 from .clipper import clip
+from .detect_markings import detect_markings
 from .georeference import georeference
-from .marking_detection import detect_markings
 from .polygonize import polygonize
 
 __all__ = (
