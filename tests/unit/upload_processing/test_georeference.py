@@ -3,11 +3,11 @@ from tempfile import NamedTemporaryFile
 
 from osgeo import gdal, osr
 
-from sketch_map_tool.upload_processing.converter import img_to_geotiff
+from sketch_map_tool.upload_processing import georeference
 
 
-def test_img_to_geotiff_map_frame(map_frame, bbox):
-    buffer = img_to_geotiff(map_frame, bbox)
+def test_georeference_map_frame(map_frame, bbox):
+    buffer = georeference(map_frame, bbox)
     assert isinstance(buffer, BytesIO)
 
     with NamedTemporaryFile() as file:
@@ -32,8 +32,8 @@ def test_img_to_geotiff_map_frame(map_frame, bbox):
     # cv2.destroyAllWindows()
 
 
-def test_img_to_geotiff_markings_detected(map_frame_markings_detected, bbox):
-    buffer = img_to_geotiff(map_frame_markings_detected, bbox)
+def test_georeference_markings_detected(map_frame_markings_detected, bbox):
+    buffer = georeference(map_frame_markings_detected, bbox)
     assert isinstance(buffer, BytesIO)
 
     with NamedTemporaryFile() as file:
