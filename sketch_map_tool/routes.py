@@ -103,8 +103,8 @@ def digitize_results_post() -> Response:
     # if we want the filenames we must construct a list of tuples or dicts
     # TODO: Write files to database
     files = request.files.getlist("file")
-    result = tasks.generate_digitized_results([BytesIO(file.read()) for file in files])
-    return redirect(url_for("digitize_results_get", uuid=result))
+    uuid = tasks.generate_digitized_results([BytesIO(file.read()) for file in files])
+    return redirect(url_for("digitize_results_get", uuid=uuid))
 
 
 @app.get("/digitize/results")
