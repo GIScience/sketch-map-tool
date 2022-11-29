@@ -176,7 +176,7 @@ def download(uuid: str, type_: ALLOWED_TYPES) -> Response:
             if task.successful():
                 file: BytesIO = task.get()[0]  # return only the sketch map
         case "digitized-data":
-            mimetype = "text/plain"
+            mimetype = "application/geopackage+sqlite3"
             if task.successful():
                 file: BytesIO = task.get()
     return send_file(file, mimetype)
