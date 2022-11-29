@@ -8,8 +8,8 @@ RUN npm install
 RUN mkdir -p /sketch_map_tool/static/bundles
 RUN npm run build
 
-
-FROM ubuntu:22.04
+# currently based on docker image ubuntu:22.04
+FROM qgis/qgis:release-3_22
 
 # install libzbar (neccessary for pyzbar to read the QR codes)
 # install gdal
