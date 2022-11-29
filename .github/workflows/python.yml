@@ -1,68 +1,33 @@
-name: Python
+name: Python Tools and Tests
 
-on: [push]
+on: [ push ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        python-version: ["3.10"]
-        poetry-version: ["1.2"]
     defaults:
       run:
         shell: bash
     steps:
       - uses: actions/checkout@v3
-      - name: Install ZBar, GDAL, GL1, QGIS
-        run: |
-          sudo apt-get update && sudo apt-get install -y --no-upgrade libzbar0 libgdal-dev libgl1 qgis python3-qgis python3-numpy python3-gdal
-      # Setup Python and Poetry (Source Poetry GitHub Repository)
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
 
-      - name: Get full Python version
-        id: full-python-version
-        run: echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info))")
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag sketch-map-tool-ci:${{ github.run_id }}
 
-      - name: Bootstrap poetry
-        run: |
-          curl -sL https://install.python-poetry.org | python - -y
+      - name: tmp
+        run: docker images -a
 
-      - name: Update PATH
-        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Run flake8
+        run: docker run --rm sketch-map-tool-ci:${{ github.run_id }} poetry run flake8 sketch_map_tool
 
-      - name: Configure poetry
-        run: poetry config virtualenvs.in-project true
+      - name: Run bandit
+        run: docker run --rm sketch-map-tool-ci:${{ github.run_id }} poetry run bandit --recursive sketch_map_tool
 
-      - name: Set up cache
-        uses: actions/cache@v3
-        id: cache
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Run black
+        run: docker run --rm sketch-map-tool-ci:${{ github.run_id }} poetry run black --check --diff sketch_map_tool
 
-      - name: Ensure cache is healthy
-        if: steps.cache.outputs.cache-hit == 'true'
-        run: timeout 10s poetry run pip --version || rm -rf .venv
-
-      - name: Install dependencies
-        run: |
-          poetry install
-      # Analyse code
-      - name: Analysing the Python code
-        run: |
-          poetry run flake8 sketch_map_tool
-          poetry run bandit --recursive sketch_map_tool
-          poetry run black --check --diff sketch_map_tool
-          poetry run isort --check --diff sketch_map_tool
-
-      # - name: Static type checking with mypy
-      #   run: |
-      #     poetry run mypy --strict sketch_map_tool
+      - name: Run isort
+        run: docker run --rm sketch-map-tool-ci:${{ github.run_id }} poetry run isort --check --diff sketch_map_tool
 
       - name: Running tests
-        run: |
-          poetry run pytest tests/unit
+        run: docker run --rm sketch-map-tool-ci:${{ github.run_id }} poetry run pytest tests/unit

@@ -36,16 +36,18 @@ USER smt:smt
 # make poetry binaries available to the docker container user
 ENV PATH=$PATH:/home/smt/.local/bin
 
-# install Python dependencies
 COPY --chown=smt:smt pyproject.toml pyproject.toml
 COPY --chown=smt:smt poetry.lock poetry.lock
 COPY --chown=smt:smt poetry.toml poetry.toml
+COPY --chown=smt:smt setup.cfg setup.cfg
+# install Python dependencies
 RUN pip3 install --no-cache-dir poetry
 RUN python3 -m poetry install --no-ansi --no-interaction --no-root
 
 # copy all the other files and install the project
 COPY --chown=smt:smt sketch_map_tool sketch_map_tool
 COPY --chown=smt:smt data/ data/
+COPY --chown=smt:smt tests/ tests/
 RUN python3 -m poetry install --no-ansi --no-interaction
 
 # get JS dependencies
