@@ -56,7 +56,7 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
 # GENERATE DIGITIZED RESULTS
 # fmt: off
-def generate_digitized_results(files):
+def generate_digitized_results(files) -> AsyncResult:
     args = upload_processing.read_qr_code(t_buffer_to_array(files[0]))
     uuid = args["uuid"]
     bbox = args["bbox"]
@@ -95,8 +95,7 @@ def generate_digitized_results(files):
                 group([c_process(f) for f in files])
                 | t_zip.s()
                 )
-    result = c_workflow(files).apply_async()
-    return result.id
+    return c_workflow(files)
     # fmt: on
 
 

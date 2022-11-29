@@ -37,9 +37,9 @@ def test_marking_detection_screenshot(basemap_marking_img_screenshot):
         assert isinstance(detected_markings, np.ndarray)
 
 
-def test_marking_detection_map_frame(map_frame, map_frame_markings):
+def test_marking_detection_map_frame(map_frame, sketch_map_frame_markings):
     for color in COLORS:
-        detected_markings = detect_markings(map_frame, map_frame_markings, color)
+        detected_markings = detect_markings(map_frame, sketch_map_frame_markings, color)
         assert isinstance(detected_markings, np.ndarray)
         # Too manually check the image uncomment following code.
         # cv2.imshow("image", img)

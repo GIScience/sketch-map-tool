@@ -32,16 +32,16 @@ def test_georeference_map_frame(map_frame, bbox):
     # cv2.destroyAllWindows()
 
 
-def test_georeference_markings_detected(map_frame_markings_detected, bbox):
-    buffer = georeference(map_frame_markings_detected, bbox)
+def test_georeference_markings_detected(sketch_map_frame_markings_detected, bbox):
+    buffer = georeference(sketch_map_frame_markings_detected, bbox)
     assert isinstance(buffer, BytesIO)
 
     with NamedTemporaryFile() as file:
         file.write(buffer.read())
         src_ds = gdal.Open(file.name)
         assert src_ds.RasterCount == 3
-        assert src_ds.RasterXSize == map_frame_markings_detected.shape[1]
-        assert src_ds.RasterYSize == map_frame_markings_detected.shape[0]
+        assert src_ds.RasterXSize == sketch_map_frame_markings_detected.shape[1]
+        assert src_ds.RasterYSize == sketch_map_frame_markings_detected.shape[0]
         proj = osr.SpatialReference(wkt=src_ds.GetProjection())
         assert "3857" == proj.GetAttrValue("AUTHORITY", 1)
 
