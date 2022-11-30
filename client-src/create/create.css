@@ -11,6 +11,12 @@ body > main {
 #map {
     width: 100%;
     height: 50vh;
+    flex: 1 0 auto;
+}
+
+#left {
+    display: flex;
+    flex-direction: column;
 }
 
 #right {

@@ -1,11 +1,11 @@
 import { PAPER_FORMAT, ORIENTATION, Margin } from "@giscience/ol-print-layout-control";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins";
-import { fillSelectOptions } from "../shared";
+import { fillSelectOptions, setDisabled } from "../shared";
 
 function bindFormToPrintLayoutControl(printLayoutControl) {
     const paperFormats = { ...PAPER_FORMAT };
-    console.log(paperFormats);
     delete paperFormats.BROADSHEET;
+
     // property: format
     fillSelectOptions("format", paperFormats);
 
@@ -67,6 +67,35 @@ function bindFormToPrintLayoutControl(printLayoutControl) {
         const newScale = event.target.getScaleDenominator();
         document.getElementById("scale").value = JSON.stringify(newScale);
     });
+
+    // disable form submit and display info if zoom is lower than 9
+    function handleZoomChange(zoom) {
+        if (zoom < 9) {
+            setDisabled("next-button", true);
+            document.querySelector("#infobox")
+                .classList
+                .remove("invisible");
+        } else {
+            setDisabled("next-button", false);
+            document.querySelector("#infobox")
+                .classList
+                .add("invisible");
+        }
+    }
+
+    // initialize form state
+    const view = printLayoutControl.getMap()
+        .getView();
+    const initialZoom = view.getZoom();
+    handleZoomChange(initialZoom);
+
+    // update form state on zoomchange
+    printLayoutControl.getMap()
+        .getView()
+        .on("change:resolution", (event) => {
+            const currentZoom = event.target.getZoom();
+            handleZoomChange(currentZoom);
+        });
 }
 
 export {
