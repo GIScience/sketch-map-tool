@@ -26,6 +26,7 @@ psycopg2 = "^2.9.5"
 # these dependencies are maintained by Ubuntu 22.04 or your local setup
 #numpy = "1.21.5"
 #pygdal = "3.4.1.10"
+geojson = "^2.5.0"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
