@@ -25,11 +25,11 @@ def polygonize(geotiff: BytesIO, layer_name: str) -> BytesIO:
         dst_ds = driver.CreateDataSource(str(outfile_name))
 
         dst_layer = dst_ds.CreateLayer(layer_name, srs=srs)
-        # src_layer.CreateField(ogr.FieldDefn("color", ogr.OFTString))
+        dst_layer.CreateField(ogr.FieldDefn("color", ogr.OFTString))
         src_band = src_ds.GetRasterBand(1)
 
         # (srcBand, maskBand, outLayer, iPixValField)
-        gdal.Polygonize(src_band, None, dst_layer, -1)
+        gdal.Polygonize(src_band, None, dst_layer, 0)
 
         src_ds = None  # close dataset
         dst_ds = None  # close dataset
