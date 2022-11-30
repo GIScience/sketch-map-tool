@@ -81,6 +81,7 @@ def generate_digitized_results(files) -> AsyncResult:
                 t_detect.s(map_frame, color)
                 | t_georeference.s(bbox)
                 | t_polygonize.s(color)
+                | t_clean.s()
                 )
 
     def c_process(sketch_map: BytesIO) -> chain:
@@ -130,6 +131,11 @@ def t_georeference(sketch_map_frame: NDArray, bbox: Bbox) -> AsyncResult | Bytes
 @celery.task()
 def t_polygonize(geotiff: BytesIO, layer_name: str) -> AsyncResult | BytesIO:
     return upload_processing.polygonize(geotiff, layer_name)
+
+
+@celery.task()
+def t_clean(geojson: BytesIO) -> AsyncResult | BytesIO:
+    return upload_processing.clean(geojson)
 
 
 @celery.task()
