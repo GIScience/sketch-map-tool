@@ -34,6 +34,10 @@ form {
     height: 7rem;
 }
 
+.filebokz .error-msg::before {
+    display: inline !important;
+}
+
 button {
     display: inline;
     width: fit-content;

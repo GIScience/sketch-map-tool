@@ -19,7 +19,8 @@
     </div>
     <main class="container-fluid">
         <div id="main-message" class="sketchy h1 center-text">
-            Scan or photograph your marked sketch maps after data collection.<br>Then, upload one or more marked SketchMaps at once
+            Scan or photograph your marked sketch maps after data collection.<br>Then, upload one or
+            more marked SketchMaps at once as .jpg or .png file
         </div>
 
         <form name="upload" action="/digitize/results" method="post" enctype=multipart/form-data>
@@ -27,9 +28,9 @@
             <div class="filebokz" data-max-size="524288000" data-allowed-extensions="jpeg,jpg,png">
                 <input type="file" id="file" name="file" multiple/>
                 <label for="file">
-                    <img id="cloud" class="no-files" src="/static/assets/upload_cloud.svg">
+                    <img id="cloud" class="no-files" src="/static/assets/upload_cloud.svg" alt="red cloud icon">
                     <strong class="no-files">Choose file(s)</strong>
-                    <span class="no-files is-draggable">or drag them here</span>
+                    <span class="no-files is-draggable">or drag them here<br>(.png or .jpg)</span>
                     <div
                             class="files file-previews"
                             data-content='<span>{name}</span> <span>({size})</span> <span class="fa fa-trash remove" aria-hidden="true">✗</span>'
