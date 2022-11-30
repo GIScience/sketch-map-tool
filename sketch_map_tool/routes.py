@@ -14,7 +14,7 @@ from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
 from sketch_map_tool.data_store import client as ds_client  # type: ignore
 from sketch_map_tool.definitions import ALLOWED_TYPES
-from sketch_map_tool.exceptions import QRCodeError
+from sketch_map_tool.exceptions import OQTReportError, QRCodeError
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.validators import validate_type, validate_uuid
 
@@ -139,7 +139,7 @@ def status(uuid: str, type_: ALLOWED_TYPES) -> Response:
         elif task.failed():  # REJECTED, REVOKED, FAILURE
             try:
                 task.get(propagate=True)
-            except QRCodeError as err:
+            except (QRCodeError, OQTReportError) as err:
                 # The request was well-formed but was unable to be followed due to semantic
                 # errors.
                 http_status = 422  # Unprocessable Entity
