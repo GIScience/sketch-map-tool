@@ -45,6 +45,8 @@ def test_marking_detection_map_frame(map_frame, sketch_map_frame_markings):
         # cv2.imshow("image", detected_markings)
         # cv2.waitKey(0)
         # cv2.destroyAllWindows()
+        # To write image to disk uncomment following code
+        # cv2.imwrite("/tmp/detected_markings.png", detected_markings)
 
 
 def test_marking_detection_photo(basemap_marking_img_photo):
