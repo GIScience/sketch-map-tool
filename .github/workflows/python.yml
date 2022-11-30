@@ -14,9 +14,6 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag sketch-map-tool-ci:${{ github.run_id }}
 
-      - name: tmp
-        run: docker images -a
-
       - name: Run flake8
         run: docker run --rm sketch-map-tool-ci:${{ github.run_id }} poetry run flake8 sketch_map_tool
 
