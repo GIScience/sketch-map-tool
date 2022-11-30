@@ -1,5 +1,6 @@
 import requests
 
+from sketch_map_tool.exceptions import OQTReportError
 from sketch_map_tool.models import Bbox
 
 OQT_API_URL = "https://oqt.ohsome.org/api"
@@ -35,5 +36,7 @@ def get_report(bbox: Bbox, include_svg: bool = True, include_html: bool = False)
         "flatten": False,
     }
     req = requests.post(url, json=parameters)
+    if req.status_code == 422:
+        raise OQTReportError(req.json()["detail"])
     report_properties = req.json()["properties"]
     return report_properties
