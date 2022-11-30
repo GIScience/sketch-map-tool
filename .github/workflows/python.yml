@@ -3,28 +3,39 @@ name: Python Tools and Tests
 on: [ push ]
 
 jobs:
-  test:
+  build-analyze-test:
     runs-on: ubuntu-22.04
+    name: "Build, Analyze and Test"
     defaults:
       run:
         shell: bash
     steps:
       - uses: actions/checkout@v3
-
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag sketch-map-tool-ci:${{ github.run_id }}
-
+      - name: Install poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'poetry'
+      - name: Install system dependencies
+        run: sudo apt-get install -y --no-upgrade libzbar0 libgdal-dev libgl1
+      - name: Install numpy
+        run: poetry run pip install numpy==1.23.5
+      - name: Install pygdal
+        run: poetry run pip install pygdal==3.4.1.10
+      - name: Install dependencies
+        run: poetry install
       - name: Run flake8
-        run: docker run --rm sketch-map-tool-ci:${{ github.run_id }} poetry run flake8 sketch_map_tool
-
+        run: poetry run flake8 sketch_map_tool
+        continue-on-error: true
       - name: Run bandit
-        run: docker run --rm sketch-map-tool-ci:${{ github.run_id }} poetry run bandit --recursive sketch_map_tool
-
+        run: poetry run bandit --recursive sketch_map_tool
+        continue-on-error: true
       - name: Run black
-        run: docker run --rm sketch-map-tool-ci:${{ github.run_id }} poetry run black --check --diff sketch_map_tool
-
+        run: poetry run black --check --diff sketch_map_tool
+        continue-on-error: true
       - name: Run isort
-        run: docker run --rm sketch-map-tool-ci:${{ github.run_id }} poetry run isort --check --diff sketch_map_tool
-
+        run: poetry run isort --check --diff sketch_map_tool
+        continue-on-error: true
       - name: Running tests
-        run: docker run --rm sketch-map-tool-ci:${{ github.run_id }} poetry run pytest tests/unit
+        run: poetry run pytest tests/unit
