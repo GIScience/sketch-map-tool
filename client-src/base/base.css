@@ -55,6 +55,14 @@ body {
     margin-top: 1.5rem;
 }
 
+.invisible {
+    visibility: hidden;
+}
+
+.hidden {
+    display: none;
+}
+
 .sketchy {
     font-family: "Architects Daughter", cursive;
 }
@@ -71,6 +79,26 @@ body {
     background: var(--heigit-red);
     margin-right: 0.5rem;
     display: inline-block;
+}
+
+.infobox {
+    position: relative;
+    padding-left: 3.5rem;
+}
+
+.infobox::before {
+    content: "i";
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    background-color: gold;
+    margin-left: -2.5rem;
+    text-align: center;
+    font-weight: bold;
+    line-height: 2rem;
+    font-size: 1.5rem;
+    border-radius: 1rem;
+    top: calc(50% - 1rem);
 }
 
 .center-text {
