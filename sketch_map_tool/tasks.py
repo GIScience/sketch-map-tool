@@ -1,9 +1,11 @@
 from io import BytesIO
 
 import cv2
+import geojson
 import numpy as np
 from celery import chain, group
 from celery.result import AsyncResult
+from geojson import GeoJSON
 from numpy.typing import NDArray
 
 from sketch_map_tool import celery_app as celery
@@ -57,12 +59,12 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 # GENERATE DIGITIZED RESULTS
 # fmt: off
 def generate_digitized_results(files) -> AsyncResult:
-    args = upload_processing.read_qr_code(t_buffer_to_array(files[0]))
+    args = upload_processing.read_qr_code(t_to_array(files[0]))
     uuid = args["uuid"]
     bbox = args["bbox"]
 
     map_frame_buffer = celery.AsyncResult(uuid).get()[1]
-    map_frame = t_buffer_to_array(map_frame_buffer)
+    map_frame = t_to_array(map_frame_buffer)
 
     # Design Celery Workflow
     #
@@ -81,13 +83,14 @@ def generate_digitized_results(files) -> AsyncResult:
                 t_detect.s(map_frame, color)
                 | t_georeference.s(bbox)
                 | t_polygonize.s(color)
+                | t_to_geojson.s()
                 | t_clean.s()
                 )
 
     def c_process(sketch_map: BytesIO) -> chain:
         """Process a Sketch Map."""
         return (
-            t_buffer_to_array.s(sketch_map)
+            t_to_array.s(sketch_map)
             | t_clip.s(map_frame)
             | group([c_digitize(c) for c in COLORS])
             | t_merge.s()
@@ -97,18 +100,27 @@ def generate_digitized_results(files) -> AsyncResult:
         """Start processing workflow for each file."""
         return (
                 group([c_process(f) for f in files])
-                | t_zip.s()
+                | t_merge.s()
                 )
     return c_workflow(files)
     # fmt: on
 
 
 @celery.task()
-def t_buffer_to_array(buffer: BytesIO) -> AsyncResult | NDArray:
+def t_to_array(buffer: BytesIO) -> AsyncResult | NDArray:
     buffer.seek(0)
     return cv2.imdecode(
         np.fromstring(buffer.read(), dtype="uint8"), cv2.IMREAD_UNCHANGED
     )
+
+
+@celery.task()
+def t_to_geojson(buffer: BytesIO) -> AsyncResult | GeoJSON:
+    return geojson.load(buffer)
+
+
+def t_to_buffer(geojson_object: GeoJSON) -> AsyncResult | BytesIO:
+    return BytesIO(geojson.dumps(geojson_object).encode("utf-8"))
 
 
 @celery.task()
@@ -139,10 +151,10 @@ def t_clean(geojson: BytesIO) -> AsyncResult | BytesIO:
 
 
 @celery.task()
-def t_merge(geojsons: list) -> AsyncResult | BytesIO:
-    return upload_processing.merge(geojsons)
+def t_merge(feature_collections: list) -> AsyncResult | BytesIO:
+    return upload_processing.merge(feature_collections)
 
 
 @celery.task()
-def t_zip(args) -> AsyncResult | BytesIO:
-    return args[0]
+def t_geopackage(feature_collections: list) -> AsyncResult | BytesIO:
+    return upload_processing.geopackage(feature_collections)

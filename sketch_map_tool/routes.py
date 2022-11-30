@@ -4,6 +4,8 @@ import json
 from io import BytesIO
 from uuid import uuid4
 
+import geojson
+
 # from celery import chain, group
 from flask import Response, redirect, render_template, request, send_file, url_for
 
@@ -179,7 +181,8 @@ def download(uuid: str, type_: ALLOWED_TYPES) -> Response:
             if task.successful():
                 file: BytesIO = task.get()[0]  # return only the sketch map
         case "digitized-data":
-            mimetype = "application/geopackage+sqlite3"
+            mimetype = "application/geojson"
             if task.successful():
-                file: BytesIO = task.get()
+                result = task.get()
+                file = BytesIO(geojson.dumps(result).encode("utf-8"))
     return send_file(file, mimetype)
