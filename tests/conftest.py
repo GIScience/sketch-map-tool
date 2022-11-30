@@ -132,6 +132,13 @@ def sketch_map_frame_markings_detected():
     return cv2.imread(str(FIXTURE_DIR / "sketch-map-frame-markings-detected.png"))
 
 
+@pytest.fixture
+def detected_markings():
+    path = str(FIXTURE_DIR / "detected-markings.geojson")
+    with open(path, "rb") as file:
+        return BytesIO(file.read())
+
+
 # @pytest.fixture
 # def file(sketch_map):
 #     return File(filename="filename", mimetype="image/png", image=sketch_map)
