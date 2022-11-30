@@ -106,8 +106,8 @@ def digitize_results_post() -> Response:
     workflow = tasks.generate_digitized_results(
         [BytesIO(file.read()) for file in files]
     )
-    workflow.apply_async()
-    return redirect(url_for("digitize_results_get", uuid=workflow.id))
+    result = workflow.apply_async()
+    return redirect(url_for("digitize_results_get", uuid=result.id))
 
 
 @app.get("/digitize/results")
