@@ -6,7 +6,7 @@ from sketch_map_tool import tasks
 
 
 def test_t_buffer_to_array(sketch_map_buffer):
-    task = tasks.t_buffer_to_array.apply_async(args=[sketch_map_buffer])
+    task = tasks.t_to_array.apply_async(args=[sketch_map_buffer])
     result = task.wait()
     assert isinstance(result, ndarray)
 

@@ -1,6 +1,7 @@
 from io import BytesIO
 
 import cv2
+import geojson
 import pytest
 
 from sketch_map_tool.models import Bbox, PaperFormat, Size
@@ -109,6 +110,13 @@ def sketch_map_frame_markings_detected_buffer():
 
 
 @pytest.fixture
+def detected_markings_cleaned_buffer():
+    path = str(FIXTURE_DIR / "detected-markings.geojson")
+    with open(path, "rb") as file:
+        return BytesIO(file.read())
+
+
+@pytest.fixture
 def sketch_map():
     """Photo of a Sketch Map."""
     return cv2.imread(
@@ -134,9 +142,14 @@ def sketch_map_frame_markings_detected():
 
 @pytest.fixture
 def detected_markings():
-    path = str(FIXTURE_DIR / "detected-markings.geojson")
-    with open(path, "rb") as file:
-        return BytesIO(file.read())
+    with open(str(FIXTURE_DIR / "detected-markings.geojson"), "r") as file:
+        return geojson.load(file)
+
+
+@pytest.fixture
+def detected_markings_cleaned():
+    with open(str(FIXTURE_DIR / "detected-markings-cleaned.geojson"), "r") as file:
+        return geojson.load(file)
 
 
 # @pytest.fixture
