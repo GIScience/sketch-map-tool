@@ -24,7 +24,7 @@ async function poll(url, prefix) {
     }
 
     async function onProgress(response) {
-        console.log("progress", response);
+        // console.log("progress", response);
     }
 
     async function onValid(response) {
@@ -43,18 +43,27 @@ async function poll(url, prefix) {
      * Displays an error message and disappears the download button
      * @param _prefix sketch-map | quality-report
      */
-    function handleError(_prefix) {
-        document.querySelectorAll(`#${prefix} :is(.pending, .success)`).forEach((element) => element.classList.add("hidden"));
-        document.querySelectorAll(`#${prefix} .error`).forEach((element) => element.classList.remove("hidden"));
+    function handleError(_prefix, errorText) {
+        document.querySelectorAll(`#${prefix} :is(.pending, .success)`)
+            .forEach((element) => element.classList.add("hidden"));
+        document.querySelectorAll(`#${prefix} .error`)
+            .forEach((element) => {
+                element.classList.remove("hidden");
+                const errorElementString = `<p><details><summary>Error Details</summary>${errorText}</details></p>`;
+                const errorElement = document.createRange()
+                    .createContextualFragment(errorElementString);
+                element.appendChild(errorElement);
+            });
 
         // a button to disappear
         document.getElementById(`${_prefix}-download-button`).style.display = "none";
     }
 
     async function onError(response) {
-        const errorText = await response.text();
-        console.log(response.status, response.statusText, errorText);
-        handleError(prefix);
+        const resonseJSON = await response.json();
+        const errorText = resonseJSON.error;
+        console.log(response.status, response.statusText, errorText, resonseJSON);
+        handleError(prefix, errorText);
     }
 
     try {
