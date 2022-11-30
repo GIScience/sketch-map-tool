@@ -14,6 +14,9 @@ def clean(fc_buffer):
     fc = geojson.load(fc_buffer)
     fc.features = [f for f in fc.features if f.properties["color"] == "255"]
     for f in fc.features:
-        assert isinstance(f.geometry, geojson.Polygon)
+        if not isinstance(f.geometry, geojson.Polygon):
+            raise TypeError(
+                "geojson should never contain another geometry type than Polygon"
+            )
         f.geometry.coordinates = [f.geometry.coordinates[0]]  # Delete inner ring
     return BytesIO(geojson.dumps(fc).encode("utf-8"))
