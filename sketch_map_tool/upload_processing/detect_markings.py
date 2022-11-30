@@ -79,6 +79,9 @@ def detect_markings(
             == (bgr[2] < threshold_bgr_abs)
         )
     ] = 255
+    single_color_marking = _reduce_noise(single_color_marking)
+    single_color_marking = _reduce_holes(single_color_marking)
+    single_color_marking[single_color_marking > 0] = 255
     return single_color_marking
 
 
