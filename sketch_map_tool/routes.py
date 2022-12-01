@@ -8,6 +8,7 @@ import geojson
 
 # from celery import chain, group
 from flask import Response, redirect, render_template, request, send_file, url_for
+from werkzeug.utils import secure_filename
 
 from sketch_map_tool import celery_app, definitions
 from sketch_map_tool import flask_app as app
@@ -17,8 +18,6 @@ from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import OQTReportError, QRCodeError, UUIDNotFoundError
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.validators import validate_type, validate_uuid
-
-# from werkzeug.utils import secure_filename
 
 
 @app.get("/")
@@ -106,7 +105,9 @@ def digitize_results_post() -> Response:
     # if we want the filenames we must construct a list of tuples or dicts
     # TODO: Write files to database
     files = request.files.getlist("file")
-    id_ = tasks.generate_digitized_results([BytesIO(file.read()) for file in files])
+    id_ = tasks.generate_digitized_results(
+        [(BytesIO(file.read()), secure_filename(file.filename)) for file in files]
+    )
     return redirect(url_for("digitize_results_get", uuid=id_))
 
 
