@@ -2,3 +2,10 @@
 details > details {
     margin-left: 4rem;
 }
+
+#print-page-icon {
+    float: right;
+    border: 1px solid var(--heigit-red);
+    padding: 1rem;
+    text-align: center;
+}
