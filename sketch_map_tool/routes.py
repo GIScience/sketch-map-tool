@@ -22,7 +22,7 @@ from sketch_map_tool.validators import validate_type, validate_uuid
 
 @app.get("/")
 def index() -> str:
-    return render_template("index2.html")
+    return render_template("index.html")
 
 
 @app.get("/help")
