@@ -30,6 +30,7 @@ def format_():
         width=29.7,
         height=21,
         right_margin=5,
+        map_margin=1.0,
         font_size=8,
         qr_scale=0.6,
         compass_scale=0.25,

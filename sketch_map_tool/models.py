@@ -37,6 +37,7 @@ class PaperFormat:
         width: Width of the paper [cm]
         height: Height of the paper [cm]
         right_margin: Width of the margin [cm]
+        map_margin: Width of the margin around the map [cm]
         font_size: Font size [pt]
         qr_scale: Scale factor of the QR-code
         compass_scale: Scale factor of the compass
@@ -58,6 +59,7 @@ class PaperFormat:
     width: float
     height: float
     right_margin: float
+    map_margin: float
     font_size: int
     qr_scale: float
     compass_scale: float
