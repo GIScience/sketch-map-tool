@@ -77,13 +77,13 @@ def generate_pdf(  # noqa: C901
     canv_template.setPageSize(landscape((adjusted_height * cm, adjusted_width * cm)))
 
     # Add map to canvas:
-    for canv in [canv_map, canv_template]:
+    for canv, canv_map_margin in zip([canv_map, canv_template], [map_margin, 0]):
         if rotate:  # portrait
             canv.rotate(90)
             canv.drawImage(
                 map_image_reportlab,
-                map_margin * cm,
-                (-adjusted_height - map_margin) * cm,
+                canv_map_margin * cm,
+                (-adjusted_height - canv_map_margin) * cm,
                 mask="auto",
                 width=adjusted_width * cm,
                 height=adjusted_height * cm,
@@ -92,8 +92,8 @@ def generate_pdf(  # noqa: C901
         else:  # landscape
             canv.drawImage(
                 map_image_reportlab,
-                map_margin * cm,
-                map_margin * cm,
+                canv_map_margin * cm,
+                canv_map_margin * cm,
                 mask="auto",
                 width=adjusted_width * cm,
                 height=adjusted_height * cm,
@@ -239,58 +239,58 @@ def generate_pdf(  # noqa: C901
             0.333 * format_.height * cm + format_.qr_y * cm,
         )
 
-    for canv in [canv_map, canv_template]:
+    for canv, canv_map_margin in zip([canv_map, canv_template], [map_margin, 0]):
         # Add globes to improve feature detection during upload processing
 
         # corner globes
         # bottom left
-        renderPDF.draw(globe_1, canv, map_margin * cm, map_margin * cm)
+        renderPDF.draw(globe_1, canv, canv_map_margin * cm, canv_map_margin * cm)
         # top left
         renderPDF.draw(
             globe_3,
             canv,
-            map_margin * cm,
-            (map_margin + adjusted_height) * cm - globe_length,
+            canv_map_margin * cm,
+            (canv_map_margin + adjusted_height) * cm - globe_length,
         )
         # top right
         renderPDF.draw(
             globe_4,
             canv,
-            (map_margin + adjusted_width) * cm - globe_length,
-            (map_margin + adjusted_height) * cm - globe_length,
+            (canv_map_margin + adjusted_width) * cm - globe_length,
+            (canv_map_margin + adjusted_height) * cm - globe_length,
         )
         # bottom right
         renderPDF.draw(
             globe_2,
             canv,
-            (map_margin + adjusted_width) * cm - globe_length,
-            map_margin * cm,
+            (canv_map_margin + adjusted_width) * cm - globe_length,
+            canv_map_margin * cm,
         )
 
         # middle globes
         renderPDF.draw(
             globe_2,
             canv,
-            map_margin * cm,
-            (map_margin + adjusted_height / 2) * cm - 0.5 * globe_length,
+            canv_map_margin * cm,
+            (canv_map_margin + adjusted_height / 2) * cm - 0.5 * globe_length,
         )
         renderPDF.draw(
             globe_1,
             canv,
-            (map_margin + adjusted_width / 2) * cm - 0.5 * globe_length,
-            (map_margin + adjusted_height) * cm - globe_length,
+            (canv_map_margin + adjusted_width / 2) * cm - 0.5 * globe_length,
+            (canv_map_margin + adjusted_height) * cm - globe_length,
         )
         renderPDF.draw(
             globe_3,
             canv,
-            (map_margin + adjusted_width) * cm - globe_length,
-            (map_margin + adjusted_height) / 2 * cm - globe_length / 2,
+            (canv_map_margin + adjusted_width) * cm - globe_length,
+            (canv_map_margin + adjusted_height) / 2 * cm - globe_length / 2,
         )
         renderPDF.draw(
             globe_4,
             canv,
-            (map_margin + adjusted_width / 2) * cm - globe_length / 2,
-            map_margin * cm,
+            (canv_map_margin + adjusted_width / 2) * cm - globe_length / 2,
+            canv_map_margin * cm,
         )
 
         # Generate PDFs:
