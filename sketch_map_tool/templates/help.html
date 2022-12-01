@@ -12,16 +12,18 @@
 {% block body %}
     <main class="container">
         <p>
-            These <strong>Step-by-Step instructions</strong> guide you through the Sketch Map Tool
-            and provide useful recommendations.
+            These <strong>Step-by-Step Instructions</strong> guide you through the Sketch Map Tool
+            and provide useful recommendations.<br>
+            You can download and print this manual if needed.
+            <a href="#" onclick="window.print();">PRINTLINK</a>
         </p>
         <p>
-            Answers to the frequently asked questions can be found in the <a href="#faq">FAQ</a>
+            Answers to the Frequently Asked Questions can be found in the <a href="#faq">FAQ</a>
             section below.
         </p>
         <p>
             Learn more about the combination of the Sketch Map Tool with additional data collection
-            methods in the <a href="#additional-information">Additonal Information</a> section.
+            methods in the <a href="#additional-information">Additional Information</a> section.
         </p>
         <p>
             As the current version of the Sketch Map Tool has only been released shortly, problems
@@ -31,14 +33,15 @@
             or the Sketch Map Tool user support. (&rarr;<a href="/about#contact">Contact</a>)
         </p>
 
-        <h1 id="step-by-step">Step-by-Step instructions</h1>
+        <h1 id="step-by-step">Step-by-Step Instructions</h1>
         <details>
             <summary id="create-paper-maps">
                 <div class="sketchy circle">1</div>
                 Create paper maps to collect data
             </summary>
             <details>
-                <summary id="define-your-area-of-interest">1.1 Define your Area of Interest</summary>
+                <summary id="define-your-area-of-interest">1.1 Define your Area of Interest
+                </summary>
                 <article>
                     <p>
                         Select your area of interest either by zooming into the map preview or with
@@ -51,6 +54,11 @@
                         will
                         be printed on the Sketch Map.
                     </p>
+                    <figure>
+                        <img src="{{ url_for("static", filename="assets/images/help/1_1_AOI.png") }}"
+                             alt="Picture of a group mapping situation.">
+                        <figcaption></figcaption>
+                    </figure>
 
                     <h6><em>Recommendations:</em></h6>
                     <ul>
@@ -74,7 +82,7 @@
                                     points
                                     of interest (POIs) should be visible.
                                 </li>
-                                <li>Cover all relevstrongant areas for your use case: e.g. if
+                                <li>Cover all relevant areas for your use case: e.g. if
                                     studying
                                     flooding,
                                     cover especially those areas near rivers, creeks and sinkholes
@@ -94,12 +102,15 @@
                 <summary id="map-quality-check">1.2 Map Quality Check</summary>
                 <article>
                     <p>
-                        The generated Sketch Map uses a base map layer of OpenStreetMap (OSM). The
+                        The generated Sketch Map uses a base map layer of <a
+                            href="http://wiki.osm.org" target="_blank">OpenStreetMap
+                        (OSM)</a>. The
                         Map
                         Quality Check helps to evaluate the fitness of the area of interest for the
                         purpose of participatory mapping based on a quality analysis of the
                         OpenStreetMap data with the
-                        <a href="https://oqt.ohsome.org">HeiGIT ohsome quality analyst - OQT</a>. The
+                        <a href="https://oqt.ohsome.org">HeiGIT ohsome quality analyst - OQT</a>.
+                        The
                         fitness
                         report can be downloaded as PDF file by clicking on the blue button. It
                         includes
@@ -146,16 +157,16 @@
             </details>
         </details>
         <details>
-            <summary id="data-collection"><strong class="sketchy" style="color: var(--heigit-red)">THEN: </strong> &nbsp;Data
+            <summary id="data-collection"><strong class="sketchy" style="color: var(--heigit-red)">THEN: </strong>
+                &nbsp;Data
                 collection in the field
             </summary>
             <article>
                 <p>
-                    At the moment the Sketch Map Tool detects red, blue and black markings. The tool
-                    does not differentiate between blue and black marking and combines these to one
-                    output result. The detection works best if the marked areas are filled out
+                    At the moment the Sketch Map Tool detects red, blue and black markings. The
+                    detection works best if the marked areas are filled out
                     entirely. The tool cannot detect overlapping markings.<br>
-                    Please make sure not to accidentally mark the globes at the edge as they are
+                    Please make sure not to accidentally mark the globes on the edge as they are
                     needed to improve the automatic map detection.
                 </p>
                 <h6><em>Recommendations:</em></h6>
@@ -196,10 +207,12 @@
         <details>
             <summary id="paper-to-geodata">
                 <div class="sketchy circle">2</div>
-                Paper to Geodata: Automatically digitize collected data
+                Paper to GIS: Automatically digitize collected data
             </summary>
             <details>
-                <summary id="scan-or-photo-marked-sketch-maps">2.1 Scan or photograph your marked Sketch Maps</summary>
+                <summary id="scan-or-photo-marked-sketch-maps">2.1 Scan or photograph your marked
+                    Sketch Maps
+                </summary>
                 <article>
                     <p>
                         After the field data collection, scan or photograph the marked Sketch Maps.
@@ -212,18 +225,18 @@
                     <ul>
                         <li>
                             If you cannot scan, the photos must be taken from above in a 180-degree
-                            angle (parallel above the sketch map) to produce the best possible
+                            angle (parallel above the Sketch Maps) to produce the best possible
                             result.
                         </li>
                         <li>
-                            Please upload a complete image of the sketch map and do not try to cut
+                            Please upload a complete image of the Sketch Maps and do not try to cut
                             out the map from the photo.
                         </li>
                         <li>
                             Take care of the lighting conditions when taking a picture.
                         </li>
                         <li>
-                            The georeferencing works best if you scan the marked sketch map with a
+                            The georeferencing works best if you scan the marked Sketch Maps with a
                             resolution of 300 dpi. Attention! The file size will be too large when
                             scanning with a 600 dpi resolution.
                         </li>
@@ -236,16 +249,17 @@
                     <p>
                         To upload files you can click on the upload field or drag and drop your
                         files directly in the upload field and then click on the Upload button. You
-                        can upload one or more marked sketch maps at once. However, the download
+                        can upload one or more marked Sketch Maps at once. However, the download
                         files will consist of seperate files (vector data output) or layers
-                        (All-In-One-QGIS project) for each colour and sketch map. The upload works
+                        (All-In-One-QGIS project) for each colour and Sketch Maps. The upload works
                         for jpg or png files.
                     </p>
 
                     <h6><em>Recommendations:</em></h6>
                     <ul>
                         <li>
-                            It is also possible to upload more than one sketch map at the same time,
+                            It is also possible to upload more than one Sketch Maps at the same
+                            time,
                             but the upload will take longer.
                         </li>
                         <li>
@@ -260,18 +274,35 @@
                 </article>
             </details>
             <details>
-                <summary id="download-results-as-geodata">2.3 Download results as Geodata</summary>
-                {# TODO Check for doc updates https://confluence.heigit.org/display/SMT/Help+Page #}
+                <summary id="download-results-as-geodata">2.3 Download collected Markings as
+                    Geodata
+                </summary>
                 <article>
                     <p>
-                        Download the sketches in different geodata formats (Geotiffs, Vector data or
-                        All-In-One-QGIS projects).
+                        Download the markings of the Sketch Maps in different geodata formats
+                        (raster data as zipped GeoTIFFs, vector data as GeoJSON file).
                     </p>
+                    <p>
+                        You can download the georeferenced Sketch Maps as a GeoTIFFs or the
+                        colour-detected markings as vector data (for red, blue and black
+                        markings) in a GeoJSON file.
+                    </p>
+                    <p>
+                        The vector data output file contains polygons for the markings of each
+                        uploaded Sketch Map. Each polygon has attributes about its color and its
+                        source-filename.<br>The GeoTIFF output files consist of georeferenced
+                        "pictures" for each of your uploaded Sketch Maps.
+                    </p>
+
+                    <h6><em>Recommendations:</em></h6>
                     <ul>
                         <li>
-                            You can download the georeferenced Sketch Map as a GeoTIFF or the
-                            colour-detected shapefiles (for both red and blue/black markings) in one
-                            ZIP-folder.
+                            If you are experiencing problems during the upload process, please check
+                            out the <a href="#faq">FAQ section</a> below or contact your Sketch Map
+                            Tool focal point in your organization or the Sketch Map Tool user
+                            support (&rarr;&nbsp;<a href="/about#contact">Contact</a>) if you cannot
+                            find your
+                            answers there.
                         </li>
                     </ul>
                 </article>
@@ -279,36 +310,42 @@
         </details>
         <details>
             {# TODO Check for doc updates https://confluence.heigit.org/display/SMT/Help+Page #}
-            <summary id="import-geodata-in-qgis"><strong class="sketchy" style="color: var(--heigit-red)">FINALLY: </strong>
+            <summary id="import-geodata-in-qgis"><strong class="sketchy"
+                                                         style="color: var(--heigit-red)">FINALLY: </strong>
                 Import Geodata in QGIS
             </summary>
             <article>
+                <p>
+                    You can load the vector data file into your GIS software. The layers have
+                    different attributes (check attribute table) which correspond to the different
+                    colours. You can also open the GeoTIFF file for validating the colour-detection
+                    of the markings. The GeoTIFF output files consist of georeferenced "pictures"
+                    for each of your uploaded Sketch Maps.
+                </p>
+                <p>
+                    When you open the files in QGIS, it should look similar to this example and show
+                    all the markings of your sketch map(s).
+                </p>
+                <img src="" alt="Screenshot of vector results in QGIS">
+                <h6><em>Recommendations:</em></h6>
                 <ul>
                     <li>
-                        You can open the colour-detected shapefiles and the further analyses
-                        directly in a QGIS project.
+                        In case some of the sketches have not been digitzed correctly, you can use
+                        the GeoTIFF file to manually create/adjust the polygon layers.
                     </li>
                     <li>
-                        When you open the QGIS project it should look similar to this example and
-                        show all the markings on your sketch maps.
-                        <em>If anything looks strange, please check your uploaded sketch maps and
-                            if necessary, scan them again or take new pictures.</em>
-                    </li>
-                    <li>
-                        Opened as a new QGIS project the automatic colour-detected markings on the
-                        sketch map can be further analysed. One analysis is the count of overlapping
-                        areas between the markings.
-                        <em>
-                            The analysis should work automatically within the sketch map tool but if
-                            problems occur the analysis is a combination of the union and
-                            count-duplicates scripts → check Screenshots of Analysis tools
-                            (combined)
-                        </em>
-                    </li>
-                    <li>
-                        To finally see the analysed result of the count duplicates you need to adapt
-                        the <strong>symbology</strong> to your needs and the number of analysed
-                        sketch maps!
+                        If the imported data looks strange and does not represent the actual
+                        markings of the sketch maps, please check your uploaded sketch map files and
+                        if necessary, scan them again or take new pictures according to the
+                        recommendations above. Also, verify if the GeoTiff file represents the
+                        actual markings of the sketch maps. If this is not the case the colour
+                        detections has not worked out correctly. Please review the recommendations
+                        in the sections about the data collection, the scan or photograph or the
+                        upload above and consult our FAQ section about the problems in the colour
+                        detection.<br>
+                        If you cannot find your answers there, please contact your Sketch Map Tool
+                        focal point in your organization or the Sketch Map Tool user support (&rarr;&nbsp;<a
+                            href="/about#contact">Contact</a>).
                     </li>
                 </ul>
             </article>
@@ -327,8 +364,10 @@
             <summary>What are the quality levels for OSM data used in the tool?</summary>
             <article>
                 The OSM data are classified with a traffic light system. Green stands for good
-                suitability of the data, yellow for possible problems when carrying out a sketch map
-                study with OSM based sketch maps, and red for probable problems. Recommendations are
+                suitability of the data, yellow for possible problems when carrying out a Sketch
+                Maps
+                study with OSM based Sketch Maps, and red for probable problems. Recommendations
+                are
                 also given on what to consider based on the results.
             </article>
         </details>
@@ -342,12 +381,13 @@
         </details>
         <details>
             <summary>Why is it important to analyse the suitability of OSM data before creating a
-                sketch map?
+                Sketch Maps?
             </summary>
             <article>
-                OSM data is used for the creation of the sketch map. If the OSM data in a study area
+                OSM data is used for the creation of the Sketch Maps. If the OSM data in a study
+                area
                 are lacking some important features, they are missing on the maps as well. Thus the
-                quality of the OSM data is directly related to the quality of the sketch maps. The
+                quality of the OSM data is directly related to the quality of the Sketch Maps. The
                 features might be relevant for participants to orientate on the map.
             </article>
         </details>
@@ -365,7 +405,7 @@
             <summary>How does mapping work with the Sketch Map Tool?</summary>
             <article>
                 The local population can for example draw flooded areas such as streets, parks, etc.
-                on the printed sketch map. The larger paper formats also allow to hold group
+                on the printed Sketch Maps. The larger paper formats also allow to hold group
                 discussions about flooded areas. The maps with the markings can be photographed and
                 uploaded to the tool. The georeferenced TIFF and shape files can then be further
                 analysed or used.
@@ -379,12 +419,13 @@
             </article>
         </details>
         <details>
-            <summary>Why are there a code and globes on the sketch maps?</summary>
+            <summary>Why are there a code and globes on the Sketch Maps?</summary>
             <article>
                 These are required for georeferencing. This is why it is important to have them on
-                the sketch maps. If the code cannot be detected by the tool, i.e. you see an error
+                the Sketch Maps. If the code cannot be detected by the tool, i.e. you see an error
                 message stating this; in this case you can also use the info next to 'code contents'
-                on the sketch map. This information can be entered manually under 'Problems with the
+                on the Sketch Maps. This information can be entered manually under 'Problems with
+                the
                 code detection?' on the upload page.
             </article>
         </details>
@@ -400,10 +441,10 @@
             <article>
                 Please make sure you do not accidentally mark the globes at the edge as they are
                 needed to improve the automatic map detection. But if someone accidentally marked
-                the globes, it is still possible to upload the sketch maps. Try the automatic
+                the globes, it is still possible to upload the Sketch Maps. Try the automatic
                 detection of the map boundaries. Use thicker felt tip pens with intense colours.
                 Currently, for the vector-data generation only red, blue and black are supported.
-                Prepare the same set of pens for all interviewers. Add a number on the sketch map
+                Prepare the same set of pens for all interviewers. Add a number on the Sketch Maps
                 and save this number in the questionnaire as well, if you use one. An overview of
                 each step with recommendations can be found <a href="#step-by-step">here</a>.
             </article>
@@ -418,16 +459,16 @@
             </article>
         </details>
         <details>
-            <summary>What do I have to consider when photographing the sketch maps to get the best
+            <summary>What do I have to consider when photographing the Sketch Maps to get the best
                 possible results?
             </summary>
             <article>
                 The images need to be in .jpg or .png format. All files together may not be larger
                 than 500&nbsp;MB.
-                The georeferencing works best if you scan the marked sketch map with a resolution
+                The georeferencing works best if you scan the marked Sketch Maps with a resolution
                 of
                 300 dpi. The photos must be taken from above in a 180-degree angle (parallel above
-                the sketch map) to produce the best result.
+                the Sketch Maps) to produce the best result.
                 An overview of
                 each step with recommendations can be found <a href="#step-by-step">here</a>.
             </article>
@@ -437,7 +478,7 @@
             <article>
                 You can open the TIFF file in a geographic information system (GIS), such as ArcGIS
                 or QGIS, to check this. If you load the file there and insert a basemap (for example
-                the OSM basemap) you can see if the georeferencing has worked. The sketch map
+                the OSM basemap) you can see if the georeferencing has worked. The Sketch Maps
                 should
                 match the base map.
             </article>
