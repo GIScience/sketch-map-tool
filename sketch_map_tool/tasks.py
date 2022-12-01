@@ -79,8 +79,8 @@ def generate_digitized_results(files) -> str:
     request_task = {
         uuid: json.dumps(
             {
-                "geo-referenced-sketch-maps": str(result_id_1),
-                "detected-markings": str(result_id_2),
+                "raster-results": str(result_id_1),
+                "vector-results": str(result_id_2),
             }
         )
     }

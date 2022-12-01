@@ -10,7 +10,7 @@ from sketch_map_tool.models import LiteratureReference, PaperFormat
 
 # Types of requests
 REQUEST_TYPES = Literal[
-    "quality-report", "sketch-map", "geo-referenced-sketch-maps", "detected-markings"
+    "quality-report", "sketch-map", "raster-results", "vector-results"
 ]
 # Colors to be detected
 COLORS = ["white", "red", "blue", "green", "yellow", "turquoise", "pink"]

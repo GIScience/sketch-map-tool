@@ -1,8 +1,8 @@
 import { getUUIDFromURL, poll, handleMainMessage } from "../shared";
 
-const digitizedResultsUrl = `/api/status/${getUUIDFromURL()}/detected-markings`;
+const vectorResultsUrl = `/api/status/${getUUIDFromURL()}/vector-results`;
 
-const rasterResultsUrl = `/api/status/${getUUIDFromURL()}/geo-referenced-sketch-maps`;
+const rasterResultsUrl = `/api/status/${getUUIDFromURL()}/raster-results`;
 
 const qgisResultsUrl = `/api/status/${getUUIDFromURL()}/qgis-data`;
 
@@ -10,6 +10,6 @@ const qgisResultsUrl = `/api/status/${getUUIDFromURL()}/qgis-data`;
 
 Promise.all([
     poll(rasterResultsUrl, "raster-data"),
-    poll(digitizedResultsUrl, "vector-data"),
+    poll(vectorResultsUrl, "vector-data"),
     poll(qgisResultsUrl, "qgis-data"),
 ]).then(handleMainMessage);
