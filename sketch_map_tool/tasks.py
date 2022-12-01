@@ -8,7 +8,7 @@ import geojson
 import numpy as np
 from celery import chain, group
 from celery.result import AsyncResult
-from geojson import GeoJSON
+from geojson import FeatureCollection, GeoJSON
 from numpy.typing import NDArray
 
 from sketch_map_tool import celery_app as celery
@@ -62,8 +62,9 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
 # GENERATE DIGITIZED RESULTS
 #
-def generate_digitized_results(files) -> str:
-    args = upload_processing.read_qr_code(t_to_array(files[0]))
+def generate_digitized_results(files: list[tuple[BytesIO, str]]) -> str:
+
+    args = upload_processing.read_qr_code(t_to_array(files[0][0]))
     uuid = args["uuid"]
     bbox = args["bbox"]
 
@@ -89,7 +90,7 @@ def generate_digitized_results(files) -> str:
     return uuid
 
 
-# Design Celery Workflow
+# Celery Workflow
 #
 # https://docs.celeryq.dev/en/stable/userguide/canvas.html
 #
@@ -106,14 +107,14 @@ def georeference_sketch_maps(files, map_frame, bbox) -> str:
 
     def c_workflow(files) -> chain:
         """Start processing workflow for each file."""
-        return (group([c_process(f) for f in files]) | t_zip.s())
+        return (group([c_process(file) for (file, _) in files]) | t_zip.s())
 
     return c_workflow(files).apply_async().id
 
 
 def digitize_sketches(files, map_frame, bbox) -> str:
 
-    def c_digitize(color: str) -> chain:
+    def c_digitize(color: str, name: str) -> chain:
         """Digitize one color of a Sketch Map."""
         # TODO: Avoid redundant code execution.
         # If detect markings is executed for the same image but different colors,
@@ -124,26 +125,32 @@ def digitize_sketches(files, map_frame, bbox) -> str:
                 | t_polygonize.s(color)
                 | t_to_geojson.s()
                 | t_clean.s()
+                | t_enrich.s({"color": color, "name": name})
                 )
 
-    def c_process(sketch_map: BytesIO) -> chain:
+    def c_process(sketch_map: BytesIO, name: str) -> chain:
         """Process a Sketch Map."""
         return (
             t_to_array.s(sketch_map)
             | t_clip.s(map_frame)
-            | group([c_digitize(c) for c in COLORS])
+            | group([c_digitize(color, name) for color in COLORS])
             | t_merge.s()
         )
 
     def c_workflow(files) -> chain:
         """Start processing workflow for each file."""
         return (
-                group([c_process(f) for f in files])
+                group([c_process(file, name) for (file, name) in files])
                 | t_merge.s()
                 )
 
     return c_workflow(files).apply_async().id
-    # fmt: on
+
+# Celery Tasks
+#
+# t_ -> task
+#
+# fmt: on
 
 
 @celery.task()
@@ -152,11 +159,6 @@ def t_to_array(buffer: BytesIO) -> AsyncResult | NDArray:
     return cv2.imdecode(
         np.fromstring(buffer.read(), dtype="uint8"), cv2.IMREAD_UNCHANGED
     )
-
-
-@celery.task()
-def t_to_geojson(buffer: BytesIO) -> AsyncResult | GeoJSON:
-    return geojson.load(buffer)
 
 
 def t_to_buffer(geojson_object: GeoJSON) -> AsyncResult | BytesIO:
@@ -186,19 +188,31 @@ def t_polygonize(geotiff: BytesIO, layer_name: str) -> AsyncResult | BytesIO:
 
 
 @celery.task()
-def t_clean(geojson: BytesIO) -> AsyncResult | BytesIO:
-    return upload_processing.clean(geojson)
+def t_to_geojson(buffer: BytesIO) -> AsyncResult | FeatureCollection:
+    return geojson.load(buffer)
 
 
 @celery.task()
-def t_merge(feature_collections: list) -> AsyncResult | BytesIO:
-    return upload_processing.merge(feature_collections)
+def t_clean(fc: FeatureCollection) -> AsyncResult | FeatureCollection:
+    return upload_processing.clean(fc)
+
+
+@celery.task()
+def t_enrich(
+    fc: FeatureCollection, properties: dict
+) -> AsyncResult | FeatureCollection:
+    return upload_processing.enrich(fc, properties)
+
+
+@celery.task()
+def t_merge(fcs: list[FeatureCollection]) -> AsyncResult | FeatureCollection:
+    return upload_processing.merge(fcs)
 
 
 @celery.task()
 def t_zip(files: list) -> AsyncResult | BytesIO:
     buffer = BytesIO()
-    with ZipFile(buffer, 'w') as zip_file:
+    with ZipFile(buffer, "w") as zip_file:
         for i, file in enumerate(files):
             zip_file.writestr(str(i) + ".geotiff", file.read())
     buffer.seek(0)
