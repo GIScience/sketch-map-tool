@@ -9,9 +9,9 @@ from sketch_map_tool.config import get_config_value
 from sketch_map_tool.models import LiteratureReference, PaperFormat
 
 # Types of requests
-CREATE_TYPES = Literal["quality-report", "sketch-map"]
-DIGITIZE_TYPES = Literal["digitized-data"]
-ALLOWED_TYPES = Literal[CREATE_TYPES, DIGITIZE_TYPES]
+REQUEST_TYPES = Literal[
+    "quality-report", "sketch-map", "geo-referenced-sketch-maps", "detected-markings"
+]
 # Colors to be detected
 COLORS = ["white", "red", "blue", "green", "yellow", "turquoise", "pink"]
 
