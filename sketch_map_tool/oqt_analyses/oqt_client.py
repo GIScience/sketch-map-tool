@@ -37,6 +37,11 @@ def get_report(bbox: Bbox, include_svg: bool = True, include_html: bool = False)
     }
     req = requests.post(url, json=parameters)
     if req.status_code == 422:
-        raise OQTReportError(req.json()["detail"])
+        if req.json()["type"] == "SizeRestrictionError":
+            raise OQTReportError(
+                "Selected Area-of-Interest is too large for a Map Quality Check Report."
+            )
+        else:
+            raise OQTReportError(req.json()["detail"])
     report_properties = req.json()["properties"]
     return report_properties

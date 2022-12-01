@@ -35,9 +35,9 @@ def mock_get_task_id(monkeypatch, uuid):
 
 
 @vcr.use_cassette()
-def test_generate_sketch_map(monkeypatch, bbox, format_, size, scale):
+def test_generate_sketch_map(monkeypatch, uuid, bbox, format_, size, scale):
     map_pdf, map_img = tasks.generate_sketch_map(
-        bbox, format_, "landscape", size, scale
+        uuid, bbox, format_, "landscape", size, scale
     )
     assert isinstance(map_pdf, BytesIO)
     assert isinstance(map_img, BytesIO)

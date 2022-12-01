@@ -4,3 +4,7 @@ class QRCodeError(Exception):
 
 class OQTReportError(Exception):
     pass
+
+
+class UUIDNotFoundError(Exception):
+    pass
