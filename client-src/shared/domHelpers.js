@@ -86,6 +86,16 @@ function closeAllDetailsElements() {
         });
 }
 
+/**
+ * Close all existing DETAILSElements
+ */
+function openAllDetailsElements() {
+    [...document.querySelectorAll("details")]
+        .forEach((details) => {
+            details.setAttribute("open", true);
+        });
+}
+
 export {
     getUUIDFromURL,
     fillSelectOptions,
@@ -94,4 +104,5 @@ export {
     setIsBusy,
     openDetailsParents,
     closeAllDetailsElements,
+    openAllDetailsElements,
 };

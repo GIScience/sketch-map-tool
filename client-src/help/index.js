@@ -1,4 +1,4 @@
-import { closeAllDetailsElements, openDetailsParents } from "../shared";
+import { closeAllDetailsElements, openAllDetailsElements, openDetailsParents } from "../shared";
 
 // open details sections when anchor link is used
 
@@ -17,3 +17,9 @@ if (anchor) {
     };
     anchorLink.addEventListener("click", onClick);
 });
+
+window.printPage = () => {
+    openAllDetailsElements();
+    window.print();
+    closeAllDetailsElements();
+};
