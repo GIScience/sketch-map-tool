@@ -185,7 +185,7 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
             if task.successful():
                 file = task.get()
         case "vector-results":
-            mimetype = "application/geojson"
+            mimetype = "application/geo+json"
             if task.successful():
                 file = BytesIO(geojson.dumps(task.get()).encode("utf-8"))
     return send_file(file, mimetype)
