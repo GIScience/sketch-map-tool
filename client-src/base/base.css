@@ -101,6 +101,16 @@ body {
     top: calc(50% - 1rem);
 }
 
+.github-icon {
+    display: inline-block;
+    position: relative;
+    width: 1rem;
+    height: 1rem;
+    background-image: url("/static/assets/logos/GitHub-Mark-64px.png");
+    background-size: 1rem;
+    vertical-align: baseline;
+}
+
 .center-text {
     text-align: center;
 }
