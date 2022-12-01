@@ -1,6 +1,6 @@
 import json
 from io import BytesIO
-from uuid import uuid4
+from uuid import UUID, uuid4
 from zipfile import ZipFile
 
 import cv2
@@ -21,9 +21,9 @@ from sketch_map_tool.oqt_analyses import get_report
 from sketch_map_tool.wms import client as wms_client
 
 
-@celery.task(bind=True)
+@celery.task()
 def generate_sketch_map(
-    self,
+    uuid: UUID,
     bbox: Bbox,
     format_: PaperFormat,
     orientation: str,
@@ -34,7 +34,7 @@ def generate_sketch_map(
     raw = wms_client.get_map_image(bbox, size)
     map_image = wms_client.as_image(raw)
     qr_code_ = map_generation.qr_code(
-        self.request.id,
+        uuid,
         bbox,
         format_,
         orientation,
@@ -67,7 +67,8 @@ def generate_digitized_results(files) -> str:
     uuid = args["uuid"]
     bbox = args["bbox"]
 
-    map_frame_buffer = celery.AsyncResult(uuid).get()[1]
+    task_id = ds_client.get_task_id(uuid, "sketch-map")
+    map_frame_buffer = celery.AsyncResult(task_id).get()[1]  # Get map frame template
     map_frame = t_to_array(map_frame_buffer)
 
     result_id_1 = georeference_sketch_maps(files, map_frame, bbox)

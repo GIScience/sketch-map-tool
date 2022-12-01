@@ -14,7 +14,7 @@ from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
 from sketch_map_tool.data_store import client as ds_client  # type: ignore
 from sketch_map_tool.definitions import REQUEST_TYPES
-from sketch_map_tool.exceptions import OQTReportError, QRCodeError
+from sketch_map_tool.exceptions import OQTReportError, QRCodeError, UUIDNotFoundError
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.validators import validate_type, validate_uuid
 
@@ -57,14 +57,15 @@ def create_results_post() -> Response:
     size = Size(**size_raw)
     scale = float(request.form["scale"])
 
+    # Unique id for current request
+    uuid = str(uuid4())
+
     # Tasks
     task_sketch_map = tasks.generate_sketch_map.apply_async(
-        args=(bbox, format_, orientation, size, scale)
+        args=(uuid, bbox, format_, orientation, size, scale)
     )
     task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox_wgs84,))
 
-    # Unique id for current request
-    uuid = str(uuid4())
     # Mapping of request id to multiple tasks id's
     request_task = {
         uuid: json.dumps(
@@ -142,9 +143,10 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
                 http_status = 422  # Unprocessable Entity
                 status = "FAILED"
                 error = str(err)
-            else:
+            except (Exception) as err:
                 http_status = 500  # Internal Server Error
                 status = "FAILED"
+                error = str(err)
     else:  # PENDING, RETRY, RECEIVED, STARTED
         # Accepted for processing, but has not been completed
         http_status = 202  # Accepted
@@ -177,12 +179,22 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
             mimetype = "application/pdf"
             if task.successful():
                 file: BytesIO = task.get()[0]  # return only the sketch map
-        case "detected-markings":
-            mimetype = "application/geojson"
-            if task.successful():
-                file = BytesIO(geojson.dumps(task.get()).encode("utf-8"))
-        case "geo-referenced-sketch-maps":
+        case "raster-results":
             mimetype = "application/zip"
             if task.successful():
                 file = task.get()
+        case "vector-results":
+            mimetype = "application/geojson"
+            if task.successful():
+                file = BytesIO(geojson.dumps(task.get()).encode("utf-8"))
     return send_file(file, mimetype)
+
+
+@app.errorhandler(QRCodeError)
+def handle_exception(error):
+    return render_template("error.html", error_msg=str(error)), 422
+
+
+@app.errorhandler(UUIDNotFoundError)
+def handle_not_found_exception(error):
+    return render_template("error.html", error_msg=str(error)), 404
