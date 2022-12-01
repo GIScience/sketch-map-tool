@@ -123,7 +123,7 @@ def generate_pdf(  # noqa: C901
         -(
             map_margin * 2
             + adjusted_width
-            + format_.compass_scale * 3
+            + format_.compass_scale * 2
             + 3 * format_.indent
         )
         * cm
@@ -134,13 +134,13 @@ def generate_pdf(  # noqa: C901
 
         # Add copyright information:
         text = canv_map.beginText()
-        text.setTextOrigin(copyright_text_origin, rotate_indent)
+        text.setTextOrigin(copyright_text_origin + 1.0 * cm, rotate_indent)
         text.textLines("Map: © OpenStreetMap Contributors")
         canv_map.drawText(text)
 
         # Add QR-Code:
         renderPDF.draw(
-            qr_code, canv_map, format_.qr_y * cm, -(format_.width - 0.1) * cm
+            qr_code, canv_map, format_.qr_y * cm, -(format_.width - 1.1) * cm
         )
 
         # Add scale:
@@ -181,14 +181,16 @@ def generate_pdf(  # noqa: C901
                 + format_.font_size / 4
             )
             * cm,
-            rotate_indent - 2 * format_.compass_scale * cm,
+            rotate_indent - 2 * format_.compass_scale * cm + format_.qr_y * cm,
         )
         canv_map.rotate(-90)
     else:  # landscape
         x_right_margin = map_margin * 2 + adjusted_width + format_.indent
         # Add copyright information:
         text = canv_map.beginText()
-        text.setTextOrigin(x_right_margin * cm, copyright_text_origin)
+        text.setTextOrigin(
+            x_right_margin * cm, copyright_text_origin + format_.qr_y * cm
+        )
         if format_.title in ("a0", "a1", "a2"):
             text.textLines("Map:\n\n© OpenStreetMap Contributors")
         else:
@@ -206,26 +208,26 @@ def generate_pdf(  # noqa: C901
         # Add scale:
         canv_map.rect(
             x_right_margin * cm,
-            0.297 * format_.height * cm,
+            0.297 * format_.height * cm + format_.qr_y * cm,
             scale_length / 2 * cm,
             format_.scale_height * cm,
             fill=1,
         )
         canv_map.rect(
             (x_right_margin + scale_length / 2) * cm,
-            0.297 * format_.height * cm,
+            0.297 * format_.height * cm + format_.qr_y * cm,
             scale_length / 2 * cm,
             format_.scale_height * cm,
             fill=0,
         )
         canv_map.drawString(
             (x_right_margin + scale_length / 2 - format_.font_size / 25) * cm,
-            0.285 * format_.height * cm,
+            0.285 * format_.height * cm + format_.qr_y * cm,
             scale_text[0],
         )
         canv_map.drawString(
             (x_right_margin + scale_length - format_.font_size / 25) * cm,
-            0.285 * format_.height * cm,
+            0.285 * format_.height * cm + format_.qr_y * cm,
             scale_text[1],
         )
 
@@ -234,7 +236,7 @@ def generate_pdf(  # noqa: C901
             compass,
             canv_map,
             x_right_margin * cm,
-            0.333 * format_.height * cm,
+            0.333 * format_.height * cm + format_.qr_y * cm,
         )
 
     for canv in [canv_map, canv_template]:
