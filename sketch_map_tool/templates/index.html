@@ -1,103 +1,95 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sketch Map Tool Prototype</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="../static/style/style.css" rel="stylesheet"/>
-    <script src="./static/scripts/header_menu.js"></script>
-</head>
-<body class="center-text">
-    <h1>Sketch Map Tool Prototype</h1>
-    <div class="container border">
-        <header class="d-flex justify-content-center small-margin">
-            <ul class="nav nav-pills">
-                <li class="nav-item">
-                    <a class="nav-link active" id="btn-info" href="#" aria-current="page">Info</a></li>
-                <li class="nav-item">
-                    <a class="nav-link" id="btn-analyses" href="./analyses">Analyses</a></li>
-                <li class="nav-item disabled-button">
-                    <a class="nav-link" id="btn-generation" href="#">Map generation</a>
-                </li>
-                <li class="nav-item disabled-button">
-                    <a class="nav-link" id="btn-upload" href="#">Upload sketch maps</a>
-                </li>
-            </ul>
-        </header>
-    </div>
-    <br><br>
-    <div class="card contents-card">
-        <div class="card-body">
-            <p>
-                This is a prototype of the Sketch Map Tool. While we are working on a more polished and advanced version
-                (including additional features, a better design, translations and a cleaner code base), we want to give
-                you the opportunity to already use the core features of the Sketch Map Tool and build your own projects
-                based on it. Therefore, we published this prototype version. Feel free to use it as permitted by the
-                <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">
-                    GNU Affero General Public License v3.0</a>.
-            </p>
-            <p>
-                If you use this tool or parts of it for scientific purposes, please cite the paper in which the tool
-                was originally presented (see below).
-            </p>
-            <p>
-                The Sketch Map Tool has been developed in the
-                <a href="https://warwick.ac.uk/fac/arts/schoolforcross-facultystudies/igsd/research/waterproofingdata/">
-                    Waterproofing Data Project</a> at
-                <a href="https://www.geog.uni-heidelberg.de/gis/index_en.html">
-                    GIScience of Heidelberg University</a>
-                with the support of multiple funders (See the README in the repository for information about the funders).
-            </p>
-            <p>
-                It was developed to provide a tool that supports the whole workflow of using sketch maps in the field, e.g. for flood
-                mapping. This workflow typically consists of three parts:
+{% extends "base.html" %}
 
-                <ul>
-                    <li>Before a study is conducted, the data on which the maps are based are inspected to assess
-                        whether using maps based on them might cause any problems, e.g. they are outdated or incomplete.
-                        In our case the maps are based on <a href="https://www.openstreetmap.org">OpenStreetMap</a>
-                        Data <br>
-                        <svg class="bi bi-arrow-right-circle" xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 19">
-                            <!-- Licence: MIT, Copyright (c) 2019-2021 The Bootstrap Authors, see https://github.com/twbs/icons/blob/main/LICENSE.md -->
-                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-                        </svg>
-                        <b>Analyze OSM data</b>
-                    </li>
-                    <li>
-                        To carry out the actual study, sketch maps need to be printed. This should be possible in small as well as large paper
-                        formats to allow for group mappings. Thus generating maps in high resolution is necessary.<br>
-                        <svg class="bi bi-arrow-right-circle" xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 19">
-                            <!-- Licence: MIT, Copyright (c) 2019-2021 The Bootstrap Authors, see https://github.com/twbs/icons/blob/main/LICENSE.md -->
-                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-                        </svg>
-                        <b>Generate sketch maps</b>
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for("static", filename="bundles/index.css") }}">
+{% endblock head %}
 
-                    </li>
-                    <li>After participants have marked areas or points of interest on the sketch maps, the maps need to
-                        be digitised, georeferenced, and the markings need to be detected.<br>
-                        <svg class="bi bi-arrow-right-circle" xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 19">
-                            <!-- Licence: MIT, Copyright (c) 2019-2021 The Bootstrap Authors, see https://github.com/twbs/icons/blob/main/LICENSE.md -->
-                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-                        </svg>
-                        <b>Automatically georeference uploaded sketch maps and detect markings on them</b>
-                    </li>
-                </ul>
-            </p>
-            <p>
-                For more information about the tool and its origin, you can take a look at the paper in which it was
-                presented:
-                <div class="card half-width">
-                    <div class="card-body">
-                        Klonner, C.; Hartmann, M.; Dischl, R.; Djami, L.; Anderson, L.; Raifer, M.; Lima-Silva, F.;
-                        Castro Degrossi, L.; Zipf, A.; Porto de Albuquerque, J. The Sketch Map Tool Facilitates the
-                        Assessment of OpenStreetMap Data for Participatory Mapping. ISPRS Int. J. Geo-Inf. 2021, 10,
-                        130. <a href="https://doi.org/10.3390/ijgi10030130">https://doi.org/10.3390/ijgi10030130</a>
+{% block header_message %}
+    Create re-digitizable paper maps for offline data collection in the field
+{% endblock header_message %}
+
+{% block body %}
+    <main>
+        <div id="teaser-message" class="flex-container">
+            <article class="center-text">
+                <div class="container">
+                    <p>
+                        The <strong>Sketch&nbsp;Map Tool</strong> is an
+                        easy-to-use tool for participatory sketch mapping through <strong>offline</strong>
+                        collection,
+                        digitization and
+                        georeferencing of <strong>local spatial knowledge</strong>.
+                        <br>
+                        The tool has a variety of applications. For example, do you want to work
+                        together with people in a community to map their experience and perception
+                        of risk in their neighbourhood in a paper-based format, but still be able to
+                        quickly analyse the results digitally? Then, the Sketch&nbsp;Map Tool is exactly
+                        what you need!
+                    </p>
+                    <p>
+                        Learn more about the <a
+                            href="/about">project</a> and <a href="/help">how to use
+                        the tool</a>!
+                    </p>
+                </div>
+            </article>
+        </div>
+
+        <div id="main-grid" class="grid">
+            {# row 1#}
+            <div class="sketchy circle">1</div>
+            <div id="then">THEN</div>
+            <div class="sketchy circle">2</div>
+
+            {#row 2#}
+            <div class="h1 center-text">Create Paper Maps to Collect Data</div>
+            <div></div>
+            <div class="h1 center-text">Paper to GIS:<br>Automatically Digitize Your Sketch&nbsp;Maps
+            </div>
+
+
+            {#row 3#}
+
+            {#for larger screens use horizontal arrows#}
+            <div id="span-grid-row-for-arrows">
+                <div id="row-grid" class="grid">
+                    <div id="left-arrows" class="horizontal step-arrows">
+                        <div class="active">Define your Area of Interest</div>
+                        <div class="">Map Quality Check</div>
+                        <div class="">PDF Export of Sketch&nbsp;Map</div>
+                    </div>
+                    <div id="middle_blank"></div>
+                    <div id="right-arrows" class="horizontal step-arrows">
+                        <div class="active">Scan or photograph your marked Sketch&nbsp;Maps</div>
+                        <div class="">Upload your Sketch&nbsp;Maps</div>
+                        <div class="">Download collected Markings as Geodata</div>
                     </div>
                 </div>
-            </p>
+            </div>
+
+            {#for small screens use horizontal arrows#}
+            <div class="vertical step-arrows">
+                <div class="active">Define your Area of Interest</div>
+                <div class="">Map Quality Check</div>
+                <div class="">PDF Export of Sketch&nbsp;Map</div>
+            </div>
+            <div class="vertical step-arrows"></div>
+            <div class="vertical step-arrows">
+                <div class="active">Scan or photograph your marked Sketch&nbsp;Maps</div>
+                <div class="">Upload your Sketch&nbsp;Maps</div>
+                <div class="">Download collected Markings as Geodata</div>
+            </div>
+
+            {#row 4#}
+            <a href="/create">
+                <button type="button">Create a Sketch&nbsp;Map</button>
+            </a>
+            <div></div>
+            <a href="/digitize">
+                <button type="button">Digitize your Sketch&nbsp;Maps</button>
+            </a>
+
         </div>
-    </div>
-</body>
-</html>
+
+    </main>
+{% endblock body %}
