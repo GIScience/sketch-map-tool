@@ -6,13 +6,13 @@
 
 {% block header_message %}
     <div class="circle" style="display: inline-block" ;>2</div>Paper to GIS:
-    <span style="font-size: smaller">Create Geotiffs, Vector data or All-In-One-QGIS projects</span>
+    <span style="font-size: smaller">Automatically Digitize Your Sketch&nbsp;Maps</span>
 {% endblock %}
 
 {% block body %}
     <div class="container-fluid horizontal step-arrows">
-        <div>Scan or photograph your marked SketchMaps</div>
-        <div>Upload your SketchMaps</div>
+        <div>Scan or photograph your marked Sketch&nbsp;Maps</div>
+        <div>Upload your Sketch&nbsp;Maps</div>
         <div class="active">Download collected Markings as Geodata</div>
     </div>
     <main class="container">
@@ -73,30 +73,30 @@
                        disabled="disabled">Download ZIP</a>
                 </article>
             </div>
-            <div>
-                <article id="qgis-data" class="result">
-                    <header>
-                        <img src="{{ url_for("static", filename="assets/logos/qgis-logo.svg") }}"
-                             alt="QGIS logo"><br>
-                        <span class="brand-font sub-icon">All-in-One</span>
-                    </header>
-                    <h6>All-in-One QGIS Project</h6>
-                    <p class="pending">
-                        We are packaging a QGIS project file, which contains all raster and vector
-                        data of the markings.
-                    </p>
-                    <p class="success hidden">
-                        We have packed a QGIS project file, which contains all raster and vector
-                        data of the markings.
-                    </p>
-                    <p class="error hidden">
-                        Sorry! <br>Something went wrong while trying to generate the Result.
-                    </p>
-                    <a id="qgis-data-download-button" href="#" download aria-busy="true"
-                       role="button"
-                       disabled="disabled">Download ZIP</a>
-                </article>
-            </div>
+{#            <div>#}
+{#                <article id="qgis-data" class="result">#}
+{#                    <header>#}
+{#                        <img src="{{ url_for("static", filename="assets/logos/qgis-logo.svg") }}"#}
+{#                             alt="QGIS logo"><br>#}
+{#                        <span class="brand-font sub-icon">All-in-One</span>#}
+{#                    </header>#}
+{#                    <h6>All-in-One QGIS Project</h6>#}
+{#                    <p class="pending">#}
+{#                        We are packaging a QGIS project file, which contains all raster and vector#}
+{#                        data of the markings.#}
+{#                    </p>#}
+{#                    <p class="success hidden">#}
+{#                        We have packed a QGIS project file, which contains all raster and vector#}
+{#                        data of the markings.#}
+{#                    </p>#}
+{#                    <p class="error hidden">#}
+{#                        Sorry! <br>Something went wrong while trying to generate the Result.#}
+{#                    </p>#}
+{#                    <a id="qgis-data-download-button" href="#" download aria-busy="true"#}
+{#                       role="button"#}
+{#                       disabled="disabled">Download ZIP</a>#}
+{#                </article>#}
+{#            </div>#}
         </div>
     </main>
 {% endblock body %}
