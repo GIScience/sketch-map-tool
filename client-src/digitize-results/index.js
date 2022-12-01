@@ -1,8 +1,8 @@
 import { getUUIDFromURL, poll, handleMainMessage } from "../shared";
 
-const digitizedResultsUrl = `/api/status/${getUUIDFromURL()}/digitized-data`;
+const digitizedResultsUrl = `/api/status/${getUUIDFromURL()}/detected-markings`;
 
-const rasterResultsUrl = `/api/status/${getUUIDFromURL()}/raster-data`;
+const rasterResultsUrl = `/api/status/${getUUIDFromURL()}/geo-referenced-sketch-maps`;
 
 const qgisResultsUrl = `/api/status/${getUUIDFromURL()}/qgis-data`;
 

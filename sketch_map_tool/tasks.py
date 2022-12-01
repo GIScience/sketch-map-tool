@@ -1,4 +1,7 @@
+import json
 from io import BytesIO
+from uuid import uuid4
+from zipfile import ZipFile
 
 import cv2
 import geojson
@@ -10,6 +13,7 @@ from numpy.typing import NDArray
 
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool import map_generation, upload_processing
+from sketch_map_tool.data_store import client as ds_client
 from sketch_map_tool.definitions import COLORS
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
@@ -57,8 +61,8 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
 
 # GENERATE DIGITIZED RESULTS
-# fmt: off
-def generate_digitized_results(files) -> AsyncResult:
+#
+def generate_digitized_results(files) -> str:
     args = upload_processing.read_qr_code(t_to_array(files[0]))
     uuid = args["uuid"]
     bbox = args["bbox"]
@@ -66,14 +70,48 @@ def generate_digitized_results(files) -> AsyncResult:
     map_frame_buffer = celery.AsyncResult(uuid).get()[1]
     map_frame = t_to_array(map_frame_buffer)
 
-    # Design Celery Workflow
-    #
-    # https://docs.celeryq.dev/en/stable/userguide/canvas.html
-    #
-    # t_    -> task
-    # c_    -> chain of tasks (sequential)
-    # group -> group of tasks (parallel)
-    #
+    result_id_1 = georeference_sketch_maps(files, map_frame, bbox)
+    result_id_2 = digitize_sketches(files, map_frame, bbox)
+
+    # Unique id for current request
+    uuid = str(uuid4())
+    # Mapping of request id to multiple tasks id's
+    request_task = {
+        uuid: json.dumps(
+            {
+                "geo-referenced-sketch-maps": str(result_id_1),
+                "detected-markings": str(result_id_2),
+            }
+        )
+    }
+    ds_client.set(request_task)
+    return uuid
+
+
+# Design Celery Workflow
+#
+# https://docs.celeryq.dev/en/stable/userguide/canvas.html
+#
+# t_    -> task
+# c_    -> chain of tasks (sequential)
+# group -> group of tasks (parallel)
+#
+# fmt: off
+def georeference_sketch_maps(files, map_frame, bbox) -> str:
+
+    def c_process(sketch_map: BytesIO) -> chain:
+        """Process a Sketch Map."""
+        return (t_to_array.s(sketch_map) | t_clip.s(map_frame) | t_georeference.s(bbox))
+
+    def c_workflow(files) -> chain:
+        """Start processing workflow for each file."""
+        return (group([c_process(f) for f in files]) | t_zip.s())
+
+    return c_workflow(files).apply_async().id
+
+
+def digitize_sketches(files, map_frame, bbox) -> str:
+
     def c_digitize(color: str) -> chain:
         """Digitize one color of a Sketch Map."""
         # TODO: Avoid redundant code execution.
@@ -102,7 +140,8 @@ def generate_digitized_results(files) -> AsyncResult:
                 group([c_process(f) for f in files])
                 | t_merge.s()
                 )
-    return c_workflow(files)
+
+    return c_workflow(files).apply_async().id
     # fmt: on
 
 
@@ -153,6 +192,16 @@ def t_clean(geojson: BytesIO) -> AsyncResult | BytesIO:
 @celery.task()
 def t_merge(feature_collections: list) -> AsyncResult | BytesIO:
     return upload_processing.merge(feature_collections)
+
+
+@celery.task()
+def t_zip(files: list) -> AsyncResult | BytesIO:
+    buffer = BytesIO()
+    with ZipFile(buffer, 'w') as zip_file:
+        for i, file in enumerate(files):
+            zip_file.writestr(str(i) + ".geotiff", file.read())
+    buffer.seek(0)
+    return buffer
 
 
 @celery.task()

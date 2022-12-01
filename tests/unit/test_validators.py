@@ -3,7 +3,10 @@ import pytest
 from sketch_map_tool.validators import validate_type, validate_uuid
 
 
-@pytest.mark.parametrize("type_", ["quality-report", "sketch-map", "digitized-data"])
+@pytest.mark.parametrize(
+    "type_",
+    ["quality-report", "sketch-map", "geo-referenced-sketch-maps", "detected-markings"],
+)
 def test_validate_type(type_):
     validate_type(type_)
 

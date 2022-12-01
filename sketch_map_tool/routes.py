@@ -13,7 +13,7 @@ from sketch_map_tool import celery_app, definitions
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
 from sketch_map_tool.data_store import client as ds_client  # type: ignore
-from sketch_map_tool.definitions import ALLOWED_TYPES
+from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import OQTReportError, QRCodeError
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.validators import validate_type, validate_uuid
@@ -105,11 +105,8 @@ def digitize_results_post() -> Response:
     # if we want the filenames we must construct a list of tuples or dicts
     # TODO: Write files to database
     files = request.files.getlist("file")
-    workflow = tasks.generate_digitized_results(
-        [BytesIO(file.read()) for file in files]
-    )
-    result = workflow.apply_async()
-    return redirect(url_for("digitize_results_get", uuid=result.id))
+    id_ = tasks.generate_digitized_results([BytesIO(file.read()) for file in files])
+    return redirect(url_for("digitize_results_get", uuid=id_))
 
 
 @app.get("/digitize/results")
@@ -122,7 +119,7 @@ def digitize_results_get(uuid: str | None = None) -> Response | str:
 
 
 @app.get("/api/status/<uuid>/<type_>")
-def status(uuid: str, type_: ALLOWED_TYPES) -> Response:
+def status(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
@@ -164,7 +161,7 @@ def status(uuid: str, type_: ALLOWED_TYPES) -> Response:
 
 
 @app.route("/api/download/<uuid>/<type_>")
-def download(uuid: str, type_: ALLOWED_TYPES) -> Response:
+def download(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
@@ -180,9 +177,12 @@ def download(uuid: str, type_: ALLOWED_TYPES) -> Response:
             mimetype = "application/pdf"
             if task.successful():
                 file: BytesIO = task.get()[0]  # return only the sketch map
-        case "digitized-data":
+        case "detected-markings":
             mimetype = "application/geojson"
             if task.successful():
-                result = task.get()
-                file = BytesIO(geojson.dumps(result).encode("utf-8"))
+                file = BytesIO(geojson.dumps(task.get()).encode("utf-8"))
+        case "geo-referenced-sketch-maps":
+            mimetype = "application/zip"
+            if task.successful():
+                file = task.get()
     return send_file(file, mimetype)
