@@ -33,6 +33,10 @@ npm install # Install local versions of esbuild, eslint and stylelint to build a
 # Hack away
 ```
 
+### Configuration
+
+Please refer to the [configuration documentation](/docs/configuration.md).
+
 ### Celery Backend (Postgres) and Brocker (Redis)
 
 ```bash
