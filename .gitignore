@@ -232,6 +232,7 @@ fabric.properties
 
 # Custom
 pylint_env/*
+.idea/
 
 # JS
 **/node_modules/
