@@ -36,7 +36,7 @@ def format_():
         compass_scale=0.25,
         globe_scale=0.125,
         scale_height=0.33,
-        qr_y=0.1,
+        qr_y=1.0,
         indent=0.25,
         qr_contents_distances_not_rotated=(2, 3),
         qr_contents_distance_rotated=3,
