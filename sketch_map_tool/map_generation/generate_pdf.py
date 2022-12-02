@@ -51,29 +51,29 @@ def generate_pdf(  # noqa: C901
     ratio = map_height_px / map_width_px
 
     if not rotate:  # landscape
-        adjusted_width = format_.width - format_.right_margin - 2 * map_margin  # cm
-        adjusted_height = adjusted_width * ratio  # cm
+        frame_width = format_.width - format_.right_margin - 2 * map_margin  # cm
+        frame_height = frame_width * ratio  # cm
 
-        if adjusted_height > format_.height:
-            adjusted_height = format_.height - 2 * map_margin  # cm
-            adjusted_width = adjusted_height / ratio  # cm
+        if frame_height > format_.height:
+            frame_height = format_.height - 2 * map_margin  # cm
+            frame_width = frame_height / ratio  # cm
 
     else:  # portrait
-        adjusted_height = format_.width - format_.right_margin - 2 * map_margin  # cm
-        adjusted_width = adjusted_height / ratio  # cm
-        if adjusted_width > format_.height:
-            adjusted_width = format_.height - 2 * map_margin  # cm
-            adjusted_height = adjusted_width * ratio  # cm
+        frame_height = format_.width - format_.right_margin - 2 * map_margin  # cm
+        frame_width = frame_height / ratio  # cm
+        if frame_width > format_.height:
+            frame_width = format_.height - 2 * map_margin  # cm
+            frame_height = frame_width * ratio  # cm
 
     map_image_reportlab = PIL_image_to_image_reader(map_image_input)
 
     # create map_image by adding globes
     map_img = create_map_frame(
-        map_image_reportlab, format_, adjusted_width, adjusted_height, rotate
+        map_image_reportlab, format_, frame_width, frame_height, rotate
     )
 
     if rotate:
-        adjusted_width, adjusted_height = adjusted_height, adjusted_width
+        frame_width, frame_height = frame_height, frame_width
 
     map_pdf = BytesIO()
     # create output canvas
@@ -86,8 +86,8 @@ def generate_pdf(  # noqa: C901
         canv_map_margin * cm,
         canv_map_margin * cm,
         mask="auto",
-        width=adjusted_width * cm,
-        height=adjusted_height * cm,
+        width=frame_width * cm,
+        height=frame_height * cm,
     )
 
     compass = get_compass(format_.compass_scale)
@@ -97,8 +97,8 @@ def generate_pdf(  # noqa: C901
     canv_map.rect(
         map_margin * cm,
         map_margin * cm,
-        adjusted_width * cm,
-        adjusted_height * cm,
+        frame_width * cm,
+        frame_height * cm,
         fill=0,
     )
 
@@ -106,12 +106,7 @@ def generate_pdf(  # noqa: C901
     canv_map.setFillColorRGB(0, 0, 0)
     copyright_text_origin = 0.24 * format_.height * cm
     rotate_indent = (
-        -(
-            map_margin * 2
-            + adjusted_width
-            + format_.compass_scale * 2
-            + 3 * format_.indent
-        )
+        -(map_margin * 2 + frame_width + format_.compass_scale * 2 + 3 * format_.indent)
         * cm
     )
 
@@ -171,7 +166,7 @@ def generate_pdf(  # noqa: C901
         )
         canv_map.rotate(-90)
     else:  # landscape
-        x_right_margin = map_margin * 2 + adjusted_width + format_.indent
+        x_right_margin = map_margin * 2 + frame_width + format_.indent
         # Add copyright information:
         text = canv_map.beginText()
         text.setTextOrigin(
