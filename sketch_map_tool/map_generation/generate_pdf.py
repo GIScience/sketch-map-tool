@@ -73,7 +73,7 @@ def generate_pdf(  # noqa: C901
 
     # create map_image by adding globes
     map_img = create_map_frame(
-        map_image_reportlab, format_, frame_height, frame_width, portrait
+        map_image_reportlab, format_, map_height_px, map_width_px, portrait
     )
 
     map_pdf = BytesIO()
@@ -268,43 +268,42 @@ def create_map_frame(
 ) -> BytesIO:
     map_frame = BytesIO()
     canv = canvas.Canvas(map_frame)
-    canv.setPageSize(landscape((height * cm, width * cm)))
+    canv.setPageSize(landscape((height, width)))
 
+    globe_size = width / 37
     if portrait:
-        width, height = height, width
         canv.rotate(90)
         canv.drawImage(
             map_image,
             0,
-            -height * cm,
+            -height,
             mask="auto",
-            width=width * cm,
-            height=height * cm,
+            width=width,
+            height=height,
         )
         canv.rotate(-90)
-        add_globes(canv, format_, width, height)
+        add_globes(canv, globe_size, height=width, width=height)
     else:
         canv.drawImage(
             map_image,
             0,
             0,
             mask="auto",
-            width=width * cm,
-            height=height * cm,
+            width=width,
+            height=height,
         )
-        add_globes(canv, format_, height, width)
+        add_globes(canv, globe_size, height, width)
 
     canv.save()
     map_frame.seek(0)
     return pdf_page_to_img(map_frame)
 
 
-def add_globes(canv: canvas.Canvas, format_: PaperFormat, height: float, width: float):
-    globe_1, globe_2, globe_3, globe_4 = get_globes(format_.globe_scale)
+def add_globes(canv: canvas.Canvas, size: float, height: float, width: float):
+    globe_1, globe_2, globe_3, globe_4 = get_globes(size)
 
-    size = 150 * format_.globe_scale
-    h = height * cm - size
-    w = width * cm - size
+    h = height - size
+    w = width - size
 
     globes = [
         # corner
@@ -338,12 +337,12 @@ def add_globes(canv: canvas.Canvas, format_: PaperFormat, height: float, width: 
         renderPDF.draw(globe, canv, x, y)
 
 
-def get_globes(scale_factor) -> Tuple[Drawing, ...]:
+def get_globes(expected_size) -> Tuple[Drawing, ...]:
     """Read globe as SVG from disk, convert to RLG and scale it."""
     globes = []
     for i in range(1, 5):
         globe = svg2rlg(RESOURCE_PATH / "globe_{0}.svg".format(i))
-        globe.scale(scale_factor, scale_factor)
+        globe = resize_rlg(globe, expected_size)
         globes.append(globe)
     return tuple(globes)
 
