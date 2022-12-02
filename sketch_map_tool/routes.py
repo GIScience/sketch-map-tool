@@ -174,21 +174,25 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
     match type_:
         case "quality-report":
             mimetype = "application/pdf"
+            download_name = type_ + ".pdf"
             if task.successful():
                 file: BytesIO = task.get()
         case "sketch-map":
             mimetype = "application/pdf"
+            download_name = type_ + ".pdf"
             if task.successful():
                 file: BytesIO = task.get()[0]  # return only the sketch map
         case "raster-results":
             mimetype = "application/zip"
+            download_name = type_ + ".zip"
             if task.successful():
                 file = task.get()
         case "vector-results":
             mimetype = "application/geo+json"
+            download_name = type_ + ".geojson"
             if task.successful():
                 file = BytesIO(geojson.dumps(task.get()).encode("utf-8"))
-    return send_file(file, mimetype)
+    return send_file(file, mimetype, download_name=download_name)
 
 
 @app.errorhandler(QRCodeError)
