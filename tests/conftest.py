@@ -8,6 +8,15 @@ from sketch_map_tool.models import Bbox, PaperFormat, Size
 from tests import FIXTURE_DIR
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--save-maps",
+        action="store_true",
+        help="save created maps in parametrized test",
+        default=False,
+    )
+
+
 @pytest.fixture
 def bbox():
     return Bbox(

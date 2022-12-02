@@ -1,3 +1,4 @@
+import os
 from io import BytesIO
 from pathlib import Path
 from uuid import uuid4
@@ -75,6 +76,7 @@ def test_generate_pdf(
     paper_format: PaperFormat,
     orientation,
     expected_sketch_map,
+    request,
 ) -> None:
     sketch_map, sketch_map_template = generate_pdf(
         map_image,
@@ -84,6 +86,23 @@ def test_generate_pdf(
     )
     assert isinstance(sketch_map, BytesIO)
     assert isinstance(sketch_map_template, BytesIO)
+    # if you want the maps to be saved for visual inspection, use the parameter --save-maps with pytest
+    if request.config.getoption("--save-maps"):
+        dirname = "debug-output"
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+        with open(
+            "{}/debug-map-{}-{}.pdf".format(dirname, paper_format.title, orientation),
+            "wb",
+        ) as fw:
+            fw.write(sketch_map.read())
+        with open(
+            "{}/debug-map-template-{}-{}.png".format(
+                dirname, paper_format.title, orientation
+            ),
+            "wb",
+        ) as fw:
+            fw.write(sketch_map_template.read())
     # TODO:
     # assert filecmp.cmp(
     #     sketch_map,
