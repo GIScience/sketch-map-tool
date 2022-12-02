@@ -54,7 +54,6 @@ def generate_pdf(  # noqa: C901
         ratio = map_width_px / map_height_px
     else:
         ratio = map_height_px / map_width_px
-    assert_ratio = map_height_px / map_width_px
     # calculate right_margin
     right_margin = format_.right_margin
     # calculate width of map frame
@@ -69,19 +68,6 @@ def generate_pdf(  # noqa: C901
     column_origin_x = (frame_width + 2 * map_margin) * cm
     column_origin_y = 0
     column_margin = map_margin * cm
-
-    if portrait:
-        assert_frame_height = format_.width - right_margin - 2 * map_margin  # cm
-        assert_frame_width = assert_frame_height / assert_ratio  # cm
-        if assert_frame_width > format_.height:
-            assert_frame_width = format_.height - 2 * map_margin  # cm
-            assert_frame_height = assert_frame_width * assert_ratio  # cm
-    else:
-        assert_frame_width = format_.width - right_margin - 2 * map_margin  # cm
-        assert_frame_height = assert_frame_width * assert_ratio  # cm
-        if assert_frame_height > format_.height:
-            assert_frame_height = format_.height - 2 * map_margin  # cm
-            assert_frame_width = assert_frame_height / assert_ratio  # cm
 
     map_image_reportlab = PIL_image_to_image_reader(map_image_input)
 
