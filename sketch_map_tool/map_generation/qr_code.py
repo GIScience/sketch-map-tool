@@ -6,7 +6,6 @@ from io import BytesIO
 import qrcode
 import qrcode.image.svg
 from reportlab.graphics.shapes import Drawing
-from reportlab.lib.units import cm
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool import __version__
@@ -78,8 +77,4 @@ def _make_qr_code(data: str) -> BytesIO:
 
 
 def _to_report_lab_graphic(format_: PaperFormat, svg: BytesIO) -> Drawing:
-    rlg = svg2rlg(svg)
-    expected_width = 0.85 * format_.right_margin * cm
-    scale = expected_width / rlg.width
-    rlg.scale(scale, scale)
-    return rlg
+    return svg2rlg(svg)
