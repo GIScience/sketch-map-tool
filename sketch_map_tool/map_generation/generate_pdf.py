@@ -47,33 +47,41 @@ def generate_pdf(  # noqa: C901
     map_margin = format_.map_margin
 
     # TODO: Use orientation parameter to determine rotation
-    rotate = map_width_px < map_height_px
-    ratio = map_height_px / map_width_px
+    portrait = map_width_px < map_height_px
+    if portrait:
+        ratio = map_width_px / map_height_px
+    else:
+        ratio = map_height_px / map_width_px
+    assert_ratio = map_height_px / map_width_px
 
-    if not rotate:  # landscape
-        frame_width = format_.width - format_.right_margin - 2 * map_margin  # cm
-        frame_height = frame_width * ratio  # cm
+    # calculate width of map frame
+    frame_width = format_.width - format_.right_margin - 2 * map_margin  # cm
+    # making sure the map frame isn't higher than possible
+    frame_height = min(frame_width * ratio, format_.height - 2 * map_margin)  # cm
+    # making sure that the ratio is still correct
+    frame_width = frame_height / ratio
 
-        if frame_height > format_.height:
-            frame_height = format_.height - 2 * map_margin  # cm
-            frame_width = frame_height / ratio  # cm
-
-    else:  # portrait
-        frame_height = format_.width - format_.right_margin - 2 * map_margin  # cm
-        frame_width = frame_height / ratio  # cm
-        if frame_width > format_.height:
-            frame_width = format_.height - 2 * map_margin  # cm
-            frame_height = frame_width * ratio  # cm
+    if portrait:
+        assert_frame_height = (
+            format_.width - format_.right_margin - 2 * map_margin
+        )  # cm
+        assert_frame_width = assert_frame_height / assert_ratio  # cm
+        if assert_frame_width > format_.height:
+            assert_frame_width = format_.height - 2 * map_margin  # cm
+            assert_frame_height = assert_frame_width * assert_ratio  # cm
+    else:
+        assert_frame_width = format_.width - format_.right_margin - 2 * map_margin  # cm
+        assert_frame_height = assert_frame_width * assert_ratio  # cm
+        if assert_frame_height > format_.height:
+            assert_frame_height = format_.height - 2 * map_margin  # cm
+            assert_frame_width = assert_frame_height / assert_ratio  # cm
 
     map_image_reportlab = PIL_image_to_image_reader(map_image_input)
 
     # create map_image by adding globes
     map_img = create_map_frame(
-        map_image_reportlab, format_, frame_width, frame_height, rotate
+        map_image_reportlab, format_, frame_height, frame_width, portrait
     )
-
-    if rotate:
-        frame_width, frame_height = frame_height, frame_width
 
     map_pdf = BytesIO()
     # create output canvas
@@ -110,7 +118,7 @@ def generate_pdf(  # noqa: C901
         * cm
     )
 
-    if rotate:  # portrait
+    if portrait:
         canv_map.rotate(90)
 
         # Add copyright information:
@@ -165,7 +173,7 @@ def generate_pdf(  # noqa: C901
             rotate_indent - 2 * format_.compass_scale * cm + format_.qr_y * cm,
         )
         canv_map.rotate(-90)
-    else:  # landscape
+    else:
         x_right_margin = map_margin * 2 + frame_width + format_.indent
         # Add copyright information:
         text = canv_map.beginText()
@@ -240,15 +248,16 @@ def PIL_image_to_image_reader(map_image_input):
 def create_map_frame(
     map_image: ImageReader,
     format_: PaperFormat,
-    width: float,
     height: float,
-    rotate: bool,
+    width: float,
+    portrait: bool,
 ) -> BytesIO:
     map_frame = BytesIO()
     canv = canvas.Canvas(map_frame)
     canv.setPageSize(landscape((height * cm, width * cm)))
 
-    if rotate:  # portrait
+    if portrait:
+        width, height = height, width
         canv.rotate(90)
         canv.drawImage(
             map_image,
@@ -260,7 +269,7 @@ def create_map_frame(
         )
         canv.rotate(-90)
         add_globes(canv, format_, width, height)
-    else:  # landscape
+    else:
         canv.drawImage(
             map_image,
             0,
@@ -378,7 +387,7 @@ def pdf_page_to_img(pdf: BytesIO, page_id=0) -> BytesIO:
     with fitz.Document(stream=pdf, filetype="pdf") as doc:
         page = doc.load_page(page_id)
         # TODO: Is this necessary?
-        # if rotate:
+        # if portrait:
         #     page.set_rotation(90)
         page.get_pixmap().pil_save(img, format="png")
     img.seek(0)
