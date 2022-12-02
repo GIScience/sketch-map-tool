@@ -5,13 +5,14 @@ from pathlib import Path
 from typing import Tuple
 
 import fitz
-from PIL import Image
+from PIL import Image as PILImage
 from reportlab.graphics import renderPDF
 from reportlab.graphics.shapes import Drawing
-from reportlab.lib import utils
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.units import cm
+from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
+from reportlab.platypus.flowables import Image
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool.models import PaperFormat
@@ -23,7 +24,7 @@ RESOURCE_PATH = Path(__file__).parent.resolve() / "resources"
 
 
 def generate_pdf(  # noqa: C901
-    map_image: Image,
+    map_image_input: PILImage,
     qr_code: Drawing,
     format_: PaperFormat,
     scale: float,
@@ -36,13 +37,13 @@ def generate_pdf(  # noqa: C901
     # Generate emplate image (PNG) as Pillow object for later upload processing
 
     :output_path: Path under which the output PDF should be stored.
-    :param map_image: Image of the map to be used as sketch map.
+    :param map_image_input: Image of the map to be used as sketch map.
     :param bbox: Bounding box, needed for naming, scale calculation and  the code for
                  georeferencing.
     :param paper_format: Paper format of the PDF document.
     :return: Path to the generated PDF file.
     """
-    map_width_px, map_height_px = map_image.size
+    map_width_px, map_height_px = map_image_input.size
     map_margin = format_.map_margin
 
     # TODO: Use orientation parameter to determine rotation
@@ -64,47 +65,32 @@ def generate_pdf(  # noqa: C901
             adjusted_width = format_.height - 2 * map_margin  # cm
             adjusted_height = adjusted_width * ratio  # cm
 
-    map_image_raw = io.BytesIO()
-    map_image.save(map_image_raw, format="png")
-    map_image_reportlab = utils.ImageReader(map_image_raw)
+    map_image_reportlab = PIL_image_to_image_reader(map_image_input)
 
-    map_pdf = BytesIO()
-    map_template = BytesIO()
-    # Set-up everything for the reportlab pdf:
-    canv_map = canvas.Canvas(map_pdf)
-    canv_template = canvas.Canvas(map_template)
-    canv_map.setPageSize(landscape((format_.height * cm, format_.width * cm)))
-    canv_template.setPageSize(landscape((adjusted_height * cm, adjusted_width * cm)))
-
-    # Add map to canvas:
-    for canv, canv_map_margin in zip([canv_map, canv_template], [map_margin, 0]):
-        if rotate:  # portrait
-            canv.rotate(90)
-            canv.drawImage(
-                map_image_reportlab,
-                canv_map_margin * cm,
-                (-adjusted_height - canv_map_margin) * cm,
-                mask="auto",
-                width=adjusted_width * cm,
-                height=adjusted_height * cm,
-            )
-            canv.rotate(-90)
-        else:  # landscape
-            canv.drawImage(
-                map_image_reportlab,
-                canv_map_margin * cm,
-                canv_map_margin * cm,
-                mask="auto",
-                width=adjusted_width * cm,
-                height=adjusted_height * cm,
-            )
+    # create map_image by adding globes
+    map_img = create_map_frame(
+        map_image_reportlab, format_, adjusted_width, adjusted_height, rotate
+    )
 
     if rotate:
         adjusted_width, adjusted_height = adjusted_height, adjusted_width
 
+    map_pdf = BytesIO()
+    # create output canvas
+    canv_map = canvas.Canvas(map_pdf)
+    canv_map.setPageSize(landscape((format_.height * cm, format_.width * cm)))
+    # Add map to canvas:
+    canv_map_margin = map_margin
+    canv_map.drawImage(
+        ImageReader(map_img),
+        canv_map_margin * cm,
+        canv_map_margin * cm,
+        mask="auto",
+        width=adjusted_width * cm,
+        height=adjusted_height * cm,
+    )
+
     compass = get_compass(format_.compass_scale)
-    globe_1, globe_2, globe_3, globe_4 = get_globes(format_.globe_scale)
-    globe_length = 150 * format_.globe_scale
     scale_length, scale_text = get_scale(scale, width_max=(format_.right_margin - 1))
 
     # Add a border around the map
@@ -239,69 +225,99 @@ def generate_pdf(  # noqa: C901
             0.333 * format_.height * cm + format_.qr_y * cm,
         )
 
-    for canv, canv_map_margin in zip([canv_map, canv_template], [map_margin, 0]):
-        # Add globes to improve feature detection during upload processing
-
-        # corner globes
-        # bottom left
-        renderPDF.draw(globe_1, canv, canv_map_margin * cm, canv_map_margin * cm)
-        # top left
-        renderPDF.draw(
-            globe_3,
-            canv,
-            canv_map_margin * cm,
-            (canv_map_margin + adjusted_height) * cm - globe_length,
-        )
-        # top right
-        renderPDF.draw(
-            globe_4,
-            canv,
-            (canv_map_margin + adjusted_width) * cm - globe_length,
-            (canv_map_margin + adjusted_height) * cm - globe_length,
-        )
-        # bottom right
-        renderPDF.draw(
-            globe_2,
-            canv,
-            (canv_map_margin + adjusted_width) * cm - globe_length,
-            canv_map_margin * cm,
-        )
-
-        # middle globes
-        renderPDF.draw(
-            globe_2,
-            canv,
-            canv_map_margin * cm,
-            (canv_map_margin + adjusted_height / 2) * cm - 0.5 * globe_length,
-        )
-        renderPDF.draw(
-            globe_1,
-            canv,
-            (canv_map_margin + adjusted_width / 2) * cm - 0.5 * globe_length,
-            (canv_map_margin + adjusted_height) * cm - globe_length,
-        )
-        renderPDF.draw(
-            globe_3,
-            canv,
-            (canv_map_margin + adjusted_width) * cm - globe_length,
-            (canv_map_margin + adjusted_height) / 2 * cm - globe_length / 2,
-        )
-        renderPDF.draw(
-            globe_4,
-            canv,
-            (canv_map_margin + adjusted_width / 2) * cm - globe_length / 2,
-            canv_map_margin * cm,
-        )
-
+    for canv in [canv_map]:
         # Generate PDFs:
         canv.save()
 
     map_pdf.seek(0)
-    map_template.seek(0)
-
-    map_img = pdf_page_to_img(map_template)
+    map_img.seek(0)
 
     return (map_pdf, map_img)
+
+
+def PIL_image_to_image_reader(map_image_input):
+    map_image_raw = io.BytesIO()
+    map_image_input.save(map_image_raw, format="png")
+    map_image_reportlab = ImageReader(map_image_raw)
+    return map_image_reportlab
+
+
+def create_map_frame(
+    map_image: ImageReader,
+    format_: PaperFormat,
+    width: float,
+    height: float,
+    rotate: bool,
+) -> BytesIO:
+    map_frame = BytesIO()
+    canv = canvas.Canvas(map_frame)
+    canv.setPageSize(landscape((height * cm, width * cm)))
+
+    if rotate:  # portrait
+        canv.rotate(90)
+        canv.drawImage(
+            map_image,
+            0,
+            -height * cm,
+            mask="auto",
+            width=width * cm,
+            height=height * cm,
+        )
+        canv.rotate(-90)
+        add_globes(canv, format_, width, height)
+    else:  # landscape
+        canv.drawImage(
+            map_image,
+            0,
+            0,
+            mask="auto",
+            width=width * cm,
+            height=height * cm,
+        )
+        add_globes(canv, format_, height, width)
+
+    canv.save()
+    map_frame.seek(0)
+    return pdf_page_to_img(map_frame)
+
+
+def add_globes(canv: canvas.Canvas, format_: PaperFormat, height: float, width: float):
+    globe_1, globe_2, globe_3, globe_4 = get_globes(format_.globe_scale)
+
+    size = 150 * format_.globe_scale
+    h = height * cm - size
+    w = width * cm - size
+
+    globes = [
+        # corner
+        globe_1,
+        globe_3,
+        globe_4,
+        globe_2,
+        # middle
+        globe_2,
+        globe_1,
+        globe_3,
+        globe_4,
+    ]
+    positions = [
+        # corner globes
+        # bottom left
+        (0, 0),
+        # top left
+        (0, h),
+        # top right
+        (w, h),
+        # bottom right
+        (w, 0),
+        # middle globes
+        (0, h / 2),
+        (w / 2, h),
+        (w, h / 2),
+        (w / 2, 0),
+    ]
+    for globe, (x, y) in zip(globes, positions):
+        renderPDF.draw(globe, canv, x, y)
 
 
 def get_globes(scale_factor) -> Tuple[Drawing, ...]:
