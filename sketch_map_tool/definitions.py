@@ -14,6 +14,8 @@ REQUEST_TYPES = Literal[
 ]
 # Colors to be detected
 COLORS = ["white", "red", "blue", "green", "yellow", "turquoise", "pink"]
+# Resources for PDF generation
+PDF_RESOURCES_PATH = Path(__file__).parent.resolve() / "resources"
 
 
 def get_literature_references() -> list[LiteratureReference]:
