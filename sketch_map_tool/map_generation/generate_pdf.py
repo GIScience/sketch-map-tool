@@ -1,7 +1,6 @@
 """ Generate a sketch map PDF. """
 import io
 from io import BytesIO
-from pathlib import Path
 from typing import Tuple
 
 import fitz
@@ -17,12 +16,12 @@ from reportlab.platypus import Frame, Paragraph
 from reportlab.platypus.flowables import Image, Spacer
 from svglib.svglib import svg2rlg
 
+from sketch_map_tool.definitions import PDF_RESOURCES_PATH
+from sketch_map_tool.helpers import resize_rlg_by_width
 from sketch_map_tool.models import PaperFormat
 
 # PIL should be able to open high resolution PNGs of large Maps:
 Image.MAX_IMAGE_PIXELS = None
-
-RESOURCE_PATH = Path(__file__).parent.resolve() / "resources"
 
 
 def generate_pdf(  # noqa: C901
@@ -203,9 +202,9 @@ def draw_right_column(
     em = normal_style.fontSize
 
     # Add Logos
-    smt_logo = svg2rlg(RESOURCE_PATH / "SketchMap_Logo_compact.svg")
+    smt_logo = svg2rlg(PDF_RESOURCES_PATH / "SketchMap_Logo_compact.svg")
     smt_logo = resize_rlg_by_width(smt_logo, width - margin)
-    heigit_logo = svg2rlg(RESOURCE_PATH / "HeiGIT_Logo_compact.svg")
+    heigit_logo = svg2rlg(PDF_RESOURCES_PATH / "HeiGIT_Logo_compact.svg")
     heigit_logo = resize_rlg_by_width(heigit_logo, width - margin)
 
     # Add compass
@@ -367,14 +366,14 @@ def get_globes(expected_size) -> Tuple[Drawing, ...]:
     """Read globe as SVG from disk, convert to RLG and scale it."""
     globes = []
     for i in range(1, 5):
-        globe = svg2rlg(RESOURCE_PATH / "globe_{0}.svg".format(i))
+        globe = svg2rlg(PDF_RESOURCES_PATH / "globe_{0}.svg".format(i))
         globe = resize_rlg_by_width(globe, expected_size)
         globes.append(globe)
     return tuple(globes)
 
 
 def get_compass(size: float) -> Drawing:
-    compass = svg2rlg(RESOURCE_PATH / "north.svg")
+    compass = svg2rlg(PDF_RESOURCES_PATH / "north.svg")
     compass = resize_rlg_by_width(compass, size)
     return compass
 
@@ -458,17 +457,3 @@ def pdf_page_to_img(pdf: BytesIO, page_id=0) -> BytesIO:
         page.get_pixmap().pil_save(img, format="png")
     img.seek(0)
     return img
-
-
-def resize_rlg_by_width(d: Drawing, size: float) -> Drawing:
-    factor = size / d.width
-    d.scale(factor, factor)
-    d.asDrawing(d.width * factor, d.height * factor)
-    return d
-
-
-def resize_rlg_by_height(d: Drawing, size: float) -> Drawing:
-    factor = size / d.height
-    d.scale(factor, factor)
-    d.asDrawing(d.width * factor, d.height * factor)
-    return d

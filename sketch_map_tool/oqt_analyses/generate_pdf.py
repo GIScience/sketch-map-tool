@@ -6,10 +6,8 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Table
 from svglib.svglib import svg2rlg
 
-from sketch_map_tool.map_generation.generate_pdf import (
-    RESOURCE_PATH,
-    resize_rlg_by_height,
-)
+from sketch_map_tool.definitions import PDF_RESOURCES_PATH
+from sketch_map_tool.helpers import resize_rlg_by_height
 
 
 def generate_pdf(report_properties: dict) -> BytesIO:
@@ -130,13 +128,13 @@ def report_header(canv, doc):
     logo_height = doc.topMargin / 2
     logo_draw_y = doc.height + doc.bottomMargin + doc.topMargin / 2 - logo_height / 2
     # right: heigit
-    heigit_logo = svg2rlg(RESOURCE_PATH / "HeiGIT_Logo_base.svg")
+    heigit_logo = svg2rlg(PDF_RESOURCES_PATH / "HeiGIT_Logo_base.svg")
     heigit_logo = resize_rlg_by_height(heigit_logo, logo_height)
     heigit_logo.drawOn(
         canv, doc.width + doc.leftMargin - heigit_logo.width, logo_draw_y
     )
     # left: OQT
-    oqt_logo = svg2rlg(RESOURCE_PATH / "ohsome-quality-analyst_without_fonts.svg")
+    oqt_logo = svg2rlg(PDF_RESOURCES_PATH / "ohsome-quality-analyst_without_fonts.svg")
     oqt_logo = resize_rlg_by_height(oqt_logo, logo_height)
     logo_draw_y = (
         doc.height + doc.bottomMargin + doc.topMargin / 2 - oqt_logo.height / 2
