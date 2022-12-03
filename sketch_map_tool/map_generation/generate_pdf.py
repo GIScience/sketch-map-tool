@@ -14,7 +14,7 @@ from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Frame, Paragraph
-from reportlab.platypus.flowables import Image, Spacer, TopPadder
+from reportlab.platypus.flowables import Image, Spacer
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool.models import PaperFormat
@@ -202,6 +202,12 @@ def draw_right_column(
     normal_style = scale_style(format_, "Normal", 50)
     em = normal_style.fontSize
 
+    # Add Logos
+    smt_logo = svg2rlg(RESOURCE_PATH / "SketchMap_Logo_compact.svg")
+    smt_logo = resize_rlg(smt_logo, width - margin)
+    heigit_logo = svg2rlg(RESOURCE_PATH / "HeiGIT_Logo_compact.svg")
+    heigit_logo = resize_rlg(heigit_logo, width - margin)
+
     # Add compass
     compass_size = width * 0.25  # this is the current ratio of the right column width
     compass = get_compass(compass_size)
@@ -221,15 +227,25 @@ def draw_right_column(
         font_size=em,
     )
 
+    # fills up the remaining space, placed between the TOP and the BOTTOM aligned elements
+    space_filler = Spacer(width, 0)  # height will be filled after list creation
     # order all elements in column
     flowables = [
+        smt_logo,
+        Spacer(width, 2 * em),
+        heigit_logo,
+        space_filler,
         compass,
         Spacer(width, 2 * em),
         scale,
         Spacer(width, 2 * em),
         p_copyright,
-        TopPadder(qr_code),
+        Spacer(width, 2 * em),
+        qr_code,
     ]
+    space_filler.height = calculate_space_filler_height(
+        canv, flowables, width, height, margin
+    )
     frame = Frame(
         x,
         y,
@@ -241,6 +257,16 @@ def draw_right_column(
         topPadding=margin,
     )
     frame.addFromList(flowables, canv)
+
+
+def calculate_space_filler_height(canv, flowables, width, height, margin):
+    flowables_height = 0
+    for f in flowables:
+        if isinstance(f, Paragraph):
+            # a Paragraph doesn't have a height without this command
+            f.wrapOn(canv, width - margin, height)
+        flowables_height += f.height
+    return height - 2 * margin - flowables_height
 
 
 def scale_style(format_: PaperFormat, style_name: str, factor: float) -> ParagraphStyle:
@@ -437,5 +463,5 @@ def pdf_page_to_img(pdf: BytesIO, page_id=0) -> BytesIO:
 def resize_rlg(d: Drawing, size: float) -> Drawing:
     factor = size / d.width
     d.scale(factor, factor)
-    d.asDrawing(size, size)
+    d.asDrawing(d.width * factor, d.height * factor)
     return d
