@@ -18,7 +18,7 @@ from sketch_map_tool.map_generation.generate_pdf import (
 )
 from sketch_map_tool.models import PaperFormat
 from tests import FIXTURE_DIR
-from tests.unit.helper import save_test_pdf
+from tests.unit.helper import save_test_file
 
 
 @pytest.fixture
@@ -87,16 +87,16 @@ def test_generate_pdf(
     assert isinstance(sketch_map, BytesIO)
     assert isinstance(sketch_map_template, BytesIO)
     # if you want the maps to be saved for visual inspection, use the parameter --save-maps with pytest
-    save_test_pdf(
+    save_test_file(
         request,
         "--save-maps",
         "debug-map-{}-{}.pdf".format(paper_format.title, orientation),
         sketch_map,
     )
-    save_test_pdf(
+    save_test_file(
         request,
         "--save-maps",
-        "debug-map-template-{}-{}.pdf".format(paper_format.title, orientation),
+        "debug-map-template-{}-{}.png".format(paper_format.title, orientation),
         sketch_map_template,
     )
     # TODO:
