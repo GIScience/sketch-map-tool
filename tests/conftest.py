@@ -15,6 +15,12 @@ def pytest_addoption(parser):
         help="save created maps in parametrized test",
         default=False,
     )
+    parser.addoption(
+        "--save-report",
+        action="store_true",
+        help="save created reports in parametrized test",
+        default=False,
+    )
 
 
 @pytest.fixture
