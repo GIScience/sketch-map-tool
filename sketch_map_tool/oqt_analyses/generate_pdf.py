@@ -6,6 +6,11 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Table
 from svglib.svglib import svg2rlg
 
+from sketch_map_tool.map_generation.generate_pdf import (
+    RESOURCE_PATH,
+    resize_rlg_by_height,
+)
+
 
 def generate_pdf(report_properties: dict) -> BytesIO:
     report_light_radius = 15
@@ -90,7 +95,7 @@ def generate_pdf(report_properties: dict) -> BytesIO:
         ]
         components += indicator_components
 
-    doc.build(components)
+    doc.build(components, onFirstPage=report_header, onLaterPages=report_header)
     bytes_output.seek(0)
     return bytes_output
 
@@ -117,3 +122,24 @@ def generate_traffic_light(label, radius=10):
         y += radius * 2 + margin
 
     return drawing
+
+
+def report_header(canv, doc):
+    canv.saveState()
+    # logos
+    logo_height = doc.topMargin / 2
+    logo_draw_y = doc.height + doc.bottomMargin + doc.topMargin / 2 - logo_height / 2
+    # right: heigit
+    heigit_logo = svg2rlg(RESOURCE_PATH / "HeiGIT_Logo_base.svg")
+    heigit_logo = resize_rlg_by_height(heigit_logo, logo_height)
+    heigit_logo.drawOn(
+        canv, doc.width + doc.leftMargin - heigit_logo.width, logo_draw_y
+    )
+    # left: OQT
+    oqt_logo = svg2rlg(RESOURCE_PATH / "ohsome-quality-analyst_without_fonts.svg")
+    oqt_logo = resize_rlg_by_height(oqt_logo, logo_height)
+    logo_draw_y = (
+        doc.height + doc.bottomMargin + doc.topMargin / 2 - oqt_logo.height / 2
+    )
+    oqt_logo.drawOn(canv, doc.leftMargin, logo_draw_y)
+    canv.restoreState()

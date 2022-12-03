@@ -204,9 +204,9 @@ def draw_right_column(
 
     # Add Logos
     smt_logo = svg2rlg(RESOURCE_PATH / "SketchMap_Logo_compact.svg")
-    smt_logo = resize_rlg(smt_logo, width - margin)
+    smt_logo = resize_rlg_by_width(smt_logo, width - margin)
     heigit_logo = svg2rlg(RESOURCE_PATH / "HeiGIT_Logo_compact.svg")
-    heigit_logo = resize_rlg(heigit_logo, width - margin)
+    heigit_logo = resize_rlg_by_width(heigit_logo, width - margin)
 
     # Add compass
     compass_size = width * 0.25  # this is the current ratio of the right column width
@@ -217,7 +217,7 @@ def draw_right_column(
 
     # Add QR-Code:
     qr_size = min(width, height) - margin
-    qr_code = resize_rlg(qr_code, qr_size)
+    qr_code = resize_rlg_by_width(qr_code, qr_size)
 
     # Add scale:
     scale = get_scale(
@@ -368,14 +368,14 @@ def get_globes(expected_size) -> Tuple[Drawing, ...]:
     globes = []
     for i in range(1, 5):
         globe = svg2rlg(RESOURCE_PATH / "globe_{0}.svg".format(i))
-        globe = resize_rlg(globe, expected_size)
+        globe = resize_rlg_by_width(globe, expected_size)
         globes.append(globe)
     return tuple(globes)
 
 
 def get_compass(size: float) -> Drawing:
     compass = svg2rlg(RESOURCE_PATH / "north.svg")
-    compass = resize_rlg(compass, size)
+    compass = resize_rlg_by_width(compass, size)
     return compass
 
 
@@ -460,8 +460,15 @@ def pdf_page_to_img(pdf: BytesIO, page_id=0) -> BytesIO:
     return img
 
 
-def resize_rlg(d: Drawing, size: float) -> Drawing:
+def resize_rlg_by_width(d: Drawing, size: float) -> Drawing:
     factor = size / d.width
+    d.scale(factor, factor)
+    d.asDrawing(d.width * factor, d.height * factor)
+    return d
+
+
+def resize_rlg_by_height(d: Drawing, size: float) -> Drawing:
+    factor = size / d.height
     d.scale(factor, factor)
     d.asDrawing(d.width * factor, d.height * factor)
     return d
