@@ -93,7 +93,10 @@ def test_get_config(config_keys):
 def test_get_config_value(config_keys):
     for key in config_keys:
         val = config.get_config_value(key)
-        assert isinstance(val, str)
+        if key in ["wms-read-timeout"]:
+            assert isinstance(val, int)
+        else:
+            assert isinstance(val, str)
 
 
 @mock.patch.dict(
