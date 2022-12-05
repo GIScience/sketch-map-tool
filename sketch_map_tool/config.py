@@ -27,6 +27,7 @@ def load_config_default() -> Dict[str, str]:
         "data-store": "redis://localhost:6379",
         "wms-url": "https://maps.heigit.org/osm-carto/service?SERVICE=WMS&VERSION=1.1.1",
         "wms-layers": "heigit:osm-carto@2xx",
+        "wms-read-timeout": 600,
     }
 
 
@@ -49,6 +50,7 @@ def load_config_from_env() -> Dict[str, str]:
         "data-store": os.getenv("SMT-DATA-STORE"),
         "wms-url": os.getenv("SMT-WMS-URL"),
         "wms-layers": os.getenv("SMT-WMS-LAYERS"),
+        "wms-read-timeout": os.getenv("SMT-WMS-READ-TIMEOUT"),
     }
     return {k: v for k, v in cfg.items() if v is not None}
 

@@ -5,3 +5,4 @@ result-backend = "db+postgresql://smt:smt@localhost:5432"
 data-store = "redis://localhost:6379"
 wms-url = "https://maps.heigit.org/osm-carto/service?SERVICE=WMS&VERSION=1.1.1"
 wms-layers = "heigit:osm-carto@2xx"
+wms-read-timeout = 600

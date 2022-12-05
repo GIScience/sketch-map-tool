@@ -26,6 +26,7 @@ def config_keys():
         "data-store",
         "wms-url",
         "wms-layers",
+        "wms-read-timeout",
     )
 
 

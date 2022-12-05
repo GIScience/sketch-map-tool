@@ -35,7 +35,9 @@ def get_map_image(bbox: Bbox, size: Size) -> Response:
         "BBOX": ",".join([str(cord) for cord in astuple(bbox)]),
     }
     try:
-        return requests.get(url, params, stream=True, timeout=600)
+        return requests.get(
+            url, params, stream=True, timeout=int(get_config_value("wms-read-timeout"))
+        )
     except ReadTimeout:
         raise MapGenerationError(
             "Map area couldn't be processed with the current resources. Please try again once."
