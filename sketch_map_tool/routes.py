@@ -15,7 +15,12 @@ from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
 from sketch_map_tool.data_store import client as ds_client  # type: ignore
 from sketch_map_tool.definitions import REQUEST_TYPES
-from sketch_map_tool.exceptions import OQTReportError, QRCodeError, UUIDNotFoundError
+from sketch_map_tool.exceptions import (
+    MapGenerationError,
+    OQTReportError,
+    QRCodeError,
+    UUIDNotFoundError,
+)
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.validators import validate_type, validate_uuid
 
@@ -138,6 +143,10 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
         elif task.failed():  # REJECTED, REVOKED, FAILURE
             try:
                 task.get(propagate=True)
+            except MapGenerationError as err:
+                http_status = 408  # Request Timeout
+                status = "FAILED"
+                error = str(err)
             except (QRCodeError, OQTReportError) as err:
                 # The request was well-formed but was unable to be followed due to semantic
                 # errors.

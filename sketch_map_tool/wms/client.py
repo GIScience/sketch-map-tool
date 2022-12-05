@@ -5,9 +5,10 @@ from dataclasses import astuple
 import requests
 from PIL import Image
 from PIL.PngImagePlugin import PngImageFile
-from requests import Response
+from requests import ReadTimeout, Response
 
 from sketch_map_tool.config import get_config_value
+from sketch_map_tool.exceptions import MapGenerationError
 from sketch_map_tool.models import Bbox, Size
 
 
@@ -33,7 +34,12 @@ def get_map_image(bbox: Bbox, size: Size) -> Response:
         "STYLES": "",
         "BBOX": ",".join([str(cord) for cord in astuple(bbox)]),
     }
-    return requests.get(url, params, stream=True, timeout=600)
+    try:
+        return requests.get(url, params, stream=True, timeout=600)
+    except ReadTimeout:
+        raise MapGenerationError(
+            "Map area couldn't be processed with the current resources. Please try again once."
+        )
 
 
 def as_image(response: Response) -> PngImageFile:

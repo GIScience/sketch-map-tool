@@ -1,3 +1,7 @@
+class MapGenerationError(Exception):
+    pass
+
+
 class QRCodeError(Exception):
     pass
 
