@@ -34,7 +34,7 @@ services:
       SMT-DATA-STORE: "redis://redis:6379"
       SMT-BROKER-URL: "redis://redis:6379"
       SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
-    entrypoint: ["poetry", "run", "celery", "--app", "sketch_map_tool.tasks", "worker", "--concurrency", "4", "--loglevel", "WARN", "-E"]
+    entrypoint: ["poetry", "run", "celery", "--app", "sketch_map_tool.tasks", "worker", "--concurrency", "4", "--loglevel", "WARNING", "-E"]
   redis:
     image: redis:7
     deploy:
