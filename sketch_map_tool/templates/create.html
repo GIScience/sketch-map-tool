@@ -29,7 +29,7 @@
                 <article id="infobox" class="infobox invisible">Your Area of Interest is too large!
                     <br>Zoom further in to be able to create a Sketch Map.
                 </article>
-                <form action="/create/results" method="post">
+                <form id="page-setup-form" action="/create/results" method="post">
                     <label for="format">Paper Format</label>
                     <select id="format" name="format"></select>
 
@@ -41,7 +41,7 @@
                     <input type="hidden" id="size" name="size"
                            value='{"width": 6055, "height": 8658}'>
                     <input type="hidden" id="scale" name="scale" value='11545.36'>
-                    <button id="next-button" type="submit">NEXT &rarr;</button>
+                    <button id="next-button" type="button">NEXT &rarr;</button>
                 </form>
             </div>
 
