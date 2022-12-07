@@ -17,7 +17,7 @@ services:
       SMT-BROKER-URL: "redis://redis:6379"
       SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
     ports:
-      - "127.0.0.1:8081:8081"
+      - "127.0.0.1:8081:8080"
     entrypoint: ["poetry", "run", "waitress-serve", "sketch_map_tool.routes:app"]
   celery:
     build:
@@ -43,7 +43,7 @@ services:
           memory: 2G
     # Start with persistent storage
     # dump redis db every 10 minutes (if 1 value changed)
-    entrypoint: ["redis-server", "--save", "600", "1"]
+    entrypoint: ["redis-server", "--save", "\"\""]
     volumes:
         - redis_data:/data
   postgres:
