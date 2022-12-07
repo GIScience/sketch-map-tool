@@ -88,12 +88,10 @@ def create_results_post() -> Response:
 def create_results_get(uuid: str | None = None) -> Response | str:
     if uuid is None:
         return redirect(url_for("create"))
-
+    validate_uuid(uuid)
     # Check if celery tasks for UUID exists
     _ = ds_client.get_task_id(uuid, "sketch-map")
     _ = ds_client.get_task_id(uuid, "quality-report")
-
-    validate_uuid(uuid)
     return render_template("create-results.html")
 
 
