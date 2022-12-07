@@ -15,6 +15,8 @@ def make_flask() -> Flask:
             "result_backend": get_config_value("result-backend"),
             "task_serializer": "pickle",
             "result_serializer": "json",
+            "result_compression": "gzip",
+            "task_compression": "gzip",
             "result_chord_join_timeout": 10.0,  # default: 3.0 seconds
             "result_chord_retry_interval": 3.0,  # default: 1.0 seconds
             "accept_content": ["application/json", "application/x-python-serialize"],
