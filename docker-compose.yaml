@@ -4,20 +4,29 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 1G
     depends_on:
       - celery
       - redis
+      - postgres
     environment:
       SMT-DATA-STORE: "redis://redis:6379"
       SMT-BROKER-URL: "redis://redis:6379"
       SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
     ports:
-      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:8081:8081"
     entrypoint: ["poetry", "run", "waitress-serve", "sketch_map_tool.routes:app"]
   celery:
     build:
       context: ./
       dockerfile: Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 4G
     depends_on:
       - redis
       - postgres
@@ -25,15 +34,24 @@ services:
       SMT-DATA-STORE: "redis://redis:6379"
       SMT-BROKER-URL: "redis://redis:6379"
       SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
-    entrypoint: ["poetry", "run", "celery", "--app", "sketch_map_tool.tasks", "worker"]
+    entrypoint: ["poetry", "run", "celery", "--app", "sketch_map_tool.tasks", "worker", "--concurrency", "4", "--loglevel", "WARN", "-E"]
   redis:
     image: redis:7
+    deploy:
+      resources:
+        limits:
+          memory: 2G
     # Start with persistent storage
-    entrypoint: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    # dump redis db every 10 minutes (if 1 value changed)
+    entrypoint: ["redis-server", "--save", "600", "1"]
     volumes:
         - redis_data:/data
   postgres:
     image: postgres:15
+    deploy:
+      resources:
+        limits:
+          memory: 1G
     environment:
       POSTGRES_PASSWORD: smt
       POSTGRES_USER: smt
