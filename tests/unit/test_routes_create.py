@@ -43,7 +43,9 @@ def test_create_result_get(client):
 
 def test_create_result_post(client, mock_tasks, monkeypatch, bbox, bbox_wgs84):
     """Redirect to /create/results/<uuid>"""
-    monkeypatch.setattr("sketch_map_tool.data_store.client.set", lambda x: None)
+    monkeypatch.setattr(
+        "sketch_map_tool.database.client.set_async_result_ids", lambda x, y: None
+    )
     data = {
         "bbox": json.dumps(astuple(bbox)),
         "bboxWGS84": json.dumps(astuple(bbox_wgs84)),
