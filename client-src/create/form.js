@@ -96,6 +96,13 @@ function bindFormToPrintLayoutControl(printLayoutControl) {
             const currentZoom = event.target.getZoom();
             handleZoomChange(currentZoom);
         });
+
+    // make sure that bbox values are up-to-date before submitting the form
+    document.getElementById("next-button")
+        .addEventListener("click", () => {
+            printLayoutControl.handleBboxChange();
+            document.querySelector("#page-setup-form").submit();
+        });
 }
 
 export {

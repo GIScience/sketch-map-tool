@@ -4,9 +4,11 @@ from io import BytesIO
 from typing import Tuple
 
 import fitz
+import matplotlib.pyplot as plt
+from matplotlib_scalebar.scalebar import ScaleBar
 from PIL import Image as PILImage
 from reportlab.graphics import renderPDF
-from reportlab.graphics.shapes import Drawing, Rect, String
+from reportlab.graphics.shapes import Drawing
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
@@ -70,9 +72,12 @@ def generate_pdf(  # noqa: C901
 
     map_image_reportlab = PIL_image_to_image_reader(map_image_input)
 
+    # calculate m per px in map frame
+    cm_per_px = frame_width * scale / map_width_px
+    m_per_px = cm_per_px / 100
     # create map_image by adding globes
     map_img = create_map_frame(
-        map_image_reportlab, format_, map_height_px, map_width_px, portrait
+        map_image_reportlab, format_, map_height_px, map_width_px, portrait, m_per_px
     )
 
     map_pdf = BytesIO()
@@ -125,68 +130,6 @@ def generate_pdf(  # noqa: C901
     return map_pdf, map_img
 
 
-# TODO REMOVE, NOT IN USE
-def create_right_column_portrait(
-    canv_map,
-    compass,
-    copyright_text_origin,
-    format_,
-    map_margin,
-    qr_code,
-    rotate_indent,
-    scale_length,
-    scale_text,
-):
-    canv_map.rotate(90)
-    # Add copyright information:
-    text = canv_map.beginText()
-    text.setTextOrigin(copyright_text_origin + 1.0 * cm, rotate_indent)
-    text.textLines("Map: © OpenStreetMap Contributors")
-    canv_map.drawText(text)
-    # Add QR-Code:
-    renderPDF.draw(qr_code, canv_map, format_.qr_y * cm, -(format_.width - 1.1) * cm)
-    # Add scale:
-    x_scale_cm = 0.24 * format_.height + format_.font_size / 1.5 + map_margin
-    canv_map.rect(
-        x_scale_cm * cm,
-        rotate_indent,
-        scale_length / 2 * cm,
-        format_.scale_height * cm,
-        fill=1,
-    )
-    canv_map.rect(
-        (x_scale_cm + scale_length / 2) * cm,
-        rotate_indent,
-        scale_length / 2 * cm,
-        format_.scale_height * cm,
-        fill=0,
-    )
-    canv_map.drawString(
-        (x_scale_cm + scale_length / 2 - format_.font_size / 25) * cm,
-        rotate_indent - format_.height * 0.012 * cm,
-        scale_text[0],
-    )
-    canv_map.drawString(
-        (x_scale_cm + scale_length - format_.font_size / 25) * cm,
-        rotate_indent - format_.height * 0.012 * cm,
-        scale_text[1],
-    )
-    # Add compass:
-    renderPDF.draw(
-        compass,
-        canv_map,
-        (
-            0.24 * format_.height
-            + format_.font_size / 1.5
-            + scale_length
-            + format_.font_size / 4
-        )
-        * cm,
-        rotate_indent - 2 * format_.compass_scale * cm + format_.qr_y * cm,
-    )
-    canv_map.rotate(-90)
-
-
 def draw_right_column(
     canv: canvas.Canvas,
     width: float,
@@ -218,14 +161,6 @@ def draw_right_column(
     qr_size = min(width, height) - margin
     qr_code = resize_rlg_by_width(qr_code, qr_size)
 
-    # Add scale:
-    scale = get_scale(
-        scale,
-        width_max=width - margin,
-        scale_height=format_.scale_height * cm,
-        font_size=em,
-    )
-
     # fills up the remaining space, placed between the TOP and the BOTTOM aligned elements
     space_filler = Spacer(width, 0)  # height will be filled after list creation
     # order all elements in column
@@ -235,8 +170,6 @@ def draw_right_column(
         heigit_logo,
         space_filler,
         compass,
-        Spacer(width, 2 * em),
-        scale,
         Spacer(width, 2 * em),
         p_copyright,
         Spacer(width, 2 * em),
@@ -290,6 +223,7 @@ def create_map_frame(
     height: float,
     width: float,
     portrait: bool,
+    m_per_px: float,
 ) -> BytesIO:
     map_frame = BytesIO()
     canv = canvas.Canvas(map_frame)
@@ -321,7 +255,28 @@ def create_map_frame(
 
     canv.save()
     map_frame.seek(0)
-    return pdf_page_to_img(map_frame)
+    return add_scalebar(pdf_page_to_img(map_frame), m_per_px)
+
+
+def add_scalebar(input_image: BytesIO, m_per_px: float) -> BytesIO:
+    # render legend with matplotlib
+    img = plt.imread(input_image)
+    width, height = img.shape[1], img.shape[0]
+    # dpi do not have to be correct, just should be fixed during processing
+    dpi = 192
+    plt.figure(figsize=(width / dpi, height / dpi), dpi=dpi)
+    plt.axis("off")
+    # add image to plot
+    plt.imshow(img)
+    plt.tight_layout(pad=0)
+    scalebar = ScaleBar(m_per_px)
+    plt.gca().add_artist(scalebar)
+
+    # write output
+    output_image = BytesIO()
+    plt.savefig(output_image, dpi="figure", format="png")
+    output_image.seek(0)
+    return output_image
 
 
 def add_globes(canv: canvas.Canvas, size: float, height: float, width: float):
@@ -376,74 +331,6 @@ def get_compass(size: float) -> Drawing:
     compass = svg2rlg(PDF_RESOURCES_PATH / "north.svg")
     compass = resize_rlg_by_width(compass, size)
     return compass
-
-
-def get_scale(
-    scale_value: float, width_max: float, scale_height: float, font_size: float
-) -> tuple[float, tuple[str, str]]:
-    """Get scale length [cm] and scale text.
-
-    scale_value: Scale denominator
-    width_max: Maximal width of the scale bar [cm]
-    scale_height: Height of the returned scale
-
-    E.g.
-    (scale bar) 1 cm = 11545.36 cm (scale denominator)
-    (scale bar) ? cm = 50000 cm    (factor)
-    """
-    for factor in (
-        1000000,  # 10 km
-        500000,
-        200000,
-        100000,  # 1 km
-        50000,
-        20000,
-        10000,  # 100 m
-        5000,
-        1000,  # 10 m
-    ):
-        scale_length = factor / scale_value
-        if scale_length <= width_max:
-            # Two parts of the black and white scale bar
-            if factor >= 100000:
-                # In kilometer
-                scale_text = (
-                    str(int((factor / 100000) / 2)) + "km",
-                    str(int(factor / 100000)) + "km",
-                )
-            else:
-                # In meter
-                scale_text = (
-                    str(int((factor / 100) / 2)) + "m",
-                    str(int(factor / 100)) + "m",
-                )
-            break
-    scale = Drawing(width_max, scale_height + font_size * 1.25)
-    scale.add(
-        Rect(
-            0,
-            scale.height - scale_height,
-            scale_length / 2,
-            scale_height,
-            fillColor="black",
-        )
-    )
-    scale.add(
-        Rect(
-            scale_length / 2,
-            scale.height - scale_height,
-            scale_length / 2,
-            scale_height,
-            fillColor="white",
-        )
-    )
-    scale.add(
-        String(scale_length / 2, 0, scale_text[0], fontSize=font_size, textAnchor="end")
-    )
-    scale.add(
-        String(scale_length, 0, scale_text[1], fontSize=font_size, textAnchor="end")
-    )
-    return scale
 
 
 def pdf_page_to_img(pdf: BytesIO, page_id=0) -> BytesIO:
