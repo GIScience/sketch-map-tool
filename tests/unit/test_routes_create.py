@@ -66,7 +66,10 @@ def test_create_results_uuid(client, uuid, monkeypatch):
     assert resp.status_code == 200
 
 
-def test_create_results_uuid_not_found(client, uuid):
+def test_create_results_uuid_not_found(client, uuid, monkeypatch):
+    monkeypatch.setattr(
+        "sketch_map_tool.database.client._execute_read_query", lambda a, b: []
+    )
     resp = client.get("/create/results/{0}".format(uuid))
     assert resp.status_code == 404
 
