@@ -14,7 +14,7 @@ def detect_markings(
     img_base: NDArray,
     img_markings: NDArray,
     colour: str,
-    bgr_interval_size: int = 40,
+    hsv_interval_size: int = 40,
     threshold_img_diff: int = 150,
 ) -> List[Tuple[str, NDArray]]:
     """
@@ -27,7 +27,7 @@ def detect_markings(
     :param img_base: Map without markings.
     :param img_markings: Map with markings.
     :param colour: Colour of the markings to be detected.
-    :param bgr_interval_size: Size of the H-value interval to be used. 40 means +/- 20 around
+    :param hsv_interval_size: Size of the H-value interval to be used. 40 means +/- 20 around
                               the defined value for the chosen colour 'colour'.
     :param threshold_img_diff: Threshold for the marking detection concerning the absolute
                                grayscale difference between corresponding pixels in 'img_base' and
@@ -53,8 +53,8 @@ def detect_markings(
     hsv = colors[colour]
 
     # Calculate the H-value interval of the colour given as argument
-    h_value_interval = hsv[0][0][0] - int(bgr_interval_size / 2), hsv[0][0][0] + int(
-        bgr_interval_size / 2
+    h_value_interval = hsv[0][0][0] - int(hsv_interval_size / 2), hsv[0][0][0] + int(
+        hsv_interval_size / 2
     )
 
     # In case one of the values lies outside the range (0, 179), the interval has to be adjusted
