@@ -13,39 +13,59 @@ from PIL import Image, ImageEnhance
 def detect_markings(
     img_base: NDArray,
     img_markings: NDArray,
-    color: str,
-    threshold_bgr: float = 0.5,
-    threshold_img_diff: int = 100,
+    colour: str,
+    bgr_interval_size: int = 40,
+    threshold_img_diff: int = 150,
 ) -> List[Tuple[str, NDArray]]:
     """
     Detect markings in the colours blue, green, red, pink, turquoise, white, and yellow.
-    Note that there must be a sufficient difference between the colour of the markings and the background. White and
-    yellow markings might therefore not be detected on many sketch maps.
+    Note that there must be a sufficient difference between the colour of the markings
+    and the background. White and yellow markings might therefore not be detected on many
+    sketch maps.
 
 
     :param img_base: Map without markings.
     :param img_markings: Map with markings.
-    :param threshold_bgr: Threshold for the colour detection. 0.5 means 50%, i.e. all BGR values above 50% * 255 will be
-                          considered 255, all values below this threshold will be considered 0 for determining the
-                          colour of the markings.
-    :param threshold_img_diff: Threshold for the marking detection concerning the absolute grayscale difference between
-                               corresponding pixels in 'img_base' and 'img_markings'.
-    :return: A list of pairs of the colour name and the image object with the detected markings in this colour
-             [("colour name", img_array), ...].
+    :param colour: Colour of the markings to be detected.
+    :param bgr_interval_size: Size of the H-value interval to be used. 40 means +/- 20 around
+                              the defined value for the chosen colour 'colour'.
+    :param threshold_img_diff: Threshold for the marking detection concerning the absolute
+                               grayscale difference between corresponding pixels in 'img_base' and
+                               'img_markings'.
+    :return: A list of pairs of the colour name and the image object with the detected markings in
+             this colour [("colour name", img_array), ...].
     """
-    threshold_bgr_abs = threshold_bgr * 255
+    # For the colour detection see https://docs.opencv.org/3.4/df/d9d/tutorial_py_colorspaces.html
+    # under "How to find HSV values to track?"
+    # Tests have shown that an H-value interval of +/- 20, i.e. a size of 40, works better
+    # than +/- 10
+    # To test out different HSV ranges, you can use the code snippet under
+    # https://stackoverflow.com/a/59906154
 
+    # Calculate HSV values based on BGR colour values:
     colors = {
-        "white": (255, 255, 255),
-        "red": (0, 0, 255),
-        "blue": (255, 0, 0),
-        "green": (0, 255, 0),
-        "yellow": (0, 255, 255),
-        "turquoise": (255, 255, 0),
-        "pink": (255, 0, 255),
+        "red": cv2.cvtColor(np.uint8([[[0, 0, 255]]]), cv2.COLOR_BGR2HSV),
+        "blue": cv2.cvtColor(np.uint8([[[255, 0, 0]]]), cv2.COLOR_BGR2HSV),
+        "green": cv2.cvtColor(np.uint8([[[0, 255, 0]]]), cv2.COLOR_BGR2HSV),
     }
-    bgr = colors[color]
+    if colour not in colors.keys():
+        raise ValueError(f"Colour {colour} is not supported yet.")
+    hsv = colors[colour]
 
+    # Calculate the H-value interval of the colour given as argument
+    h_value_interval = hsv[0][0][0] - int(bgr_interval_size / 2), hsv[0][0][0] + int(
+        bgr_interval_size / 2
+    )
+
+    # In case one of the values lies outside the range (0, 179), the interval has to be adjusted
+    if h_value_interval[0] < 0:
+        h_value_interval = (179 + h_value_interval[0], 179)
+        # The second interval (0, h_value_interval[1]) has been discarded as currently this is only
+        # relevant for red and matches an orange typically used in OSM icons resulting in much noise
+    elif h_value_interval[1] > 179:
+        h_value_interval = (h_value_interval[0], 179)
+        # Currently not the case, when more colours are added, please check whether the second
+        # possible interval needs to be considered.
     img_base_height, img_base_width, _ = img_base.shape
     img_markings = cv2.resize(
         img_markings,
@@ -62,23 +82,15 @@ def detect_markings(
 
     markings_multicolor = np.zeros_like(img_markings, np.uint8)
     markings_multicolor[mask_markings] = img_markings[mask_markings]
-
-    # for color, bgr in colors.items():
+    markings_multicolor = cv2.cvtColor(markings_multicolor, cv2.COLOR_BGR2HSV)
     single_color_marking = np.zeros_like(markings_multicolor, np.uint8)
     single_color_marking[
-        (
-            (markings_multicolor[:, :, 0] < threshold_bgr_abs)
-            == (bgr[0] < threshold_bgr_abs)
-        )
-        & (
-            (markings_multicolor[:, :, 1] < threshold_bgr_abs)
-            == (bgr[1] < threshold_bgr_abs)
-        )
-        & (
-            (markings_multicolor[:, :, 2] < threshold_bgr_abs)
-            == (bgr[2] < threshold_bgr_abs)
-        )
+        ((markings_multicolor[:, :, 0] >= h_value_interval[0]))
+        & ((markings_multicolor[:, :, 0] <= h_value_interval[1]))
+        & ((markings_multicolor[:, :, 1] >= 100))
+        & ((markings_multicolor[:, :, 2] >= 100))
     ] = 255
+
     single_color_marking = _reduce_noise(single_color_marking)
     single_color_marking = _reduce_holes(single_color_marking)
     single_color_marking[single_color_marking > 0] = 255
