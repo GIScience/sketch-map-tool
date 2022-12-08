@@ -13,7 +13,7 @@ from werkzeug.utils import secure_filename
 from sketch_map_tool import celery_app, definitions
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
-from sketch_map_tool.data_store import client as ds_client  # type: ignore
+from sketch_map_tool.database import client as db_client
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
     MapGenerationError,
@@ -70,16 +70,12 @@ def create_results_post() -> Response:
     )
     task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox_wgs84,))
 
-    # Mapping of request id to multiple tasks id's
-    request_task = {
-        uuid: json.dumps(
-            {
-                "sketch-map": str(task_sketch_map.id),
-                "quality-report": str(task_quality_report.id),
-            }
-        )
+    # Map of request type to multiple Async Result IDs
+    map_ = {
+        "sketch-map": str(task_sketch_map.id),
+        "quality-report": str(task_quality_report.id),
     }
-    ds_client.set(request_task)
+    db_client.set_async_result_ids(uuid, map_)
     return redirect(url_for("create_results_get", uuid=uuid))
 
 
@@ -90,8 +86,8 @@ def create_results_get(uuid: str | None = None) -> Response | str:
         return redirect(url_for("create"))
     validate_uuid(uuid)
     # Check if celery tasks for UUID exists
-    _ = ds_client.get_task_id(uuid, "sketch-map")
-    _ = ds_client.get_task_id(uuid, "quality-report")
+    _ = db_client.get_async_result_id(uuid, "sketch-map")
+    _ = db_client.get_async_result_id(uuid, "quality-report")
     return render_template("create-results.html")
 
 
@@ -133,8 +129,8 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    task_id = ds_client.get_task_id(uuid, type_)
-    task = celery_app.AsyncResult(task_id)
+    id_ = db_client.get_async_result_id(uuid, type_)
+    task = celery_app.AsyncResult(id_)
 
     href = None
     error = None
@@ -180,8 +176,8 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    task_id = ds_client.get_task_id(uuid, type_)
-    task = celery_app.AsyncResult(task_id)
+    id_ = db_client.get_async_result_id(uuid, type_)
+    task = celery_app.AsyncResult(id_)
 
     match type_:
         case "quality-report":

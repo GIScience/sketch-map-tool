@@ -13,7 +13,7 @@ def client():
 def mock_request_task_mapping(uuid, monkeypatch):
     """Mock request id to task id mapping."""
     monkeypatch.setattr(
-        "sketch_map_tool.routes.ds_client.get_task_id", lambda uuid, type_: uuid
+        "sketch_map_tool.routes.db_client.get_async_result_id", lambda uuid, type_: uuid
     )
 
 
