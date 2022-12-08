@@ -31,11 +31,13 @@
             methods in the <a href="#additional-information">Additional Information</a> section.
         </p>
         <p>
-            As the current version of the Sketch Map Tool has only been released very recently, problems
+            As the current version of the Sketch Map Tool has only been released very recently,
+            problems
             might still occur during different steps of the process. We are sorry if this causes any
             inconvenience for you! We strive to continuously improve the product, so kindly inform
-            us about the technical issues via the Sketch Map Tool contact person in your organization
-            or the Sketch Map Tool user support. (&rarr;<a href="/about#contact">Contact</a>)
+            us about the technical issues via <a
+                href="https://github.com/GIScience/sketch-map-tool/issues/new" target="_blank">GitHub
+            Issues</a>.
         </p>
 
         <h1 id="step-by-step">Step-by-Step Instructions</h1>
@@ -163,15 +165,13 @@
         </details>
         <details>
             <summary id="data-collection"><strong class="sketchy" style="color: var(--heigit-red)">THEN: </strong>
-                &nbsp;Data
-                collection in the field
+                &nbsp;Data collection in the field
             </summary>
             <article>
                 <p>
-                    At the moment the Sketch Map Tool detects red, blue, green, yellow, turquoise and
-                    pink markings. Red and blue markings work best in most cases. The
-                    detection works best if the marked areas are filled out
-                    entirely.<br>
+                    At the moment the Sketch Map Tool detects red, blue, green, yellow, turquoise
+                    and pink markings. Red and blue markings work best in most cases. The detection
+                    works best if the marked areas are filled out entirely.<br>
                     Please make sure not to accidentally mark the globes on the edge as they are
                     needed to improve the automatic map detection.
                 </p>
@@ -253,27 +253,19 @@
                     <p>
                         To upload files you can click on the upload field or drag and drop your
                         files directly in the upload field and then click on the Upload button. You
-                        can upload one or more marked Sketch Maps at once. However, the download
-                        files will consist of separate files (vector data output) or layers
-                        for each colour and Sketch Map as well as a GeoJSON containing the marking
-                        detection results for all Sketch Maps and colours. The upload works
+                        can upload one or more marked Sketch Maps at once. The upload works
                         for jpg or png files.
                     </p>
 
                     <h6><em>Recommendations:</em></h6>
                     <ul>
                         <li>
-                            It is also possible to upload more than one Sketch Map at the same
-                            time,
-                            but the upload will take longer.
+                            It is possible to upload more than one Sketch Map at the same
+                            time, but the upload will take longer.
                         </li>
                         <li>
                             If you are experiencing problems during the upload process, please check
-                            out the <a href="#faq">FAQ section</a> below or contact the Sketch Map Tool
-                            contact person in your organization or the Sketch Map Tool user
-                            support (&rarr;&nbsp;<a href="/about#contact">Contact</a>) if you cannot
-                            find your
-                            answers there.
+                            out the <a href="#faq">FAQ section</a> below.
                         </li>
                     </ul>
                 </article>
@@ -284,25 +276,23 @@
                 </summary>
                 <article>
                     <p>
-                        You can download the georeferenced Sketch Maps as a GeoTIFFs or the
+                        You can download the georeferenced Sketch Maps as GeoTIFFs (zip) and the
                         colour-detected markings as vector data in a GeoJSON file.
                     </p>
                     <p>
-                        The vector data output file contains polygons for the markings of each
-                        uploaded Sketch Map. Each polygon has attributes about its color and its
-                        source-filename.<br>The GeoTIFF output files consist of georeferenced
-                        images for each of your uploaded Sketch Maps.
+                        The GeoTIFF raster data output files consist of georeferenced
+                        images for each of your uploaded Sketch Maps.<br>
+                        The GeoJSON vector data output file contains polygons for the markings of
+                        each
+                        uploaded Sketch Map. Each polygon has attributes about its colour and its
+                        source filename (from the uploaded image).
                     </p>
 
                     <h6><em>Recommendations:</em></h6>
                     <ul>
                         <li>
                             If you are experiencing problems during the upload process, please check
-                            out the <a href="#faq">FAQ section</a> below or contact the Sketch Map Tool contact person
-                            in your organization or the Sketch Map Tool user
-                            support (&rarr;&nbsp;<a href="/about#contact">Contact</a>) if you cannot
-                            find your
-                            answers there.
+                            out the <a href="#faq">FAQ section</a> below.
                         </li>
                     </ul>
                 </article>
@@ -338,11 +328,9 @@
                         if necessary, scan them again or take new pictures according to the
                         recommendations above. Please review the recommendations
                         in the sections about the data collection, the scan or photograph and the
-                        upload above and consult our FAQ section about the problems in the colour
-                        detection.<br>
-                        If you cannot find your answers there, please contact the Sketch Map Tool
-                        contact person in your organization or the Sketch Map Tool user support (&rarr;&nbsp;<a
-                            href="/about#contact">Contact</a>).
+                        upload above and consult our <a href="#faq">FAQ section</a> about the
+                        problems in the colour
+                        detection.
                     </li>
                 </ul>
             </article>
@@ -416,11 +404,11 @@
             </article>
         </details>
         <details>
-            <summary>Why are there a code and globes on the Sketch Maps?</summary>
+            <summary>Why are there a QR code and globes on the Sketch Maps?</summary>
             <article>
-                The code is required for georeferencing. The globes support the detection of the map
-                in your uploaded images. This is why it is important to have them on
-                the Sketch Maps.
+                The QR code is required for georeferencing. The globes support the detection of the
+                map in your uploaded images. This is why it is important to have them on the Sketch
+                Maps.
             </article>
         </details>
         <details>
