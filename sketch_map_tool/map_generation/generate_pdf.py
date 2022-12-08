@@ -273,8 +273,13 @@ def add_scalebar(input_image: BytesIO, m_per_px: float) -> BytesIO:
     plt.gca().add_artist(scalebar)
 
     # write output
+    figure_output = BytesIO()
+    plt.savefig(figure_output, dpi="figure", format="png")
+    figure_output.seek(0)
+
+    # convert from RGB to RGBA
     output_image = BytesIO()
-    plt.savefig(output_image, dpi="figure", format="png")
+    PILImage.open(figure_output).convert("RGB").save(output_image, format="png")
     output_image.seek(0)
     return output_image
 
