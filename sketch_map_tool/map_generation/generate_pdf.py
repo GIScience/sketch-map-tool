@@ -4,6 +4,8 @@ from io import BytesIO
 from typing import Tuple
 
 import fitz
+import matplotlib.pyplot as plt
+from matplotlib_scalebar.scalebar import ScaleBar
 from PIL import Image as PILImage
 from reportlab.graphics import renderPDF
 from reportlab.graphics.shapes import Drawing, Rect, String
@@ -70,9 +72,12 @@ def generate_pdf(  # noqa: C901
 
     map_image_reportlab = PIL_image_to_image_reader(map_image_input)
 
+    # calculate m per px in map frame
+    cm_per_px = frame_width * scale / map_width_px
+    m_per_px = cm_per_px / 100
     # create map_image by adding globes
     map_img = create_map_frame(
-        map_image_reportlab, format_, map_height_px, map_width_px, portrait
+        map_image_reportlab, format_, map_height_px, map_width_px, portrait, m_per_px
     )
 
     map_pdf = BytesIO()
@@ -290,6 +295,7 @@ def create_map_frame(
     height: float,
     width: float,
     portrait: bool,
+    m_per_px: float,
 ) -> BytesIO:
     map_frame = BytesIO()
     canv = canvas.Canvas(map_frame)
@@ -321,7 +327,28 @@ def create_map_frame(
 
     canv.save()
     map_frame.seek(0)
-    return pdf_page_to_img(map_frame)
+    return add_scalebar(pdf_page_to_img(map_frame), m_per_px)
+
+
+def add_scalebar(input_image: BytesIO, m_per_px: float) -> BytesIO:
+    # render legend with matplotlib
+    img = plt.imread(input_image)
+    width, height = img.shape[1], img.shape[0]
+    # dpi do not have to be correct, just should be fixed during processing
+    dpi = 192
+    plt.figure(figsize=(width / dpi, height / dpi), dpi=dpi)
+    plt.axis("off")
+    # add image to plot
+    plt.imshow(img)
+    plt.tight_layout(pad=0)
+    scalebar = ScaleBar(m_per_px)
+    plt.gca().add_artist(scalebar)
+
+    # write output
+    output_image = BytesIO()
+    plt.savefig(output_image, dpi="figure", format="png")
+    output_image.seek(0)
+    return output_image
 
 
 def add_globes(canv: canvas.Canvas, size: float, height: float, width: float):

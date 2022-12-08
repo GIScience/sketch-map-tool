@@ -27,6 +27,7 @@ psycopg2 = "^2.9.5"
 #numpy = "1.23.5"
 #pygdal = "3.4.1.10"
 geojson = "^2.5.0"
+matplotlib-scalebar = "^0.8.1"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
