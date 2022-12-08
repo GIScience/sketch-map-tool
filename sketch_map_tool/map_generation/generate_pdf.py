@@ -130,68 +130,6 @@ def generate_pdf(  # noqa: C901
     return map_pdf, map_img
 
 
-# TODO REMOVE, NOT IN USE
-def create_right_column_portrait(
-    canv_map,
-    compass,
-    copyright_text_origin,
-    format_,
-    map_margin,
-    qr_code,
-    rotate_indent,
-    scale_length,
-    scale_text,
-):
-    canv_map.rotate(90)
-    # Add copyright information:
-    text = canv_map.beginText()
-    text.setTextOrigin(copyright_text_origin + 1.0 * cm, rotate_indent)
-    text.textLines("Map: © OpenStreetMap Contributors")
-    canv_map.drawText(text)
-    # Add QR-Code:
-    renderPDF.draw(qr_code, canv_map, format_.qr_y * cm, -(format_.width - 1.1) * cm)
-    # Add scale:
-    x_scale_cm = 0.24 * format_.height + format_.font_size / 1.5 + map_margin
-    canv_map.rect(
-        x_scale_cm * cm,
-        rotate_indent,
-        scale_length / 2 * cm,
-        format_.scale_height * cm,
-        fill=1,
-    )
-    canv_map.rect(
-        (x_scale_cm + scale_length / 2) * cm,
-        rotate_indent,
-        scale_length / 2 * cm,
-        format_.scale_height * cm,
-        fill=0,
-    )
-    canv_map.drawString(
-        (x_scale_cm + scale_length / 2 - format_.font_size / 25) * cm,
-        rotate_indent - format_.height * 0.012 * cm,
-        scale_text[0],
-    )
-    canv_map.drawString(
-        (x_scale_cm + scale_length - format_.font_size / 25) * cm,
-        rotate_indent - format_.height * 0.012 * cm,
-        scale_text[1],
-    )
-    # Add compass:
-    renderPDF.draw(
-        compass,
-        canv_map,
-        (
-            0.24 * format_.height
-            + format_.font_size / 1.5
-            + scale_length
-            + format_.font_size / 4
-        )
-        * cm,
-        rotate_indent - 2 * format_.compass_scale * cm + format_.qr_y * cm,
-    )
-    canv_map.rotate(-90)
-
-
 def draw_right_column(
     canv: canvas.Canvas,
     width: float,
