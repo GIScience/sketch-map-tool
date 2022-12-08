@@ -4,6 +4,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+    restart: unless-stopped
     deploy:
       resources:
         limits:
@@ -23,6 +24,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+    restart: unless-stopped
     deploy:
       resources:
         limits:
@@ -37,6 +39,7 @@ services:
     entrypoint: ["poetry", "run", "celery", "--app", "sketch_map_tool.tasks", "worker", "--concurrency", "4", "--loglevel", "WARNING", "-E"]
   redis:
     image: redis:7
+    restart: unless-stopped
     deploy:
       resources:
         limits:
@@ -48,6 +51,7 @@ services:
         - redis_data:/data
   postgres:
     image: postgres:15
+    restart: unless-stopped
     deploy:
       resources:
         limits:
