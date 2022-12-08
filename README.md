@@ -18,3 +18,11 @@ Please refer to [this document](/docs/CONTRIBUTING.md).
 ## Development Setup
 
 Please refer to the [development setup documentation](/docs/development-setup.md).
+
+## Funding
+
+The initial proof of concept has been developed in the project T2S Waterproofing Data which is financially supported by the Belmont Forum
+and NORFACE Joint Research Programme on Transformations to Sustainability, co-funded by DLR/BMBF (Federal Ministry of
+Education and Research) as part of its Social-Ecological Research funding priority, ESRC/Global Challenges Research
+Fund (ES/S006982/1), FAPESP and the European Commission through Horizon 2020. Additional work on the Sketch Map Tool has
+been financially supported by the German Red Cross. The ongoing work takes place at [HeiGIT](https://heigit.org).

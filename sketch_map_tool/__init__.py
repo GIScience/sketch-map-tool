@@ -3,7 +3,7 @@ from flask import Flask
 
 from sketch_map_tool.config import get_config_value
 
-__version__ = "0.9.0"
+__version__ = "1.0.0"
 
 
 def make_flask() -> Flask:
