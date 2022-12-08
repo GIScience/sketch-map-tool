@@ -56,16 +56,17 @@ def test_create_result_post(client, mock_tasks, monkeypatch, bbox, bbox_wgs84):
     assert resp.status_code == 302
 
 
-def test_create_results_uuid(client, uuid):
+def test_create_results_uuid(client, uuid, monkeypatch):
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.db_client.get_async_result_id", lambda a, b: None
+    )
     resp = client.get("/create/results/{0}".format(uuid))
     assert resp.status_code == 200
 
 
 def test_create_results_uuid_not_found(client, uuid):
     resp = client.get("/create/results/{0}".format(uuid))
-    assert resp.status_code == 200
-    # TODO: Should be 404
-    # assert resp.status_code == 404
+    assert resp.status_code == 404
 
 
 def test_create_results_invalid_uuid(client):

@@ -1,4 +1,3 @@
-import json
 from io import BytesIO
 from uuid import UUID, uuid4
 from zipfile import ZipFile
@@ -13,7 +12,7 @@ from numpy.typing import NDArray
 
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool import map_generation, upload_processing
-from sketch_map_tool.data_store import client as ds_client
+from sketch_map_tool.database import client as db_client
 from sketch_map_tool.definitions import COLORS
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
@@ -68,8 +67,8 @@ def generate_digitized_results(files: list[tuple[BytesIO, str]]) -> str:
     uuid = args["uuid"]
     bbox = args["bbox"]
 
-    task_id = ds_client.get_task_id(uuid, "sketch-map")
-    map_frame_buffer = celery.AsyncResult(task_id).get()[1]  # Get map frame template
+    id_ = db_client.get_async_result_id(uuid, "sketch-map")
+    map_frame_buffer = celery.AsyncResult(id_).get()[1]  # Get map frame template
     map_frame = t_to_array(map_frame_buffer)
 
     result_id_1 = georeference_sketch_maps(files, map_frame, bbox)
@@ -78,15 +77,11 @@ def generate_digitized_results(files: list[tuple[BytesIO, str]]) -> str:
     # Unique id for current request
     uuid = str(uuid4())
     # Mapping of request id to multiple tasks id's
-    request_task = {
-        uuid: json.dumps(
-            {
-                "raster-results": str(result_id_1),
-                "vector-results": str(result_id_2),
-            }
-        )
+    map_ = {
+        "raster-results": str(result_id_1),
+        "vector-results": str(result_id_2),
     }
-    ds_client.set(request_task)
+    db_client.set_async_result_ids(uuid, map_)
     return uuid
 
 
