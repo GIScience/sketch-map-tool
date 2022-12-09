@@ -33,7 +33,7 @@ def read(img: NDArray, depth=0) -> MappingProxyType:
         case 0:
             if depth <= 5:
                 # Try again with down scaled image
-                read(_resize(img), depth=depth + 1)
+                return read(_resize(img), depth=depth + 1)
             else:
                 raise QRCodeError("QR-Code could not be detected.")
         case 1:
