@@ -13,7 +13,7 @@ The tool has a variety of applications. For example, do you want to work togethe
 
 ## Contributing Guideline
 
-Please refer to [this document](/docs/CONTRIBUTING.md).
+Please refer to [this document](/CONTRIBUTING.md).
 
 ## Development Setup
 
