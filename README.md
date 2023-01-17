@@ -19,6 +19,10 @@ Please refer to [this document](/CONTRIBUTING.md).
 
 Please refer to the [development setup documentation](/docs/development-setup.md).
 
+## Components
+
+![](/docs/component-diagram.png)
+
 ## Funding
 
 The initial proof of concept has been developed in the project T2S Waterproofing Data which is financially supported by the Belmont Forum
