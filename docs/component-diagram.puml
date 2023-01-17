@@ -1,0 +1,48 @@
+@startuml
+package "Sketch Map Tool" {
+  node webclient as "Web App Frontend" <<JavaScript>> {
+      component client as "Client"
+    }
+
+    node flask as "Web App Backend" <<Flask>> {
+        component routes.py
+    }
+
+    node celery as "Task Queue" <<Celery>>{
+        component tasks.py
+        component oqt_analyses
+        component map_generation
+        component upload_processing
+        tasks.py --> oqt_analyses
+        tasks.py --> map_generation
+        tasks.py --> upload_processing
+    }
+
+    database postgres as "Result Store" <<Postgres>>
+    database redis as "Message Broker" <<Redis>>
+
+    routes.py --> tasks.py
+    celery --> postgres
+    celery --> redis
+    client --> routes.py
+}
+
+cloud internet as "Internet" #line.dotted
+cloud oqt as "OQT API" #line.dotted
+cloud ohsome as "ohsome API" #line.dotted
+
+package "HeiGIT Maps" #line.dotted {
+    cloud wms as "WMS" #line.dotted
+    database osmdb as "OSMDB" #line.dotted
+
+}
+
+internet --> client
+
+map_generation --> wms
+wms --> osmdb
+
+oqt_analyses --> oqt
+oqt --> ohsome
+
+@enduml
