@@ -1,5 +1,6 @@
 import json
 from dataclasses import astuple
+from unittest.mock import MagicMock, patch
 from uuid import uuid4
 
 import pytest
@@ -66,10 +67,12 @@ def test_create_results_uuid(client, uuid, monkeypatch):
     assert resp.status_code == 200
 
 
-def test_create_results_uuid_not_found(client, uuid, monkeypatch):
-    monkeypatch.setattr(
-        "sketch_map_tool.database.client._execute_read_query", lambda a, b: []
-    )
+@patch("sketch_map_tool.database.client.db_conn")
+def test_create_results_uuid_not_found(mock_conn, client, uuid):
+    mock_curs = MagicMock()
+    mock_curs.fetchall.return_value = []
+    mock_conn.cursor.return_value.__enter__.return_value = mock_curs
+
     resp = client.get("/create/results/{0}".format(uuid))
     assert resp.status_code == 404
 
