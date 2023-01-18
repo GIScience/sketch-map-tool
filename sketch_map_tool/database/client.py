@@ -6,8 +6,10 @@ from sketch_map_tool.config import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import UUIDNotFoundError
 
+db_conn = None
 
-def _create_connection():
+
+def create_connection():
     raw = get_config_value("result-backend")
     dns = raw[3:]
     connection = psycopg2.connect(dns)
@@ -15,61 +17,35 @@ def _create_connection():
     return connection
 
 
-def _execute_query(query):
-    connection = _create_connection()
-    cursor = connection.cursor()
-
-    cursor.execute(query)
-
-    cursor.close()
-    connection.close()
-
-
-def _execute_write_query(query, data):
-    connection = _create_connection()
-    cursor = connection.cursor()
-
-    cursor.execute(query, data)
-
-    cursor.close()
-    connection.close()
-
-
-def _execute_read_query(query, data):
-    connection = _create_connection()
-    cursor = connection.cursor()
-
-    cursor.execute(query, data)
-    result = cursor.fetchall()
-
-    cursor.close()
-    connection.close()
-    return result
-
-
 # QUERIES
 #
 def _insert_id_map(uuid: str, map_: dict):
-    query = """
+    global db_conn
+    create_query = """
     CREATE TABLE IF NOT EXISTS uuid_map(
       uuid uuid PRIMARY KEY,
       map json NOT NULL
     )
     """
-    _execute_query(query)
-
-    query = "INSERT INTO uuid_map(uuid, map) VALUES (%s, %s)"
-    _execute_write_query(query, [uuid, json.dumps(map_)])
+    insert_query = "INSERT INTO uuid_map(uuid, map) VALUES (%s, %s)"
+    with db_conn.cursor() as curs:
+        curs.execute(create_query)
+        curs.execute(insert_query, [uuid, json.dumps(map_)])
 
 
 def _delete_id_map(uuid: str):
+    global db_conn
     query = "DELETE FROM uuid_map WHERE uuid = %s"
-    _execute_write_query(query, [uuid])
+    with db_conn.cursor() as curs:
+        curs.execute(query, [uuid])
 
 
 def _select_id_map(uuid) -> dict:
+    global db_conn
     query = "SELECT map FROM uuid_map WHERE uuid = %s"
-    raw = _execute_read_query(query, [uuid])
+    with db_conn.cursor() as curs:
+        curs.execute(query, [uuid])
+        raw = curs.fetchall()
     if raw:
         return raw[0][0]
     else:

@@ -7,6 +7,7 @@ import geojson
 import numpy as np
 from celery import chain, group
 from celery.result import AsyncResult
+from celery.signals import worker_process_init, worker_process_shutdown
 from geojson import FeatureCollection, GeoJSON
 from numpy.typing import NDArray
 
@@ -18,6 +19,24 @@ from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
 from sketch_map_tool.oqt_analyses import get_report
 from sketch_map_tool.wms import client as wms_client
+
+db_conn = None  # psycopg2 database connection
+
+
+@worker_process_init.connect
+def init_worker(**kwargs):
+    """Initializing database connection for worker"""
+    # TODO: Use a connection pool instead of a single connection
+    global db_conn
+    db_conn = db_client.create_connection()
+
+
+@worker_process_shutdown.connect
+def shutdown_worker(**kwargs):
+    """Closing database connection for worker"""
+    global db_conn
+    if db_conn:
+        db_conn.close()
 
 
 @celery.task()
