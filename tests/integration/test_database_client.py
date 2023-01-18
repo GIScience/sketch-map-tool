@@ -39,3 +39,8 @@ def test_get_async_result_id(uuid):
     assert uuid1 == client.get_async_result_id(uuid, "sketch-map")
     assert uuid2 == client.get_async_result_id(uuid, "quality-report")
     client._delete_id_map(uuid)
+
+
+@patch("sketch_map_tool.database.client.db_conn", client.create_connection())
+def test_insert_files(files):
+    client._insert_files(files)
