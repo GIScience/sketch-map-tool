@@ -3,6 +3,7 @@ from io import BytesIO
 import cv2
 import geojson
 import pytest
+from werkzeug.datastructures import FileStorage
 
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from tests import FIXTURE_DIR
@@ -168,11 +169,11 @@ def detected_markings_cleaned():
         return geojson.load(file)
 
 
-# @pytest.fixture
-# def file(sketch_map):
-#     return File(filename="filename", mimetype="image/png", image=sketch_map)
+@pytest.fixture
+def file(sketch_map_buffer):
+    return FileStorage(stream=sketch_map_buffer, filename="filename")
 
 
-# @pytest.fixture
-# def files(file):
-#     return [file, file]
+@pytest.fixture
+def files(file):
+    return [file, file]

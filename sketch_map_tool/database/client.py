@@ -1,6 +1,7 @@
 import json
 
 import psycopg2
+from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
@@ -50,6 +51,28 @@ def _select_id_map(uuid) -> dict:
         return raw[0][0]
     else:
         raise UUIDNotFoundError("There are no tasks in the broker for UUID: " + uuid)
+
+
+def _insert_files(files) -> list[str]:
+    """Insert uploaded files as blob into the database and return primary keys"""
+    global db_conn
+    create_query = """
+    CREATE TABLE IF NOT EXISTS blob(
+        id serial PRIMARY KEY,
+        file_name VARCHAR,
+        file BYTEA
+        )
+        """
+    insert_query = "INSERT INTO blob(file_name, file) VALUES (%s, %s) RETURNING id"
+    data = [(secure_filename(file.filename), file.read()) for file in files]
+    with db_conn.cursor() as curs:
+        # executemany and fetchall does not work together
+        curs.execute(create_query)
+        ids = []
+        for d in data:
+            curs.execute(insert_query, d)
+            ids.append(curs.fetchone()[0])
+    return ids
 
 
 # Set and get request ID and type to Async Result IDs
