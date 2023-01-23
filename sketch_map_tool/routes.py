@@ -186,26 +186,24 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
             download_name = type_ + ".pdf"
             if task.successful():
                 file: BytesIO = task.get()
-                task.delete()
         case "sketch-map":
             mimetype = "application/pdf"
             download_name = type_ + ".pdf"
             if task.successful():
-                file: BytesIO = task.get()[0]  # return only the sketch map
-                # A built-in periodic task (celery.backend_cleanup) will delete this
-                # result after as certain time (result_expires).
+                sketch_map, map_frame = task.get()
+                file: BytesIO = sketch_map
+                # TODO: Save map frame to DB
+                # db_client.save_map_frame(map_frame)
         case "raster-results":
             mimetype = "application/zip"
             download_name = type_ + ".zip"
             if task.successful():
                 file = task.get()
-                task.delete()
         case "vector-results":
             mimetype = "application/geo+json"
             download_name = type_ + ".geojson"
             if task.successful():
                 file = BytesIO(geojson.dumps(task.get()).encode("utf-8"))
-                task.delete()
     return send_file(file, mimetype, download_name=download_name)
 
 
