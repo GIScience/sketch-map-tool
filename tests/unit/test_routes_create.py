@@ -68,6 +68,7 @@ def test_create_results_uuid(client, uuid, monkeypatch):
 
 
 @patch("sketch_map_tool.database.client.db_conn")
+@patch("sketch_map_tool.database.client.open_connection", lambda: None)
 def test_create_results_uuid_not_found(mock_conn, client, uuid):
     mock_curs = MagicMock()
     mock_curs.fetchall.return_value = []

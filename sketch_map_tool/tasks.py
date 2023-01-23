@@ -20,23 +20,17 @@ from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
 from sketch_map_tool.oqt_analyses import get_report
 from sketch_map_tool.wms import client as wms_client
 
-db_conn = None  # psycopg2 database connection
-
 
 @worker_process_init.connect
 def init_worker(**kwargs):
     """Initializing database connection for worker"""
-    # TODO: Use a connection pool instead of a single connection
-    global db_conn
-    db_conn = db_client.create_connection()
+    db_client.open_connection()
 
 
 @worker_process_shutdown.connect
 def shutdown_worker(**kwargs):
     """Closing database connection for worker"""
-    global db_conn
-    if db_conn:
-        db_conn.close()
+    db_client.close_connection()
 
 
 @celery.task()
@@ -86,6 +80,7 @@ def generate_digitized_results(files: list[tuple[BytesIO, str]]) -> str:
     uuid = args["uuid"]
     bbox = args["bbox"]
 
+    db_client.open_connection()
     id_ = db_client.get_async_result_id(uuid, "sketch-map")
     map_frame_buffer = celery.AsyncResult(id_).get()[1]  # Get map frame template
     map_frame = t_to_array(map_frame_buffer)
@@ -101,6 +96,7 @@ def generate_digitized_results(files: list[tuple[BytesIO, str]]) -> str:
         "vector-results": str(result_id_2),
     }
     db_client.set_async_result_ids(uuid, map_)
+    db_client.close_connection()
     return uuid
 
 

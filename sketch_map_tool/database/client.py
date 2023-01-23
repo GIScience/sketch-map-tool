@@ -1,27 +1,33 @@
 import json
 
 import psycopg2
+from psycopg2.extensions import connection
 from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import UUIDNotFoundError
 
-db_conn = None
+db_conn: connection | None = None
 
 
-def create_connection():
+def open_connection():
+    global db_conn
     raw = get_config_value("result-backend")
     dns = raw[3:]
-    connection = psycopg2.connect(dns)
-    connection.autocommit = True
-    return connection
+    db_conn = psycopg2.connect(dns)
+    db_conn.autocommit = True
+
+
+def close_connection():
+    global db_conn
+    if isinstance(db_conn, connection) and db_conn.closed is False:
+        db_conn.close()
 
 
 # QUERIES
 #
 def _insert_id_map(uuid: str, map_: dict):
-    global db_conn
     create_query = """
     CREATE TABLE IF NOT EXISTS uuid_map(
       uuid uuid PRIMARY KEY,
@@ -35,7 +41,6 @@ def _insert_id_map(uuid: str, map_: dict):
 
 
 def _delete_id_map(uuid: str):
-    global db_conn
     query = "DELETE FROM uuid_map WHERE uuid = %s"
     with db_conn.cursor() as curs:
         curs.execute(query, [uuid])
@@ -55,10 +60,9 @@ def _select_id_map(uuid) -> dict:
 
 def _insert_files(files) -> list[str]:
     """Insert uploaded files as blob into the database and return primary keys"""
-    global db_conn
     create_query = """
     CREATE TABLE IF NOT EXISTS blob(
-        id serial PRIMARY KEY,
+        id SERIAL PRIMARY KEY,
         file_name VARCHAR,
         file BYTEA
         )
