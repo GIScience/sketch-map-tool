@@ -19,6 +19,8 @@ def make_flask() -> Flask:
             "result_chord_join_timeout": 10.0,  # default: 3.0 seconds
             "result_chord_retry_interval": 3.0,  # default: 1.0 seconds
             "accept_content": ["application/json", "application/x-python-serialize"],
+            # Reserve at most one extra task for every worker process.
+            "worker_prefetch_multiplier": 1,
         }
     )
 
