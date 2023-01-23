@@ -43,6 +43,7 @@ types-redis = "^4.3.21.3"
 vcrpy = "^4.2.1"
 pytest-celery = "^0.0.0"
 flower = "^1.2.0"
+locust = "^2.14.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
