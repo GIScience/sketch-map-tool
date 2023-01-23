@@ -21,6 +21,8 @@ def make_flask() -> Flask:
             "accept_content": ["application/json", "application/x-python-serialize"],
             # Reserve at most one extra task for every worker process.
             "worker_prefetch_multiplier": 1,
+            # Avoid errors due to cached db connections going stale through inactivity
+            "database_short_lived_sessions": True,
         }
     )
 
