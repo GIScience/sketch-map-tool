@@ -179,27 +179,33 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
     id_ = db_client.get_async_result_id(uuid, type_)
     task = celery_app.AsyncResult(id_)
 
+    # TODO: handle task.successful is false for each case
     match type_:
         case "quality-report":
             mimetype = "application/pdf"
             download_name = type_ + ".pdf"
             if task.successful():
                 file: BytesIO = task.get()
+                task.delete()
         case "sketch-map":
             mimetype = "application/pdf"
             download_name = type_ + ".pdf"
             if task.successful():
                 file: BytesIO = task.get()[0]  # return only the sketch map
+                # A built-in periodic task (celery.backend_cleanup) will delete this
+                # result after as certain time (result_expires).
         case "raster-results":
             mimetype = "application/zip"
             download_name = type_ + ".zip"
             if task.successful():
                 file = task.get()
+                task.delete()
         case "vector-results":
             mimetype = "application/geo+json"
             download_name = type_ + ".geojson"
             if task.successful():
                 file = BytesIO(geojson.dumps(task.get()).encode("utf-8"))
+                task.delete()
     return send_file(file, mimetype, download_name=download_name)
 
 
