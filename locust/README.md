@@ -16,10 +16,8 @@ At the moment you can set these env variables:
 ```bash
 LOCUST_NUM_FILES=1
 LOCUST_MAP_FILENAME="sketch-map.png"
-
-# To be added:
-#     host = 'http://localhost:8081'
-#     wait_time = constant(6)
-#     api_status_wait_time = 5
-#     api_status_retries = 30
+LOCUST_FLASK_HOST="http://localhost:8081"
+LOCUST_WAIT_TIME=6
+LOCUST_API_STATUS_WAIT_TIME=5
+LOCUST_API_STATUS_RETRIES=30
 ```
