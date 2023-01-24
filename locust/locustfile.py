@@ -1,4 +1,3 @@
-# TODO install locust
 import logging
 import os
 from time import sleep
@@ -17,10 +16,10 @@ def validate_uuid(uuid: str):
 
 
 class WorkflowCycle(HttpUser):
-    host = "http://localhost:8081"
-    wait_time = constant(6)
-    api_status_wait_time = 5
-    api_status_retries = 30
+    host = os.getenv("LOCUST_FLASK_HOST", default="http://localhost:8081")
+    wait_time = constant(int(os.getenv("LOCUST_WAIT_TIME", default=6)))
+    api_status_wait_time = int(os.getenv("LOCUST_API_STATUS_WAIT_TIME", default=5))
+    api_status_retries = int(os.getenv("LOCUST_API_STATUS_RETRIES", default=30))
 
     @task
     def create(self):
@@ -41,7 +40,7 @@ class WorkflowCycle(HttpUser):
 
     @task
     def digitize(self):
-        num_files = os.getenv("LOCUST_NUM_FILES", default=1)
+        num_files = int(os.getenv("LOCUST_NUM_FILES", default=1))
         map_filename = os.getenv("LOCUST_MAP_FILENAME", default="sketch-map.png")
         files = [("file", open(map_filename, "rb")) for _ in range(num_files)]
         digitize_post = self.client.post("/digitize/results", files=files)
