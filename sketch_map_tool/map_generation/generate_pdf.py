@@ -37,14 +37,13 @@ def generate_pdf(  # noqa: C901
     georeferencing, a scale, copyright information, and objects to help the feature detection
     during the upload processing.
 
-    # Generate emplate image (PNG) as Pillow object for later upload processing
+    Also generate template image (PNG) as Pillow object for later upload processing
 
-    :output_path: Path under which the output PDF should be stored.
     :param map_image_input: Image of the map to be used as sketch map.
-    :param bbox: Bounding box, needed for naming, scale calculation and  the code for
-                 georeferencing.
-    :param paper_format: Paper format of the PDF document.
-    :return: Path to the generated PDF file.
+    :param qr_code: QR code to be included on the sketch map for georeferencing.
+    :param format_: Paper format of the PDF document.
+    :param scale: Ratio for the scale in the sketch map legend
+    :return: Sketch Map PDF, Template image
     """
     map_width_px, map_height_px = map_image_input.size
     map_margin = format_.map_margin
