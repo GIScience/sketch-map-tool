@@ -1,4 +1,5 @@
 import json
+from io import BytesIO
 
 import psycopg2
 from psycopg2.extensions import connection
@@ -94,13 +95,13 @@ def _insert_files(files) -> list[int]:
     return ids
 
 
-def _select_file(id_: int) -> memoryview:
+def _select_file(id_: int) -> BytesIO:
     query = "SELECT file FROM blob WHERE id = %s"
     with db_conn.cursor() as curs:
         curs.execute(query, [id_])
         raw = curs.fetchone()
         if raw:
-            return raw[0]
+            return BytesIO(raw[0])
         else:
             raise FileNotFoundError_(
                 "There is no file in the database with the id: " + str(id_)
