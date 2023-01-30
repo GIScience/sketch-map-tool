@@ -111,9 +111,9 @@ def digitize_results_post() -> Response:
     # if we want the filenames we must construct a list of tuples or dicts
     # TODO: Write files to database
     files = request.files.getlist("file")
-    id_ = tasks.generate_digitized_results(
-        [(BytesIO(file.read()), secure_filename(file.filename)) for file in files]
-    )
+    with db_client.DbConn():
+        ids = db_client.write_files(files)
+    id_ = tasks.generate_digitized_results(ids)
     return redirect(url_for("digitize_results_get", uuid=id_))
 
 
