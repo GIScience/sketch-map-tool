@@ -10,5 +10,13 @@ class OQTReportError(Exception):
     pass
 
 
-class UUIDNotFoundError(Exception):
+class DatabaseError(Exception):
+    pass
+
+
+class UUIDNotFoundError(DatabaseError):
+    pass
+
+
+class FileNotFoundError_(DatabaseError):
     pass

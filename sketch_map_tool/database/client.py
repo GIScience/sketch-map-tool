@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
-from sketch_map_tool.exceptions import UUIDNotFoundError
+from sketch_map_tool.exceptions import FileNotFoundError_, UUIDNotFoundError
 
 db_conn: connection | None = None
 
@@ -79,6 +79,25 @@ def _insert_files(files) -> list[str]:
     return ids
 
 
+def _select_file(id_: int) -> memoryview:
+    query = "SELECT file FROM blob WHERE id = %s"
+    with db_conn.cursor() as curs:
+        curs.execute(query, [id_])
+        raw = curs.fetchone()
+        if raw:
+            return raw[0]
+        else:
+            raise FileNotFoundError_(
+                "There is no file in the database with the id: " + str(id_)
+            )
+
+
+def _delete_file(id_: int):
+    query = "DELETE FROM blob WHERE id = %s"
+    with db_conn.cursor() as curs:
+        curs.execute(query, [id_])
+
+
 # Set and get request ID and type to Async Result IDs
 #
 def get_async_result_id(request_uuid: str, request_type: REQUEST_TYPES) -> str:
@@ -109,3 +128,13 @@ def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
         _insert_id_map(request_uuid, map_)
     finally:
         close_connection()
+
+
+def read_file(id_: int) -> memoryview:
+    """Get an uploaded file stored in the database by ID."""
+    return _select_file(id_)
+
+
+def write_files(files) -> list[int]:
+    """Write uploaded files to the database and return IDs (primary keys)"""
+    return _insert_files(files)
