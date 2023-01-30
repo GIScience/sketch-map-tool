@@ -5,6 +5,7 @@ import geojson
 import pytest
 from werkzeug.datastructures import FileStorage
 
+from sketch_map_tool.database import client as db_client
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from tests import FIXTURE_DIR
 
@@ -22,6 +23,15 @@ def pytest_addoption(parser):
         help="save created reports in parametrized test",
         default=False,
     )
+
+
+@pytest.fixture()
+def db_conn():
+    # setup
+    db_client.open_connection()
+    yield None
+    # teardown
+    db_client.close_connection()
 
 
 @pytest.fixture
@@ -177,3 +187,14 @@ def file(sketch_map_buffer):
 @pytest.fixture
 def files(file):
     return [file, file]
+
+
+@pytest.fixture()
+def file_ids(files, db_conn):
+    """IDs of uploaded files stored in the database."""
+    # setup
+    ids = db_client._insert_files(files)
+    yield ids
+    # teardown
+    for i in ids:
+        db_client._delete_file(i)
