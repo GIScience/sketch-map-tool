@@ -4,6 +4,7 @@ import pytest
 from psycopg2.extensions import connection
 
 from sketch_map_tool.database import client
+from sketch_map_tool.exceptions import FileNotFoundError_
 
 
 @pytest.fixture()
@@ -13,6 +14,17 @@ def db_conn():
     yield None
     # teardown
     client.close_connection()
+
+
+@pytest.fixture()
+def file_ids(files, db_conn):
+    """IDs of uploaded files stored in the database."""
+    # setup
+    ids = client._insert_files(files)
+    yield ids
+    # teardown
+    for i in ids:
+        client._delete_file(i)
 
 
 def test_open_connection():
@@ -67,3 +79,24 @@ def test_get_async_result_id(uuid, db_conn):
 def test_insert_files(files, db_conn):
     ids = client._insert_files(files)
     assert len(ids) == 2
+    assert isinstance(ids[0], int)
+    # tear down
+    for i in ids:
+        client._delete_file(i)
+
+
+def test_delete_file(files, db_conn):
+    ids = client._insert_files(files)
+    for i in ids:
+        # No error should be raised
+        client._delete_file(i)
+
+
+def test_read_files(file_ids, db_conn):
+    file = client._select_file(file_ids[0])
+    assert isinstance(file, memoryview)
+
+
+def test_read_files_file_not_found(files, db_conn):
+    with pytest.raises(FileNotFoundError_):
+        client._select_file(1000)
