@@ -58,7 +58,7 @@ def _select_id_map(uuid) -> dict:
         raise UUIDNotFoundError("There are no tasks in the broker for UUID: " + uuid)
 
 
-def _insert_files(files) -> list[str]:
+def _insert_files(files) -> list[int]:
     """Insert uploaded files as blob into the database and return primary keys"""
     create_query = """
     CREATE TABLE IF NOT EXISTS blob(
