@@ -74,19 +74,21 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
 # GENERATE DIGITIZED RESULTS
 #
-def generate_digitized_results(files: list[tuple[BytesIO, str]]) -> str:
+def generate_digitized_results(file_ids: list[int]) -> str:
 
-    args = upload_processing.read_qr_code(t_to_array(files[0][0]))
+    with db_client.DbConn():
+        file = db_client.read_file(file_ids[0])
+    args = upload_processing.read_qr_code(t_to_array(file))
     uuid = args["uuid"]
     bbox = args["bbox"]
 
     with db_client.DbConn():
         id_ = db_client.get_async_result_id(uuid, "sketch-map")
     map_frame_buffer = celery.AsyncResult(id_).get()[1]  # Get map frame template
-    map_frame = t_to_array(map_frame_buffer)
+    map_frame = t_to_array(map_frame_buffer.read())
 
-    result_id_1 = georeference_sketch_maps(files, map_frame, bbox)
-    result_id_2 = digitize_sketches(files, map_frame, bbox)
+    result_id_1 = georeference_sketch_maps(file_ids, map_frame, bbox)
+    result_id_2 = digitize_sketches(file_ids, map_frame, bbox)
 
     # Unique id for current request
     uuid = str(uuid4())
@@ -109,20 +111,25 @@ def generate_digitized_results(files: list[tuple[BytesIO, str]]) -> str:
 # group -> group of tasks (parallel)
 #
 # fmt: off
-def georeference_sketch_maps(files, map_frame, bbox) -> str:
+def georeference_sketch_maps(file_ids, map_frame, bbox) -> str:
 
-    def c_process(sketch_map: BytesIO) -> chain:
+    def c_process(sketch_map: int) -> chain:
         """Process a Sketch Map."""
-        return (t_to_array.s(sketch_map) | t_clip.s(map_frame) | t_georeference.s(bbox))
+        return (
+                t_read_file.s(sketch_map)
+                | t_to_array.s()
+                | t_clip.s(map_frame)
+                | t_georeference.s(bbox)
+                )
 
     def c_workflow(files) -> chain:
         """Start processing workflow for each file."""
-        return (group([c_process(file) for (file, _) in files]) | t_zip.s())
+        return (group([c_process(i) for i in file_ids]) | t_zip.s())
 
-    return c_workflow(files).apply_async().id
+    return c_workflow(file_ids).apply_async().id
 
 
-def digitize_sketches(files, map_frame, bbox) -> str:
+def digitize_sketches(file_ids, map_frame, bbox) -> str:
 
     def c_digitize(color: str, name: str) -> chain:
         """Digitize one color of a Sketch Map."""
@@ -138,23 +145,25 @@ def digitize_sketches(files, map_frame, bbox) -> str:
                 | t_enrich.s({"color": color, "name": name})
                 )
 
-    def c_process(sketch_map: BytesIO, name: str) -> chain:
+    def c_process(sketch_map: int, name: str) -> chain:
         """Process a Sketch Map."""
         return (
-            t_to_array.s(sketch_map)
+            t_read_file.s(sketch_map)
+            | t_to_array.s()
             | t_clip.s(map_frame)
             | group([c_digitize(color, name) for color in COLORS])
             | t_merge.s()
         )
 
-    def c_workflow(files) -> chain:
+    def c_workflow(file_ids: list[int]) -> chain:
         """Start processing workflow for each file."""
         return (
-                group([c_process(file, name) for (file, name) in files])
+                # TODO: replace mock by actual file name
+                group([c_process(i, "mock") for i in file_ids])
                 | t_merge.s()
                 )
 
-    return c_workflow(files).apply_async().id
+    return c_workflow(file_ids).apply_async().id
 
 # Celery Tasks
 #
@@ -164,13 +173,16 @@ def digitize_sketches(files, map_frame, bbox) -> str:
 
 
 @celery.task()
-def t_to_array(buffer: BytesIO) -> AsyncResult | NDArray:
-    buffer.seek(0)
-    return cv2.imdecode(
-        np.fromstring(buffer.read(), dtype="uint8"), cv2.IMREAD_UNCHANGED
-    )
+def t_read_file(id_: int) -> bytes:
+    return db_client.read_file(id_)
 
 
+@celery.task()
+def t_to_array(buffer: bytes) -> AsyncResult | NDArray:
+    return cv2.imdecode(np.fromstring(buffer, dtype="uint8"), cv2.IMREAD_UNCHANGED)
+
+
+# TODO: Remove unused func
 def t_to_buffer(geojson_object: GeoJSON) -> AsyncResult | BytesIO:
     return BytesIO(geojson.dumps(geojson_object).encode("utf-8"))
 
