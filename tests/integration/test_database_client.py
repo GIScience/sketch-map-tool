@@ -78,11 +78,13 @@ def test_get_async_result_id(uuid, db_conn):
 
 def test_insert_files(files, db_conn):
     ids = client._insert_files(files)
-    assert len(ids) == 2
-    assert isinstance(ids[0], int)
-    # tear down
-    for i in ids:
-        client._delete_file(i)
+    try:
+        assert len(ids) == 2
+        assert isinstance(ids[0], int)
+    finally:
+        # tear down
+        for i in ids:
+            client._delete_file(i)
 
 
 def test_delete_file(files, db_conn):
@@ -99,4 +101,4 @@ def test_read_files(file_ids, db_conn):
 
 def test_read_files_file_not_found(files, db_conn):
     with pytest.raises(FileNotFoundError_):
-        client._select_file(1000)
+        client._select_file(1000000)
