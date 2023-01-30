@@ -7,26 +7,6 @@ from sketch_map_tool.database import client
 from sketch_map_tool.exceptions import FileNotFoundError_
 
 
-@pytest.fixture()
-def db_conn():
-    # setup
-    client.open_connection()
-    yield None
-    # teardown
-    client.close_connection()
-
-
-@pytest.fixture()
-def file_ids(files, db_conn):
-    """IDs of uploaded files stored in the database."""
-    # setup
-    ids = client._insert_files(files)
-    yield ids
-    # teardown
-    for i in ids:
-        client._delete_file(i)
-
-
 def test_open_connection():
     client.db_conn = None
     client.open_connection()
