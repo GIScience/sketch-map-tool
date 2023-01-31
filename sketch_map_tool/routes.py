@@ -75,7 +75,8 @@ def create_results_post() -> Response:
         "sketch-map": str(task_sketch_map.id),
         "quality-report": str(task_quality_report.id),
     }
-    db_client.set_async_result_ids(uuid, map_)
+    with db_client.DbConn():
+        db_client.set_async_result_ids(uuid, map_)
     return redirect(url_for("create_results_get", uuid=uuid))
 
 
@@ -86,8 +87,9 @@ def create_results_get(uuid: str | None = None) -> Response | str:
         return redirect(url_for("create"))
     validate_uuid(uuid)
     # Check if celery tasks for UUID exists
-    _ = db_client.get_async_result_id(uuid, "sketch-map")
-    _ = db_client.get_async_result_id(uuid, "quality-report")
+    with db_client.DbConn():
+        _ = db_client.get_async_result_id(uuid, "sketch-map")
+        _ = db_client.get_async_result_id(uuid, "quality-report")
     return render_template("create-results.html")
 
 
@@ -129,7 +131,8 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    id_ = db_client.get_async_result_id(uuid, type_)
+    with db_client.DbConn():
+        id_ = db_client.get_async_result_id(uuid, type_)
     task = celery_app.AsyncResult(id_)
 
     href = None
@@ -176,7 +179,8 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    id_ = db_client.get_async_result_id(uuid, type_)
+    with db_client.DbConn():
+        id_ = db_client.get_async_result_id(uuid, type_)
     task = celery_app.AsyncResult(id_)
 
     match type_:

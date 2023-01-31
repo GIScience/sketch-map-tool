@@ -119,12 +119,7 @@ def get_async_result_id(request_uuid: str, request_type: REQUEST_TYPES) -> str:
     """Get the Celery Async Result ID for a request."""
     # Do not call this function from a Celery worker process.
     # Celery worker processes open up db connection during initialization.
-    open_connection()
-    try:
-        map_ = _select_id_map(request_uuid)
-    finally:
-        close_connection()
-
+    map_ = _select_id_map(request_uuid)
     try:
         return map_[request_type]  # AsyncResult ID
     except KeyError as error:
@@ -138,11 +133,7 @@ def get_async_result_id(request_uuid: str, request_type: REQUEST_TYPES) -> str:
 def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
     # Do not call this function from a Celery worker process.
     # Celery worker processes open up db connection during initialization.
-    open_connection()
-    try:
-        _insert_id_map(request_uuid, map_)
-    finally:
-        close_connection()
+    _insert_id_map(request_uuid, map_)
 
 
 def read_file(id_: int) -> memoryview:
