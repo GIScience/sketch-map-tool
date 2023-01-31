@@ -80,7 +80,8 @@ def generate_digitized_results(files: list[tuple[BytesIO, str]]) -> str:
     uuid = args["uuid"]
     bbox = args["bbox"]
 
-    id_ = db_client.get_async_result_id(uuid, "sketch-map")
+    with db_client.DbConn():
+        id_ = db_client.get_async_result_id(uuid, "sketch-map")
     map_frame_buffer = celery.AsyncResult(id_).get()[1]  # Get map frame template
     map_frame = t_to_array(map_frame_buffer)
 
@@ -94,7 +95,8 @@ def generate_digitized_results(files: list[tuple[BytesIO, str]]) -> str:
         "raster-results": str(result_id_1),
         "vector-results": str(result_id_2),
     }
-    db_client.set_async_result_ids(uuid, map_)
+    with db_client.DbConn():
+        db_client.set_async_result_ids(uuid, map_)
     return uuid
 
 
