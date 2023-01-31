@@ -21,8 +21,23 @@ def open_connection():
 
 def close_connection():
     global db_conn
-    if isinstance(db_conn, connection) and db_conn.closed is False:
+    if isinstance(db_conn, connection) and db_conn.closed == 0:  # 0 if the conn is open
         db_conn.close()
+
+
+class DbConn:
+    """
+    Context manager for database connection.
+
+    This context manager is intended to be used in the flask worker.
+    Celery manages connection to the database during initialization of the workers.
+    """
+
+    def __enter__(self):
+        open_connection()
+
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        close_connection()
 
 
 # QUERIES
