@@ -44,7 +44,15 @@ def test_close_closed_connection():
 def test_close_open_connection(db_conn):
     assert isinstance(client.db_conn, connection)
     client.close_connection()
-    assert client.db_conn.closed == 0
+    assert client.db_conn.closed != 0  # 0 if the connection is open
+
+
+def test_DbConn():
+    assert client.db_conn is None or client.db_conn != 0
+    with client.DbConn():
+        assert isinstance(client.db_conn, connection)
+        assert client.db_conn.closed == 0  # 0 if the connection is open
+    assert client.db_conn.closed != 0
 
 
 def test_insert_uuid_map(uuid, db_conn):
