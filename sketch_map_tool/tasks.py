@@ -111,7 +111,7 @@ def generate_digitized_results(file_ids: list[int]) -> str:
 # group -> group of tasks (parallel)
 #
 # fmt: off
-def georeference_sketch_maps(file_ids, map_frame, bbox) -> str:
+def georeference_sketch_maps(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> str:
 
     def c_process(sketch_map: int) -> chain:
         """Process a Sketch Map."""
@@ -122,14 +122,14 @@ def georeference_sketch_maps(file_ids, map_frame, bbox) -> str:
                 | t_georeference.s(bbox)
                 )
 
-    def c_workflow(files) -> chain:
+    def c_workflow(file_ids: list[int]) -> chain:
         """Start processing workflow for each file."""
         return (group([c_process(i) for i in file_ids]) | t_zip.s())
 
     return c_workflow(file_ids).apply_async().id
 
 
-def digitize_sketches(file_ids, map_frame, bbox) -> str:
+def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> str:
 
     def c_digitize(color: str, name: str) -> chain:
         """Digitize one color of a Sketch Map."""
