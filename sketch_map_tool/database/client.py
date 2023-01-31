@@ -122,6 +122,19 @@ def _select_file(id_: int) -> bytes:
             )
 
 
+def _select_file_name(id_: int) -> str:
+    query = "SELECT file_name FROM blob WHERE id = %s"
+    with db_conn.cursor() as curs:
+        curs.execute(query, [id_])
+        raw = curs.fetchone()
+        if raw:
+            return raw[0]
+        else:
+            raise FileNotFoundError_(
+                "There is no file in the database with the id: " + str(id_)
+            )
+
+
 def _delete_file(id_: int):
     query = "DELETE FROM blob WHERE id = %s"
     with db_conn.cursor() as curs:
@@ -150,6 +163,11 @@ def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
 def read_file(id_: int) -> bytes:
     """Get an uploaded file stored in the database by ID."""
     return _select_file(id_)
+
+
+def get_file_name(id_: int) -> str:
+    """Get an uploaded file name of a file stored in the database by ID."""
+    return _select_file_name(id_)
 
 
 def write_files(files) -> list[int]:

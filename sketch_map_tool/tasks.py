@@ -113,10 +113,10 @@ def generate_digitized_results(file_ids: list[int]) -> str:
 # fmt: off
 def georeference_sketch_maps(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> str:
 
-    def c_process(sketch_map: int) -> chain:
+    def c_process(sketch_map_id: int) -> chain:
         """Process a Sketch Map."""
         return (
-                t_read_file.s(sketch_map)
+                t_read_file.s(sketch_map_id)
                 | t_to_array.s()
                 | t_clip.s(map_frame)
                 | t_georeference.s(bbox)
@@ -145,33 +145,32 @@ def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> st
                 | t_enrich.s({"color": color, "name": name})
                 )
 
-    def c_process(sketch_map: int, name: str) -> chain:
+    def c_process(sketch_map_id: int, name: str) -> chain:
         """Process a Sketch Map."""
         return (
-            t_read_file.s(sketch_map)
+            t_read_file.s(sketch_map_id)
             | t_to_array.s()
             | t_clip.s(map_frame)
             | group([c_digitize(color, name) for color in COLORS])
             | t_merge.s()
         )
 
-    def c_workflow(file_ids: list[int]) -> chain:
+    def c_workflow(file_ids: list[int], file_names: list[str]) -> chain:
         """Start processing workflow for each file."""
         return (
-                # TODO: replace mock by actual file name
-                group([c_process(i, "mock") for i in file_ids])
+                group([c_process(i, n) for i, n in zip(file_ids, file_names)])
                 | t_merge.s()
                 )
+    with db_client.DbConn():
+        file_names = [db_client.get_file_name(i) for i in file_ids]
+    return c_workflow(file_ids, file_names).apply_async().id
 
-    return c_workflow(file_ids).apply_async().id
 
 # Celery Tasks
 #
 # t_ -> task
 #
 # fmt: on
-
-
 @celery.task()
 def t_read_file(id_: int) -> bytes:
     return db_client.read_file(id_)
