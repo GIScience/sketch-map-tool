@@ -31,6 +31,20 @@ def mock_tasks(monkeypatch):
     )
 
 
+@pytest.fixture()
+def mock_DbConn(uuid, monkeypatch):
+    """Mock DbConn context manager."""
+
+    class MockDbConn:
+        def __enter__(self):
+            pass
+
+        def __exit__(self, exc_type, exc_value, exc_tb):
+            pass
+
+    monkeypatch.setattr("sketch_map_tool.routes.db_client.DbConn", MockDbConn)
+
+
 def test_create(client):
     resp = client.get("/create")
     assert resp.status_code == 200
@@ -42,7 +56,9 @@ def test_create_result_get(client):
     assert resp.status_code == 302  # Redirect
 
 
-def test_create_result_post(client, mock_tasks, monkeypatch, bbox, bbox_wgs84):
+def test_create_result_post(
+    client, mock_tasks, mock_DbConn, monkeypatch, bbox, bbox_wgs84
+):
     """Redirect to /create/results/<uuid>"""
     monkeypatch.setattr(
         "sketch_map_tool.database.client.set_async_result_ids", lambda x, y: None
@@ -59,7 +75,7 @@ def test_create_result_post(client, mock_tasks, monkeypatch, bbox, bbox_wgs84):
     assert resp.status_code == 302
 
 
-def test_create_results_uuid(client, uuid, monkeypatch):
+def test_create_results_uuid(client, uuid, monkeypatch, mock_DbConn):
     monkeypatch.setattr(
         "sketch_map_tool.routes.db_client.get_async_result_id", lambda a, b: None
     )
