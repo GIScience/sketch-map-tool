@@ -65,33 +65,63 @@ def test_get_async_result_id(uuid, db_conn):
 
 
 def test_insert_files(files, db_conn):
-    ids = client._insert_files(files)
+    ids = client.insert_files(files)
     try:
         assert len(ids) == 2
         assert isinstance(ids[0], int)
     finally:
         # tear down
         for i in ids:
-            client._delete_file(i)
+            client.delete_file(i)
 
 
 def test_delete_file(files, db_conn):
-    ids = client._insert_files(files)
+    ids = client.insert_files(files)
     for i in ids:
         # No error should be raised
-        client._delete_file(i)
+        client.delete_file(i)
 
 
 def test_select_file(file_ids, db_conn):
-    file = client._select_file(file_ids[0])
+    file = client.select_file(file_ids[0])
     assert isinstance(file, bytes)
 
 
 def test_select_file_file_not_found(files, db_conn):
     with pytest.raises(FileNotFoundError_):
-        client._select_file(1000000)
+        client.select_file(1000000)
 
 
 def test_select_file_name(file_ids, db_conn):
-    file = client._select_file_name(file_ids[0])
+    file = client.select_file_name(file_ids[0])
     assert isinstance(file, str)
+
+
+def test_select_map_frame(uuids, db_conn):
+    file = client.select_map_frame(uuids[0])
+    assert isinstance(file, bytes)
+
+
+def test_select_map_frame_file_not_found(db_conn):
+    with pytest.raises(FileNotFoundError_):
+        client.select_map_frame(uuid4())
+
+
+def test_write_map_frame(map_frame_buffer, db_conn):
+    uuid = uuid4()
+    client.insert_map_frame(map_frame_buffer, uuid)
+    try:
+        file = client.select_map_frame(uuid)
+        assert isinstance(file, bytes)
+    finally:
+        # tear down
+        client.delete_map_frame(uuid)
+
+
+def test_delete_map_frame(map_frame_buffer, db_conn):
+    uuid = uuid4()
+    client.insert_map_frame(map_frame_buffer, uuid)
+    client.select_map_frame(uuid)  # Should not raise a FileNotFoundError_
+    client.delete_map_frame(uuid)
+    with pytest.raises(FileNotFoundError_):
+        client.select_map_frame(uuid)

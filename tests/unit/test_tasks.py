@@ -36,11 +36,11 @@ def mock_get_task_id(monkeypatch, uuid):
 
 @vcr.use_cassette()
 def test_generate_sketch_map(monkeypatch, uuid, bbox, format_, size, scale):
-    map_pdf, map_img = tasks.generate_sketch_map(
-        uuid, bbox, format_, "landscape", size, scale
+    monkeypatch.setattr(
+        "sketch_map_tool.tasks.db_client.insert_map_frame", lambda id_, field: uuid
     )
+    map_pdf = tasks.generate_sketch_map(uuid, bbox, format_, "landscape", size, scale)
     assert isinstance(map_pdf, BytesIO)
-    assert isinstance(map_img, BytesIO)
 
 
 @vcr.use_cassette("test_get_report")

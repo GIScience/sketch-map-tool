@@ -44,7 +44,7 @@ def generate_sketch_map(
     size: Size,
     scale: float,
 ) -> BytesIO | AsyncResult:
-    """Generate a sketch map as PDF."""
+    """Generate and returns a sketch map as PDF and stores the map frame in DB."""
     raw = wms_client.get_map_image(bbox, size)
     map_image = wms_client.as_image(raw)
     qr_code_ = map_generation.qr_code(
@@ -61,7 +61,8 @@ def generate_sketch_map(
         format_,
         scale,
     )
-    return map_pdf, map_img
+    db_client.insert_map_frame(map_img, uuid)
+    return map_pdf
 
 
 @celery.task()
@@ -79,14 +80,13 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 def generate_digitized_results(file_ids: list[int]) -> str:
 
     with db_client.DbConn():
-        file = db_client.read_file(file_ids[0])
+        file = db_client.select_file(file_ids[0])
     args = upload_processing.read_qr_code(t_to_array(file))
     uuid = args["uuid"]
     bbox = args["bbox"]
 
     with db_client.DbConn():
-        id_ = db_client.get_async_result_id(uuid, "sketch-map")
-    map_frame_buffer = celery.AsyncResult(id_).get()[1]  # Get map frame template
+        map_frame_buffer = BytesIO(db_client.select_map_frame(UUID(uuid)))
     map_frame = t_to_array(map_frame_buffer.read())
 
     result_id_1 = georeference_sketch_maps(file_ids, map_frame, bbox)
@@ -145,7 +145,7 @@ def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> st
                 )
 
     with db_client.DbConn():
-        file_names = [db_client.get_file_name(i) for i in file_ids]
+        file_names = [db_client.select_file_name(i) for i in file_ids]
     return c_workflow(file_ids, file_names).apply_async().id
 
 
@@ -193,7 +193,7 @@ def t_digitize(
 
 @celery.task()
 def t_read_file(id_: int) -> bytes:
-    return db_client.read_file(id_)
+    return db_client.select_file(id_)
 
 
 @celery.task()

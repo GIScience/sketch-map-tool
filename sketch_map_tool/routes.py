@@ -8,7 +8,6 @@ import geojson
 
 # from celery import chain, group
 from flask import Response, redirect, render_template, request, send_file, url_for
-from werkzeug.utils import secure_filename
 
 from sketch_map_tool import celery_app, definitions
 from sketch_map_tool import flask_app as app
@@ -107,7 +106,7 @@ def digitize_results_post() -> Response:
         return redirect(url_for("digitize"))
     files = request.files.getlist("file")
     with db_client.DbConn():
-        ids = db_client.write_files(files)
+        ids = db_client.insert_files(files)
     id_ = tasks.generate_digitized_results(ids)
     return redirect(url_for("digitize_results_get", uuid=id_))
 
@@ -188,7 +187,7 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
             mimetype = "application/pdf"
             download_name = type_ + ".pdf"
             if task.successful():
-                file: BytesIO = task.get()[0]  # return only the sketch map
+                file: BytesIO = task.get()
         case "raster-results":
             mimetype = "application/zip"
             download_name = type_ + ".zip"
