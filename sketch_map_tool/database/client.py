@@ -109,7 +109,7 @@ def _insert_files(files) -> list[int]:
     return ids
 
 
-def _select_file(id_: int) -> memoryview:
+def _select_file(id_: int) -> bytes:
     query = "SELECT file FROM blob WHERE id = %s"
     with db_conn.cursor() as curs:
         curs.execute(query, [id_])
@@ -147,7 +147,7 @@ def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
     _insert_id_map(request_uuid, map_)
 
 
-def read_file(id_: int) -> memoryview:
+def read_file(id_: int) -> bytes:
     """Get an uploaded file stored in the database by ID."""
     return _select_file(id_)
 
