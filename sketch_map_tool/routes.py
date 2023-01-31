@@ -105,11 +105,6 @@ def digitize_results_post() -> Response:
     # No files uploaded
     if "file" not in request.files:
         return redirect(url_for("digitize"))
-    # TODO FileStorage seems not to be serializable -> Error too much Recursion
-    # the map function transforms the list of FileStorage Objects to a list of bytes
-    # not sure if this is the best approach but is accepted by celery task
-    # if we want the filenames we must construct a list of tuples or dicts
-    # TODO: Write files to database
     files = request.files.getlist("file")
     with db_client.DbConn():
         ids = db_client.write_files(files)
