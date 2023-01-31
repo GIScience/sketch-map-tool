@@ -1,5 +1,4 @@
 import json
-from io import BytesIO
 
 import psycopg2
 from psycopg2.extensions import connection
@@ -10,6 +9,21 @@ from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import FileNotFoundError_, UUIDNotFoundError
 
 db_conn: connection | None = None
+
+
+def bytea2bytes(value, cur):
+    """Cast memoryview to binary."""
+    m = psycopg2.BINARY(value, cur)
+    if m is not None:
+        return m.tobytes()
+
+
+# psycopg2 returns memoryview when reading blobs from DB. We need binary since
+# memoryview can not be pickled which is a requirement for result of a celery task.
+BYTEA2BYTES = psycopg2.extensions.new_type(
+    psycopg2.BINARY.values, "BYTEA2BYTES", bytea2bytes
+)
+psycopg2.extensions.register_type(BYTEA2BYTES)
 
 
 def open_connection():
@@ -95,13 +109,13 @@ def _insert_files(files) -> list[int]:
     return ids
 
 
-def _select_file(id_: int) -> BytesIO:
+def _select_file(id_: int) -> memoryview:
     query = "SELECT file FROM blob WHERE id = %s"
     with db_conn.cursor() as curs:
         curs.execute(query, [id_])
         raw = curs.fetchone()
         if raw:
-            return BytesIO(raw[0])
+            return raw[0]
         else:
             raise FileNotFoundError_(
                 "There is no file in the database with the id: " + str(id_)

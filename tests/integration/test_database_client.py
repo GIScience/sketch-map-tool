@@ -1,4 +1,3 @@
-from io import BytesIO
 from uuid import uuid4
 
 import pytest
@@ -85,7 +84,7 @@ def test_delete_file(files, db_conn):
 
 def test_read_files(file_ids, db_conn):
     file = client._select_file(file_ids[0])
-    assert isinstance(file, BytesIO)
+    assert isinstance(file, bytes)
 
 
 def test_read_files_file_not_found(files, db_conn):
