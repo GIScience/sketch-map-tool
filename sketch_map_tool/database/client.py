@@ -1,4 +1,6 @@
 import json
+from io import BytesIO
+from uuid import UUID
 
 import psycopg2
 from psycopg2.extensions import connection
@@ -88,7 +90,25 @@ def _select_id_map(uuid) -> dict:
         raise UUIDNotFoundError("There are no tasks in the broker for UUID: " + uuid)
 
 
-def _insert_files(files) -> list[int]:
+def get_async_result_id(request_uuid: str, request_type: REQUEST_TYPES) -> str:
+    """Get the Celery Async Result IDs for a request."""
+    map_ = _select_id_map(request_uuid)
+    try:
+        return map_[request_type]  # AsyncResult ID
+    except KeyError as error:
+        raise UUIDNotFoundError(
+            "There are no tasks in the broker for UUID and request type: {}, {}".format(
+                request_uuid, request_type
+            )
+        ) from error
+
+
+def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
+    """Set the Celery Result IDs for a request."""
+    _insert_id_map(request_uuid, map_)
+
+
+def insert_files(files) -> list[int]:
     """Insert uploaded files as blob into the database and return primary keys"""
     create_query = """
     CREATE TABLE IF NOT EXISTS blob(
@@ -109,7 +129,8 @@ def _insert_files(files) -> list[int]:
     return ids
 
 
-def _select_file(id_: int) -> bytes:
+def select_file(id_: int) -> bytes:
+    """Get an uploaded file stored in the database by ID."""
     query = "SELECT file FROM blob WHERE id = %s"
     with db_conn.cursor() as curs:
         curs.execute(query, [id_])
@@ -122,7 +143,8 @@ def _select_file(id_: int) -> bytes:
             )
 
 
-def _select_file_name(id_: int) -> str:
+def select_file_name(id_: int) -> str:
+    """Get an uploaded file name of a file stored in the database by ID."""
     query = "SELECT file_name FROM blob WHERE id = %s"
     with db_conn.cursor() as curs:
         curs.execute(query, [id_])
@@ -135,41 +157,46 @@ def _select_file_name(id_: int) -> str:
             )
 
 
-def _delete_file(id_: int):
+def delete_file(id_: int):
     query = "DELETE FROM blob WHERE id = %s"
     with db_conn.cursor() as curs:
         curs.execute(query, [id_])
 
 
-# Set and get request ID and type to Async Result IDs
-#
-def get_async_result_id(request_uuid: str, request_type: REQUEST_TYPES) -> str:
-    """Get the Celery Async Result ID for a request."""
-    map_ = _select_id_map(request_uuid)
-    try:
-        return map_[request_type]  # AsyncResult ID
-    except KeyError as error:
-        raise UUIDNotFoundError(
-            "There are no tasks in the broker for UUID and request type: {}, {}".format(
-                request_uuid, request_type
+def insert_map_frame(file: BytesIO, uuid: UUID):
+    """Insert map frame as blob into the database with the uuid as primary key.
+
+    The map frame is later on needed for georeferencing the uploaded photo or scan of
+    a sketch map.
+    """
+    create_query = """
+    CREATE TABLE IF NOT EXISTS map_frame(
+        uuid UUID PRIMARY KEY,
+        file BYTEA
+        )
+        """
+    insert_query = "INSERT INTO map_frame(uuid, file) VALUES (%s, %s)"
+    with db_conn.cursor() as curs:
+        curs.execute(create_query)
+        curs.execute(insert_query, (str(uuid), file.read()))
+
+
+def select_map_frame(uuid: UUID) -> bytes:
+    """Select map frame of the associated UUID."""
+    query = "SELECT file FROM map_frame WHERE uuid = %s"
+    with db_conn.cursor() as curs:
+        curs.execute(query, [str(uuid)])
+        raw = curs.fetchone()
+        if raw:
+            return raw[0]
+        else:
+            raise FileNotFoundError_(
+                "There is no map frame in the database with the uuid: {}".format(uuid)
             )
-        ) from error
 
 
-def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
-    _insert_id_map(request_uuid, map_)
-
-
-def read_file(id_: int) -> bytes:
-    """Get an uploaded file stored in the database by ID."""
-    return _select_file(id_)
-
-
-def get_file_name(id_: int) -> str:
-    """Get an uploaded file name of a file stored in the database by ID."""
-    return _select_file_name(id_)
-
-
-def write_files(files) -> list[int]:
-    """Write uploaded files to the database and return IDs (primary keys)"""
-    return _insert_files(files)
+def delete_map_frame(uuid: UUID):
+    """Delete map frame of the associated UUID from the database."""
+    query = "DELETE FROM map_frame WHERE uuid = %s"
+    with db_conn.cursor() as curs:
+        curs.execute(query, [str(uuid)])

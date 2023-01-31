@@ -1,4 +1,5 @@
 from io import BytesIO
+from uuid import uuid4
 
 import cv2
 import geojson
@@ -118,7 +119,7 @@ def sketch_map_markings_buffer_2():
 @pytest.fixture
 def map_frame_buffer():
     """Map frame of original Sketch Map."""
-    with open(str(FIXTURE_DIR / "sketch-map-frame.png"), "rb") as file:
+    with open(str(FIXTURE_DIR / "map-frame.png"), "rb") as file:
         return BytesIO(file.read())
 
 
@@ -193,8 +194,23 @@ def files(file):
 def file_ids(files, db_conn):
     """IDs of uploaded files stored in the database."""
     # setup
-    ids = db_client._insert_files(files)
+    ids = db_client.insert_files(files)
     yield ids
     # teardown
     for i in ids:
-        db_client._delete_file(i)
+        db_client.delete_file(i)
+
+
+@pytest.fixture()
+def uuids(map_frame_buffer, db_conn):
+    """UUIDs of map frames stored in the database."""
+    # setup
+    uuids = []
+    for i in range(3):
+        uuid = uuid4()
+        uuids.append(uuid)
+        db_client.insert_map_frame(map_frame_buffer, uuid)
+    yield uuids
+    # teardown
+    for i in uuids:
+        db_client.delete_map_frame(i)
