@@ -82,11 +82,16 @@ def test_delete_file(files, db_conn):
         client._delete_file(i)
 
 
-def test_read_files(file_ids, db_conn):
+def test_select_file(file_ids, db_conn):
     file = client._select_file(file_ids[0])
     assert isinstance(file, bytes)
 
 
-def test_read_files_file_not_found(files, db_conn):
+def test_select_file_file_not_found(files, db_conn):
     with pytest.raises(FileNotFoundError_):
         client._select_file(1000000)
+
+
+def test_select_file_name(file_ids, db_conn):
+    file = client._select_file_name(file_ids[0])
+    assert isinstance(file, str)
