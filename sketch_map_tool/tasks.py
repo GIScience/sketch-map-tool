@@ -114,37 +114,14 @@ def generate_digitized_results(file_ids: list[int]) -> str:
 # fmt: off
 def georeference_sketch_maps(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> str:
 
-    def c_process(sketch_map_id: int) -> chain:
-        """Process a Sketch Map."""
-        return (
-                t_read_file.s(sketch_map_id)
-                | t_to_array.s()
-                | t_clip.s(map_frame)
-                | t_georeference.s(bbox)
-                )
-
     def c_workflow(file_ids: list[int]) -> chain:
         """Start processing workflow for each file."""
-        return (group([c_process(i) for i in file_ids]) | t_zip.s())  # chord
+        return (group([t_process.s(i, map_frame, bbox) for i in file_ids]) | t_zip.s())  # chord
 
     return c_workflow(file_ids).apply_async().id
 
 
 def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> str:
-
-    def c_digitize(color: str, name: str) -> chain:
-        """Digitize one color of a Sketch Map."""
-        # TODO: Avoid redundant code execution.
-        # If detect markings is executed for the same image but different colors,
-        # steps like contrast enhancements are executed multiple times.
-        return (
-                t_detect.s(map_frame, color)
-                | t_georeference.s(bbox)
-                | t_polygonize.s(color)
-                | t_to_geojson.s()
-                | t_clean.s()
-                | t_enrich.s({"color": color, "name": name})
-                )
 
     def c_process(sketch_map_id: int, name: str) -> chain:
         """Process a Sketch Map."""
@@ -152,7 +129,7 @@ def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> st
             t_read_file.s(sketch_map_id)
             | t_to_array.s()
             | t_clip.s(map_frame)
-            | group([c_digitize(color, name) for color in COLORS])  # chord
+            | group([t_digitize.s(map_frame, bbox, color, name) for color in COLORS])  # chord
             | t_merge.s()
         )
 
@@ -162,6 +139,7 @@ def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> st
                 group([c_process(i, n) for i, n in zip(file_ids, file_names)])  # chord
                 | t_merge.s()
                 )
+
     with db_client.DbConn():
         file_names = [db_client.get_file_name(i) for i in file_ids]
     return c_workflow(file_ids, file_names).apply_async().id
@@ -172,6 +150,35 @@ def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> st
 # t_ -> task
 #
 # fmt: on
+
+
+@celery.task()
+def t_process(sketch_map_id: int, map_frame: BytesIO, bbox: Bbox) -> AsyncResult | BytesIO:
+    """Process a Sketch Map."""
+    r = t_read_file(sketch_map_id)
+    r = t_to_array(r)
+    r = t_clip(r, map_frame)
+    r = t_georeference(r, bbox)
+    return r
+
+
+@celery.task()
+def t_digitize(
+    sketch_map_frame: NDArray, map_frame: BytesIO, bbox: Bbox, color: str, name: str
+) -> AsyncResult | FeatureCollection:
+    """Digitize one color of a Sketch Map."""
+    # TODO: Avoid redundant code execution.
+    # If detect markings is executed for the same image but different colors,
+    # steps like contrast enhancements are executed multiple times.
+    r = t_detect(sketch_map_frame, map_frame, color)
+    r = t_georeference(r, bbox)
+    r = t_polygonize(r, color)
+    r = t_to_geojson(r)
+    r = t_clean(r)
+    r = t_enrich(r, {"color": color, "name": name})
+    return r
+
+
 @celery.task()
 def t_read_file(id_: int) -> bytes:
     return db_client.read_file(id_)
