@@ -8,7 +8,7 @@ import numpy as np
 from celery import chain, group
 from celery.result import AsyncResult
 from celery.signals import worker_process_init, worker_process_shutdown
-from geojson import FeatureCollection, GeoJSON
+from geojson import FeatureCollection
 from numpy.typing import NDArray
 
 from sketch_map_tool import celery_app as celery
@@ -199,11 +199,6 @@ def t_read_file(id_: int) -> bytes:
 @celery.task()
 def t_to_array(buffer: bytes) -> AsyncResult | NDArray:
     return cv2.imdecode(np.fromstring(buffer, dtype="uint8"), cv2.IMREAD_UNCHANGED)
-
-
-# TODO: Remove unused func
-def t_to_buffer(geojson_object: GeoJSON) -> AsyncResult | BytesIO:
-    return BytesIO(geojson.dumps(geojson_object).encode("utf-8"))
 
 
 @celery.task()
