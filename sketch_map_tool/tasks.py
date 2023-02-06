@@ -33,6 +33,8 @@ def shutdown_worker(**kwargs):
     db_client.close_connection()
 
 
+# 1. GENERATE SKETCH MAP & QUALITY REPORT
+#
 @celery.task()
 def generate_sketch_map(
     uuid: UUID,
@@ -72,7 +74,7 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
     return generate_report_pdf(report)
 
 
-# GENERATE DIGITIZED RESULTS
+# 2. GENERATE DIGITIZED RESULTS
 #
 def generate_digitized_results(file_ids: list[int]) -> str:
 
@@ -112,11 +114,13 @@ def generate_digitized_results(file_ids: list[int]) -> str:
 # chord -> group chained to a task
 #
 # fmt: off
+
+
 def georeference_sketch_maps(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> str:
 
     def c_workflow(file_ids: list[int]) -> chain:
         """Start processing workflow for each file."""
-        return (group([t_process.s(i, map_frame, bbox) for i in file_ids]) | t_zip.s())  # chord
+        return (group([t_process.s(i, map_frame, bbox) for i in file_ids]) | t_zip.s())
 
     return c_workflow(file_ids).apply_async().id
 
@@ -129,15 +133,15 @@ def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> st
             t_read_file.s(sketch_map_id)
             | t_to_array.s()
             | t_clip.s(map_frame)
-            | group([t_digitize.s(map_frame, bbox, color, name) for color in COLORS])  # chord
-            | t_merge.s()
+            | group([t_digitize.s(map_frame, bbox, color, name) for color in COLORS])
+            | t_merge.s()  # group | task => chord
         )
 
     def c_workflow(file_ids: list[int], file_names: list[str]) -> chain:
         """Start processing workflow for each file."""
         return (
-                group([c_process(i, n) for i, n in zip(file_ids, file_names)])  # chord
-                | t_merge.s()
+                group([c_process(i, n) for i, n in zip(file_ids, file_names)])
+                | t_merge.s()  # group | task => chord
                 )
 
     with db_client.DbConn():
@@ -153,7 +157,11 @@ def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> st
 
 
 @celery.task()
-def t_process(sketch_map_id: int, map_frame: BytesIO, bbox: Bbox) -> AsyncResult | BytesIO:
+def t_process(
+    sketch_map_id: int,
+    map_frame: BytesIO,
+    bbox: Bbox,
+) -> AsyncResult | BytesIO:
     """Process a Sketch Map."""
     r = t_read_file(sketch_map_id)
     r = t_to_array(r)
@@ -164,7 +172,11 @@ def t_process(sketch_map_id: int, map_frame: BytesIO, bbox: Bbox) -> AsyncResult
 
 @celery.task()
 def t_digitize(
-    sketch_map_frame: NDArray, map_frame: BytesIO, bbox: Bbox, color: str, name: str
+    sketch_map_frame: NDArray,
+    map_frame: BytesIO,
+    bbox: Bbox,
+    color: str,
+    name: str,
 ) -> AsyncResult | FeatureCollection:
     """Digitize one color of a Sketch Map."""
     # TODO: Avoid redundant code execution.
