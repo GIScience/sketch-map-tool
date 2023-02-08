@@ -13,7 +13,8 @@ from numpy.typing import NDArray
 
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool import map_generation, upload_processing
-from sketch_map_tool.database import client as db_client
+from sketch_map_tool.database import client_celery as db_client_celery
+from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import COLORS
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
@@ -24,13 +25,13 @@ from sketch_map_tool.wms import client as wms_client
 @worker_process_init.connect
 def init_worker(**kwargs):
     """Initializing database connection for worker"""
-    db_client.open_connection()
+    db_client_celery.open_connection()
 
 
 @worker_process_shutdown.connect
 def shutdown_worker(**kwargs):
     """Closing database connection for worker"""
-    db_client.close_connection()
+    db_client_celery.close_connection()
 
 
 # 1. GENERATE SKETCH MAP & QUALITY REPORT
@@ -61,7 +62,7 @@ def generate_sketch_map(
         format_,
         scale,
     )
-    db_client.insert_map_frame(map_img, uuid)
+    db_client_celery.insert_map_frame(map_img, uuid)
     return map_pdf
 
 
@@ -78,15 +79,11 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 # 2. GENERATE DIGITIZED RESULTS
 #
 def generate_digitized_results(file_ids: list[int]) -> str:
-
-    with db_client.DbConn():
-        file = db_client.select_file(file_ids[0])
+    file = db_client_flask.select_file(file_ids[0])
     args = upload_processing.read_qr_code(t_to_array(file))
     uuid = args["uuid"]
     bbox = args["bbox"]
-
-    with db_client.DbConn():
-        map_frame_buffer = BytesIO(db_client.select_map_frame(UUID(uuid)))
+    map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
     map_frame = t_to_array(map_frame_buffer.read())
 
     result_id_1 = georeference_sketch_maps(file_ids, map_frame, bbox)
@@ -99,8 +96,7 @@ def generate_digitized_results(file_ids: list[int]) -> str:
         "raster-results": str(result_id_1),
         "vector-results": str(result_id_2),
     }
-    with db_client.DbConn():
-        db_client.set_async_result_ids(uuid, map_)
+    db_client_flask.set_async_result_ids(uuid, map_)
     return uuid
 
 
@@ -143,9 +139,7 @@ def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> st
                 group([c_process(i, n) for i, n in zip(file_ids, file_names)])
                 | t_merge.s()  # group | task => chord
                 )
-
-    with db_client.DbConn():
-        file_names = [db_client.select_file_name(i) for i in file_ids]
+    file_names = [db_client_flask.select_file_name(i) for i in file_ids]
     return c_workflow(file_ids, file_names).apply_async().id
 
 
@@ -193,7 +187,7 @@ def t_digitize(
 
 @celery.task()
 def t_read_file(id_: int) -> bytes:
-    return db_client.select_file(id_)
+    return db_client_celery.select_file(id_)
 
 
 @celery.task()

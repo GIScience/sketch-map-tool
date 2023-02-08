@@ -6,10 +6,12 @@ import geojson
 import pytest
 from werkzeug.datastructures import FileStorage
 
-from sketch_map_tool.database import client as db_client
+from sketch_map_tool.database import client_flask as db_client_flask
+from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from tests import FIXTURE_DIR
 
+from sketch_map_tool import make_flask
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -26,13 +28,29 @@ def pytest_addoption(parser):
     )
 
 
+# TODO: remove if not used
+# @pytest.fixture()
+# def db_conn_flask():
+#     # setup
+#     db_client_flask.open_connection()
+#     yield None
+#     # teardown
+#     db_client_flask.close_connection()
+
+
 @pytest.fixture()
-def db_conn():
+def db_conn_celery():
     # setup
-    db_client.open_connection()
+    db_client_celery.open_connection()
     yield None
     # teardown
-    db_client.close_connection()
+    db_client_celery.close_connection()
+
+
+
+@pytest.fixture()
+def flask_app():
+    yield make_flask()
 
 
 @pytest.fixture
@@ -191,26 +209,27 @@ def files(file):
 
 
 @pytest.fixture()
-def file_ids(files, db_conn):
+def file_ids(files, flask_app):
     """IDs of uploaded files stored in the database."""
-    # setup
-    ids = db_client.insert_files(files)
-    yield ids
-    # teardown
-    for i in ids:
-        db_client.delete_file(i)
+    with flask_app.app_context():
+        # setup
+        ids = db_client_flask.insert_files(files)
+        yield ids
+        # teardown
+        for i in ids:
+            db_client_flask.delete_file(i)
 
 
 @pytest.fixture()
-def uuids(map_frame_buffer, db_conn):
+def uuids(map_frame_buffer, db_conn_celery):
     """UUIDs of map frames stored in the database."""
     # setup
     uuids = []
     for i in range(3):
         uuid = uuid4()
         uuids.append(uuid)
-        db_client.insert_map_frame(map_frame_buffer, uuid)
+        db_client_celery.insert_map_frame(map_frame_buffer, uuid)
     yield uuids
     # teardown
     for i in uuids:
-        db_client.delete_map_frame(i)
+        db_client_celery.delete_map_frame(i)

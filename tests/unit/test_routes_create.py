@@ -31,20 +31,6 @@ def mock_tasks(monkeypatch):
     )
 
 
-@pytest.fixture()
-def mock_DbConn(uuid, monkeypatch):
-    """Mock DbConn context manager."""
-
-    class MockDbConn:
-        def __enter__(self):
-            pass
-
-        def __exit__(self, exc_type, exc_value, exc_tb):
-            pass
-
-    monkeypatch.setattr("sketch_map_tool.routes.db_client.DbConn", MockDbConn)
-
-
 def test_create(client):
     resp = client.get("/create")
     assert resp.status_code == 200
@@ -57,11 +43,11 @@ def test_create_result_get(client):
 
 
 def test_create_result_post(
-    client, mock_tasks, mock_DbConn, monkeypatch, bbox, bbox_wgs84
+    client, mock_tasks, monkeypatch, bbox, bbox_wgs84
 ):
     """Redirect to /create/results/<uuid>"""
     monkeypatch.setattr(
-        "sketch_map_tool.database.client.set_async_result_ids", lambda x, y: None
+        "sketch_map_tool.database.client_flask.set_async_result_ids", lambda x, y: None
     )
     data = {
         "bbox": json.dumps(astuple(bbox)),
@@ -75,7 +61,7 @@ def test_create_result_post(
     assert resp.status_code == 302
 
 
-def test_create_results_uuid(client, uuid, monkeypatch, mock_DbConn):
+def test_create_results_uuid(client, uuid, monkeypatch):
     monkeypatch.setattr(
         "sketch_map_tool.routes.db_client.get_async_result_id", lambda a, b: None
     )
@@ -83,13 +69,10 @@ def test_create_results_uuid(client, uuid, monkeypatch, mock_DbConn):
     assert resp.status_code == 200
 
 
-@patch("sketch_map_tool.database.client.db_conn")
-@patch("sketch_map_tool.database.client.open_connection", lambda: None)
-def test_create_results_uuid_not_found(mock_conn, client, uuid):
-    mock_curs = MagicMock()
-    mock_curs.fetchall.return_value = []
-    mock_conn.cursor.return_value.__enter__.return_value = mock_curs
-
+def test_create_results_uuid_not_found(monkeypatch, client, uuid):
+    monkeypatch.setattr(
+        "sketch_map_tool.database.client_flask._select_id_map", lambda _: {}
+    )
     resp = client.get("/create/results/{0}".format(uuid))
     assert resp.status_code == 404
 

@@ -4,6 +4,7 @@ from celery import Celery
 from flask import Flask
 
 from sketch_map_tool.config import get_config_value
+from sketch_map_tool.database import client_flask as db_client
 
 __version__ = "1.0.0"
 
@@ -30,6 +31,7 @@ def make_flask() -> Flask:
             "database_short_lived_sessions": True,
         }
     )
+    flask_app.teardown_appcontext(db_client.close_connection)
 
     return flask_app
 
