@@ -79,7 +79,6 @@ def _delete_id_map(uuid: str):
 
 
 def _select_id_map(uuid) -> dict:
-    global db_conn
     query = "SELECT map FROM uuid_map WHERE uuid = %s"
     with db_conn.cursor() as curs:
         curs.execute(query, [uuid])
