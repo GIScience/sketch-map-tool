@@ -12,7 +12,7 @@ from flask import Response, redirect, render_template, request, send_file, url_f
 from sketch_map_tool import celery_app, definitions
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks
-from sketch_map_tool.database import client as db_client
+from sketch_map_tool.database import client_flask as db_client
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
     MapGenerationError,
@@ -74,8 +74,7 @@ def create_results_post() -> Response:
         "sketch-map": str(task_sketch_map.id),
         "quality-report": str(task_quality_report.id),
     }
-    with db_client.DbConn():
-        db_client.set_async_result_ids(uuid, map_)
+    db_client.set_async_result_ids(uuid, map_)
     return redirect(url_for("create_results_get", uuid=uuid))
 
 
@@ -86,9 +85,8 @@ def create_results_get(uuid: str | None = None) -> Response | str:
         return redirect(url_for("create"))
     validate_uuid(uuid)
     # Check if celery tasks for UUID exists
-    with db_client.DbConn():
-        _ = db_client.get_async_result_id(uuid, "sketch-map")
-        _ = db_client.get_async_result_id(uuid, "quality-report")
+    _ = db_client.get_async_result_id(uuid, "sketch-map")
+    _ = db_client.get_async_result_id(uuid, "quality-report")
     return render_template("create-results.html")
 
 
@@ -105,8 +103,7 @@ def digitize_results_post() -> Response:
     if "file" not in request.files:
         return redirect(url_for("digitize"))
     files = request.files.getlist("file")
-    with db_client.DbConn():
-        ids = db_client.insert_files(files)
+    ids = db_client.insert_files(files)
     id_ = tasks.generate_digitized_results(ids)
     return redirect(url_for("digitize_results_get", uuid=id_))
 
@@ -125,8 +122,7 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    with db_client.DbConn():
-        id_ = db_client.get_async_result_id(uuid, type_)
+    id_ = db_client.get_async_result_id(uuid, type_)
     task = celery_app.AsyncResult(id_)
 
     href = None
@@ -173,8 +169,7 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    with db_client.DbConn():
-        id_ = db_client.get_async_result_id(uuid, type_)
+    id_ = db_client.get_async_result_id(uuid, type_)
     task = celery_app.AsyncResult(id_)
 
     match type_:

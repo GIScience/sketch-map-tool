@@ -10,20 +10,6 @@ def client():
 
 
 @pytest.fixture()
-def mock_DbConn(uuid, monkeypatch):
-    """Mock DbConn context manager."""
-
-    class MockDbConn:
-        def __enter__(self):
-            pass
-
-        def __exit__(self, exc_type, exc_value, exc_tb):
-            pass
-
-    monkeypatch.setattr("sketch_map_tool.routes.db_client.DbConn", MockDbConn)
-
-
-@pytest.fixture()
 def mock_request_task_mapping(uuid, monkeypatch):
     """Mock request id to task id mapping."""
     monkeypatch.setattr(
@@ -129,7 +115,6 @@ def test_status_successful(
     type_,
     mock_request_task_mapping,
     mock_async_results_successful,
-    mock_DbConn,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 200
@@ -146,7 +131,6 @@ def test_status_processing(
     type_,
     mock_request_task_mapping,
     mock_async_results_processing,
-    mock_DbConn,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 202
@@ -162,7 +146,6 @@ def test_status_failed(
     type_,
     mock_request_task_mapping,
     mock_async_results_failed,
-    mock_DbConn,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 422
@@ -179,7 +162,6 @@ def test_status_failed_hard(
     type_,
     mock_request_task_mapping,
     mock_async_results_failed_hard,
-    mock_DbConn,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 500
