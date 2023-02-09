@@ -103,7 +103,7 @@ def georeference_sketch_maps(file_ids: list[int], map_frame: NDArray, bbox: Bbox
     def c_workflow(file_ids: list[int]) -> chain:
         """Start processing workflow for each file."""
         return (
-                group([c_process.s(i, map_frame, bbox) for i in file_ids])
+                group([c_process(i, map_frame, bbox) for i in file_ids])
                 | t_zip.s()  # chord
                 )
 
