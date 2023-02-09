@@ -46,22 +46,9 @@ def detect_markings(
     }
     bgr = colors[color]
 
-    img_base_height, img_base_width, _ = img_base.shape
-    img_markings = cv2.resize(
-        img_markings,
-        (img_base_width, img_base_height),
-        fx=4,
-        fy=4,
-        interpolation=cv2.INTER_NEAREST,
+    markings_multicolor = prepare_img_for_markings(
+        img_base, img_markings, threshold_img_diff
     )
-    img_markings_contrast = _enhance_contrast(img_markings)
-    img_diff = cv2.absdiff(img_base, img_markings_contrast)
-
-    img_diff_gray = cv2.cvtColor(img_diff, cv2.COLOR_BGR2GRAY)
-    mask_markings = img_diff_gray > threshold_img_diff
-
-    markings_multicolor = np.zeros_like(img_markings, np.uint8)
-    markings_multicolor[mask_markings] = img_markings[mask_markings]
 
     # for color, bgr in colors.items():
     single_color_marking = np.zeros_like(markings_multicolor, np.uint8)
@@ -83,6 +70,24 @@ def detect_markings(
     single_color_marking = _reduce_holes(single_color_marking)
     single_color_marking[single_color_marking > 0] = 255
     return single_color_marking
+
+
+def prepare_img_for_markings(img_base, img_markings, threshold_img_diff):
+    img_base_height, img_base_width, _ = img_base.shape
+    img_markings = cv2.resize(
+        img_markings,
+        (img_base_width, img_base_height),
+        fx=4,
+        fy=4,
+        interpolation=cv2.INTER_NEAREST,
+    )
+    img_markings_contrast = _enhance_contrast(img_markings)
+    img_diff = cv2.absdiff(img_base, img_markings_contrast)
+    img_diff_gray = cv2.cvtColor(img_diff, cv2.COLOR_BGR2GRAY)
+    mask_markings = img_diff_gray > threshold_img_diff
+    markings_multicolor = np.zeros_like(img_markings, np.uint8)
+    markings_multicolor[mask_markings] = img_markings[mask_markings]
+    return markings_multicolor
 
 
 def _enhance_contrast(img: NDArray, factor: float = 2.0) -> NDArray:
