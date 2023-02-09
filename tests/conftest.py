@@ -6,12 +6,12 @@ import geojson
 import pytest
 from werkzeug.datastructures import FileStorage
 
-from sketch_map_tool.database import client_flask as db_client_flask
+from sketch_map_tool import make_flask
 from sketch_map_tool.database import client_celery as db_client_celery
+from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from tests import FIXTURE_DIR
 
-from sketch_map_tool import make_flask
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -45,7 +45,6 @@ def db_conn_celery():
     yield None
     # teardown
     db_client_celery.close_connection()
-
 
 
 @pytest.fixture()
