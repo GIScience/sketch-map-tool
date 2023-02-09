@@ -7,32 +7,14 @@ from psycopg2.extensions import connection
 from sketch_map_tool.database import client_flask
 from sketch_map_tool.exceptions import FileNotFoundError_
 
-# def test_open_connection():
-#     client.db_conn = None
-#     client.open_connection()
-#     assert isinstance(client.db_conn, connection)
-#     client.close_connection()
-#     client.db_conn = None
 
-
-# def test_close_closed_connection():
-#     client.db_conn = None
-#     client.close_connection()
-#     assert client.db_conn is None
-
-
-# def test_close_open_connection(db_conn_flask):
-#     assert isinstance(client.db_conn, connection)
-#     client.close_connection()
-#     assert client.db_conn.closed != 0  # 0 if the connection is open
-
-
-def test_close_open_connection(flask_app):
+def test_open_close_connection(flask_app):
     with flask_app.app_context():
-        client_flask.open_connection()
-        assert isinstance(g.db_conn, connection)
+        g.pop("db_conn", None)
+        db_conn = client_flask.open_connection()
+        assert isinstance(db_conn, connection)
         client_flask.close_connection()
-        assert "db_conn" not in g
+        assert db_conn.closed != 0  # 0 if the connection is open
 
 
 def test_insert_uuid_map(flask_app, uuid):

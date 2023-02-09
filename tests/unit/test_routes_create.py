@@ -1,6 +1,5 @@
 import json
 from dataclasses import astuple
-from unittest.mock import MagicMock, patch
 from uuid import uuid4
 
 import pytest
@@ -42,9 +41,7 @@ def test_create_result_get(client):
     assert resp.status_code == 302  # Redirect
 
 
-def test_create_result_post(
-    client, mock_tasks, monkeypatch, bbox, bbox_wgs84
-):
+def test_create_result_post(client, mock_tasks, monkeypatch, bbox, bbox_wgs84):
     """Redirect to /create/results/<uuid>"""
     monkeypatch.setattr(
         "sketch_map_tool.database.client_flask.set_async_result_ids", lambda x, y: None
