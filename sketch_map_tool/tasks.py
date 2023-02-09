@@ -93,11 +93,7 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 #
 def georeference_sketch_maps(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> str:
 
-    def c_process(
-        sketch_map_id: int,
-        map_frame: BytesIO,
-        bbox: Bbox
-    ) -> AsyncResult | BytesIO:
+    def c_process(sketch_map_id: int, map_frame: BytesIO, bbox: Bbox) -> chain:
         """Process a Sketch Map."""
         return (
             t_preprocess.s(sketch_map_id, map_frame)
