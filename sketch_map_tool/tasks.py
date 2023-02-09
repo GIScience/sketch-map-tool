@@ -113,7 +113,7 @@ def generate_digitized_results(file_ids: list[int]) -> str:
 # fmt: off
 
 
-def georeference_sketch_maps(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> str:
+def georeference_sketch_maps(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> str:
 
     def c_workflow(file_ids: list[int]) -> chain:
         """Start processing workflow for each file."""
@@ -122,7 +122,7 @@ def georeference_sketch_maps(file_ids: list[int], map_frame: BytesIO, bbox: Bbox
     return c_workflow(file_ids).apply_async().id
 
 
-def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> str:
+def digitize_sketches(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> str:
 
     def c_process(sketch_map_id: int, name: str) -> chain:
         """Process a Sketch Map."""
@@ -153,7 +153,7 @@ def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> st
 @celery.task()
 def t_process_georeferencing(
     sketch_map_id: int,
-    map_frame: BytesIO,
+    map_frame: NDArray,
     bbox: Bbox,
 ) -> AsyncResult | BytesIO:
     """Process a Sketch Map."""
@@ -163,7 +163,7 @@ def t_process_georeferencing(
 
 
 @celery.task()
-def t_process(sketch_map_id: int, map_frame: BytesIO) -> AsyncResult | NDArray:
+def t_process(sketch_map_id: int, map_frame: NDArray) -> AsyncResult | NDArray:
     r = t_read_file(sketch_map_id)
     r = t_to_array(r)
     r = t_clip(r, map_frame)
@@ -173,7 +173,7 @@ def t_process(sketch_map_id: int, map_frame: BytesIO) -> AsyncResult | NDArray:
 @celery.task()
 def t_prepare_digitize(
     sketch_map_frame: NDArray,
-    map_frame: BytesIO,
+    map_frame: NDArray,
 ) -> AsyncResult | NDArray:
     return prepare_img_for_markings(map_frame, sketch_map_frame)
 
