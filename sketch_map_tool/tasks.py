@@ -126,9 +126,7 @@ def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> st
     def c_process(sketch_map_id: int, name: str) -> chain:
         """Process a Sketch Map."""
         return (
-            t_read_file.s(sketch_map_id)
-            | t_to_array.s()
-            | t_clip.s(map_frame)
+            t_process.s(sketch_map_id, map_frame)
             | group([t_digitize.s(map_frame, bbox, color, name) for color in COLORS])
             | t_merge.s()  # group | task => chord
         )
@@ -157,7 +155,7 @@ def t_process_georeferencing(
     bbox: Bbox,
 ) -> AsyncResult | BytesIO:
     """Process a Sketch Map."""
-    r = t_process(map_frame, sketch_map_id)
+    r = t_process(sketch_map_id, map_frame)
     r = t_georeference(r, bbox)
     return r
 
