@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from celery import Celery
 from flask import Flask
 
@@ -18,6 +20,9 @@ def make_flask() -> Flask:
             "result_compression": "gzip",
             "result_chord_join_timeout": 10.0,  # default: 3.0 seconds
             "result_chord_retry_interval": 3.0,  # default: 1.0 seconds
+            # A built-in periodic task will delete the results after this time,
+            # assuming that celery beat is enabled.
+            "result_expires": timedelta(days=1),
             "accept_content": ["application/json", "application/x-python-serialize"],
             # Reserve at most one extra task for every worker process.
             "worker_prefetch_multiplier": 1,
