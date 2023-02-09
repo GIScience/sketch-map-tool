@@ -2,7 +2,7 @@ import json
 
 # from functools import reduce
 from io import BytesIO
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import geojson
 
@@ -11,8 +11,9 @@ from flask import Response, redirect, render_template, request, send_file, url_f
 
 from sketch_map_tool import celery_app, definitions
 from sketch_map_tool import flask_app as app
-from sketch_map_tool import tasks
+from sketch_map_tool import tasks, upload_processing
 from sketch_map_tool.database import client_flask as db_client
+from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
     MapGenerationError,
@@ -21,6 +22,11 @@ from sketch_map_tool.exceptions import (
     UUIDNotFoundError,
 )
 from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.tasks import (
+    digitize_sketches,
+    georeference_sketch_maps,
+    t_to_array,
+)
 from sketch_map_tool.validators import validate_type, validate_uuid
 
 
@@ -104,7 +110,23 @@ def digitize_results_post() -> Response:
         return redirect(url_for("digitize"))
     files = request.files.getlist("file")
     ids = db_client.insert_files(files)
-    id_ = tasks.generate_digitized_results(ids)
+    file = db_client_flask.select_file(ids[0])
+    args = upload_processing.read_qr_code(t_to_array(file))
+    uuid = args["uuid"]
+    bbox = args["bbox"]
+    map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
+    map_frame = t_to_array(map_frame_buffer.read())
+    result_id_1 = georeference_sketch_maps(ids, map_frame, bbox)
+    result_id_2 = digitize_sketches(ids, map_frame, bbox)
+    # Unique id for current request
+    uuid = str(uuid4())
+    # Mapping of request id to multiple tasks id's
+    map_ = {
+        "raster-results": str(result_id_1),
+        "vector-results": str(result_id_2),
+    }
+    db_client_flask.set_async_result_ids(uuid, map_)
+    id_ = uuid
     return redirect(url_for("digitize_results_get", uuid=id_))
 
 

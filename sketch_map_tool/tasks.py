@@ -1,5 +1,5 @@
 from io import BytesIO
-from uuid import UUID, uuid4
+from uuid import UUID
 from zipfile import ZipFile
 
 import cv2
@@ -77,30 +77,6 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
     return generate_report_pdf(report)
 
 
-# 2. GENERATE DIGITIZED RESULTS
-#
-def generate_digitized_results(file_ids: list[int]) -> str:
-    file = db_client_flask.select_file(file_ids[0])
-    args = upload_processing.read_qr_code(t_to_array(file))
-    uuid = args["uuid"]
-    bbox = args["bbox"]
-    map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
-    map_frame = t_to_array(map_frame_buffer.read())
-
-    result_id_1 = georeference_sketch_maps(file_ids, map_frame, bbox)
-    result_id_2 = digitize_sketches(file_ids, map_frame, bbox)
-
-    # Unique id for current request
-    uuid = str(uuid4())
-    # Mapping of request id to multiple tasks id's
-    map_ = {
-        "raster-results": str(result_id_1),
-        "vector-results": str(result_id_2),
-    }
-    db_client_flask.set_async_result_ids(uuid, map_)
-    return uuid
-
-
 # Celery Workflow
 #
 # https://docs.celeryq.dev/en/stable/userguide/canvas.html
@@ -113,11 +89,27 @@ def generate_digitized_results(file_ids: list[int]) -> str:
 # fmt: off
 
 
+# 2. DIGITIZE RESULTS
+#
 def georeference_sketch_maps(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> str:
+
+    def c_process(
+        sketch_map_id: int,
+        map_frame: BytesIO,
+        bbox: Bbox
+    ) -> AsyncResult | BytesIO:
+        """Process a Sketch Map."""
+        return (
+            t_preprocess.s(sketch_map_id, map_frame)
+            | t_georeference.s(bbox)
+        )
 
     def c_workflow(file_ids: list[int]) -> chain:
         """Start processing workflow for each file."""
-        return (group([t_process_georeferencing.s(i, map_frame, bbox) for i in file_ids]) | t_zip.s())
+        return (
+                group([c_process.s(i, map_frame, bbox) for i in file_ids])
+                | t_zip.s()  # chord
+                )
 
     return c_workflow(file_ids).apply_async().id
 
@@ -127,17 +119,17 @@ def digitize_sketches(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> st
     def c_process(sketch_map_id: int, name: str) -> chain:
         """Process a Sketch Map."""
         return (
-            t_process.s(sketch_map_id, map_frame)
+            t_preprocess.s(sketch_map_id, map_frame)
             | t_prepare_digitize.s(map_frame)
             | group([t_digitize.s(bbox, color, name) for color in COLORS])
-            | t_merge.s()  # group | task => chord
+            | t_merge.s()  # chord
         )
 
     def c_workflow(file_ids: list[int], file_names: list[str]) -> chain:
         """Start processing workflow for each file."""
         return (
                 group([c_process(i, n) for i, n in zip(file_ids, file_names)])
-                | t_merge.s()  # group | task => chord
+                | t_merge.s()  # chord
                 )
     file_names = [db_client_flask.select_file_name(i) for i in file_ids]
     return c_workflow(file_ids, file_names).apply_async().id
@@ -151,19 +143,7 @@ def digitize_sketches(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> st
 
 
 @celery.task()
-def t_process_georeferencing(
-    sketch_map_id: int,
-    map_frame: NDArray,
-    bbox: Bbox,
-) -> AsyncResult | BytesIO:
-    """Process a Sketch Map."""
-    r = t_process(sketch_map_id, map_frame)
-    r = t_georeference(r, bbox)
-    return r
-
-
-@celery.task()
-def t_process(sketch_map_id: int, map_frame: NDArray) -> AsyncResult | NDArray:
+def t_preprocess(sketch_map_id: int, map_frame: NDArray) -> AsyncResult | NDArray:
     r = t_read_file(sketch_map_id)
     r = t_to_array(r)
     r = t_clip(r, map_frame)
