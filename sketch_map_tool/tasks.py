@@ -116,7 +116,7 @@ def georeference_sketch_maps(file_ids: list[int], map_frame: BytesIO, bbox: Bbox
 
     def c_workflow(file_ids: list[int]) -> chain:
         """Start processing workflow for each file."""
-        return (group([t_process.s(i, map_frame, bbox) for i in file_ids]) | t_zip.s())
+        return (group([t_process_georeferencing.s(i, map_frame, bbox) for i in file_ids]) | t_zip.s())
 
     return c_workflow(file_ids).apply_async().id
 
@@ -151,7 +151,7 @@ def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> st
 
 
 @celery.task()
-def t_process(
+def t_process_georeferencing(
     sketch_map_id: int,
     map_frame: BytesIO,
     bbox: Bbox,
