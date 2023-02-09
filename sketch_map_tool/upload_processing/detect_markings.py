@@ -2,7 +2,6 @@
 """
 Functions to process images of sketch maps and detect markings on them
 """
-from typing import List, Tuple
 
 import cv2
 import numpy as np
@@ -14,7 +13,7 @@ def detect_markings(
     sketch_map_frame: NDArray,
     color: str,
     threshold_bgr: float = 0.5,
-) -> List[Tuple[str, NDArray]]:
+) -> NDArray:
     """
     Detect markings in the colours blue, green, red, pink, turquoise, white, and yellow.
     Note that there must be a sufficient difference between the colour of the markings and the background. White and
