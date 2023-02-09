@@ -157,10 +157,16 @@ def t_process_georeferencing(
     bbox: Bbox,
 ) -> AsyncResult | BytesIO:
     """Process a Sketch Map."""
+    r = t_process(map_frame, sketch_map_id)
+    r = t_georeference(r, bbox)
+    return r
+
+
+@celery.task()
+def t_process(sketch_map_id: int, map_frame: BytesIO) -> AsyncResult | NDArray:
     r = t_read_file(sketch_map_id)
     r = t_to_array(r)
     r = t_clip(r, map_frame)
-    r = t_georeference(r, bbox)
     return r
 
 
