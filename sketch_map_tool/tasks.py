@@ -186,9 +186,6 @@ def t_digitize(
     name: str,
 ) -> AsyncResult | FeatureCollection:
     """Digitize one color of a Sketch Map."""
-    # TODO: Avoid redundant code execution.
-    # If detect markings is executed for the same image but different colors,
-    # steps like contrast enhancements are executed multiple times.
     r = t_detect(sketch_map_frame, color)
     r = t_georeference(r, bbox)
     r = t_polygonize(r, color)
