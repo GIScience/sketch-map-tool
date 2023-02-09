@@ -11,11 +11,9 @@ from PIL import Image, ImageEnhance
 
 
 def detect_markings(
-    img_base: NDArray,
-    img_markings: NDArray,
+    sketch_map_frame: NDArray,
     color: str,
     threshold_bgr: float = 0.5,
-    threshold_img_diff: int = 100,
 ) -> List[Tuple[str, NDArray]]:
     """
     Detect markings in the colours blue, green, red, pink, turquoise, white, and yellow.
@@ -23,13 +21,10 @@ def detect_markings(
     yellow markings might therefore not be detected on many sketch maps.
 
 
-    :param img_base: Map without markings.
-    :param img_markings: Map with markings.
+    :param sketch_map_frame: TODO
     :param threshold_bgr: Threshold for the colour detection. 0.5 means 50%, i.e. all BGR values above 50% * 255 will be
                           considered 255, all values below this threshold will be considered 0 for determining the
                           colour of the markings.
-    :param threshold_img_diff: Threshold for the marking detection concerning the absolute grayscale difference between
-                               corresponding pixels in 'img_base' and 'img_markings'.
     :return: A list of pairs of the colour name and the image object with the detected markings in this colour
              [("colour name", img_array), ...].
     """
@@ -46,23 +41,19 @@ def detect_markings(
     }
     bgr = colors[color]
 
-    markings_multicolor = prepare_img_for_markings(
-        img_base, img_markings, threshold_img_diff
-    )
-
     # for color, bgr in colors.items():
-    single_color_marking = np.zeros_like(markings_multicolor, np.uint8)
+    single_color_marking = np.zeros_like(sketch_map_frame, np.uint8)
     single_color_marking[
         (
-            (markings_multicolor[:, :, 0] < threshold_bgr_abs)
+            (sketch_map_frame[:, :, 0] < threshold_bgr_abs)
             == (bgr[0] < threshold_bgr_abs)
         )
         & (
-            (markings_multicolor[:, :, 1] < threshold_bgr_abs)
+            (sketch_map_frame[:, :, 1] < threshold_bgr_abs)
             == (bgr[1] < threshold_bgr_abs)
         )
         & (
-            (markings_multicolor[:, :, 2] < threshold_bgr_abs)
+            (sketch_map_frame[:, :, 2] < threshold_bgr_abs)
             == (bgr[2] < threshold_bgr_abs)
         )
     ] = 255
@@ -72,7 +63,17 @@ def detect_markings(
     return single_color_marking
 
 
-def prepare_img_for_markings(img_base, img_markings, threshold_img_diff):
+def prepare_img_for_markings(
+    img_base: NDArray,
+    img_markings: NDArray,
+    threshold_img_diff: int = 100,
+) -> NDArray:
+    """
+    TODO pydoc
+
+    :param threshold_img_diff: Threshold for the marking detection concerning the absolute grayscale difference between
+    corresponding pixels in 'img_base' and 'img_markings'.
+    """
     img_base_height, img_base_width, _ = img_base.shape
     img_markings = cv2.resize(
         img_markings,

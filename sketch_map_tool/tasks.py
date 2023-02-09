@@ -19,6 +19,7 @@ from sketch_map_tool.definitions import COLORS
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
 from sketch_map_tool.oqt_analyses import get_report
+from sketch_map_tool.upload_processing.detect_markings import prepare_img_for_markings
 from sketch_map_tool.wms import client as wms_client
 
 
@@ -127,7 +128,8 @@ def digitize_sketches(file_ids: list[int], map_frame: BytesIO, bbox: Bbox) -> st
         """Process a Sketch Map."""
         return (
             t_process.s(sketch_map_id, map_frame)
-            | group([t_digitize.s(map_frame, bbox, color, name) for color in COLORS])
+            | t_prepare_digitize.s(map_frame)
+            | group([t_digitize.s(bbox, color, name) for color in COLORS])
             | t_merge.s()  # group | task => chord
         )
 
@@ -169,9 +171,16 @@ def t_process(sketch_map_id: int, map_frame: BytesIO) -> AsyncResult | NDArray:
 
 
 @celery.task()
-def t_digitize(
+def t_prepare_digitize(
     sketch_map_frame: NDArray,
     map_frame: BytesIO,
+) -> AsyncResult | NDArray:
+    return prepare_img_for_markings(map_frame, sketch_map_frame)
+
+
+@celery.task()
+def t_digitize(
+    sketch_map_frame: NDArray,
     bbox: Bbox,
     color: str,
     name: str,
@@ -180,7 +189,7 @@ def t_digitize(
     # TODO: Avoid redundant code execution.
     # If detect markings is executed for the same image but different colors,
     # steps like contrast enhancements are executed multiple times.
-    r = t_detect(sketch_map_frame, map_frame, color)
+    r = t_detect(sketch_map_frame, color)
     r = t_georeference(r, bbox)
     r = t_polygonize(r, color)
     r = t_to_geojson(r)
@@ -205,10 +214,8 @@ def t_clip(sketch_map: NDArray, map_frame: NDArray) -> AsyncResult | NDArray:
 
 
 @celery.task()
-def t_detect(
-    sketch_map_frame: NDArray, map_frame: NDArray, color
-) -> AsyncResult | NDArray:
-    return upload_processing.detect_markings(map_frame, sketch_map_frame, color)
+def t_detect(sketch_map_frame: NDArray, color) -> AsyncResult | NDArray:
+    return upload_processing.detect_markings(sketch_map_frame, color)
 
 
 @celery.task()
