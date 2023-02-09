@@ -24,8 +24,6 @@ def detect_markings(
     :param threshold_bgr: Threshold for the colour detection. 0.5 means 50%, i.e. all BGR values above 50% * 255 will be
                           considered 255, all values below this threshold will be considered 0 for determining the
                           colour of the markings.
-    :return: A list of pairs of the colour name and the image object with the detected markings in this colour
-             [("colour name", img_array), ...].
     """
     threshold_bgr_abs = threshold_bgr * 255
 
