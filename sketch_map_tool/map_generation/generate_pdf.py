@@ -18,7 +18,7 @@ from reportlab.platypus.flowables import Image, Spacer
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool.definitions import PDF_RESOURCES_PATH
-from sketch_map_tool.helpers import resize_rlg_by_width
+from sketch_map_tool.helpers import resize_png, resize_rlg_by_width
 from sketch_map_tool.models import PaperFormat
 
 # PIL should be able to open high resolution PNGs of large Maps:
@@ -125,12 +125,10 @@ def generate_pdf(  # noqa: C901
     map_pdf.seek(0)
     map_frame.seek(0)
 
-    if portrait:  # Rotate the map frame for correct georeferencing
-        map_frame_rotated_bytes = BytesIO()
-        map_frame_rotated = PILImage.open(map_frame).rotate(270, expand=1)
-        map_frame_rotated.save(map_frame_rotated_bytes, format="png")
-        map_frame_rotated_bytes.seek(0)
-        map_frame = map_frame_rotated_bytes
+    # TODO find reasonable value
+    max_length_map_frame = 1000
+    map_frame = resize_png(map_frame, max_length_map_frame)
+
     return map_pdf, map_frame
 
 
