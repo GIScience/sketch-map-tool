@@ -22,7 +22,7 @@ def mock_task(monkeypatch, uuid):
 
     mock_task = MockTask(uuid)
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.generate_sketch_map.AsyncResult",
+        "sketch_map_tool.routes.tasks.t_generate_sketch_map.AsyncResult",
         lambda args: mock_task,
     )
 

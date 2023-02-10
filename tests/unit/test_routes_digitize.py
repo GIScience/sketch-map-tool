@@ -12,10 +12,10 @@ def client():
 def mock_task(uuid, monkeypatch):
     """Mock celery workflow generate digitized results."""
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.digitize_sketches", lambda args: uuid
+        "sketch_map_tool.routes.tasks.t_digitize_sketches", lambda args: uuid
     )
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.georeference_sketch_maps", lambda args: uuid
+        "sketch_map_tool.routes.tasks.t_georeference_sketch_maps", lambda args: uuid
     )
 
 
