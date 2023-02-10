@@ -5,7 +5,6 @@ from zipfile import ZipFile
 import cv2
 import geojson
 import numpy as np
-from celery import chain, group
 from celery.result import AsyncResult
 from celery.signals import worker_process_init, worker_process_shutdown
 from geojson import FeatureCollection
@@ -93,42 +92,61 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 #
 def georeference_sketch_maps(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> str:
 
-    def c_process(sketch_map_id: int, map_frame: BytesIO, bbox: Bbox) -> chain:
+    return tmp_geo.s(file_ids, map_frame, bbox).apply_async().id
+
+
+@celery.task()
+def tmp_geo(file_ids, map_frame, bbox):
+    def c_process(sketch_map_id: int) -> AsyncResult | BytesIO:
         """Process a Sketch Map."""
-        return (
-            t_preprocess.s(sketch_map_id, map_frame)
-            | t_georeference.s(bbox)
-        )
+        r = t_read_file(sketch_map_id)
+        r = t_to_array(r)
+        r = t_clip(r, map_frame)
+        r = t_georeference(r, bbox)
+        return r
 
-    def c_workflow(file_ids: list[int]) -> chain:
+    def c_workflow() -> AsyncResult | BytesIO:
         """Start processing workflow for each file."""
-        return (
-                group([c_process(i, map_frame, bbox) for i in file_ids])
-                | t_zip.s()  # chord
-                )
+        r = [c_process(i) for i in file_ids]
+        r = t_zip(r)  # chord
+        return r
 
-    return c_workflow(file_ids).apply_async().id
+    return c_workflow()
 
 
 def digitize_sketches(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> str:
 
-    def c_process(sketch_map_id: int, name: str) -> chain:
-        """Process a Sketch Map."""
-        return (
-            t_preprocess.s(sketch_map_id, map_frame)
-            | t_prepare_digitize.s(map_frame)
-            | group([t_digitize.s(bbox, color, name) for color in COLORS])
-            | t_merge.s()  # chord
-        )
-
-    def c_workflow(file_ids: list[int], file_names: list[str]) -> chain:
-        """Start processing workflow for each file."""
-        return (
-                group([c_process(i, n) for i, n in zip(file_ids, file_names)])
-                | t_merge.s()  # chord
-                )
     file_names = [db_client_flask.select_file_name(i) for i in file_ids]
-    return c_workflow(file_ids, file_names).apply_async().id
+    return tmp.s(file_ids, file_names, map_frame, bbox).apply_async().id
+
+
+@celery.task()
+def tmp(file_ids, file_names, map_frame, bbox):
+    def c_process(sketch_map_id: int, name: str) -> AsyncResult | FeatureCollection:
+        """Process a Sketch Map."""
+        r = t_read_file(sketch_map_id)
+        r = t_to_array(r)
+        r = t_clip(r, map_frame)
+        r = t_prepare_digitize(r, map_frame)
+        rlist = []
+        for color in COLORS:
+            r1 = t_detect(r, color)
+            r1 = t_georeference(r1, bbox)
+            r1 = t_polygonize(r1, color)
+            r1 = t_to_geojson(r1)
+            r1 = t_clean(r1)
+            r1 = t_enrich(r1, {"color": color, "name": name})
+            rlist.append(r1)
+        r = t_merge(rlist)
+        return r
+
+    def c_workflow(file_ids: list[int], file_names: list[str]) -> AsyncResult | FeatureCollection:
+        """Start processing workflow for each file."""
+        r = [c_process(i, n) for i, n in zip(file_ids, file_names)]
+        r = t_merge(r)  # chord
+        return r
+
+    return c_workflow(file_ids, file_names)
 
 
 # Celery Tasks
@@ -138,15 +156,6 @@ def digitize_sketches(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> st
 # fmt: on
 
 
-@celery.task()
-def t_preprocess(sketch_map_id: int, map_frame: NDArray) -> AsyncResult | NDArray:
-    r = t_read_file(sketch_map_id)
-    r = t_to_array(r)
-    r = t_clip(r, map_frame)
-    return r
-
-
-@celery.task()
 def t_prepare_digitize(
     sketch_map_frame: NDArray,
     map_frame: NDArray,
@@ -154,76 +163,48 @@ def t_prepare_digitize(
     return prepare_img_for_markings(map_frame, sketch_map_frame)
 
 
-@celery.task()
-def t_digitize(
-    sketch_map_frame: NDArray,
-    bbox: Bbox,
-    color: str,
-    name: str,
-) -> AsyncResult | FeatureCollection:
-    """Digitize one color of a Sketch Map."""
-    r = t_detect(sketch_map_frame, color)
-    r = t_georeference(r, bbox)
-    r = t_polygonize(r, color)
-    r = t_to_geojson(r)
-    r = t_clean(r)
-    r = t_enrich(r, {"color": color, "name": name})
-    return r
-
-
-@celery.task()
 def t_read_file(id_: int) -> bytes:
     return db_client_celery.select_file(id_)
 
 
-@celery.task()
 def t_to_array(buffer: bytes) -> AsyncResult | NDArray:
     return cv2.imdecode(np.fromstring(buffer, dtype="uint8"), cv2.IMREAD_UNCHANGED)
 
 
-@celery.task()
 def t_clip(sketch_map: NDArray, map_frame: NDArray) -> AsyncResult | NDArray:
     return upload_processing.clip(sketch_map, map_frame)
 
 
-@celery.task()
 def t_detect(sketch_map_frame: NDArray, color) -> AsyncResult | NDArray:
     return upload_processing.detect_markings(sketch_map_frame, color)
 
 
-@celery.task()
 def t_georeference(sketch_map_frame: NDArray, bbox: Bbox) -> AsyncResult | BytesIO:
     return upload_processing.georeference(sketch_map_frame, bbox)
 
 
-@celery.task()
 def t_polygonize(geotiff: BytesIO, layer_name: str) -> AsyncResult | BytesIO:
     return upload_processing.polygonize(geotiff, layer_name)
 
 
-@celery.task()
 def t_to_geojson(buffer: BytesIO) -> AsyncResult | FeatureCollection:
     return geojson.load(buffer)
 
 
-@celery.task()
 def t_clean(fc: FeatureCollection) -> AsyncResult | FeatureCollection:
     return upload_processing.clean(fc)
 
 
-@celery.task()
 def t_enrich(
     fc: FeatureCollection, properties: dict
 ) -> AsyncResult | FeatureCollection:
     return upload_processing.enrich(fc, properties)
 
 
-@celery.task()
 def t_merge(fcs: list[FeatureCollection]) -> AsyncResult | FeatureCollection:
     return upload_processing.merge(fcs)
 
 
-@celery.task()
 def t_zip(files: list) -> AsyncResult | BytesIO:
     buffer = BytesIO()
     with ZipFile(buffer, "w") as zip_file:
@@ -233,6 +214,5 @@ def t_zip(files: list) -> AsyncResult | BytesIO:
     return buffer
 
 
-@celery.task()
 def t_geopackage(feature_collections: list) -> AsyncResult | BytesIO:
     return upload_processing.geopackage(feature_collections)
