@@ -96,48 +96,35 @@ def t_generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 def t_georeference_sketch_maps(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> AsyncResult | BytesIO:
     def st_process(sketch_map_id: int) -> AsyncResult | BytesIO:
         """Process a Sketch Map."""
-        r = st_read_file(sketch_map_id)
-        r = st_to_array(r)
-        r = st_clip(r, map_frame)
-        r = st_georeference(r, bbox)
-        return r
+        sketch_map_frame = st_read_file(sketch_map_id)
+        sketch_map_frame = st_to_array(sketch_map_frame)
+        sketch_map_frame = st_clip(sketch_map_frame, map_frame)
+        sketch_map_frame = st_georeference(sketch_map_frame, bbox)
+        return sketch_map_frame
 
-    def st_workflow() -> AsyncResult | BytesIO:
-        """Start processing workflow for each file."""
-        r = [st_process(i) for i in file_ids]
-        r = st_zip(r)  # chord
-        return r
-
-    return st_workflow()
+    return st_zip([st_process(i) for i in file_ids])
 
 
 @celery.task()
 def t_digitize_sketches(file_ids: list[int], file_names: list[str], map_frame: NDArray, bbox: Bbox) -> AsyncResult | FeatureCollection:
     def st_process(sketch_map_id: int, name: str) -> AsyncResult | FeatureCollection:
         """Process a Sketch Map."""
-        r = st_read_file(sketch_map_id)
-        r = st_to_array(r)
-        r = st_clip(r, map_frame)
-        r = st_prepare_digitize(r, map_frame)
-        rlist = []
+        sketch_map_frame = st_read_file(sketch_map_id)
+        sketch_map_frame = st_to_array(sketch_map_frame)
+        sketch_map_frame = st_clip(sketch_map_frame, map_frame)
+        sketch_map_frame = st_prepare_digitize(sketch_map_frame, map_frame)
+        frames = []
         for color in COLORS:
-            r1 = st_detect(r, color)
-            r1 = st_georeference(r1, bbox)
-            r1 = st_polygonize(r1, color)
-            r1 = st_to_geojson(r1)
-            r1 = st_clean(r1)
-            r1 = st_enrich(r1, {"color": color, "name": name})
-            rlist.append(r1)
-        r = st_merge(rlist)
-        return r
+            interim_result = st_detect(sketch_map_frame, color)
+            interim_result = st_georeference(interim_result, bbox)
+            interim_result = st_polygonize(interim_result, color)
+            interim_result = st_to_geojson(interim_result)
+            interim_result = st_clean(interim_result)
+            interim_result = st_enrich(interim_result, {"color": color, "name": name})
+            frames.append(interim_result)
+        return st_merge(frames)
 
-    def st_workflow(file_ids: list[int], file_names: list[str]) -> AsyncResult | FeatureCollection:
-        """Start processing workflow for each file."""
-        r = [st_process(i, n) for i, n in zip(file_ids, file_names)]
-        r = st_merge(r)  # chord
-        return r
-
-    return st_workflow(file_ids, file_names)
+    return st_merge([st_process(file_id, name) for file_id, name in zip(file_ids, file_names)])
 
 
 # Celery Tasks
