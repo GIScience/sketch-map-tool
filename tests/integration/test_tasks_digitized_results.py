@@ -6,25 +6,25 @@ from sketch_map_tool import tasks
 
 
 def test_t_read_file(file_ids):
-    task = tasks.t_read_file.apply_async(args=[file_ids[0]])
+    task = tasks.st_read_file.apply_async(args=[file_ids[0]])
     result = task.wait()
     assert isinstance(result, bytes)
 
 
 def test_t_buffer_to_array(sketch_map_buffer):
-    task = tasks.t_to_array.apply_async(args=[sketch_map_buffer.read()])
+    task = tasks.st_to_array.apply_async(args=[sketch_map_buffer.read()])
     result = task.wait()
     assert isinstance(result, ndarray)
 
 
 def test_t_clip(sketch_map, map_frame):
-    task = tasks.t_clip.apply_async(args=[sketch_map, map_frame])
+    task = tasks.st_clip.apply_async(args=[sketch_map, map_frame])
     result = task.wait()
     assert isinstance(result, ndarray)
 
 
 def test_t_detect(sketch_map_frame_markings, map_frame):
-    task = tasks.t_detect.apply_async(
+    task = tasks.st_detect.apply_async(
         args=[sketch_map_frame_markings, map_frame, "red"]
     )
     result = task.wait()
@@ -32,7 +32,7 @@ def test_t_detect(sketch_map_frame_markings, map_frame):
 
 
 def test_t_georeference(sketch_map_frame_markings_detected, bbox):
-    task = tasks.t_georeference.apply_async(
+    task = tasks.st_georeference.apply_async(
         args=[sketch_map_frame_markings_detected, bbox]
     )
     result = task.wait()
@@ -40,7 +40,7 @@ def test_t_georeference(sketch_map_frame_markings_detected, bbox):
 
 
 def test_t_polygonize(sketch_map_frame_markings_detected_buffer):
-    task = tasks.t_polygonize.apply_async(
+    task = tasks.st_polygonize.apply_async(
         args=[sketch_map_frame_markings_detected_buffer, "red"]
     )
     result = task.wait()

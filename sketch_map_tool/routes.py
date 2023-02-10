@@ -23,9 +23,9 @@ from sketch_map_tool.exceptions import (
 )
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.tasks import (
-    digitize_sketches,
-    georeference_sketch_maps,
-    t_to_array,
+    st_to_array,
+    t_digitize_sketches,
+    t_georeference_sketch_maps,
 )
 from sketch_map_tool.validators import validate_type, validate_uuid
 
@@ -70,10 +70,12 @@ def create_results_post() -> Response:
     uuid = str(uuid4())
 
     # Tasks
-    task_sketch_map = tasks.generate_sketch_map.apply_async(
+    task_sketch_map = tasks.t_generate_sketch_map.apply_async(
         args=(uuid, bbox, format_, orientation, size, scale)
     )
-    task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox_wgs84,))
+    task_quality_report = tasks.t_generate_quality_report.apply_async(
+        args=(bbox_wgs84,)
+    )
 
     # Map of request type to multiple Async Result IDs
     map_ = {
@@ -112,13 +114,15 @@ def digitize_results_post() -> Response:
     ids = db_client.insert_files(files)
     file = db_client_flask.select_file(ids[0])
     file_names = [db_client_flask.select_file_name(i) for i in ids]
-    args = upload_processing.read_qr_code(t_to_array(file))
+    args = upload_processing.read_qr_code(st_to_array(file))
     uuid = args["uuid"]
     bbox = args["bbox"]
     map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
-    map_frame = t_to_array(map_frame_buffer.read())
-    result_id_1 = georeference_sketch_maps.s(ids, map_frame, bbox).apply_async().id
-    result_id_2 = digitize_sketches.s(ids, file_names, map_frame, bbox).apply_async().id
+    map_frame = st_to_array(map_frame_buffer.read())
+    result_id_1 = t_georeference_sketch_maps.s(ids, map_frame, bbox).apply_async().id
+    result_id_2 = (
+        t_digitize_sketches.s(ids, file_names, map_frame, bbox).apply_async().id
+    )
     # Unique id for current request
     uuid = str(uuid4())
     # Mapping of request id to multiple tasks id's
