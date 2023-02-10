@@ -22,11 +22,7 @@ from sketch_map_tool.exceptions import (
     UUIDNotFoundError,
 )
 from sketch_map_tool.models import Bbox, PaperFormat, Size
-from sketch_map_tool.tasks import (
-    digitize_sketches,
-    georeference_sketch_maps,
-    t_to_array,
-)
+from sketch_map_tool.tasks import t_to_array, tmp, tmp_geo
 from sketch_map_tool.validators import validate_type, validate_uuid
 
 
@@ -111,13 +107,14 @@ def digitize_results_post() -> Response:
     files = request.files.getlist("file")
     ids = db_client.insert_files(files)
     file = db_client_flask.select_file(ids[0])
+    file_names = [db_client_flask.select_file_name(i) for i in ids]
     args = upload_processing.read_qr_code(t_to_array(file))
     uuid = args["uuid"]
     bbox = args["bbox"]
     map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
     map_frame = t_to_array(map_frame_buffer.read())
-    result_id_1 = georeference_sketch_maps(ids, map_frame, bbox)
-    result_id_2 = digitize_sketches(ids, map_frame, bbox)
+    result_id_1 = tmp_geo.s(ids, map_frame, bbox).apply_async().id
+    result_id_2 = tmp.s(ids, file_names, map_frame, bbox).apply_async().id
     # Unique id for current request
     uuid = str(uuid4())
     # Mapping of request id to multiple tasks id's

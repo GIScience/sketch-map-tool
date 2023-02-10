@@ -13,7 +13,6 @@ from numpy.typing import NDArray
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool import map_generation, upload_processing
 from sketch_map_tool.database import client_celery as db_client_celery
-from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import COLORS
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
@@ -90,13 +89,10 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
 # 2. DIGITIZE RESULTS
 #
-def georeference_sketch_maps(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> str:
-
-    return tmp_geo.s(file_ids, map_frame, bbox).apply_async().id
 
 
 @celery.task()
-def tmp_geo(file_ids, map_frame, bbox):
+def tmp_geo(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> AsyncResult | BytesIO:
     def c_process(sketch_map_id: int) -> AsyncResult | BytesIO:
         """Process a Sketch Map."""
         r = t_read_file(sketch_map_id)
@@ -114,14 +110,8 @@ def tmp_geo(file_ids, map_frame, bbox):
     return c_workflow()
 
 
-def digitize_sketches(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> str:
-
-    file_names = [db_client_flask.select_file_name(i) for i in file_ids]
-    return tmp.s(file_ids, file_names, map_frame, bbox).apply_async().id
-
-
 @celery.task()
-def tmp(file_ids, file_names, map_frame, bbox):
+def tmp(file_ids: list[int], file_names: list[str], map_frame: NDArray, bbox: Bbox) -> AsyncResult | FeatureCollection:
     def c_process(sketch_map_id: int, name: str) -> AsyncResult | FeatureCollection:
         """Process a Sketch Map."""
         r = t_read_file(sketch_map_id)
