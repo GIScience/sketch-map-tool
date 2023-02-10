@@ -54,19 +54,19 @@ def generate_sketch_map(
 ) -> BytesIO | AsyncResult:
     """Generate and returns a sketch map as PDF and stores the map frame in DB."""
     raw = wms_client.get_map_image(bbox, size)
-    map_image = wms_client.as_image(raw)
+    map_frame = wms_client.as_image(raw)
     qr_code_ = map_generation.qr_code(
         str(uuid),
         bbox,
         format_,
     )
-    map_pdf, map_img = map_generation.generate_pdf(
-        map_image,
+    map_pdf, map_frame = map_generation.generate_pdf(
+        map_frame,
         qr_code_,
         format_,
         scale,
     )
-    db_client_celery.insert_map_frame(map_img, uuid)
+    db_client_celery.insert_map_frame(map_frame, uuid)
     return map_pdf
 
 
