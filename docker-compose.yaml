@@ -28,7 +28,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 4G
+          memory: 8G
     depends_on:
       - redis
       - postgres
@@ -55,7 +55,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1G
+          memory: 3G
     environment:
       POSTGRES_PASSWORD: smt
       POSTGRES_USER: smt
