@@ -92,7 +92,7 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
 
 @celery.task()
-def tmp_geo(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> AsyncResult | BytesIO:
+def georeference_sketch_maps(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> AsyncResult | BytesIO:
     def c_process(sketch_map_id: int) -> AsyncResult | BytesIO:
         """Process a Sketch Map."""
         r = t_read_file(sketch_map_id)
@@ -111,7 +111,7 @@ def tmp_geo(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> AsyncResult 
 
 
 @celery.task()
-def tmp(file_ids: list[int], file_names: list[str], map_frame: NDArray, bbox: Bbox) -> AsyncResult | FeatureCollection:
+def digitize_sketches(file_ids: list[int], file_names: list[str], map_frame: NDArray, bbox: Bbox) -> AsyncResult | FeatureCollection:
     def c_process(sketch_map_id: int, name: str) -> AsyncResult | FeatureCollection:
         """Process a Sketch Map."""
         r = t_read_file(sketch_map_id)
