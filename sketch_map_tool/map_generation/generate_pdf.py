@@ -126,6 +126,13 @@ def generate_pdf(  # noqa: C901
     map_pdf.seek(0)
     map_img.seek(0)
 
+    if portrait:  # Rotate the map frame for correct georeferencing
+        map_img_rotated_bytes = BytesIO()
+        map_img_rotated = PILImage.open(map_img).rotate(270, expand=1)
+        map_img_rotated.save(map_img_rotated_bytes, format="png")
+        map_img_rotated_bytes.seek(0)
+        map_img = map_img_rotated_bytes
+
     return map_pdf, map_img
 
 
