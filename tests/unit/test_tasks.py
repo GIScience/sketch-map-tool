@@ -2,7 +2,6 @@
 
 from io import BytesIO
 
-import numpy as np
 import pytest
 
 from sketch_map_tool import tasks
@@ -47,14 +46,4 @@ def test_generate_sketch_map(monkeypatch, uuid, bbox, format_, size, scale):
 @vcr.use_cassette("test_get_report")
 def test_generate_quality_report(bbox_wgs84):
     result = tasks.t_generate_quality_report(bbox_wgs84)
-    assert isinstance(result, BytesIO)
-
-
-def test_clip(sketch_map, map_frame):
-    result = tasks.st_clip(sketch_map, map_frame)
-    assert isinstance(result, np.ndarray)
-
-
-def test_img_to_geotiff(map_frame, bbox):
-    result = tasks.st_georeference(map_frame, bbox)
     assert isinstance(result, BytesIO)

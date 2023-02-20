@@ -17,7 +17,16 @@ from sketch_map_tool.definitions import COLORS
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
 from sketch_map_tool.oqt_analyses import get_report
-from sketch_map_tool.upload_processing.detect_markings import prepare_img_for_markings
+from sketch_map_tool.upload_processing import (
+    clean,
+    clip,
+    detect_markings,
+    enrich,
+    georeference,
+    merge,
+    polygonize,
+    prepare_img_for_markings,
+)
 from sketch_map_tool.wms import client as wms_client
 
 
@@ -94,10 +103,10 @@ def t_georeference_sketch_maps(
     def st_process(sketch_map_id: int) -> BytesIO:
         """Process a Sketch Map."""
         # r = interim result
-        r = st_read_file(sketch_map_id)
+        r = db_client_celery.select_file(sketch_map_id)
         r = st_to_array(r)
-        r = st_clip(r, map_frame)
-        r = st_georeference(r, bbox)
+        r = clip(r, map_frame)
+        r = georeference(r, bbox)
         return r
 
     return st_zip([st_process(i) for i in file_ids])
@@ -113,68 +122,28 @@ def t_digitize_sketches(
     def st_process(sketch_map_id: int, name: str) -> FeatureCollection:
         """Process a Sketch Map."""
         # r = interim result
-        r = st_read_file(sketch_map_id)
+        r = db_client_celery.select_file(sketch_map_id)
         r = st_to_array(r)
-        r = st_clip(r, map_frame)
-        r = st_prepare_digitize(r, map_frame)
+        r = clip(r, map_frame)
+        r = prepare_img_for_markings(map_frame, r)
         geojsons = []
         for color in COLORS:
-            r_ = st_detect(r, color)
-            r_ = st_georeference(r_, bbox)
-            r_ = st_polygonize(r_, color)
-            r_ = st_to_geojson(r_)
-            r_ = st_clean(r_)
-            r_ = st_enrich(r_, {"color": color, "name": name})
+            r_ = detect_markings(r, color)
+            r_ = georeference(r_, bbox)
+            r_ = polygonize(r_, color)
+            r_ = geojson.load(r_)
+            r_ = clean(r_)
+            r_ = enrich(r_, {"color": color, "name": name})
             geojsons.append(r_)
-        return st_merge(geojsons)
+        return merge(geojsons)
 
-    return st_merge(
+    return merge(
         [st_process(file_id, name) for file_id, name in zip(file_ids, file_names)]
     )
 
 
-def st_prepare_digitize(sketch_map_frame: NDArray, map_frame: NDArray) -> NDArray:
-    return prepare_img_for_markings(map_frame, sketch_map_frame)
-
-
-def st_read_file(id_: int) -> bytes:
-    return db_client_celery.select_file(id_)
-
-
 def st_to_array(buffer: bytes) -> NDArray:
     return cv2.imdecode(np.fromstring(buffer, dtype="uint8"), cv2.IMREAD_UNCHANGED)
-
-
-def st_clip(sketch_map: NDArray, map_frame: NDArray) -> NDArray:
-    return upload_processing.clip(sketch_map, map_frame)
-
-
-def st_detect(sketch_map_frame: NDArray, color) -> NDArray:
-    return upload_processing.detect_markings(sketch_map_frame, color)
-
-
-def st_georeference(sketch_map_frame: NDArray, bbox: Bbox) -> BytesIO:
-    return upload_processing.georeference(sketch_map_frame, bbox)
-
-
-def st_polygonize(geotiff: BytesIO, layer_name: str) -> BytesIO:
-    return upload_processing.polygonize(geotiff, layer_name)
-
-
-def st_to_geojson(buffer: BytesIO) -> FeatureCollection:
-    return geojson.load(buffer)
-
-
-def st_clean(fc: FeatureCollection) -> FeatureCollection:
-    return upload_processing.clean(fc)
-
-
-def st_enrich(fc: FeatureCollection, properties: dict) -> FeatureCollection:
-    return upload_processing.enrich(fc, properties)
-
-
-def st_merge(fcs: list[FeatureCollection]) -> FeatureCollection:
-    return upload_processing.merge(fcs)
 
 
 def st_zip(files: list) -> BytesIO:
