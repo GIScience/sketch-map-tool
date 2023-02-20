@@ -84,8 +84,6 @@ def t_generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 # c_    -> chain of tasks (sequential)
 # group -> group of tasks (parallel)
 # chord -> group chained to a task
-#
-# fmt: off
 
 
 # 2. DIGITIZE RESULTS
@@ -93,7 +91,11 @@ def t_generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
 
 @celery.task()
-def t_georeference_sketch_maps(file_ids: list[int], map_frame: NDArray, bbox: Bbox) -> AsyncResult | BytesIO:
+def t_georeference_sketch_maps(
+    file_ids: list[int],
+    map_frame: NDArray,
+    bbox: Bbox,
+) -> AsyncResult | BytesIO:
     def st_process(sketch_map_id: int) -> AsyncResult | BytesIO:
         """Process a Sketch Map."""
         sketch_map_frame = st_read_file(sketch_map_id)
@@ -106,7 +108,12 @@ def t_georeference_sketch_maps(file_ids: list[int], map_frame: NDArray, bbox: Bb
 
 
 @celery.task()
-def t_digitize_sketches(file_ids: list[int], file_names: list[str], map_frame: NDArray, bbox: Bbox) -> AsyncResult | FeatureCollection:
+def t_digitize_sketches(
+    file_ids: list[int],
+    file_names: list[str],
+    map_frame: NDArray,
+    bbox: Bbox,
+) -> AsyncResult | FeatureCollection:
     def st_process(sketch_map_id: int, name: str) -> AsyncResult | FeatureCollection:
         """Process a Sketch Map."""
         sketch_map_frame = st_read_file(sketch_map_id)
@@ -124,14 +131,14 @@ def t_digitize_sketches(file_ids: list[int], file_names: list[str], map_frame: N
             frames.append(interim_result)
         return st_merge(frames)
 
-    return st_merge([st_process(file_id, name) for file_id, name in zip(file_ids, file_names)])
+    return st_merge(
+        [st_process(file_id, name) for file_id, name in zip(file_ids, file_names)]
+    )
 
 
 # Celery Tasks
 #
 # t_ -> task
-#
-# fmt: on
 
 
 def st_prepare_digitize(
