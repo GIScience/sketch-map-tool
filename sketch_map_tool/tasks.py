@@ -11,7 +11,7 @@ from geojson import FeatureCollection
 from numpy.typing import NDArray
 
 from sketch_map_tool import celery_app as celery
-from sketch_map_tool import map_generation, upload_processing
+from sketch_map_tool import map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import COLORS
 from sketch_map_tool.models import Bbox, PaperFormat, Size
@@ -144,7 +144,3 @@ def digitize_sketches(
 
 def st_to_array(buffer: bytes) -> NDArray:
     return cv2.imdecode(np.fromstring(buffer, dtype="uint8"), cv2.IMREAD_UNCHANGED)
-
-
-def st_geopackage(feature_collections: list) -> BytesIO:
-    return upload_processing.geopackage(feature_collections)
