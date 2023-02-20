@@ -93,11 +93,12 @@ def t_georeference_sketch_maps(
 ) -> AsyncResult | BytesIO:
     def st_process(sketch_map_id: int) -> BytesIO:
         """Process a Sketch Map."""
-        sketch_map_frame = st_read_file(sketch_map_id)
-        sketch_map_frame = st_to_array(sketch_map_frame)
-        sketch_map_frame = st_clip(sketch_map_frame, map_frame)
-        sketch_map_frame = st_georeference(sketch_map_frame, bbox)
-        return sketch_map_frame
+        # r = interim result
+        r = st_read_file(sketch_map_id)
+        r = st_to_array(r)
+        r = st_clip(r, map_frame)
+        r = st_georeference(r, bbox)
+        return r
 
     return st_zip([st_process(i) for i in file_ids])
 
@@ -111,20 +112,21 @@ def t_digitize_sketches(
 ) -> AsyncResult | FeatureCollection:
     def st_process(sketch_map_id: int, name: str) -> FeatureCollection:
         """Process a Sketch Map."""
-        sketch_map_frame = st_read_file(sketch_map_id)
-        sketch_map_frame = st_to_array(sketch_map_frame)
-        sketch_map_frame = st_clip(sketch_map_frame, map_frame)
-        sketch_map_frame = st_prepare_digitize(sketch_map_frame, map_frame)
-        frames = []
+        # r = interim result
+        r = st_read_file(sketch_map_id)
+        r = st_to_array(r)
+        r = st_clip(r, map_frame)
+        r = st_prepare_digitize(r, map_frame)
+        geojsons = []
         for color in COLORS:
-            interim_result = st_detect(sketch_map_frame, color)
-            interim_result = st_georeference(interim_result, bbox)
-            interim_result = st_polygonize(interim_result, color)
-            interim_result = st_to_geojson(interim_result)
-            interim_result = st_clean(interim_result)
-            interim_result = st_enrich(interim_result, {"color": color, "name": name})
-            frames.append(interim_result)
-        return st_merge(frames)
+            r_ = st_detect(r, color)
+            r_ = st_georeference(r_, bbox)
+            r_ = st_polygonize(r_, color)
+            r_ = st_to_geojson(r_)
+            r_ = st_clean(r_)
+            r_ = st_enrich(r_, {"color": color, "name": name})
+            geojsons.append(r_)
+        return st_merge(geojsons)
 
     return st_merge(
         [st_process(file_id, name) for file_id, name in zip(file_ids, file_names)]
