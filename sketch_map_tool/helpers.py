@@ -1,5 +1,8 @@
 from pathlib import Path
 
+import cv2
+import numpy as np
+from numpy.typing import NDArray
 from reportlab.graphics.shapes import Drawing
 
 
@@ -20,3 +23,7 @@ def resize_rlg_by_height(d: Drawing, size: float) -> Drawing:
     d.scale(factor, factor)
     d.asDrawing(d.width * factor, d.height * factor)
     return d
+
+
+def to_array(buffer: bytes) -> NDArray:
+    return cv2.imdecode(np.fromstring(buffer, dtype="uint8"), cv2.IMREAD_UNCHANGED)
