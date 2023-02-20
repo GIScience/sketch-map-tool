@@ -33,6 +33,14 @@ def shutdown_worker(**kwargs):
     db_client_celery.close_connection()
 
 
+# Celery Workflow
+#
+# https://docs.celeryq.dev/en/stable/userguide/canvas.html
+#
+# t_    -> task
+# st_   -> subtask (not a real celery task)
+
+
 # 1. GENERATE SKETCH MAP & QUALITY REPORT
 #
 @celery.task()
@@ -75,21 +83,8 @@ def t_generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
     return generate_report_pdf(report)
 
 
-# Celery Workflow
-#
-# https://docs.celeryq.dev/en/stable/userguide/canvas.html
-#
-# t_    -> task
-# st_   -> subtask (not a real celery task)
-# c_    -> chain of tasks (sequential)
-# group -> group of tasks (parallel)
-# chord -> group chained to a task
-
-
 # 2. DIGITIZE RESULTS
 #
-
-
 @celery.task()
 def t_georeference_sketch_maps(
     file_ids: list[int],
@@ -134,11 +129,6 @@ def t_digitize_sketches(
     return st_merge(
         [st_process(file_id, name) for file_id, name in zip(file_ids, file_names)]
     )
-
-
-# Celery Tasks
-#
-# t_ -> task
 
 
 def st_prepare_digitize(sketch_map_frame: NDArray, map_frame: NDArray) -> NDArray:
