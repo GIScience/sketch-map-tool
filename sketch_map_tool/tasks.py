@@ -42,18 +42,10 @@ def shutdown_worker(**kwargs):
     db_client_celery.close_connection()
 
 
-# Celery Workflow
-#
-# https://docs.celeryq.dev/en/stable/userguide/canvas.html
-#
-# t_    -> task
-# st_   -> subtask (not a real celery task)
-
-
 # 1. GENERATE SKETCH MAP & QUALITY REPORT
 #
 @celery.task()
-def t_generate_sketch_map(
+def generate_sketch_map(
     uuid: UUID,
     bbox: Bbox,
     format_: PaperFormat,
@@ -83,7 +75,7 @@ def t_generate_sketch_map(
 
 
 @celery.task()
-def t_generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
+def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
     """Generate a quality report as PDF.
 
     Fetch quality indicators from the OQT API
@@ -95,12 +87,12 @@ def t_generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 # 2. DIGITIZE RESULTS
 #
 @celery.task()
-def t_georeference_sketch_maps(
+def georeference_sketch_maps(
     file_ids: list[int],
     map_frame: NDArray,
     bbox: Bbox,
 ) -> AsyncResult | BytesIO:
-    def st_process(sketch_map_id: int) -> BytesIO:
+    def process(sketch_map_id: int) -> BytesIO:
         """Process a Sketch Map."""
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
@@ -109,17 +101,17 @@ def t_georeference_sketch_maps(
         r = georeference(r, bbox)
         return r
 
-    return st_zip([st_process(i) for i in file_ids])
+    return st_zip([process(i) for i in file_ids])
 
 
 @celery.task()
-def t_digitize_sketches(
+def digitize_sketches(
     file_ids: list[int],
     file_names: list[str],
     map_frame: NDArray,
     bbox: Bbox,
 ) -> AsyncResult | FeatureCollection:
-    def st_process(sketch_map_id: int, name: str) -> FeatureCollection:
+    def process(sketch_map_id: int, name: str) -> FeatureCollection:
         """Process a Sketch Map."""
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
@@ -138,7 +130,7 @@ def t_digitize_sketches(
         return merge(geojsons)
 
     return merge(
-        [st_process(file_id, name) for file_id, name in zip(file_ids, file_names)]
+        [process(file_id, name) for file_id, name in zip(file_ids, file_names)]
     )
 
 

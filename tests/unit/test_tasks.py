@@ -21,7 +21,7 @@ def mock_task(monkeypatch, uuid):
 
     mock_task = MockTask(uuid)
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.t_generate_sketch_map.AsyncResult",
+        "sketch_map_tool.routes.tasks.generate_sketch_map.AsyncResult",
         lambda args: mock_task,
     )
 
@@ -39,11 +39,11 @@ def test_generate_sketch_map(monkeypatch, uuid, bbox, format_, size, scale):
         "sketch_map_tool.tasks.db_client_celery.insert_map_frame",
         lambda id_, field: uuid,
     )
-    map_pdf = tasks.t_generate_sketch_map(uuid, bbox, format_, "landscape", size, scale)
+    map_pdf = tasks.generate_sketch_map(uuid, bbox, format_, "landscape", size, scale)
     assert isinstance(map_pdf, BytesIO)
 
 
 @vcr.use_cassette("test_get_report")
 def test_generate_quality_report(bbox_wgs84):
-    result = tasks.t_generate_quality_report(bbox_wgs84)
+    result = tasks.generate_quality_report(bbox_wgs84)
     assert isinstance(result, BytesIO)
