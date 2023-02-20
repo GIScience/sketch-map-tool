@@ -2,9 +2,7 @@ from io import BytesIO
 from uuid import UUID
 from zipfile import ZipFile
 
-import cv2
 import geojson
-import numpy as np
 from celery.result import AsyncResult
 from celery.signals import worker_process_init, worker_process_shutdown
 from geojson import FeatureCollection
@@ -14,6 +12,7 @@ from sketch_map_tool import celery_app as celery
 from sketch_map_tool import map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import COLORS
+from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
 from sketch_map_tool.oqt_analyses import get_report
@@ -96,7 +95,7 @@ def georeference_sketch_maps(
         """Process a Sketch Map."""
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
-        r = st_to_array(r)
+        r = to_array(r)
         r = clip(r, map_frame)
         r = georeference(r, bbox)
         return r
@@ -123,7 +122,7 @@ def digitize_sketches(
         """Process a Sketch Map."""
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
-        r = st_to_array(r)
+        r = to_array(r)
         r = clip(r, map_frame)
         r = prepare_img_for_markings(map_frame, r)
         geojsons = []
@@ -140,7 +139,3 @@ def digitize_sketches(
     return merge(
         [process(file_id, name) for file_id, name in zip(file_ids, file_names)]
     )
-
-
-def st_to_array(buffer: bytes) -> NDArray:
-    return cv2.imdecode(np.fromstring(buffer, dtype="uint8"), cv2.IMREAD_UNCHANGED)

@@ -19,12 +19,9 @@ from sketch_map_tool.exceptions import (
     QRCodeError,
     UUIDNotFoundError,
 )
+from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
-from sketch_map_tool.tasks import (
-    digitize_sketches,
-    georeference_sketch_maps,
-    st_to_array,
-)
+from sketch_map_tool.tasks import digitize_sketches, georeference_sketch_maps
 from sketch_map_tool.validators import validate_type, validate_uuid
 
 
@@ -110,11 +107,11 @@ def digitize_results_post() -> Response:
     ids = db_client.insert_files(files)
     file = db_client_flask.select_file(ids[0])
     file_names = [db_client_flask.select_file_name(i) for i in ids]
-    args = upload_processing.read_qr_code(st_to_array(file))
+    args = upload_processing.read_qr_code(to_array(file))
     uuid = args["uuid"]
     bbox = args["bbox"]
     map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
-    map_frame = st_to_array(map_frame_buffer.read())
+    map_frame = to_array(map_frame_buffer.read())
     result_id_1 = georeference_sketch_maps.s(ids, map_frame, bbox).apply_async().id
     result_id_2 = digitize_sketches.s(ids, file_names, map_frame, bbox).apply_async().id
     # Unique id for current request
