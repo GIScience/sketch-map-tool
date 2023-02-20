@@ -101,7 +101,15 @@ def georeference_sketch_maps(
         r = georeference(r, bbox)
         return r
 
-    return st_zip([process(i) for i in file_ids])
+    def zip_(files: list) -> BytesIO:
+        buffer = BytesIO()
+        with ZipFile(buffer, "w") as zip_file:
+            for i, file in enumerate(files):
+                zip_file.writestr(str(i) + ".geotiff", file.read())
+        buffer.seek(0)
+        return buffer
+
+    return zip_([process(i) for i in file_ids])
 
 
 @celery.task()
@@ -136,15 +144,6 @@ def digitize_sketches(
 
 def st_to_array(buffer: bytes) -> NDArray:
     return cv2.imdecode(np.fromstring(buffer, dtype="uint8"), cv2.IMREAD_UNCHANGED)
-
-
-def st_zip(files: list) -> BytesIO:
-    buffer = BytesIO()
-    with ZipFile(buffer, "w") as zip_file:
-        for i, file in enumerate(files):
-            zip_file.writestr(str(i) + ".geotiff", file.read())
-    buffer.seek(0)
-    return buffer
 
 
 def st_geopackage(feature_collections: list) -> BytesIO:
