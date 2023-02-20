@@ -96,7 +96,7 @@ def t_georeference_sketch_maps(
     map_frame: NDArray,
     bbox: Bbox,
 ) -> AsyncResult | BytesIO:
-    def st_process(sketch_map_id: int) -> AsyncResult | BytesIO:
+    def st_process(sketch_map_id: int) -> BytesIO:
         """Process a Sketch Map."""
         sketch_map_frame = st_read_file(sketch_map_id)
         sketch_map_frame = st_to_array(sketch_map_frame)
@@ -114,7 +114,7 @@ def t_digitize_sketches(
     map_frame: NDArray,
     bbox: Bbox,
 ) -> AsyncResult | FeatureCollection:
-    def st_process(sketch_map_id: int, name: str) -> AsyncResult | FeatureCollection:
+    def st_process(sketch_map_id: int, name: str) -> FeatureCollection:
         """Process a Sketch Map."""
         sketch_map_frame = st_read_file(sketch_map_id)
         sketch_map_frame = st_to_array(sketch_map_frame)
@@ -141,10 +141,7 @@ def t_digitize_sketches(
 # t_ -> task
 
 
-def st_prepare_digitize(
-    sketch_map_frame: NDArray,
-    map_frame: NDArray,
-) -> AsyncResult | NDArray:
+def st_prepare_digitize(sketch_map_frame: NDArray, map_frame: NDArray) -> NDArray:
     return prepare_img_for_markings(map_frame, sketch_map_frame)
 
 
@@ -152,45 +149,43 @@ def st_read_file(id_: int) -> bytes:
     return db_client_celery.select_file(id_)
 
 
-def st_to_array(buffer: bytes) -> AsyncResult | NDArray:
+def st_to_array(buffer: bytes) -> NDArray:
     return cv2.imdecode(np.fromstring(buffer, dtype="uint8"), cv2.IMREAD_UNCHANGED)
 
 
-def st_clip(sketch_map: NDArray, map_frame: NDArray) -> AsyncResult | NDArray:
+def st_clip(sketch_map: NDArray, map_frame: NDArray) -> NDArray:
     return upload_processing.clip(sketch_map, map_frame)
 
 
-def st_detect(sketch_map_frame: NDArray, color) -> AsyncResult | NDArray:
+def st_detect(sketch_map_frame: NDArray, color) -> NDArray:
     return upload_processing.detect_markings(sketch_map_frame, color)
 
 
-def st_georeference(sketch_map_frame: NDArray, bbox: Bbox) -> AsyncResult | BytesIO:
+def st_georeference(sketch_map_frame: NDArray, bbox: Bbox) -> BytesIO:
     return upload_processing.georeference(sketch_map_frame, bbox)
 
 
-def st_polygonize(geotiff: BytesIO, layer_name: str) -> AsyncResult | BytesIO:
+def st_polygonize(geotiff: BytesIO, layer_name: str) -> BytesIO:
     return upload_processing.polygonize(geotiff, layer_name)
 
 
-def st_to_geojson(buffer: BytesIO) -> AsyncResult | FeatureCollection:
+def st_to_geojson(buffer: BytesIO) -> FeatureCollection:
     return geojson.load(buffer)
 
 
-def st_clean(fc: FeatureCollection) -> AsyncResult | FeatureCollection:
+def st_clean(fc: FeatureCollection) -> FeatureCollection:
     return upload_processing.clean(fc)
 
 
-def st_enrich(
-    fc: FeatureCollection, properties: dict
-) -> AsyncResult | FeatureCollection:
+def st_enrich(fc: FeatureCollection, properties: dict) -> FeatureCollection:
     return upload_processing.enrich(fc, properties)
 
 
-def st_merge(fcs: list[FeatureCollection]) -> AsyncResult | FeatureCollection:
+def st_merge(fcs: list[FeatureCollection]) -> FeatureCollection:
     return upload_processing.merge(fcs)
 
 
-def st_zip(files: list) -> AsyncResult | BytesIO:
+def st_zip(files: list) -> BytesIO:
     buffer = BytesIO()
     with ZipFile(buffer, "w") as zip_file:
         for i, file in enumerate(files):
@@ -199,5 +194,5 @@ def st_zip(files: list) -> AsyncResult | BytesIO:
     return buffer
 
 
-def st_geopackage(feature_collections: list) -> AsyncResult | BytesIO:
+def st_geopackage(feature_collections: list) -> BytesIO:
     return upload_processing.geopackage(feature_collections)
