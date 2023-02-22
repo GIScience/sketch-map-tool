@@ -1,3 +1,3 @@
 #!/bin/bash
 # Run celery
-celery -A sketch_map_tool.tasks worker --loglevel=INFO
+poetry run celery -A sketch_map_tool.tasks worker --loglevel=INFO
