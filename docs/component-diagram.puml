@@ -28,13 +28,16 @@ package "Sketch Map Tool" {
 }
 
 cloud internet as "Internet" #line.dotted
-cloud oqt as "OQT API" #line.dotted
-cloud ohsome as "ohsome API" #line.dotted
 
 package "HeiGIT Maps" #line.dotted {
     cloud wms as "WMS" #line.dotted
     database osmdb as "OSMDB" #line.dotted
 
+}
+
+package "HeiGIT Services" #line.dotted {
+    cloud oqt as "OQT API" #line.dotted
+    cloud ohsome as "ohsome API" #line.dotted
 }
 
 internet --> client
