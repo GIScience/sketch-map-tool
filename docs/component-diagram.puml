@@ -22,8 +22,9 @@ package "Sketch Map Tool" {
     database redis as "Message Broker" <<Redis>>
 
     routes.py --> tasks.py
-    celery --> postgres
+    flask -> postgres
     celery --> redis
+    celery --> postgres
     client --> routes.py
 }
 
