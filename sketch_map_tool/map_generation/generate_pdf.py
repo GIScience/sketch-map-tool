@@ -126,7 +126,7 @@ def generate_pdf(  # noqa: C901
     map_frame.seek(0)
 
     # TODO find reasonable value
-    max_length_map_frame = 1000
+    max_length_map_frame = 2000
     map_frame = resize_png(map_frame, max_length_map_frame)
 
     return map_pdf, map_frame
