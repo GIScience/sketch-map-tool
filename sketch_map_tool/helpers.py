@@ -31,8 +31,8 @@ def to_array(buffer: bytes) -> NDArray:
     return cv2.imdecode(np.fromstring(buffer, dtype="uint8"), cv2.IMREAD_UNCHANGED)
 
 
-def resize_png(input: BytesIO, max_length: float) -> BytesIO:
-    input_img = PILImage.open(input)
+def resize_png(input_buffer: BytesIO, max_length: float) -> BytesIO:
+    input_img = PILImage.open(input_buffer)
     ratio = input_img.width / input_img.height
     if ratio > 1:
         width = min(max_length, input_img.width)
