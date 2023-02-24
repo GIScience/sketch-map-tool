@@ -56,6 +56,14 @@ def map_image(request):
 
 
 @pytest.fixture
+def map_image_too_big(request):
+    """Map image from WMS exceeding the limit on map frame size"""
+    orientation = request.getfixturevalue("orientation")
+    p = FIXTURE_DIR / "map-img-big-{}.jpg".format(orientation)
+    return Image.open(p)
+
+
+@pytest.fixture
 def qr_code(bbox, format_, size):
     return generate_qr_code(
         str(uuid4()),
@@ -107,6 +115,25 @@ def test_generate_pdf(
     #     expected_sketch_map[1],
     #     shallow=False,
     # )
+
+
+@pytest.mark.parametrize("orientation", ["landscape", "portrait"])
+def test_generate_pdf_map_frame_too_big(
+    map_image_too_big,
+    qr_code,
+    orientation,
+) -> None:
+    sketch_map, sketch_map_template = generate_pdf(
+        map_image_too_big,
+        qr_code,
+        A0,
+        1283.129,
+    )
+
+    map_frame_img = Image.open(sketch_map_template)
+
+    # Check that the upper limit on map frame size is enforced
+    assert map_frame_img.width <= 2000 and map_frame_img.height <= 2000
 
 
 def test_get_globes(format_):
