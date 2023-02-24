@@ -125,7 +125,8 @@ def generate_pdf(  # noqa: C901
     map_pdf.seek(0)
     map_frame.seek(0)
 
-    # Resize map_frame to avoid very large objects in upload processing of e.g. A0 maps
+    # Resize map_frame if a length of 2000 px is exceeded in one dimension to avoid very large objects in upload
+    # processing of e.g. A0 maps
     map_frame = resize_png(map_frame, max_length=2000)
 
     return map_pdf, map_frame
