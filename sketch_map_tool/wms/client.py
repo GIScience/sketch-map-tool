@@ -3,7 +3,7 @@
 from dataclasses import astuple
 
 import requests
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from PIL.PngImagePlugin import PngImageFile
 from requests import ReadTimeout, Response
 
@@ -45,4 +45,9 @@ def get_map_image(bbox: Bbox, size: Size) -> Response:
 
 
 def as_image(response: Response) -> PngImageFile:
-    return Image.open(response.raw)
+    try:
+        return Image.open(response.raw)
+    except UnidentifiedImageError:
+        raise MapGenerationError(
+            "WMS did not deliver a valid image. There is likely a problem with the WMS. Please try again later."
+        )
