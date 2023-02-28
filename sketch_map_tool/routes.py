@@ -17,7 +17,7 @@ from sketch_map_tool.exceptions import (
     MapGenerationError,
     OQTReportError,
     QRCodeError,
-    UUIDNotFoundError,
+    UUIDNotFoundError, FileNotFoundError_,
 )
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
@@ -94,7 +94,8 @@ def create_results_get(uuid: str | None = None) -> Response | str:
 @app.get("/digitize")
 def digitize() -> str:
     """Serve a file upload form for sketch map processing"""
-    return render_template("digitize.html")
+    no_template = request.args.get("no_template", default=False)  # Whether no matching template has been found
+    return render_template("digitize.html", no_template=no_template)
 
 
 @app.post("/digitize/results")
@@ -110,7 +111,10 @@ def digitize_results_post() -> Response:
     args = upload_processing.read_qr_code(to_array(file))
     uuid = args["uuid"]
     bbox = args["bbox"]
-    map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
+    try:
+        map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
+    except FileNotFoundError_:
+        return redirect(url_for("digitize", no_template=True))
     map_frame = to_array(map_frame_buffer.read())
     result_id_1 = georeference_sketch_maps.s(ids, map_frame, bbox).apply_async().id
     result_id_2 = digitize_sketches.s(ids, file_names, map_frame, bbox).apply_async().id
