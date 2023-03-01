@@ -95,10 +95,7 @@ def create_results_get(uuid: str | None = None) -> Response | str:
 @app.get("/digitize")
 def digitize() -> str:
     """Serve a file upload form for sketch map processing"""
-    no_template = request.args.get(
-        "no_template", default=False
-    )  # Whether no matching template has been found
-    return render_template("digitize.html", no_template=no_template)
+    return render_template("digitize.html")
 
 
 @app.post("/digitize/results")
@@ -114,10 +111,7 @@ def digitize_results_post() -> Response:
     args = upload_processing.read_qr_code(to_array(file))
     uuid = args["uuid"]
     bbox = args["bbox"]
-    try:
-        map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
-    except FileNotFoundError_:
-        return redirect(url_for("digitize", no_template=True))
+    map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
     map_frame = to_array(map_frame_buffer.read())
     result_id_1 = georeference_sketch_maps.s(ids, map_frame, bbox).apply_async().id
     result_id_2 = digitize_sketches.s(ids, file_names, map_frame, bbox).apply_async().id
@@ -222,6 +216,7 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
 
 
 @app.errorhandler(QRCodeError)
+@app.errorhandler(FileNotFoundError_)
 def handle_exception(error):
     return render_template("error.html", error_msg=str(error)), 422
 

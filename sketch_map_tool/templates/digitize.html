@@ -22,20 +22,7 @@
             Scan or photograph your marked Sketch Maps after data collection.<br>Then, upload one or
             more marked Sketch Maps at once as .jpg or .png file.
         </div>
-        {% if no_template %}
-            <dialog open>
-                <article>
-                    <header>
-                        <a href="?" aria-label="Close" class="close"></a>
-                        Error
-                    </header>
-                    <p>
-                        No matching map frame for detecting the map in the uploaded photo and for marking detection
-                        could be found in the database.
-                    </p>
-                </article>
-            </dialog>
-        {% endif %}
+
         <form name="upload" action="/digitize/results" method="post" enctype=multipart/form-data>
 
             <div class="filebokz" data-max-size="524288000" data-allowed-extensions="jpeg,jpg,png">
