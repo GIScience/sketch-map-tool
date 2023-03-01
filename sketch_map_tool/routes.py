@@ -14,10 +14,11 @@ from sketch_map_tool.database import client_flask as db_client
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
+    FileNotFoundError_,
     MapGenerationError,
     OQTReportError,
     QRCodeError,
-    UUIDNotFoundError, FileNotFoundError_,
+    UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
@@ -94,7 +95,9 @@ def create_results_get(uuid: str | None = None) -> Response | str:
 @app.get("/digitize")
 def digitize() -> str:
     """Serve a file upload form for sketch map processing"""
-    no_template = request.args.get("no_template", default=False)  # Whether no matching template has been found
+    no_template = request.args.get(
+        "no_template", default=False
+    )  # Whether no matching template has been found
     return render_template("digitize.html", no_template=no_template)
 
 
