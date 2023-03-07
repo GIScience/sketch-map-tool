@@ -46,10 +46,33 @@ After applying the filter for blue markings, our project looks as follows:
 ![QGIS Screenshot](img/qgis3.jpg)
 
 ## 3. Filter by sketch map
-...
+To filter by sketch map, follow the same steps as under *2. Filter by colour*. Only this time the relevant field is 
+`name` instead of `color` and the possible values are the filenames under which you uploaded the sketch maps. Therefore,
+the filter expression looks like this:
+```
+"name" = 'your_filename.jpg'
+```
+As above, all possible values can be obtained by (when not having applied any filter before) selecting `name` under 
+`Fields` and then clicking on `All` under `Values`, which shows a list of all names.
+
+**Note**: If you already applied a filter that you want to undo, simply open the filter window again and either click on 
+`Clear` or delete the query under `Provider Specific Filter Expression` and click `Ok`.  
 
 ## 4. Filter by colour and sketch map
-...
+To filter by colour and sketch map, you can combine multiple conditions in the filter expression by using `AND`:
+```
+"color" = 'blue' AND "name" = 'sketchmap1.jpg'
+```
+
+## 5. Advanced filtering
+You can of course also use other operators shown in the filter window to compose more complex filter expressions, e.g.
+```
+"color" != 'blue' AND ("name" = 'sketchmap1.jpg' OR "name" = 'sketchmap2.jpg')
+```
 
 ## 5. Export filtered layer
-...
+To export your filtered layer, e.g. all markings in only one colour, you proceed as follows:
+* Right-click on the layer in the layer view on the left
+* Hover over `Export` -> Click on `Save features as`
+* Select the format you wish, e.g. `GeoJSON`, select a file path and name
+* Click `Ok`
