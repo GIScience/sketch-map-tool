@@ -48,6 +48,7 @@ def as_image(response: Response) -> PngImageFile:
     try:
         return Image.open(response.raw)
     except UnidentifiedImageError:
+        # TODO: Read error from XML reponse and log it (#234)
         raise MapGenerationError(
-            "WMS did not deliver a valid image. There is likely a problem with the WMS. Please try again later."
+            "The Web Map Service returned an error. Please change the Area-of-Interest or try again later."
         )
