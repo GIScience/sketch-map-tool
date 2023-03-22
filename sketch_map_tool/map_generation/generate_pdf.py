@@ -281,6 +281,7 @@ def add_scalebar(input_image: BytesIO, m_per_px: float) -> BytesIO:
     # write output
     figure_output = BytesIO()
     plt.savefig(figure_output, dpi="figure", format="png")
+    plt.close()
     figure_output.seek(0)
 
     # convert from RGB to RGBA
