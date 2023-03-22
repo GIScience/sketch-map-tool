@@ -3,7 +3,7 @@
 from dataclasses import astuple
 
 import requests
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from PIL.PngImagePlugin import PngImageFile
 from requests import ReadTimeout, Response
 
@@ -45,4 +45,10 @@ def get_map_image(bbox: Bbox, size: Size) -> Response:
 
 
 def as_image(response: Response) -> PngImageFile:
-    return Image.open(response.raw)
+    try:
+        return Image.open(response.raw)
+    except UnidentifiedImageError:
+        # TODO: Read error from XML reponse and log it (#234)
+        raise MapGenerationError(
+            "The Web Map Service returned an error. Please change the Area-of-Interest or try again later."
+        )
