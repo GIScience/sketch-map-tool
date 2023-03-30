@@ -43,5 +43,10 @@ def get_report(bbox: Bbox, include_svg: bool = True, include_html: bool = False)
             )
         else:
             raise OQTReportError(req.json()["detail"])
-    report_properties = req.json()["properties"]
+    try:
+        report_properties = req.json()["properties"]
+    except requests.exceptions.InvalidJSONError:
+        raise OQTReportError(
+            "There seems to be a problem with OQT. Please try again later."
+        )
     return report_properties
