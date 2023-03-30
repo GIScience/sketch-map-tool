@@ -15,7 +15,6 @@ matplotlib = "^3.5.3"
 reportlab = "^3.6.11"
 toml = "^0.10.2"
 celery = {extras = ["SQLAlchemy", "redis"], version = "^5.2.7"}
-redis = "^4.3.4"
 pyzbar = "^0.1.9"
 opencv-python = "^4.6.0"
 qrcode = "^7.3.1"
@@ -28,6 +27,7 @@ psycopg2 = "^2.9.5"
 #pygdal = "3.4.1.10"
 geojson = "^2.5.0"
 matplotlib-scalebar = "^0.8.1"
+redis = "^4.5.4"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
