@@ -1,3 +1,4 @@
+import re
 from io import BytesIO
 from uuid import UUID
 from zipfile import ZipFile
@@ -88,11 +89,16 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 @celery.task()
 def georeference_sketch_maps(
     file_ids: list[int],
+    file_names: list[str],
     map_frame: NDArray,
     bbox: Bbox,
 ) -> AsyncResult | BytesIO:
     def process(sketch_map_id: int) -> BytesIO:
-        """Process a Sketch Map."""
+        """Process a Sketch Map.
+
+        :param sketch_map_id: ID under which the uploaded file is stored in the database.
+        :return: Georeferenced image (GeoTIFF) of the sketch map .
+        """
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
@@ -100,15 +106,18 @@ def georeference_sketch_maps(
         r = georeference(r, bbox)
         return r
 
-    def zip_(files: list) -> BytesIO:
+    def zip_(files: list, file_names: list[str]) -> BytesIO:
         buffer = BytesIO()
         with ZipFile(buffer, "w") as zip_file:
             for i, file in enumerate(files):
-                zip_file.writestr(str(i) + ".geotiff", file.read())
+                name_cleaned = re.sub(
+                    "[^A-Za-z0-9_-]", "_", ".".join(file_names[i].split(".")[:-1])
+                )
+                zip_file.writestr(f"{name_cleaned}.geotiff", file.read())
         buffer.seek(0)
         return buffer
 
-    return zip_([process(i) for i in file_ids])
+    return zip_([process(file_id) for file_id in file_ids], file_names)
 
 
 @celery.task()
