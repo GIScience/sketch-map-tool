@@ -32,6 +32,16 @@ def qr_code_img_no():
 
 
 @pytest.fixture
+def qr_code_invalid_uuid():
+    return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code-invalid-uuid.jpg"))
+
+
+@pytest.fixture
+def qr_code_invalid_contents():
+    return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code-invalid-contents.jpg"))
+
+
+@pytest.fixture
 def decoded_content(uuid, format_, bbox, size, scale):
     return MappingProxyType(
         {
@@ -67,13 +77,27 @@ def test_read_qr_code_sketch_map(sketch_map, decoded_content):
 
 
 def test_read_qr_code_multiple(qr_code_img_mutliple):
-    with pytest.raises(QRCodeError):
+    with pytest.raises(QRCodeError) as qr_code_error:
         qr_code_reader.read(qr_code_img_mutliple)
+    assert str(qr_code_error.value) == "Multiple QR-Codes detected."
 
 
 def test_read_qr_code_no(qr_code_img_no):
-    with pytest.raises(QRCodeError):
+    with pytest.raises(QRCodeError) as qr_code_error:
         qr_code_reader.read(qr_code_img_no)
+    assert str(qr_code_error.value) == "QR-Code could not be detected."
+
+
+def test_read_qr_code_invalid_uuid(qr_code_invalid_uuid):
+    with pytest.raises(QRCodeError) as qr_code_error:
+        qr_code_reader.read(qr_code_invalid_uuid)
+    assert str(qr_code_error.value) == "The provided UUID is invalid."
+
+
+def test_read_qr_code_invalid_contents(qr_code_invalid_contents):
+    with pytest.raises(QRCodeError) as qr_code_error:
+        qr_code_reader.read(qr_code_invalid_contents)
+    assert str(qr_code_error.value) == "QR-Code does not have expected content."
 
 
 def test_resize(sketch_map):

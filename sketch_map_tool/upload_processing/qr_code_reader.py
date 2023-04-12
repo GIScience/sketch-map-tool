@@ -13,6 +13,7 @@ from pyzbar import pyzbar
 from sketch_map_tool import definitions
 from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.models import Bbox, Size
+from sketch_map_tool.validators import validate_uuid
 
 
 def read(img: NDArray, depth=0) -> MappingProxyType:
@@ -37,8 +38,12 @@ def read(img: NDArray, depth=0) -> MappingProxyType:
             else:
                 raise QRCodeError("QR-Code could not be detected.")
         case 1:
-            data = decoded_objects[0].data.decode()
-            return _decode_data(data)
+            data = _decode_data(decoded_objects[0].data.decode())
+            try:
+                validate_uuid(data["uuid"])
+            except ValueError:
+                raise QRCodeError("The provided UUID is invalid.")
+            return data
         case _:
             raise QRCodeError("Multiple QR-Codes detected.")
 
