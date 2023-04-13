@@ -141,7 +141,13 @@ def select_map_frame(uuid: UUID) -> bytes:
     query = "SELECT file FROM map_frame WHERE uuid = %s"
     db_conn = open_connection()
     with db_conn.cursor() as curs:
-        curs.execute(query, [str(uuid)])
+        try:
+            curs.execute(query, [str(uuid)])
+        except psycopg2.errors.UndefinedTable:
+            raise FileNotFoundError_(
+                "In this Sketch Map Tool instance no sketch map has been generated yet. You can only upload sketch maps"
+                " to the instance on which they have been created."
+            )
         raw = curs.fetchone()
         if raw:
             return raw[0]
