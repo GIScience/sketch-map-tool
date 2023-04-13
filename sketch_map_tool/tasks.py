@@ -1,4 +1,3 @@
-import re
 from io import BytesIO
 from uuid import UUID
 from zipfile import ZipFile
@@ -110,10 +109,8 @@ def georeference_sketch_maps(
         buffer = BytesIO()
         with ZipFile(buffer, "w") as zip_file:
             for i, file in enumerate(files):
-                name_cleaned = re.sub(
-                    "[^A-Za-z0-9_-]", "_", ".".join(file_names[i].split(".")[:-1])
-                )
-                zip_file.writestr(f"{name_cleaned}.geotiff", file.read())
+                name = ".".join(file_names[i].split(".")[:-1])
+                zip_file.writestr(f"{name}.geotiff", file.read())
         buffer.seek(0)
         return buffer
 
