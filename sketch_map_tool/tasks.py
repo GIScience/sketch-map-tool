@@ -108,8 +108,8 @@ def georeference_sketch_maps(
     def zip_(files: list, file_names: list[str]) -> BytesIO:
         buffer = BytesIO()
         with ZipFile(buffer, "w") as zip_file:
-            for i, file in enumerate(files):
-                name = ".".join(file_names[i].split(".")[:-1])
+            for upload_name, file in zip(file_names, files):
+                name = ".".join(upload_name.split(".")[:-1])
                 zip_file.writestr(f"{name}.geotiff", file.read())
         buffer.seek(0)
         return buffer
