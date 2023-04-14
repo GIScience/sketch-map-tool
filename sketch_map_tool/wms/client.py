@@ -1,8 +1,10 @@
 """Web Map Service Client"""
 
 from dataclasses import astuple
+from io import BytesIO
 
 import requests
+from markupsafe import escape
 from PIL import Image, UnidentifiedImageError
 from PIL.PngImagePlugin import PngImageFile
 from requests import ReadTimeout, Response
@@ -45,10 +47,14 @@ def get_map_image(bbox: Bbox, size: Size) -> Response:
 
 
 def as_image(response: Response) -> PngImageFile:
+    response_content = response.content
+    response.close()
     try:
-        return Image.open(response.raw)
+        return Image.open(BytesIO(response_content))
     except UnidentifiedImageError:
-        # TODO: Read error from XML reponse and log it (#234)
-        raise MapGenerationError(
-            "The Web Map Service returned an error. Please change the Area-of-Interest or try again later."
-        )
+        error_msg = "The Web Map Service returned an error. Please try again later."
+        if "xml version" in str(response_content):  # Response is an XML error report
+            error_msg += " Response from the WMS:\n" + escape(
+                response_content.decode("utf8")
+            )
+        raise MapGenerationError(error_msg)
