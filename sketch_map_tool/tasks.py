@@ -89,19 +89,22 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 def georeference_sketch_maps(
     file_ids: list[int],
     file_names: list[str],
-    map_frame: NDArray,
-    bbox: Bbox,
+    uuids: list[str],
+    map_frames: dict[str, NDArray],
+    bboxes: list[Bbox],
 ) -> AsyncResult | BytesIO:
-    def process(sketch_map_id: int) -> BytesIO:
+    def process(sketch_map_id: int, uuid: str, bbox: Bbox) -> BytesIO:
         """Process a Sketch Map.
 
         :param sketch_map_id: ID under which the uploaded file is stored in the database.
+        :param uuid: UUID under which the sketch map was created.
+        :bbox: Bounding box of the AOI on the sketch map.
         :return: Georeferenced image (GeoTIFF) of the sketch map .
         """
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
-        r = clip(r, map_frame)
+        r = clip(r, map_frames[uuid])
         r = georeference(r, bbox)
         return r
 
@@ -114,23 +117,26 @@ def georeference_sketch_maps(
         buffer.seek(0)
         return buffer
 
-    return zip_([process(file_id) for file_id in file_ids], file_names)
+    return zip_([process(file_id, uuid, bbox) for file_id, uuid, bbox in zip(file_ids, uuids, bboxes)], file_names)
 
 
 @celery.task()
 def digitize_sketches(
     file_ids: list[int],
     file_names: list[str],
-    map_frame: NDArray,
-    bbox: Bbox,
+    uuids: list[str],
+    map_frames: dict[str, NDArray],
+    bboxes: list[Bbox],
 ) -> AsyncResult | FeatureCollection:
-    def process(sketch_map_id: int, name: str) -> FeatureCollection:
+    def process(
+        sketch_map_id: int, name: str, uuid: str, bbox: Bbox
+    ) -> FeatureCollection:
         """Process a Sketch Map."""
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
-        r = clip(r, map_frame)
-        r = prepare_img_for_markings(map_frame, r)
+        r = clip(r, map_frames[uuid])
+        r = prepare_img_for_markings(map_frames[uuid], r)
         geojsons = []
         for color in COLORS:
             r_ = detect_markings(r, color)
@@ -143,5 +149,8 @@ def digitize_sketches(
         return merge(geojsons)
 
     return merge(
-        [process(file_id, name) for file_id, name in zip(file_ids, file_names)]
+        [
+            process(file_id, name, uuid, bbox)
+            for file_id, name, uuid, bbox in zip(file_ids, file_names, uuids, bboxes)
+        ]
     )
