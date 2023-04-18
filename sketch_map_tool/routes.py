@@ -11,13 +11,13 @@ from sketch_map_tool import celery_app, definitions
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks, upload_processing
 from sketch_map_tool.database import client_flask as db_client
-from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
     FileNotFoundError_,
     MapGenerationError,
     OQTReportError,
     QRCodeError,
+    UploadLimitsExceededError,
     UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import to_array
@@ -105,15 +105,20 @@ def digitize_results_post() -> Response:
     if "file" not in request.files:
         return redirect(url_for("digitize"))
     files = request.files.getlist("file")
+    max_nr_simultaneous_uploads = 100
+    if len(files) > max_nr_simultaneous_uploads:
+        raise UploadLimitsExceededError(
+            f"You can only upload up to {max_nr_simultaneous_uploads} files at once."
+        )
     ids = db_client.insert_files(files)
-    files_from_db = [db_client_flask.select_file(i) for i in ids]
-    file_names = [db_client_flask.select_file_name(i) for i in ids]
+    files_from_db = [db_client.select_file(i) for i in ids]
+    file_names = [db_client.select_file_name(i) for i in ids]
     args = [upload_processing.read_qr_code(to_array(file)) for file in files_from_db]
     uuids = [args_["uuid"] for args_ in args]
     bboxes = [args_["bbox"] for args_ in args]
     map_frames = dict()
     for uuid in set(uuids):  # Only retrieve map_frame once per uuid to save memory
-        map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
+        map_frame_buffer = BytesIO(db_client.select_map_frame(UUID(uuid)))
         map_frames[uuid] = to_array(map_frame_buffer.read())
     result_id_1 = (
         georeference_sketch_maps.s(ids, file_names, uuids, map_frames, bboxes)
@@ -130,7 +135,7 @@ def digitize_results_post() -> Response:
         "raster-results": str(result_id_1),
         "vector-results": str(result_id_2),
     }
-    db_client_flask.set_async_result_ids(uuid, map_)
+    db_client.set_async_result_ids(uuid, map_)
     id_ = uuid
     return redirect(url_for("digitize_results_get", uuid=id_))
 
@@ -225,6 +230,7 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
 
 @app.errorhandler(QRCodeError)
 @app.errorhandler(FileNotFoundError_)
+@app.errorhandler(UploadLimitsExceededError)
 def handle_exception(error):
     return render_template("error.html", error_msg=str(error)), 422
 

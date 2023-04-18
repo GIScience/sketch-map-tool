@@ -10,6 +10,10 @@ class OQTReportError(Exception):
     pass
 
 
+class UploadLimitsExceededError(Exception):
+    pass
+
+
 class DatabaseError(Exception):
     pass
 
