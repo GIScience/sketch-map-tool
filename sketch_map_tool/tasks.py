@@ -88,11 +88,16 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 @celery.task()
 def georeference_sketch_maps(
     file_ids: list[int],
+    file_names: list[str],
     map_frame: NDArray,
     bbox: Bbox,
 ) -> AsyncResult | BytesIO:
     def process(sketch_map_id: int) -> BytesIO:
-        """Process a Sketch Map."""
+        """Process a Sketch Map.
+
+        :param sketch_map_id: ID under which the uploaded file is stored in the database.
+        :return: Georeferenced image (GeoTIFF) of the sketch map .
+        """
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
@@ -100,15 +105,16 @@ def georeference_sketch_maps(
         r = georeference(r, bbox)
         return r
 
-    def zip_(files: list) -> BytesIO:
+    def zip_(files: list, file_names: list[str]) -> BytesIO:
         buffer = BytesIO()
         with ZipFile(buffer, "w") as zip_file:
-            for i, file in enumerate(files):
-                zip_file.writestr(str(i) + ".geotiff", file.read())
+            for upload_name, file in zip(file_names, files):
+                name = ".".join(upload_name.split(".")[:-1])
+                zip_file.writestr(f"{name}.geotiff", file.read())
         buffer.seek(0)
         return buffer
 
-    return zip_([process(i) for i in file_ids])
+    return zip_([process(file_id) for file_id in file_ids], file_names)
 
 
 @celery.task()
