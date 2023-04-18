@@ -106,6 +106,12 @@ function bindFormToPrintLayoutControl(printLayoutControl) {
             printLayoutControl.handleBboxChange();
             document.querySelector("#page-setup-form").submit();
         });
+
+    // update the URL when the selection is changed  (e.g. to bookmark the current selection)
+    printLayoutControl.on("change:bbox", (event) => {
+        const newCenter = printLayoutControl.getMap().getView().getCenter();
+        window.history.replaceState({}, document.title, `?center=${newCenter}`);
+    });
 }
 
 export {
