@@ -153,7 +153,8 @@ def select_map_frame(uuid: UUID) -> bytes:
             return raw[0]
         else:
             raise FileNotFoundError_(
-                "There is no map frame in the database with the uuid: {}".format(uuid)
+                f"There is no map frame in the database with the uuid: {uuid}. You can only upload sketch maps to the "
+                "instance on which they have been created."
             )
 
 
