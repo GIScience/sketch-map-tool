@@ -1,6 +1,5 @@
 import { Map, View } from "ol";
 import { Tile } from "ol/layer";
-import { fromLonLat } from "ol/proj";
 import { OSM } from "ol/source";
 import Geocoder from "@kirtandesai/ol-geocoder";
 import { PrintLayout, PAPER_FORMAT, ORIENTATION } from "@giscience/ol-print-layout-control";
@@ -14,11 +13,11 @@ import { SKETCH_MAP_MARGINS } from "./sketchMapMargins.js";
  * @param {number} [zoom=15] - the zoomlevel in which the map will be initialized
  * @returns {Map}
  */
-function createMap(target = "map", lonLat = [8.68, 49.41], zoom = 15) {
+function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965], zoom = 15) {
     const map = new Map({
         target,
         view: new View({
-            center: fromLonLat(lonLat),
+            center: lonLat,
             zoom,
             maxZoom: 20,
             enableRotation: false,

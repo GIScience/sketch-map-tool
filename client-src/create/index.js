@@ -11,13 +11,13 @@ import { bindFormToPrintLayoutControl } from "./form.js";
 const searchParams = new URLSearchParams(window.location.search);
 const centerArg = searchParams.get("center");
 
-const map = createMap("map", [8.68, 49.41], 15);
-
+let center = [966253.1800856147, 6344703.99262965];
 if (centerArg != null) {
     const centerCoords = centerArg.split(",");
-    const center = [parseFloat(centerCoords[0]), parseFloat(centerCoords[1])];
-    map.getView().setCenter(center);
+    center = [parseFloat(centerCoords[0]), parseFloat(centerCoords[1])];
 }
+
+const map = createMap("map", center, 15);
 
 const printLayoutControl = addPrintLayoutControl(map);
 bindFormToPrintLayoutControl(printLayoutControl);
