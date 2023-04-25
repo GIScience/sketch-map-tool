@@ -5,7 +5,6 @@ from typing import Tuple
 
 import fitz
 import matplotlib.pyplot as plt
-from matplotlib_scalebar.scalebar import ScaleBar
 from PIL import Image as PILImage
 from reportlab.graphics import renderPDF
 from reportlab.graphics.shapes import Drawing
@@ -72,11 +71,11 @@ def generate_pdf(  # noqa: C901
     map_image_reportlab = PIL_image_to_image_reader(map_image_input)
 
     # calculate m per px in map frame
-    cm_per_px = frame_width * scale / map_width_px
-    m_per_px = cm_per_px / 100
+    # cm_per_px = frame_width * scale / map_width_px
+    # m_per_px = cm_per_px / 100
     # create map_image by adding globes
     map_img = create_map_frame(
-        map_image_reportlab, format_, map_height_px, map_width_px, portrait, m_per_px
+        map_image_reportlab, format_, map_height_px, map_width_px, portrait, scale
     )
 
     map_pdf = BytesIO()
@@ -229,7 +228,7 @@ def create_map_frame(
     height: float,
     width: float,
     portrait: bool,
-    m_per_px: float,
+    scale: float,
 ) -> BytesIO:
     map_frame = BytesIO()
     canv = canvas.Canvas(map_frame)
@@ -259,13 +258,26 @@ def create_map_frame(
         )
         add_globes(canv, globe_size, height, width)
 
+    canv.rect(width * 0.75, height * 0.97, ppi_to_pixel_per_cm(192), 10, fill=True)
+    canv.drawString(width * 0.75, height * 0.95, f"1cm : {scale / 100}m")
+
     canv.save()
     map_frame.seek(0)
-    return add_scalebar(pdf_page_to_img(map_frame), m_per_px)
+    return pdf_page_to_img(map_frame)
 
 
-def add_scalebar(input_image: BytesIO, m_per_px: float) -> BytesIO:
+def ppi_to_pixel_per_cm(ppi: float) -> float:
+    """
+    :param ppi: Value in pixels per inch
+    :return: Corresponding pixels per centimeter
+    """
+    return 0.393701*ppi
+
+
+def add_scalebar(input_image: BytesIO, m_per_px: float, img_width: int, img_height: int, ppi: int) -> BytesIO:
     # render legend with matplotlib
+
+
     img = plt.imread(input_image)
     width, height = img.shape[1], img.shape[0]
     # dpi do not have to be correct, just should be fixed during processing
