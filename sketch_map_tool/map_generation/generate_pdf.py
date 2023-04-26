@@ -4,7 +4,6 @@ from io import BytesIO
 from typing import Tuple
 
 import fitz
-import matplotlib.pyplot as plt
 from PIL import Image as PILImage
 from reportlab.graphics import renderPDF
 from reportlab.graphics.shapes import Drawing
@@ -75,7 +74,7 @@ def generate_pdf(  # noqa: C901
     # m_per_px = cm_per_px / 100
     # create map_image by adding globes
     map_img = create_map_frame(
-        map_image_reportlab, format_, map_height_px, map_width_px, portrait, scale
+        map_image_reportlab, map_height_px, map_width_px, portrait, scale
     )
 
     map_pdf = BytesIO()
@@ -224,7 +223,6 @@ def PIL_image_to_image_reader(map_image_input):
 
 def create_map_frame(
     map_image: ImageReader,
-    format_: PaperFormat,
     height: float,
     width: float,
     portrait: bool,
@@ -258,9 +256,7 @@ def create_map_frame(
         )
         add_globes(canv, globe_size, height, width)
 
-    canv.rect(width * 0.75, height * 0.97, ppi_to_pixel_per_cm(192), 10, fill=True)
-    canv.drawString(width * 0.75, height * 0.95, f"1cm : {scale / 100}m")
-
+    add_scale(canv, width, height, scale)
     canv.save()
     map_frame.seek(0)
     return pdf_page_to_img(map_frame)
@@ -271,36 +267,7 @@ def ppi_to_pixel_per_cm(ppi: float) -> float:
     :param ppi: Value in pixels per inch
     :return: Corresponding pixels per centimeter
     """
-    return 0.393701*ppi
-
-
-def add_scalebar(input_image: BytesIO, m_per_px: float, img_width: int, img_height: int, ppi: int) -> BytesIO:
-    # render legend with matplotlib
-
-
-    img = plt.imread(input_image)
-    width, height = img.shape[1], img.shape[0]
-    # dpi do not have to be correct, just should be fixed during processing
-    dpi = 192
-    plt.figure(figsize=(width / dpi, height / dpi), dpi=dpi)
-    plt.axis("off")
-    # add image to plot
-    plt.imshow(img)
-    plt.tight_layout(pad=0)
-    scalebar = ScaleBar(m_per_px)
-    plt.gca().add_artist(scalebar)
-
-    # write output
-    figure_output = BytesIO()
-    plt.savefig(figure_output, dpi="figure", format="png")
-    plt.close()
-    figure_output.seek(0)
-
-    # convert from RGB to RGBA
-    output_image = BytesIO()
-    PILImage.open(figure_output).convert("RGB").save(output_image, format="png")
-    output_image.seek(0)
-    return output_image
+    return 0.393701 * ppi
 
 
 def add_globes(canv: canvas.Canvas, size: float, height: float, width: float):
@@ -355,6 +322,19 @@ def get_compass(size: float) -> Drawing:
     compass = svg2rlg(PDF_RESOURCES_PATH / "north.svg")
     compass = resize_rlg_by_width(compass, size)
     return compass
+
+
+def add_scale(canv, width, height, scale):
+    scale_bar_length = round(
+        ppi_to_pixel_per_cm(192)
+    )  # Equals one cm printed with 192 ppi
+    scale_bar_x, scale_bar_y = int(width * 0.99) - scale_bar_length, int(height * 0.98)
+    canv.setFillColorRGB(255, 255, 255)
+    canv.rect(scale_bar_x - 15, scale_bar_y - 30, scale_bar_length + 30, 60, fill=True)
+    canv.setFillColorRGB(0, 0, 0)
+    canv.rect(scale_bar_x, scale_bar_y, scale_bar_length, 20, fill=True)
+    canv.setFont("Times-Roman", 16)
+    canv.drawString(scale_bar_x, scale_bar_y - 20, f"1cm : {round(scale / 100)}m")
 
 
 def pdf_page_to_img(pdf: BytesIO, page_id=0) -> BytesIO:
