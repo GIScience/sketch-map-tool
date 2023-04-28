@@ -4,6 +4,7 @@ from io import BytesIO
 from typing import Tuple
 
 import fitz
+import reportlab.pdfgen.canvas
 from PIL import Image as PILImage
 from reportlab.graphics import renderPDF
 from reportlab.graphics.shapes import Drawing
@@ -70,11 +71,11 @@ def generate_pdf(  # noqa: C901
     map_image_reportlab = PIL_image_to_image_reader(map_image_input)
 
     # calculate m per px in map frame
-    # cm_per_px = frame_width * scale / map_width_px
-    # m_per_px = cm_per_px / 100
+    cm_per_px = frame_width * scale / map_width_px
+    m_per_px = cm_per_px / 100
     # create map_image by adding globes
     map_img = create_map_frame(
-        map_image_reportlab, map_height_px, map_width_px, portrait, scale
+        map_image_reportlab, map_height_px, map_width_px, portrait, m_per_px, format_
     )
 
     map_pdf = BytesIO()
@@ -223,10 +224,11 @@ def PIL_image_to_image_reader(map_image_input):
 
 def create_map_frame(
     map_image: ImageReader,
-    height: float,
-    width: float,
+    height: int,
+    width: int,
     portrait: bool,
-    scale: float,
+    m_per_px: float,
+    format_: PaperFormat
 ) -> BytesIO:
     map_frame = BytesIO()
     canv = canvas.Canvas(map_frame)
@@ -256,7 +258,7 @@ def create_map_frame(
         )
         add_globes(canv, globe_size, height, width)
 
-    add_scale(canv, width, height, scale)
+    add_scale(canv, width, height, m_per_px, format_)
     canv.save()
     map_frame.seek(0)
     return pdf_page_to_img(map_frame)
@@ -324,17 +326,30 @@ def get_compass(size: float) -> Drawing:
     return compass
 
 
-def add_scale(canv, width, height, scale):
+def add_scale(canv: reportlab.pdfgen.canvas.Canvas, width: int, height: int, m_per_px: float, paper_format: PaperFormat):
     scale_bar_length = round(
-        ppi_to_pixel_per_cm(192)
-    )  # Equals one cm printed with 192 ppi
-    scale_bar_x, scale_bar_y = int(width * 0.99) - scale_bar_length, int(height * 0.98)
+        width*paper_format.scale_length_factor
+    )
+    corresponding_meters = round(m_per_px * scale_bar_length)
+    if corresponding_meters >= 1000:
+        corresponding_meters = corresponding_meters - corresponding_meters % 1000 + 1000  # Round up to the next 1000m
+    elif corresponding_meters >= 500:
+        corresponding_meters = corresponding_meters - corresponding_meters % 500 + 500  # Round up to the next 500m
+    elif corresponding_meters >= 100:
+        corresponding_meters = corresponding_meters - corresponding_meters % 100 + 100  # Round up to the next 100m
+    elif corresponding_meters >= 50:
+        corresponding_meters = corresponding_meters - corresponding_meters % 50 + 50  # Round up to the next 50m
+    else:
+        corresponding_meters = corresponding_meters - corresponding_meters % 10 + 10  # Round up to the next 10m
+    scale_bar_length = round(corresponding_meters/m_per_px)
+    scale_bar_x, scale_bar_y = width + paper_format.scale_relative_xy[0] - scale_bar_length, height + paper_format.scale_relative_xy[1]
     canv.setFillColorRGB(255, 255, 255)
-    canv.rect(scale_bar_x - 15, scale_bar_y - 30, scale_bar_length + 30, 60, fill=True)
+    background_params = paper_format.scale_background_params
+    canv.rect(scale_bar_x + background_params[0], scale_bar_y + background_params[1], scale_bar_length+background_params[2], background_params[3], fill=True)
     canv.setFillColorRGB(0, 0, 0)
-    canv.rect(scale_bar_x, scale_bar_y, scale_bar_length, 20, fill=True)
-    canv.setFont("Times-Roman", 16)
-    canv.drawString(scale_bar_x, scale_bar_y - 20, f"1cm : {round(scale / 100)}m")
+    canv.rect(scale_bar_x, scale_bar_y, scale_bar_length, paper_format.scale_height, fill=True)
+    canv.setFont("Times-Roman", paper_format.font_size*2)  # Should be a bit bigger than e.g. the copyright note
+    canv.drawString(scale_bar_x, scale_bar_y - paper_format.scale_distance_to_text, f"{corresponding_meters}m")
 
 
 def pdf_page_to_img(pdf: BytesIO, page_id=0) -> BytesIO:
