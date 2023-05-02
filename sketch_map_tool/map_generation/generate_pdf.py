@@ -247,6 +247,7 @@ def create_map_frame(
         )
         canv.rotate(-90)
         add_globes(canv, globe_size, height=width, width=height)
+        add_scale(canv, width=height, height=width, m_per_px=m_per_px, paper_format=format_)
     else:
         canv.drawImage(
             map_image,
@@ -257,8 +258,8 @@ def create_map_frame(
             height=height,
         )
         add_globes(canv, globe_size, height, width)
+        add_scale(canv, width, height, m_per_px, format_)
 
-    add_scale(canv, width, height, m_per_px, format_)
     canv.save()
     map_frame.seek(0)
     return pdf_page_to_img(map_frame)
