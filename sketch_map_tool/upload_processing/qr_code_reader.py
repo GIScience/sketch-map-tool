@@ -50,22 +50,19 @@ def read(img: NDArray, depth=0) -> MappingProxyType:
 
 def _decode_data(data) -> MappingProxyType:
     try:
-        d = json.loads(data)
-    except JSONDecodeError as error:
+        contents = data.split(",")
+        if not len(contents) == 5:  # uuid and bbox coordinates
+            raise ValueError("Unexpected length of QR-code contents.")
+        uuid = contents[0]
+        bbox = Bbox(*[float(coordinate) for coordinate in contents[1:]])  # Raises ValueError for non-float values
+    except ValueError as error:
         raise QRCodeError("QR-Code does not have expected content.") from error
-    try:
-        return MappingProxyType(
-            {
-                "uuid": d["id"],
-                "bbox": Bbox(**d["bbox"]),
-                "format_": getattr(definitions, d["format"].upper()),
-                "orientation": d["orientation"],
-                "size": Size(**d["size"]),
-                "scale": float(d["scale"]),
-            }
-        )
-    except KeyError as error:
-        raise QRCodeError("QR-Code does not have expected content.") from error
+    return MappingProxyType(
+        {
+            "uuid": uuid,
+            "bbox": bbox,
+        }
+    )
 
 
 def _resize(img, scale: float = 0.75):

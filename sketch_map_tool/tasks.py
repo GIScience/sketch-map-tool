@@ -56,12 +56,9 @@ def generate_sketch_map(
     raw = wms_client.get_map_image(bbox, size)
     map_image = wms_client.as_image(raw)
     qr_code_ = map_generation.qr_code(
-        uuid,
+        str(uuid),
         bbox,
         format_,
-        orientation,
-        size,
-        scale,
     )
     map_pdf, map_img = map_generation.generate_pdf(
         map_image,
