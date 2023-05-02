@@ -228,7 +228,7 @@ def create_map_frame(
     width: int,
     portrait: bool,
     m_per_px: float,
-    format_: PaperFormat
+    format_: PaperFormat,
 ) -> BytesIO:
     map_frame = BytesIO()
     canv = canvas.Canvas(map_frame)
@@ -247,7 +247,9 @@ def create_map_frame(
         )
         canv.rotate(-90)
         add_globes(canv, globe_size, height=width, width=height)
-        add_scale(canv, width=height, height=width, m_per_px=m_per_px, paper_format=format_)
+        add_scale(
+            canv, width=height, height=width, m_per_px=m_per_px, paper_format=format_
+        )
     else:
         canv.drawImage(
             map_image,
@@ -327,30 +329,61 @@ def get_compass(size: float) -> Drawing:
     return compass
 
 
-def add_scale(canv: reportlab.pdfgen.canvas.Canvas, width: int, height: int, m_per_px: float, paper_format: PaperFormat):
-    scale_bar_length = round(
-        width*paper_format.scale_length_factor
-    )
+def add_scale(
+    canv: reportlab.pdfgen.canvas.Canvas,
+    width: int,
+    height: int,
+    m_per_px: float,
+    paper_format: PaperFormat,
+):
+    scale_bar_length = round(width * paper_format.scale_length_factor)
     corresponding_meters = round(m_per_px * scale_bar_length)
     if corresponding_meters >= 1000:
-        corresponding_meters = corresponding_meters - corresponding_meters % 1000 + 1000  # Round up to the next 1000m
+        corresponding_meters = (
+            corresponding_meters - corresponding_meters % 1000 + 1000
+        )  # Round up to the next 1000m
     elif corresponding_meters >= 500:
-        corresponding_meters = corresponding_meters - corresponding_meters % 500 + 500  # Round up to the next 500m
+        corresponding_meters = (
+            corresponding_meters - corresponding_meters % 500 + 500
+        )  # Round up to the next 500m
     elif corresponding_meters >= 100:
-        corresponding_meters = corresponding_meters - corresponding_meters % 100 + 100  # Round up to the next 100m
+        corresponding_meters = (
+            corresponding_meters - corresponding_meters % 100 + 100
+        )  # Round up to the next 100m
     elif corresponding_meters >= 50:
-        corresponding_meters = corresponding_meters - corresponding_meters % 50 + 50  # Round up to the next 50m
+        corresponding_meters = (
+            corresponding_meters - corresponding_meters % 50 + 50
+        )  # Round up to the next 50m
     else:
-        corresponding_meters = corresponding_meters - corresponding_meters % 10 + 10  # Round up to the next 10m
-    scale_bar_length = round(corresponding_meters/m_per_px)
-    scale_bar_x, scale_bar_y = width + paper_format.scale_relative_xy[0] - scale_bar_length, height + paper_format.scale_relative_xy[1]
+        corresponding_meters = (
+            corresponding_meters - corresponding_meters % 10 + 10
+        )  # Round up to the next 10m
+    scale_bar_length = round(corresponding_meters / m_per_px)
+    scale_bar_x, scale_bar_y = (
+        width + paper_format.scale_relative_xy[0] - scale_bar_length,
+        height + paper_format.scale_relative_xy[1],
+    )
     canv.setFillColorRGB(255, 255, 255)
     background_params = paper_format.scale_background_params
-    canv.rect(scale_bar_x + background_params[0], scale_bar_y + background_params[1], scale_bar_length+background_params[2], background_params[3], fill=True)
+    canv.rect(
+        scale_bar_x + background_params[0],
+        scale_bar_y + background_params[1],
+        scale_bar_length + background_params[2],
+        background_params[3],
+        fill=True,
+    )
     canv.setFillColorRGB(0, 0, 0)
-    canv.rect(scale_bar_x, scale_bar_y, scale_bar_length, paper_format.scale_height, fill=True)
-    canv.setFont("Times-Roman", paper_format.font_size*2)  # Should be a bit bigger than e.g. the copyright note
-    canv.drawString(scale_bar_x, scale_bar_y - paper_format.scale_distance_to_text, f"{corresponding_meters}m")
+    canv.rect(
+        scale_bar_x, scale_bar_y, scale_bar_length, paper_format.scale_height, fill=True
+    )
+    canv.setFont(
+        "Times-Roman", paper_format.font_size * 2
+    )  # Should be a bit bigger than e.g. the copyright note
+    canv.drawString(
+        scale_bar_x,
+        scale_bar_y - paper_format.scale_distance_to_text,
+        f"{corresponding_meters}m",
+    )
 
 
 def pdf_page_to_img(pdf: BytesIO, page_id=0) -> BytesIO:
