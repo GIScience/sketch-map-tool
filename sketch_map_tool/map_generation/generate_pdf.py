@@ -247,7 +247,7 @@ def create_map_frame(
         )
         canv.rotate(-90)
         add_globes(canv, globe_size, height=width, width=height)
-        add_scale(
+        add_scalebar(
             canv, width=height, height=width, m_per_px=m_per_px, paper_format=format_
         )
     else:
@@ -260,7 +260,7 @@ def create_map_frame(
             height=height,
         )
         add_globes(canv, globe_size, height, width)
-        add_scale(canv, width, height, m_per_px, format_)
+        add_scalebar(canv, width, height, m_per_px, format_)
 
     canv.save()
     map_frame.seek(0)
@@ -329,14 +329,14 @@ def get_compass(size: float) -> Drawing:
     return compass
 
 
-def add_scale(
+def add_scalebar(
     canv: reportlab.pdfgen.canvas.Canvas,
     width: int,
     height: int,
     m_per_px: float,
     paper_format: PaperFormat,
 ):
-    scale_bar_length = round(width * paper_format.scale_length_factor)
+    scale_bar_length = round(width * 0.075)
     corresponding_meters = round(m_per_px * scale_bar_length)
     if corresponding_meters >= 1000:
         corresponding_meters = (
