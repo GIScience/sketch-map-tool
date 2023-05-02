@@ -75,7 +75,7 @@ def generate_pdf(  # noqa: C901
     m_per_px = cm_per_px / 100
     # create map_image by adding globes
     map_img = create_map_frame(
-        map_image_reportlab, map_height_px, map_width_px, portrait, m_per_px, format_
+        map_image_reportlab, format_, map_height_px, map_width_px, portrait, m_per_px
     )
 
     map_pdf = BytesIO()
@@ -224,11 +224,11 @@ def PIL_image_to_image_reader(map_image_input):
 
 def create_map_frame(
     map_image: ImageReader,
+    format_: PaperFormat,
     height: int,
     width: int,
     portrait: bool,
     m_per_px: float,
-    format_: PaperFormat,
 ) -> BytesIO:
     map_frame = BytesIO()
     canv = canvas.Canvas(map_frame)
@@ -265,14 +265,6 @@ def create_map_frame(
     canv.save()
     map_frame.seek(0)
     return pdf_page_to_img(map_frame)
-
-
-def ppi_to_pixel_per_cm(ppi: float) -> float:
-    """
-    :param ppi: Value in pixels per inch
-    :return: Corresponding pixels per centimeter
-    """
-    return 0.393701 * ppi
 
 
 def add_globes(canv: canvas.Canvas, size: float, height: float, width: float):
