@@ -43,7 +43,6 @@ class PaperFormat:
         compass_scale: Scale factor of the compass
         globe_scale: Scale factor of the globes
         scale_height: Height of the scale [px].
-        scale_length_factor: Determines length of scale (scale length = scale_length_factor * width of map frame)
         scale_relative_xy: Position of the scale relative to the map frame width or height respectively
         scale_background_params: (x relative to scale, y relative to scale, length additional to scale, height)
         scale_distance_to_text: Distance from the scale bar to the text describing it [px]
@@ -68,7 +67,6 @@ class PaperFormat:
     compass_scale: float
     globe_scale: float
     scale_height: int
-    scale_length_factor: float
     scale_relative_xy: tuple[int, int]
     scale_background_params: tuple[int, int, int, int]
     scale_distance_to_text: int

@@ -95,7 +95,6 @@ def format_():
         compass_scale=0.25,
         globe_scale=0.125,
         scale_height=1,
-        scale_length_factor=0.075,
         scale_relative_xy=(-15, -30),
         scale_background_params=(-15, -30, 30, 60),
         scale_distance_to_text=20,
