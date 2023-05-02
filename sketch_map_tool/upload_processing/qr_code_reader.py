@@ -54,7 +54,9 @@ def _decode_data(data) -> MappingProxyType:
         if not len(contents) == 5:  # uuid and bbox coordinates
             raise ValueError("Unexpected length of QR-code contents.")
         uuid = contents[0]
-        bbox = Bbox(*[float(coordinate) for coordinate in contents[1:]])  # Raises ValueError for non-float values
+        bbox = Bbox(
+            *[float(coordinate) for coordinate in contents[1:]]
+        )  # Raises ValueError for non-float values
     except ValueError as error:
         raise QRCodeError("QR-Code does not have expected content.") from error
     return MappingProxyType(

@@ -53,8 +53,5 @@ def test_qr_code(
         str(uuid4()),
         bbox,
         format_,
-        "landscape",
-        size,
-        75,
     )
     assert isinstance(result, Drawing)
