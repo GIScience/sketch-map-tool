@@ -31,8 +31,7 @@ def _encode_data(
     uuid: str,
     bbox: Bbox,
 ) -> str:
-    bbox_dict = asdict(bbox)
-    return f"{uuid},{bbox_dict['lon_min']},{bbox_dict['lat_min']},{bbox_dict['lon_max']},{bbox_dict['lat_max']}"
+    return f"{uuid},{bbox.lon_min},{bbox.lat_min},{bbox.lon_max},{bbox.lat_max}"
 
 
 def _make_qr_code(data: str) -> BytesIO:
