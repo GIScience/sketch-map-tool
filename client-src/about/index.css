@@ -37,3 +37,9 @@ article > span {
     background-color: var(--secondary);
     aspect-ratio: 1;
 }
+
+@media (prefers-color-scheme: dark) {
+    .logos {
+        background-color: white;
+    }
+}

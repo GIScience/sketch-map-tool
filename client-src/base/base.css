@@ -225,3 +225,14 @@ nav {
 .vertical.step-arrows > div.active {
     background-image: url("/static/assets/active_step_arrow_vertical.svg");
 }
+
+@media (prefers-color-scheme: dark) {
+    .horizontal.step-arrows > div {
+        background-image: url("/static/assets/step_arrow_dark.svg");
+    }
+
+    [role="link"],
+    a {
+        --color: #7a7aff;
+    }
+}

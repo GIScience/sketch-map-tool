@@ -43,10 +43,11 @@
             Material</a> section below or on
             the <a href="/help">Help page</a>!
         </p>
-        <figure>
+        <picture>
+            <source srcset="{{ url_for("static", filename="assets/images/about/sketchmaptool_markiertekarte_dark.webp") }}" media="(prefers-color-scheme: dark)">
             <img src="{{ url_for("static", filename="assets/images/about/sketchmaptool_markiertekarte.webp") }}"
                  alt="SketchMap Preview">
-        </figure>
+        </picture>
 
         <h1 id="the-project">The Project</h1>
         <p>

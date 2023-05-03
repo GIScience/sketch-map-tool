@@ -80,3 +80,13 @@
     min-height: 7rem;
     max-width: 15rem;
 }
+
+@media (prefers-color-scheme: dark) {
+    #then {
+        background-color: #11191f;
+    }
+
+    #main-grid {
+        background: linear-gradient(white, white) center/2px 100% no-repeat;
+    }
+}

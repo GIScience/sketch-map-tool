@@ -43,3 +43,12 @@ button {
     width: fit-content;
     min-width: 30%;
 }
+
+@media (prefers-color-scheme: dark) {
+    .filebokz {
+        background-color: #11191f;
+
+        --drag-bg-color: black;
+        --hover-bg-color: black;
+    }
+}
