@@ -21,6 +21,7 @@ qrcode = "^7.3.1"
 svglib = "^1.4.1"
 PyMuPDF = {extras = ["Pillow"], version = "^1.21.0"}
 psycopg2 = "^2.9.5"
+flask-babel = "^3.1.0"
 # these dependencies are maintained by your local setup and have to be fixed for now, since poetry and (py)gdal packages can't work together
 # if you change these versions, please change them in development-setup.md, Dockerfile and .github/workflows/python.yml as well
 #numpy = "1.23.5"
