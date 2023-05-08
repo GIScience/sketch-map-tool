@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from celery import Celery
 from flask import Flask, request
-from flask.ext.babel import Babel
+from flask_babel import Babel
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.database import client_flask as db_client
@@ -56,14 +56,13 @@ def make_celery(flask_app: Flask) -> Celery:
     return celery_app
 
 
-flask_app = make_flask()
-celery_app = make_celery(flask_app)
-babel = Babel(flask_app)  # for translations
-
-
-@babel.localeselector
 def get_locale():
     """
     Get locality of user to provide translations if available.
     """
-    return request.accept_languages.best_match([flask_app.config['LANGUAGES'].keys()])
+    return request.accept_languages.best_match(flask_app.config['LANGUAGES'].keys())
+
+
+flask_app = make_flask()
+celery_app = make_celery(flask_app)
+babel = Babel(flask_app, locale_selector=get_locale)  # for translations
