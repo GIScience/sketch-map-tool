@@ -48,12 +48,15 @@ def get_map_image(bbox: Bbox, size: Size) -> Response:
 
 def as_image(response: Response) -> PngImageFile:
     response_content = response.content
+    content_type = response.headers["content-type"]
     response.close()
     try:
         return Image.open(BytesIO(response_content))
     except UnidentifiedImageError:
         error_msg = "The Web Map Service returned an error. Please try again later."
-        if "xml version" in str(response_content):  # Response is an XML error report
+        if (
+            content_type == "application/vnd.ogc.se_xml"
+        ):  # Response is an XML error report
             error_msg += " Response from the WMS:\n" + escape(
                 response_content.decode("utf8")
             )
