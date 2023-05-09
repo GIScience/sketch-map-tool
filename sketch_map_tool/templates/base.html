@@ -27,9 +27,9 @@
             </li>
         </ul>
         <ul id="nav-right">
-            <li><a href="{{ url_for('index') }}" class="nav-link secondary">Home</a></li>
-            <li><a href="{{ url_for('about') }}" class="nav-link secondary">About</a></li>
-            <li><a href="{{ url_for('help') }}" class="nav-link secondary">Help</a></li>
+            <li><a href="{{ url_for('index') }}" class="nav-link secondary">{{ _('Home') }}</a></li>
+            <li><a href="{{ url_for('about') }}" class="nav-link secondary">{{ _('About') }}</a></li>
+            <li><a href="{{ url_for('help') }}" class="nav-link secondary">{{ _('Help') }}</a></li>
             <li><a href="https://github.com/GIScience/sketch-map-tool" class="nav-link secondary" target="_blank"><span class="github-icon"></span> Code</a></li>
             <li><details role="list">
                 <summary aria-haspopup="listbox"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-globe2" viewBox="0 0 16 16">
@@ -48,12 +48,12 @@
     </div>
 
     <footer class="container-fluid">
-        <a class="nav-link secondary" href="https://heigit.org/privacy-policy/" target="_blank">Privacy
-            Policy</a>
+        <a class="nav-link secondary" href="https://heigit.org/privacy-policy/" target="_blank">{{ _('Privacy
+            Policy') }}</a>
         <span>&middot;</span>
-        <a class="nav-link secondary" href="https://heigit.org/imprint/" target="_blank">Imprint</a>
+        <a class="nav-link secondary" href="https://heigit.org/imprint/" target="_blank">{{ _('Imprint') }}</a>
         <a href="https://heigit.org" target="_blank"><img
-                src="/static/assets/logos/HeiGIT/HeiGIT_Logo_base.svg" alt="HeiGIT Logo"></a>
+                src="/static/assets/logos/HeiGIT/HeiGIT_Logo_base.svg" alt="{{ _('HeiGIT Logo') }}"></a>
     </footer>
 </div>
 </body>

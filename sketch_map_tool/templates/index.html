@@ -5,7 +5,7 @@
 {% endblock head %}
 
 {% block header_message %}
-    Create re-digitizable paper maps for offline data collection in the field
+    {{ _('Create re-digitizable paper maps for offline data collection in the field') }}
 {% endblock header_message %}
 
 {% block body %}
@@ -14,7 +14,7 @@
             <article class="center-text">
                 <div class="container">
                     <p>
-                        The <strong>Sketch&nbsp;Map Tool</strong> is an
+                        {{ _('The <strong>Sketch&nbsp;Map Tool</strong> is an
                         easy-to-use tool for participatory sketch mapping through <strong>offline</strong>
                         collection,
                         digitization and
@@ -24,12 +24,12 @@
                         together with people in a community to map their experience and perception
                         of risk in their neighbourhood in a paper-based format, but still be able to
                         quickly analyse the results digitally? Then, the Sketch&nbsp;Map Tool is exactly
-                        what you need!
+                        what you need!') }}
                     </p>
                     <p>
-                        Learn more about the <a
+                        {{ _('Learn more about the <a
                             href="/about">project</a> and <a href="/help">how to use
-                        the tool</a>!
+                        the tool</a>!') }}
                     </p>
                 </div>
             </article>
@@ -38,13 +38,13 @@
         <div id="main-grid" class="grid">
             {# row 1#}
             <div class="sketchy circle">1</div>
-            <div id="then">THEN</div>
+            <div id="then">{{ _('THEN') }}</div>
             <div class="sketchy circle">2</div>
 
             {#row 2#}
-            <div class="h1 center-text">Create Paper Maps to Collect Data</div>
+            <div class="h1 center-text">{{ _('Create Paper Maps to Collect Data') }}</div>
             <div></div>
-            <div class="h1 center-text">Paper to GIS:<br>Automatically Digitize Your Sketch&nbsp;Maps
+            <div class="h1 center-text">{{ _('Paper to GIS:<br>Automatically Digitize Your Sketch&nbsp;Maps') }}
             </div>
 
 
@@ -54,39 +54,39 @@
             <div id="span-grid-row-for-arrows">
                 <div id="row-grid" class="grid">
                     <div id="left-arrows" class="horizontal step-arrows">
-                        <div class="active">Define your Area of Interest</div>
-                        <div class="">Map Quality Check</div>
-                        <div class="">PDF Export of Sketch&nbsp;Map</div>
+                        <div class="active">{{ _('Define your Area of Interest') }}</div>
+                        <div class="">{{ _('Map Quality Check') }}</div>
+                        <div class="">{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
                     </div>
                     <div id="middle_blank"></div>
                     <div id="right-arrows" class="horizontal step-arrows">
-                        <div class="active">Scan or photograph your marked Sketch&nbsp;Maps</div>
-                        <div class="">Upload your Sketch&nbsp;Maps</div>
-                        <div class="">Download collected Markings as Geodata</div>
+                        <div class="active">{{ _('Scan or photograph your marked Sketch&nbsp;Maps') }}</div>
+                        <div class="">{{ _('Upload your Sketch&nbsp;Maps') }}</div>
+                        <div class="">{{ _('Download collected Markings as Geodata') }}</div>
                     </div>
                 </div>
             </div>
 
             {#for small screens use horizontal arrows#}
             <div class="vertical step-arrows">
-                <div class="active">Define your Area of Interest</div>
-                <div class="">Map Quality Check</div>
-                <div class="">PDF Export of Sketch&nbsp;Map</div>
+                <div class="active">{{ _('Define your Area of Interest') }}</div>
+                <div class="">{{ _('Map Quality Check') }}</div>
+                <div class="">{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
             </div>
             <div class="vertical step-arrows"></div>
             <div class="vertical step-arrows">
-                <div class="active">Scan or photograph your marked Sketch&nbsp;Maps</div>
-                <div class="">Upload your Sketch&nbsp;Maps</div>
-                <div class="">Download collected Markings as Geodata</div>
+                <div class="active">{{ _('Scan or photograph your marked Sketch&nbsp;Maps') }}</div>
+                <div class="">{{ _('Upload your Sketch&nbsp;Maps') }}</div>
+                <div class="">{{ _('Download collected Markings as Geodata') }}</div>
             </div>
 
             {#row 4#}
             <a href="/create">
-                <button type="button">Create a Sketch&nbsp;Map</button>
+                <button type="button">{{ _('Create a Sketch&nbsp;Map') }}</button>
             </a>
             <div></div>
             <a href="/digitize">
-                <button type="button">Digitize your Sketch&nbsp;Maps</button>
+                <button type="button">{{ _('Digitize your Sketch&nbsp;Maps') }}</button>
             </a>
 
         </div>

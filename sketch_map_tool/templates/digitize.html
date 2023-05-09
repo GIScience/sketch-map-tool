@@ -7,20 +7,20 @@
 {% endblock head %}
 
 {% block header_message %}
-    <div class="circle" style="display: inline-block" ;>2</div>Paper to GIS:
-    <span style="font-size: smaller">Automatically Digitize Your Sketch&nbsp;Maps</span>
+    <div class="circle" style="display: inline-block" ;>2</div>{{ _('Paper to GIS:') }}
+    <span style="font-size: smaller">{{ _('Automatically Digitize Your Sketch&nbsp;Maps') }}</span>
 {% endblock %}
 
 {% block body %}
     <div class="container-fluid horizontal step-arrows">
-        <div class="active">Scan or photograph your marked Sketch&nbsp;Maps</div>
-        <div class="active">Upload your Sketch&nbsp;Maps</div>
-        <div>Download collected Markings as Geodata</div>
+        <div class="active">{{ _('Scan or photograph your marked Sketch&nbsp;Maps') }}</div>
+        <div class="active">{{ _('Upload your Sketch&nbsp;Maps') }}</div>
+        <div>{{ _('Download collected Markings as Geodata') }}</div>
     </div>
     <main class="container-fluid">
         <div id="main-message" class="sketchy h1 center-text">
-            Scan or photograph your marked Sketch Maps after data collection.<br>Then, upload one or
-            more marked Sketch Maps at once as .jpg or .png file.
+            {{ _('Scan or photograph your marked Sketch Maps after data collection.<br>Then, upload one or
+            more marked Sketch Maps at once as .jpg or .png file.') }}
         </div>
 
         <form name="upload" action="/digitize/results" method="post" enctype=multipart/form-data>
@@ -28,9 +28,9 @@
             <div class="filebokz" data-max-size="524288000" data-allowed-extensions="jpeg,jpg,png">
                 <input type="file" id="file" name="file" multiple/>
                 <label for="file">
-                    <img id="cloud" class="no-files" src="/static/assets/upload_cloud.svg" alt="red cloud icon">
-                    <strong class="no-files">Choose file(s)</strong>
-                    <span class="no-files is-draggable">or drag them here<br>(.png or .jpg)</span>
+                    <img id="cloud" class="no-files" src="/static/assets/upload_cloud.svg" alt="{{ _('red cloud icon') }}">
+                    <strong class="no-files">{{ _('Choose file(s)') }}</strong>
+                    <span class="no-files is-draggable">{{ _('or drag them here<br>(.png or .jpg)') }}</span>
                     <div
                             class="files file-previews"
                             data-content='<span>{name}</span> <span>({size})</span> <span class="fa fa-trash remove" aria-hidden="true">✗</span>'
@@ -43,10 +43,10 @@
                     </div>
                     <span class="error-msg"></span>
                 </label>
-                <span class="info">Files: <span class="file-count"></span> (<span
-                        class="size"></span>)&nbsp;&nbsp;&nbsp; Max total size: 500 MB</span>
+                <span class="info">{{ _('Files:') }} <span class="file-count"></span> (<span
+                        class="size"></span>)&nbsp;&nbsp;&nbsp; {{ _('Max total size: 500 MB') }}</span>
             </div>
-            <button id="submitBtn" type="submit" class="">Upload</button>
+            <button id="submitBtn" type="submit" class="">{{ _('Upload') }}</button>
         </form>
     <script>
 

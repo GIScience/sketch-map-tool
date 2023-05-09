@@ -6,49 +6,49 @@
 {% endblock head %}
 
 {% block header_message %}
-    <div class="circle" style="display: inline-block;">1</div>Create paper maps to collect data
+    <div class="circle" style="display: inline-block;">1</div>{{ _('Create paper maps to collect data') }}
 {% endblock %}
 
 {% block body %}
     <div class="container-fluid horizontal step-arrows">
-        <div>Define your Area of Interest</div>
-        <div class="active">Map Quality Check</div>
-        <div class="active">PDF Export of Sketch&nbsp;Map</div>
+        <div>{{ _('Define your Area of Interest') }}</div>
+        <div class="active">{{ _('Map Quality Check') }}</div>
+        <div class="active">{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
     </div>
     <main class="container">
-        <div id="main-message" class="sketchy h1 center-text">Your results are being processed ...
+        <div id="main-message" class="sketchy h1 center-text">{{ _('Your results are being processed ...') }}
         </div>
 
         <div class="grid">
             <div>
                 <article id="quality-report" class="result">
                     <header>
-                        <img src="{{ url_for("static", filename="assets/images/create-results/quality-report-icon.svg") }}" alt="quality report icon"><br>
-                        <img class="sub-icon" src="{{ url_for("static", filename="assets/logos/HeiGIT/ohsome-quality-analyst.svg") }}" alt="ohsome quality analyst logo">
+                        <img src="{{ url_for("static", filename="assets/images/create-results/quality-report-icon.svg") }}" alt="{{ _('quality report icon') }}"><br>
+                        <img class="sub-icon" src="{{ url_for("static", filename="assets/logos/HeiGIT/ohsome-quality-analyst.svg") }}" alt="{{ _('ohsome quality analyst logo') }}">
                     </header>
-                    <h6>Map Quality Check Report</h6>
+                    <h6>{{ _('Map Quality Check Report') }}</h6>
                     <p class="pending">
-                        We are analyzing the <a href="https://wiki.osm.org" target="_blank">OpenStreetMap
+                        {{ _('We are analyzing the <a href="https://wiki.osm.org" target="_blank">OpenStreetMap
                         (OSM)</a> data of the selected Area-of-Interest.<br>The Map Quality Check
                         Report gives insights about the <strong>fitness for field data
                         collection</strong>. It is
                         created with the help of the <a href="https://oqt.ohsome.org/"
-                                                        target="_blank">ohsome quality analyst</a>.
+                                                        target="_blank">ohsome quality analyst</a>.') }}
                     </p>
                     <p class="success hidden">
-                        We have analyzed the <a href="https://wiki.osm.org" target="_blank">OpenStreetMap
+                        {{ _('We have analyzed the <a href="https://wiki.osm.org" target="_blank">OpenStreetMap
                         (OSM)</a> data of the selected Area of Interest.<br>The Map Quality Check
                         Report gives insights about the <strong>fitness for field data
                         collection</strong>. It has been
                         created with the help of the <a href="https://oqt.ohsome.org/"
-                                                        target="_blank">ohsome quality analyst</a>.
+                                                        target="_blank">ohsome quality analyst</a>.') }}
                     </p>
                     <p class="error hidden">
-                        Sorry! <br>Something went wrong while trying to generate the Result.
+                        {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}
                     </p>
                     <a id="quality-report-download-button" href="#" download aria-busy="true"
-                       role="button" disabled="disabled">Download
-                        PDF</a>
+                       role="button" disabled="disabled">{{ _('Download
+                        PDF') }}</a>
                 </article>
             </div>
             <div>
@@ -57,26 +57,26 @@
                         <img src="{{ url_for("static", filename="assets/images/create-results/sketch-map-icon.svg") }}" alt="sketch map icon"><br>
                         <span class="brand-font heigit-red sub-icon">Sketch Map</span>
                     </header>
-                    <h6>Sketch Map Template</h6>
+                    <h6>{{ _('Sketch Map Template') }}</h6>
                     <p class="pending">
-                        We are creating the Sketch Map template that you can use for offline
+                        {{ _('We are creating the Sketch Map template that you can use for offline
                         participatory mapping.<br>
                         <strong>Please be patient, this can take 2-3 minutes.</strong> We use up-to-date
-                        <a href="https://wiki.osm.org" target="_blank">OpenStreetMap (OSM)</a> data to create a high resolution printable map for you.
+                        <a href="https://wiki.osm.org" target="_blank">OpenStreetMap (OSM)</a> data to create a high resolution printable map for you.') }}
                     </p>
                     <p class="success hidden">
-                        We have created the Sketch Map template that you can use for offline
+                        {{ _('We have created the Sketch Map template that you can use for offline
                         participatory mapping.<br>
                         We used up-to-date
                         <a href="https://wiki.osm.org" target="_blank">OpenStreetMap (OSM)</a> data to create a high resolution printable map for you.<br>
-                        <strong>You can now start collecting data in the field!</strong>
+                        <strong>You can now start collecting data in the field!</strong>') }}
                     </p>
                     <p class="error hidden">
-                        Sorry! <br>Something went wrong while trying to generate the Result.
+                        {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}
                     </p>
                     <a id="sketch-map-download-button" href="#" download aria-busy="true"
                        role="button"
-                       disabled="disabled">Download PDF</a>
+                       disabled="disabled">{{ _('Download PDF') }}</a>
                 </article>
             </div>
         </div>
