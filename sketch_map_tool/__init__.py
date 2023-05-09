@@ -1,7 +1,8 @@
+import os
 from datetime import timedelta
 
 from celery import Celery
-from flask import Flask, request
+from flask import Flask, request, session
 from flask_babel import Babel
 
 from sketch_map_tool.config import get_config_value
@@ -32,11 +33,7 @@ def make_flask() -> Flask:
             "database_short_lived_sessions": True,
         },
         BABEL_DEFAULT_LOCALE="en",
-        LANGUAGES={
-            "en": "English",
-            "de": "Deutsch",
-            "pt": "Portuguese"
-        }
+        LANGUAGES={"en": "English", "de": "Deutsch", "pt": "Portuguese"},
     )
     flask_app.teardown_appcontext(db_client.close_connection)
 
@@ -60,9 +57,17 @@ def get_locale():
     """
     Get locality of user to provide translations if available.
     """
-    return request.accept_languages.best_match(flask_app.config['LANGUAGES'].keys())
+    if request.args.get("lang"):
+        session["lang"] = request.args.get("lang")
+    return session.get(
+        "lang",
+        request.accept_languages.best_match(flask_app.config["LANGUAGES"].keys()),
+    )
 
 
 flask_app = make_flask()
+flask_app.secret_key = os.urandom(
+    24
+)  # Only for language settings, thus, not problematic to be regenerated on restart
 celery_app = make_celery(flask_app)
 babel = Babel(flask_app, locale_selector=get_locale)  # for translations
