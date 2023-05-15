@@ -27,6 +27,7 @@ def config_keys():
         "wms-url",
         "wms-layers",
         "wms-read-timeout",
+        "max-nr-simultaneous-uploads",
     )
 
 
