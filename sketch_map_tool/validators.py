@@ -1,6 +1,8 @@
 from typing import get_args
 from uuid import UUID
 
+from flask_babel import gettext
+
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.models import LiteratureReference
 
@@ -19,7 +21,9 @@ def validate_uuid(uuid: str):
     try:
         _ = UUID(uuid, version=4)
     except ValueError as error:
-        raise ValueError("The provided URL does not contain a valid UUID") from error
+        raise ValueError(
+            gettext("The provided URL does not contain a valid UUID")
+        ) from error
 
 
 def validate_literature_reference(literatur_reference: LiteratureReference):

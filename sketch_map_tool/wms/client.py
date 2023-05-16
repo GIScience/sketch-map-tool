@@ -4,6 +4,7 @@ from dataclasses import astuple
 from io import BytesIO
 
 import requests
+from flask_babel import gettext
 from markupsafe import escape
 from PIL import Image, UnidentifiedImageError
 from PIL.PngImagePlugin import PngImageFile
@@ -42,7 +43,9 @@ def get_map_image(bbox: Bbox, size: Size) -> Response:
         )
     except ReadTimeout:
         raise MapGenerationError(
-            "Map area couldn't be processed with the current resources. Please try again once."
+            gettext(
+                "Map area couldn't be processed with the current resources. Please try again once."
+            )
         )
 
 
@@ -53,7 +56,7 @@ def as_image(response: Response) -> PngImageFile:
     try:
         return Image.open(BytesIO(response_content))
     except UnidentifiedImageError:
-        error_msg = "The Web Map Service returned an error. Please try again later."
+        error_msg = gettext("The Web Map Service returned an error. Please try again later.")
         if (
             content_type == "application/vnd.ogc.se_xml"
         ):  # Response is an XML error report

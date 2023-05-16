@@ -7,6 +7,7 @@ from json import JSONDecodeError
 from types import MappingProxyType
 
 import cv2
+from flask_babel import gettext
 from numpy.typing import NDArray
 from pyzbar import pyzbar
 
@@ -36,23 +37,23 @@ def read(img: NDArray, depth=0) -> MappingProxyType:
                 # Try again with down scaled image
                 return read(_resize(img), depth=depth + 1)
             else:
-                raise QRCodeError("QR-Code could not be detected.")
+                raise QRCodeError(gettext("QR-Code could not be detected."))
         case 1:
             data = _decode_data(decoded_objects[0].data.decode())
             try:
                 validate_uuid(data["uuid"])
             except ValueError:
-                raise QRCodeError("The provided UUID is invalid.")
+                raise QRCodeError(gettext("The provided UUID is invalid."))
             return data
         case _:
-            raise QRCodeError("Multiple QR-Codes detected.")
+            raise QRCodeError(gettext("Multiple QR-Codes detected."))
 
 
 def _decode_data(data) -> MappingProxyType:
     try:
         d = json.loads(data)
     except JSONDecodeError as error:
-        raise QRCodeError("QR-Code does not have expected content.") from error
+        raise QRCodeError(gettext("QR-Code does not have expected content.")) from error
     try:
         return MappingProxyType(
             {
@@ -65,7 +66,7 @@ def _decode_data(data) -> MappingProxyType:
             }
         )
     except KeyError as error:
-        raise QRCodeError("QR-Code does not have expected content.") from error
+        raise QRCodeError(gettext("QR-Code does not have expected content.")) from error
 
 
 def _resize(img, scale: float = 0.75):
