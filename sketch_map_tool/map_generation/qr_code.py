@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from io import BytesIO
 
 import qrcode
@@ -6,6 +5,7 @@ import qrcode.image.svg
 from reportlab.graphics.shapes import Drawing
 from svglib.svglib import svg2rlg
 
+from sketch_map_tool import __version__
 from sketch_map_tool.models import Bbox, PaperFormat
 
 
@@ -13,25 +13,20 @@ def qr_code(
     uuid: str,
     bbox: Bbox,
     format_: PaperFormat,
+    version: str = __version__,
 ) -> Drawing:
     """Generate a QR code holding the Celery task id and parameters of the map creation.
 
     :uuid: The uuid of a celery task associated with the creation of the PDF map.
     """
-    data = _encode_data(
-        uuid,
-        bbox,
-    )
+    data = _encode_data(uuid, bbox, version)
     qr_code_svg = _make_qr_code(data)
     qr_code_rlg = _to_report_lab_graphic(format_, qr_code_svg)
     return qr_code_rlg
 
 
-def _encode_data(
-    uuid: str,
-    bbox: Bbox,
-) -> str:
-    return f"{uuid},{bbox.lon_min},{bbox.lat_min},{bbox.lon_max},{bbox.lat_max}"
+def _encode_data(uuid: str, bbox: Bbox, version_nr: str) -> str:
+    return f"{version_nr},{uuid},{bbox.lon_min},{bbox.lat_min},{bbox.lon_max},{bbox.lat_max}"
 
 
 def _make_qr_code(data: str) -> BytesIO:

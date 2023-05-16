@@ -2,17 +2,14 @@
 Read QR codes from photos / scans
 """
 
-import json
-from json import JSONDecodeError
 from types import MappingProxyType
 
 import cv2
 from numpy.typing import NDArray
 from pyzbar import pyzbar
 
-from sketch_map_tool import definitions
 from sketch_map_tool.exceptions import QRCodeError
-from sketch_map_tool.models import Bbox, Size
+from sketch_map_tool.models import Bbox
 from sketch_map_tool.validators import validate_uuid
 
 
@@ -51,20 +48,16 @@ def read(img: NDArray, depth=0) -> MappingProxyType:
 def _decode_data(data) -> MappingProxyType:
     try:
         contents = data.split(",")
-        if not len(contents) == 5:  # uuid and bbox coordinates
+        if not len(contents) == 6:  # version nr, uuid and bbox coordinates
             raise ValueError("Unexpected length of QR-code contents.")
-        uuid = contents[0]
+        version_nr = contents[0]
+        uuid = contents[1]
         bbox = Bbox(
-            *[float(coordinate) for coordinate in contents[1:]]
+            *[float(coordinate) for coordinate in contents[2:]]
         )  # Raises ValueError for non-float values
     except ValueError as error:
         raise QRCodeError("QR-Code does not have expected content.") from error
-    return MappingProxyType(
-        {
-            "uuid": uuid,
-            "bbox": bbox,
-        }
-    )
+    return MappingProxyType({"uuid": uuid, "bbox": bbox, "version": version_nr})
 
 
 def _resize(img, scale: float = 0.75):
