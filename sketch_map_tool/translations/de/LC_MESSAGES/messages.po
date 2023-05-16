@@ -521,7 +521,7 @@ msgstr "Papierformat"
 
 #: sketch_map_tool/templates/create.html:36
 msgid "Paper Orientation"
-msgstr "Ausrichtung"
+msgstr "Ausrichtung (portrait=Hochformat, landscape=Querformat)"
 
 #: sketch_map_tool/templates/create.html:44
 msgid "NEXT"
