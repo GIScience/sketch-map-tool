@@ -407,7 +407,10 @@ msgid ""
 "href=\"https://oqt.ohsome.org/\"\n"
 "                                                        "
 "target=\"_blank\">ohsome quality analyst</a>."
-msgstr ""
+msgstr "Analisamos os dados do <a href=\"https://wiki.osm.org\" "
+"target=\"_blank\">OpenStreetMap (OSM)</a> da área selecionada. As análises são realizadas com o <a "
+"href=\"https://oqt.ohsome.org/\"\n"
+"target=\"_blank\">OQT</a>"
 
 #: sketch_map_tool/templates/create-results.html:47
 #: sketch_map_tool/templates/create-results.html:75
@@ -436,7 +439,10 @@ msgid ""
 "                        <a href=\"https://wiki.osm.org\" "
 "target=\"_blank\">OpenStreetMap (OSM)</a> data to create a high "
 "resolution printable map for you."
-msgstr ""
+msgstr "Estamos criando o Sketch Map que você pode usar para mapeamento participativo off-line.<br>"
+"<strong>Seja paciente, pois isso pode levar de 2 a 3 minutos.</strong>"
+"Usamos dados atualizados do <a href=\"https://wiki.osm.org\" "
+"target=\"_blank\">OpenStreetMap (OSM)</a> para criar os mapas."
 
 #: sketch_map_tool/templates/create-results.html:68
 msgid ""
@@ -448,7 +454,9 @@ msgid ""
 "resolution printable map for you.<br>\n"
 "                        <strong>You can now start collecting data in the "
 "field!</strong>"
-msgstr ""
+msgstr "Criamos o Sketch Map que você pode usar para mapeamento participativo off-line.<br>"
+"Usamos dados atualizados do <a href=\"https://wiki.osm.org\" "
+"target=\"_blank\">OpenStreetMap (OSM)</a> para criar os mapas."
 
 #: sketch_map_tool/templates/create-results.html:79
 msgid "Download PDF"
@@ -470,7 +478,7 @@ msgstr "A área é demasiado grande"
 
 #: sketch_map_tool/templates/create.html:33
 msgid "Paper Format"
-msgstr ""
+msgstr "Tamanho de papel"
 
 #: sketch_map_tool/templates/create.html:36
 msgid "Paper Orientation"
@@ -529,7 +537,7 @@ msgid ""
 "We are extracting and geo-referencing the color markings of your Sketch\n"
 "                        Maps.<br>\n"
 "                        Please be patient this can take 2-3 minutes."
-msgstr ""
+msgstr "Seu Sketch Map está sendo digitalizado.<br>Seja paciente, isso pode levar de 2 a 3 minutos."
 
 #: sketch_map_tool/templates/digitize-results.html:37
 msgid ""
@@ -538,7 +546,7 @@ msgid ""
 "                        You can download them as rasterized GeoTIFFs and "
 "use them for further\n"
 "                        analysis in your favorite GIS Software."
-msgstr ""
+msgstr "Seu Sketch Map foi digitalizado."
 
 #: sketch_map_tool/templates/digitize-results.html:46
 msgid "Download ZIP"
@@ -563,7 +571,7 @@ msgid ""
 "                        You can download them as vectorized polygons and "
 "use them for further\n"
 "                        analysis in your favorite GIS Software."
-msgstr ""
+msgstr "Suas marcações foram digitalizadas."
 
 #: sketch_map_tool/templates/digitize-results.html:73
 msgid "Download GeoJSON"
@@ -606,7 +614,7 @@ msgstr "Erro"
 
 #: sketch_map_tool/templates/help.html:9
 msgid "Need some help?"
-msgstr ""
+msgstr "Ajuda"
 
 #: sketch_map_tool/templates/help.html:16
 msgid "Print"
@@ -651,7 +659,16 @@ msgid ""
 "                href=\"https://github.com/GIScience/sketch-map-"
 "tool/issues/new\" target=\"_blank\">GitHub\n"
 "            Issues</a>."
-msgstr ""
+msgstr "Como só temos traduções para uma parte da ferramenta, algumas partes foram traduzidas usando a tradução "
+"automática. Se quiser contribuir com traduções melhores, entre em contato conosco em "
+"<a href=\"mailto:sketch-map-tool@heigit.org\">sketch-map-tool@heigit.org</a>.<br>"
+"Como a versão atual da Sketch Map Tool foi lançada muito recentemente, ainda podem ocorrer problemas durante "
+"diferentes etapas do processo. Lamentamos se isso causar algum inconveniente para você! Nós nos esforçamos para "
+"melhorar continuamente o produto, portanto, informe-nos sobre os problemas técnicos por meio do "
+"<a\n"
+"                href=\"https://github.com/GIScience/sketch-map-"
+"tool/issues/new\" target=\"_blank\">GitHub\n"
+"            Issues</a>."
 
 #: sketch_map_tool/templates/help.html:43
 msgid "Step-by-Step Instructions"
@@ -663,7 +680,7 @@ msgid ""
 "with\n"
 "                        the\n"
 "                        search function in the sidebar."
-msgstr ""
+msgstr "Selecione sua área de interesse ampliando a visualização do mapa ou usando a função de pesquisa na barra lateral."
 
 #: sketch_map_tool/templates/help.html:59
 msgid ""
@@ -672,7 +689,8 @@ msgid ""
 " area of interest, which\n"
 "                        will\n"
 "                        be printed on the Sketch Map."
-msgstr ""
+msgstr "Escolha entre diferentes formatos de papel e uma orientação de página adequada. A linha vermelha tracejada "
+"representa os limites de sua área de interesse, que serão impressos no Sketch Map."
 
 #: sketch_map_tool/templates/help.html:70
 #: sketch_map_tool/templates/help.html:128
@@ -682,40 +700,40 @@ msgstr ""
 #: sketch_map_tool/templates/help.html:291
 #: sketch_map_tool/templates/help.html:319
 msgid "Recommendations:"
-msgstr ""
+msgstr "Recomendações:"
 
 #: sketch_map_tool/templates/help.html:72
 msgid ""
 "Adapt the extent of your selected area to your use case. The\n"
 "                            following\n"
 "                            questions should be kept in mind:"
-msgstr ""
+msgstr "Adapte a extensão da área selecionada ao seu caso de uso. As perguntas a seguir devem ser mantidas em mente:"
 
 #: sketch_map_tool/templates/help.html:76
 msgid "What should be mapped by the participants?"
-msgstr ""
+msgstr "O que deve ser mapeado pelos participantes?"
 
 #: sketch_map_tool/templates/help.html:77
 msgid "What should be visible on the map and in what level of detail?"
-msgstr ""
+msgstr "O que deve estar visível no mapa e em que nível de detalhe?"
 
 #: sketch_map_tool/templates/help.html:79
 msgid "Which areas should the map cover?"
-msgstr ""
+msgstr "Quais áreas o mapa deve cobrir?"
 
 #: sketch_map_tool/templates/help.html:82
 msgid "Adapt the area extent to the paper size you want to use."
-msgstr ""
+msgstr "Adapte a extensão da área ao tamanho do papel que você deseja usar."
 
 #: sketch_map_tool/templates/help.html:83
 msgid "The area is too big? Create multiple Sketch Maps."
-msgstr ""
+msgstr "A área é muito grande? Crie vários Sketch Maps."
 
 #: sketch_map_tool/templates/help.html:84
 msgid ""
 "Aspects you might want to consider for the selection of the area of\n"
 "                            interest:"
-msgstr ""
+msgstr "Aspectos que você pode considerar para a seleção da área:"
 
 #: sketch_map_tool/templates/help.html:87
 msgid ""
@@ -724,7 +742,9 @@ msgid ""
 "Besides visual inspection you\n"
 "                                    can check the landmark density result"
 " in the quality report."
-msgstr ""
+msgstr "Certifique-se de que esteja orientado no mapa: as ruas (e seus nomes) e alguns pontos de referência "
+"devem estar visíveis. Além da inspeção visual, você pode verificar o resultado da densidade de pontos de referência "
+"no relatório de qualidade."
 
 #: sketch_map_tool/templates/help.html:91
 msgid ""
@@ -738,7 +758,7 @@ msgid ""
 "                                    as critical infrastructure which "
 "might be affected by the flood\n"
 "                                    event."
-msgstr ""
+msgstr "Cobrir todas as áreas relevantes para seu caso de uso: por exemplo, infraestrutura crítica."
 
 #: sketch_map_tool/templates/help.html:111
 msgid ""
@@ -763,7 +783,15 @@ msgid ""
 " data and recommendations\n"
 "                        for\n"
 "                        the subsequent field data collection."
-msgstr ""
+msgstr "O mapa de esboço gerado é baseado nos dados do <a\n"
+"                            href=\"https://wiki.osm.org\" "
+"target=\"_blank\">OpenStreetMap\n"
+"                        (OSM)</a>. "
+"A verificação da qualidade do mapa ajuda a avaliar a adequação dos dados do OpenStreetMap da área de interesse para "
+"fins de mapeamento participativo. As análises são feitas pelo <a "
+"href=\"https://oqt.ohsome.org/\"\n"
+"target=\"_blank\">ohsome quality analyst</a>. "
+"O relatório de qualidade pode ser baixado como arquivo PDF clicando no botão azul."
 
 #: sketch_map_tool/templates/help.html:131
 msgid ""
