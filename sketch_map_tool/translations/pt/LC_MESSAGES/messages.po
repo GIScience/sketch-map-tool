@@ -107,8 +107,7 @@ msgid ""
 "material\">Learning\n"
 "            Material</a> section below or on\n"
 "            the <a href=\"/help\">Help page</a>!"
-msgstr "Saiba mais sobre como usar a ferramenta na seção <a href=\"#learning-material\">Material didático</a> abaixo "
-"ou na página de <a href=\"/help\">Ajuda</a>."
+msgstr ""
 
 #: sketch_map_tool/templates/about.html:48
 msgid "SketchMap Preview"
@@ -1414,7 +1413,7 @@ msgstr " "
 
 #: sketch_map_tool/templates/index.html:8
 msgid "Create re-digitizable paper maps for offline data collection in the field"
-msgstr "Criar mapas em papel redigitalizáveis para coleta de dados off-line no campo"
+msgstr "Criar mapas em papel redigitalizáveis para coleta de dados<br>off-line no campo"
 
 #: sketch_map_tool/templates/index.html:17
 msgid ""
