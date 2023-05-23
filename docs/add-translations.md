@@ -41,7 +41,7 @@ string has been added, run
    ```
    poetry run pybabel compile -d sketch_map_tool/translations
    ```
-
+(included in the Dockerfile, therefore you do not need to compile them if you use the tool with Docker).
 Now the app should automatically use the provided translations in case the respective locality is chosen.
 
 ## Troubleshooting
