@@ -801,7 +801,9 @@ msgid ""
 "                            Quality Check to ensure that participants can"
 " orientate properly on the\n"
 "                            paper maps."
-msgstr ""
+msgstr "Antes de usar os mapas baseados no OSM da área selecionada para o mapeamento participativo, dê uma olhada nos "
+"resultados da verificação da qualidade do mapa para garantir que os participantes possam se orientar adequadamente "
+"nos mapas em papel."
 
 #: sketch_map_tool/templates/help.html:137
 msgid ""
@@ -812,13 +814,16 @@ msgid ""
 "mapping. You can learn more\n"
 "                            about the analyses and each indicator in the "
 "generated PDF report."
-msgstr ""
+msgstr "As análises se concentram na densidade de pontos de referência, na atualidade dos dados de amenidades e ruas, "
+"bem como na completude das amenidades e no mapeamento da rede viária. Você pode saber mais sobre as análises e cada "
+"indicador no relatório gerado em PDF (inglês)."
 
 #: sketch_map_tool/templates/help.html:143
 msgid ""
 "The report includes useful recommendations to ensure that the generated\n"
 "                            maps are suitable for participatory mapping."
-msgstr ""
+msgstr "O relatório inclui recomendações úteis para garantir que os mapas gerados sejam adequados para o mapeamento "
+"participativo."
 
 #: sketch_map_tool/templates/help.html:147
 msgid ""
@@ -830,26 +835,31 @@ msgid ""
 "                            improve the OSM data before using the Sketch "
 "Map Tool. For example, you\n"
 "                            could conduct a mapathon."
-msgstr ""
+msgstr "Caso os dados do OSM da sua área de interesse não sejam suficientes para a finalidade do mapeamento "
+"participativo, você pode consultar o projeto <a\n"
+"                                "
+"href=\"https://www.missingmaps.org/\">Missing Maps</a> para melhorar os dados do OSM antes de usar a ferramenta "
+"Sketch Map. Por exemplo, você pode realizar um mapathon."
 
 #: sketch_map_tool/templates/help.html:157
 msgid "Export Sketch Map as PDF"
-msgstr ""
+msgstr "Exportar o Sketch Map como PDF"
 
 #: sketch_map_tool/templates/help.html:160
 msgid ""
 "The generated Sketch Map for your selected area of interest can be\n"
 "                        downloaded as PDF file by clicking on the blue "
 "button."
-msgstr ""
+msgstr "O Sketch Map gerado para sua área de interesse selecionada pode ser baixado como arquivo PDF clicando no botão "
+"azul."
 
 #: sketch_map_tool/templates/help.html:167
 msgid "THEN:"
-msgstr ""
+msgstr "ENTÃO"
 
 #: sketch_map_tool/templates/help.html:168
 msgid "Data collection in the field"
-msgstr ""
+msgstr "Coleta de dados no local"
 
 #: sketch_map_tool/templates/help.html:172
 msgid ""
@@ -862,11 +872,16 @@ msgid ""
 "                    Please make sure not to accidentally mark the globes "
 "on the edge as they are\n"
 "                    needed to improve the automatic map detection."
-msgstr ""
+msgstr "No momento, a Sketch Map Tool detecta marcações em vermelho, azul, verde, amarelo, turquesa e rosa. As "
+"marcações vermelhas e azuis funcionam melhor na maioria dos casos. A detecção funciona melhor se as áreas marcadas "
+"estiverem totalmente preenchidas.<br>"
+"Certifique-se de não marcar acidentalmente os globos que estão na borda, pois eles podem melhorar a detecção "
+"automática do mapa. No entanto, o processamento de upload ainda funciona na maioria dos casos se os globos estiverem "
+"pintados."
 
 #: sketch_map_tool/templates/help.html:181
 msgid "Use thick felt-tip pens with intense colours."
-msgstr ""
+msgstr "Use canetas de feltro grossas com cores intensas."
 
 #: sketch_map_tool/templates/help.html:184
 msgid ""
@@ -875,20 +890,23 @@ msgid ""
 "                        different information, it is recommended to use "
 "individual Sketch Maps for\n"
 "                        each purpose/topic or per participant."
-msgstr ""
+msgstr "Se você tiver muitos participantes ou quiser que eles forneçam muitas informações diferentes, é recomendável "
+"usar Sketch Maps individuais para cada objetivo/tópico ou por participante."
 
 #: sketch_map_tool/templates/help.html:189
 msgid ""
 "Prepare the same set of pens for all participants/groups for better\n"
 "                        comparison of the results."
-msgstr ""
+msgstr "Prepare o mesmo conjunto de canetas para todos os participantes/grupos para uma melhor comparação dos "
+"resultados."
 
 #: sketch_map_tool/templates/help.html:193
 msgid ""
 "Inform all participants that markings should be filled out entirely and\n"
 "                        should not cover the globes on the edge of the "
 "maps."
-msgstr ""
+msgstr "Informe a todos os participantes que as marcações devem ser preenchidas por completo e não devem cobrir os "
+"globos nas bordas dos mapas."
 
 #: sketch_map_tool/templates/help.html:197
 msgid ""
@@ -900,7 +918,10 @@ msgid ""
 "                        This needs to be done manually in the subsequent "
 "analysis process in\n"
 "                        your Geographic Information System software."
-msgstr ""
+msgstr "Se forem usadas cores diferentes para tópicos específicos, é possível permitir que os participantes incluam "
+"uma legenda para o significado de cada cor fora da extensão do mapa. No entanto, a ferramenta atualmente não usa "
+"essas informações. Isso precisa ser feito manualmente no processo de análise subsequente em seu software GIS (por "
+"exemplo, QGIS)."
 
 #: sketch_map_tool/templates/help.html:204
 msgid ""
@@ -910,17 +931,18 @@ msgid ""
 "add a number on the Sketch\n"
 "                        Map and save this number in the data collection "
 "questionnaire."
-msgstr ""
+msgstr "Se você coletar informações adicionais dos participantes com outros métodos de coleta de dados, como o Kobo "
+"Collect ou o ODK, adicione um número ao Sketch Map e inclua esse número no questionário de coleta de dados."
 
 #: sketch_map_tool/templates/help.html:214
 msgid "Paper to GIS: Automatically digitize collected data"
-msgstr ""
+msgstr "Do papel para o GIS: Digitalize automaticamente os dados coletados"
 
 #: sketch_map_tool/templates/help.html:217
 msgid ""
 "Scan or photograph your marked\n"
 "                    Sketch Maps"
-msgstr ""
+msgstr "Digitalize ou fotografe seus Sketch Maps marcados"
 
 #: sketch_map_tool/templates/help.html:222
 msgid ""
@@ -933,7 +955,10 @@ msgid ""
 "                        are visible on the image. The scans or "
 "photographs must be in jpg or png\n"
 "                        file format for the upload to work."
-msgstr ""
+msgstr "Após a coleta de dados de campo, digitalize ou fotografe os Sketch Maps marcados. A detecção de cores "
+"funciona melhor ao digitalizar os Sketch Maps. Ao tirar uma foto, certifique-se de que o QR-Code esteja completo e "
+"que todos os globos estejam visíveis na imagem. As digitalizações ou fotografias devem estar no formato jpg ou "
+"png para que o upload funcione."
 
 #: sketch_map_tool/templates/help.html:231
 msgid ""
@@ -941,17 +966,18 @@ msgid ""
 "                            angle (parallel above the Sketch Maps) to "
 "produce the best possible\n"
 "                            result."
-msgstr ""
+msgstr "Se não for possível digitalizar, as fotos devem ser tiradas de cima em um ângulo de 180 graus (paralelas "
+"acima dos Sketch Maps) para produzir o melhor resultado possível."
 
 #: sketch_map_tool/templates/help.html:236
 msgid ""
 "Please upload a complete image of the Sketch Maps and do not try to cut\n"
 "                            out the map from the photo."
-msgstr ""
+msgstr "Carregue uma imagem completa do Sketch Map e não tente recortar o mapa da foto."
 
 #: sketch_map_tool/templates/help.html:240
 msgid "Take care of the lighting conditions when taking a picture."
-msgstr ""
+msgstr "Tome cuidado com as condições de iluminação ao tirar uma foto."
 
 #: sketch_map_tool/templates/help.html:243
 msgid ""
@@ -959,11 +985,13 @@ msgid ""
 "                            resolution of 300 dpi. Attention! The file "
 "size will be too large when\n"
 "                            scanning with a 600 dpi resolution."
-msgstr ""
+msgstr "O georreferenciamento funcionará melhor se você digitalizar os Sketch Maps marcados com uma resolução de 300 "
+"dpi. Atenção! O tamanho do arquivo será demasiado grande quando a digitalização for feita com uma resolução de 600 "
+"dpi."
 
 #: sketch_map_tool/templates/help.html:251
 msgid "Upload your Sketch Maps"
-msgstr ""
+msgstr "Carregue seus Sketch Maps"
 
 #: sketch_map_tool/templates/help.html:254
 msgid ""
@@ -973,13 +1001,15 @@ msgid ""
 "                        can upload one or more marked Sketch Maps at "
 "once. The upload works\n"
 "                        for jpg or png files."
-msgstr ""
+msgstr "Para fazer upload de arquivos, você pode clicar no campo de upload ou arrastar e soltar seus arquivos "
+"diretamente no campo de upload e, em seguida, clicar no botão Upload. Você pode carregar um ou mais Sketch Maps "
+"marcados de uma só vez. O upload funciona para arquivos jpg ou png."
 
 #: sketch_map_tool/templates/help.html:263
 msgid ""
 "It is possible to upload more than one Sketch Map at the same\n"
 "                            time, but the upload will take longer."
-msgstr ""
+msgstr "É possível carregar mais de um Sketch Map ao mesmo tempo, mas o carregamento será mais demorado."
 
 #: sketch_map_tool/templates/help.html:267
 #: sketch_map_tool/templates/help.html:294
@@ -987,20 +1017,22 @@ msgid ""
 "If you are experiencing problems during the upload process, please check\n"
 "                            out the <a href=\"#faq\">FAQ section</a> "
 "below."
-msgstr ""
+msgstr "Se tiver problemas durante o processo de upload, consulte a seção de <a href=\"#faq\">perguntas frequentes</a> "
+"abaixo."
 
 #: sketch_map_tool/templates/help.html:274
 msgid ""
 "Download collected Markings as\n"
 "                    Geodata"
-msgstr ""
+msgstr "Download das marcações coletadas como geodados"
 
 #: sketch_map_tool/templates/help.html:279
 msgid ""
 "You can download the georeferenced Sketch Maps as GeoTIFFs (zip) and the\n"
 "                        colour-detected markings as vector data in a "
 "GeoJSON file."
-msgstr ""
+msgstr "Você pode baixar os Sketch Maps georreferenciados como GeoTIFFs (zip) e as marcações detectadas por cor como "
+"dados vetoriais em um arquivo GeoJSON."
 
 #: sketch_map_tool/templates/help.html:283
 msgid ""
@@ -1013,15 +1045,18 @@ msgid ""
 "                        uploaded Sketch Map. Each polygon has attributes "
 "about its colour and its\n"
 "                        source filename (from the uploaded image)."
-msgstr ""
+msgstr "Os arquivos de saída de dados rasterizados GeoTIFF consistem em imagens georreferenciadas para cada um dos "
+"seus Sketch Maps carregados.<br>"
+"O arquivo de saída de dados vetoriais GeoJSON contém polígonos para as marcações de cada Sketch Map carregado. Cada "
+"polígono tem atributos sobre sua cor e seu nome de arquivo de origem (da imagem carregada)."
 
 #: sketch_map_tool/templates/help.html:303
 msgid "FINALLY:"
-msgstr ""
+msgstr "FINALMENTE:"
 
 #: sketch_map_tool/templates/help.html:304
 msgid "Import Geodata in a GIS, e.g. QGIS"
-msgstr ""
+msgstr "Importar os geodados em um GIS, por exemplo, QGIS"
 
 #: sketch_map_tool/templates/help.html:308
 msgid ""
@@ -1035,18 +1070,22 @@ msgid ""
 "GeoTIFF output files consist\n"
 "                    of georeferenced images for each of your uploaded "
 "Sketch Maps."
-msgstr ""
+msgstr "Você pode carregar o arquivo de dados vetoriais em seu software GIS. As camadas têm atributos diferentes "
+"(verifique a tabela de atributos) que correspondem às diferentes cores e nomes de arquivos dos carregamentos. Você "
+"também pode abrir o arquivo GeoTIFF para validar a detecção de cores das marcações. Os arquivos de saída GeoTIFF "
+"consistem em imagens georreferenciadas para cada um dos seus Sketch Maps carregados."
 
 #: sketch_map_tool/templates/help.html:315
 msgid ""
 "When you open the files in QGIS, it should look similar to this example "
 "and show\n"
 "                    all the markings of your Sketch Map(s)."
-msgstr ""
+msgstr "Quando você abrir os arquivos no QGIS, eles deverão ser semelhantes a este exemplo e mostrar todas as "
+"marcações do(s) seu(s) Sketch Map(s)."
 
 #: sketch_map_tool/templates/help.html:318
 msgid "Screenshot of vector results in QGIS"
-msgstr ""
+msgstr "Captura de tela dos resultados vetoriais no QGIS"
 
 #: sketch_map_tool/templates/help.html:322
 msgid ""
@@ -1054,7 +1093,8 @@ msgid ""
 "use\n"
 "                        the GeoTIFF file to manually create/adjust the "
 "polygon layers."
-msgstr ""
+msgstr "Caso algumas das marcações não tenham sido digitalizadas corretamente, você pode usar o arquivo GeoTIFF para "
+"criar/ajustar manualmente as camadas de polígonos."
 
 #: sketch_map_tool/templates/help.html:326
 msgid ""
@@ -1071,15 +1111,18 @@ msgid ""
 " section</a> about the\n"
 "                        problems in the colour\n"
 "                        detection."
-msgstr ""
+msgstr "Se os dados importados parecerem estranhos e não representarem as marcações reais dos Sketch Maps, verifique "
+"os arquivos de Sketch Map carregados e, se necessário, digitalize-os novamente ou tire novas fotos de acordo com as "
+"recomendações acima. Consulte as recomendações nas seções sobre coleta de dados, digitalização ou fotografia e "
+"upload acima e consulte nossa seção de <a href=\"#faq\">perguntas frequentes</a>."
 
 #: sketch_map_tool/templates/help.html:340
 msgid "FAQs"
-msgstr ""
+msgstr "Perguntas frequentes"
 
 #: sketch_map_tool/templates/help.html:342
 msgid "What are OSM data?"
-msgstr ""
+msgstr "O que são dados OSM?"
 
 #: sketch_map_tool/templates/help.html:344
 msgid ""
@@ -1087,11 +1130,14 @@ msgid ""
 "about it <a\n"
 "                    href=\"https://wiki.osm.org\" "
 "target=\"_blank\">here</a>."
-msgstr ""
+msgstr "Os dados do OpenStreetMap são geodados de acesso livre. "
+"Você pode obter mais informações sobre isso <a\n"
+"                    href=\"https://wiki.osm.org\" "
+"target=\"_blank\">aqui</a>."
 
 #: sketch_map_tool/templates/help.html:349
 msgid "What are the quality levels for OSM data used in the tool?"
-msgstr ""
+msgstr "Quais são os níveis de qualidade dos dados OSM usados na ferramenta?"
 
 #: sketch_map_tool/templates/help.html:351
 msgid ""
@@ -1104,11 +1150,13 @@ msgid ""
 "problems. Recommendations\n"
 "                are\n"
 "                also given on what to consider based on the results."
-msgstr ""
+msgstr "Os dados do OSM são classificados com um sistema de semáforo. Verde significa boa adequação dos dados, amarelo "
+"significa possíveis problemas ao realizar um estudo com Sketch Maps baseados em OSM e vermelho significa problemas "
+"prováveis. Também são feitas recomendações sobre o que deve ser considerado com base nos resultados."
 
 #: sketch_map_tool/templates/help.html:360
 msgid "Which analyses are performed and why?"
-msgstr ""
+msgstr "Quais análises são realizadas e por quê?"
 
 #: sketch_map_tool/templates/help.html:362
 msgid ""
@@ -1117,14 +1165,16 @@ msgid ""
 "                    href=\"https://doi.org/10.3390/ijgi10030130\" "
 "target=\"_blank\">this\n"
 "                paper</a>."
-msgstr ""
+msgstr "Você pode ler mais sobre as análises incluídas na Sketch Map Tool neste <a\n"
+"                    href=\"https://doi.org/10.3390/ijgi10030130\" "
+"target=\"_blank\">artigo</a> (em inglês)."
 
 #: sketch_map_tool/templates/help.html:368
 msgid ""
 "Why is it important to analyse the suitability of OSM data before "
 "creating a\n"
 "                Sketch Map?"
-msgstr ""
+msgstr "Por que é importante analisar a adequação dos dados do OSM antes de criar um Sketch Map?"
 
 #: sketch_map_tool/templates/help.html:372
 msgid ""
@@ -1137,11 +1187,14 @@ msgid ""
 "quality of the Sketch Maps. The\n"
 "                features might be relevant for participants to orientate "
 "on the map."
-msgstr ""
+msgstr "Os dados do OSM são usados para a criação dos Sketch Maps. Se os dados do OSM em uma área de estudo não "
+"tiverem alguns recursos importantes, eles também não aparecerão nos mapas. Portanto, a qualidade dos dados do OSM "
+"está diretamente relacionada à qualidade dos Sketch Maps. Os elementos podem ser relevantes para que os "
+"participantes se orientem no mapa."
 
 #: sketch_map_tool/templates/help.html:380
 msgid "For which research questions can the Sketch Map Tool be used?"
-msgstr ""
+msgstr "Para quais perguntas de pesquisa o Sketch Map Tool pode ser usado?"
 
 #: sketch_map_tool/templates/help.html:382
 msgid ""
@@ -1155,11 +1208,13 @@ msgid ""
 "completely different\n"
 "                research question, as long as you check that it fits your"
 " purpose."
-msgstr ""
+msgstr "Ele pode ser usado para uma variedade de perguntas de pesquisas. Muitos tipos diferentes de dados podem ser "
+"coletados em Sketch Maps em papel. Por exemplo, você pode estudar o conhecimento local sobre desastres naturais, "
+"condições climáticas extremas, calor etc."
 
 #: sketch_map_tool/templates/help.html:390
 msgid "How does mapping work with the Sketch Map Tool?"
-msgstr ""
+msgstr "Como funciona o mapeamento com a Sketch Map Tool?"
 
 #: sketch_map_tool/templates/help.html:392
 msgid ""
@@ -1172,11 +1227,14 @@ msgid ""
 "                uploaded to the tool. The georeferenced TIFF and vector "
 "files can then be further\n"
 "                analysed or used."
-msgstr ""
+msgstr "A população local pode, por exemplo, desenhar áreas inundadas, como ruas, parques etc. nos Sketch Maps "
+"impressos. Os formatos maiores de papel também permitem a realização de discussões em grupo. Os mapas com as "
+"marcações podem ser fotografados e carregados na ferramenta. Os arquivos TIFF e vetoriais georreferenciados podem "
+"ser analisados ou usados posteriormente."
 
 #: sketch_map_tool/templates/help.html:400
 msgid "How large can my study area be?"
-msgstr ""
+msgstr "Qual é o tamanho máximo de minha área de estudo?"
 
 #: sketch_map_tool/templates/help.html:402
 msgid ""
@@ -1184,11 +1242,12 @@ msgid ""
 "level.\n"
 "                The max. size of the study area is limited by the "
 "selection tool."
-msgstr ""
+msgstr "Até o momento, a Sketch Map Tool só foi testada em nível de bairro ou cidade. O tamanho máximo da área de "
+"estudo é limitado pela página de seleção."
 
 #: sketch_map_tool/templates/help.html:407
 msgid "Why are there a QR code and globes on the Sketch Maps?"
-msgstr ""
+msgstr "Por que há um código QR e globos no Sketch Maps?"
 
 #: sketch_map_tool/templates/help.html:409
 msgid ""
@@ -1197,11 +1256,12 @@ msgid ""
 "                map in your uploaded images. This is why it is important "
 "to have them on the Sketch\n"
 "                Maps."
-msgstr ""
+msgstr "O código QR é necessário para o georreferenciamento. Os globos suportam a detecção do mapa em suas imagens "
+"carregadas."
 
 #: sketch_map_tool/templates/help.html:415
 msgid "Can I access my results at a later point of time?"
-msgstr ""
+msgstr "Posso acessar meus resultados posteriormente?"
 
 #: sketch_map_tool/templates/help.html:417
 msgid ""
@@ -1209,11 +1269,12 @@ msgid ""
 "tool. If you\n"
 "                forgot to download the files, you can simply upload and "
 "process the files again."
-msgstr ""
+msgstr "Não, os resultados sempre devem ser baixados diretamente após o uso da ferramenta. Se você se esquecer de "
+"fazer o download dos arquivos, basta fazer o upload e processar os arquivos novamente."
 
 #: sketch_map_tool/templates/help.html:422
 msgid "What do I have to pay attention to in the field?"
-msgstr ""
+msgstr "Em que devo prestar atenção no campo?"
 
 #: sketch_map_tool/templates/help.html:424
 msgid ""
@@ -1231,11 +1292,17 @@ msgid ""
 " use one. An overview of\n"
 "                each step with recommendations can be found <a href"
 "=\"#step-by-step\">here</a>."
-msgstr ""
+msgstr "Certifique-se de não marcar acidentalmente os globos que estão na borda, pois eles podem melhorar a detecção "
+"automática do mapa. No entanto, se alguém marcou acidentalmente os globos, ainda é possível carregar o Sketch Map. "
+"Use canetas de ponta de feltro mais grossas com cores intensas. As marcações em vermelho e azul são mais bem "
+"detectadas na maioria dos casos. Prepare o mesmo conjunto de canetas para todos os entrevistadores. Adicione um "
+"número aos Sketch Maps e salve esse número também no questionário, se estiver usando um. Uma visão geral de cada "
+"etapa com recomendações pode ser encontrada <a href"
+"=\"#step-by-step\">aqui</a>."
 
 #: sketch_map_tool/templates/help.html:434
 msgid "How does the georeferencing work?"
-msgstr ""
+msgstr "Como funciona o georreferenciamento?"
 
 #: sketch_map_tool/templates/help.html:436
 msgid ""
@@ -1243,14 +1310,16 @@ msgid ""
 "                <a href=\"https://doi.org/10.3390/ijgi10030130\"\n"
 "                   target=\"_blank\">paper about the Sketch Map Tool\n"
 "                </a> in the paragraph about \"Image Processing\"."
-msgstr ""
+msgstr "Você pode encontrar sua resposta no <a href=\"https://doi.org/10.3390/ijgi10030130\"\n"
+"                   target=\"_blank\">artigo sobre a Sketch Map Tool</a> (inglês) no parágrafo sobre o "
+"\"Image Processing\"."
 
 #: sketch_map_tool/templates/help.html:443
 msgid ""
 "What do I have to consider when photographing the Sketch Maps to get the "
 "best\n"
 "                possible results?"
-msgstr ""
+msgstr "O que devo considerar ao fotografar os Sketch Maps para obter os melhores resultados possíveis?"
 
 #: sketch_map_tool/templates/help.html:447
 msgid ""
@@ -1266,11 +1335,16 @@ msgid ""
 "                An overview of\n"
 "                each step with recommendations can be found <a href"
 "=\"#step-by-step\">here</a>."
-msgstr ""
+msgstr "As imagens precisam estar no formato .jpg ou .png. Todos os arquivos juntos não podem ter mais de 500 MB. O "
+"georreferenciamento funciona melhor se você digitalizar os Sketch Maps marcados com uma resolução de 300 dpi. Se, em "
+"vez disso, você os fotografar, as fotos deverão ser tiradas de cima em um ângulo de 180 graus (paralelas acima dos "
+"Sketch Maps) para produzir o melhor resultado. Uma visão geral de cada etapa com recomendações pode ser encontrada "
+"<a href"
+"=\"#step-by-step\">aqui</a>."
 
 #: sketch_map_tool/templates/help.html:458
 msgid "How do I check if the georeferencing is correct?"
-msgstr ""
+msgstr "Como posso verificar se o georreferenciamento está correto?"
 
 #: sketch_map_tool/templates/help.html:460
 msgid ""
@@ -1282,11 +1356,13 @@ msgid ""
 "worked. The Sketch Maps\n"
 "                should\n"
 "                match the base map."
-msgstr ""
+msgstr "Você pode abrir o arquivo TIFF em um software GIS, como o ArcGIS ou o QGIS, para verificar isso. Se você "
+"carregar o arquivo nesse software e carregar um mapa base (por exemplo, o mapa base do OSM), poderá ver se o "
+"georreferenciamento funcionou. Os Sketch Maps devem corresponder ao mapa de base."
 
 #: sketch_map_tool/templates/help.html:469
 msgid "Why does my generated TIFF file look strange?"
-msgstr ""
+msgstr "Por que meu arquivo TIFF gerado tem uma aparência estranha?"
 
 #: sketch_map_tool/templates/help.html:471
 msgid ""
@@ -1301,13 +1377,16 @@ msgid ""
 "                example, the photo may have been taken from the wrong "
 "angle or the globes may have\n"
 "                been painted over."
-msgstr ""
+msgstr "Primeiro, tente abrir o arquivo em um software GIS, como o ArcGIS ou o QGIS. O georreferenciamento pode ter "
+"funcionado mesmo que o arquivo TIFF não tenha a aparência correta. Se ele ainda estiver incorreto no GIS, o mapa não "
+"pôde ser detectado corretamente pela ferramenta na foto, o que pode ter vários motivos. Tente carregar uma foto de "
+"melhor qualidade (por exemplo, condições de iluminação, resolução mais alta, paralela acima do Sketch Map)."
 
 #: sketch_map_tool/templates/help.html:481
 msgid ""
 "How can I see / analyse results for one colour or uploaded sketch map "
 "only?"
-msgstr ""
+msgstr "Como posso ver/analisar os resultados de uma cor ou de um Sketch Map carregado apenas?"
 
 #: sketch_map_tool/templates/help.html:483
 msgid ""
@@ -1317,11 +1396,13 @@ msgid ""
 "                <a href=\"https://github.com/GIScience/sketch-map-"
 "tool/tree/main/docs/how-to/filter-results-in-qgis.md\">\n"
 "                    this guide</a>."
-msgstr ""
+msgstr "Você pode filtrar pelos atributos <code>color</code> ou <code>name</code>. Como isso é feito no QGIS, é "
+"explicado neste <a href=\"https://github.com/GIScience/sketch-map-"
+"tool/tree/main/docs/how-to/filter-results-in-qgis.md\">guia</a> (inglês)."
 
 #: sketch_map_tool/templates/help.html:490
 msgid "Additional Information"
-msgstr ""
+msgstr " "
 
 #: sketch_map_tool/templates/help.html:492
 msgid ""
@@ -1329,11 +1410,11 @@ msgid ""
 "Sketch Map Tool can\n"
 "            be combined with additional data collection methods. Stay "
 "tuned!"
-msgstr ""
+msgstr " "
 
 #: sketch_map_tool/templates/index.html:8
 msgid "Create re-digitizable paper maps for offline data collection in the field"
-msgstr ""
+msgstr "Criar mapas em papel redigitalizáveis para coleta de dados off-line no campo"
 
 #: sketch_map_tool/templates/index.html:17
 msgid ""
@@ -1354,7 +1435,12 @@ msgid ""
 "                        quickly analyse the results digitally? Then, the "
 "Sketch&nbsp;Map Tool is exactly\n"
 "                        what you need!"
-msgstr ""
+msgstr "O <strong>Sketch Map Tool</strong> é uma ferramenta fácil de usar para mapeamento participativo baseado em "
+"papel por meio da coleta de dados <strong>off-line</strong>, digitalização e georreferenciamento do "
+"<strong>conhecimento espacial local</strong>.<br>A ferramenta tem uma variedade de aplicações. Por exemplo, você "
+"quer trabalhar em uma comunidade para traçar um mapa da experiência e da percepção de risco no bairro em um formato "
+"impresso, mas ainda assim poder analisar rapidamente os resultados digitalmente? Então, o Sketch Map Tool é "
+"exatamente o que você precisa!"
 
 #: sketch_map_tool/templates/index.html:30
 msgid ""
@@ -1362,54 +1448,56 @@ msgid ""
 "                            href=\"/about\">project</a> and <a "
 "href=\"/help\">how to use\n"
 "                        the tool</a>!"
-msgstr ""
+msgstr "Saiba mais sobre o <a\n"
+"                            href=\"/about\">projeto</a> e <a "
+"href=\"/help\">como usar a ferramenta</a>."
 
 #: sketch_map_tool/templates/index.html:41
 msgid "THEN"
-msgstr ""
+msgstr "ENTÃO"
 
 #: sketch_map_tool/templates/index.html:45
 msgid "Create Paper Maps to Collect Data"
-msgstr ""
+msgstr "Criar mapas de papel para coletar dados"
 
 #: sketch_map_tool/templates/index.html:47
 msgid "Paper to GIS:<br>Automatically Digitize Your Sketch&nbsp;Maps"
-msgstr ""
+msgstr "De papel para GIS:<br>Digitalize automaticamente seus Sketch Maps"
 
 #: sketch_map_tool/templates/index.html:85
 msgid "Create a Sketch&nbsp;Map"
-msgstr ""
+msgstr "Criar um Sketch Map"
 
 #: sketch_map_tool/templates/index.html:89
 msgid "Digitize your Sketch&nbsp;Maps"
-msgstr ""
+msgstr "Digitalize seus Sketch Maps"
 
 #: sketch_map_tool/upload_processing/qr_code_reader.py:40
 msgid "QR-Code could not be detected."
-msgstr ""
+msgstr "Não foi possível detectar o QR-Code."
 
 #: sketch_map_tool/upload_processing/qr_code_reader.py:46
 msgid "The provided UUID is invalid."
-msgstr ""
+msgstr "O UUID fornecido é inválido."
 
 #: sketch_map_tool/upload_processing/qr_code_reader.py:49
 msgid "Multiple QR-Codes detected."
-msgstr ""
+msgstr "Vários QR-Codes detectados."
 
 #: sketch_map_tool/upload_processing/qr_code_reader.py:56
 #: sketch_map_tool/upload_processing/qr_code_reader.py:69
 msgid "QR-Code does not have expected content."
-msgstr ""
+msgstr "O QR-Code não tem o conteúdo esperado."
 
 #: sketch_map_tool/wms/client.py:44
 msgid ""
 "Map area couldn't be processed with the current resources. Please try "
 "again once."
-msgstr ""
+msgstr "A área do mapa não pôde ser processada com os recursos atuais. Tente novamente uma vez."
 
 #: sketch_map_tool/wms/client.py:56
 msgid ""
 "The Web Map Service returned an error. Please change the Area-of-Interest"
 " or try again later."
-msgstr ""
+msgstr "O Web Map Service retornou um erro. Altere a área selecionada ou tente novamente mais tarde."
 
