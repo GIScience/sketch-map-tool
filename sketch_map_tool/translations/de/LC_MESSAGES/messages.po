@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.1.1\n"
 "Report-Msgid-Bugs-To: sketch-map-tool@heigit.org\n"
-"POT-Creation-Date: 2023-05-16 13:39+0200\n"
+"POT-Creation-Date: 2023-05-24 11:16+0200\n"
 "PO-Revision-Date: 2023-05-11 17:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -30,11 +30,15 @@ msgstr "Es gibt in der Datenbank keine Sketch-Map mit der UUID: {}"
 
 #: sketch_map_tool/oqt_analyses/oqt_client.py:43
 msgid "Selected Area-of-Interest is too large for a Map Quality Check Report."
-msgstr "Der gewählte Kartenausschnitt ist zu groß für eine Qualitätsprüfung der OSM-Daten."
+msgstr ""
+"Der gewählte Kartenausschnitt ist zu groß für eine Qualitätsprüfung der "
+"OSM-Daten."
 
 #: sketch_map_tool/oqt_analyses/oqt_client.py:53
 msgid "There seems to be a problem with OQT. Please try again later."
-msgstr "Es scheint ein Problem mit OQT zu geben. Bitte versuchen Sie es später erneut."
+msgstr ""
+"Es scheint ein Problem mit OQT zu geben. Bitte versuchen Sie es später "
+"erneut."
 
 #: sketch_map_tool/templates/about.html:8
 msgid "What is this all about?"
@@ -380,29 +384,29 @@ msgstr ""
 msgid "en"
 msgstr "de"
 
-#: sketch_map_tool/templates/base.html:30
+#: sketch_map_tool/templates/base.html:32
 msgid "Home"
 msgstr "Start"
 
-#: sketch_map_tool/templates/base.html:31
+#: sketch_map_tool/templates/base.html:33
 msgid "About"
 msgstr "Über"
 
-#: sketch_map_tool/templates/base.html:32
+#: sketch_map_tool/templates/base.html:34
 msgid "Help"
 msgstr "Hilfe"
 
-#: sketch_map_tool/templates/base.html:51
+#: sketch_map_tool/templates/base.html:53
 msgid ""
 "Privacy\n"
 "            Policy"
 msgstr "Datenschutzerklärung"
 
-#: sketch_map_tool/templates/base.html:54
+#: sketch_map_tool/templates/base.html:56
 msgid "Imprint"
 msgstr "Impressum"
 
-#: sketch_map_tool/templates/base.html:56
+#: sketch_map_tool/templates/base.html:58
 msgid "HeiGIT Logo"
 msgstr "HeiGIT Logo"
 
@@ -1740,12 +1744,14 @@ msgstr "Der QR-Code hat nicht den erwarteten Inhalt."
 msgid ""
 "Map area couldn't be processed with the current resources. Please try "
 "again once."
-msgstr "Der Kartenausschnitt konnte mit den aktuell verfügbaren Ressourcen nicht verarbeitet werden. Bitte versuchen Sie "
-"es noch einmal."
+msgstr ""
+"Der Kartenausschnitt konnte mit den aktuell verfügbaren Ressourcen nicht "
+"verarbeitet werden. Bitte versuchen Sie es noch einmal."
 
 #: sketch_map_tool/wms/client.py:56
 msgid ""
 "The Web Map Service returned an error. Please change the Area-of-Interest"
 " or try again later."
-msgstr "Der Web-Map-Service hat eine Fehlermeldung zurückgegeben. Bitte versuchen Sie einen anderen Kartenausschnitt "
-"oder probieren Sie es später erneut."
+msgstr ""
+"Der Web-Map-Service hat eine Fehlermeldung zurückgegeben. Bitte versuchen"
+" Sie einen anderen Kartenausschnitt oder probieren Sie es später erneut."
