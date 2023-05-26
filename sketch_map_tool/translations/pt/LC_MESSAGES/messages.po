@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.1.1\n"
 "Report-Msgid-Bugs-To: sketch-map-tool@heigit.org\n"
-"POT-Creation-Date: 2023-05-24 11:16+0200\n"
+"POT-Creation-Date: 2023-05-26 13:42+0200\n"
 "PO-Revision-Date: 2023-05-17 12:40+0200\n"
 "Language: pt\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -19,16 +19,26 @@ msgstr ""
 " UUID"
 
 #: sketch_map_tool/database/client_celery.py:63
-#: sketch_map_tool/database/client_flask.py:115
-#: sketch_map_tool/database/client_flask.py:137
+#: sketch_map_tool/database/client_flask.py:116
+#: sketch_map_tool/database/client_flask.py:138
 msgid "There is no file in the database with the id: "
 msgstr "Processo não encontrado. There is no file in the database with the id: "
 
-#: sketch_map_tool/database/client_flask.py:152
-msgid "There is no map frame in the database with the uuid: {}"
-msgstr ""
-"Nenhum modelo de esboço correspondente encontrado. There is no map frame "
-"in the database with the uuid: {}"
+#: sketch_map_tool/database/client_flask.py:151
+msgid ""
+"In this Sketch Map Tool instance no sketch map has been generated yet. "
+"You can only upload sketch maps to the instance on which they have been "
+"created."
+msgstr "Nesta instância do Sketch Map Tool, ainda não foi gerado nenhum Sketch Map. Você só pode carregar "
+"Sketch Maps na instância em que eles foram criados."
+
+#: sketch_map_tool/database/client_flask.py:161
+msgid ""
+"There is no map frame in the database with the uuid: {}. You can only "
+"upload sketch maps to the instance on which they have been created."
+msgstr "Nenhum modelo de esboço correspondente encontrado. Você só pode carregar "
+"Sketch Maps na instância em que eles foram criados. "
+"There is no map frame in the database with the uuid: {}."
 
 #: sketch_map_tool/oqt_analyses/oqt_client.py:43
 msgid "Selected Area-of-Interest is too large for a Map Quality Check Report."
@@ -1616,7 +1626,7 @@ msgstr "Vários QR-Codes detectados."
 msgid "QR-Code does not have expected content."
 msgstr "O QR-Code não tem o conteúdo esperado."
 
-#: sketch_map_tool/wms/client.py:44
+#: sketch_map_tool/wms/client.py:46
 msgid ""
 "Map area couldn't be processed with the current resources. Please try "
 "again once."
@@ -1624,10 +1634,9 @@ msgstr ""
 "A área do mapa não pôde ser processada com os recursos atuais. Tente "
 "novamente uma vez."
 
-#: sketch_map_tool/wms/client.py:56
-msgid ""
-"The Web Map Service returned an error. Please change the Area-of-Interest"
-" or try again later."
+#: sketch_map_tool/wms/client.py:59
+msgid "The Web Map Service returned an error. Please try again later."
 msgstr ""
 "O Web Map Service retornou um erro. Altere a área selecionada ou tente "
 "novamente mais tarde."
+
