@@ -116,7 +116,9 @@ def digitize_results_post() -> Response:
         map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
         map_frames[uuid] = to_array(map_frame_buffer.read())
     result_id_1 = (
-        georeference_sketch_maps.s(ids, file_names, uuids, map_frames, bboxes).apply_async().id
+        georeference_sketch_maps.s(ids, file_names, uuids, map_frames, bboxes)
+        .apply_async()
+        .id
     )
     result_id_2 = (
         digitize_sketches.s(ids, file_names, uuids, map_frames, bboxes).apply_async().id

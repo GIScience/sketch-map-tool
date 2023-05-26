@@ -117,7 +117,13 @@ def georeference_sketch_maps(
         buffer.seek(0)
         return buffer
 
-    return zip_([process(file_id, uuid, bbox) for file_id, uuid, bbox in zip(file_ids, uuids, bboxes)], file_names)
+    return zip_(
+        [
+            process(file_id, uuid, bbox)
+            for file_id, uuid, bbox in zip(file_ids, uuids, bboxes)
+        ],
+        file_names,
+    )
 
 
 @celery.task()
