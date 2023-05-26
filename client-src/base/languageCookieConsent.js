@@ -1,5 +1,7 @@
-// For retrieving the selected language across all sub-pages, a cookie is stored. To be certainly
-// GDPR conform, the user is asked for consent, even though there is no tracking etc. involved.
+// For retrieving the selected language across all sub-pages, a cookie is stored (via Flask session)
+// Another cookie stores whether this question has already been confirmed to avoid that the user has
+// to click ok every time. To be certainly GDPR conform, the user is asked for consent, even though
+// there is no tracking etc. involved.
 
 function getConsentToStoreLanguageSelection(lang) {
     if (document.cookie === "languageSet=true" || confirm(
