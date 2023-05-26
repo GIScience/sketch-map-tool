@@ -53,9 +53,12 @@ def make_celery(flask_app: Flask) -> Celery:
     return celery_app
 
 
-def get_locale():
+def get_locale() -> str:
     """
     Get locality of user to provide translations if available.
+
+    :return: Language code for language either actively selected by the user or, otherwise, best matching language
+             depending on the request from the available ones.
     """
     if request.args.get("lang"):
         session["lang"] = request.args.get("lang")
