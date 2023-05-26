@@ -69,8 +69,9 @@ def get_async_result_id(request_uuid: str, request_type: REQUEST_TYPES) -> str:
         return map_[request_type]  # AsyncResult ID
     except KeyError as error:
         raise UUIDNotFoundError(
-            "There are no tasks in the broker for UUID and request type: {}, {}"
-            .format(request_uuid, request_type)
+            "There are no tasks in the broker for UUID and request type: {}, {}".format(
+                request_uuid, request_type
+            )
         ) from error
 
 
