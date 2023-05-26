@@ -56,7 +56,9 @@ def as_image(response: Response) -> PngImageFile:
     try:
         return Image.open(BytesIO(response_content))
     except UnidentifiedImageError:
-        error_msg = gettext("The Web Map Service returned an error. Please try again later.")
+        error_msg = gettext(
+            "The Web Map Service returned an error. Please try again later."
+        )
         if (
             content_type == "application/vnd.ogc.se_xml"
         ):  # Response is an XML error report

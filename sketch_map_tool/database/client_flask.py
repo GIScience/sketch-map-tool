@@ -57,9 +57,7 @@ def _select_id_map(uuid) -> dict:
     if raw:
         return raw[0][0]
     else:
-        raise UUIDNotFoundError(
-            "There are no tasks in the broker for UUID: " + uuid
-        )
+        raise UUIDNotFoundError("There are no tasks in the broker for UUID: " + uuid)
 
 
 def get_async_result_id(request_uuid: str, request_type: REQUEST_TYPES) -> str:
