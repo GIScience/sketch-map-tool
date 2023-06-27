@@ -13,7 +13,7 @@ from sketch_map_tool.helpers import resize_rlg_by_height
 def generate_pdf(report_properties: dict) -> BytesIO:
     report_light_radius = 15
     indicator_light_radius = 10
-    indicator_img_size = 200
+    indicator_img_width = 300
     indicator_table_margin = 10
 
     metadata = report_properties["report"]["metadata"]
@@ -68,18 +68,17 @@ def generate_pdf(report_properties: dict) -> BytesIO:
         )
         indicator_img = svg2rlg(svg_bytes)
         indicator_img.scale(
-            indicator_img_size / indicator_img.width,
-            indicator_img_size / indicator_img.height,
+            indicator_img_width / indicator_img.width,
+            indicator_img_width / indicator_img.width,
         )
-        indicator_img.width = indicator_img_size
-        indicator_img.height = indicator_img_size
+        indicator_img.width = indicator_img_width
+        indicator_img.height = indicator_img_width
         indicator_result_description = Paragraph(result["description"])
         indicator_result_table = Table(
-            [[indicator_traffic_light, indicator_img, indicator_result_description]],
+            [[indicator_traffic_light, indicator_img]],
             colWidths=[
                 indicator_light_radius * 3 + indicator_table_margin,
-                indicator_img_size + indicator_table_margin,
-                None,
+                indicator_img_width + indicator_table_margin,
             ],
             style=[
                 ("ALIGN", (0, 0), (-1, -1), "CENTER"),
@@ -90,6 +89,7 @@ def generate_pdf(report_properties: dict) -> BytesIO:
             indicator_heading,
             indicator_description,
             indicator_result_table,
+            indicator_result_description,
         ]
         components += indicator_components
 
