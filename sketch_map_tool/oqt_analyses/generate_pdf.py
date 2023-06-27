@@ -53,7 +53,7 @@ def generate_pdf(report_properties: dict) -> BytesIO:
         result = indicator["result"]
 
         indicator_heading = Paragraph(
-            "{} ({})".format(indicator["metadata"]["name"], indicator["layer"]["name"]),
+            "{} ({})".format(indicator["metadata"]["name"], indicator["topic"]["name"]),
             styles["Heading3"],
         )
         indicator_heading.keepWithNext = True
