@@ -1,4 +1,7 @@
 import { PAPER_FORMAT, ORIENTATION, Margin } from "@giscience/ol-print-layout-control";
+import {
+    toLonLat, get as getProjection, transformExtent,
+} from "ol/proj";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins";
 import { fillSelectOptions, setDisabled } from "../shared";
 
@@ -46,14 +49,18 @@ function bindFormToPrintLayoutControl(printLayoutControl) {
     // property: bbox (in webmercator)
     document.getElementById("bbox").value = JSON.stringify(printLayoutControl.getBbox());
     printLayoutControl.on("change:bbox", (event) => {
-        const newBbox = event.target.getBbox();
-        document.getElementById("bbox").value = JSON.stringify(newBbox);
+        let newBbox = event.target.getBbox();
+        newBbox = toLonLat(newBbox.slice(0, 2)).concat(toLonLat(newBbox.slice(2, 4))); // See https://github.com/GIScience/sketch-map-tool/issues/250
+        document.getElementById("bbox").value = JSON.stringify(
+            transformExtent(newBbox, getProjection("EPSG:4326"), getProjection("EPSG:3857")),
+        );
     });
 
     // property: bboxWGS84 (in wgs84)
     document.getElementById("bboxWGS84").value = JSON.stringify(printLayoutControl.getBboxAsLonLat());
     printLayoutControl.on("change:bbox", (event) => {
-        const newBbox = event.target.getBboxAsLonLat();
+        let newBbox = event.target.getBbox();
+        newBbox = toLonLat(newBbox.slice(0, 2)).concat(toLonLat(newBbox.slice(2, 4))); // See https://github.com/GIScience/sketch-map-tool/issues/250
         document.getElementById("bboxWGS84").value = JSON.stringify(newBbox);
     });
 
@@ -106,6 +113,12 @@ function bindFormToPrintLayoutControl(printLayoutControl) {
             printLayoutControl.handleBboxChange();
             document.querySelector("#page-setup-form").submit();
         });
+
+    // update the URL when the selection is changed  (e.g. to bookmark the current selection)
+    printLayoutControl.on("change:bbox", (event) => {
+        const newCenter = printLayoutControl.getMap().getView().getCenter();
+        window.history.replaceState({}, document.title, `?center=${newCenter}`);
+    });
 }
 
 export {
