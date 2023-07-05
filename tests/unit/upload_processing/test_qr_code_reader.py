@@ -33,7 +33,7 @@ def qr_code_img_no():
 
 @pytest.fixture
 def qr_code_invalid_uuid():
-    return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code-invalid-uuid.jpg"))
+    return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code-invalid-uuid.png"))
 
 
 @pytest.fixture
