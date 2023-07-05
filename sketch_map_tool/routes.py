@@ -10,7 +10,7 @@ from flask import Response, redirect, render_template, request, send_file, url_f
 from sketch_map_tool import celery_app, definitions
 from sketch_map_tool import flask_app as app
 from sketch_map_tool import tasks, upload_processing
-from sketch_map_tool.database import client_flask as db_client
+from sketch_map_tool.config import get_config_value
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
@@ -18,6 +18,7 @@ from sketch_map_tool.exceptions import (
     MapGenerationError,
     OQTReportError,
     QRCodeError,
+    UploadLimitsExceededError,
     UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import to_array
@@ -76,7 +77,7 @@ def create_results_post() -> Response:
         "sketch-map": str(task_sketch_map.id),
         "quality-report": str(task_quality_report.id),
     }
-    db_client.set_async_result_ids(uuid, map_)
+    db_client_flask.set_async_result_ids(uuid, map_)
     return redirect(url_for("create_results_get", uuid=uuid))
 
 
@@ -87,8 +88,8 @@ def create_results_get(uuid: str | None = None) -> Response | str:
         return redirect(url_for("create"))
     validate_uuid(uuid)
     # Check if celery tasks for UUID exists
-    _ = db_client.get_async_result_id(uuid, "sketch-map")
-    _ = db_client.get_async_result_id(uuid, "quality-report")
+    _ = db_client_flask.get_async_result_id(uuid, "sketch-map")
+    _ = db_client_flask.get_async_result_id(uuid, "quality-report")
     return render_template("create-results.html")
 
 
@@ -105,7 +106,12 @@ def digitize_results_post() -> Response:
     if "file" not in request.files:
         return redirect(url_for("digitize"))
     files = request.files.getlist("file")
-    ids = db_client.insert_files(files)
+    max_nr_simultaneous_uploads = int(get_config_value("max-nr-simultaneous-uploads"))
+    if len(files) > max_nr_simultaneous_uploads:
+        raise UploadLimitsExceededError(
+            f"You can only upload up to {max_nr_simultaneous_uploads} files at once."
+        )
+    ids = db_client_flask.insert_files(files)
     files_from_db = [db_client_flask.select_file(i) for i in ids]
     file_names = [db_client_flask.select_file_name(i) for i in ids]
     args = [upload_processing.read_qr_code(to_array(file)) for file in files_from_db]
@@ -149,7 +155,7 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    id_ = db_client.get_async_result_id(uuid, type_)
+    id_ = db_client_flask.get_async_result_id(uuid, type_)
     task = celery_app.AsyncResult(id_)
 
     href = None
@@ -196,7 +202,7 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    id_ = db_client.get_async_result_id(uuid, type_)
+    id_ = db_client_flask.get_async_result_id(uuid, type_)
     task = celery_app.AsyncResult(id_)
 
     match type_:
@@ -225,6 +231,7 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
 
 @app.errorhandler(QRCodeError)
 @app.errorhandler(FileNotFoundError_)
+@app.errorhandler(UploadLimitsExceededError)
 def handle_exception(error):
     return render_template("error.html", error_msg=str(error)), 422
 

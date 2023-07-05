@@ -10,6 +10,7 @@ from sketch_map_tool import make_flask
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.routes import digitize_results_post
 from tests import FIXTURE_DIR
 
 
@@ -50,6 +51,20 @@ def db_conn_celery():
 @pytest.fixture()
 def flask_app():
     yield make_flask()
+
+
+@pytest.fixture()
+def flask_client(flask_app):
+    flask_app.config.update(
+        {
+            "TESTING": True,
+        }
+    )
+    # Register routes to be tested:
+    flask_app.add_url_rule(
+        "/digitize/results", view_func=digitize_results_post, methods=["POST"]
+    )
+    return flask_app.test_client()
 
 
 @pytest.fixture
