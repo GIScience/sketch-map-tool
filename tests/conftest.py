@@ -113,6 +113,11 @@ def uuid():
 
 
 @pytest.fixture
+def version_nr():
+    return "0.9.0"
+
+
+@pytest.fixture
 def bbox_as_list():
     return [964472.1973848869, 6343459.035638228, 967434.6098457306, 6345977.635778541]
 

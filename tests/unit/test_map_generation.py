@@ -61,9 +61,6 @@ def qr_code(bbox, format_, size):
         str(uuid4()),
         bbox,
         format_,
-        "landscape",
-        size,
-        0.75,
     )
 
 
