@@ -9,6 +9,9 @@ function bindFormToPrintLayoutControl(printLayoutControl) {
     const paperFormats = { ...PAPER_FORMAT };
     delete paperFormats.BROADSHEET;
 
+    // TODO: This is temporary. Delete once A0 works
+    delete paperFormats.A0;
+
     // property: format
     fillSelectOptions("format", paperFormats);
 
