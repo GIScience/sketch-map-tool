@@ -1,5 +1,7 @@
 from io import BytesIO
 
+import plotly.graph_objects as go
+import plotly.io as pio
 from reportlab.graphics.shapes import Circle, Drawing, Rect
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
@@ -60,8 +62,11 @@ def generate_pdf(report_properties: dict) -> BytesIO:
         indicator_description = Paragraph(metadata["description"])
         indicator_description.keepWithNext = True
         # indicator_heading.keepWithNext = True
-        # convert svg string to bytes file-like object
-        svg_bytes = BytesIO(result["svg"].encode())
+
+        # Create figure
+        fig = go.Figure(result["figure"])
+        svg_bytes = BytesIO(pio.to_image(fig, format="svg"))
+
         # fix width/height ratio because OQT only produces squared SVGs
         indicator_traffic_light = generate_traffic_light(
             result["label"], radius=indicator_light_radius
