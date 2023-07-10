@@ -1,4 +1,5 @@
 import os
+from copy import deepcopy
 from unittest import mock
 
 import pytest
@@ -33,7 +34,7 @@ def test_allowed_nr_of_uploads(flask_client, sketch_map_markings_buffer_1):
             data=dict(
                 file=[
                     (sketch_map_markings_buffer_1, "file1.png"),
-                    (sketch_map_markings_buffer_1, "file2.png"),
+                    (deepcopy(sketch_map_markings_buffer_1), "file2.png"),
                 ],
             ),
             follow_redirects=True,
