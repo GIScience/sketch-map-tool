@@ -107,7 +107,6 @@ def generate_pdf(  # noqa: C901
     canv_map.setFontSize(format_.font_size)
     canv_map.setFillColorRGB(0, 0, 0)
 
-    # TODO implement for portrait
     draw_right_column(
         canv_map,
         column_width,
@@ -118,6 +117,7 @@ def generate_pdf(  # noqa: C901
         qr_code,
         scale,
         format_,
+        portrait,
     )
 
     # Generate PDFs:
@@ -146,6 +146,7 @@ def draw_right_column(
     qr_code: Drawing,
     scale,
     format_,
+    portrait=False,
 ) -> None:
     normal_style = scale_style(format_, "Normal", 50)
     em = normal_style.fontSize
@@ -158,7 +159,7 @@ def draw_right_column(
 
     # Add compass
     compass_size = width * 0.25  # this is the current ratio of the right column width
-    compass = get_compass(compass_size)
+    compass = get_compass(compass_size, portrait)
 
     # Add copyright information:
     p_copyright = Paragraph("Map: © OpenStreetMap Contributors", normal_style)
@@ -339,8 +340,11 @@ def get_globes(expected_size) -> Tuple[Drawing, ...]:
     return tuple(globes)
 
 
-def get_compass(size: float) -> Drawing:
-    compass = svg2rlg(PDF_RESOURCES_PATH / "north.svg")
+def get_compass(size: float, portrait=False) -> Drawing:
+    file_name = "north.svg"
+    if portrait:
+        file_name = "north_rotated.svg"
+    compass = svg2rlg(PDF_RESOURCES_PATH / file_name)
     compass = resize_rlg_by_width(compass, size)
     return compass
 
