@@ -6,6 +6,10 @@ from qgis.analysis import QgsNativeAlgorithms
 from zipfile import ZipFile
 import processing
 from processing.core.Processing import Processing
+from processing.script import ScriptUtils
+import os
+import shutil
+import pathlib
 
 
 def create_qgis_project(markings: BytesIO):
@@ -20,18 +24,26 @@ def create_qgis_project(markings: BytesIO):
     project.setCrs(reference_system)
     inter_file = NamedTemporaryFile(suffix=".geojson")
     Processing.initialize()
-    QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
-    buffered_layer = processing.run("native:buffer", {
-        'INPUT': infile.name,
-        'DISTANCE': 1.5,
-        'SEGMENTS': 5,
-        'END_CAP_STYLE': 0,
-        'JOIN_STYLE': 0,
-        'MITER_LIMIT': 2,
-        'DISSOLVE': False,
-        'OUTPUT': inter_file.name,
+
+    # Add custom QGIS scripts to processing toolbox:
+    scripts_path = pathlib.Path(__file__).parent.resolve() / "qgis_scripts"
+    qgis_scripts_path = ScriptUtils.defaultScriptsFolder()
+
+    added_scripts = False
+    for filename in os.listdir(scripts_path):
+        if filename not in os.listdir(qgis_scripts_path):
+            shutil.copy(os.path.join(scripts_path, filename), os.path.join(qgis_scripts_path, filename))
+            added_scripts = True
+
+    if added_scripts:
+        QgsApplication.processingRegistry().providerById("script").refreshAlgorithms()
+
+    buffered_layer = processing.run("script:split_count_merge", {
+        'inlayer': infile.name,
+        'OutputLayer': inter_file.name,
+        'uniqueidfield': "color",
         # 'OUTPUT': 'memory:'
-    })['OUTPUT']
+    })['OutputLayer']
     outfile = NamedTemporaryFile(suffix=".qgs")
     project.write(outfile.name)
     buffer = BytesIO()
