@@ -73,6 +73,33 @@
                        disabled="disabled">Download GeoJSON</a>
                 </article>
             </div>
+            <div>
+                <article id="qgis-data" class="result">
+                    <header>
+                        <img src="{{ url_for("static", filename="assets/images/digitize-results/markings-count-icon.svg") }}"
+                             alt="QGIS logo"><br>
+                        <span class="brand-font sub-icon">Analyses</span>
+                    </header>
+                    <h6>Further Analyses</h6>
+                    <p class="pending">
+                        We are packaging a QGIS project file, which contains all vector
+                        data of the markings as well as the overlap counts of different markings.
+                        An example for a heatmap based on the overlap counts is also being generated.
+                    </p>
+                    <p class="success hidden">
+                        We have packed a QGIS project file, which contains all vector
+                        data of the markings as well as the overlap counts of different markings.
+                        The ZIP also contains an example for a heatmap generated in QGIS based on
+                        the overlap counts.
+                    </p>
+                    <p class="error hidden">
+                        Sorry! <br>Something went wrong while trying to generate the Result.
+                    </p>
+                    <a id="qgis-data-download-button" href="#" download aria-busy="true"
+                       role="button"
+                       disabled="disabled">Download ZIP</a>
+                </article>
+            </div>
         </div>
     </main>
 {% endblock body %}
