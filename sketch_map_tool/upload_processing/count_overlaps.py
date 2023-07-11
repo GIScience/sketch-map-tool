@@ -15,14 +15,14 @@ import pathlib
 def create_qgis_project(markings: BytesIO):
     project = QgsProject()
     project.setTitle("Sketch Map Tool Results")
-    infile = NamedTemporaryFile(suffix=".geojson")
+    infile = NamedTemporaryFile(prefix="markings_", suffix=".geojson")
     with open(infile.name, "wb") as f:
         f.write(markings.read())
     layer = QgsVectorLayer(infile.name, "Markings", 'ogr')
     project.addMapLayer(layer)
     reference_system = QgsCoordinateReferenceSystem("EPSG:4326")
     project.setCrs(reference_system)
-    result_file = NamedTemporaryFile(suffix=".geojson")
+    result_file = NamedTemporaryFile(prefix="overlap_counts_", suffix=".geojson")
     Processing.initialize()
 
     # Add custom QGIS scripts to processing toolbox:
