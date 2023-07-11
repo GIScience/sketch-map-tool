@@ -23,7 +23,7 @@ from sketch_map_tool.exceptions import (
 )
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
-from sketch_map_tool.tasks import digitize_sketches, georeference_sketch_maps
+from sketch_map_tool.tasks import digitize_sketches, georeference_sketch_maps, analyse_markings
 from sketch_map_tool.validators import validate_type, validate_uuid
 
 
@@ -129,12 +129,17 @@ def digitize_results_post() -> Response:
     result_id_2 = (
         digitize_sketches.s(ids, file_names, uuids, map_frames, bboxes).apply_async().id
     )
+
+    result_id_3 = (
+        analyse_markings.s(ids, file_names, uuids, map_frames, bboxes).apply_async().id
+    )
     # Unique id for current request
     uuid = str(uuid4())
     # Mapping of request id to multiple tasks id's
     map_ = {
         "raster-results": str(result_id_1),
         "vector-results": str(result_id_2),
+        "qgis-data": str(result_id_3),
     }
     db_client_flask.set_async_result_ids(uuid, map_)
     id_ = uuid
@@ -226,6 +231,11 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
             download_name = type_ + ".geojson"
             if task.successful():
                 file = BytesIO(geojson.dumps(task.get()).encode("utf-8"))
+        case "qgis-data":
+            mimetype = "application/zip"
+            download_name = type_ + ".zip"
+            if task.successful():
+                file = task.get()
     return send_file(file, mimetype, download_name=download_name)
 
 

@@ -25,6 +25,7 @@ from sketch_map_tool.upload_processing import (
     merge,
     polygonize,
     prepare_img_for_markings,
+    create_qgis_project,
 )
 from sketch_map_tool.wms import client as wms_client
 
@@ -81,7 +82,9 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
 
 # 2. DIGITIZE RESULTS
-#
+# TODO: Avoid duplication in the three tasks, instead let the later ones wait for the first to finish to directly
+#       use intermediary results
+
 @celery.task()
 def georeference_sketch_maps(
     file_ids: list[int],
@@ -157,3 +160,39 @@ def digitize_sketches(
             for file_id, name, uuid, bbox in zip(file_ids, file_names, uuids, bboxes)
         ]
     )
+
+
+@celery.task()
+def analyse_markings(
+    file_ids: list[int],
+    file_names: list[str],
+    uuids: list[str],
+    map_frames: dict[str, NDArray],
+    bboxes: list[Bbox],
+) -> AsyncResult | FeatureCollection:
+    def process(
+        sketch_map_id: int, name: str, uuid: str, bbox: Bbox
+    ) -> FeatureCollection:
+        """Process a Sketch Map."""
+        # r = interim result
+        r = db_client_celery.select_file(sketch_map_id)
+        r = to_array(r)
+        r = clip(r, map_frames[uuid])
+        r = prepare_img_for_markings(map_frames[uuid], r)
+        geojsons = []
+        for color in COLORS:
+            r_ = detect_markings(r, color)
+            r_ = georeference(r_, bbox)
+            r_ = polygonize(r_, color)
+            r_ = geojson.load(r_)
+            r_ = clean(r_)
+            r_ = enrich(r_, {"color": color, "name": name})
+            geojsons.append(r_)
+        return merge(geojsons)
+
+    return create_qgis_project(BytesIO(geojson.dumps(merge(
+        [
+            process(file_id, name, uuid, bbox)
+            for file_id, name, uuid, bbox in zip(file_ids, file_names, uuids, bboxes)
+        ]
+    )).encode("utf-8")))
