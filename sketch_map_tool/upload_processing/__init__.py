@@ -6,7 +6,7 @@ from .georeference import georeference
 from .merge import merge
 from .polygonize import polygonize
 from .qr_code_reader import read as read_qr_code
-from .count_overlaps import create_qgis_project
+from .count_overlaps import create_qgis_project, generate_heatmap
 
 __all__ = (
     "enrich",
@@ -18,5 +18,6 @@ __all__ = (
     "read_qr_code",
     "polygonize",
     "merge",
-    "create_qgis_project"
+    "create_qgis_project",
+    "generate_heatmap",
 )

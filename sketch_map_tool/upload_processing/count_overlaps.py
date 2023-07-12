@@ -1,5 +1,7 @@
 from io import BytesIO
 from tempfile import NamedTemporaryFile
+from typing import List, Tuple
+
 from qgis.core import (QgsProject, QgsVectorLayer, QgsCoordinateReferenceSystem, QgsApplication,
                        QgsProcessingFeatureSourceDefinition, QgsProcessingFeedback)
 from zipfile import ZipFile
@@ -49,14 +51,18 @@ def create_qgis_project(markings: BytesIO):
     project.addMapLayer(layer_result)
     outfile = NamedTemporaryFile(suffix=".qgs")
     project.write(outfile.name)
-    buffer = BytesIO()
-    with (ZipFile(buffer, "w") as zip_file, open(infile.name, "rb") as f_markings, open(outfile.name, "rb") as f_qgis,
+    buffer_project = BytesIO()
+    buffer_overlaps = BytesIO()
+    with (ZipFile(buffer_project, "w") as zip_file, open(infile.name, "rb") as f_markings, open(outfile.name, "rb") as f_qgis,
           open(result_file.name, "rb") as f_result):
         zip_file.writestr(infile.name.replace("tmp/", "./"), f_markings.read())
         zip_file.writestr(result_file.name.replace("tmp/", "./"), f_result.read())
         zip_file.writestr(f"project.qgs", f_qgis.read())
-    buffer.seek(0)
-    return buffer
+        f_result.seek(0)
+        buffer_overlaps.write(f_result.read())
+    buffer_project.seek(0)
+    buffer_overlaps.seek(0)
+    return buffer_project, buffer_overlaps
 
 
 def generate_heatmap(geojson_path, lon_min, lat_min, lon_max, lat_max, bg_img_path) -> List[Tuple[str, BytesIO]]:

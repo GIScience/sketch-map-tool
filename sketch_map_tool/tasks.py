@@ -1,4 +1,5 @@
 from io import BytesIO
+from typing import List, Tuple
 from uuid import UUID
 from zipfile import ZipFile
 
@@ -7,6 +8,7 @@ from celery.result import AsyncResult
 from celery.signals import worker_process_init, worker_process_shutdown
 from geojson import FeatureCollection
 from numpy.typing import NDArray
+from tempfile import NamedTemporaryFile
 
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool import map_generation
@@ -26,6 +28,7 @@ from sketch_map_tool.upload_processing import (
     polygonize,
     prepare_img_for_markings,
     create_qgis_project,
+    generate_heatmap,
 )
 from sketch_map_tool.wms import client as wms_client
 
@@ -169,7 +172,12 @@ def analyse_markings(
     uuids: list[str],
     map_frames: dict[str, NDArray],
     bboxes: list[Bbox],
+    map_frame_template: BytesIO
 ) -> AsyncResult | FeatureCollection:
+    if len(set(bboxes)) != 1:
+        raise ValueError("Because the map frame is used as background for the heatmap, this process only works "
+                         "when uploading sketch maps covering exactly the same area.")
+
     def process(
         sketch_map_id: int, name: str, uuid: str, bbox: Bbox
     ) -> FeatureCollection:
@@ -190,9 +198,31 @@ def analyse_markings(
             geojsons.append(r_)
         return merge(geojsons)
 
-    return create_qgis_project(BytesIO(geojson.dumps(merge(
+    def zip_(qgis_project: BytesIO, heatmaps: List[Tuple[str, BytesIO]]) -> BytesIO:
+        buffer = BytesIO()
+        with ZipFile(buffer, "w") as zip_file:
+            zip_file.writestr(f"qgis_project.zip", qgis_project.read())
+            for colour, heatmap in heatmaps:
+                zip_file.writestr(f"heatmap_{colour}.jpg", heatmap.read())
+        buffer.seek(0)
+        return buffer
+
+    qgis_project, overlaps = create_qgis_project(BytesIO(geojson.dumps(merge(
         [
             process(file_id, name, uuid, bbox)
             for file_id, name, uuid, bbox in zip(file_ids, file_names, uuids, bboxes)
         ]
     )).encode("utf-8")))
+    geojson_overlaps_file = NamedTemporaryFile(suffix=".geojson")
+    map_frame_template_file = NamedTemporaryFile(suffix=".jpg")
+    with open(geojson_overlaps_file.name, "wb") as fw:
+        fw.write(overlaps.read())
+    with open(map_frame_template_file.name, "wb") as fw:
+        fw.write(map_frame_template.read())
+    return zip_(qgis_project, generate_heatmap(
+        geojson_overlaps_file.name,
+        bboxes[0].lon_min,
+        bboxes[0].lat_min,
+        bboxes[0].lon_max,
+        bboxes[0].lat_max,
+        map_frame_template_file.name))

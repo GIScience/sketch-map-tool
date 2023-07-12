@@ -118,6 +118,7 @@ def digitize_results_post() -> Response:
     uuids = [args_["uuid"] for args_ in args]
     bboxes = [args_["bbox"] for args_ in args]
     map_frames = dict()
+    map_frame_buffer = BytesIO()
     for uuid in set(uuids):  # Only retrieve map_frame once per uuid to save memory
         map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
         map_frames[uuid] = to_array(map_frame_buffer.read())
@@ -130,8 +131,9 @@ def digitize_results_post() -> Response:
         digitize_sketches.s(ids, file_names, uuids, map_frames, bboxes).apply_async().id
     )
 
+    map_frame_buffer.seek(0)
     result_id_3 = (
-        analyse_markings.s(ids, file_names, uuids, map_frames, bboxes).apply_async().id
+        analyse_markings.s(ids, file_names, uuids, map_frames, bboxes, map_frame_buffer).apply_async().id
     )
     # Unique id for current request
     uuid = str(uuid4())
