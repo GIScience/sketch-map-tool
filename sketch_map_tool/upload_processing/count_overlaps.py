@@ -2,7 +2,6 @@ from io import BytesIO
 from tempfile import NamedTemporaryFile
 from qgis.core import (QgsProject, QgsVectorLayer, QgsCoordinateReferenceSystem, QgsApplication,
                        QgsProcessingFeatureSourceDefinition, QgsProcessingFeedback)
-from qgis.analysis import QgsNativeAlgorithms
 from zipfile import ZipFile
 import processing
 from processing.core.Processing import Processing
@@ -10,6 +9,8 @@ from processing.script import ScriptUtils
 import os
 import shutil
 import pathlib
+import geopandas as gpd
+import matplotlib.pyplot as plt
 
 
 def create_qgis_project(markings: BytesIO):
@@ -56,3 +57,41 @@ def create_qgis_project(markings: BytesIO):
         zip_file.writestr(f"project.qgs", f_qgis.read())
     buffer.seek(0)
     return buffer
+
+
+def generate_heatmap(geojson_path, lon_min, lat_min, lon_max, lat_max, bg_img_path) -> List[Tuple[str, BytesIO]]:
+    """
+    Create a heatmap covering the extent given in 'lon_min', ..., 'lat_max' arguments, based on the
+    'COUNT' data in the GeoJSON referred to with 'geojson_path'.
+
+    :param geojson_path: Path to a GeoJSON containing a 'COUNT' property for all features.
+    :param lon_min: Longitude in web mercator of the lower left corner of the extent.
+    :param lat_min: Latitude in web mercator of the lower left corner of the extent.
+    :param lon_max: Longitude in web mercator of the upper right corner of the extent.
+    :param lat_max: Latitude in web mercator of the upper right corner of the extent.
+    :param bg_img_path: Path to the map image shown as background to the heatmap.
+    :return: JPGs of the heatmaps for each colour of detected markings and the names of the
+             corresponding colours.
+    """
+    df_geojson = gpd.read_file(geojson_path)
+    results = []
+    for colour in df_geojson["color"].unique():
+        df_col = df_geojson[df_geojson["color"] == colour]
+        fig = plt.figure()
+        ax = fig.subplots()
+
+        xlim = ([lon_min, lon_max])
+        ylim = ([lat_min, lat_max])
+        ax.set_xlim(xlim)
+        ax.set_ylim(ylim)
+
+        img = plt.imread(bg_img_path)
+        ax.imshow(img, extent=[lon_min, lon_max, lat_min, lat_max])
+
+        df_col.plot(column="COUNT", cmap="cividis", ax=ax)
+        plt.colorbar(ax.get_children()[1], ax=ax)
+        result_buffer = BytesIO()
+        fig.savefig(result_buffer, format="jpg")
+        result_buffer.seek(0)
+        results.append((colour, result_buffer))
+    return results
