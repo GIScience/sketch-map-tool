@@ -13,6 +13,7 @@ import shutil
 import pathlib
 import geopandas as gpd
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def create_qgis_project(markings: BytesIO):
@@ -95,7 +96,8 @@ def generate_heatmap(geojson_path, lon_min, lat_min, lon_max, lat_max, bg_img_pa
         ax.imshow(img, extent=[lon_min, lon_max, lat_min, lat_max])
 
         df_col.plot(column="COUNT", cmap="cividis", ax=ax)
-        plt.colorbar(ax.get_children()[1], ax=ax)
+        plt.colorbar(ax.get_children()[1], ax=ax, ticks=np.arange(np.min(np.asarray(df_col["COUNT"]).astype(int)),
+                                                                  np.max(np.asarray(df_col["COUNT"]).astype(int)) + 1))
         result_buffer = BytesIO()
         fig.savefig(result_buffer, format="jpg")
         result_buffer.seek(0)
