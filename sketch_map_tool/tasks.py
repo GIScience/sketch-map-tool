@@ -202,7 +202,7 @@ def analyse_markings(
     """
     if len(set(bboxes)) != 1:
         raise ValueError(
-            "Because the map frame is used as background for the heatmap, this process only works "
+            "Because the map frame is used as background for the heatmaps, this process only works "
             "when uploading sketch maps covering exactly the same area."
         )
 
