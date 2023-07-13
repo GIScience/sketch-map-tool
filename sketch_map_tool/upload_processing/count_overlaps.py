@@ -1,19 +1,23 @@
+import os
+import pathlib
+import shutil
 from io import BytesIO
 from tempfile import NamedTemporaryFile
 from typing import List, Tuple
-
-from qgis.core import (QgsProject, QgsVectorLayer, QgsCoordinateReferenceSystem, QgsApplication,
-                       QgsProcessingFeatureSourceDefinition, QgsProcessingFeedback)
 from zipfile import ZipFile
-import processing
-from processing.core.Processing import Processing
-from processing.script import ScriptUtils
-import os
-import shutil
-import pathlib
+
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import numpy as np
+import processing
+from processing.core.Processing import Processing
+from processing.script import ScriptUtils
+from qgis.core import (
+    QgsApplication,
+    QgsCoordinateReferenceSystem,
+    QgsProject,
+    QgsVectorLayer,
+)
 
 
 def create_qgis_project(markings: BytesIO):
@@ -22,7 +26,7 @@ def create_qgis_project(markings: BytesIO):
     infile = NamedTemporaryFile(prefix="markings_", suffix=".geojson")
     with open(infile.name, "wb") as f:
         f.write(markings.read())
-    layer = QgsVectorLayer(infile.name, "Markings", 'ogr')
+    layer = QgsVectorLayer(infile.name, "Markings", "ogr")
     project.addMapLayer(layer)
     reference_system = QgsCoordinateReferenceSystem("EPSG:4326")
     project.setCrs(reference_system)
@@ -36,29 +40,39 @@ def create_qgis_project(markings: BytesIO):
     added_scripts = False
     for filename in os.listdir(scripts_path):
         if filename not in os.listdir(qgis_scripts_path):
-            shutil.copy(os.path.join(scripts_path, filename), os.path.join(qgis_scripts_path, filename))
+            shutil.copy(
+                os.path.join(scripts_path, filename),
+                os.path.join(qgis_scripts_path, filename),
+            )
             added_scripts = True
 
     if added_scripts:
         QgsApplication.processingRegistry().providerById("script").refreshAlgorithms()
 
-    processing.run("script:split_count_merge", {
-        'inlayer': infile.name,
-        'OutputLayer': result_file.name,
-        'uniqueidfield': "color",
-        # 'OUTPUT': 'memory:'
-    })
-    layer_result = QgsVectorLayer(result_file.name, "Overlap Counts", 'ogr')
+    processing.run(
+        "script:split_count_merge",
+        {
+            "inlayer": infile.name,
+            "OutputLayer": result_file.name,
+            "uniqueidfield": "color",
+            # 'OUTPUT': 'memory:'
+        },
+    )
+    layer_result = QgsVectorLayer(result_file.name, "Overlap Counts", "ogr")
     project.addMapLayer(layer_result)
     outfile = NamedTemporaryFile(suffix=".qgs")
     project.write(outfile.name)
     buffer_project = BytesIO()
     buffer_overlaps = BytesIO()
-    with (ZipFile(buffer_project, "w") as zip_file, open(infile.name, "rb") as f_markings, open(outfile.name, "rb") as f_qgis,
-          open(result_file.name, "rb") as f_result):
+    with (
+        ZipFile(buffer_project, "w") as zip_file,
+        open(infile.name, "rb") as f_markings,
+        open(outfile.name, "rb") as f_qgis,
+        open(result_file.name, "rb") as f_result,
+    ):
         zip_file.writestr(infile.name.replace("tmp/", "./"), f_markings.read())
         zip_file.writestr(result_file.name.replace("tmp/", "./"), f_result.read())
-        zip_file.writestr(f"project.qgs", f_qgis.read())
+        zip_file.writestr("project.qgs", f_qgis.read())
         f_result.seek(0)
         buffer_overlaps.write(f_result.read())
     buffer_project.seek(0)
@@ -66,7 +80,9 @@ def create_qgis_project(markings: BytesIO):
     return buffer_project, buffer_overlaps
 
 
-def generate_heatmap(geojson_path, lon_min, lat_min, lon_max, lat_max, bg_img_path) -> List[Tuple[str, BytesIO]]:
+def generate_heatmaps(
+    geojson_path, lon_min, lat_min, lon_max, lat_max, bg_img_path
+) -> List[Tuple[str, BytesIO]]:
     """
     Create a heatmap covering the extent given in 'lon_min', ..., 'lat_max' arguments, based on the
     'COUNT' data in the GeoJSON referred to with 'geojson_path'.
@@ -87,8 +103,8 @@ def generate_heatmap(geojson_path, lon_min, lat_min, lon_max, lat_max, bg_img_pa
         fig = plt.figure()
         ax = fig.subplots()
 
-        xlim = ([lon_min, lon_max])
-        ylim = ([lat_min, lat_max])
+        xlim = [lon_min, lon_max]
+        ylim = [lat_min, lat_max]
         ax.set_xlim(xlim)
         ax.set_ylim(ylim)
 
@@ -96,8 +112,14 @@ def generate_heatmap(geojson_path, lon_min, lat_min, lon_max, lat_max, bg_img_pa
         ax.imshow(img, extent=[lon_min, lon_max, lat_min, lat_max])
 
         df_col.plot(column="COUNT", cmap="cividis", ax=ax)
-        plt.colorbar(ax.get_children()[1], ax=ax, ticks=np.arange(np.min(np.asarray(df_col["COUNT"]).astype(int)),
-                                                                  np.max(np.asarray(df_col["COUNT"]).astype(int)) + 1))
+        plt.colorbar(
+            ax.get_children()[1],
+            ax=ax,
+            ticks=np.arange(
+                np.min(np.asarray(df_col["COUNT"]).astype(int)),
+                np.max(np.asarray(df_col["COUNT"]).astype(int)) + 1,
+            ),
+        )
         result_buffer = BytesIO()
         fig.savefig(result_buffer, format="jpg")
         result_buffer.seek(0)

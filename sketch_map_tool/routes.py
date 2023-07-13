@@ -23,7 +23,11 @@ from sketch_map_tool.exceptions import (
 )
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
-from sketch_map_tool.tasks import digitize_sketches, georeference_sketch_maps, analyse_markings
+from sketch_map_tool.tasks import (
+    analyse_markings,
+    digitize_sketches,
+    georeference_sketch_maps,
+)
 from sketch_map_tool.validators import validate_type, validate_uuid
 
 
@@ -133,7 +137,9 @@ def digitize_results_post() -> Response:
 
     map_frame_buffer.seek(0)
     result_id_3 = (
-        analyse_markings.s(ids, file_names, uuids, map_frames, bboxes, map_frame_buffer).apply_async().id
+        analyse_markings.s(ids, file_names, uuids, map_frames, bboxes, map_frame_buffer)
+        .apply_async()
+        .id
     )
     # Unique id for current request
     uuid = str(uuid4())
