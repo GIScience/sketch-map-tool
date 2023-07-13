@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 
 import geojson
 
-# from celery import chain, group
+from celery import chain
 from flask import Response, redirect, render_template, request, send_file, url_for
 
 from sketch_map_tool import celery_app, definitions
@@ -131,16 +131,17 @@ def digitize_results_post() -> Response:
         .apply_async()
         .id
     )
-    result_id_2 = (
-        digitize_sketches.s(ids, file_names, uuids, map_frames, bboxes).apply_async().id
-    )
 
     map_frame_buffer.seek(0)
+    marking_detection_analyses_chain = chain(digitize_sketches.s(ids, file_names, uuids, map_frames, bboxes),
+              analyse_markings.s(bboxes, map_frame_buffer)).apply_async()
     result_id_3 = (
-        analyse_markings.s(ids, file_names, uuids, map_frames, bboxes, map_frame_buffer)
-        .apply_async()
-        .id
+        marking_detection_analyses_chain.id
     )
+    result_id_2 = (
+       marking_detection_analyses_chain.parent.id
+    )
+
     # Unique id for current request
     uuid = str(uuid4())
     # Mapping of request id to multiple tasks id's

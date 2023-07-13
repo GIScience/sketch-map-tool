@@ -176,10 +176,7 @@ def digitize_sketches(
 
 @celery.task()
 def analyse_markings(
-    file_ids: list[int],
-    file_names: list[str],
-    uuids: list[str],
-    map_frames: dict[str, NDArray],
+    markings_collection: FeatureCollection,
     bboxes: list[Bbox],
     map_frame_template: BytesIO,
 ) -> AsyncResult | BytesIO:
@@ -216,14 +213,7 @@ def analyse_markings(
         return buffer
 
     markings = geojson.dumps(
-        merge(
-            [
-                process_marking_detection(file_id, name, bbox, map_frames[uuid])
-                for file_id, name, uuid, bbox in zip(
-                    file_ids, file_names, uuids, bboxes
-                )
-            ]
-        )
+        markings_collection
     ).encode("utf-8")
     qgis_project, overlaps = create_qgis_project(BytesIO(markings))
     geojson_overlaps_file = NamedTemporaryFile(suffix=".geojson")
