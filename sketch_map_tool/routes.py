@@ -135,11 +135,12 @@ def digitize_results_post() -> Response:
     map_frame_buffer.seek(0)
     marking_detection_analyses_chain = chain(digitize_sketches.s(ids, file_names, uuids, map_frames, bboxes),
               analyse_markings.s(bboxes, map_frame_buffer)).apply_async()
-    result_id_3 = (
-        marking_detection_analyses_chain.id
-    )
+
     result_id_2 = (
        marking_detection_analyses_chain.parent.id
+    )
+    result_id_3 = (
+        marking_detection_analyses_chain.id
     )
 
     # Unique id for current request
