@@ -18,8 +18,6 @@ from PyQt5.QtCore import QVariant
 
 # TODO: Refactor
 class CountDuplicates(QgsProcessingAlgorithm):
-    
-
     INPUT = 'INPUT'
     OUTPUT = 'OUTPUT'
     ID_FIELD = 'ID_FIELD'
@@ -79,12 +77,13 @@ class CountDuplicates(QgsProcessingAlgorithm):
         out_fields = source.fields()
         out_fields.append(QgsField("COUNT", QVariant.Int, '', 10, 0))
         
-        # Add id fields
-        id_idx = source.fields().indexOf('name')
-        values = source.uniqueValues(id_idx)
+        # Add id fields, used to TODO
+        name_index = source.fields().indexOf("name")
+        values = source.uniqueValues(name_index)
         for id_value in values:
-            out_fields.append(QgsField("{}".format(id_value), QVariant.Int, '', 10, 0))
-        out_fields.remove(id_idx)
+            out_fields.append(QgsField(str(id_value), QVariant.Int, '', 10, 0))
+        out_fields.remove(name_index)
+        # TODO: Contents of out_fields now -> Can the initialisation be made more clearly?
 
         # The 'dest_id' variable is used to uniquely identify the feature sink
         (sink, dest_id) = self.parameterAsSink(
@@ -96,51 +95,28 @@ class CountDuplicates(QgsProcessingAlgorithm):
             source.sourceCrs()
         )
         
-        feedback.pushInfo('CRS is {}'.format(source.sourceCrs().authid()))
-
-        # If sink was not created, throw an exception to indicate that the algorithm
-        # encountered a fatal error.
         if sink is None:
             raise QgsProcessingException(self.invalidSinkError(parameters, self.OUTPUT))
 
-        # Compute the number of steps to display within the progress bar and
-        # get features from source
-        total = 100.0 / source.featureCount() if source.featureCount() else 0
-        features = [feat for feat in source.getFeatures()]
+        features = source.getFeatures()
 
-        for current, feature in enumerate(features):
-            # Stop the algorithm if cancel button has been clicked
-            if feedback.isCanceled():
-                break
-
-            # make attribute list
-            inAttr = feature.attributes()
-            del inAttr[id_idx]
-            inAttr += [0] * (len(out_fields) - len(inAttr))
+        for i, feature in enumerate(features):
+            attributes = feature.attributes()
+            attributes.remove(name_index)
+            attributes += [0] * (len(out_fields) - len(attributes))  # TODO: Why?
 
             count = 0
             add_feature = True
 
-            for other_current, other_feature in enumerate(features):
+            for j, other_feature in enumerate(features):
                 if feature.geometry().equals(other_feature.geometry()):
-                    feature_id = other_feature.attributes()[id_idx]
-                    inAttr[out_fields.indexOf("{}".format(feature_id))] += 1
+                    feature_id = other_feature.attributes()[name_index]
+                    attributes[out_fields.indexOf("{}".format(feature_id))] += 1
                     count += 1
-                    # duplicate feature already added?
-                    if current > other_current:
-                        add_feature = False
-            # create new feature
-            out_feature = QgsFeature()
-            # set attributes and geometry
-            inAttr[out_fields.indexOf("COUNT")] = count
-            out_feature.setAttributes(inAttr)
-            out_feature.setGeometry(feature.geometry())
-
-            # Add a feature in the sink
-            if add_feature:
-                sink.addFeature(out_feature, QgsFeatureSink.FastInsert)
-
-            # Update the progress bar
-            feedback.setProgress(int(current * total))
-
+                    if j >= i:  # duplicate feature not already added
+                        out_feature = QgsFeature()
+                        attributes[out_fields.indexOf("COUNT")] = count
+                        out_feature.setAttributes(attributes)
+                        out_feature.setGeometry(feature.geometry())
+                        sink.addFeature(out_feature, QgsFeatureSink.FastInsert)
         return {self.OUTPUT: dest_id}

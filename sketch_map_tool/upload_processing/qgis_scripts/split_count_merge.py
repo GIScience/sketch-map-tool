@@ -1,6 +1,6 @@
 """
-For each colour that has been used for markings, count overlapping features, i.e. overlapping markings in that
-colour from different sketch maps.
+For each colour that has been used for markings, count overlapping features,
+i.e. overlapping markings in that colour from different sketch maps.
 """
 
 from qgis.core import QgsProcessing
@@ -9,8 +9,6 @@ from qgis.core import QgsProcessingMultiStepFeedback
 from qgis.core import QgsProcessingParameterVectorLayer
 from qgis.core import QgsProcessingParameterString
 from qgis.core import QgsProcessingParameterFeatureSink
-from qgis.core import QgsMessageLog
-from qgis.core import Qgis
 import processing
 
 
@@ -33,12 +31,11 @@ class Split_count_merge(QgsProcessingAlgorithm):
             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT,
             'OUTPUT_HTML_FILE': QgsProcessing.TEMPORARY_OUTPUT
         }
-        outputs['ListUniqueValues'] = processing.run('qgis:listuniquevalues', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        values = outputs['ListUniqueValues']['UNIQUE_VALUES']
-        values = values.split(';')
+        unique_id_values = processing.run(
+            'qgis:listuniquevalues', alg_params, context=context, feedback=feedback,
+            is_child_algorithm=True)['UNIQUE_VALUES'].split(';')
         out_layers = []
-        for value in values:
-            # Extract by attribute
+        for value in unique_id_values:
             alg_params = {
                 'FIELD': parameters['uniqueidfield'],
                 'INPUT': parameters['inlayer'],
@@ -46,41 +43,37 @@ class Split_count_merge(QgsProcessingAlgorithm):
                 'VALUE': value,
                 'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
             }
-            try:
-                outputs['ExtractByAttribute'] = processing.run('native:extractbyattribute', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-            except:
-                QgsMessageLog.logMessage("ERROR AT RUNNING 'extractbyattribute' WITH value = "+str(value)+", parameters['inlayer'] = "+str(parameters['inlayer']), level=Qgis.Critical)
-                raise Exception
-            feedback.setCurrentStep(1)
-            if feedback.isCanceled():
-                return {}
+
+            # TODO: What does this script do?
+            extracted_by_attribute = processing.run('native:extractbyattribute',
+                                     alg_params, context=context,
+                                     feedback=feedback,
+                                     is_child_algorithm=True)['OUTPUT']
 
             alg_params = {
-                'INPUT': outputs['ExtractByAttribute']['OUTPUT'],
+                'INPUT': extracted_by_attribute,
                 'OVERLAY': None,
                 'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
             }
-            try:
-                outputs['Union'] = processing.run('native:union', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-            except:
-                QgsMessageLog.logMessage("ERROR AT RUNNING 'union' WITH outputs['ExtractByAttribute']['OUTPUT'] = "+str(outputs['ExtractByAttribute']['OUTPUT']), level=Qgis.Critical)
-                raise Exception
+
+            union = processing.run(
+                'native:union', alg_params, context=context, feedback=feedback,
+                is_child_algorithm=True)['OUTPUT']
             feedback.setCurrentStep(2)
             if feedback.isCanceled():
                 return {}
 
             alg_params = {
-                'INPUT': outputs['Union']['OUTPUT'],
+                'INPUT': union,
                 'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
             }
             # Run custom count_duplicates script (also needs to be added to the QGIS processing toolbox before
             # running this one)
-            try:
-                outputs['CountDuplicates'] = processing.run('script:count_duplicates', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-            except:
-                QgsMessageLog.logMessage("ERROR AT RUNNING 'count_duplicates' WITH outputs['Union']['OUTPUT'] = "+str(outputs['Union']['OUTPUT']), level=Qgis.Critical)
-                raise Exception
-            out_layers.append(outputs['CountDuplicates']['OUTPUT'])
+            # TODO: Add code from second script here
+            overlap_counts = processing.run(
+                'script:count_duplicates', alg_params, context=context, feedback=feedback,
+                is_child_algorithm=True)['OUTPUT']
+            out_layers.append(overlap_counts)
         
         # Merge vector layers
         alg_params = {
@@ -88,12 +81,10 @@ class Split_count_merge(QgsProcessingAlgorithm):
             'LAYERS': out_layers,
             'OUTPUT': parameters['OutputLayer']
         }
-        try:
-            outputs['MergeVectorLayers'] = processing.run('native:mergevectorlayers', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
-        except:
-            QgsMessageLog.logMessage("ERROR AT RUNNING 'mergevectorlayers' WITH out_layers = "+str(out_layers), level=Qgis.Critical)
-            raise Exception
-        results['OutputLayer'] = outputs['MergeVectorLayers']['OUTPUT']
+
+        results['OutputLayer'] = processing.run(
+            'native:mergevectorlayers', alg_params, context=context, feedback=feedback,
+            is_child_algorithm=True)['OUTPUT']
         return results
         
     def name(self):
