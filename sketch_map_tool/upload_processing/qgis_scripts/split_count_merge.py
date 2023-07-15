@@ -7,7 +7,6 @@ import processing
 from qgis.core import (
     QgsProcessing,
     QgsProcessingAlgorithm,
-    QgsProcessingMultiStepFeedback,
     QgsProcessingParameterFeatureSink,
     QgsProcessingParameterString,
     QgsProcessingParameterVectorLayer,
@@ -44,9 +43,7 @@ class Split_count_merge(QgsProcessingAlgorithm):
         )
 
     def processAlgorithm(self, parameters, context, model_feedback):
-        feedback = QgsProcessingMultiStepFeedback(1, model_feedback)
         results = {}
-        outputs = {}
 
         alg_params = {
             "FIELDS": parameters["uniqueidfield"],
@@ -54,48 +51,43 @@ class Split_count_merge(QgsProcessingAlgorithm):
             "OUTPUT": QgsProcessing.TEMPORARY_OUTPUT,
             "OUTPUT_HTML_FILE": QgsProcessing.TEMPORARY_OUTPUT,
         }
-        unique_id_values = processing.run(
+        unique_colour_values = processing.run(
             "qgis:listuniquevalues",
             alg_params,
             context=context,
-            feedback=feedback,
             is_child_algorithm=True,
         )["UNIQUE_VALUES"].split(";")
         out_layers = []
-        for value in unique_id_values:
+        for colour in unique_colour_values:
             alg_params = {
                 "FIELD": parameters["uniqueidfield"],
                 "INPUT": parameters["inlayer"],
                 "OPERATOR": 0,
-                "VALUE": value,
+                "VALUE": colour,
                 "OUTPUT": QgsProcessing.TEMPORARY_OUTPUT,
             }
 
-            # TODO: What does this script do?
-            extracted_by_attribute = processing.run(
+            layer_current_colour = processing.run(
                 "native:extractbyattribute",
                 alg_params,
                 context=context,
-                feedback=feedback,
                 is_child_algorithm=True,
             )["OUTPUT"]
 
+            # Create separate features for overlaps and non-overlapping parts of features, i.e.
+            # split features on overlaps and create an overlap feature for each feature involved
+            # in the overlap
             alg_params = {
-                "INPUT": extracted_by_attribute,
+                "INPUT": layer_current_colour,
                 "OVERLAY": None,
                 "OUTPUT": QgsProcessing.TEMPORARY_OUTPUT,
             }
-
             union = processing.run(
                 "native:union",
                 alg_params,
                 context=context,
-                feedback=feedback,
                 is_child_algorithm=True,
             )["OUTPUT"]
-            feedback.setCurrentStep(2)
-            if feedback.isCanceled():
-                return {}
 
             alg_params = {"INPUT": union, "OUTPUT": QgsProcessing.TEMPORARY_OUTPUT}
             # Run custom count_duplicates script (also needs to be added to the QGIS processing toolbox before
@@ -105,12 +97,14 @@ class Split_count_merge(QgsProcessingAlgorithm):
                 "script:count_duplicates",
                 alg_params,
                 context=context,
-                feedback=feedback,
                 is_child_algorithm=True,
             )["OUTPUT"]
             out_layers.append(overlap_counts)
 
-        # Merge vector layers
+
+
+
+        # Merge overlap count layers for different colours
         alg_params = {
             "CRS": parameters["inlayer"],
             "LAYERS": out_layers,
@@ -121,7 +115,6 @@ class Split_count_merge(QgsProcessingAlgorithm):
             "native:mergevectorlayers",
             alg_params,
             context=context,
-            feedback=feedback,
             is_child_algorithm=True,
         )["OUTPUT"]
         return results
