@@ -69,7 +69,7 @@ class CountDuplicates(QgsProcessingAlgorithm):
                 self.invalidSourceError(parameters, self.INPUT)
             )
 
-        # Create the output layer
+        # Create the output layer fields
         out_fields = source.fields()
         out_fields.append(QgsField("COUNT", QVariant.Int, "", 10, 0))
 
@@ -77,8 +77,17 @@ class CountDuplicates(QgsProcessingAlgorithm):
         name_index = source.fields().indexOf("name")
         values = source.uniqueValues(name_index)
         for id_value in values:
-            out_fields.append(QgsField(str(id_value), QVariant.Int, "", 10, 0))
+            #out_fields.append(QgsField(str(id_value), QVariant.Int, "", 10, 0))
+            out_fields.append(QgsField(f"{id_value}", QVariant.Int, "", 10, 0))
+        print("BEFORE:")
+        print(out_fields)
+        for out_f in out_fields:
+            print(out_f)
         out_fields.remove(name_index)
+        print("AFTER:")
+        print(out_fields)
+        for out_f in out_fields:
+            print(out_f)
         # TODO: Contents of out_fields now -> Can the initialisation be made more clearly?
 
         # The 'dest_id' variable is used to uniquely identify the feature sink
@@ -98,7 +107,7 @@ class CountDuplicates(QgsProcessingAlgorithm):
 
         for i, feature in enumerate(features):
             attributes = feature.attributes()
-            attributes.remove(name_index)
+            del attributes[name_index]
             attributes += [0] * (len(out_fields) - len(attributes))  # TODO: Why?
 
             count = 0
