@@ -73,22 +73,14 @@ class CountDuplicates(QgsProcessingAlgorithm):
         out_fields = source.fields()
         out_fields.append(QgsField("COUNT", QVariant.Int, "", 10, 0))
 
-        # Add id fields, used to TODO
+        # Add fields identifying different sketch maps, i.e. the filenames
         name_index = source.fields().indexOf("name")
         values = source.uniqueValues(name_index)
+
         for id_value in values:
-            #out_fields.append(QgsField(str(id_value), QVariant.Int, "", 10, 0))
             out_fields.append(QgsField(f"{id_value}", QVariant.Int, "", 10, 0))
-        print("BEFORE:")
-        print(out_fields)
-        for out_f in out_fields:
-            print(out_f)
+
         out_fields.remove(name_index)
-        print("AFTER:")
-        print(out_fields)
-        for out_f in out_fields:
-            print(out_f)
-        # TODO: Contents of out_fields now -> Can the initialisation be made more clearly?
 
         # The 'dest_id' variable is used to uniquely identify the feature sink
         (sink, dest_id) = self.parameterAsSink(
@@ -105,15 +97,19 @@ class CountDuplicates(QgsProcessingAlgorithm):
 
         features = source.getFeatures()
 
+        # print(f"{len(features)=}")
+        print(f"{features=}")
         for i, feature in enumerate(features):
+            print(f"Feature loop, iteration {i=}, {feature=}")
             attributes = feature.attributes()
             del attributes[name_index]
-            attributes += [0] * (len(out_fields) - len(attributes))  # TODO: Why?
+            attributes += [0] * (len(out_fields) - len(attributes))  # Initialise new fields with zero
 
             count = 0
-            add_feature = True
 
-            for j, other_feature in enumerate(features):
+            features_ = source.getFeatures()
+            for j, other_feature in enumerate(features_):
+                print(f"Inner Feature loop, iteration {j=}, {other_feature=}")
                 if feature.geometry().equals(other_feature.geometry()):
                     feature_id = other_feature.attributes()[name_index]
                     attributes[out_fields.indexOf("{}".format(feature_id))] += 1
@@ -124,4 +120,5 @@ class CountDuplicates(QgsProcessingAlgorithm):
                         out_feature.setAttributes(attributes)
                         out_feature.setGeometry(feature.geometry())
                         sink.addFeature(out_feature, QgsFeatureSink.FastInsert)
+            print("Finished inner loop")
         return {self.OUTPUT: dest_id}

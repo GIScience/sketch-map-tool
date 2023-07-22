@@ -95,17 +95,16 @@ class CountOverlaps(QgsProcessingAlgorithm):
             out_fields = source.fields()
             out_fields.append(QgsField("COUNT", QVariant.Int, "", 10, 0))
 
-            # Add id fields identifying different sketch maps, i.e. the filenames
+            # Add fields identifying different sketch maps, i.e. the filenames
+            # They will be used to indicate to which sketch maps each part of the markings belongs to
             name_index = source.fields().indexOf("name")
             unique_ids = source.uniqueValues(name_index)
+            sketch_map_indicator_fields_indices = []
             for id_ in unique_ids:
+                sketch_map_indicator_fields_indices.append(len(out_fields))
                 out_fields.append(QgsField(str(id_), QVariant.Int, "", 10, 0))
-            print("BEFORE:")
-            print(out_fields)
             out_fields.remove(name_index)
-            print("AFTER:")
-            print(out_fields)
-            # TODO: Contents of out_fields now -> Can the initialisation be made more clearly?
+
             # The 'dest_id' variable is used to uniquely identify the feature sink
             (sink, dest_id) = self.parameterAsSink(
                 parameters,
@@ -124,7 +123,7 @@ class CountOverlaps(QgsProcessingAlgorithm):
             for i, feature in enumerate(features):
                 attributes = feature.attributes()
                 del attributes[name_index]
-                attributes += [0] * (len(out_fields) - len(attributes))  # TODO: Why?
+                attributes += [0] * (len(out_fields) - len(attributes))  # Initialise new fields with zero
 
                 count = 0
                 add_feature = True
@@ -140,6 +139,9 @@ class CountOverlaps(QgsProcessingAlgorithm):
                             out_feature.setAttributes(attributes)
                             out_feature.setGeometry(feature.geometry())
                             sink.addFeature(out_feature, QgsFeatureSink.FastInsert)
+
+            for indicator_field_index in sketch_map_indicator_fields_indices:
+                out_fields.remove(indicator_field_index)
             return {self.OUTPUT: dest_id}
 
             out_layers.append(overlap_counts)
