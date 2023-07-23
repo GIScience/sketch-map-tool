@@ -1,6 +1,7 @@
 """
 For each colour that has been used for markings, count overlapping features,
 i.e. overlapping markings in that colour from different sketch maps.
+Requires custom script 'count_duplicates'.
 """
 
 import processing
@@ -13,8 +14,7 @@ from qgis.core import (
 )
 
 
-# TODO: Refactor
-class Split_count_merge(QgsProcessingAlgorithm):
+class CountOverlaps(QgsProcessingAlgorithm):
     def initAlgorithm(self, config=False):
         self.addParameter(
             QgsProcessingParameterVectorLayer(
@@ -26,7 +26,7 @@ class Split_count_merge(QgsProcessingAlgorithm):
         )
         self.addParameter(
             QgsProcessingParameterString(
-                "uniqueidfield",
+                "colour_field",
                 "Colour field name",
                 multiLine=False,
                 defaultValue="color",
@@ -46,7 +46,7 @@ class Split_count_merge(QgsProcessingAlgorithm):
         results = {}
 
         alg_params = {
-            "FIELDS": parameters["uniqueidfield"],
+            "FIELDS": parameters["colour_field"],
             "INPUT": parameters["inlayer"],
             "OUTPUT": QgsProcessing.TEMPORARY_OUTPUT,
             "OUTPUT_HTML_FILE": QgsProcessing.TEMPORARY_OUTPUT,
@@ -60,7 +60,7 @@ class Split_count_merge(QgsProcessingAlgorithm):
         out_layers = []
         for colour in unique_colour_values:
             alg_params = {
-                "FIELD": parameters["uniqueidfield"],
+                "FIELD": parameters["colour_field"],
                 "INPUT": parameters["inlayer"],
                 "OPERATOR": 0,
                 "VALUE": colour,
@@ -90,9 +90,9 @@ class Split_count_merge(QgsProcessingAlgorithm):
             )["OUTPUT"]
 
             alg_params = {"INPUT": union, "OUTPUT": QgsProcessing.TEMPORARY_OUTPUT}
+
             # Run custom count_duplicates script (also needs to be added to the QGIS processing toolbox before
-            # running this one)
-            # TODO: Add code from second script here
+            # running this one), that counts the features that have the same geometries, i.e. the overlap features
             overlap_counts = processing.run(
                 "script:count_duplicates",
                 alg_params,
@@ -100,9 +100,6 @@ class Split_count_merge(QgsProcessingAlgorithm):
                 is_child_algorithm=True,
             )["OUTPUT"]
             out_layers.append(overlap_counts)
-
-
-
 
         # Merge overlap count layers for different colours
         alg_params = {
@@ -120,10 +117,10 @@ class Split_count_merge(QgsProcessingAlgorithm):
         return results
 
     def name(self):
-        return "split_count_merge"
+        return "count_overlaps"
 
     def displayName(self):
-        return "split_count_merge"
+        return "count_overlaps"
 
     def group(self):
         return ""
@@ -131,8 +128,5 @@ class Split_count_merge(QgsProcessingAlgorithm):
     def groupId(self):
         return ""
 
-    def shortHelpString(self):
-        return "Split input layer by unique colours. Count duplicates for every unique value found. Merge resulting layers into final Output Layer, containing counts of overlapping features for each unique attribute value in specified id_field."
-
     def createInstance(self):
-        return Split_count_merge()
+        return CountOverlaps()

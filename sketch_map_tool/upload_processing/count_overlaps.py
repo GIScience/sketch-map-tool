@@ -59,11 +59,11 @@ def create_qgis_project(markings: BytesIO) -> Tuple[BytesIO, BytesIO]:
     # Run the overlapping count script
     result_file = NamedTemporaryFile(prefix="overlap_counts_", suffix=".geojson")
     processing.run(
-        "script:split_count_merge",
+        "script:count_overlaps",
         {
             "inlayer": infile.name,
             "OutputLayer": result_file.name,
-            "uniqueidfield": "color",
+            "colour_field": "color",
         },
     )
 

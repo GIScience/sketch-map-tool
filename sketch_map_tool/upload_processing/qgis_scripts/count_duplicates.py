@@ -1,5 +1,6 @@
 """
-Count duplicate, i.e. overlapping, features of input layer.
+Count duplicate features (i.e. with the same geometry) in the  input layer.
+Helper script for 'count_overlaps'.
 """
 
 import processing
@@ -17,7 +18,6 @@ from qgis.core import (
 )
 
 
-# TODO: Refactor
 class CountDuplicates(QgsProcessingAlgorithm):
     INPUT = "INPUT"
     OUTPUT = "OUTPUT"
@@ -42,7 +42,7 @@ class CountDuplicates(QgsProcessingAlgorithm):
         return ""
 
     def shortHelpString(self):
-        return self.tr("Count Duplicates in input layer.")
+        return self.tr("Count duplicate features in input layer.")
 
     def initAlgorithm(self, config=None):
         # Add the input vector features source
@@ -95,8 +95,7 @@ class CountDuplicates(QgsProcessingAlgorithm):
         if sink is None:
             raise QgsProcessingException(self.invalidSinkError(parameters, self.OUTPUT))
 
-
-        # Count overlaps for each feature:
+        # Count duplicates for each feature:
         features = source.getFeatures()
 
         for i, feature in enumerate(features):
@@ -104,7 +103,8 @@ class CountDuplicates(QgsProcessingAlgorithm):
             del attributes[name_index]
             attributes += [0] * (len(out_fields) - len(attributes))  # Initialise new fields with zero
 
-            count = 0  # Each feature 'overlaps' with itself, so the count will be incremented by one in the inner loop
+            count = 0  # Each feature has the same geometry as itself, so the count will be incremented by one in any
+            #            case in the following inner loop
 
             features_ = source.getFeatures()
             for j, other_feature in enumerate(features_):
@@ -113,7 +113,7 @@ class CountDuplicates(QgsProcessingAlgorithm):
                     attributes[out_fields.indexOf(str(feature_id))] = 1  # Set the indicator variable for this
                     #                                                              sketch map to one
                     count += 1
-                    if j >= i:  # overlapping feature not already added
+                    if j >= i:  # duplicate feature not already added
                         out_feature = QgsFeature()
                         attributes[out_fields.indexOf("COUNT")] = count
                         out_feature.setAttributes(attributes)
