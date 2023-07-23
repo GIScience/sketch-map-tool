@@ -118,6 +118,7 @@ class CountOverlaps(QgsProcessingAlgorithm):
             if sink is None:
                 raise QgsProcessingException(self.invalidSinkError(parameters, self.OUTPUT))
 
+            # Count overlaps for each feature:
             features = source.getFeatures()
 
             for i, feature in enumerate(features):
@@ -125,26 +126,25 @@ class CountOverlaps(QgsProcessingAlgorithm):
                 del attributes[name_index]
                 attributes += [0] * (len(out_fields) - len(attributes))  # Initialise new fields with zero
 
-                count = 0
-                add_feature = True
+                count = 0  # Each feature 'overlaps' with itself, so the count will be incremented by one in the inner loop
 
-                for j, other_feature in enumerate(features):
+                features_ = source.getFeatures()
+                for j, other_feature in enumerate(features_):
                     if feature.geometry().equals(other_feature.geometry()):
-                        feature_id = other_feature.attributes()[name_index]
-                        attributes[out_fields.indexOf("{}".format(feature_id))] += 1
+                        feature_id = other_feature.attributes()[
+                            name_index]  # Name of the sketch map this marking is from
+                        attributes[out_fields.indexOf(str(feature_id))] = 1  # Set the indicator variable for this
+                        #                                                              sketch map to one
                         count += 1
-                        if j >= i:  # duplicate feature not already added
+                        if j >= i:  # overlapping feature not already added
                             out_feature = QgsFeature()
                             attributes[out_fields.indexOf("COUNT")] = count
                             out_feature.setAttributes(attributes)
                             out_feature.setGeometry(feature.geometry())
                             sink.addFeature(out_feature, QgsFeatureSink.FastInsert)
+            # return {self.OUTPUT: dest_id}
 
-            for indicator_field_index in sketch_map_indicator_fields_indices:
-                out_fields.remove(indicator_field_index)
-            return {self.OUTPUT: dest_id}
-
-            out_layers.append(overlap_counts)
+            # out_layers.append(overlap_counts)
 
 
 

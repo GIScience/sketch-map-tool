@@ -78,7 +78,7 @@ class CountDuplicates(QgsProcessingAlgorithm):
         values = source.uniqueValues(name_index)
 
         for id_value in values:
-            out_fields.append(QgsField(f"{id_value}", QVariant.Int, "", 10, 0))
+            out_fields.append(QgsField(str(id_value), QVariant.Int, "", 10, 0))
 
         out_fields.remove(name_index)
 
@@ -95,30 +95,28 @@ class CountDuplicates(QgsProcessingAlgorithm):
         if sink is None:
             raise QgsProcessingException(self.invalidSinkError(parameters, self.OUTPUT))
 
+
+        # Count overlaps for each feature:
         features = source.getFeatures()
 
-        # print(f"{len(features)=}")
-        print(f"{features=}")
         for i, feature in enumerate(features):
-            print(f"Feature loop, iteration {i=}, {feature=}")
             attributes = feature.attributes()
             del attributes[name_index]
             attributes += [0] * (len(out_fields) - len(attributes))  # Initialise new fields with zero
 
-            count = 0
+            count = 0  # Each feature 'overlaps' with itself, so the count will be incremented by one in the inner loop
 
             features_ = source.getFeatures()
             for j, other_feature in enumerate(features_):
-                print(f"Inner Feature loop, iteration {j=}, {other_feature=}")
                 if feature.geometry().equals(other_feature.geometry()):
-                    feature_id = other_feature.attributes()[name_index]
-                    attributes[out_fields.indexOf("{}".format(feature_id))] += 1
+                    feature_id = other_feature.attributes()[name_index]  # Name of the sketch map this marking is from
+                    attributes[out_fields.indexOf(str(feature_id))] = 1  # Set the indicator variable for this
+                    #                                                              sketch map to one
                     count += 1
-                    if j >= i:  # duplicate feature not already added
+                    if j >= i:  # overlapping feature not already added
                         out_feature = QgsFeature()
                         attributes[out_fields.indexOf("COUNT")] = count
                         out_feature.setAttributes(attributes)
                         out_feature.setGeometry(feature.geometry())
                         sink.addFeature(out_feature, QgsFeatureSink.FastInsert)
-            print("Finished inner loop")
         return {self.OUTPUT: dest_id}
