@@ -3,7 +3,6 @@ Count duplicate features (i.e. with the same geometry) in the  input layer.
 Helper script for 'count_overlaps'.
 """
 
-import processing
 from PyQt5.QtCore import QCoreApplication, QVariant
 from qgis.core import (
     QgsFeature,
@@ -14,7 +13,6 @@ from qgis.core import (
     QgsProcessingException,
     QgsProcessingParameterFeatureSink,
     QgsProcessingParameterFeatureSource,
-    QgsProcessingParameterString,
 )
 
 
@@ -101,7 +99,9 @@ class CountDuplicates(QgsProcessingAlgorithm):
         for i, feature in enumerate(features):
             attributes = feature.attributes()
             del attributes[name_index]
-            attributes += [0] * (len(out_fields) - len(attributes))  # Initialise new fields with zero
+            attributes += [0] * (
+                len(out_fields) - len(attributes)
+            )  # Initialise new fields with zero
 
             count = 0  # Each feature has the same geometry as itself, so the count will be incremented by one in any
             #            case in the following inner loop
@@ -109,8 +109,12 @@ class CountDuplicates(QgsProcessingAlgorithm):
             features_ = source.getFeatures()
             for j, other_feature in enumerate(features_):
                 if feature.geometry().equals(other_feature.geometry()):
-                    feature_id = other_feature.attributes()[name_index]  # Name of the sketch map this marking is from
-                    attributes[out_fields.indexOf(str(feature_id))] = 1  # Set the indicator variable for this
+                    feature_id = other_feature.attributes()[
+                        name_index
+                    ]  # Name of the sketch map this marking is from
+                    attributes[
+                        out_fields.indexOf(str(feature_id))
+                    ] = 1  # Set the indicator variable for this
                     #                                                              sketch map to one
                     count += 1
                     if j >= i:  # duplicate feature not already added
