@@ -9,7 +9,9 @@ RUN mkdir -p /sketch_map_tool/static/bundles
 RUN npm run build
 
 
-FROM ubuntu:22.04
+# currently based on docker image ubuntu:22.04
+# this image comes with gdal preinstalled
+FROM qgis/qgis:release-3_22
 
 # install libzbar (neccessary for pyzbar to read the QR codes)
 # install gdal
@@ -21,7 +23,11 @@ RUN apt-get update \
         libzbar0 \
         libgdal-dev \
         libgl1 \
+        python3-qgis \
     && rm -rf /var/lib/apt/lists/*
+
+# to prevent poetry from running into a version bug
+RUN apt-get remove -y python3-distro-info
 
 # update C env vars so compiler can find gdal
 ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
@@ -38,6 +44,7 @@ ENV PATH=$PATH:/home/smt/.local/bin
 
 COPY --chown=smt:smt pyproject.toml pyproject.toml
 COPY --chown=smt:smt poetry.lock poetry.lock
+COPY --chown=smt:smt poetry.toml poetry.toml
 COPY --chown=smt:smt setup.cfg setup.cfg
 # install Python dependencies
 RUN pip3 install --no-cache-dir poetry

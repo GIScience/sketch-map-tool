@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 
 import geojson
 
-# from celery import chain, group
+from celery import chain
 from flask import Response, redirect, render_template, request, send_file, url_for
 
 from sketch_map_tool import celery_app, definitions
@@ -23,7 +23,11 @@ from sketch_map_tool.exceptions import (
 )
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
-from sketch_map_tool.tasks import digitize_sketches, georeference_sketch_maps
+from sketch_map_tool.tasks import (
+    analyse_markings,
+    digitize_sketches,
+    georeference_sketch_maps,
+)
 from sketch_map_tool.validators import validate_type, validate_uuid
 
 
@@ -118,6 +122,7 @@ def digitize_results_post() -> Response:
     uuids = [args_["uuid"] for args_ in args]
     bboxes = [args_["bbox"] for args_ in args]
     map_frames = dict()
+    map_frame_buffer = BytesIO()
     for uuid in set(uuids):  # Only retrieve map_frame once per uuid to save memory
         map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
         map_frames[uuid] = to_array(map_frame_buffer.read())
@@ -126,15 +131,25 @@ def digitize_results_post() -> Response:
         .apply_async()
         .id
     )
+
+    map_frame_buffer.seek(0)
+    marking_detection_analyses_chain = chain(digitize_sketches.s(ids, file_names, uuids, map_frames, bboxes),
+              analyse_markings.s(bboxes, map_frame_buffer)).apply_async()
+
     result_id_2 = (
-        digitize_sketches.s(ids, file_names, uuids, map_frames, bboxes).apply_async().id
+       marking_detection_analyses_chain.parent.id
     )
+    result_id_3 = (
+        marking_detection_analyses_chain.id
+    )
+
     # Unique id for current request
     uuid = str(uuid4())
     # Mapping of request id to multiple tasks id's
     map_ = {
         "raster-results": str(result_id_1),
         "vector-results": str(result_id_2),
+        "qgis-data": str(result_id_3),
     }
     db_client_flask.set_async_result_ids(uuid, map_)
     id_ = uuid
@@ -226,6 +241,11 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
             download_name = type_ + ".geojson"
             if task.successful():
                 file = BytesIO(geojson.dumps(task.get()).encode("utf-8"))
+        case "qgis-data":
+            mimetype = "application/zip"
+            download_name = type_ + ".zip"
+            if task.successful():
+                file = task.get()
     return send_file(file, mimetype, download_name=download_name)
 
 

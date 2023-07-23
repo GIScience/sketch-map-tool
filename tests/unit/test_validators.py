@@ -5,7 +5,7 @@ from sketch_map_tool.validators import validate_type, validate_uuid
 
 @pytest.mark.parametrize(
     "type_",
-    ["quality-report", "sketch-map", "raster-results", "vector-results"],
+    ["quality-report", "sketch-map", "raster-results", "vector-results", "qgis-data"],
 )
 def test_validate_type(type_):
     validate_type(type_)

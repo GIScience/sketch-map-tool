@@ -1,5 +1,6 @@
 from .clean import clean
 from .clip import clip
+from .count_overlaps import create_qgis_project, generate_heatmaps
 from .detect_markings import detect_markings, prepare_img_for_markings
 from .enrich import enrich
 from .georeference import georeference
@@ -17,4 +18,6 @@ __all__ = (
     "read_qr_code",
     "polygonize",
     "merge",
+    "create_qgis_project",
+    "generate_heatmaps",
 )

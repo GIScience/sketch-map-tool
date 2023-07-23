@@ -74,7 +74,7 @@ class WorkflowCycle(HttpUser):
         digitize_post = self.client.post("/digitize/results", files=files)
         digitize_uuid = digitize_post.url.split("/")[-1]
         validate_uuid(digitize_uuid)
-        for result_type in ("raster-results", "vector-results"):
+        for result_type in ("raster-results", "vector-results", "qgis-data"):
             download_url = self.status_loop(digitize_uuid, result_type)
             request_name = "/api/download/[uuid]/{}".format(result_type)
             result = self.client.get(download_url, name=request_name)
