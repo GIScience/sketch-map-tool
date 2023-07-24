@@ -59,6 +59,11 @@ To run all unit tests, run this command in the project path:
 pytest tests/unit
 ```
 
+To run all integration tests in Docker containers, run the following command in the project path:
+```bash
+docker compose run --entrypoint poetry flask run pytest tests/integration/
+```
+
 ## JS and CSS
 
 For the individual html pages the js and css code should be developed in `client-src/**` as 
