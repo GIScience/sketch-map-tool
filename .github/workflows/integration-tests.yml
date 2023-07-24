@@ -1,0 +1,11 @@
+name: Integration tests
+
+on: [ push ]
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build and run integration tests
+        run: docker compose run --entrypoint poetry flask run pytest tests/integration/
