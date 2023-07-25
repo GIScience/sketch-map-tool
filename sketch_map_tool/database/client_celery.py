@@ -18,6 +18,10 @@ def open_connection():
     db_conn.autocommit = True
 
 
+if db_conn is None:
+    open_connection()
+
+
 def close_connection():
     global db_conn
     if isinstance(db_conn, connection) and db_conn.closed == 0:  # 0 if the conn is open
