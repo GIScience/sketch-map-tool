@@ -65,7 +65,7 @@ Make sure that you do not have an old volume in use from previous tests, which c
 ```bash
 docker compose run --entrypoint poetry flask run pytest tests/integration/
 # Clean up afterwards:
-docker-compose down -v
+docker compose down -v
 ```
 
 ## JS and CSS

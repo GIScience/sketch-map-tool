@@ -1,6 +1,7 @@
 name: Integration tests
 
-on: [ workflow_dispatch ]
+#on: [ workflow_dispatch ]
+on: [ push ]
 
 jobs:
   test:
@@ -10,4 +11,4 @@ jobs:
       - name: Build and run integration tests
         run: docker compose run --entrypoint poetry flask run pytest tests/integration/
       - name: clean-up
-        run: docker-compose down -v
+        run: docker compose down -v
