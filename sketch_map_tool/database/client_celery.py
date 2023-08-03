@@ -1,3 +1,4 @@
+import time
 from io import BytesIO
 from uuid import UUID
 
@@ -18,8 +19,12 @@ def open_connection():
     db_conn.autocommit = True
 
 
-if db_conn is None:
-    open_connection()
+while db_conn is None:
+    try:
+        open_connection()
+    except psycopg2.OperationalError:  # Postgres not yet up and running
+        print("Connection to database failed. Trying again in 5 seconds...")
+        time.sleep(5)
 
 
 def close_connection():

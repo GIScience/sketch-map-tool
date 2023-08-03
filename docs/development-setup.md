@@ -63,6 +63,7 @@ To run all integration tests in Docker containers, run the following command in 
 Make sure that you do not have an old volume in use from previous tests, which could lead to conflicts.
 
 ```bash
+docker compose build  # Build images in case changes have been performed
 docker compose run --entrypoint poetry flask run pytest tests/integration/
 # Clean up afterwards:
 docker compose down -v
