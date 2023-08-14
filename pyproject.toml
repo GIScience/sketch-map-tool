@@ -15,7 +15,6 @@ matplotlib = "^3.5.3"
 reportlab = "^3.6.11"
 toml = "^0.10.2"
 celery = {extras = ["SQLAlchemy", "redis"], version = "^5.2.7"}
-pyzbar = "^0.1.9"
 opencv-python = "^4.6.0"
 qrcode = "^7.3.1"
 svglib = "^1.4.1"
@@ -23,11 +22,8 @@ PyMuPDF = {extras = ["Pillow"], version = "^1.21.0"}
 psycopg2 = "^2.9.5"
 plotly = "^5.15.0"
 kaleido = "0.2.1"  # Not working with '^', cf. https://github.com/plotly/Kaleido/issues/125
-
-# these dependencies are maintained by your local setup and have to be fixed for now, since poetry and (py)gdal packages can't work together
-# if you change these versions, please change them in development-setup.md, Dockerfile and .github/workflows/python.yml as well
-#numpy = "1.23.5"
-#pygdal = "3.4.1.10"
+gdal = {version = "3.4.1", extras = ["numpy"]}  # same as in Dockerfile and environment.yml
+pyzbar = "0.1.9"  # same as in Dockerfile and environment.yml
 geojson = "^2.5.0"
 matplotlib-scalebar = "^0.8.1"
 redis = "^4.5.4"
@@ -38,7 +34,7 @@ bandit = "1.7.4"
 mypy = "0.981"
 flake8 = "5.0.4"
 black = "22.8.0"
-isort = "5.10.1"
+isort = "5.12.0"
 pytest = "^7.1.3"
 pre-commit = "^2.20.0"
 types-toml = "^0.10.8"

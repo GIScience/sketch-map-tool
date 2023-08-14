@@ -1,62 +1,61 @@
 # Development Setup
 
-## Requirements
+## Prerequisites (Requirements)
 
-- Python: `^3.10`
-- Poetry: `1.2`
+- Python: `>=3.10`
+- [Mamba](https://github.com/conda-forge/miniforge#install): `>=1.4`
 - Node: `>=14`
-- Redis: `^7.0`
-- Postgres: `^15.0`
-- zbar
-  - Mac OS X: `brew install zbar`
-  - Debian derivatives: `sudo apt-get install libzbar0`
-  - Fedora: `sudo dnf install zbar-devel`
-  - Windows: DLLs are included with the Windows Python wheels
-- GDAL: `>=3.4.1, <3.5`
 
-This project uses [Poetry](https://python-poetry.org/docs/) for packaging and dependencies management. Please make sure it is installed on your system.
-[ZBar](https://zbar.sourceforge.net/) is used to detect and decode QR-Codes and need to be installed on the system as well.
+This project uses [Mamba](https://github.com/conda-forge/miniforge#install) for environment and dependencies management. Please make sure it is installed on your system: [Installation Guide](https://github.com/conda-forge/miniforge#install)
+
+> Actually, Mamba and Poetry together are used to manage environment and dependencies. But only Mamba is required to be present on the System. Poetry will be installed by Mamba. Mamba installs pre built binaries for depedencies like GDAL. Poetry installs the rest of the Python dependencies.
 
 ## Installation
 
 ### Python Package
 
 ```bash
-# Git clone repository
-# these versions have to be fixed for now, since poetry and (py)gdal packages can't work together
-poetry run pip install numpy==1.23.5
-poetry run pip install pygdal==3.4.1.10
-poetry install
-poetry shell  # Spawns a shell within the virtual environment
-pre-commit install  # Install pre-commit hooks
-npm install # Install local versions of esbuild, eslint and stylelint to build and check JS and CSS
-# Hack away
+git clone https://github.com/GIScience/sketch-map-tool.git
+cd sketch-map-tool
+mamba env create --file environment.yml
+mamba activate smt
+poetry install  # poetry installs directly into activated mamba environment
+pre-commit install
+# install local versions of esbuild, eslint and stylelint to build and check JS and CSS
+npm install
+# hack away
 ```
 
-### Configuration
+## Configuration
 
 Please refer to the [configuration documentation](/docs/configuration.md).
 
-### Celery Backend (Postgres) and Brocker (Redis)
-
-```bash
-docker run --name redis -d -p 6379:6379 redis
-docker run --name postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres
-```
-
 ## Usage
 
+### 1. Start Celery (Task Queue)
+
 ```bash
+mamba activate smt
+# backend (postgres)
+docker run --name smt-redis -d -p 6379:6379 redis
+# broker (redis)
+docker run --name smt-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres
+# celery
 celery --app sketch_map_tool.tasks worker --loglevel=INFO
+```
+
+### 2. Start Flask (Web App)
+
+```bash
+mamba activate smt
 flask --app sketch_map_tool/app.py --debug run
 # Go to http://127.0.0.1:5000
 ```
 
-## Testing
+## Tests
 
-To run all unit tests, run this command in the project path:
 ```bash
-pytest tests/unit
+pytest
 ```
 
 ## JS and CSS
@@ -80,10 +79,7 @@ npm run build
 
 If you like to develop using an IDE like [PyCharm](https://www.jetbrains.com/pycharm/), you can use the PyCharm Run Configurations instead of running Python manually.
 
-1. Use the [Poetry builtin](https://www.jetbrains.com/help/pycharm/poetry.html) to create the virtual environment.
-2. If PyCharm asks, let it allow to install the npm and poetry/python packages.
-3. Run `pre-commit install` in the PyCharm terminal (see above).
-4. Add different configurations:
+1. Add different configurations:
    1. Docker Image Configuration:
       * Image ID: `redis`
       * Container name: `redis`
@@ -103,4 +99,4 @@ If you like to develop using an IDE like [PyCharm](https://www.jetbrains.com/pyc
    5. Python tests — pytest:
       * Script path: `project_path/tests/unit`
       * Working Directory: `project_path`
-5. For development: Run or Debug Celery and Flask Configurations
+2. For development: Run or Debug Celery and Flask Configurations
