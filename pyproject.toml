@@ -22,8 +22,6 @@ PyMuPDF = {extras = ["Pillow"], version = "^1.21.0"}
 psycopg2 = "^2.9.5"
 plotly = "^5.15.0"
 kaleido = "0.2.1"  # Not working with '^', cf. https://github.com/plotly/Kaleido/issues/125
-gdal = {version = "3.4.1", extras = ["numpy"]}  # same as in Dockerfile and environment.yml
-pyzbar = "0.1.9"  # same as in Dockerfile and environment.yml
 geojson = "^2.5.0"
 matplotlib-scalebar = "^0.8.1"
 redis = "^4.5.4"
