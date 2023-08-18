@@ -15,12 +15,23 @@ This project uses [Mamba](https://github.com/conda-forge/miniforge#install) for 
 ### Python Package
 
 ```bash
+# clone repository
 git clone https://github.com/GIScience/sketch-map-tool.git
 cd sketch-map-tool
+
+# setup environment and install package
 mamba env create --file environment.yml
+
 mamba activate smt
 poetry install  # poetry installs directly into activated mamba environment
+
+# install git commit hooks
 pre-commit install
+
+# fetch and run backend (postgres) and broker (redis) using docker
+docker run --name smt-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres
+docker run --name smt-redis -d -p 6379:6379 redis
+
 # install local versions of esbuild, eslint and stylelint to build and check JS and CSS
 npm install
 # hack away
@@ -36,11 +47,7 @@ Please refer to the [configuration documentation](/docs/configuration.md).
 
 ```bash
 mamba activate smt
-# backend (postgres)
-docker run --name smt-redis -d -p 6379:6379 redis
-# broker (redis)
-docker run --name smt-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres
-# celery
+docker start smt-postgres smt-redis
 celery --app sketch_map_tool.tasks worker --loglevel=INFO
 ```
 
