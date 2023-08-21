@@ -34,6 +34,7 @@ docker run --name smt-redis -d -p 6379:6379 redis
 
 # install local versions of esbuild, eslint and stylelint to build and check JS and CSS
 npm install
+npm run build  # build/bundle JS and CSS
 # hack away
 ```
 
@@ -55,7 +56,7 @@ celery --app sketch_map_tool.tasks worker --loglevel=INFO
 
 ```bash
 mamba activate smt
-flask --app sketch_map_tool/app.py --debug run
+flask --app sketch_map_tool/routes.py --debug run
 # Go to http://127.0.0.1:5000
 ```
 
