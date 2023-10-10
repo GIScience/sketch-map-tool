@@ -13,28 +13,10 @@ repos:
     hooks:
       - id: black
         args: ["--check", "--diff"]
-  - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.0.292
     hooks:
-      - id: isort
-        args: ["--check", "--diff"]
-  - repo: https://github.com/pycqa/flake8
-    rev: "5.0.4"
-    hooks:
-      - id: flake8
-        args: ["--count", "--statistics"]
-  - repo: https://github.com/pycqa/bandit
-    rev: "1.7.4"
-    hooks:
-      - id: bandit
-        name: bandit
-        exclude: tests
-  # TODO: mypy ignores config
-  # - repo: https://github.com/pre-commit/mirrors-mypy
-  #   rev: "v0.981"
-  #   hooks:
-  #     - id: mypy
-  #       args: ["--config-file", "setup.cfg"]
+      - id: ruff
   # Javascript
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: "v8.24.0"
