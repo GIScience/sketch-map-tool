@@ -112,9 +112,12 @@ def digitize_results_post() -> Response:
             f"You can only upload up to {max_nr_simultaneous_uploads} files at once."
         )
     ids = db_client_flask.insert_files(files)
-    files_from_db = [db_client_flask.select_file(i) for i in ids]
+
     file_names = [db_client_flask.select_file_name(i) for i in ids]
-    args = [upload_processing.read_qr_code(to_array(file)) for file in files_from_db]
+    args = [
+        upload_processing.read_qr_code(to_array(db_client_flask.select_file(_id)))
+        for _id in ids
+    ]
     uuids = [args_["uuid"] for args_ in args]
     bboxes = [args_["bbox"] for args_ in args]
     map_frames = dict()
