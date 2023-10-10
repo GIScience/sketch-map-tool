@@ -17,6 +17,7 @@ def make_flask() -> Flask:
             "broker_url": get_config_value("broker-url"),
             "result_backend": get_config_value("result-backend"),
             "task_serializer": "pickle",
+            "task_track_started": True,   # report ‘started’ status worker executes task
             "result_serializer": "json",
             "result_compression": "gzip",
             "result_chord_join_timeout": 10.0,  # default: 3.0 seconds
