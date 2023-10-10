@@ -87,14 +87,13 @@ def insert_files(files) -> list[int]:
         )
         """
     insert_query = "INSERT INTO blob(file_name, file) VALUES (%s, %s) RETURNING id"
-    data = [(secure_filename(file.filename), file.read()) for file in files]
     db_conn = open_connection()
     with db_conn.cursor() as curs:
         # executemany and fetchall does not work together
         curs.execute(create_query)
         ids = []
-        for d in data:
-            curs.execute(insert_query, d)
+        for file in files:
+            curs.execute(insert_query, (secure_filename(file.filename), file.read()))
             ids.append(curs.fetchone()[0])
     return ids
 
