@@ -14,7 +14,6 @@ services:
       - redis
       - postgres
     environment:
-      SMT-DATA-STORE: "redis://redis:6379"
       SMT-BROKER-URL: "redis://redis:6379"
       SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
     ports:
@@ -33,10 +32,15 @@ services:
       - redis
       - postgres
     environment:
-      SMT-DATA-STORE: "redis://redis:6379"
       SMT-BROKER-URL: "redis://redis:6379"
       SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
     entrypoint: ["poetry", "run", "celery", "--app", "sketch_map_tool.tasks", "worker", "--beat", "--concurrency", "4", "--loglevel", "INFO", "-E"]
+  flower:
+    image: mher/flower
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5555:5555"
+    entrypoint: ["celery", "--broker=redis://redis:6379", "flower"]
   redis:
     image: redis:7
     restart: unless-stopped
