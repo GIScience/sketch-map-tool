@@ -7,9 +7,8 @@ import geojson
 # from celery import chain, group
 from flask import Response, redirect, render_template, request, send_file, url_for
 
-from sketch_map_tool import celery_app, definitions
+from sketch_map_tool import celery_app, definitions, tasks, upload_processing
 from sketch_map_tool import flask_app as app
-from sketch_map_tool import tasks, upload_processing
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
@@ -140,8 +139,7 @@ def digitize_results_post() -> Response:
         "vector-results": str(result_id_2),
     }
     db_client_flask.set_async_result_ids(uuid, map_)
-    id_ = uuid
-    return redirect(url_for("digitize_results_get", uuid=id_))
+    return redirect(url_for("digitize_results_get", uuid=uuid))
 
 
 @app.get("/digitize/results")
@@ -176,8 +174,8 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
                 status = "FAILED"
                 error = str(err)
             except (QRCodeError, OQTReportError) as err:
-                # The request was well-formed but was unable to be followed due to semantic
-                # errors.
+                # The request was well-formed but was unable to be followed due
+                # to semantic errors.
                 http_status = 422  # Unprocessable Entity
                 status = "FAILED"
                 error = str(err)
