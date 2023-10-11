@@ -1,8 +1,20 @@
+from copy import deepcopy
 from io import BytesIO
 from pathlib import Path
 from tempfile import NamedTemporaryFile, TemporaryDirectory
 
-from osgeo import gdal, ogr, osr
+import geojson
+from osgeo import gdal, ogr
+from pyproj import Transformer
+
+
+def transform(feature: geojson.FeatureCollection):
+    """Reproject GeoJSON from WebMercator to EPSG:4326"""
+    transformer = Transformer.from_crs("EPSG:3857", "EPSG:4326", always_xy=True)
+    return geojson.utils.map_tuples(
+        lambda coordinates: transformer.transform(coordinates[0], coordinates[1]),
+        deepcopy(feature),
+    )
 
 
 def polygonize(geotiff: BytesIO, layer_name: str) -> BytesIO:
@@ -14,8 +26,9 @@ def polygonize(geotiff: BytesIO, layer_name: str) -> BytesIO:
     infile = NamedTemporaryFile(suffix=".geotiff")
     with open(infile.name, "wb") as f:
         f.write(geotiff.getbuffer())
+
     src_ds = gdal.Open(infile.name)
-    srs = osr.SpatialReference(wkt=src_ds.GetProjection())
+    srs = src_ds.GetSpatialRef()
 
     with TemporaryDirectory() as tmpdirname:
         outfile_name = Path(tmpdirname) / "out.geojson"
@@ -33,5 +46,8 @@ def polygonize(geotiff: BytesIO, layer_name: str) -> BytesIO:
 
         src_ds = None  # close dataset
         dst_ds = None  # close dataset
-        with open(outfile_name, "rb") as f:
-            return BytesIO(f.read())
+
+        with open(str(outfile_name), "rb") as f:
+            feature = geojson.FeatureCollection(geojson.load(f))
+            feature = transform(feature)
+            return BytesIO(geojson.dumps(feature).encode())
