@@ -23,7 +23,6 @@ def config_keys():
         "user-agent",
         "broker-url",
         "result-backend",
-        "data-store",
         "wms-url",
         "wms-layers",
         "wms-read-timeout",
