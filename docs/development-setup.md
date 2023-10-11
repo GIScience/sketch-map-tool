@@ -63,6 +63,7 @@ flask --app sketch_map_tool/routes.py --debug run
 ## Tests
 
 ```bash
+# make sure celery is running
 pytest
 ```
 
