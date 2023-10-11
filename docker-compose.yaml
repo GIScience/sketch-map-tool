@@ -36,7 +36,7 @@ services:
       SMT-DATA-STORE: "redis://redis:6379"
       SMT-BROKER-URL: "redis://redis:6379"
       SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
-    entrypoint: ["poetry", "run", "celery", "--app", "sketch_map_tool.tasks", "worker", "--beat", "--concurrency", "4", "--loglevel", "WARNING", "-E"]
+    entrypoint: ["poetry", "run", "celery", "--app", "sketch_map_tool.tasks", "worker", "--beat", "--concurrency", "4", "--loglevel", "INFO", "-E"]
   redis:
     image: redis:7
     restart: unless-stopped
@@ -44,6 +44,8 @@ services:
       resources:
         limits:
           memory: 2G
+    ports:
+      - "127.0.0.1:6379:6379"
     # Start with persistent storage
     # dump redis db every 10 minutes (if 1 value changed)
     entrypoint: ["redis-server", "--save", "\"\""]
@@ -59,6 +61,8 @@ services:
     environment:
       POSTGRES_PASSWORD: smt
       POSTGRES_USER: smt
+    ports:
+      - "127.0.0.1:5432:5432"
     volumes:
         - pg_data:/var/lib/postgresql/data
 volumes:
