@@ -1,46 +1,20 @@
+from copy import deepcopy
 from io import BytesIO
 from pathlib import Path
 from tempfile import NamedTemporaryFile, TemporaryDirectory
 
-from osgeo import gdal, ogr, osr
+import geojson
+from osgeo import gdal, ogr
+from pyproj import Transformer
 
 
-def reproject_geojson(
-    layer_name,
-    srs_srs,
-    outfile_name: str,
-    reprojected_name: str,
-) -> None:
+def transform(feature: geojson.FeatureCollection):
     """Reproject GeoJSON from WebMercator to EPSG:4326"""
-    # create transformation
-    out_spatial_ref = osr.SpatialReference()
-    out_spatial_ref.ImportFromEPSG(4326)
-    coord_trans = osr.CreateCoordinateTransformation(srs_srs, out_spatial_ref)
-
-    # load/create in and reprojected layers
-    driver = ogr.GetDriverByName("GeoJSON")
-    in_data_set = driver.Open(outfile_name)
-    in_layer = in_data_set.GetLayer()
-
-    reproj_ds = driver.CreateDataSource(reprojected_name)
-    reproj_layer = reproj_ds.CreateLayer(layer_name, srs=out_spatial_ref)
-    reproj_layer_definition = reproj_layer.GetLayerDefn()
-
-    # loop though features in input, reproject and write to output
-    in_feature = in_layer.GetNextFeature()
-    while in_feature:
-        geom = in_feature.GetGeometryRef()
-
-        geom.Transform(coord_trans)
-
-        out_feature = ogr.Feature(reproj_layer_definition)
-        out_feature.SetGeometry(geom)
-        reproj_layer.CreateFeature(out_feature)
-
-        out_feature = None
-        in_feature = in_layer.GetNextFeature()
-    reproj_ds = None
-    in_data_set = None
+    transformer = Transformer.from_crs("EPSG:3857", "EPSG:4326", always_xy=True)
+    return geojson.utils.map_tuples(
+        lambda coordinates: transformer.transform(coordinates[0], coordinates[1]),
+        deepcopy(feature),
+    )
 
 
 def polygonize(geotiff: BytesIO, layer_name: str) -> BytesIO:
@@ -58,7 +32,7 @@ def polygonize(geotiff: BytesIO, layer_name: str) -> BytesIO:
 
     with TemporaryDirectory() as tmpdirname:
         outfile_name = Path(tmpdirname) / "out.geojson"
-        reprojected_name = Path(tmpdirname) / "reprojected.geojson"
+        Path(tmpdirname) / "reprojected.geojson"
 
         # open geojson
         driver = ogr.GetDriverByName("GeoJSON")
@@ -74,7 +48,7 @@ def polygonize(geotiff: BytesIO, layer_name: str) -> BytesIO:
         src_ds = None  # close dataset
         dst_ds = None  # close dataset
 
-        reproject_geojson(layer_name, srs, str(outfile_name), str(reprojected_name))
-
-        with open(reprojected_name, "rb") as f:
-            return BytesIO(f.read())
+        with open(str(outfile_name), "rb") as f:
+            feature = geojson.FeatureCollection(geojson.load(f))
+            feature = transform(feature)
+            return BytesIO(geojson.dumps(feature).encode())

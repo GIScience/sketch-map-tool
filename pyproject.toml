@@ -26,6 +26,7 @@ geojson = "^2.5.0"
 matplotlib-scalebar = "^0.8.1"
 redis = "^4.5.4"
 ruff = "^0.0.292"
+pyproj = "^3.6.1"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
