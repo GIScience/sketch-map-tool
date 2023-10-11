@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timezone
 from uuid import UUID
 
 import psycopg2
@@ -30,14 +31,16 @@ def _insert_id_map(uuid: str, map_: dict):
     create_query = """
     CREATE TABLE IF NOT EXISTS uuid_map(
       uuid uuid PRIMARY KEY,
+      ts timestamptz;
       map json NOT NULL
     )
     """
-    insert_query = "INSERT INTO uuid_map(uuid, map) VALUES (%s, %s)"
+    insert_query = "INSERT INTO uuid_map(uuid, ts, map) VALUES (%s, %s, %s)"
     db_conn = open_connection()
     with db_conn.cursor() as curs:
         curs.execute(create_query)
-        curs.execute(insert_query, [uuid, json.dumps(map_)])
+        dt = datetime.now(timezone.utc)
+        curs.execute(insert_query, [uuid, dt, json.dumps(map_)])
 
 
 def _delete_id_map(uuid: str):
