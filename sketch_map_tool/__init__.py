@@ -18,6 +18,7 @@ def make_flask() -> Flask:
             "result_backend": get_config_value("result-backend"),
             "task_serializer": "pickle",
             "task_track_started": True,  # report ‘started’ status worker executes task
+            "task_send_sent_event": True,
             "result_serializer": "json",
             "result_extended": True,  # save result attributes to backend (e.g. name)
             "result_compression": "gzip",
@@ -29,6 +30,7 @@ def make_flask() -> Flask:
             "accept_content": ["application/json", "application/x-python-serialize"],
             # Reserve at most one extra task for every worker process.
             "worker_prefetch_multiplier": 1,
+            "worker_send_task_events": True,  # send task-related events to be monitored
             # Avoid errors due to cached db connections going stale through inactivity
             "database_short_lived_sessions": True,
         }
