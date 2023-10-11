@@ -5,7 +5,10 @@ from flask import g
 from psycopg2.extensions import connection
 
 from sketch_map_tool.database import client_flask
-from sketch_map_tool.exceptions import CustomFileNotFoundError
+from sketch_map_tool.exceptions import (
+    CustomFileNotFoundError,
+    UploadLimitsExceededError,
+)
 
 
 def test_open_close_connection(flask_app):
@@ -60,6 +63,20 @@ def test_insert_files(flask_app, files):
             # tear down
             for i in ids:
                 client_flask.delete_file(i)
+
+
+def test_insert_too_large_files(flask_app, files, monkeypatch):
+    with flask_app.app_context():
+        with pytest.raises(UploadLimitsExceededError):
+            monkeypatch.setenv("MAX-SINGLE-FILE-SIZE", "10")
+            client_flask.insert_files(files)
+
+
+def test_insert_too_many_pixels_files(flask_app, files, monkeypatch):
+    with flask_app.app_context():
+        with pytest.raises(UploadLimitsExceededError):
+            monkeypatch.setenv("MAX-PIXEL-PER-IMAGE", "10")
+            client_flask.insert_files(files)
 
 
 def test_delete_file(flask_app, files):

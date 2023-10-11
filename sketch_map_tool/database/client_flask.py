@@ -8,7 +8,11 @@ from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
-from sketch_map_tool.exceptions import CustomFileNotFoundError, UUIDNotFoundError
+from sketch_map_tool.exceptions import (
+    CustomFileNotFoundError,
+    UUIDNotFoundError,
+)
+from sketch_map_tool.validators import validate_uploaded_sketchmap
 
 
 def open_connection():
@@ -93,7 +97,8 @@ def insert_files(files) -> list[int]:
         curs.execute(create_query)
         ids = []
         for file in files:
-            curs.execute(insert_query, (secure_filename(file.filename), file.read()))
+            content = validate_uploaded_sketchmap(file)
+            curs.execute(insert_query, (secure_filename(file.filename), content))
             ids.append(curs.fetchone()[0])
     return ids
 
