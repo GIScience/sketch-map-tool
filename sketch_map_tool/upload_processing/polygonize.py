@@ -32,7 +32,6 @@ def polygonize(geotiff: BytesIO, layer_name: str) -> BytesIO:
 
     with TemporaryDirectory() as tmpdirname:
         outfile_name = Path(tmpdirname) / "out.geojson"
-        Path(tmpdirname) / "reprojected.geojson"
 
         # open geojson
         driver = ogr.GetDriverByName("GeoJSON")
