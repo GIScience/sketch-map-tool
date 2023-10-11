@@ -1,11 +1,9 @@
-import { PAPER_FORMAT, ORIENTATION, Margin } from "@giscience/ol-print-layout-control";
-import {
-    toLonLat, get as getProjection, transformExtent,
-} from "ol/proj";
+import { Margin, ORIENTATION, PAPER_FORMAT } from "@giscience/ol-print-layout-control";
+import { get as getProjection, toLonLat, transformExtent } from "ol/proj";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins";
-import { fillSelectOptions, setDisabled } from "../shared";
+import { fillSelectOptions } from "../shared";
 
-function bindFormToPrintLayoutControl(printLayoutControl) {
+function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
     const paperFormats = { ...PAPER_FORMAT };
     delete paperFormats.BROADSHEET;
 
@@ -81,15 +79,31 @@ function bindFormToPrintLayoutControl(printLayoutControl) {
     // disable form submit and display info if zoom is lower than 9
     function handleZoomChange(zoom) {
         if (zoom < 9) {
-            setDisabled("next-button", true);
-            document.querySelector("#infobox")
-                .classList
-                .remove("invisible");
+            messageController.addWarning("zoom-info");
         } else {
-            setDisabled("next-button", false);
-            document.querySelector("#infobox")
-                .classList
-                .add("invisible");
+            messageController.removeWarning("zoom-info");
+        }
+    }
+
+    function handleAntimeridian(bboxWgs84) {
+        // normalizeLon uses mathematic modulo like in R, not % symetric modulo like in Java
+        // or Javascript
+        const normalizeLon = (x) => ((((x + 180) % 360) + 360) % 360) - 180;
+
+        const antimeridianLayer = printLayoutControl.getMap()
+            .getLayers().getArray()
+            .find((l) => l.get("name") === "Antimeridian");
+
+        if (!bboxWgs84) return;
+        // check if antimeridian is within extent -> when left (x1) is bigger than right (x2)
+        const [left, , right] = bboxWgs84;
+
+        if (normalizeLon(left) > normalizeLon(right)) {
+            messageController.addWarning("antimeridian-info");
+            antimeridianLayer.setVisible(true);
+        } else {
+            messageController.removeWarning("antimeridian-info");
+            antimeridianLayer.setVisible(false);
         }
     }
 
@@ -98,6 +112,7 @@ function bindFormToPrintLayoutControl(printLayoutControl) {
         .getView();
     const initialZoom = view.getZoom();
     handleZoomChange(initialZoom);
+    handleAntimeridian(printLayoutControl.getBboxAsLonLat());
 
     // update form state on zoomchange
     printLayoutControl.getMap()
@@ -114,10 +129,12 @@ function bindFormToPrintLayoutControl(printLayoutControl) {
             document.querySelector("#page-setup-form").submit();
         });
 
-    // update the URL when the selection is changed  (e.g. to bookmark the current selection)
     printLayoutControl.on("change:bbox", (event) => {
+        // update the URL when the selection is changed  (e.g. to bookmark the current selection)
         const newCenter = printLayoutControl.getMap().getView().getCenter();
         window.history.replaceState({}, document.title, `?center=${newCenter}`);
+        // show warning and disable form if bbox crosses the antimeridian
+        handleAntimeridian(event.target.getBboxAsLonLat());
     });
 }
 
