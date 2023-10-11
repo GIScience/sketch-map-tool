@@ -144,15 +144,17 @@ def select_map_frame(uuid: UUID) -> bytes:
             curs.execute(query, [str(uuid)])
         except psycopg2.errors.UndefinedTable:
             raise FileNotFoundError_(
-                "In this Sketch Map Tool instance no sketch map has been generated yet. You can only upload sketch maps"
-                " to the instance on which they have been created."
+                "In this Sketch Map Tool instance no sketch map "
+                "has been generated yet. You can only upload sketch"
+                " maps to the instance on which they have been created."
             )
         raw = curs.fetchone()
         if raw:
             return raw[0]
         else:
             raise FileNotFoundError_(
-                f"There is no map frame in the database with the uuid: {uuid}. You can only upload sketch maps to the "
+                f"There is no map frame in the database with the uuid: {uuid}."
+                f" You can only upload sketch maps to the "
                 "instance on which they have been created."
             )
 
