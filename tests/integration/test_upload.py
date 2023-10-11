@@ -25,10 +25,9 @@ def test_too_many_uploads(flask_client, sketch_map_markings_buffer_1):
 
 @mock.patch.dict(os.environ, {"SMT-MAX-NR-SIM-UPLOADS": "2"})
 def test_allowed_nr_of_uploads(flask_client, sketch_map_markings_buffer_1):
-    # Successful run requires that a sketch map has been generated on the instance beforehand
-    with pytest.raises(
-        FileNotFoundError_
-    ):  # uuid of test image not in database, but the exception shows that the uploads have been accepted and processed
+    # Successful run requires that a sketch map
+    # has been generated on the instance beforehand
+    try:
         flask_client.post(
             "/digitize/results",
             data=dict(
@@ -39,3 +38,8 @@ def test_allowed_nr_of_uploads(flask_client, sketch_map_markings_buffer_1):
             ),
             follow_redirects=True,
         )
+    # if we do not have a previous successful run this error will appear;
+    # uuid of test image not in database, but the exception shows
+    # that the uploads have been accepted and processed -> relevant code works
+    except FileNotFoundError_:
+        pass
