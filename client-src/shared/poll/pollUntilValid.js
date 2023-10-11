@@ -27,8 +27,24 @@ class PollUntilValid {
         onError = () => {},
     ) {
         do {
-            /* eslint-disable no-await-in-loop */
-            const response = await fetch(url);
+            let response;
+            try {
+                /* eslint-disable no-await-in-loop */
+                response = await fetch(url);
+            } catch (error) {
+                if (error instanceof TypeError) {
+                    // Chrome and Firefox use different Error messages, so it's hard to be more
+                    // specific than checking for TypeError
+                    // see: https://developer.mozilla.org/en-US/docs/Web/API/fetch#exceptions
+                    console.log("NetworkError, continue retrying", error);
+                    await PollUntilValid.wait(5000);
+                } else {
+                    throw error;
+                }
+            }
+
+            // eslint-disable-next-line no-continue
+            if (!response) continue;
 
             // if response code is not between 200-299
             if (!response.ok) {
@@ -43,6 +59,7 @@ class PollUntilValid {
                 await onValid(response);
                 return response;
             }
+
             /* eslint-enable */
         } while (true);
     }

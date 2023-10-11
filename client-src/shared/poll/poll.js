@@ -67,11 +67,11 @@ async function poll(url, prefix) {
     }
 
     try {
-        return PollUntilValid.poll(url, validateFn, 1000, onValid, onProgress, onError);
+        return await PollUntilValid.poll(url, validateFn, 1000, onValid, onProgress, onError);
     } catch (e) {
         // Network Error or other reason why the request could not be completed
         console.log(e);
-        handleError(prefix);
+        handleError(prefix, e);
         return null;
     }
 }
