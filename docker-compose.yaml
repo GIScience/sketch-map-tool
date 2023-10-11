@@ -39,7 +39,7 @@ services:
     image: mher/flower
     restart: unless-stopped
     ports:
-      - "127.0.0.1:5555:5555"
+      - "5555:5555"
     entrypoint: ["celery", "--broker=redis://redis:6379", "flower"]
   redis:
     image: redis:7
@@ -66,7 +66,7 @@ services:
       POSTGRES_PASSWORD: smt
       POSTGRES_USER: smt
     ports:
-      - "127.0.0.1:5432:5432"
+      - "5432:5432"
     volumes:
         - pg_data:/var/lib/postgresql/data
 volumes:
