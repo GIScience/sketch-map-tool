@@ -1,6 +1,6 @@
 name: CSS-JavaScript-Linting
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   linting:
