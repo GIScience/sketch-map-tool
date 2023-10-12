@@ -1,14 +1,11 @@
 version: "3.9"
 services:
   flask:
+    # Web app
     build:
       context: ./
       dockerfile: Dockerfile
     restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 1G
     depends_on:
       - celery
       - redis
@@ -20,14 +17,11 @@ services:
       - "127.0.0.1:8081:8080"
     entrypoint: ["poetry", "run", "waitress-serve", "sketch_map_tool.routes:app"]
   celery:
+    # Task queue
     build:
       context: ./
       dockerfile: Dockerfile
     restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 8G
     depends_on:
       - redis
       - postgres
@@ -36,18 +30,16 @@ services:
       SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
     entrypoint: ["poetry", "run", "celery", "--app", "sketch_map_tool.tasks", "worker", "--beat", "--concurrency", "4", "--loglevel", "INFO", "-E"]
   flower:
+    # Monitoring of Celery
     image: mher/flower
     restart: unless-stopped
     ports:
       - "5555:5555"
     entrypoint: ["celery", "--broker=redis://redis:6379", "flower"]
   redis:
+    # Message broker
     image: redis:7
     restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 2G
     ports:
       - "127.0.0.1:6379:6379"
     # Start with persistent storage
@@ -56,12 +48,9 @@ services:
     volumes:
         - redis_data:/data
   postgres:
+    # Result backend
     image: postgres:15
     restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 3G
     environment:
       POSTGRES_PASSWORD: smt
       POSTGRES_USER: smt
