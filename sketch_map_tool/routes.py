@@ -162,7 +162,6 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
     if task.ready():
         if task.successful():  # SUCCESS
             http_status = 200
-            status = "SUCCESSFUL"
             href = "/api/download/" + uuid + "/" + type_
         elif task.failed():  # REJECTED, REVOKED, FAILURE
             try:
@@ -171,19 +170,16 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
                 # The request was well-formed but was unable to be followed due
                 # to semantic errors.
                 http_status = 422  # Unprocessable Entity
-                status = "FAILED"
                 error = str(err)
             except (Exception) as err:
                 http_status = 500  # Internal Server Error
-                status = "FAILED"
                 error = str(err)
-    else:  # PENDING, RETRY, RECEIVED, STARTED
+    else:  # PENDING, RETRY, STARTED
         # Accepted for processing, but has not been completed
         http_status = 202  # Accepted
-        status = "PROCESSING"
     body_raw = {
         "id": uuid,
-        "status": status,
+        "status": task.status,
         "type": type_,
         "href": href,
         "error": error,
