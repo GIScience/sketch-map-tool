@@ -1,5 +1,5 @@
 name: Python Linting
-on: [ push, pull_request ]
+on: [ push ]
 jobs:
   linting:
     runs-on: ubuntu-latest
