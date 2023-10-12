@@ -169,11 +169,7 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
         elif task.failed():  # REJECTED, REVOKED, FAILURE
             try:
                 task.get(propagate=True)
-            except MapGenerationError as err:
-                http_status = 408  # Request Timeout
-                status = "FAILED"
-                error = str(err)
-            except (QRCodeError, OQTReportError) as err:
+            except (QRCodeError, OQTReportError, MapGenerationError) as err:
                 # The request was well-formed but was unable to be followed due
                 # to semantic errors.
                 http_status = 422  # Unprocessable Entity
