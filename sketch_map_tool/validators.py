@@ -21,6 +21,7 @@ def validate_type(type_: REQUEST_TYPES):
 
 
 def validate_uploaded_sketchmap(file):
+    """Validation function for uploaded files."""
     max_single_file_size = int(get_config_value("max_single_file_size"))
     max_pixel_per_image = int(get_config_value("max_pixel_per_image"))
 
@@ -50,19 +51,19 @@ def validate_uuid(uuid: str):
         raise ValueError("The provided URL does not contain a valid UUID") from error
 
 
-def validate_literature_reference(literatur_reference: LiteratureReference):
-    """Validate literatur reference to not include empty strings."""
-    if literatur_reference.citation == "":
+def validate_literature_reference(literature_reference: LiteratureReference):
+    """Validate literature reference to not include empty strings."""
+    if literature_reference.citation == "":
         raise ValueError(
             "Literature reference JSON fields "
             + "should not contain empty strings as values."
         )
-    if literatur_reference.img_src == "":
+    if literature_reference.img_src == "":
         raise ValueError(
             "Literature reference JSON fields should "
             + "not contain empty strings as values."
         )
-    if literatur_reference.url == "":
+    if literature_reference.url == "":
         raise ValueError(
             "Literature reference JSON fields should "
             + "not contain empty strings as values."
