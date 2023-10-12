@@ -37,12 +37,12 @@ function createAntiMeridianLayer() {
                 width: 3,
             }),
             text: new Text({
-                text: "Antimeridian",
+                text: "Antimeridian\nPlease move it out of the map",
                 placement: "line",
-                offsetY: -10,
+                offsetY: 2,
                 fill: new Fill({ color: "red" }),
-                font: "20px sans-serif",
-                repeat: 200,
+                font: "16px sans-serif",
+                repeat: 400,
             }),
         }),
     });

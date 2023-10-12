@@ -45,6 +45,6 @@
     "@kirtandesai/ol-geocoder": "^5.0.3",
     "@picocss/pico": "^1.5.6",
     "filebokz": "^0.1.2",
-    "ol": "^7.1.0"
+    "ol": "^8.1.0"
   }
 }
