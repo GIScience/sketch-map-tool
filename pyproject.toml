@@ -19,7 +19,6 @@ opencv-python = "^4.6.0"
 qrcode = "^7.3.1"
 svglib = "^1.4.1"
 PyMuPDF = {extras = ["Pillow"], version = "^1.21.0"}
-psycopg2 = "^2.9.5"
 plotly = "^5.15.0"
 kaleido = "0.2.1"  # Not working with '^', cf. https://github.com/plotly/Kaleido/issues/125
 geojson = "^2.5.0"
