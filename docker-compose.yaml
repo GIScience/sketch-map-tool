@@ -15,7 +15,16 @@ services:
       SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
     ports:
       - "127.0.0.1:8081:8080"
-    entrypoint: ["poetry", "run", "waitress-serve", "sketch_map_tool.routes:app"]
+    entrypoint:
+      [
+        "mamba",
+        "run",
+        "--no-capture-output",
+        "--name",
+        "smt",
+        "waitress-serve",
+        "sketch_map_tool.routes:app",
+      ]
   celery:
     # Task queue
     build:
@@ -28,7 +37,24 @@ services:
     environment:
       SMT-BROKER-URL: "redis://redis:6379"
       SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
-    entrypoint: ["poetry", "run", "celery", "--app", "sketch_map_tool.tasks", "worker", "--beat", "--concurrency", "4", "--loglevel", "INFO", "-E"]
+    entrypoint:
+      [
+        "mamba",
+        "run",
+        "--no-capture-output",
+        "--name",
+        "smt",
+        "celery",
+        "--app",
+        "sketch_map_tool.tasks",
+        "worker",
+        "--beat",
+        "--concurrency",
+        "4",
+        "--loglevel",
+        "INFO",
+        "-E",
+      ]
   flower:
     # Monitoring of Celery
     image: mher/flower
@@ -46,7 +72,7 @@ services:
     # dump redis db every 10 minutes (if 1 value changed)
     entrypoint: ["redis-server", "--save", "\"\""]
     volumes:
-        - redis_data:/data
+      - redis_data:/data
   postgres:
     # Result backend
     image: postgres:15
@@ -57,7 +83,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-        - pg_data:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
 volumes:
-    redis_data:
-    pg_data:
+  redis_data:
+  pg_data:
