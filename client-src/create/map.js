@@ -1,7 +1,7 @@
 import { Feature, Map, View } from "ol";
 import { Tile } from "ol/layer";
 import { OSM } from "ol/source";
-import Geocoder from "@kirtandesai/ol-geocoder";
+import Geocoder from "ol-geocoder";
 import { PrintLayout, PAPER_FORMAT, ORIENTATION } from "@giscience/ol-print-layout-control";
 import { fromLonLat } from "ol/proj";
 import { LineString } from "ol/geom";
