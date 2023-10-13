@@ -1,6 +1,6 @@
 import "ol/ol.css";
 import "@giscience/ol-print-layout-control/dist/ol-print-layout-control.css";
-import "@kirtandesai/ol-geocoder/dist/ol-geocoder.css";
+import "ol-geocoder/dist/ol-geocoder.css";
 import "./geocoder.css";
 import "./create.css";
 
