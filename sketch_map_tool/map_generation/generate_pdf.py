@@ -18,7 +18,7 @@ from reportlab.platypus.flowables import Image, Spacer
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool.definitions import PDF_RESOURCES_PATH
-from sketch_map_tool.helpers import resize_rlg_by_width
+from sketch_map_tool.helpers import resize_png, resize_rlg_by_width
 from sketch_map_tool.models import PaperFormat
 
 # PIL should be able to open high resolution PNGs of large Maps:
@@ -26,7 +26,7 @@ Image.MAX_IMAGE_PIXELS = None
 
 
 def generate_pdf(  # noqa: C901
-    map_image_input: PILImage,
+    map_frame_input: PILImage,
     qr_code: Drawing,
     format_: PaperFormat,
     scale: float,
@@ -38,13 +38,13 @@ def generate_pdf(  # noqa: C901
 
     Also generate template image (PNG) as Pillow object for later upload processing
 
-    :param map_image_input: Image of the map to be used as sketch map.
+    :param map_frame_input: Image of the map to be used as sketch map.
     :param qr_code: QR code to be included on the sketch map for georeferencing.
     :param format_: Paper format of the PDF document.
     :param scale: Ratio for the scale in the sketch map legend
     :return: Sketch Map PDF, Template image
     """
-    map_width_px, map_height_px = map_image_input.size
+    map_width_px, map_height_px = map_frame_input.size
     map_margin = format_.map_margin
 
     # TODO: Use orientation parameter to determine rotation
@@ -68,14 +68,14 @@ def generate_pdf(  # noqa: C901
     column_origin_y = 0
     column_margin = map_margin * cm
 
-    map_image_reportlab = PIL_image_to_image_reader(map_image_input)
+    map_frame_reportlab = PIL_image_to_image_reader(map_frame_input)
 
     # calculate m per px in map frame
     cm_per_px = frame_width * scale / map_width_px
     m_per_px = cm_per_px / 100
     # create map_image by adding globes
-    map_img = create_map_frame(
-        map_image_reportlab, format_, map_height_px, map_width_px, portrait, m_per_px
+    map_frame = create_map_frame(
+        map_frame_reportlab, format_, map_height_px, map_width_px, portrait, m_per_px
     )
 
     map_pdf = BytesIO()
@@ -85,7 +85,7 @@ def generate_pdf(  # noqa: C901
     # Add map to canvas:
     canv_map_margin = map_margin
     canv_map.drawImage(
-        ImageReader(map_img),
+        ImageReader(map_frame),
         canv_map_margin * cm,
         canv_map_margin * cm,
         mask="auto",
@@ -123,16 +123,13 @@ def generate_pdf(  # noqa: C901
     canv_map.save()
 
     map_pdf.seek(0)
-    map_img.seek(0)
+    map_frame.seek(0)
 
-    if portrait:  # Rotate the map frame for correct georeferencing
-        map_img_rotated_bytes = BytesIO()
-        map_img_rotated = PILImage.open(map_img).rotate(270, expand=1)
-        map_img_rotated.save(map_img_rotated_bytes, format="png")
-        map_img_rotated_bytes.seek(0)
-        map_img = map_img_rotated_bytes
+    # Resize map_frame if a length of 2000 px is exceeded in one dimension to avoid very large objects in upload
+    # processing of e.g. A0 maps
+    map_frame = resize_png(map_frame, max_length=2000)
 
-    return map_pdf, map_img
+    return map_pdf, map_frame
 
 
 def draw_right_column(
