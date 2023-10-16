@@ -23,6 +23,8 @@ def mock_async_results_successful(monkeypatch):
     """Mock celery tasks results."""
 
     class MockTask:
+        status = "SUCCESSFUL"
+
         def get(*args, **kwargs):
             pass
 
@@ -47,6 +49,8 @@ def mock_async_results_processing(monkeypatch):
     """Mock celery tasks results."""
 
     class MockTask:
+        status = "PROCESSING"
+
         def get(*args, **kwargs):
             pass
 
@@ -65,6 +69,8 @@ def mock_async_results_failed(request, monkeypatch):
     """Mock celery tasks results."""
 
     class MockTask:
+        status = "FAILED"
+
         def get(*args, **kwargs):
             raise QRCodeError("Mock error")
 
