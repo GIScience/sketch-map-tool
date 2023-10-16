@@ -7,7 +7,7 @@ from flask import Flask
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.database import client_flask as db_client
 
-__version__ = "1.1.3"
+__version__ = "1.1.4"
 
 waitress_logger = logging.getLogger("waitress")
 waitress_logger.setLevel(logging.INFO)
