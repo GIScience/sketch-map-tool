@@ -19,7 +19,7 @@ repos:
       - id: ruff
   # Javascript
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: "v8.24.0"
+    rev: "v8.51.0"
     hooks:
       - id: eslint
-        additional_dependencies: ['eslint@8.24.0', 'eslint-plugin-import@2.26.0', 'eslint-config-airbnb-base@15.0.0']
+        additional_dependencies: ['eslint@8.51.0', 'eslint-plugin-import@2.28.1', 'eslint-config-airbnb-base@15.0.0']
