@@ -8,7 +8,10 @@ from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
-from sketch_map_tool.exceptions import CustomFileNotFoundError, UUIDNotFoundError
+from sketch_map_tool.exceptions import (
+    CustomFileNotFoundError,
+    UUIDNotFoundError,
+)
 
 
 def open_connection():
@@ -89,7 +92,6 @@ def insert_files(files) -> list[int]:
     insert_query = "INSERT INTO blob(file_name, file) VALUES (%s, %s) RETURNING id"
     db_conn = open_connection()
     with db_conn.cursor() as curs:
-        # executemany and fetchall does not work together
         curs.execute(create_query)
         ids = []
         for file in files:

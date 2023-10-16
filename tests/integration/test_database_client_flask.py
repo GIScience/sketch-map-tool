@@ -5,7 +5,9 @@ from flask import g
 from psycopg2.extensions import connection
 
 from sketch_map_tool.database import client_flask
-from sketch_map_tool.exceptions import CustomFileNotFoundError
+from sketch_map_tool.exceptions import (
+    CustomFileNotFoundError,
+)
 
 
 def test_open_close_connection(flask_app):
