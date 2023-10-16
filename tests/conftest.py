@@ -66,10 +66,10 @@ def flask_app():
     app.add_url_rule(
         "/digitize/results", view_func=digitize_results_post, methods=["POST", "GET"]
     )
-    flask_app.add_url_rule("/digitize", view_func=digitize, methods=["GET"])
-    flask_app.add_url_rule("/", view_func=index, methods=["GET"])
-    flask_app.add_url_rule("/about", view_func=about, methods=["GET"])
-    flask_app.add_url_rule("/help", view_func=help, methods=["GET"])
+    app.add_url_rule("/digitize", view_func=digitize, methods=["GET"])
+    app.add_url_rule("/", view_func=index, methods=["GET"])
+    app.add_url_rule("/about", view_func=about, methods=["GET"])
+    app.add_url_rule("/help", view_func=help, methods=["GET"])
     yield app
 
 
