@@ -1,19 +1,15 @@
-name: JS and CSS Linting
-on: [push, pull_request]
+name: pre-commit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
 jobs:
-  linting:
-    name: JS and CSS Linting
+  pre-commit:
     runs-on: ubuntu-latest
     steps:
+      - run: npm install
       - uses: actions/checkout@v3
-      - name: Set up Linters
-        run: |
-          npm install eslint@8.10.0
-          npm install eslint-config-airbnb-base@15.0.0
-          npm install eslint-plugin-import@2.25.4
-          npm install stylelint@14.8.3
-          npm install stylelint-config-standard@25.0.0
-      - name: Run ESLint
-        run: npx eslint .
-      - name: Run Stylelint
-        run: npx stylelint "**/*.css"
+      - uses: actions/setup-python@v3
+      - uses: pre-commit/action@v3.0.0
