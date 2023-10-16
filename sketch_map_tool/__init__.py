@@ -23,7 +23,7 @@ def make_flask() -> Flask:
             "task_serializer": "pickle",
             "task_track_started": True,  # report ‘started’ status worker executes task
             "task_send_sent_event": True,
-            "result_serializer": "json",
+            "result_serializer": "pickle",
             "result_extended": True,  # save result attributes to backend (e.g. name)
             "result_compression": "gzip",
             "result_chord_join_timeout": 10.0,  # default: 3.0 seconds
