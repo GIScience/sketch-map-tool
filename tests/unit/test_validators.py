@@ -3,7 +3,7 @@ import pytest
 from sketch_map_tool.exceptions import UploadLimitsExceededError
 from sketch_map_tool.validators import (
     validate_type,
-    validate_uploaded_sketchmap,
+    validate_uploaded_sketchmaps,
     validate_uuid,
 )
 
@@ -25,13 +25,7 @@ def test_validate_type_invalid(type_):
 def test_validate_file_by_pixel_count(files, monkeypatch):
     with pytest.raises(UploadLimitsExceededError):
         monkeypatch.setenv("MAX-PIXEL-PER-IMAGE", "10")
-        validate_uploaded_sketchmap(files[0])
-
-
-def test_validate_file_by_size(files, monkeypatch):
-    with pytest.raises(UploadLimitsExceededError):
-        monkeypatch.setenv("MAX-SINGLE-FILE-SIZE", "10")
-        validate_uploaded_sketchmap(files[1])
+        validate_uploaded_sketchmaps(files)
 
 
 def test_validate_uui(uuid):

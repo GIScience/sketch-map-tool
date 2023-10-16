@@ -28,7 +28,6 @@ def load_config_default() -> Dict[str, str]:
         "wms-layers": "heigit:osm-carto@2xx",
         "wms-read-timeout": 600,
         "max-nr-simultaneous-uploads": 100,
-        "max_single_file_size": 838860800,  # 100mb
         "max_pixel_per_image": 10e8,  # 10.000*10.000
     }
 
@@ -53,7 +52,6 @@ def load_config_from_env() -> Dict[str, str]:
         "wms-layers": os.getenv("SMT-WMS-LAYERS"),
         "wms-read-timeout": os.getenv("SMT-WMS-READ-TIMEOUT"),
         "max-nr-simultaneous-uploads": os.getenv("SMT-MAX-NR-SIM-UPLOADS"),
-        "max_single_file_size": os.getenv("MAX-SINGLE-FILE-SIZE"),  # 100mb
         "max_pixel_per_image": os.getenv("MAX-PIXEL-PER-IMAGE"),
     }
     return {k: v for k, v in cfg.items() if v is not None}

@@ -1,9 +1,8 @@
-import os
-from io import BytesIO
 from typing import get_args
 from uuid import UUID
 
 import PIL.Image as Image
+from werkzeug.datastructures import FileStorage
 
 from sketch_map_tool import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
@@ -20,27 +19,25 @@ def validate_type(type_: REQUEST_TYPES):
         )
 
 
-def validate_uploaded_sketchmap(file):
+def validate_uploaded_sketchmaps(files: list[FileStorage]):
     """Validation function for uploaded files."""
-    max_single_file_size = int(get_config_value("max_single_file_size"))
+
+    max_nr_simultaneous_uploads = int(get_config_value("max-nr-simultaneous-uploads"))
     max_pixel_per_image = int(get_config_value("max_pixel_per_image"))
 
-    file_length = file.seek(0, os.SEEK_END)
-    if file_length > max_single_file_size:
+    if len(files) > max_nr_simultaneous_uploads:
         raise UploadLimitsExceededError(
-            f"You can only upload pictures "
-            f"up to a filesize of {max_single_file_size}."
+            f"You can only upload up to {max_nr_simultaneous_uploads} files at once."
         )
-    file.seek(0, os.SEEK_SET)
-    content = file.read()
-    img = Image.open(BytesIO(content))
-    total_pxl_cnt = img.size[0] * img.size[1]
-    if total_pxl_cnt > max_pixel_per_image:
-        raise UploadLimitsExceededError(
-            f"You can only upload pictures up to "
-            f"a total pixel count of {max_pixel_per_image}."
-        )
-    return content
+
+    for file in files:
+        img = Image.open(file)
+        total_pxl_cnt = img.size[0] * img.size[1]
+        if total_pxl_cnt > max_pixel_per_image:
+            raise UploadLimitsExceededError(
+                f"You can only upload pictures up to "
+                f"a total pixel count of {max_pixel_per_image}."
+            )
 
 
 def validate_uuid(uuid: str):

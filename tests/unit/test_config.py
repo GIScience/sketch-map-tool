@@ -27,6 +27,7 @@ def config_keys():
         "wms-layers",
         "wms-read-timeout",
         "max-nr-simultaneous-uploads",
+        "max_pixel_per_image",
     )
 
 
@@ -93,8 +94,12 @@ def test_get_config(config_keys):
 def test_get_config_value(config_keys):
     for key in config_keys:
         val = config.get_config_value(key)
-        if key in ["wms-read-timeout", "max-nr-simultaneous-uploads"]:
-            assert isinstance(val, int)
+        if key in [
+            "wms-read-timeout",
+            "max-nr-simultaneous-uploads",
+            "max_pixel_per_image",
+        ]:
+            assert isinstance(val, int | float)
         else:
             assert isinstance(val, str)
 

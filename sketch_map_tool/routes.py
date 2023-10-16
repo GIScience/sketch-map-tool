@@ -9,7 +9,6 @@ from flask import Response, redirect, render_template, request, send_file, url_f
 
 from sketch_map_tool import celery_app, definitions, tasks, upload_processing
 from sketch_map_tool import flask_app as app
-from sketch_map_tool.config import get_config_value
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
@@ -23,7 +22,11 @@ from sketch_map_tool.exceptions import (
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.tasks import digitize_sketches, georeference_sketch_maps
-from sketch_map_tool.validators import validate_type, validate_uuid
+from sketch_map_tool.validators import (
+    validate_type,
+    validate_uploaded_sketchmaps,
+    validate_uuid,
+)
 
 
 @app.get("/")
@@ -105,13 +108,8 @@ def digitize_results_post() -> Response:
     if "file" not in request.files:
         return redirect(url_for("digitize"))
     files = request.files.getlist("file")
-    max_nr_simultaneous_uploads = int(get_config_value("max-nr-simultaneous-uploads"))
-    if len(files) > max_nr_simultaneous_uploads:
-        raise UploadLimitsExceededError(
-            f"You can only upload up to {max_nr_simultaneous_uploads} files at once."
-        )
+    validate_uploaded_sketchmaps(files)
     ids = db_client_flask.insert_files(files)
-
     file_names = [db_client_flask.select_file_name(i) for i in ids]
     args = [
         upload_processing.read_qr_code(to_array(db_client_flask.select_file(_id)))
