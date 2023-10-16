@@ -4,7 +4,10 @@ from unittest import mock
 
 import pytest
 
-from sketch_map_tool.exceptions import FileNotFoundError_, UploadLimitsExceededError
+from sketch_map_tool.exceptions import (
+    CustomFileNotFoundError,
+    UploadLimitsExceededError,
+)
 
 
 @mock.patch.dict(os.environ, {"SMT-MAX-NR-SIM-UPLOADS": "2"})
@@ -41,5 +44,5 @@ def test_allowed_nr_of_uploads(flask_client, sketch_map_markings_buffer_1):
     # if we do not have a previous successful run this error will appear;
     # uuid of test image not in database, but the exception shows
     # that the uploads have been accepted and processed -> relevant code works
-    except FileNotFoundError_:
+    except CustomFileNotFoundError:
         pass

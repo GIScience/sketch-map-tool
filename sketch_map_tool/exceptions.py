@@ -22,5 +22,5 @@ class UUIDNotFoundError(DatabaseError):
     pass
 
 
-class FileNotFoundError_(DatabaseError):
+class CustomFileNotFoundError(DatabaseError):
     pass

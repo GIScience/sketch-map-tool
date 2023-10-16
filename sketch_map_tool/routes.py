@@ -13,7 +13,7 @@ from sketch_map_tool.config import get_config_value
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
-    FileNotFoundError_,
+    CustomFileNotFoundError,
     MapGenerationError,
     OQTReportError,
     QRCodeError,
@@ -227,7 +227,7 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
 
 
 @app.errorhandler(QRCodeError)
-@app.errorhandler(FileNotFoundError_)
+@app.errorhandler(CustomFileNotFoundError)
 @app.errorhandler(UploadLimitsExceededError)
 def handle_exception(error):
     return render_template("error.html", error_msg=str(error)), 422

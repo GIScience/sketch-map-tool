@@ -4,7 +4,7 @@ import pytest
 from psycopg2.extensions import connection
 
 from sketch_map_tool.database import client_celery, client_flask
-from sketch_map_tool.exceptions import FileNotFoundError_
+from sketch_map_tool.exceptions import CustomFileNotFoundError
 
 
 def test_open_connection():
@@ -46,6 +46,6 @@ def test_delete_map_frame(db_conn_celery, flask_app, map_frame_buffer):
     with flask_app.app_context():
         client_flask.select_map_frame(uuid)  # Should not raise a FileNotFoundError_
     client_celery.delete_map_frame(uuid)
-    with pytest.raises(FileNotFoundError_):
+    with pytest.raises(CustomFileNotFoundError):
         with flask_app.app_context():
             client_flask.select_map_frame(uuid)

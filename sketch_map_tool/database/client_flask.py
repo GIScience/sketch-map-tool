@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
-from sketch_map_tool.exceptions import FileNotFoundError_, UUIDNotFoundError
+from sketch_map_tool.exceptions import CustomFileNotFoundError, UUIDNotFoundError
 
 
 def open_connection():
@@ -108,7 +108,7 @@ def select_file(id_: int) -> bytes:
         if raw:
             return raw[0]
         else:
-            raise FileNotFoundError_(
+            raise CustomFileNotFoundError(
                 "There is no file in the database with the id: " + str(id_)
             )
 
@@ -130,7 +130,7 @@ def select_file_name(id_: int) -> str:
         if raw:
             return raw[0]
         else:
-            raise FileNotFoundError_(
+            raise CustomFileNotFoundError(
                 "There is no file in the database with the id: " + str(id_)
             )
 
@@ -143,7 +143,7 @@ def select_map_frame(uuid: UUID) -> bytes:
         try:
             curs.execute(query, [str(uuid)])
         except psycopg2.errors.UndefinedTable:
-            raise FileNotFoundError_(
+            raise CustomFileNotFoundError(
                 "In this Sketch Map Tool instance no sketch map "
                 "has been generated yet. You can only upload sketch"
                 " maps to the instance on which they have been created."
@@ -152,7 +152,7 @@ def select_map_frame(uuid: UUID) -> bytes:
         if raw:
             return raw[0]
         else:
-            raise FileNotFoundError_(
+            raise CustomFileNotFoundError(
                 f"There is no map frame in the database with the uuid: {uuid}."
                 f" You can only upload sketch maps to the "
                 "instance on which they have been created."
