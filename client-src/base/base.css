@@ -22,7 +22,7 @@
     --card-sectionning-background-color: #e6e6e6 !important;
 }
 
-@media (min-width: 576px) {
+@media (width >= 576px) {
     :root {
         --logo-text-size: 2.8rem;
     }
