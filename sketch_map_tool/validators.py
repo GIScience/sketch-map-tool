@@ -26,13 +26,16 @@ def validate_literature_reference(literatur_reference: LiteratureReference):
     """Validate literatur reference to not include empty strings."""
     if literatur_reference.citation == "":
         raise ValueError(
-            "Literature reference JSON fields should not contain empty strings as values."
+            "Literature reference JSON fields "
+            "should not contain empty strings as values."
         )
     if literatur_reference.img_src == "":
         raise ValueError(
-            "Literature reference JSON fields should not contain empty strings as values."
+            "Literature reference JSON fields "
+            "should not contain empty strings as values."
         )
     if literatur_reference.url == "":
         raise ValueError(
-            "Literature reference JSON fields should not contain empty strings as values."
+            "Literature reference JSON fields "
+            "should not contain empty strings as values."
         )

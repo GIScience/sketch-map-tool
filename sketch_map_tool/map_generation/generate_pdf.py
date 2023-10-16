@@ -32,9 +32,9 @@ def generate_pdf(  # noqa: C901
     scale: float,
 ) -> Tuple[BytesIO, BytesIO]:
     """
-    Generate a sketch map pdf, i.e. a PDF containing the given map image as well as a code for
-    georeferencing, a scale, copyright information, and objects to help the feature detection
-    during the upload processing.
+    Generate a sketch map pdf, i.e. a PDF containing the given map image
+    as well as a code for georeferencing, a scale, copyright information,
+    and objects to help the feature detection during the upload processing.
 
     Also generate template image (PNG) as Pillow object for later upload processing
 
@@ -68,7 +68,7 @@ def generate_pdf(  # noqa: C901
     column_origin_y = 0
     column_margin = map_margin * cm
 
-    map_image_reportlab = PIL_image_to_image_reader(map_image_input)
+    map_image_reportlab = pil_image_to_image_reader(map_image_input)
 
     # calculate m per px in map frame
     cm_per_px = frame_width * scale / map_width_px
@@ -167,7 +167,8 @@ def draw_right_column(
     qr_size = min(width, height) - margin
     qr_code = resize_rlg_by_width(qr_code, qr_size)
 
-    # fills up the remaining space, placed between the TOP and the BOTTOM aligned elements
+    # fills up the remaining space, placed between
+    # the TOP and the BOTTOM aligned elements
     space_filler = Spacer(width, 0)  # height will be filled after list creation
     # order all elements in column
     flowables = [
@@ -216,7 +217,7 @@ def scale_style(format_: PaperFormat, style_name: str, factor: float) -> Paragra
     return normal_style
 
 
-def PIL_image_to_image_reader(map_image_input):
+def pil_image_to_image_reader(map_image_input):
     map_image_raw = io.BytesIO()
     map_image_input.save(map_image_raw, format="png")
     map_image_reportlab = ImageReader(map_image_raw)

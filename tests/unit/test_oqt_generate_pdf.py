@@ -22,5 +22,6 @@ def test_generate_pdf(bbox_wgs84, request):
     report = get_report(bbox_wgs84)
     actual = generate_pdf(report)
     assert isinstance(actual, BytesIO)
-    # if you want the report to be saved for visual inspection, use the parameter --save-report with pytest
+    # if you want the report to be saved for visual inspection,
+    # use the parameter --save-report with pytest
     save_test_file(request, "--save-report", "report.pdf", actual)

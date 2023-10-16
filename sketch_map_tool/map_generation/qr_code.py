@@ -26,7 +26,10 @@ def qr_code(
 
 
 def _encode_data(uuid: str, bbox: Bbox, version_nr: str) -> str:
-    return f"{version_nr},{uuid},{bbox.lon_min},{bbox.lat_min},{bbox.lon_max},{bbox.lat_max}"
+    return (
+        f"{version_nr},{uuid},{bbox.lon_min},"
+        f"{bbox.lat_min},{bbox.lon_max},{bbox.lat_max}"
+    )
 
 
 def _make_qr_code(data: str) -> BytesIO:
