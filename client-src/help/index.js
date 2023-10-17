@@ -10,10 +10,10 @@ if (anchor) {
 
 // jump inside page
 [...document.querySelectorAll("[href^='#']")].forEach((anchorLink) => {
-    const anchor = anchorLink.getAttribute("href");
+    const anchorHref = anchorLink.getAttribute("href");
     const onClick = () => {
         closeAllDetailsElements();
-        openDetailsParents(document.querySelector(anchor));
+        openDetailsParents(document.querySelector(anchorHref));
     };
     anchorLink.addEventListener("click", onClick);
 });
