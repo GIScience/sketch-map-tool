@@ -38,6 +38,8 @@ def validate_uploaded_sketchmaps(files: list[FileStorage]):
                 f"You can only upload pictures up to "
                 f"a total pixel count of {max_pixel_per_image}."
             )
+        del img
+        file.seek(0)
 
 
 def validate_uuid(uuid: str):
