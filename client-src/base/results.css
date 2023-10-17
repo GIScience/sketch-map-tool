@@ -16,3 +16,7 @@
     height: 3rem;
     font-size: 2rem;
 }
+
+.task-status {
+    font-size: small;
+}
