@@ -2,6 +2,7 @@ import pytest
 from celery.contrib.testing.tasks import ping  # noqa: F401
 from psycopg2.extensions import connection
 from testcontainers.postgres import PostgresContainer
+from testcontainers.redis import RedisContainer
 
 from sketch_map_tool import CELERY_CONFIG
 from sketch_map_tool import celery_app as ca
@@ -20,23 +21,32 @@ def monkeypatch_session():
 @pytest.fixture(scope="session", autouse=True)
 def postgres_container(monkeypatch_session):
     with PostgresContainer("postgres:15") as postgres:
-        conn = "db+postgresql://{user}:{password}@localhost:{port}/{database}".format(
+        conn = "db+postgresql://{user}:{password}@127.0.0.1:{port}/{database}".format(
             user=postgres.POSTGRES_USER,
             password=postgres.POSTGRES_PASSWORD,
             port=postgres.get_exposed_port(5432),
             database=postgres.POSTGRES_DB,
         )
         monkeypatch_session.setenv("SMT-RESULT-BACKEND", conn)
-        print(conn)
-        # pytestmark = pytest.mark.glob("celery", result_backend=conn)
 
         yield {"connection_url": conn}
     # cleanup
 
 
+@pytest.fixture(scope="session", autouse=True)
+def redis_container(monkeypatch_session):
+    with RedisContainer("redis:7") as redis:
+        port = redis.get_client().get_connection_kwargs()["port"]
+        conn = f"redis://127.0.0.1:{port}"
+        monkeypatch_session.setenv("SMT-BROKER-URL", conn)
+        yield {"connection_url": conn}
+    # cleanup
+
+
 @pytest.fixture(scope="session")
-def celery_config(postgres_container):
+def celery_config(postgres_container, redis_container):
     CELERY_CONFIG["result_backend"] = postgres_container["connection_url"]
+    CELERY_CONFIG["broker_url"] = redis_container["connection_url"]
     return CELERY_CONFIG
 
 
