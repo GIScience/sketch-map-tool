@@ -67,7 +67,7 @@ def sketch_map_png(sketch_map_pdf, tmp_path_factory, uuid):
     page = pdf.load_page(0)
     png = page.get_pixmap()
 
-    png = draw_line_on_png(png)
+    png = draw_line_on_png(png)  # mock sketches on map
 
     path = tmp_path_factory.getbasetemp() / uuid / "sketch-map.png"
     png.save(path, output="png")
