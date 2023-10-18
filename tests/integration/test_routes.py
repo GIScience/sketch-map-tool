@@ -1,8 +1,10 @@
+import os.path
 from pathlib import Path
 from time import sleep
 from uuid import UUID
 
 import fitz
+import geojson
 import pytest
 import requests
 
@@ -38,18 +40,11 @@ def uuid(params):
 @pytest.fixture(scope="session")
 def sketch_map_pdf(uuid, tmp_path_factory) -> Path:
     fn = tmp_path_factory.mktemp(uuid, numbered=False) / "sketch-map.pdf"
-    # for 30 seconds check status
-    for _ in range(30):
-        response = requests.get(f"http://localhost:8081/api/status/{uuid}/sketch-map")
-        if response.status_code == 200:
-            response = requests.get(
-                f"http://localhost:8081/api/download/{uuid}/sketch-map"
-            )
-            with open(fn, "wb") as file:
-                file.write(response.content)
-            return fn
-        sleep(1)
-    raise TimeoutError("Sketch map PDF could not be created")
+    probe_status_endpoint(uuid, "sketch-map")
+    response = requests.get(f"http://localhost:8081/api/download/{uuid}/sketch-map")
+    with open(fn, "wb") as file:
+        file.write(response.content)
+    return fn
 
 
 @pytest.fixture(scope="session")
@@ -62,6 +57,20 @@ def sketch_map_png(sketch_map_pdf, tmp_path_factory, uuid):
     path = tmp_path_factory.getbasetemp() / uuid / "sketch-map.png"
     png.save(path, output="png")
     return path
+
+
+@pytest.fixture(scope="session")
+def uuid_result_uploaded(sketch_map_png):
+    url = "http://localhost:8081/digitize/results"
+    with open(sketch_map_png, "rb") as file:
+        files = {"file": file}
+        response = requests.post(url, files=files)
+    response.raise_for_status()
+
+    # Extract UUID from response
+    url_parts = response.url.rsplit("/")
+    uuid = url_parts[-1]
+    return uuid
 
 
 def test_sketch_map_pdf(sketch_map_pdf):
@@ -96,35 +105,14 @@ def test_create_results_post(params):
 
 def test_api_status_uuid_sketch_map(uuid):
     # for 30 seconds check status
-    for _ in range(30):
-        response = requests.get(f"http://localhost:8081/api/status/{uuid}/sketch-map")
-        assert response.status_code in (200, 202)
-        result = response.json()
-
-        status = result.pop("status")
-        assert status in ("SUCCESS", "PENDING", "RETRY", "STARTED")
-
-        href = result.pop("href", None)
-        assert result == {"id": uuid, "type": "sketch-map"}
-
-        if response.status_code == 200:
-            assert href == "/api/download/" + uuid + "/sketch-map"
-            assert status == "SUCCESS"
-            break
-        sleep(1)
-    assert response.status_code == 200
+    probe_status_endpoint(uuid, "sketch-map")
 
 
 def test_api_download_uuid_sketch_map(uuid):
     # for 30 seconds check status
-    for _ in range(30):
-        response = requests.get(f"http://localhost:8081/api/status/{uuid}/sketch-map")
-        if response.status_code == 200:
-            response = requests.get(
-                f"http://localhost:8081/api/download/{uuid}/sketch-map"
-            )
-            break
-        sleep(1)
+    probe_status_endpoint(uuid, "sketch-map")
+
+    response = requests.get(f"http://localhost:8081/api/download/{uuid}/sketch-map")
     assert response.status_code == 200
     assert len(response.content) > 0
 
@@ -140,5 +128,110 @@ def test_digitize_results_post(sketch_map_png):
     url_parts = response.url.rsplit("/")
     uuid = url_parts[-1]
     url_rest = "/".join(url_parts[:-1])
+
     assert UUID(uuid).version == 4
     assert url_rest == "http://localhost:8081/digitize/results"
+
+
+def probe_status_endpoint(uuid, endpoint):
+    """Wait for computations to be finished and status to return 200 or fail."""
+    # for 30 seconds check status
+    for _ in range(30):
+        response = requests.get(f"http://localhost:8081/api/status/{uuid}/{endpoint}")
+        assert response.status_code in (200, 202)
+        result = response.json()
+
+        status = result.pop("status")
+        assert status in ("SUCCESS", "PENDING", "RETRY", "STARTED")
+
+        href = result.pop("href", None)
+        assert result == {"id": uuid, "type": endpoint}
+
+        if response.status_code == 200:
+            assert href == "/api/download/" + uuid + f"/{endpoint}"
+            assert status == "SUCCESS"
+            break
+        sleep(1)
+    assert response.status_code == 200, "Status not 200 after 30 seconds"
+
+
+def test_api_status_uuid_raster_and_vector_results(uuid_result_uploaded):
+    probe_status_endpoint(uuid_result_uploaded, "raster-results")
+    probe_status_endpoint(uuid_result_uploaded, "vector-results")
+
+
+def test_api_download_uuid_vector_result(uuid_result_uploaded):
+    probe_status_endpoint(uuid_result_uploaded, "vector-results")
+
+    response = requests.get(
+        f"http://localhost:8081/api/download/{uuid_result_uploaded}/vector-results"
+    )
+
+    assert response.status_code == 200
+    json = geojson.loads(geojson.dumps(response.json()))
+    assert json.is_valid
+
+
+def test_api_download_uuid_raster_result(uuid_result_uploaded):
+    probe_status_endpoint(uuid_result_uploaded, "raster-results")
+
+    response = requests.get(
+        f"http://localhost:8081/api/download/{uuid_result_uploaded}/raster-results"
+    )
+    assert response.status_code == 200
+    assert len(response.content) > 0
+
+
+@pytest.fixture
+def vector_result(uuid_result_uploaded, tmp_path_factory):
+    probe_status_endpoint(uuid_result_uploaded, "vector-results")
+
+    response = requests.get(
+        f"http://localhost:8081/api/download/{uuid_result_uploaded}/vector-results"
+    )
+    response.raise_for_status()
+
+    # check if folder exists
+    if not os.path.exists(tmp_path_factory.getbasetemp() / uuid_result_uploaded):
+        fn = (
+            tmp_path_factory.mktemp(uuid_result_uploaded, numbered=False)
+            / "vector-results.geojson"
+        )
+    else:
+        fn = (
+            tmp_path_factory.getbasetemp()
+            / uuid_result_uploaded
+            / "vector-results.geojson"
+        )
+    with open(fn, "w") as file:
+        geojson.dump(response.json(), file)
+    return fn
+
+
+@pytest.fixture
+def raster_result(uuid_result_uploaded, tmp_path_factory):
+    probe_status_endpoint(uuid_result_uploaded, "raster-results")
+
+    response = requests.get(
+        f"http://localhost:8081/api/download/{uuid_result_uploaded}/raster-results"
+    )
+    response.raise_for_status()
+
+    # check if folder exists
+    if not os.path.exists(tmp_path_factory.getbasetemp() / uuid_result_uploaded):
+        fn = (
+            tmp_path_factory.mktemp(uuid_result_uploaded, numbered=False)
+            / "raster-results.tif"
+        )
+    else:
+        fn = (
+            tmp_path_factory.getbasetemp() / uuid_result_uploaded / "raster-results.tif"
+        )
+    with open(fn, "wb") as file:
+        file.write(response.content)
+    return fn
+
+
+def test_vector_and_raster_fixtures(vector_result, raster_result):
+    assert vector_result.exists()
+    assert raster_result.exists()
