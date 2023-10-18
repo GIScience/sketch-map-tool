@@ -25,6 +25,8 @@ geojson = "^2.5.0"
 matplotlib-scalebar = "^0.8.1"
 redis = "^4.5.4"
 pyproj = "^3.6.1"
+testcontainers-postgres = "^0.0.1rc1"
+pytest-celery = "^0.0.0"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
