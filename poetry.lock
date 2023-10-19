@@ -2926,6 +2926,20 @@ sqlalchemy = "*"
 testcontainers-core = "*"
 
 [[package]]
+name = "testcontainers-redis"
+version = "0.0.1rc1"
+description = "Redis component of testcontainers-python."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "testcontainers_redis-0.0.1rc1-py3-none-any.whl", hash = "sha256:d65efc617474bbd3f6b059984d4c0a9e093d97eec04e77c62c480836c95d710b"},
+]
+
+[package.dependencies]
+redis = "*"
+testcontainers-core = "*"
+
+[[package]]
 name = "tinycss2"
 version = "1.2.1"
 description = "A tiny CSS parser"
@@ -3444,4 +3458,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "a454fecee16ba0e654f56f843e97cf27765dcc38e3d3839345ccaa09b31bffaa"
+content-hash = "f135d9b775ca4d9cfb5eb258e6cc474b90381f8b54e56c76bc746ac1155937eb"
