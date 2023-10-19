@@ -1,64 +1,13 @@
-import pytest
 from celery.contrib.testing.tasks import ping  # noqa: F401
 from psycopg2.extensions import connection
-from testcontainers.postgres import PostgresContainer
-from testcontainers.redis import RedisContainer
 
-from sketch_map_tool import CELERY_CONFIG
-from sketch_map_tool import celery_app as ca
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.database import client_celery
-from sketch_map_tool.tasks import generate_quality_report
-from tests import vcr_app
 
 
-@pytest.fixture(scope="session")
-def monkeypatch_session():
-    with pytest.MonkeyPatch.context() as mp:
-        yield mp
-
-
-@pytest.fixture(scope="session", autouse=True)
-def postgres_container(monkeypatch_session):
-    with PostgresContainer("postgres:15") as postgres:
-        conn = "db+postgresql://{user}:{password}@127.0.0.1:{port}/{database}".format(
-            user=postgres.POSTGRES_USER,
-            password=postgres.POSTGRES_PASSWORD,
-            port=postgres.get_exposed_port(5432),
-            database=postgres.POSTGRES_DB,
-        )
-        monkeypatch_session.setenv("SMT-RESULT-BACKEND", conn)
-
-        yield {"connection_url": conn}
-    # cleanup
-
-
-@pytest.fixture(scope="session", autouse=True)
-def redis_container(monkeypatch_session):
-    with RedisContainer("redis:7") as redis:
-        port = redis.get_client().get_connection_kwargs()["port"]
-        conn = f"redis://127.0.0.1:{port}"
-        monkeypatch_session.setenv("SMT-BROKER-URL", conn)
-        yield {"connection_url": conn}
-    # cleanup
-
-
-@pytest.fixture(scope="session")
-def celery_config(postgres_container, redis_container):
-    CELERY_CONFIG["result_backend"] = postgres_container["connection_url"]
-    CELERY_CONFIG["broker_url"] = redis_container["connection_url"]
-    return CELERY_CONFIG
-
-
-@pytest.fixture(scope="session")
-def celery_app(celery_config):
-    ca.conf.update(celery_config)
-    return ca
-
-
-def test_testcontainers():
-    # test that connection string is set and not default
+def test_testcontainers_postgres():
     conn = get_config_value("result-backend")
+    # test that connection string is set and not default
     assert conn != "db+postgresql://smt:smt@localhost:5432"
     assert conn != ""
     assert conn is not None
@@ -75,6 +24,9 @@ def test_testcontainers():
     client_celery.db_conn = None
 
 
-@vcr_app.use_cassette
-def test_task(bbox_wgs84, celery_worker, celery_app):
-    assert generate_quality_report.delay(bbox_wgs84).get() is not None
+def test_testcontainers_redis():
+    conn = get_config_value("broker-url")
+    # test that connection string is set and not default
+    assert conn != "redis://localhost:6379"
+    assert conn != ""
+    assert conn is not None
