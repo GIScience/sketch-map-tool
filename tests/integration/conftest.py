@@ -1,27 +1,25 @@
+import json
 from io import BytesIO
-from uuid import uuid4
+from uuid import UUID, uuid4
 
+import fitz
 import pytest
 from celery.contrib.testing.tasks import ping  # noqa: F401
 from testcontainers.postgres import PostgresContainer
 from testcontainers.redis import RedisContainer
 from werkzeug.datastructures import FileStorage
 
-from sketch_map_tool import CELERY_CONFIG, make_flask
+from sketch_map_tool import CELERY_CONFIG, make_flask, routes
 from sketch_map_tool import celery_app as smt_celery_app
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.models import Bbox, PaperFormat, Size
-from sketch_map_tool.routes import (
-    about,
-    digitize,
-    digitize_results_post,
-    help,
-    index,
-)
 from tests import FIXTURE_DIR
 
 
+#
+# Session wide test setup of DB (redis and postgres) and workers (flask and celery)
+#
 @pytest.fixture(scope="session")
 def monkeypatch_session():
     with pytest.MonkeyPatch.context() as mp:
@@ -69,18 +67,27 @@ def celery_config(postgres_container, redis_container):
 
 
 @pytest.fixture(scope="session", autouse=True)
+def celery_worker_parameters():
+    return {"shutdown_timeout": 20}
+
+
+@pytest.mark.usefixtures("postgres_container", "redis_container")
+@pytest.fixture(scope="session", autouse=True)
 def celery_app(celery_config):
     """Configure Celery test app."""
     smt_celery_app.conf.update(celery_config)
     return smt_celery_app
 
 
-@pytest.fixture(autouse=True)
-def celery_worker(celery_worker):
-    return celery_worker
+@pytest.mark.usefixtures("postgres_container", "redis_container")
+@pytest.fixture(scope="session", autouse=True)
+def celery_worker(celery_session_worker):
+    return celery_session_worker
+    # yield celery_session_worker
+    # celery_session_worker.terminate()
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def flask_app():
     app = make_flask()
     app.config.update(
@@ -90,18 +97,54 @@ def flask_app():
     )
     # Register routes to be tested:
     app.add_url_rule(
-        "/digitize/results",
-        view_func=digitize_results_post,
-        methods=["POST", "GET"],
+        "/create/results",
+        view_func=routes.create_results_post,
+        methods=["POST"],
     )
-    app.add_url_rule("/digitize", view_func=digitize, methods=["GET"])
-    app.add_url_rule("/", view_func=index, methods=["GET"])
-    app.add_url_rule("/about", view_func=about, methods=["GET"])
-    app.add_url_rule("/help", view_func=help, methods=["GET"])
+    app.add_url_rule(
+        "/create/results",
+        view_func=routes.create_results_get,
+        methods=["GET"],
+    )
+    app.add_url_rule(
+        "/create/results/<uuid>",
+        view_func=routes.create_results_get,
+        methods=["GET"],
+    )
+    app.add_url_rule(
+        "/digitize/results",
+        view_func=routes.digitize_results_post,
+        methods=["POST"],
+    )
+    app.add_url_rule(
+        "/digitize/results",
+        view_func=routes.digitize_results_get,
+        methods=["get"],
+    )
+    app.add_url_rule(
+        "/digitize/results/<uuid>",
+        view_func=routes.digitize_results_get,
+        methods=["get"],
+    )
+    app.add_url_rule(
+        "/api/status/<uuid>/<type_>",
+        view_func=routes.status,
+        methods=["get"],
+    )
+    app.add_url_rule(
+        "/api/download/<uuid>/<type_>",
+        view_func=routes.download,
+        methods=["get"],
+    )
+    app.add_url_rule("/create", view_func=routes.create, methods=["GET"])
+    app.add_url_rule("/digitize", view_func=routes.digitize, methods=["GET"])
+    app.add_url_rule("/", view_func=routes.index, methods=["GET"])
+    app.add_url_rule("/about", view_func=routes.about, methods=["GET"])
+    app.add_url_rule("/help", view_func=routes.help, methods=["GET"])
     yield app
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def flask_client(flask_app):
     return flask_app.test_client()
 
@@ -115,6 +158,9 @@ def db_conn_celery():
     db_client_celery.close_connection()
 
 
+#
+# Test input
+#
 @pytest.fixture
 def bbox():
     return Bbox(
@@ -168,6 +214,136 @@ def bbox_wgs84():
     return Bbox(lon_min=8.625, lat_min=49.3711, lon_max=8.7334, lat_max=49.4397)
 
 
+a4 = {
+    "format": "A4",
+    "orientation": "landscape",
+    "bbox": ("[964445.3646475708,6343463.48326091,967408.255014792,6345943.466874749]"),
+    "bboxWGS84": (
+        "[8.66376011761138,49.40266507327297,8.690376214631833,49.41716014123875]"
+    ),
+    "size": '{"width": 1716,"height": 1436}',
+    "scale": "9051.161965312804",
+}
+
+# TODO: Add other params
+@pytest.fixture(scope="session", params=[a4])
+def params(request):
+    return request.param
+
+
+@pytest.fixture(scope="session")
+def uuid_create(
+    params,
+    flask_client,
+    flask_app,
+    celery_app,
+    tmp_path_factory,
+) -> str:
+    response = flask_client.post("/create/results", data=params, follow_redirects=True)
+
+    # Extract UUID from response
+    url_parts = response.request.path.rsplit("/")
+    uuid = url_parts[-1]
+    url_rest = "/".join(url_parts[:-1])
+    assert UUID(uuid).version == 4
+    assert url_rest == "/create/results"
+
+    # Wait for task to be finished and retrieve result (the sketch map)
+    with flask_app.app_context():
+        id_ = db_client_flask.get_async_result_id(uuid, "sketch-map")
+    task = celery_app.AsyncResult(id_)
+    result = task.get(timeout=90)
+
+    # Write sketch map to temporary test directory
+    fn = tmp_path_factory.mktemp(uuid, numbered=False) / "sketch-map.pdf"
+    with open(fn, "wb") as file:
+        file.write(result.getbuffer())
+
+    return uuid
+
+
+@pytest.fixture(scope="session")
+def sketch_map_pdf(uuid_create, tmp_path_factory) -> bytes:
+    path = tmp_path_factory.getbasetemp() / uuid_create / "sketch-map.pdf"
+    with open(path, "rb") as file:
+        return file.read()
+
+
+@pytest.fixture(scope="session")
+def sketch_map_png(uuid_create, sketch_map_pdf, tmp_path_factory) -> BytesIO:
+    def draw_line_on_png(png):
+        """Draw a single straight line in the middle of a png"""
+        width, height = png.width, png.height
+        line_start_x = int(width / 4)
+        line_end_x = int(width / 2)
+        middle_y = int(height / 2)
+        for x in range(line_start_x, line_end_x):
+            for y in range(middle_y - 4, middle_y):
+                png.set_pixel(x, y, (138, 29, 12))
+        return png
+
+    pdf = fitz.open(stream=sketch_map_pdf)
+    page = pdf.load_page(0)
+    png = page.get_pixmap()
+    png = draw_line_on_png(png)  # mock sketches on map
+    BytesIO()
+    path = tmp_path_factory.getbasetemp() / uuid_create / "sketch-map.png"
+    png.save(path, output="png")
+    with open(path, "rb") as file:
+        return file.read()
+
+
+@pytest.fixture(scope="session")
+def uuid_digitize(
+    sketch_map_png,
+    flask_client,
+    flask_app,
+    celery_app,
+    tmp_path_factory,
+) -> str:
+    data = {"file": [(BytesIO(sketch_map_png), "sketch_map.png")]}
+    response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
+
+    # Extract UUID from response
+    url_parts = response.request.path.rsplit("/")
+    uuid = url_parts[-1]
+    url_rest = "/".join(url_parts[:-1])
+    assert UUID(uuid).version == 4
+    assert url_rest == "/digitize/results"
+
+    # Wait for tasks to be finished and retrieve results (vector and raster)
+    with flask_app.app_context():
+        id_vector = db_client_flask.get_async_result_id(uuid, "vector-results")
+        id_raster = db_client_flask.get_async_result_id(uuid, "raster-results")
+    task_vector = celery_app.AsyncResult(id_vector)
+    task_raster = celery_app.AsyncResult(id_raster)
+    result_vector = task_vector.get(timeout=90)
+    result_raster = task_raster.get(timeout=90)
+    # Write sketch map to temporary test directory
+    dir = tmp_path_factory.mktemp(uuid, numbered=False)
+    path_vector = dir / "vector.geojson"
+    path_raster = dir / "raster.zip"
+    with open(path_vector, "w") as file:
+        file.write(json.dumps(result_vector))
+    with open(path_raster, "wb") as file:
+        file.write(result_raster.getbuffer())
+    return uuid
+
+
+@pytest.fixture(scope="session")
+def vector(uuid_digitize, tmp_path_factory) -> bytes:
+    path = tmp_path_factory.getbasetemp() / uuid_digitize / "vector.geojson"
+    with open(path, "rb") as file:
+        return file.read()
+
+
+@pytest.fixture(scope="session")
+def raster(uuid_digitize, tmp_path_factory) -> bytes:
+    path = tmp_path_factory.getbasetemp() / uuid_digitize / "raster.zip"
+    with open(path, "rb") as file:
+        return file.read()
+
+
 @pytest.fixture
 def sketch_map_buffer():
     """Photo of a Sketch Map."""
@@ -204,8 +380,9 @@ def file_ids(files, flask_app):
             db_client_flask.delete_file(i)
 
 
+@pytest.mark.usefixtures("postgres_container", "redis_container")
 @pytest.fixture()
-def uuids(map_frame_buffer, db_conn_celery):
+def uuids(map_frame_buffer):
     """UUIDs of map frames stored in the database."""
     # setup
     uuids = []
