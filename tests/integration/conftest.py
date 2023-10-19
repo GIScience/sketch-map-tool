@@ -7,12 +7,18 @@ from testcontainers.postgres import PostgresContainer
 from testcontainers.redis import RedisContainer
 from werkzeug.datastructures import FileStorage
 
-from sketch_map_tool import CELERY_CONFIG
+from sketch_map_tool import CELERY_CONFIG, make_flask
 from sketch_map_tool import celery_app as smt_celery_app
-from sketch_map_tool import flask_app as smt_flask_app
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.routes import (
+    about,
+    digitize,
+    digitize_results_post,
+    help,
+    index,
+)
 from tests import FIXTURE_DIR
 
 
@@ -76,12 +82,23 @@ def celery_worker(celery_worker):
 
 @pytest.fixture()
 def flask_app():
-    smt_flask_app.config.update(
+    app = make_flask()
+    app.config.update(
         {
             "TESTING": True,
         }
     )
-    yield smt_flask_app
+    # Register routes to be tested:
+    app.add_url_rule(
+        "/digitize/results",
+        view_func=digitize_results_post,
+        methods=["POST", "GET"],
+    )
+    app.add_url_rule("/digitize", view_func=digitize, methods=["GET"])
+    app.add_url_rule("/", view_func=index, methods=["GET"])
+    app.add_url_rule("/about", view_func=about, methods=["GET"])
+    app.add_url_rule("/help", view_func=help, methods=["GET"])
+    yield app
 
 
 @pytest.fixture()
