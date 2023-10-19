@@ -47,6 +47,18 @@ def sketch_map_pdf(uuid, tmp_path_factory) -> Path:
     return fn
 
 
+def draw_line_on_png(png):
+    """Draw a single straight line in the middle of a png"""
+    width, height = png.width, png.height
+    line_start_x = int(width / 4)
+    line_end_x = int(width / 2)
+    middle_y = int(height / 2)
+    for x in range(line_start_x, line_end_x):
+        for y in range(middle_y - 4, middle_y):
+            png.set_pixel(x, y, (138, 29, 12))
+    return png
+
+
 @pytest.fixture(scope="session")
 def sketch_map_png(sketch_map_pdf, tmp_path_factory, uuid):
     with open(sketch_map_pdf, "rb") as file:
@@ -54,6 +66,9 @@ def sketch_map_png(sketch_map_pdf, tmp_path_factory, uuid):
     pdf = fitz.open(stream=sketch_map_pdf)
     page = pdf.load_page(0)
     png = page.get_pixmap()
+
+    png = draw_line_on_png(png)  # mock sketches on map
+
     path = tmp_path_factory.getbasetemp() / uuid / "sketch-map.png"
     png.save(path, output="png")
     return path
@@ -169,6 +184,7 @@ def test_api_download_uuid_vector_result(uuid_result_uploaded):
 
     assert response.status_code == 200
     json = geojson.loads(geojson.dumps(response.json()))
+    assert len(json["features"]) > 0
     assert json.is_valid
 
 
@@ -221,11 +237,11 @@ def raster_result(uuid_result_uploaded, tmp_path_factory):
     if not os.path.exists(tmp_path_factory.getbasetemp() / uuid_result_uploaded):
         fn = (
             tmp_path_factory.mktemp(uuid_result_uploaded, numbered=False)
-            / "raster-results.tif"
+            / "raster-results.zip"
         )
     else:
         fn = (
-            tmp_path_factory.getbasetemp() / uuid_result_uploaded / "raster-results.tif"
+            tmp_path_factory.getbasetemp() / uuid_result_uploaded / "raster-results.zip"
         )
     with open(fn, "wb") as file:
         file.write(response.content)
