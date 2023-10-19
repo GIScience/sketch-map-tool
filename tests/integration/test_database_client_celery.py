@@ -11,23 +11,23 @@ def test_open_connection():
     client_celery.db_conn = None
     client_celery.open_connection()
     assert isinstance(client_celery.db_conn, connection)
-    client_celery.close_connection()
-    client_celery.db_conn = None
 
 
 def test_close_closed_connection():
     client_celery.db_conn = None
     client_celery.close_connection()
     assert client_celery.db_conn is None
+    client_celery.open_connection()
 
 
-def test_close_open_connection(db_conn_celery):
+def test_close_open_connection():
     assert isinstance(client_celery.db_conn, connection)
     client_celery.close_connection()
     assert client_celery.db_conn.closed != 0  # 0 if the connection is open
+    client_celery.open_connection()
 
 
-def test_write_map_frame(db_conn_celery, flask_app, map_frame_buffer):
+def test_write_map_frame(flask_app, map_frame_buffer):
     uuid = uuid4()
     client_celery.insert_map_frame(map_frame_buffer, uuid)
     try:
@@ -40,7 +40,7 @@ def test_write_map_frame(db_conn_celery, flask_app, map_frame_buffer):
 
 
 # TODO
-def test_delete_map_frame(db_conn_celery, flask_app, map_frame_buffer):
+def test_delete_map_frame(flask_app, map_frame_buffer):
     uuid = uuid4()
     client_celery.insert_map_frame(map_frame_buffer, uuid)
     with flask_app.app_context():

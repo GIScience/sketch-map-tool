@@ -26,4 +26,4 @@ def resize_rlg_by_height(d: Drawing, size: float) -> Drawing:
 
 
 def to_array(buffer: bytes) -> NDArray:
-    return cv2.imdecode(np.fromstring(buffer, dtype="uint8"), cv2.IMREAD_UNCHANGED)
+    return cv2.imdecode(np.frombuffer(buffer, dtype="uint8"), cv2.IMREAD_UNCHANGED)

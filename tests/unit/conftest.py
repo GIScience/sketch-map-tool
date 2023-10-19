@@ -64,7 +64,7 @@ def flask_app():
     )
     # Register routes to be tested:
     app.add_url_rule(
-        "/digitize/results", view_func=digitize_results_post, methods=["POST", "GET"]
+        "/digitize/results", view_func=digitize_results_post, methods=["POST"]
     )
     app.add_url_rule("/digitize", view_func=digitize, methods=["GET"])
     app.add_url_rule("/", view_func=index, methods=["GET"])
