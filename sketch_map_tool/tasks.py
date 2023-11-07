@@ -1,6 +1,7 @@
 from io import BytesIO
 from uuid import UUID
 from zipfile import ZipFile
+from PIL import Image
 
 import geojson
 from celery.result import AsyncResult
@@ -26,6 +27,8 @@ from sketch_map_tool.upload_processing import (
     polygonize,
     prepare_img_for_markings,
 )
+from sketch_map_tool.upload_processing.detect_markings import apply_sam
+
 from sketch_map_tool.wms import client as wms_client
 
 
@@ -66,6 +69,7 @@ def generate_sketch_map(
         format_,
         scale,
     )
+    map_img.write
     db_client_celery.insert_map_frame(map_img, uuid)
     return map_pdf
 
@@ -79,9 +83,10 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
     report = get_report(bbox)
     return generate_report_pdf(report)
 
-
 # 2. DIGITIZE RESULTS
 #
+
+
 @celery.task()
 def georeference_sketch_maps(
     file_ids: list[int],
@@ -130,13 +135,17 @@ def digitize_sketches(
     ) -> FeatureCollection:
         """Process a Sketch Map."""
         # r = interim result
+
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
         r = clip(r, map_frames[uuid])
-        r = prepare_img_for_markings(map_frames[uuid], r)
+        r = prepare_img_for_markings(map_frames[uuid], r, sketch_map_id)
+        diffImage = Image.fromarray(r)
         geojsons = []
+        masks = apply_sam(diffImage)
+
         for color in COLORS:
-            r_ = detect_markings(r, color)
+            r_ = detect_markings(masks, diffImage, r , color)
             r_ = georeference(r_, bbox)
             r_ = polygonize(r_, color)
             r_ = geojson.load(r_)
