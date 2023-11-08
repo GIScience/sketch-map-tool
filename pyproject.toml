@@ -24,9 +24,10 @@ kaleido = "0.2.1"  # Not working with '^', cf. https://github.com/plotly/Kaleido
 geojson = "^2.5.0"
 matplotlib-scalebar = "^0.8.1"
 redis = "^4.5.4"
-transformers = "^4.35.0"
 pyproj = "^3.6.1"
 neptune = "^1.8.3"
+torch = {version = "^2.1.0+cpu", source = "pytorch"}
+torchvision = {version = "^0.16.0+cpu", source = "pytorch"}
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
@@ -43,6 +44,11 @@ locust = "^2.14.2"
 testcontainers-postgres = "^0.0.1rc1"
 testcontainers-redis = "^0.0.1rc1"
 hypothesis = "^6.88.4"
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
