@@ -1,4 +1,4 @@
-name: smt2
+name: smt
 channels:
   - conda-forge
 dependencies:
@@ -7,3 +7,6 @@ dependencies:
   - gdal=3.7.1  # same as in Dockerfile and pyproject.toml
   - pyzbar=0.1.9  # same as in Dockerfile and pyproject.toml
   - transformers
+  - gdal=3.7.1
+  - pyzbar=0.1.9
+  - psycopg2=2.9.7

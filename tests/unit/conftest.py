@@ -10,7 +10,13 @@ from sketch_map_tool import make_flask
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.models import Bbox, PaperFormat, Size
-from sketch_map_tool.routes import digitize_results_post
+from sketch_map_tool.routes import (
+    about,
+    digitize,
+    digitize_results_post,
+    help,
+    index,
+)
 from tests import FIXTURE_DIR
 
 
@@ -50,20 +56,25 @@ def db_conn_celery():
 
 @pytest.fixture()
 def flask_app():
-    yield make_flask()
-
-
-@pytest.fixture()
-def flask_client(flask_app):
-    flask_app.config.update(
+    app = make_flask()
+    app.config.update(
         {
             "TESTING": True,
         }
     )
     # Register routes to be tested:
-    flask_app.add_url_rule(
-        "/digitize/results", view_func=digitize_results_post, methods=["POST"]
+    app.add_url_rule(
+        "/digitize/results", view_func=digitize_results_post, methods=["POST", "GET"]
     )
+    app.add_url_rule("/digitize", view_func=digitize, methods=["GET"])
+    app.add_url_rule("/", view_func=index, methods=["GET"])
+    app.add_url_rule("/about", view_func=about, methods=["GET"])
+    app.add_url_rule("/help", view_func=help, methods=["GET"])
+    yield app
+
+
+@pytest.fixture()
+def flask_client(flask_app):
     return flask_app.test_client()
 
 

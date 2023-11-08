@@ -6,13 +6,18 @@
 - [Mamba](https://github.com/conda-forge/miniforge#install): `>=1.4`
 - Node: `>=14`
 
-This project uses [Mamba](https://github.com/conda-forge/miniforge#install) for environment and dependencies management. Please make sure it is installed on your system: [Installation Guide](https://github.com/conda-forge/miniforge#install)
+This project uses [Mamba](https://github.com/conda-forge/miniforge#install) for environment and dependencies management. Please make sure it is installed on your system: [Installation Guide](https://github.com/conda-forge/miniforge#install). Instead of Mamba, Conda can also be used.
 
 > Actually, Mamba and Poetry together are used to manage environment and dependencies. But only Mamba is required to be present on the System. Poetry will be installed by Mamba. Mamba installs pre built binaries for depedencies like GDAL. Poetry installs the rest of the Python dependencies.
 
 ## Installation
 
 ### Python Package
+
+> Note: Editors like IntelliJ IDEA or PyCharm will try to automatically setup Sketch Map Tool.
+> This does fail. They will likely create a virtual environment managed by Poetry.
+> This is wrong (See prerequisites). If this happens remove the environment (`poetry env remove 3.10`).
+> Then execute steps below
 
 ```bash
 # clone repository
@@ -63,6 +68,7 @@ flask --app sketch_map_tool/routes.py --debug run
 ## Tests
 
 ```bash
+# make sure celery is running
 pytest
 ```
 

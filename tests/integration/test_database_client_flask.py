@@ -5,7 +5,9 @@ from flask import g
 from psycopg2.extensions import connection
 
 from sketch_map_tool.database import client_flask
-from sketch_map_tool.exceptions import FileNotFoundError_
+from sketch_map_tool.exceptions import (
+    CustomFileNotFoundError,
+)
 
 
 def test_open_close_connection(flask_app):
@@ -77,7 +79,7 @@ def test_select_file(file_ids):
 
 def test_select_file_file_not_found(flask_app, files):
     with flask_app.app_context():
-        with pytest.raises(FileNotFoundError_):
+        with pytest.raises(CustomFileNotFoundError):
             client_flask.select_file(1000000)
 
 
@@ -94,5 +96,5 @@ def test_select_map_frame(flask_app, uuids):
 
 def test_select_map_frame_file_not_found(flask_app):
     with flask_app.app_context():
-        with pytest.raises(FileNotFoundError_):
+        with pytest.raises(CustomFileNotFoundError):
             client_flask.select_map_frame(uuid4())

@@ -13,7 +13,7 @@ setDisabled("submitBtn", true);
 
 // ...until files are added
 const fileElement = document.querySelector(".filebokz");
-fileElement.addEventListener("file-added", (e) => {
+fileElement.addEventListener("file-added", () => {
     setDisabled("submitBtn", false);
 });
 

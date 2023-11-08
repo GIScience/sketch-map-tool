@@ -4,6 +4,7 @@
  */
 function getUUIDFromURL() {
     const UUID_V4_PATTERN = /[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}/i;
+    // eslint-disable-next-line no-restricted-globals
     return location.pathname.match(UUID_V4_PATTERN)[0];
 }
 
@@ -15,13 +16,12 @@ function getUUIDFromURL() {
  */
 function fillSelectOptions(selectElementId, optionsMap) {
     const selectElement = document.getElementById(selectElementId);
-    for (const paperformatKey in optionsMap) {
-        if (Object.prototype.hasOwnProperty.call(optionsMap, paperformatKey)) {
+    Object.values(optionsMap)
+        .forEach((paperformatValue) => {
             const option = document.createElement("option");
-            option.text = optionsMap[paperformatKey];
+            option.text = paperformatValue;
             selectElement.appendChild(option);
-        }
-    }
+        });
 }
 
 /**
@@ -34,6 +34,10 @@ function setIsBusy(elementId, isBusy) {
     element.setAttribute("aria-busy", isBusy);
 }
 
+function setTaskStatus(elementId, taskStatus) {
+    const element = document.getElementById(elementId);
+    element.textContent = taskStatus;
+}
 /**
  * set the disabled HTMLAttribute on the given HTMLElement
  * @param elementId
@@ -99,6 +103,7 @@ function openAllDetailsElements() {
 export {
     getUUIDFromURL,
     fillSelectOptions,
+    setTaskStatus,
     setDisabled,
     setDownloadLink,
     setIsBusy,

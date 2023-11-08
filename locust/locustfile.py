@@ -21,7 +21,8 @@ def validate_uuid(uuid: str):
 def monitor_resource_use(wait_time_sec: int = 1):
     while True:
         os.system(
-            'docker stats -a --no-stream --format "{{.Name}},{{.MemPerc}}" >> resource_log.csv'
+            'docker stats -a --no-stream --format "{{.Name}},{{.MemPerc}}" '
+            ">> resource_log.csv"
         )
         time.sleep(wait_time_sec)
 
@@ -40,8 +41,14 @@ class WorkflowCycle(HttpUser):
         payload = {
             "format": "A4",
             "orientation": "landscape",
-            "bbox": "[964881.9316858181,6343777.762160674,967129.3396389671,6345658.909256095]",
-            "bboxWGS84": "[8.667681866041383,49.40450221498196,8.687870675181037,49.41549716938161]",
+            "bbox": (
+                "[964881.9316858181,6343777.762160674,"
+                "967129.3396389671,6345658.909256095]"
+            ),
+            "bboxWGS84": (
+                "[8.667681866041383,49.40450221498196,"
+                "8.687870675181037,49.41549716938161]"
+            ),
             "size": '{"width":1716,"height":1436}',
             "scale": "8391.039601898965",
         }

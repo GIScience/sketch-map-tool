@@ -98,7 +98,7 @@ def georeference_sketch_maps(
     def process(sketch_map_id: int, uuid: str, bbox: Bbox) -> BytesIO:
         """Process a Sketch Map.
 
-        :param sketch_map_id: ID under which the uploaded file is stored in the database.
+        :param sketch_map_id: ID under which uploaded file is stored in the database.
         :param uuid: UUID under which the sketch map was created.
         :bbox: Bounding box of the AOI on the sketch map.
         :return: Georeferenced image (GeoTIFF) of the sketch map .
@@ -110,22 +110,16 @@ def georeference_sketch_maps(
         r = georeference(r, bbox)
         return r
 
-    def zip_(files: list, file_names: list[str]) -> BytesIO:
-        buffer = BytesIO()
-        with ZipFile(buffer, "w") as zip_file:
-            for upload_name, file in zip(file_names, files):
-                name = ".".join(upload_name.split(".")[:-1])
-                zip_file.writestr(f"{name}.geotiff", file.read())
-        buffer.seek(0)
-        return buffer
+    def zip_(file: BytesIO, file_name: str):
+        with ZipFile(buffer, "a") as zip_file:
+            name = ".".join(file_name.split(".")[:-1])
+            zip_file.writestr(f"{name}.geotiff", file.read())
 
-    return zip_(
-        [
-            process(file_id, uuid, bbox)
-            for file_id, uuid, bbox in zip(file_ids, uuids, bboxes)
-        ],
-        file_names,
-    )
+    buffer = BytesIO()
+    for file_id, uuid, bbox, file_name in zip(file_ids, uuids, bboxes, file_names):
+        zip_(process(file_id, uuid, bbox), file_name)
+    buffer.seek(0)
+    return buffer
 
 
 @celery.task()

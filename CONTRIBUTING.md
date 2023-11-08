@@ -45,21 +45,16 @@ In short:
 - Guideline: [PEP8](https://peps.python.org/pep-0008/), [PEP 484 (Type Hints)](https://peps.python.org/pep-0484/)
 - Linter: [flake8](https://flake8.pycqa.org), [mypy](http://mypy-lang.org/), [bandit](https://github.com/PyCQA/bandit)
 
-#### Linters
+#### Linters and Autoformatter
 
-This project uses [flake8](https://flake8.pycqa.org), [mypy](http://mypy-lang.org/) and [bandit](https://github.com/PyCQA/bandit) to ensure consistent code style.
+This project uses [`black`](https://github.com/psf/black) and [`ruff`](https://github.com/astral-sh/ruff) to ensure consistent code style. See the `pyproject.toml` file for configuration.
 
-Run those linter's with following commands:
+Run those linter's/autoformatter's with following commands:
 
 ```bash
-flake8 .
-mypy --strict .
-bandit -r .
+black .
+ruff .
 ```
-
-*Tips:*
-- Mark in-line that flake8 should not raise any error: `print()  # noqa`
-- Mark in-line that bandit should not raise any error: `# nosec`
 
 ### JavaScript and CSS
 

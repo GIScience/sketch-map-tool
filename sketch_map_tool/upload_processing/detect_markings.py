@@ -21,15 +21,16 @@ def detect_markings(
         color: str,
 ) -> NDArray:
     """
-    Detect markings in the colours blue, green, red, pink, turquoise, white, and yellow.
-    Note that there must be a sufficient difference between the colour of the markings and the background. White and
-    yellow markings might therefore not be detected on many sketch maps.
+    Detect markings in the colours blue, green, red, pink, turquoise, white, and yellow
+    Note that there must be a sufficient difference between the colour of the markings
+    and the background. White and yellow markings might not be detected on sketch maps.
 
 
     :param sketch_map_frame: TODO
-    :param threshold_bgr: Threshold for the colour detection. 0.5 means 50%, i.e. all BGR values above 50% * 255 will be
-                          considered 255, all values below this threshold will be considered 0 for determining the
-                          colour of the markings.
+    :param threshold_bgr: Threshold for the colour detection. 0.5 means 50%, i.e. all
+                          BGR values above 50% * 255 will be considered 255,
+                          all values below this threshold will be considered
+                          0 for determining the colour of the markings.
     """
     colors = [average_color_inside_mask(rawImage, mask) for mask in masks]
     masks = [mask for mask, clr in zip(masks, colors) if clr == color]
@@ -48,8 +49,9 @@ def prepare_img_for_markings(
     """
     TODO pydoc
 
-    :param threshold_img_diff: Threshold for the marking detection concerning the absolute grayscale difference between
-    corresponding pixels in 'img_base' and 'img_markings'.
+    :param threshold_img_diff: Threshold for the marking detection concerning the
+    absolute grayscale difference between corresponding pixels
+    in 'img_base' and 'img_markings'.
     """
     img_base_height, img_base_width, _ = img_base.shape
     img_markings = cv2.resize(

@@ -7,14 +7,12 @@ import geojson
 # from celery import chain, group
 from flask import Response, redirect, render_template, request, send_file, url_for
 
-from sketch_map_tool import celery_app, definitions
+from sketch_map_tool import celery_app, definitions, tasks, upload_processing
 from sketch_map_tool import flask_app as app
-from sketch_map_tool import tasks, upload_processing
-from sketch_map_tool.config import get_config_value
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
-    FileNotFoundError_,
+    CustomFileNotFoundError,
     MapGenerationError,
     OQTReportError,
     QRCodeError,
@@ -24,7 +22,11 @@ from sketch_map_tool.exceptions import (
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.tasks import digitize_sketches, georeference_sketch_maps
-from sketch_map_tool.validators import validate_type, validate_uuid
+from sketch_map_tool.validators import (
+    validate_type,
+    validate_uploaded_sketchmaps,
+    validate_uuid,
+)
 
 
 @app.get("/")
@@ -106,15 +108,13 @@ def digitize_results_post() -> Response:
     if "file" not in request.files:
         return redirect(url_for("digitize"))
     files = request.files.getlist("file")
-    max_nr_simultaneous_uploads = int(get_config_value("max-nr-simultaneous-uploads"))
-    if len(files) > max_nr_simultaneous_uploads:
-        raise UploadLimitsExceededError(
-            f"You can only upload up to {max_nr_simultaneous_uploads} files at once."
-        )
+    validate_uploaded_sketchmaps(files)
     ids = db_client_flask.insert_files(files)
-    files_from_db = [db_client_flask.select_file(i) for i in ids]
     file_names = [db_client_flask.select_file_name(i) for i in ids]
-    args = [upload_processing.read_qr_code(to_array(file)) for file in files_from_db]
+    args = [
+        upload_processing.read_qr_code(to_array(db_client_flask.select_file(_id)))
+        for _id in ids
+    ]
     uuids = [args_["uuid"] for args_ in args]
     bboxes = [args_["bbox"] for args_ in args]
     map_frames = dict()
@@ -137,8 +137,7 @@ def digitize_results_post() -> Response:
         "vector-results": str(result_id_2),
     }
     db_client_flask.set_async_result_ids(uuid, map_)
-    id_ = uuid
-    return redirect(url_for("digitize_results_get", uuid=id_))
+    return redirect(url_for("digitize_results_get", uuid=uuid))
 
 
 @app.get("/digitize/results")
@@ -163,32 +162,24 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
     if task.ready():
         if task.successful():  # SUCCESS
             http_status = 200
-            status = "SUCCESSFUL"
             href = "/api/download/" + uuid + "/" + type_
         elif task.failed():  # REJECTED, REVOKED, FAILURE
             try:
                 task.get(propagate=True)
-            except MapGenerationError as err:
-                http_status = 408  # Request Timeout
-                status = "FAILED"
-                error = str(err)
-            except (QRCodeError, OQTReportError) as err:
-                # The request was well-formed but was unable to be followed due to semantic
-                # errors.
+            except (QRCodeError, OQTReportError, MapGenerationError) as err:
+                # The request was well-formed but was unable to be followed due
+                # to semantic errors.
                 http_status = 422  # Unprocessable Entity
-                status = "FAILED"
                 error = str(err)
             except (Exception) as err:
                 http_status = 500  # Internal Server Error
-                status = "FAILED"
                 error = str(err)
-    else:  # PENDING, RETRY, RECEIVED, STARTED
+    else:  # PENDING, RETRY, STARTED
         # Accepted for processing, but has not been completed
         http_status = 202  # Accepted
-        status = "PROCESSING"
     body_raw = {
         "id": uuid,
-        "status": status,
+        "status": task.status,
         "type": type_,
         "href": href,
         "error": error,
@@ -230,7 +221,7 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
 
 
 @app.errorhandler(QRCodeError)
-@app.errorhandler(FileNotFoundError_)
+@app.errorhandler(CustomFileNotFoundError)
 @app.errorhandler(UploadLimitsExceededError)
 def handle_exception(error):
     return render_template("error.html", error_msg=str(error)), 422

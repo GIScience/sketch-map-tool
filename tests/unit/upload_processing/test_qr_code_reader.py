@@ -66,7 +66,7 @@ def test_read_qr_code_sketch_map(sketch_map, decoded_content):
 
 # TODO: Find fixture which need to be downscaled
 # def test_read_qr_code_big(qr_code_img_big):
-#     """Test reading a QR-Code image which size is too big and need to be down-scaled ...
+#     """Test reading a QR-Code image which size is too big and need to be down-scaled..
 
 #     ... before content can be detected.
 #     """
