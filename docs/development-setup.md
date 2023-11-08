@@ -89,6 +89,15 @@ Bundle the code with:
 npm run build
 ```
 
+## Update dependencies
+
+When dependencies changed the environment can be updated by running:
+
+```bash
+mamba env update --file environment.yml
+poetry install
+```
+
 ## Project Setup using and IDE
 
 If you setup sketch-map-tool in an IDE like PyCharm please make sure that your IDE does not setup a Poetry managed project/virtual environment.
