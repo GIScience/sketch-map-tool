@@ -6,7 +6,7 @@ authors = ["HeiGIT <info@heigit.org>"]
 license = "GNU Affero General Public License v3.0"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "~3.10"
 Flask = "^2.2.5"
 waitress = "^2.1.2"
 requests = "^2.28.1"
@@ -24,10 +24,11 @@ kaleido = "0.2.1"  # Not working with '^', cf. https://github.com/plotly/Kaleido
 geojson = "^2.5.0"
 matplotlib-scalebar = "^0.8.1"
 redis = "^4.5.4"
-pyproj = "^3.6.1"
 testcontainers-postgres = "^0.0.1rc1"
 pytest-celery = "^0.0.0"
 testcontainers-redis = "^0.0.1rc1"
+transformers = "^4.35.0"
+pyproj = "^3.6.1"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
