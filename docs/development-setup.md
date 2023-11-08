@@ -34,8 +34,8 @@ poetry install  # poetry installs directly into activated mamba environment
 pre-commit install
 
 # fetch and run backend (postgres) and broker (redis) using docker
-docker run --name smt-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres
-docker run --name smt-redis -d -p 6379:6379 redis
+docker run --name smt-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres:15
+docker run --name smt-redis -d -p 6379:6379 redis:7
 
 # install local versions of esbuild, eslint and stylelint to build and check JS and CSS
 npm install
@@ -89,28 +89,9 @@ Bundle the code with:
 npm run build
 ```
 
-## Project Setup for PyCharm
+## Project Setup using and IDE
 
-If you like to develop using an IDE like [PyCharm](https://www.jetbrains.com/pycharm/), you can use the PyCharm Run Configurations instead of running Python manually.
+If you setup sketch-map-tool in an IDE like PyCharm please make sure that your IDE does not setup a Poetry managed project/virtual environment.
+Go thought the setup steps above in the terminal and change interpreter settings in the IDE to point to the mamba/conda environment.
 
-1. Add different configurations:
-   1. Docker Image Configuration:
-      * Image ID: `redis`
-      * Container name: `redis`
-      * Bind ports: `6379:6379`
-   2. Docker Image Configuration:
-      * Image ID: `postgres`
-      * Container name: `postgres`
-      * Bind ports: `5432:5432`
-   3. Flask server:
-      * Target type: Script path
-      * Target: `project_path/sketch_map_tool/routes.py`
-   4. Python:
-      * Module name: `celery`
-      * Parameters: `-A sketch_map_tool.tasks worker`
-      * Working directory: `project_path`
-      * Before launch: Run Another Configuration for both Docker Image Configurations
-   5. Python tests — pytest:
-      * Script path: `project_path/tests/unit`
-      * Working Directory: `project_path`
-2. For development: Run or Debug Celery and Flask Configurations
+Also make sure the environment variable `PROJ_LIB` to point to the `proj` directory of the mamba/conda environment.
