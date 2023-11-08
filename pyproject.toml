@@ -31,7 +31,6 @@ testcontainers-redis = "^0.0.1rc1"
 transformers = {extras = ["scipy"], version = "^4.35.0"}
 torch = {version = "^2.1.0+cpu", source = "pytorch"}
 torchvision = {version = "^0.16.0+cpu", source = "pytorch"}
-torchaudio = {version = "^2.1.0+cpu", source = "pytorch"}
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit

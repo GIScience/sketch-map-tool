@@ -3462,31 +3462,6 @@ url = "https://download.pytorch.org/whl/cpu"
 reference = "pytorch"
 
 [[package]]
-name = "torchaudio"
-version = "2.1.0+cpu"
-description = "An audio package for PyTorch"
-optional = false
-python-versions = "*"
-files = [
-    {file = "torchaudio-2.1.0+cpu-cp310-cp310-linux_x86_64.whl", hash = "sha256:479bf607276c688db13c3652f36978b06bf9d827763a799b6d6f07d90a794205"},
-    {file = "torchaudio-2.1.0+cpu-cp310-cp310-win_amd64.whl", hash = "sha256:87d018031d045e6257b452952440c0d4f3cce3e7cfbad575d123a412874cc8d6"},
-    {file = "torchaudio-2.1.0+cpu-cp311-cp311-linux_x86_64.whl", hash = "sha256:b78575dc4748e57046b396a85470bb3615fa7822b745ff091ded073bd036eb6e"},
-    {file = "torchaudio-2.1.0+cpu-cp311-cp311-win_amd64.whl", hash = "sha256:1a2083d8bb65edd7e11ed519dee7c9050da6f74a8f900299b27f59478cddaf60"},
-    {file = "torchaudio-2.1.0+cpu-cp38-cp38-linux_x86_64.whl", hash = "sha256:f2062f985504171368535bf86808acf86b29573d9730715dcc55408ae09a717b"},
-    {file = "torchaudio-2.1.0+cpu-cp38-cp38-win_amd64.whl", hash = "sha256:98a70a34ba96f09de51914b794792ee9a946d56f3edb8ac5c0539b626509881e"},
-    {file = "torchaudio-2.1.0+cpu-cp39-cp39-linux_x86_64.whl", hash = "sha256:b2f634b380264010916d26324ab0f2040412e77029b1cfe59333adf2070f4b99"},
-    {file = "torchaudio-2.1.0+cpu-cp39-cp39-win_amd64.whl", hash = "sha256:f6e1bf63f8902131943385a13b31215cbde135365cd4b2437971aec85bfd1b4f"},
-]
-
-[package.dependencies]
-torch = "2.1.0"
-
-[package.source]
-type = "legacy"
-url = "https://download.pytorch.org/whl/cpu"
-reference = "pytorch"
-
-[[package]]
 name = "torchvision"
 version = "0.16.0+cpu"
 description = "image and video datasets and models for torch deep learning"
@@ -4084,4 +4059,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "09e97c95fafc6f42fd1b7e4cd7566361cb4baa3860a9904f8e834a5424df7ec1"
+content-hash = "1ab7e51a6a4c58c11fd613a9d7c4a692df59f209823919511f7e1c0f7e3cc64c"
