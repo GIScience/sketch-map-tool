@@ -13,6 +13,15 @@ model = "facebook/sam-vit-base"
 
 kwargs = {}
 
+colors_fix = {
+        "blue": [0, 0, 255],
+        "green": [0, 255, 0],
+        "red": [255, 0, 0],
+        "pink": [255, 0, 255],
+        "turquoise": [0, 255, 255],
+        "yellow": [255, 255, 0],
+    }
+
 
 def detect_markings(
         masks,
@@ -32,11 +41,11 @@ def detect_markings(
                           all values below this threshold will be considered
                           0 for determining the colour of the markings.
     """
-    colors = [average_color_inside_mask(rawImage, mask) for mask in masks]
+    colors = [closest_color(average_color_inside_mask(rawImage, mask)) for mask in masks]
     masks = [mask for mask, clr in zip(masks, colors) if clr == color]
     single_color_marking = np.zeros_like(sketch_map_frame, np.uint8)
     for mask in masks:
-        single_color_marking[mask] = 1
+        single_color_marking[mask] = colors_fix[color]
     return single_color_marking
 
 

@@ -140,7 +140,7 @@ def digitize_sketches(
         r = to_array(r)
         r = clip(r, map_frames[uuid])
         r = prepare_img_for_markings(map_frames[uuid], r, sketch_map_id)
-        diffImage = Image.fromarray(r)
+        diffImage = Image.fromarray(r[:, :, ::-1])
         geojsons = []
         masks = apply_sam(diffImage)
 
