@@ -27,7 +27,7 @@ from sketch_map_tool.upload_processing import (
     polygonize,
     prepare_img_for_markings,
 )
-from sketch_map_tool.upload_processing.detect_markings import apply_sam
+from sketch_map_tool.upload_processing.detect_markings import applyMLPipeline
 
 from sketch_map_tool.wms import client as wms_client
 
@@ -139,13 +139,12 @@ def digitize_sketches(
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
         r = clip(r, map_frames[uuid])
-        r = prepare_img_for_markings(map_frames[uuid], r, sketch_map_id)
-        diffImage = Image.fromarray(r)
+        img = Image.fromarray(r)
         geojsons = []
-        masks = apply_sam(diffImage)
+        masks, colors = applyMLPipeline(img)
 
         for color in COLORS:
-            r_ = detect_markings(masks, diffImage, r , color)
+            r_ = detect_markings(masks,colors, r, color)
             r_ = georeference(r_, bbox)
             r_ = polygonize(r_, color)
             r_ = geojson.load(r_)
