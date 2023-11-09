@@ -2,6 +2,9 @@
 """
 Functions to process images of sketch maps and detect markings on them
 """
+from ultralytics import YOLO
+from transformers import pipeline
+import numpy as np
 
 import cv2
 import numpy as np
@@ -9,14 +12,30 @@ from numpy.typing import NDArray
 from PIL import Image, ImageEnhance
 from transformers import pipeline
 
-model = "facebook/sam-vit-base"
+from segment_anything import sam_model_registry
+from segment_anything import SamPredictor
 
-kwargs = {}
+sam = sam_model_registry["vit_b"](checkpoint="/home/clemens/Downloads/sam_vit_b_01ec64.pth")
+
+mask_predictor = SamPredictor(sam)
+
+modelYOLO = YOLO("/home/clemens/Downloads/best(1).pt")
+names = modelYOLO.names
+
+COLORS = {
+    "red": (0, 0, 255),
+    "blue": (255, 0, 0),
+    "green": (0, 255, 0),
+    "yellow": (0, 255, 255),
+    "pink": (255, 0, 255),
+    "orange": (0, 165, 255),
+    "black": (0, 0, 0),
+}
 
 
 def detect_markings(
         masks,
-        rawImage,
+        colors,
         sketch_map_frame: NDArray,
         color: str,
 ) -> NDArray:
@@ -32,11 +51,11 @@ def detect_markings(
                           all values below this threshold will be considered
                           0 for determining the colour of the markings.
     """
-    colors = [average_color_inside_mask(rawImage, mask) for mask in masks]
+
     masks = [mask for mask, clr in zip(masks, colors) if clr == color]
     single_color_marking = np.zeros_like(sketch_map_frame, np.uint8)
     for mask in masks:
-        single_color_marking[mask] = 1
+        single_color_marking[mask] = COLORS[color]
     return single_color_marking
 
 
@@ -113,73 +132,36 @@ def _reduce_holes(img: NDArray, factor: int = 4) -> NDArray:
     return cv2.morphologyEx(img, cv2.MORPH_CLOSE, np.ones((factor, factor), np.uint8))
 
 
-def average_color_inside_mask(image, mask):
-    # Convert image to NumPy array
-    img_array = np.array(image)
-
-    # Extract RGB values of pixels inside the mask
-    masked_pixels = img_array[mask]
-
-    # Calculate the average color
-    if len(masked_pixels) > 0:
-        average_color = np.mean(masked_pixels, axis=0)
-        return average_color.astype(np.uint8)  # Convert to integer values
-    else:
-        return None
+def applyYOLO(image, yolo):
+    result = yolo(image)[0].boxes
+    bboxes = result.xyxy
+    cls = result.cls
+    return bboxes, cls
 
 
-def padding(img, padding=-30):
-    width, height = img.size
+def maskFromBBox(box, mask_predictor):
+    masks, scores, logits = mask_predictor.predict(
+        box=box,
+        multimask_output=False
+    )
 
-    # Calculate the new image size
-    new_width = width + 2 * padding
-    new_height = height + 2 * padding
-
-    # Create a new blank image with the new size and a white background
-    new_img = Image.new("RGB", (new_width, new_height), (255, 255, 255))
-
-    # Calculate the position to paste the original image with negative padding
-    x_offset = padding
-    y_offset = padding
-
-    # Paste the original image onto the new image
-    new_img.paste(img, (x_offset, y_offset))
-    return new_img
+    return masks[0], scores[0]
 
 
-def closest_color(rgb_value, threshold=0.5):
-    colors = {
-        "blue": [0, 0, 255],
-        "green": [0, 255, 0],
-        "red": [255, 0, 0],
-        "pink": [255, 0, 255],
-        "turquoise": [0, 255, 255],
-        "yellow": [255, 255, 0],
-    }
-    # Convert the input RGB value to a NumPy array
-    target = np.array(rgb_value)
+def applySAM(image, bboxes, mask_predictor):
+    mask_predictor.set_image(np.array(image))
+    masks = []
+    scores = []
 
-    # Initialize variables for the closest color
-    closest_color = None
-    closest_distance = float('inf')
-
-    # Iterate through the predefined colors
-    for color_name, color_rgb in colors.items():
-        color_rgb = np.array(color_rgb)
-
-        # Apply the threshold to the color comparison
-        distance = np.linalg.norm(target - color_rgb)
-
-        # Check if this color is closer
-        if distance < closest_distance:
-            closest_color = color_name
-            closest_distance = distance
-
-    return closest_color
+    for box in bboxes:
+        mask, score = maskFromBBox(np.array(box), mask_predictor)
+        masks.append(mask)
+        scores.append(score)
+    return masks, scores
 
 
-def apply_sam(img):
-    generator = pipeline("mask-generation", model=model)
-    outputs = generator(img, **kwargs)
-    masks = outputs["masks"]
-    return masks
+def applyMLPipeline(img):
+    bboxes, cls = applyYOLO(img, modelYOLO)
+    masks, scores = applySAM(img, bboxes, mask_predictor)
+    colors = [names[i] for i in cls]
+    return masks, colors
