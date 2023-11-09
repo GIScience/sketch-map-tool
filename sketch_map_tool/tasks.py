@@ -145,9 +145,10 @@ def digitize_sketches(
         masks = apply_sam(diffImage)
 
         for color in COLORS:
+            # TODO Post process of deafult model: 1. Delete the frame mask 2. delete globe masks
             r_ = detect_markings(masks, diffImage, r , color)
             r_ = georeference(r_, bbox)
-            r_ = polygonize(r_, color)
+            r_ = polygonize(r_, color) # TODO please find the bug related to color blue
             r_ = geojson.load(r_)
             r_ = clean(r_)
             r_ = enrich(r_, {"color": color, "name": name})
