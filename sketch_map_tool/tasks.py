@@ -139,14 +139,15 @@ def digitize_sketches(
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
         r = clip(r, map_frames[uuid])
-        img = Image.fromarray(r)
+        r = prepare_img_for_markings(map_frames[uuid], r, sketch_map_id)
+        img = Image.fromarray(r[:, :, ::-1])
         geojsons = []
         masks, colors = applyMLPipeline(img)
 
         for color in COLORS:
             r_ = detect_markings(masks,colors, r, color)
             r_ = georeference(r_, bbox)
-            r_ = polygonize(r_, color)
+            r_ = polygonize(r_, color) # TODO please find the bug related to color blue
             r_ = geojson.load(r_)
             r_ = clean(r_)
             r_ = enrich(r_, {"color": color, "name": name})

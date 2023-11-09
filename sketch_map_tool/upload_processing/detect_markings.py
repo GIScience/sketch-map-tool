@@ -2,9 +2,6 @@
 """
 Functions to process images of sketch maps and detect markings on them
 """
-from ultralytics import YOLO
-from transformers import pipeline
-import numpy as np
 
 import cv2
 import numpy as np
@@ -147,6 +144,9 @@ def maskFromBBox(box, mask_predictor):
 
     return masks[0], scores[0]
 
+    # Calculate the new image size
+    new_width = width + 2 * padding
+    new_height = height + 2 * padding
 
 def applySAM(image, bboxes, mask_predictor):
     mask_predictor.set_image(np.array(image))
@@ -159,6 +159,9 @@ def applySAM(image, bboxes, mask_predictor):
         scores.append(score)
     return masks, scores
 
+    # Paste the original image onto the new image
+    new_img.paste(img, (x_offset, y_offset))
+    return new_img
 
 def applyMLPipeline(img):
     bboxes, cls = applyYOLO(img, modelYOLO)
