@@ -28,6 +28,10 @@ def config_keys():
         "wms-read-timeout",
         "max-nr-simultaneous-uploads",
         "max_pixel_per_image",
+        "neptune_project",
+        "neptune_api_token",
+        "neptune_model_id_yolo",
+        "neptune_model_id_sam",
     )
 
 
