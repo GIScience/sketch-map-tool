@@ -29,6 +29,7 @@ pytest-celery = "^0.0.0"
 testcontainers-redis = "^0.0.1rc1"
 transformers = "^4.35.0"
 pyproj = "^3.6.1"
+neptune = "^1.8.3"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
@@ -42,6 +43,7 @@ vcrpy = "^4.2.1"
 pytest-celery = "^0.0.0"
 flower = "^1.2.0"
 locust = "^2.14.2"
+hypothesis = "^6.88.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
