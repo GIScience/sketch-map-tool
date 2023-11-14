@@ -246,3 +246,7 @@ config/*
 
 # debug-output
 debug-output/
+
+# ml-models
+*.pt
+*.pth
