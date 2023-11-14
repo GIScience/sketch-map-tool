@@ -18,7 +18,7 @@ def get_config_path() -> str:
     return os.getenv("SMT-CONFIG", default=default)
 
 
-def load_config_default() -> Dict[str, str]:
+def load_config_default() -> Dict[str, str | int | float]:
     return {
         "data-dir": get_default_data_dir(),
         "user-agent": "sketch-map-tool",
@@ -29,6 +29,10 @@ def load_config_default() -> Dict[str, str]:
         "wms-read-timeout": 600,
         "max-nr-simultaneous-uploads": 100,
         "max_pixel_per_image": 10e8,  # 10.000*10.000
+        "neptune_project": "HeiGIT/SketchMapTool",
+        "neptune_api_token": "",
+        "neptune_model_id_yolo": "SMT-OSM-1",
+        "neptune_model_id_sam": "SMT-SAM-1",
     }
 
 
@@ -53,6 +57,10 @@ def load_config_from_env() -> Dict[str, str]:
         "wms-read-timeout": os.getenv("SMT-WMS-READ-TIMEOUT"),
         "max-nr-simultaneous-uploads": os.getenv("SMT-MAX-NR-SIM-UPLOADS"),
         "max_pixel_per_image": os.getenv("MAX-PIXEL-PER-IMAGE"),
+        "neptune_project": os.getenv("SMT-NEPTUNE-PROJECT"),
+        "neptune_api_token": os.getenv("SMT-NEPTUNE-API-TOKEN"),
+        "neptune_model_id_yolo": os.getenv("SMT-NEPTUNE-MODEL-ID-YOLO"),
+        "neptune_model_id_sam": os.getenv("SMT-NEPTUNE-MODEL-ID-SAM"),
     }
     return {k: v for k, v in cfg.items() if v is not None}
 

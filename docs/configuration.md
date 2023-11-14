@@ -15,3 +15,7 @@ To create a new configuration file simply copy the sample configuration file and
 ```
 cp sample.config.toml config.toml
 ```
+
+## Required Configuration
+
+Except of the API token (`SMT-NEPTUNE-API-TOKEN`) for neptune.ai all configuration values come with defaults for development purposes. Please make sure to configure the API token for your environment.

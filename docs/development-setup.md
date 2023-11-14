@@ -47,6 +47,8 @@ npm run build  # build/bundle JS and CSS
 
 Please refer to the [configuration documentation](/docs/configuration.md).
 
+> TL;DR: Except of the API token (`SMT-NEPTUNE-API-TOKEN`) for neptune.ai all configuration values come with defaults for development purposes. Please make sure to configure the API token for your environment.
+
 ## Usage
 
 ### 1. Start Celery (Task Queue)
@@ -104,3 +106,7 @@ If you setup sketch-map-tool in an IDE like PyCharm please make sure that your I
 Go thought the setup steps above in the terminal and change interpreter settings in the IDE to point to the mamba/conda environment.
 
 Also make sure the environment variable `PROJ_LIB` to point to the `proj` directory of the mamba/conda environment.
+
+## Troubleshooting
+
+Make sure that Poetry does not try to manage the virtual environment. Check with `poetry env list`. If any environment are listed remove them: `poetry env remove ...`
