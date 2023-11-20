@@ -4,6 +4,6 @@ channels:
 dependencies:
   - python=3.10.*
   - poetry=1.*
-  - gdal=3.7.1
-  - pyzbar=0.1.9
+  - gdal=3.7.1  # same as in Dockerfile and pyproject.toml
+  - pyzbar=0.1.9  # same as in Dockerfile and pyproject.toml
   - psycopg2=2.9.7
