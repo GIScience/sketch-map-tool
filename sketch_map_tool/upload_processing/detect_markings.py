@@ -2,62 +2,37 @@
 """
 Functions to process images of sketch maps and detect markings on them
 """
-from ultralytics import YOLO
-from transformers import pipeline
-import numpy as np
+
 
 import cv2
 import numpy as np
 from numpy.typing import NDArray
 from PIL import Image, ImageEnhance
-from transformers import pipeline
 
+from ultralytics import YOLO
 from segment_anything import sam_model_registry
 from segment_anything import SamPredictor
 
-sam = sam_model_registry["vit_b"](checkpoint="/home/clemens/Downloads/sam_vit_b_01ec64.pth")
+from sketch_map_tool.upload_processing.ml_models import init_model
+from sketch_map_tool.config import  get_config_value
+
+sam = sam_model_registry["vit_b"](init_model(get_config_value("neptune_model_id_sam")))
 
 mask_predictor = SamPredictor(sam)
 
-modelYOLO = YOLO("/home/clemens/Downloads/best(1).pt")
+modelYOLO = YOLO(init_model(get_config_value("neptune_model_id_yolo")))
 names = modelYOLO.names
 
-COLORS = {
-    "red": (0, 0, 255),
-    "blue": (255, 0, 0),
-    "green": (0, 255, 0),
-    "yellow": (0, 255, 255),
-    "pink": (255, 0, 255),
-    "orange": (0, 165, 255),
-    "black": (0, 0, 0),
-}
 
-
-def detect_markings(
-        masks,
-        colors,
+def createMarkingArray(
+        masks: list[NDArray],
+        colors: list[str],
         sketch_map_frame: NDArray,
-        color: str,
 ) -> NDArray:
-    """
-    Detect markings in the colours blue, green, red, pink, turquoise, white, and yellow
-    Note that there must be a sufficient difference between the colour of the markings
-    and the background. White and yellow markings might not be detected on sketch maps.
-
-
-    :param sketch_map_frame: TODO
-    :param threshold_bgr: Threshold for the colour detection. 0.5 means 50%, i.e. all
-                          BGR values above 50% * 255 will be considered 255,
-                          all values below this threshold will be considered
-                          0 for determining the colour of the markings.
-    """
-
-    masks = [mask for mask, clr in zip(masks, colors) if clr == color]
-    single_color_marking = np.zeros_like(sketch_map_frame, np.uint8)
-    for mask in masks:
-        single_color_marking[mask] = COLORS[color]
+    single_color_marking = np.zeros((sketch_map_frame.shape[0],sketch_map_frame.shape[1]), np.uint8)
+    for color,mask in zip(colors,masks):
+        single_color_marking[mask] = color
     return single_color_marking
-
 
 def prepare_img_for_markings(
         img_base: NDArray,
@@ -144,7 +119,6 @@ def maskFromBBox(box, mask_predictor):
         box=box,
         multimask_output=False
     )
-
     return masks[0], scores[0]
 
 

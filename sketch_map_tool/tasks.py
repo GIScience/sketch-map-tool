@@ -12,7 +12,7 @@ from numpy.typing import NDArray
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool import map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
-from sketch_map_tool.definitions import COLORS
+from sketch_map_tool.definitions import COLORS, COLORS_MAPPING
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
@@ -20,14 +20,13 @@ from sketch_map_tool.oqt_analyses import get_report
 from sketch_map_tool.upload_processing import (
     clean,
     clip,
-    detect_markings,
     enrich,
     georeference,
     merge,
     polygonize,
-    prepare_img_for_markings,
 )
-from sketch_map_tool.upload_processing.detect_markings import applyMLPipeline
+from sketch_map_tool.upload_processing.detect_markings import applyMLPipeline, createMarkingArray
+from sketch_map_tool.upload_processing.mapColors import mapColors
 
 from sketch_map_tool.wms import client as wms_client
 
@@ -139,19 +138,19 @@ def digitize_sketches(
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
         r = clip(r, map_frames[uuid])
-        img = Image.fromarray(r)
-        geojsons = []
+        img = Image.fromarray(r[:, :, ::-1])
         masks, colors = applyMLPipeline(img)
 
-        for color in COLORS:
-            r_ = detect_markings(masks,colors, r, color)
-            r_ = georeference(r_, bbox)
-            r_ = polygonize(r_, color)
-            r_ = geojson.load(r_)
-            r_ = clean(r_)
-            r_ = enrich(r_, {"color": color, "name": name})
-            geojsons.append(r_)
-        return merge(geojsons)
+        colors = [int(c)+1 for c in colors] # +1 because 0 is background
+
+        r_ = createMarkingArray(masks, colors, r)
+        r_ = georeference(r_, bbox,True)
+        r_ = polygonize(r_, name)
+        r_ = geojson.load(r_)
+        r_ = clean(r_)
+        r_ = enrich(r_, {"name": name})
+        r_ = mapColors(r_, COLORS_MAPPING)
+        return r_
 
     return merge(
         [

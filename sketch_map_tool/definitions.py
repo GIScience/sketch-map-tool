@@ -14,6 +14,15 @@ REQUEST_TYPES = Literal[
 ]
 # Colors to be detected
 COLORS = ["red", "blue", "green", "yellow", "turquoise", "pink"]
+
+# labels to be used for the detected colors
+COLORS_MAPPING = {"1": 'black',
+ "2": 'blue',
+ "3": 'green',
+ "4": 'orange',
+ "5": 'pink',
+ "6": 'red',
+ "7": 'yellow'}
 # Resources for PDF generation
 PDF_RESOURCES_PATH = Path(__file__).parent.resolve() / "resources"
 

@@ -9,7 +9,7 @@ from osgeo import gdal, osr
 from sketch_map_tool.models import Bbox
 
 
-def georeference(img: NDArray, bbox: Bbox, bgr: bool = True) -> BytesIO:
+def georeference(img: NDArray, bbox: Bbox, markings: bool = False) -> BytesIO:
     """Create a GeoTIFF from an image (numpy array) and bounding box coordinates.
 
     The image (numpy array) has to be in BGR (3 channels).
@@ -29,14 +29,17 @@ def georeference(img: NDArray, bbox: Bbox, bgr: bool = True) -> BytesIO:
             str(outfile_name),
             width,
             height,
-            3,
+            1 if markings else 3,
             gdal.GDT_Byte,
         )
 
         # write numpy array to destination raster in RGB (Reverse GBR image)
-        dataset.GetRasterBand(1).WriteArray(img[:, :, 2])  # Red
-        dataset.GetRasterBand(2).WriteArray(img[:, :, 1])  # Green
-        dataset.GetRasterBand(3).WriteArray(img[:, :, 0])  # Blue
+        if markings:
+            dataset.GetRasterBand(1).WriteArray(img)  # color value
+        else:
+            dataset.GetRasterBand(1).WriteArray(img[:, :, 2])  # Red
+            dataset.GetRasterBand(2).WriteArray(img[:, :, 1])  # Green
+            dataset.GetRasterBand(3).WriteArray(img[:, :, 0])  # Blue
 
         # set geo transform
         # fmt: off
