@@ -9,15 +9,12 @@ RUN mkdir -p /sketch_map_tool/static/bundles
 RUN npm run build
 
 
-FROM condaforge/mambaforge:latest
-
+FROM condaforge/mambaforge:23.3.1-0
 
 RUN apt-get update \
     && apt-get install -y --no-upgrade \
         libgl1 \
     && rm -rf /var/lib/apt/lists/*
-        # libzbar0 \
-        # libgdal-dev \
 # within docker container: run without root privileges
 RUN useradd -md /home/smt smt
 WORKDIR /opt/smt
