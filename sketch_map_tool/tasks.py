@@ -10,7 +10,10 @@ from geojson import FeatureCollection
 from numpy.typing import NDArray
 import logging as log
 
-from sketch_map_tool import celery_app as celery
+from segment_anything import sam_model_registry, SamPredictor
+from ultralytics import YOLO
+
+from sketch_map_tool import celery_app as celery, get_config_value
 from sketch_map_tool import map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import COLORS_MAPPING
@@ -28,6 +31,7 @@ from sketch_map_tool.upload_processing import (
 )
 from sketch_map_tool.upload_processing.create_marking_array import applyMLPipeline, create_marking_array
 from sketch_map_tool.upload_processing.mapColors import mapColors
+from sketch_map_tool.upload_processing.ml_models import init_model
 
 from sketch_map_tool.wms import client as wms_client
 
@@ -135,12 +139,18 @@ def digitize_sketches(
     ) -> FeatureCollection:
         """Process a Sketch Map."""
 
+        sam = sam_model_registry["vit_b"](init_model(get_config_value("neptune_model_id_sam")))
+
+        mask_predictor = SamPredictor(sam)
+
+        modelYOLO = YOLO(init_model(get_config_value("neptune_model_id_yolo")))
+
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
         r = clip(r, map_frames[uuid])
         img = Image.fromarray(r[:, :, ::-1]).convert("RGB") #RGB since Sam can only deal with RGB and not RGBA etc.
-        masks, colors = applyMLPipeline(img)
+        masks, colors = applyMLPipeline(img,modelYOLO,mask_predictor)
         colors = [int(c)+1 for c in colors] # +1 because 0 is background
 
         r_ = create_marking_array(masks, colors, r)
