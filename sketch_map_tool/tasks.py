@@ -134,17 +134,16 @@ def digitize_sketches(
     map_frames: dict[str, NDArray],
     bboxes: list[Bbox],
 ) -> AsyncResult | FeatureCollection:
+    sam = sam_model_registry["vit_b"](init_model(get_config_value("neptune_model_id_sam")))
+
+    mask_predictor = SamPredictor(sam)
+
+    modelYOLO = YOLO(init_model(get_config_value("neptune_model_id_yolo")))
+
     def process(
-        sketch_map_id: int, name: str, uuid: str, bbox: Bbox
+        sketch_map_id: int, name: str, uuid: str, bbox: Bbox, mask_predictor, modelYOLO
     ) -> FeatureCollection:
         """Process a Sketch Map."""
-
-        sam = sam_model_registry["vit_b"](init_model(get_config_value("neptune_model_id_sam")))
-
-        mask_predictor = SamPredictor(sam)
-
-        modelYOLO = YOLO(init_model(get_config_value("neptune_model_id_yolo")))
-
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
@@ -160,12 +159,11 @@ def digitize_sketches(
         r_ = clean(r_)
         r_ = enrich(r_, {"name": name})
         r_ = mapColors(r_, COLORS_MAPPING)
-
         return r_
 
     return merge(
         [
-            process(file_id, name, uuid, bbox)
+            process(file_id, name, uuid, bbox, mask_predictor, modelYOLO)
             for file_id, name, uuid, bbox in zip(file_ids, file_names, uuids, bboxes)
         ]
     )
