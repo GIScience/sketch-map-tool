@@ -134,6 +134,8 @@ def digitize_sketches(
     map_frames: dict[str, NDArray],
     bboxes: list[Bbox],
 ) -> AsyncResult | FeatureCollection:
+    # zero shot segment anything model
+    # creates masks based on image segmentation and bbox from object detection (YOLO)
     sam = sam_model_registry["vit_b"](init_model(get_config_value("neptune_model_id_sam")))
 
     mask_predictor = SamPredictor(sam)
