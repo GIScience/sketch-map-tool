@@ -140,6 +140,8 @@ def digitize_sketches(
 
     mask_predictor = SamPredictor(sam)
 
+    # custom trained model for object detection of markings and colors
+    # output are bbox around the sketches
     modelYOLO = YOLO(init_model(get_config_value("neptune_model_id_yolo")))
 
     def process(
