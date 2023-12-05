@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Functions to process images of sketch maps and detect markings on them
-"""
-
 import numpy as np
 from numpy.typing import NDArray
 from PIL import Image
@@ -14,7 +10,7 @@ def detect_markings(
     image: NDArray,
     sam_predictor: SamPredictor,
     yolo_model: YOLO,
-):
+) -> NDArray:
     # Sam can only deal with RGB and not RGBA etc.
     img = Image.fromarray(image[:, :, ::-1]).convert("RGB")
     # masks represent markings
@@ -28,14 +24,13 @@ def apply_ml_pipeline(
     yolo_model: YOLO,
     sam_predictor: SamPredictor,
 ) -> tuple[list, list]:
-    """Apply the entire machine learning pipeline on an image
+    """Apply the entire machine learning pipeline on an image.
 
     Steps:
         1. Apply YOLO to detect bounding boxes and label (colors) of objects (markings)
         2. Apply SAM to create binary masks of detected objects
 
     Returns:
-        tuple: Returns
         tuple: A list of masks and class labels.
             A mask is a binary numpy array with same dimensions as input image
             (map frame), masking the dominant segment inside of a bbox detected by YOLO.
@@ -77,7 +72,7 @@ def apply_sam(
     sam_predictor.set_image(np.array(image))
     masks = []
     scores = []
-    for i, bbox in enumerate(bounding_boxes):
+    for bbox in bounding_boxes:
         mask, score = mask_from_bbox(np.array(bbox), sam_predictor)
         masks.append(mask)
         scores.append(score)
@@ -97,20 +92,20 @@ def mask_from_bbox(bbox, sam_predictor: SamPredictor) -> tuple:
 def create_marking_array(
     masks: list[NDArray],
     colors: list[int],
-    sketch_map_frame: NDArray,
+    image: NDArray,
 ) -> NDArray:
     """Create a single color marking array based on masks and colors.
 
     Parameters:
         - masks: List of masks representing markings.
         - colors: List of colors corresponding to each mask.
-        - sketch_map_frame: Original sketch map frame.
+        - image: Original sketch map frame.
 
     Returns:
         NDArray: Single color marking array.
     """
     single_color_marking = np.zeros(
-        (sketch_map_frame.shape[0], sketch_map_frame.shape[1]),
+        (image.shape[0], image.shape[1]),
         dtype=np.uint8,
     )
     for color, mask in zip(colors, masks):

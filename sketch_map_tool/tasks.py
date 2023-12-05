@@ -25,9 +25,7 @@ from sketch_map_tool.upload_processing import (
     merge,
     polygonize,
 )
-from sketch_map_tool.upload_processing.detect_markings import (
-    detect_markings,
-)
+from sketch_map_tool.upload_processing.detect_markings import detect_markings
 from sketch_map_tool.upload_processing.ml_models import init_model
 from sketch_map_tool.wms import client as wms_client
 
@@ -69,7 +67,6 @@ def generate_sketch_map(
         format_,
         scale,
     )
-    map_img.write
     db_client_celery.insert_map_frame(map_img, uuid)
     return map_pdf
 
