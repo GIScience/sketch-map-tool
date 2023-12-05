@@ -129,12 +129,13 @@ def digitize_sketches(
     map_frames: dict[str, NDArray],
     bboxes: list[Bbox],
 ) -> AsyncResult | FeatureCollection:
-    # zero shot segment anything model
+    # Initialize ml-models. This has to happen inside of celery context
+    #
+    # Zero shot segment anything model
     sam_path = init_model(get_config_value("neptune_model_id_sam"))
     sam_model = sam_model_registry["vit_b"](sam_path)
     sam_predictor = SamPredictor(sam_model)  # mask predictor
-
-    # custom trained model for object detection of markings and colors
+    # Custom trained model for object detection of markings and colors
     yolo_path = init_model(get_config_value("neptune_model_id_yolo"))
     yolo_model = YOLO(yolo_path)
 

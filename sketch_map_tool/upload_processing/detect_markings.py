@@ -26,7 +26,7 @@ def detect_markings(
 def apply_ml_pipeline(
     image: Image.Image,
     yolo_model: YOLO,
-    mask_predictor: SamPredictor,
+    sam_predictor: SamPredictor,
 ) -> tuple[list, list]:
     """Apply the entire machine learning pipeline on an image
 
@@ -42,7 +42,7 @@ def apply_ml_pipeline(
             A class label is a color.
     """
     bounding_boxes, class_labels = apply_yolo(image, yolo_model)
-    masks, _ = apply_sam(image, bounding_boxes, mask_predictor)
+    masks, _ = apply_sam(image, bounding_boxes, sam_predictor)
     return masks, class_labels
 
 
@@ -65,7 +65,7 @@ def apply_yolo(
 def apply_sam(
     image: Image.Image,
     bounding_boxes: list,
-    mask_predictor: SamPredictor,
+    sam_predictor: SamPredictor,
 ) -> tuple:
     """Apply SAM (Segment Anything) on an image using bounding boxes.
 
@@ -74,23 +74,23 @@ def apply_sam(
     Returns:
         tuple: List of masks and corresponding scores.
     """
-    mask_predictor.set_image(np.array(image))
+    sam_predictor.set_image(np.array(image))
     masks = []
     scores = []
     for i, bbox in enumerate(bounding_boxes):
-        mask, score = mask_from_bbox(np.array(bbox), mask_predictor)
+        mask, score = mask_from_bbox(np.array(bbox), sam_predictor)
         masks.append(mask)
         scores.append(score)
     return masks, scores
 
 
-def mask_from_bbox(bbox, mask_predictor: SamPredictor) -> tuple:
+def mask_from_bbox(bbox, sam_predictor: SamPredictor) -> tuple:
     """Generate a mask using SAM (Segment Anything) predictor for a given bounding box.
 
     Returns:
         tuple: Mask and corresponding score.
     """
-    masks, scores, _ = mask_predictor.predict(box=bbox, multimask_output=False)
+    masks, scores, _ = sam_predictor.predict(box=bbox, multimask_output=False)
     return masks[0], scores[0]
 
 
