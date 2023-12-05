@@ -3,7 +3,10 @@ channels:
   - conda-forge
 dependencies:
   - python=3.10.*
-  - poetry=1.*
-  - gdal=3.7.1  # same as in Dockerfile and pyproject.toml
-  - pyzbar=0.1.9  # same as in Dockerfile and pyproject.toml
+  - poetry=1.7.*
+  - gdal=3.7.1
+  - zbar=0.10  # dependency of pyzbar
   - psycopg2=2.9.7
+  - pip:
+    # bypass venv issue related to nushell
+    - virtualenv==20.7 
