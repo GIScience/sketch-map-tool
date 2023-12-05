@@ -30,7 +30,7 @@ def load_config_default() -> Dict[str, str | int | float]:
         "max-nr-simultaneous-uploads": 100,
         "max_pixel_per_image": 10e8,  # 10.000*10.000
         "neptune_project": "HeiGIT/SketchMapTool",
-        "neptune_api_token": "eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiI3MDljZWY2OC1kNTQ1LTQ0YTEtYTQ2ZS1iNTczNDI1ZjgzNWEifQ==",
+        "neptune_api_token": "",
         "neptune_model_id_yolo": "SMT-OSM-1",
         "neptune_model_id_sam": "SMT-SAM-1",
     }
