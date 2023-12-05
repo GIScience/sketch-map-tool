@@ -62,7 +62,7 @@ services:
     restart: unless-stopped
     ports:
       - "5555:5555"
-    entrypoint: ["celery", "--broker=redis://redis:6379", "flower"]
+    entrypoint: ["celery", "--broker=redis://redis:6379", "flower", "--url_prefix=flower"]
   redis:
     # Message broker
     image: redis:7
