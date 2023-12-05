@@ -1,6 +1,6 @@
 from .clean import clean
 from .clip import clip
-from .create_marking_array import create_marking_array
+from .detect_markings import detect_markings
 from .enrich import enrich
 from .georeference import georeference
 from .merge import merge
@@ -11,7 +11,7 @@ __all__ = (
     "enrich",
     "clean",
     "clip",
-    "create_marking_array",
+    "detect_markings",
     "georeference",
     "read_qr_code",
     "polygonize",

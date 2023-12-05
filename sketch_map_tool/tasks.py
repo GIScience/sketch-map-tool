@@ -7,14 +7,12 @@ from celery.result import AsyncResult
 from celery.signals import worker_process_init, worker_process_shutdown
 from geojson import FeatureCollection
 from numpy.typing import NDArray
-from PIL import Image
 from segment_anything import SamPredictor, sam_model_registry
 from ultralytics import YOLO
 
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool import get_config_value, map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
-from sketch_map_tool.definitions import COLORS_MAPPING
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
@@ -27,11 +25,9 @@ from sketch_map_tool.upload_processing import (
     merge,
     polygonize,
 )
-from sketch_map_tool.upload_processing.create_marking_array import (
-    apply_ml_pipeline,
-    create_marking_array,
+from sketch_map_tool.upload_processing.detect_markings import (
+    detect_markings,
 )
-from sketch_map_tool.upload_processing.mapColors import mapColors
 from sketch_map_tool.upload_processing.ml_models import init_model
 from sketch_map_tool.wms import client as wms_client
 
@@ -90,8 +86,6 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
 # 2. DIGITIZE RESULTS
 #
-
-
 @celery.task()
 def georeference_sketch_maps(
     file_ids: list[int],
@@ -136,43 +130,38 @@ def digitize_sketches(
     bboxes: list[Bbox],
 ) -> AsyncResult | FeatureCollection:
     # zero shot segment anything model
-    # creates masks based on image segmentation and bbox from object detection (YOLO)
-    sam = sam_model_registry["vit_b"](
-        init_model(get_config_value("neptune_model_id_sam"))
-    )
-
-    mask_predictor = SamPredictor(sam)
+    sam_path = init_model(get_config_value("neptune_model_id_sam"))
+    sam_model = sam_model_registry["vit_b"](sam_path)
+    sam_predictor = SamPredictor(sam_model)  # mask predictor
 
     # custom trained model for object detection of markings and colors
-    # output are bbox around the sketches
-    modelYOLO = YOLO(init_model(get_config_value("neptune_model_id_yolo")))
+    yolo_path = init_model(get_config_value("neptune_model_id_yolo"))
+    yolo_model = YOLO(yolo_path)
 
     def process(
-        sketch_map_id: int, name: str, uuid: str, bbox: Bbox, mask_predictor, modelYOLO
+        sketch_map_id: int,
+        name: str,
+        uuid: str,
+        bbox: Bbox,
+        sam_predictor,
+        yolo_model,
     ) -> FeatureCollection:
         """Process a Sketch Map."""
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
         r = clip(r, map_frames[uuid])
-        img = Image.fromarray(r[:, :, ::-1]).convert(
-            "RGB"
-        )  # RGB since Sam can only deal with RGB and not RGBA etc.
-        masks, colors = apply_ml_pipeline(img, modelYOLO, mask_predictor)
-        colors = [int(c) + 1 for c in colors]  # +1 because 0 is background
-
-        r_ = create_marking_array(masks, colors, r)
-        r_ = georeference(r_, bbox, True)
-        r_ = polygonize(r_, name)
-        r_ = geojson.load(r_)
-        r_ = clean(r_)
-        r_ = enrich(r_, {"name": name})
-        r_ = mapColors(r_, COLORS_MAPPING)
-        return r_
+        r = detect_markings(r, sam_predictor, yolo_model)
+        r = georeference(r, bbox, bgr=False)
+        r = polygonize(r, name)
+        r = geojson.load(r)
+        r = clean(r)
+        r = enrich(r, {"name": name})
+        return r
 
     return merge(
         [
-            process(file_id, name, uuid, bbox, mask_predictor, modelYOLO)
+            process(file_id, name, uuid, bbox, sam_predictor, yolo_model)
             for file_id, name, uuid, bbox in zip(file_ids, file_names, uuids, bboxes)
         ]
     )

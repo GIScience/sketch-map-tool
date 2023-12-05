@@ -9,10 +9,13 @@ from osgeo import gdal, osr
 from sketch_map_tool.models import Bbox
 
 
-def georeference(img: NDArray, bbox: Bbox, markings: bool = False) -> BytesIO:
-    """Create a GeoTIFF from an image (numpy array) and bounding box coordinates.
+def georeference(img: NDArray, bbox: Bbox, bgr: bool = True) -> BytesIO:
+    """Create a GeoTIFF from an image (map frame) and bounding box coordinates.
 
-    The image (numpy array) has to be in BGR (3 channels).
+    The image (numpy array) should be in BGR (3 channels).
+    If it is not in BGR the image is expected to contain detected markings and the
+    result is expected to be vectorized.
+
     The Bounding Box is in WGS 84 / Pseudo-Mercator.
     """
     gdal.UseExceptions()
@@ -29,17 +32,17 @@ def georeference(img: NDArray, bbox: Bbox, markings: bool = False) -> BytesIO:
             str(outfile_name),
             width,
             height,
-            1 if markings else 3,
+            3 if bgr else 1,
             gdal.GDT_Byte,
         )
 
-        # write numpy array to destination raster in RGB (Reverse GBR image)
-        if markings:
-            dataset.GetRasterBand(1).WriteArray(img)  # color value
-        else:
+        if bgr:
+            # write numpy array to destination raster in RGB (Reverse GBR image)
             dataset.GetRasterBand(1).WriteArray(img[:, :, 2])  # Red
             dataset.GetRasterBand(2).WriteArray(img[:, :, 1])  # Green
             dataset.GetRasterBand(3).WriteArray(img[:, :, 0])  # Blue
+        else:
+            dataset.GetRasterBand(1).WriteArray(img)  # color value
 
         # set geo transform
         # fmt: off

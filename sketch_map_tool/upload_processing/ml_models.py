@@ -29,7 +29,7 @@ def init_model(id: str) -> Path:
         model["model"].download(str(path))
 
     # TODO: check if model is valid/working
-    logging.info("Model available model from neptune.ai: " + id)
+    logging.info("Available model from neptune.ai on disk: " + id)
     return path
 
 

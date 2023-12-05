@@ -1,0 +1,118 @@
+# -*- coding: utf-8 -*-
+"""
+Functions to process images of sketch maps and detect markings on them
+"""
+
+import numpy as np
+from numpy.typing import NDArray
+from PIL import Image
+from segment_anything import SamPredictor
+from ultralytics import YOLO
+
+
+def detect_markings(
+    image: NDArray,
+    sam_predictor: SamPredictor,
+    yolo_model: YOLO,
+):
+    # Sam can only deal with RGB and not RGBA etc.
+    img = Image.fromarray(image[:, :, ::-1]).convert("RGB")
+    # masks represent markings
+    masks, colors = apply_ml_pipeline(img, yolo_model, sam_predictor)
+    colors = [int(c) + 1 for c in colors]  # +1 because 0 is background
+    return create_marking_array(masks, colors, image)
+
+
+def apply_ml_pipeline(
+    image: Image.Image,
+    yolo_model: YOLO,
+    mask_predictor: SamPredictor,
+) -> tuple[list, list]:
+    """Apply the entire machine learning pipeline on an image
+
+    Steps:
+        1. Apply YOLO to detect bounding boxes and label (colors) of objects (markings)
+        2. Apply SAM to create binary masks of detected objects
+
+    Returns:
+        tuple: Returns
+        tuple: A list of masks and class labels.
+            A mask is a binary numpy array with same dimensions as input image
+            (map frame), masking the dominant segment inside of a bbox detected by YOLO.
+            A class label is a color.
+    """
+    bounding_boxes, class_labels = apply_yolo(image, yolo_model)
+    masks, _ = apply_sam(image, bounding_boxes, mask_predictor)
+    return masks, class_labels
+
+
+def apply_yolo(
+    image: Image.Image,
+    yolo_model: YOLO,
+) -> tuple[list, list]:
+    """Apply YOLO object detection on an image.
+
+    Returns:
+        tuple: Detected bounding boxes around individual markings and corresponding
+        class labels.
+    """
+    result = yolo_model(image)[0].boxes
+    bounding_boxes = result.xyxy
+    class_labels = result.cls
+    return bounding_boxes, class_labels
+
+
+def apply_sam(
+    image: Image.Image,
+    bounding_boxes: list,
+    mask_predictor: SamPredictor,
+) -> tuple:
+    """Apply SAM (Segment Anything) on an image using bounding boxes.
+
+    Creates masks based on image segmentation and bbox from object detection (YOLO)
+
+    Returns:
+        tuple: List of masks and corresponding scores.
+    """
+    mask_predictor.set_image(np.array(image))
+    masks = []
+    scores = []
+    for i, bbox in enumerate(bounding_boxes):
+        mask, score = mask_from_bbox(np.array(bbox), mask_predictor)
+        masks.append(mask)
+        scores.append(score)
+    return masks, scores
+
+
+def mask_from_bbox(bbox, mask_predictor: SamPredictor) -> tuple:
+    """Generate a mask using SAM (Segment Anything) predictor for a given bounding box.
+
+    Returns:
+        tuple: Mask and corresponding score.
+    """
+    masks, scores, _ = mask_predictor.predict(box=bbox, multimask_output=False)
+    return masks[0], scores[0]
+
+
+def create_marking_array(
+    masks: list[NDArray],
+    colors: list[int],
+    sketch_map_frame: NDArray,
+) -> NDArray:
+    """Create a single color marking array based on masks and colors.
+
+    Parameters:
+        - masks: List of masks representing markings.
+        - colors: List of colors corresponding to each mask.
+        - sketch_map_frame: Original sketch map frame.
+
+    Returns:
+        NDArray: Single color marking array.
+    """
+    single_color_marking = np.zeros(
+        (sketch_map_frame.shape[0], sketch_map_frame.shape[1]),
+        dtype=np.uint8,
+    )
+    for color, mask in zip(colors, masks):
+        single_color_marking[mask] = color
+    return single_color_marking
