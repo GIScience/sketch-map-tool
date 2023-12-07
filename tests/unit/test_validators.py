@@ -24,7 +24,7 @@ def test_validate_type_invalid(type_):
 
 def test_validate_file_by_pixel_count(files, monkeypatch):
     with pytest.raises(UploadLimitsExceededError):
-        monkeypatch.setenv("MAX-PIXEL-PER-IMAGE", "10")
+        monkeypatch.setenv("SMT_MAX_PIXEL_PER_IMAGE", "10")
         validate_uploaded_sketchmaps(files)
 
 

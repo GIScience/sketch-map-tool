@@ -39,7 +39,7 @@ def postgres_container(monkeypatch_session):
             port=postgres.get_exposed_port(5432),  # 5432 is default port of postgres
             database=postgres.POSTGRES_DB,
         )
-        monkeypatch_session.setenv("SMT-RESULT-BACKEND", conn)
+        monkeypatch_session.setenv("SMT_RESULT_BACKEND", conn)
         yield {"connection_url": conn}
     # cleanup
 
@@ -53,7 +53,7 @@ def redis_container(monkeypatch_session):
     with RedisContainer("redis:7") as redis:
         port = redis.get_exposed_port(6379)  # 6379 is default port of redis
         conn = f"redis://127.0.0.1:{port}"
-        monkeypatch_session.setenv("SMT-BROKER-URL", conn)
+        monkeypatch_session.setenv("SMT_BROKER_URL", conn)
         yield {"connection_url": conn}
     # cleanup
 
