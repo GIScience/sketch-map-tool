@@ -1,15 +1,14 @@
 import pytest
-from PIL import Image, ImageEnhance
 from numpy import asarray
-
+from PIL import Image, ImageEnhance
 from segment_anything import SamPredictor, sam_model_registry
 from ultralytics import YOLO
 
+from sketch_map_tool.config import get_config_value
 from sketch_map_tool.upload_processing.detect_markings import (
     apply_ml_pipeline,
     detect_markings,
 )
-from sketch_map_tool.config import get_config_value
 from sketch_map_tool.upload_processing.ml_models import init_model
 
 
