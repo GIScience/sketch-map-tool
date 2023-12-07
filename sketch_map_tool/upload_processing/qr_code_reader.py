@@ -1,7 +1,7 @@
 """
 Read QR codes from photos / scans
 """
-
+import json
 from types import MappingProxyType
 
 import cv2
@@ -35,7 +35,10 @@ def read(img: NDArray, depth=0) -> MappingProxyType:
             else:
                 raise QRCodeError("QR-Code could not be detected.")
         case 1:
-            data = _decode_data(decoded_objects[0].data.decode())
+            try:
+                data = _decode_data(decoded_objects[0].data.decode())
+            except QRCodeError:
+                data = _decode_data_legacy(decoded_objects[0].data.decode())
             try:
                 validate_uuid(data["uuid"])
             except ValueError:
@@ -54,6 +57,19 @@ def _decode_data(data) -> MappingProxyType:
         uuid = contents[1]
         bbox = Bbox(
             *[float(coordinate) for coordinate in contents[2:]]
+        )  # Raises ValueError for non-float values
+    except ValueError as error:
+        raise QRCodeError("QR-Code does not have expected content.") from error
+    return MappingProxyType({"uuid": uuid, "bbox": bbox, "version": version_nr})
+
+
+def _decode_data_legacy(data) -> MappingProxyType:
+    try:
+        contents = json.loads(data)
+        uuid = contents["id"]
+        version_nr = contents["version"]
+        bbox = Bbox(
+            *[float(coordinate) for coordinate in contents["bbox"].values()]
         )  # Raises ValueError for non-float values
     except ValueError as error:
         raise QRCodeError("QR-Code does not have expected content.") from error
