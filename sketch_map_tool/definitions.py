@@ -13,7 +13,15 @@ REQUEST_TYPES = Literal[
     "quality-report", "sketch-map", "raster-results", "vector-results"
 ]
 # Colors to be detected
-COLORS = ["red", "blue", "green", "yellow", "turquoise", "pink"]
+COLORS = {
+    "1": "black",
+    "2": "blue",
+    "3": "green",
+    "4": "orange",
+    "5": "pink",
+    "6": "red",
+    "7": "yellow",
+}
 # Resources for PDF generation
 PDF_RESOURCES_PATH = Path(__file__).parent.resolve() / "resources"
 

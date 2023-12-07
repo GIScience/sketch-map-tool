@@ -38,6 +38,7 @@ services:
       SMT_BROKER_URL: "redis://redis:6379"
       SMT_RESULT_BACKEND: "db+postgresql://smt:smt@postgres:5432"
       SMT_NEPTUNE_API_TOKEN: ""
+      SMT_NEPTUNE_MODEL_ID_YOLO: "SMT-OSM-2"
     entrypoint:
       [
         "mamba",

@@ -7,11 +7,12 @@ from celery.result import AsyncResult
 from celery.signals import worker_process_init, worker_process_shutdown
 from geojson import FeatureCollection
 from numpy.typing import NDArray
+from segment_anything import SamPredictor, sam_model_registry
+from ultralytics import YOLO
 
 from sketch_map_tool import celery_app as celery
-from sketch_map_tool import map_generation
+from sketch_map_tool import get_config_value, map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
-from sketch_map_tool.definitions import COLORS
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
@@ -19,13 +20,13 @@ from sketch_map_tool.oqt_analyses import get_report
 from sketch_map_tool.upload_processing import (
     clean,
     clip,
-    detect_markings,
     enrich,
     georeference,
     merge,
     polygonize,
-    prepare_img_for_markings,
 )
+from sketch_map_tool.upload_processing.detect_markings import detect_markings
+from sketch_map_tool.upload_processing.ml_models import init_model
 from sketch_map_tool.wms import client as wms_client
 
 
@@ -125,29 +126,40 @@ def digitize_sketches(
     map_frames: dict[str, NDArray],
     bboxes: list[Bbox],
 ) -> AsyncResult | FeatureCollection:
+    # Initialize ml-models. This has to happen inside of celery context
+    #
+    # Zero shot segment anything model
+    sam_path = init_model(get_config_value("neptune_model_id_sam"))
+    sam_model = sam_model_registry["vit_b"](sam_path)
+    sam_predictor = SamPredictor(sam_model)  # mask predictor
+    # Custom trained model for object detection of markings and colors
+    yolo_path = init_model(get_config_value("neptune_model_id_yolo"))
+    yolo_model = YOLO(yolo_path)
+
     def process(
-        sketch_map_id: int, name: str, uuid: str, bbox: Bbox
+        sketch_map_id: int,
+        name: str,
+        uuid: str,
+        bbox: Bbox,
+        sam_predictor,
+        yolo_model,
     ) -> FeatureCollection:
         """Process a Sketch Map."""
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
         r = clip(r, map_frames[uuid])
-        r = prepare_img_for_markings(map_frames[uuid], r)
-        geojsons = []
-        for color in COLORS:
-            r_ = detect_markings(r, color)
-            r_ = georeference(r_, bbox)
-            r_ = polygonize(r_, color)
-            r_ = geojson.load(r_)
-            r_ = clean(r_)
-            r_ = enrich(r_, {"color": color, "name": name})
-            geojsons.append(r_)
-        return merge(geojsons)
+        r = detect_markings(r, yolo_model, sam_predictor)
+        r = georeference(r, bbox, bgr=False)
+        r = polygonize(r, name)
+        r = geojson.load(r)
+        r = clean(r)
+        r = enrich(r, {"name": name})
+        return r
 
     return merge(
         [
-            process(file_id, name, uuid, bbox)
+            process(file_id, name, uuid, bbox, sam_predictor, yolo_model)
             for file_id, name, uuid, bbox in zip(file_ids, file_names, uuids, bboxes)
         ]
     )
