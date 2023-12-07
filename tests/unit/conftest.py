@@ -175,13 +175,6 @@ def map_frame_buffer():
 
 
 @pytest.fixture
-def map_frame_markings_buffer():
-    """Map frame of original Sketch Map with detected markings."""
-    with open(str(FIXTURE_DIR / "map-frame-markings.png"), "rb") as file:
-        return BytesIO(file.read())
-
-
-@pytest.fixture
 def sketch_map_frame_markings_detected_buffer():
     path = str(FIXTURE_DIR / "sketch-map-frame-markings-detected.geotiff")
     with open(path, "rb") as file:
