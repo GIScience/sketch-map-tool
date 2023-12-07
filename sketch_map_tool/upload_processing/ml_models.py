@@ -15,6 +15,8 @@ def init_model(id: str) -> Path:
     # _check_id(id)
 
     data_dir = Path(get_config_value("data-dir"))
+    # TODO: first check if model is on disk
+    # if so return model without connecting to neptune.ai
     model = neptune.init_model_version(
         with_id=id,
         project=PROJECT,

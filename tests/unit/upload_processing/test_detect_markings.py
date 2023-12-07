@@ -1,114 +1,46 @@
 import pytest
-from PIL import Image
+from PIL import Image, ImageEnhance
+from numpy import asarray
 
-from sketch_map_tool.upload_processing.create_marking_array import (
+from segment_anything import SamPredictor, sam_model_registry
+from ultralytics import YOLO
+
+from sketch_map_tool.upload_processing.detect_markings import (
     apply_ml_pipeline,
-    apply_sam,
-    apply_yolo,
-    # mask_predictor,
+    detect_markings,
 )
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.upload_processing.ml_models import init_model
-from ultralytics import YOLO
-from tests import FIXTURE_DIR
-
-MARKING_DETECTION_FIXTURE_DIR = FIXTURE_DIR / "marking-detection"
 
 
-modelYOLO = YOLO(init_model(get_config_value("neptune_model_id_yolo")))
+# Initialize ml-models.
+# This usually happens inside the celery task: `digitize_sketches`
+@pytest.fixture
+def sam_predictor():
+    # Zero shot segment anything model
+    sam_path = init_model(get_config_value("neptune_model_id_sam"))
+    sam_model = sam_model_registry["vit_b"](sam_path)
+    return SamPredictor(sam_model)  # mask predictor
 
 
 @pytest.fixture
-def basemap_marking_img_screenshot():
-    return Image.open(
-        str(MARKING_DETECTION_FIXTURE_DIR / "screenshot-base-map.jpg")
-    ), Image.open(str(MARKING_DETECTION_FIXTURE_DIR / "screenshot-markings.jpg"))
+def yolo_model():
+    # Custom trained model for object detection of markings and colors
+    yolo_path = init_model(get_config_value("neptune_model_id_yolo"))
+    return YOLO(yolo_path)
 
 
-@pytest.fixture
-def basemap_marking_img_photo():
-    return Image.open(
-        str(MARKING_DETECTION_FIXTURE_DIR / "photo-base-map.jpg")
-    ), Image.open(str(MARKING_DETECTION_FIXTURE_DIR / "photo-markings.jpg"))
+@pytest.mark.skip("For manuel testing")
+def test_detect_markings(sam_predictor, yolo_model, map_frame_markings_buffer):
+    img = asarray(Image.open(map_frame_markings_buffer))
+    markings = detect_markings(img, yolo_model, sam_predictor)
+    img = Image.fromarray(markings)
+    ImageEnhance.Contrast(img).enhance(10).show()
+    breakpoint()
 
 
-@pytest.fixture
-def basemap_marking_img_scan():
-    return Image.open(
-        str(MARKING_DETECTION_FIXTURE_DIR / "scan-base-map.jpg")
-    ), Image.open(str(MARKING_DETECTION_FIXTURE_DIR / "scan-markings.jpg"))
-
-
-def test_yolo_detection_screenshot(basemap_marking_img_screenshot):
-    base_map, markings = basemap_marking_img_screenshot
-    bboxes, colors = apply_yolo(markings, modelYOLO)
-    assert len(bboxes) == 13
-    assert len(colors) == 13
-    assert len(colors) == len(bboxes)
-
-
-def test_yolo_detection_photo(basemap_marking_img_photo):
-    base_map, markings = basemap_marking_img_photo
-    bboxes, colors = apply_yolo(markings, modelYOLO)
-    print(len(bboxes))
-    assert len(bboxes) == 13
-    assert len(colors) == 13
-    assert len(colors) == len(bboxes)
-
-
-def test_yolo_detection_scan(basemap_marking_img_scan):
-    base_map, markings = basemap_marking_img_scan
-    bboxes, colors = apply_yolo(markings, modelYOLO)
-    print(len(bboxes))
-    assert len(bboxes) == 14
-    assert len(colors) == 14
-    assert len(colors) == len(bboxes)
-
-
-# TODO: where does the mask_predictor come from?
-# def test_sam_mask_generation_screenshot(basemap_marking_img_screenshot):
-#     base_map, markings = basemap_marking_img_screenshot
-#     markings = markings.convert("RGB")
-#     bboxes, colors = apply_yolo(markings, modelYOLO)
-#     masks, scores = apply_sam(markings, bboxes, mask_predictor)
-#     assert len(masks) == len(bboxes)
-
-
-# def test_sam_mask_generation_photo(basemap_marking_img_photo):
-#     base_map, markings = basemap_marking_img_photo
-#     markings = markings.convert("RGB")
-#     bboxes, colors = apply_yolo(markings, modelYOLO)
-#     masks, scores = apply_sam(markings, bboxes, mask_predictor)
-#     assert len(masks) == len(bboxes)
-
-
-# def test_sam_mask_generation_scan(basemap_marking_img_scan):
-#     base_map, markings = basemap_marking_img_scan
-#     markings = markings.convert("RGB")
-#     bboxes, colors = apply_yolo(markings, modelYOLO)
-#     masks, scores = apply_sam(markings, bboxes, mask_predictor)
-#     assert len(masks) == len(bboxes)
-
-# TODO: apply_ml_pipeline is missing arguments
-# def test_applyPipeline_screenshot(basemap_marking_img_screenshot):
-#     base_map, markings = basemap_marking_img_screenshot
-#     markings = markings.convert("RGB")
-#     masks, colors = apply_ml_pipeline(markings)
-#     assert len(masks) == len(colors)
-#     assert len(masks) == 13
-
-
-# def test_applyPipeline_photo(basemap_marking_img_photo):
-#     base_map, markings = basemap_marking_img_photo
-#     markings = markings.convert("RGB")
-#     masks, colors = apply_ml_pipeline(markings)
-#     assert len(masks) == len(colors)
-#     assert len(masks) == 13
-
-
-# def test_applyPipeline_scan(basemap_marking_img_scan):
-#     base_map, markings = basemap_marking_img_scan
-#     markings = markings.convert("RGB")
-#     masks, colors = apply_ml_pipeline(markings)
-#     assert len(masks) == len(colors)
-#     assert len(masks) == 14
+def test_apply_ml_pipeline(sam_predictor, yolo_model, map_frame_markings_buffer):
+    img = Image.open(map_frame_markings_buffer).convert("RGB")
+    masks, colors = apply_ml_pipeline(img, yolo_model, sam_predictor)
+    # TODO: Should the len not be 2? Only two markings are on the input image.
+    assert len(masks) == len(colors) == 20

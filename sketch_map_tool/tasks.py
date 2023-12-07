@@ -149,7 +149,7 @@ def digitize_sketches(
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
         r = clip(r, map_frames[uuid])
-        r = detect_markings(r, sam_predictor, yolo_model)
+        r = detect_markings(r, yolo_model, sam_predictor)
         r = georeference(r, bbox, bgr=False)
         r = polygonize(r, name)
         r = geojson.load(r)

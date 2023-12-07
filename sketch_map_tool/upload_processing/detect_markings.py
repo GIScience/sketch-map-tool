@@ -8,8 +8,8 @@ from ultralytics import YOLO
 
 def detect_markings(
     image: NDArray,
-    sam_predictor: SamPredictor,
     yolo_model: YOLO,
+    sam_predictor: SamPredictor,
 ) -> NDArray:
     # Sam can only deal with RGB and not RGBA etc.
     img = Image.fromarray(image[:, :, ::-1]).convert("RGB")
