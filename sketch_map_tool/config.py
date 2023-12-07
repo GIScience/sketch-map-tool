@@ -12,10 +12,10 @@ from sketch_map_tool.helpers import get_project_root
 def get_config_path() -> str:
     """Get configuration file path
 
-    Read value of the environment variable 'OQT-CONFIG' or use default 'config.toml'
+    Read value of the environment variable 'SMT_CONFIG' or use default 'config.toml'
     """
     default = str(get_project_root() / "config" / "config.toml")
-    return os.getenv("SMT-CONFIG", default=default)
+    return os.getenv("SMT_CONFIG", default=default)
 
 
 def load_config_default() -> Dict[str, str | int | float]:
@@ -48,19 +48,19 @@ def load_config_from_file(path: str) -> Dict[str, str]:
 def load_config_from_env() -> Dict[str, str]:
     """Load configuration from environment variables."""
     cfg = {
-        "data-dir": os.getenv("SMT-DATA-DIR"),
-        "user-agent": os.getenv("SMT-USER-AGENT"),
-        "broker-url": os.getenv("SMT-BROKER-URL"),
-        "result-backend": os.getenv("SMT-RESULT-BACKEND"),
-        "wms-url": os.getenv("SMT-WMS-URL"),
-        "wms-layers": os.getenv("SMT-WMS-LAYERS"),
-        "wms-read-timeout": os.getenv("SMT-WMS-READ-TIMEOUT"),
-        "max-nr-simultaneous-uploads": os.getenv("SMT-MAX-NR-SIM-UPLOADS"),
-        "max_pixel_per_image": os.getenv("MAX-PIXEL-PER-IMAGE"),
-        "neptune_project": os.getenv("SMT-NEPTUNE-PROJECT"),
-        "neptune_api_token": os.getenv("SMT-NEPTUNE-API-TOKEN"),
-        "neptune_model_id_yolo": os.getenv("SMT-NEPTUNE-MODEL-ID-YOLO"),
-        "neptune_model_id_sam": os.getenv("SMT-NEPTUNE-MODEL-ID-SAM"),
+        "data-dir": os.getenv("SMT_DATA_DIR"),
+        "user-agent": os.getenv("SMT_USER_AGENT"),
+        "broker-url": os.getenv("SMT_BROKER_URL"),
+        "result-backend": os.getenv("SMT_RESULT_BACKEND"),
+        "wms-url": os.getenv("SMT_WMS_URL"),
+        "wms-layers": os.getenv("SMT_WMS_LAYERS"),
+        "wms-read-timeout": os.getenv("SMT_WMS_READ_TIMEOUT"),
+        "max-nr-simultaneous-uploads": os.getenv("SMT_MAX_NR_SIM_UPLOADS"),
+        "max_pixel_per_image": os.getenv("SMT_MAX_PIXEL_PER_IMAGE"),
+        "neptune_project": os.getenv("SMT_NEPTUNE_PROJECT"),
+        "neptune_api_token": os.getenv("SMT_NEPTUNE_API_TOKEN"),
+        "neptune_model_id_yolo": os.getenv("SMT_NEPTUNE_MODEL_ID_YOLO"),
+        "neptune_model_id_sam": os.getenv("SMT_NEPTUNE_MODEL_ID_SAM"),
     }
     return {k: v for k, v in cfg.items() if v is not None}
 
