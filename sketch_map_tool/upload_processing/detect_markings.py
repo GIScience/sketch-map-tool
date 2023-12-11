@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import numpy as np
 from numpy.typing import NDArray
 from PIL import Image
@@ -32,9 +33,9 @@ def apply_ml_pipeline(
 
     Returns:
         tuple: A list of masks and class labels.
-            A mask is a binary numpy array with same dimensions as input image
+            Masks are binary numpy arrays with same dimensions as input image
             (map frame), masking the dominant segment inside of a bbox detected by YOLO.
-            A class label is a color.
+            Class labels are colors.
     """
     bounding_boxes, class_labels = apply_yolo(image, yolo_model)
     masks, _ = apply_sam(image, bounding_boxes, sam_predictor)
@@ -45,11 +46,11 @@ def apply_yolo(
     image: Image.Image,
     yolo_model: YOLO,
 ) -> tuple[list, list]:
-    """Apply YOLO object detection on an image.
+    """Apply fine-tuned YOLO object detection on an image.
 
     Returns:
         tuple: Detected bounding boxes around individual markings and corresponding
-        class labels.
+        class labels (colors).
     """
     result = yolo_model(image)[0].boxes
     bounding_boxes = result.xyxy
@@ -62,9 +63,10 @@ def apply_sam(
     bounding_boxes: list,
     sam_predictor: SamPredictor,
 ) -> tuple:
-    """Apply SAM (Segment Anything) on an image using bounding boxes.
+    """Apply zero-shot SAM (Segment Anything) on an image using bounding boxes.
 
-    Creates masks based on image segmentation and bbox from object detection (YOLO)
+    Creates masks (numpy arrays) based on image segmentation and bounding boxes from
+    object detection (YOLO).
 
     Returns:
         tuple: List of masks and corresponding scores.
