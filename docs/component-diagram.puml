@@ -41,6 +41,10 @@ package "HeiGIT Services" #line.dotted {
     cloud ohsome as "ohsome API" #line.dotted
 }
 
+package "ML-Model Registry" #line.dotted {
+    cloud neptune as "neptune.ai API" #line.dotted
+}
+
 internet --> client
 
 map_generation --> wms
@@ -49,4 +53,5 @@ wms --> osmdb
 oqt_analyses --> oqt
 oqt --> ohsome
 
+upload_processing --> neptune
 @enduml
