@@ -1,5 +1,7 @@
 # Development Setup
 
+For contributing to this project please also read the [Contribution Guideline](/CONTRIBUTING.md)
+
 ## Prerequisites (Requirements)
 
 - Python: `>=3.10`
@@ -67,17 +69,28 @@ flask --app sketch_map_tool/routes.py --debug run
 # Go to http://127.0.0.1:5000
 ```
 
-## Tests
+## Back-End
+
+### Tests
 
 ```bash
-# make sure celery is running
 pytest
 ```
 
-## JS and CSS
+### Update dependencies
+
+When dependencies changed the environment can be updated by running:
+
+```bash
+mamba activate smt
+mamba env update --file environment.yml
+poetry install
+```
+
+## Front-End (HTML, CSS and JS)
 
 For the individual html pages the js and css code should be developed in `client-src/**` as 
-ES6 modules. 
+ES6 modules.
 
 To use the code in the HTML Templates it must be build (bundled). The bundler 
 ([esbuild](https://esbuild.github.io/)) will write the result to `static/bundles/**` 
@@ -89,15 +102,6 @@ If you want to add new code for additional HTML pages add entry-points in the bu
 Bundle the code with:
 ```bash
 npm run build
-```
-
-## Update dependencies
-
-When dependencies changed the environment can be updated by running:
-
-```bash
-mamba env update --file environment.yml
-poetry install
 ```
 
 ## Project Setup using and IDE
