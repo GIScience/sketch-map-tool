@@ -37,7 +37,7 @@ package "HeiGIT Maps" #line.dotted {
 }
 
 package "HeiGIT Services" #line.dotted {
-    cloud oqt as "OQT API" #line.dotted
+    cloud oqt as "ohsome quality API" #line.dotted
     cloud ohsome as "ohsome API" #line.dotted
 }
 
