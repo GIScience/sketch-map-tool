@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import pytest
-from numpy import asarray
 from PIL import Image, ImageEnhance
 from segment_anything import SamPredictor, sam_model_registry
 from ultralytics import YOLO
@@ -30,28 +29,27 @@ def yolo_model():
     return YOLO(yolo_path)
 
 
-@pytest.mark.skip("For manuel testing")
-def test_detect_markings(sam_predictor, yolo_model, map_frame_markings_buffer):
-    img = asarray(Image.open(map_frame_markings_buffer))
-    markings = detect_markings(img, yolo_model, sam_predictor)
+# @pytest.mark.skip("For manuel testing")
+def test_detect_markings(sam_predictor, yolo_model, map_frame_marked):
+    markings = detect_markings(map_frame_marked, yolo_model, sam_predictor)
     img = Image.fromarray(markings)
     ImageEnhance.Contrast(img).enhance(10).show()
     breakpoint()
 
 
-def test_apply_ml_pipeline(sam_predictor, yolo_model, map_frame_markings_buffer):
-    img = Image.open(map_frame_markings_buffer).convert("RGB")
-    masks, colors = apply_ml_pipeline(img, yolo_model, sam_predictor)
+def test_apply_ml_pipeline(sam_predictor, yolo_model, map_frame_marked):
+    masks, colors = apply_ml_pipeline(map_frame_marked, yolo_model, sam_predictor)
     # TODO: Should the len not be 2? Only two markings are on the input image.
     assert len(masks) == len(colors) == 6
 
 
 @pytest.mark.skip("For manuel testing")
 def test_apply_ml_pipeline_show_masks(
-    sam_predictor, yolo_model, map_frame_markings_buffer
+    sam_predictor,
+    yolo_model,
+    map_frame_marked,
 ):
-    img = Image.open(map_frame_markings_buffer).convert("RGB")
-    masks, _ = apply_ml_pipeline(img, yolo_model, sam_predictor)
+    masks, _ = apply_ml_pipeline(map_frame_marked, yolo_model, sam_predictor)
     for mask in masks:
         plt.imshow(mask, cmap="viridis", alpha=0.7)
         plt.show()
