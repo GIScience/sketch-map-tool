@@ -225,6 +225,7 @@ a4 = {
     "scale": "9051.161965312804",
 }
 
+
 # TODO: Add other params
 @pytest.fixture(scope="session", params=[a4])
 def params(request):

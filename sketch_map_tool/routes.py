@@ -171,7 +171,7 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
                 # to semantic errors.
                 http_status = 422  # Unprocessable Entity
                 error = str(err)
-            except (Exception) as err:
+            except Exception as err:
                 http_status = 500  # Internal Server Error
                 error = str(err)
     else:  # PENDING, RETRY, STARTED
