@@ -140,20 +140,20 @@ def digitize_sketches(
         name: str,
         uuid: str,
         bbox: Bbox,
-        sam_predictor,
-        yolo_model,
+        sam_predictor: SamPredictor,
+        yolo_model: YOLO,
     ) -> FeatureCollection:
         """Process a Sketch Map."""
         # r = interim result
-        r = db_client_celery.select_file(sketch_map_id)
-        r = to_array(r)
-        r = clip(r, map_frames[uuid])
-        r = detect_markings(r, yolo_model, sam_predictor)
-        r = georeference(r, bbox, bgr=False)
-        r = polygonize(r, name)
-        r = geojson.load(r)
-        r = clean(r)
-        r = enrich(r, {"name": name})
+        r: BytesIO = db_client_celery.select_file(sketch_map_id)  # type: ignore
+        r: NDArray = to_array(r)  # type: ignore
+        r: NDArray = clip(r, map_frames[uuid])  # type: ignore
+        r: NDArray = detect_markings(r, yolo_model, sam_predictor)  # type: ignore
+        r: BytesIO = georeference(r, bbox, bgr=False)  # type: ignore
+        r: BytesIO = polygonize(r, name)  # type: ignore
+        r: FeatureCollection = geojson.load(r)  # type: ignore
+        r: FeatureCollection = clean(r)  # type: ignore
+        r: FeatureCollection = enrich(r, {"name": name})  # type: ignore
         return r
 
     return merge(
