@@ -19,3 +19,8 @@ def test_vector(vector):
 def test_raster(raster):
     assert raster is not None
     assert len(raster) > 0
+
+
+def test_map_frame_marked(map_frame_marked):
+    assert map_frame_marked is not None
+    assert map_frame_marked.size is not None

@@ -5,6 +5,7 @@ from uuid import UUID, uuid4
 import fitz
 import pytest
 from celery.contrib.testing.tasks import ping  # noqa: F401
+from numpy.typing import NDArray
 from PIL import Image, ImageOps
 from testcontainers.postgres import PostgresContainer
 from testcontainers.redis import RedisContainer
@@ -14,7 +15,9 @@ from sketch_map_tool import CELERY_CONFIG, make_flask, routes
 from sketch_map_tool import celery_app as smt_celery_app
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.database import client_flask as db_client_flask
+from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.upload_processing import clip
 from tests import FIXTURE_DIR
 
 
@@ -284,7 +287,9 @@ def sketch_map_png(uuid_create, sketch_map_pdf, tmp_path_factory) -> BytesIO:
 
     # Draw shapes on PNG (Sketch Map)
     img1 = Image.open(path)  # Sketch Map (primary image)
-    img2 = Image.open(FIXTURE_DIR / "markings.png")  # Markings (overlay image)
+    img2 = Image.open(
+        FIXTURE_DIR / "upload-processing" / "markings-transparent.png"
+    )  # Markings (overlay image)
     img2 = ImageOps.cover(img2, img1.size)
     img1.paste(img2, (0, 0), mask=img2)  # Overlay images starting at 0, 0
 
@@ -295,6 +300,22 @@ def sketch_map_png(uuid_create, sketch_map_pdf, tmp_path_factory) -> BytesIO:
     img1.save(path)
     with open(path, "rb") as file:
         return file.read()
+
+
+@pytest.fixture(scope="session")
+def map_frame_marked(
+    flask_app,
+    uuid_create,
+    sketch_map_png,
+    tmp_path_factory,
+) -> NDArray:
+    """Sketch map frame with markings as PNG."""
+    with flask_app.app_context():
+        map_frame = db_client_flask.select_map_frame(UUID(uuid_create))
+    return clip(
+        to_array(sketch_map_png),
+        to_array(map_frame),
+    )
 
 
 @pytest.fixture(scope="session")
