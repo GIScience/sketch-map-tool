@@ -5,6 +5,7 @@ from uuid import UUID, uuid4
 import fitz
 import pytest
 from celery.contrib.testing.tasks import ping  # noqa: F401
+from PIL import Image, ImageOps
 from testcontainers.postgres import PostgresContainer
 from testcontainers.redis import RedisContainer
 from werkzeug.datastructures import FileStorage
@@ -214,6 +215,7 @@ def bbox_wgs84():
     return Bbox(lon_min=8.625, lat_min=49.3711, lon_max=8.7334, lat_max=49.4397)
 
 
+# TODO: Fixture `sketch_map_png` only works for landscape orientation.
 a4 = {
     "format": "A4",
     "orientation": "landscape",
@@ -272,24 +274,25 @@ def sketch_map_pdf(uuid_create, tmp_path_factory) -> bytes:
 
 @pytest.fixture(scope="session")
 def sketch_map_png(uuid_create, sketch_map_pdf, tmp_path_factory) -> BytesIO:
-    def draw_line_on_png(png):
-        """Draw a single straight line in the middle of a png"""
-        width, height = png.width, png.height
-        line_start_x = int(width / 4)
-        line_end_x = int(width / 2)
-        middle_y = int(height / 2)
-        for x in range(line_start_x, line_end_x):
-            for y in range(middle_y - 4, middle_y):
-                png.set_pixel(x, y, (138, 29, 12))
-        return png
+    """Sketch map with markings as PNG."""
+    path = tmp_path_factory.getbasetemp() / uuid_create / "sketch-map.png"
 
+    # Convert PDF to PNG
     pdf = fitz.open(stream=sketch_map_pdf)
     page = pdf.load_page(0)
-    png = page.get_pixmap()
-    png = draw_line_on_png(png)  # mock sketches on map
-    BytesIO()
-    path = tmp_path_factory.getbasetemp() / uuid_create / "sketch-map.png"
-    png.save(path, output="png")
+    page.get_pixmap().save(path, output="png")
+
+    # Draw shapes on PNG (Sketch Map)
+    img1 = Image.open(path)  # Sketch Map (primary image)
+    img2 = Image.open(FIXTURE_DIR / "markings.png")  # Markings (overlay image)
+    img2 = ImageOps.cover(img2, img1.size)
+    img1.paste(img2, (0, 0), mask=img2)  # Overlay images starting at 0, 0
+
+    # Displaying the image
+    # img1.show()
+
+    # TODO: what should be the return type of the fixture?
+    img1.save(path)
     with open(path, "rb") as file:
         return file.read()
 
