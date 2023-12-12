@@ -52,7 +52,7 @@ def apply_yolo(
         tuple: Detected bounding boxes around individual markings and corresponding
         class labels (colors).
     """
-    result = yolo_model(image)[0].boxes
+    result = yolo_model(image, conf=0.7)[0].boxes  # TODO set conf parameter
     bounding_boxes = result.xyxy
     class_labels = result.cls
     return bounding_boxes, class_labels

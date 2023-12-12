@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import pytest
 from numpy import asarray
 from PIL import Image, ImageEnhance
@@ -42,4 +43,15 @@ def test_apply_ml_pipeline(sam_predictor, yolo_model, map_frame_markings_buffer)
     img = Image.open(map_frame_markings_buffer).convert("RGB")
     masks, colors = apply_ml_pipeline(img, yolo_model, sam_predictor)
     # TODO: Should the len not be 2? Only two markings are on the input image.
-    assert len(masks) == len(colors) == 20
+    assert len(masks) == len(colors) == 6
+
+
+@pytest.mark.skip("For manuel testing")
+def test_apply_ml_pipeline_show_masks(
+    sam_predictor, yolo_model, map_frame_markings_buffer
+):
+    img = Image.open(map_frame_markings_buffer).convert("RGB")
+    masks, _ = apply_ml_pipeline(img, yolo_model, sam_predictor)
+    for mask in masks:
+        plt.imshow(mask, cmap="viridis", alpha=0.7)
+        plt.show()
