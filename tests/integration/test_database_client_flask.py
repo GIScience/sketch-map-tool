@@ -1,13 +1,38 @@
+from io import BytesIO
 from uuid import uuid4
 
 import pytest
 from flask import g
 from psycopg2.extensions import connection
+from werkzeug.datastructures import FileStorage
 
 from sketch_map_tool.database import client_flask
+from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.exceptions import (
     CustomFileNotFoundError,
 )
+
+
+@pytest.fixture
+def file(sketch_map):
+    return FileStorage(stream=BytesIO(sketch_map), filename="filename")
+
+
+@pytest.fixture
+def files(file):
+    return [file, file]
+
+
+@pytest.fixture()
+def file_ids(files, flask_app):
+    """IDs of uploaded files stored in the database."""
+    with flask_app.app_context():
+        # setup
+        ids = db_client_flask.insert_files(files)
+        yield ids
+        # teardown
+        for i in ids:
+            db_client_flask.delete_file(i)
 
 
 def test_open_close_connection(flask_app):
@@ -88,9 +113,9 @@ def test_select_file_name(file_ids):
     assert isinstance(file, str)
 
 
-def test_select_map_frame(flask_app, uuids):
+def test_select_map_frame(flask_app, uuid_create):
     with flask_app.app_context():
-        file = client_flask.select_map_frame(uuids[0])
+        file = client_flask.select_map_frame(uuid_create)
         assert isinstance(file, bytes)
 
 

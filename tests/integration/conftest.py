@@ -1,6 +1,6 @@
 import json
 from io import BytesIO
-from uuid import UUID, uuid4
+from uuid import UUID
 
 import fitz
 import pytest
@@ -9,7 +9,6 @@ from numpy.typing import NDArray
 from PIL import Image, ImageOps
 from testcontainers.postgres import PostgresContainer
 from testcontainers.redis import RedisContainer
-from werkzeug.datastructures import FileStorage
 
 from sketch_map_tool import CELERY_CONFIG, make_flask, routes
 from sketch_map_tool import celery_app as smt_celery_app
@@ -218,7 +217,7 @@ def bbox_wgs84():
     return Bbox(lon_min=8.625, lat_min=49.3711, lon_max=8.7334, lat_max=49.4397)
 
 
-# TODO: Fixture `sketch_map_png` only works for landscape orientation.
+# TODO: Fixture `sketch_map_marked` only works for landscape orientation.
 a4 = {
     "format": "A4",
     "orientation": "landscape",
@@ -269,19 +268,32 @@ def uuid_create(
 
 
 @pytest.fixture(scope="session")
-def sketch_map_pdf(uuid_create, tmp_path_factory) -> bytes:
+def sketch_map(uuid_create, tmp_path_factory) -> bytes:
+    """Sketch Map as PDF."""
     path = tmp_path_factory.getbasetemp() / uuid_create / "sketch-map.pdf"
     with open(path, "rb") as file:
         return file.read()
 
 
 @pytest.fixture(scope="session")
-def sketch_map_png(uuid_create, sketch_map_pdf, tmp_path_factory) -> BytesIO:
+def map_frame(uuid_create, flask_app, tmp_path_factory) -> bytes:
+    """Map Frame as PNG."""
+    with flask_app.app_context():
+        map_frame = db_client_flask.select_map_frame(UUID(uuid_create))
+    path = tmp_path_factory.getbasetemp() / uuid_create / "map-frame.png"
+    with open(path, "wb") as file:
+        file.write(map_frame)
+    return map_frame
+
+
+@pytest.fixture(scope="session")
+def sketch_map_marked(uuid_create, sketch_map, tmp_path_factory) -> bytes:
     """Sketch map with markings as PNG."""
-    path = tmp_path_factory.getbasetemp() / uuid_create / "sketch-map.png"
+    # TODO: increase resolution of PNG
+    path = tmp_path_factory.getbasetemp() / uuid_create / "sketch-map-marked.png"
 
     # Convert PDF to PNG
-    pdf = fitz.open(stream=sketch_map_pdf)
+    pdf = fitz.open(stream=sketch_map)  # type: ignore
     page = pdf.load_page(0)
     page.get_pixmap().save(path, output="png")
 
@@ -290,7 +302,7 @@ def sketch_map_png(uuid_create, sketch_map_pdf, tmp_path_factory) -> BytesIO:
     img2 = Image.open(
         FIXTURE_DIR / "upload-processing" / "markings-transparent.png"
     )  # Markings (overlay image)
-    img2 = ImageOps.cover(img2, img1.size)
+    img2 = ImageOps.cover(img2, img1.size)  # type: ignore
     img1.paste(img2, (0, 0), mask=img2)  # Overlay images starting at 0, 0
 
     # Displaying the image
@@ -306,27 +318,26 @@ def sketch_map_png(uuid_create, sketch_map_pdf, tmp_path_factory) -> BytesIO:
 def map_frame_marked(
     flask_app,
     uuid_create,
-    sketch_map_png,
-    tmp_path_factory,
+    sketch_map_marked,
 ) -> NDArray:
     """Sketch map frame with markings as PNG."""
     with flask_app.app_context():
         map_frame = db_client_flask.select_map_frame(UUID(uuid_create))
     return clip(
-        to_array(sketch_map_png),
+        to_array(sketch_map_marked),
         to_array(map_frame),
     )
 
 
 @pytest.fixture(scope="session")
 def uuid_digitize(
-    sketch_map_png,
+    sketch_map_marked,
     flask_client,
     flask_app,
     celery_app,
     tmp_path_factory,
 ) -> str:
-    data = {"file": [(BytesIO(sketch_map_png), "sketch_map.png")]}
+    data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")]}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
 
     # Extract UUID from response
@@ -367,55 +378,3 @@ def raster(uuid_digitize, tmp_path_factory) -> bytes:
     path = tmp_path_factory.getbasetemp() / uuid_digitize / "raster.zip"
     with open(path, "rb") as file:
         return file.read()
-
-
-@pytest.fixture
-def sketch_map_buffer():
-    """Photo of a Sketch Map."""
-    with open(str(FIXTURE_DIR / "sketch-map.png"), "rb") as file:
-        return BytesIO(file.read())
-
-
-@pytest.fixture
-def map_frame_buffer():
-    """Map frame of original Sketch Map."""
-    with open(str(FIXTURE_DIR / "map-frame.png"), "rb") as file:
-        return BytesIO(file.read())
-
-
-@pytest.fixture
-def file(sketch_map_buffer):
-    return FileStorage(stream=sketch_map_buffer, filename="filename")
-
-
-@pytest.fixture
-def files(file):
-    return [file, file]
-
-
-@pytest.fixture()
-def file_ids(files, flask_app):
-    """IDs of uploaded files stored in the database."""
-    with flask_app.app_context():
-        # setup
-        ids = db_client_flask.insert_files(files)
-        yield ids
-        # teardown
-        for i in ids:
-            db_client_flask.delete_file(i)
-
-
-@pytest.mark.usefixtures("postgres_container", "redis_container")
-@pytest.fixture()
-def uuids(map_frame_buffer):
-    """UUIDs of map frames stored in the database."""
-    # setup
-    uuids = []
-    for i in range(3):
-        uuid = uuid4()
-        uuids.append(uuid)
-        db_client_celery.insert_map_frame(map_frame_buffer, uuid)
-    yield uuids
-    # teardown
-    for i in uuids:
-        db_client_celery.delete_map_frame(i)
