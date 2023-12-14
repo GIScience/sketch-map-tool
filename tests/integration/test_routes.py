@@ -1,7 +1,11 @@
+import os
 from io import BytesIO
+from unittest import mock
 from uuid import UUID
 
 import pytest
+
+from sketch_map_tool.exceptions import UploadLimitsExceededError
 
 
 def test_create_results_post(params, flask_client):
@@ -16,8 +20,8 @@ def test_create_results_post(params, flask_client):
     assert url_rest == "/create/results"
 
 
-def test_digitize_results_post(sketch_map_png, flask_client):
-    data = {"file": [(BytesIO(sketch_map_png), "sketch_map.png")]}
+def test_digitize_results_post(sketch_map_marked, flask_client):
+    data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")]}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
     assert response.status_code == 200
 
@@ -27,6 +31,22 @@ def test_digitize_results_post(sketch_map_png, flask_client):
     url_rest = "/".join(url_parts[:-1])
     assert UUID(uuid).version == 4
     assert url_rest == "/digitize/results"
+
+
+@mock.patch.dict(os.environ, {"SMT_MAX_NR_SIM_UPLOADS": "2"})
+def test_digitize_results_post_max_uploads(flask_client, sketch_map_marked):
+    with pytest.raises(UploadLimitsExceededError):
+        flask_client.post(
+            "/digitize/results",
+            data=dict(
+                file=[
+                    (BytesIO(sketch_map_marked), "file1.png"),
+                    (BytesIO(sketch_map_marked), "file2.png"),
+                    (BytesIO(sketch_map_marked), "file3.png"),
+                ],
+            ),
+            follow_redirects=True,
+        )
 
 
 def test_api_status_uuid_sketch_map(uuid_create, flask_client):

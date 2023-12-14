@@ -1,3 +1,4 @@
+from io import BytesIO
 from uuid import uuid4
 
 import pytest
@@ -27,22 +28,18 @@ def test_close_open_connection():
     client_celery.open_connection()
 
 
-def test_write_map_frame(flask_app, map_frame_buffer):
+def test_write_map_frame(flask_app, map_frame):
     uuid = uuid4()
-    client_celery.insert_map_frame(map_frame_buffer, uuid)
-    try:
-        with flask_app.app_context():
-            file = client_flask.select_map_frame(uuid)
-            assert isinstance(file, bytes)
-    finally:
-        # tear down
-        client_celery.delete_map_frame(uuid)
+    client_celery.insert_map_frame(BytesIO(map_frame), uuid)
+    with flask_app.app_context():
+        file = client_flask.select_map_frame(uuid)
+        assert isinstance(file, bytes)
 
 
 # TODO
-def test_delete_map_frame(flask_app, map_frame_buffer):
+def test_delete_map_frame(flask_app, map_frame):
     uuid = uuid4()
-    client_celery.insert_map_frame(map_frame_buffer, uuid)
+    client_celery.insert_map_frame(BytesIO(map_frame), uuid)
     with flask_app.app_context():
         client_flask.select_map_frame(uuid)  # Should not raise a FileNotFoundError_
     client_celery.delete_map_frame(uuid)
