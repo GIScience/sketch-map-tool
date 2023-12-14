@@ -134,7 +134,7 @@ def digitize_sketches(
     sam_model = sam_model_registry["vit_b"](sam_path)
     sam_predictor = SamPredictor(sam_model)  # mask predictor
 
-    def process(
+    def process_sketch_map(
         sketch_map_id: int,
         name: str,
         uuid: str,
@@ -147,21 +147,24 @@ def digitize_sketches(
         r: BytesIO = db_client_celery.select_file(sketch_map_id)  # type: ignore
         r: NDArray = to_array(r)  # type: ignore
         r: NDArray = clip(r, map_frames[uuid])  # type: ignore
-        masks , colors = detect_markings(r, yolo_model, sam_predictor)
+        masks, colors = detect_markings(r, yolo_model, sam_predictor)
         geojsons: list[FeatureCollection] = []
-        for mask,color in zip(masks,colors):
+        for mask, color in zip(masks, colors):
             r_: NDArray = create_marking_array([mask], [color], r)
             r_: BytesIO = georeference(r_, bbox, bgr=False)  # type: ignore
             r_: FeatureCollection = polygonize(r_, layer_name=name)
-            r_t = r_ # type: ignore
             r_: FeatureCollection = post_process(r_, name)
             geojsons.append(r_)
             # type: ignore
         return merge(geojsons)
 
+    def process_marking(name, bbox, markings, mask, color):
+        """Process a Marking."""
+        pass
+
     return merge(
         [
-            process(file_id, name, uuid, bbox, sam_predictor, yolo_model)
+            process_sketch_map(file_id, name, uuid, bbox, sam_predictor, yolo_model)
             for file_id, name, uuid, bbox in zip(file_ids, file_names, uuids, bboxes)
         ]
     )

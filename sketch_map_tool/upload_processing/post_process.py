@@ -67,19 +67,18 @@ def simplify(fc: FeatureCollection) -> FeatureCollection:
 
     # Buffer operation
     buffer_distance_percentage = 0.1
-    max_width = max(
+    max_diag = max(
         ((geometry.bounds[2] - geometry.bounds[0]) ** 2 + (geometry.bounds[3] - geometry.bounds[1]) ** 2) ** 0.5 for
         geometry in geometries)  # check for webmercator
-    buffer_distance = buffer_distance_percentage * max_width
+    buffer_distance = buffer_distance_percentage * max_diag
     buffered_geometries = [geometry.buffer(buffer_distance) for geometry in geometries]
-
     # Dissolve by color field (assuming there's a "color" field)
     try:
         dissolved_geometrie = [remove_inner_rings(geometry) for geometry in cascaded_union(buffered_geometries)]
     except:
         dissolved_geometrie = [remove_inner_rings(geometry) for geometry in [cascaded_union(buffered_geometries)]]
 
-    simplified_geometries = [geometry.buffer(-buffer_distance) for geometry in dissolved_geometrie]
+    simplified_geometries = [geometry.buffer(-buffer_distance).simplify(0.0025 * max_diag) for geometry in dissolved_geometrie]
 
     # Create a single GeoJSON feature
     features = [geojson.Feature(
