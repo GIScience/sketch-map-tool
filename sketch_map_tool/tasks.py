@@ -2,7 +2,6 @@ from io import BytesIO
 from uuid import UUID
 from zipfile import ZipFile
 
-import geojson
 from celery.result import AsyncResult
 from celery.signals import worker_process_init, worker_process_shutdown
 from geojson import FeatureCollection
@@ -18,12 +17,11 @@ from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
 from sketch_map_tool.oqt_analyses import get_report
 from sketch_map_tool.upload_processing import (
-    clean,
     clip,
-    enrich,
     georeference,
     merge,
     polygonize,
+    post_process,
 )
 from sketch_map_tool.upload_processing.detect_markings import detect_markings
 from sketch_map_tool.upload_processing.ml_models import init_model
@@ -150,10 +148,8 @@ def digitize_sketches(
         r: NDArray = clip(r, map_frames[uuid])  # type: ignore
         r: NDArray = detect_markings(r, yolo_model, sam_predictor)  # type: ignore
         r: BytesIO = georeference(r, bbox, bgr=False)  # type: ignore
-        r: BytesIO = polygonize(r, name)  # type: ignore
-        r: FeatureCollection = geojson.load(r)  # type: ignore
-        r: FeatureCollection = clean(r)  # type: ignore
-        r: FeatureCollection = enrich(r, {"name": name})  # type: ignore
+        r: FeatureCollection = polygonize(r, layer_name=name)  # type: ignore
+        r: FeatureCollection = post_process(r, name)  # type: ignore
         return r
 
     return merge(

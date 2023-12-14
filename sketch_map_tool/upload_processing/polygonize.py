@@ -4,20 +4,22 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile, TemporaryDirectory
 
 import geojson
+from geojson import FeatureCollection
 from osgeo import gdal, ogr
 from pyproj import Transformer
 
 
-def transform(feature: geojson.FeatureCollection):
+def transform(feature: FeatureCollection) -> FeatureCollection:
     """Reproject GeoJSON from WebMercator to EPSG:4326"""
     transformer = Transformer.from_crs("EPSG:3857", "EPSG:4326", always_xy=True)
-    return geojson.utils.map_tuples(
+    raw = geojson.utils.map_tuples(  # type: ignore
         lambda coordinates: transformer.transform(coordinates[0], coordinates[1]),
         deepcopy(feature),
     )
+    return geojson.loads(geojson.dumps(raw))
 
 
-def polygonize(geotiff: BytesIO, layer_name: str) -> BytesIO:
+def polygonize(geotiff: BytesIO, layer_name: str) -> FeatureCollection:
     """Produces a polygon feature layer (GeoJSON) from a raster (GeoTIFF)."""
     gdal.UseExceptions()
     ogr.UseExceptions()
@@ -47,7 +49,6 @@ def polygonize(geotiff: BytesIO, layer_name: str) -> BytesIO:
         src_ds = None  # close dataset
         dst_ds = None  # close dataset
 
-        with open(str(outfile_name), "rb") as f:
-            feature = geojson.FeatureCollection(geojson.load(f))
-            feature = transform(feature)
-            return BytesIO(geojson.dumps(feature).encode())
+        with open(outfile_name, "rb") as f:
+            fc = geojson.load(f)
+            return transform(fc)
