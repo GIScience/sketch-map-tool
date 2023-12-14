@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-
+import cv2
 import numpy as np
 from numpy.typing import NDArray
 from PIL import Image
 from segment_anything import SamPredictor
 from ultralytics import YOLO
+
+from sketch_map_tool.upload_processing.create_marking_array import create_marking_array
 
 
 def detect_markings(
@@ -15,17 +17,17 @@ def detect_markings(
     # Sam can only deal with RGB and not RGBA etc.
     img = Image.fromarray(image[:, :, ::-1]).convert("RGB")
     # masks represent markings
-    masks, colors = apply_ml_pipeline(img, yolo_model, sam_predictor)
+    masks, bboxes,colors = apply_ml_pipeline(img, yolo_model, sam_predictor)
     colors = [int(c) + 1 for c in colors]  # +1 because 0 is background
-    masks_processed = post_process(masks)
-    return create_marking_array(masks_processed, colors, image)
+    masks_processed = post_process(masks,bboxes)
+    return masks_processed, colors
 
 
 def apply_ml_pipeline(
     image: Image.Image,
     yolo_model: YOLO,
     sam_predictor: SamPredictor,
-) -> tuple[list, list]:
+) -> tuple[list, list, list]:
     """Apply the entire machine learning pipeline on an image.
 
     Steps:
@@ -40,7 +42,7 @@ def apply_ml_pipeline(
     """
     bounding_boxes, class_labels = apply_yolo(image, yolo_model)
     masks, _ = apply_sam(image, bounding_boxes, sam_predictor)
-    return masks, class_labels
+    return masks, bounding_boxes, class_labels
 
 
 def apply_yolo(
@@ -82,7 +84,7 @@ def apply_sam(
     return masks, scores
 
 
-def mask_from_bbox(bbox, sam_predictor: SamPredictor) -> tuple:
+def mask_from_bbox(bbox:list, sam_predictor: SamPredictor) -> tuple:
     """Generate a mask using SAM (Segment Anything) predictor for a given bounding box.
 
     Returns:
@@ -92,32 +94,50 @@ def mask_from_bbox(bbox, sam_predictor: SamPredictor) -> tuple:
     return masks[0], scores[0]
 
 
-def post_process(masks: list[NDArray]) -> list[NDArray]:
-    processed = []
-    for mask in masks:
-        processed.append(mask)
-    return processed
+def post_process(masks: list[NDArray], bboxes: list[list[int]]) -> list[NDArray]:
+    """
+    Post-processes masks and bounding boxes to clean up and fill contours.
 
-
-def create_marking_array(
-    masks: list[NDArray],
-    colors: list[int],
-    image: NDArray,
-) -> NDArray:
-    """Create a single color marking array based on masks and colors.
+    This function takes a list of masks and their corresponding bounding boxes, applies
+    morphological operations to clean the masks, and then fills the contours. The result is
+    a list of tuples, each containing a cleaned mask and its contours.
 
     Parameters:
-        - masks: List of masks representing markings.
-        - colors: List of colors corresponding to each mask.
-        - image: Original sketch map frame.
+    - masks (List[NDArray]): A list of masks, where each mask is a NumPy array.
+    - bboxes (List[List[int]]): A list of bounding boxes, where each bbox is defined as [x1, y1, x2, y2].
 
     Returns:
-        NDArray: Single color marking array.
+    - List[Tuple[NDArray, List]]: A list of tuples, where each tuple contains a cleaned mask
+      and its contours.
     """
-    single_color_marking = np.zeros(
-        (image.shape[0], image.shape[1]),
-        dtype=np.uint8,
-    )
-    for color, mask in zip(colors, masks):
-        single_color_marking[mask] = color
-    return single_color_marking
+
+    # Convert and preprocess masks
+    preprocessed_masks = np.array([np.vstack(mask) for mask in masks], dtype=np.float32)
+    preprocessed_masks[preprocessed_masks == 0] = np.nan
+
+    # Calculate height and width for each bounding box
+    bbox_sizes = [np.array([bbox[2] - bbox[0], bbox[3] - bbox[1]]) for bbox in bboxes]
+
+    # Initialize the list for cleaned masks
+    cleaned_masks = []
+
+    for i, mask in enumerate(preprocessed_masks):
+        # Calculate kernel size as 5% of the bounding box dimensions
+        kernel_size = tuple((bbox_sizes[i] * 0.05).astype(int))
+        kernel = np.ones(kernel_size, np.uint8)
+
+        # Apply morphological closing operation
+        closed_mask = cv2.morphologyEx(mask.astype('uint8'), cv2.MORPH_CLOSE, kernel)
+
+        # Find contours
+        contours, _ = cv2.findContours(closed_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # Create a blank canvas for filled contours
+        filled_contours = np.zeros_like(closed_mask, dtype=np.uint8)
+        cv2.drawContours(filled_contours, contours, -1, 1, thickness=cv2.FILLED)
+        cleaned_masks.append(filled_contours.astype(bool))
+
+    return cleaned_masks
+
+
+

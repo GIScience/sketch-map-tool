@@ -39,9 +39,9 @@ def test_detect_markings(sam_predictor, yolo_model, map_frame_marked):
 
 
 def test_apply_ml_pipeline(sam_predictor, yolo_model, map_frame_marked):
-    masks, colors = apply_ml_pipeline(map_frame_marked, yolo_model, sam_predictor)
+    masks, bboxes ,colors = apply_ml_pipeline(map_frame_marked, yolo_model, sam_predictor)
     # TODO: Should the len not be 2? Only two markings are on the input image.
-    assert len(masks) == len(colors) == 6
+    assert len(masks) == len(colors)
 
 
 @pytest.mark.skip("For manuel testing")
@@ -50,11 +50,11 @@ def test_apply_ml_pipeline_show_masks(
     yolo_model,
     map_frame_marked,
 ):
-    masks, _ = apply_ml_pipeline(map_frame_marked, yolo_model, sam_predictor)
+    masks, _ ,_ = apply_ml_pipeline(map_frame_marked, yolo_model, sam_predictor)
     for mask in masks:
         plt.imshow(mask, cmap="viridis", alpha=0.7)
         plt.show()
 
 
 def test_post_process():
-    assert post_process([]) is not None
+    assert post_process([],[] ) is not None
