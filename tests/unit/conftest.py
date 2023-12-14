@@ -1,22 +1,11 @@
 from io import BytesIO
-from uuid import uuid4
 
 import cv2
 import geojson
 import pytest
 from werkzeug.datastructures import FileStorage
 
-from sketch_map_tool import make_flask
-from sketch_map_tool.database import client_celery as db_client_celery
-from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.models import Bbox, PaperFormat, Size
-from sketch_map_tool.routes import (
-    about,
-    digitize,
-    digitize_results_post,
-    help,
-    index,
-)
 from tests import FIXTURE_DIR
 
 
@@ -43,39 +32,6 @@ def pytest_addoption(parser):
 #     yield None
 #     # teardown
 #     db_client_flask.close_connection()
-
-
-@pytest.fixture()
-def db_conn_celery():
-    # setup
-    db_client_celery.open_connection()
-    yield None
-    # teardown
-    db_client_celery.close_connection()
-
-
-@pytest.fixture()
-def flask_app():
-    app = make_flask()
-    app.config.update(
-        {
-            "TESTING": True,
-        }
-    )
-    # Register routes to be tested:
-    app.add_url_rule(
-        "/digitize/results", view_func=digitize_results_post, methods=["POST"]
-    )
-    app.add_url_rule("/digitize", view_func=digitize, methods=["GET"])
-    app.add_url_rule("/", view_func=index, methods=["GET"])
-    app.add_url_rule("/about", view_func=about, methods=["GET"])
-    app.add_url_rule("/help", view_func=help, methods=["GET"])
-    yield app
-
-
-@pytest.fixture()
-def flask_client(flask_app):
-    return flask_app.test_client()
 
 
 @pytest.fixture
@@ -154,36 +110,8 @@ def sketch_map_buffer():
 
 
 @pytest.fixture
-def sketch_map_markings_buffer_1():
-    """Photo of a Sketch Map."""
-    with open(str(FIXTURE_DIR / "sketch-map-markings-1.png"), "rb") as file:
-        return BytesIO(file.read())
-
-
-@pytest.fixture
-def sketch_map_markings_buffer_2():
-    """Photo of a Sketch Map."""
-    with open(str(FIXTURE_DIR / "sketch-map-markings-2.png"), "rb") as file:
-        return BytesIO(file.read())
-
-
-@pytest.fixture
-def map_frame_buffer():
-    """Map frame of original Sketch Map."""
-    with open(str(FIXTURE_DIR / "map-frame.png"), "rb") as file:
-        return BytesIO(file.read())
-
-
-@pytest.fixture
 def sketch_map_frame_markings_detected_buffer():
     path = str(FIXTURE_DIR / "sketch-map-frame-markings-detected.geotiff")
-    with open(path, "rb") as file:
-        return BytesIO(file.read())
-
-
-@pytest.fixture
-def detected_markings_cleaned_buffer():
-    path = str(FIXTURE_DIR / "detected-markings.geojson")
     with open(path, "rb") as file:
         return BytesIO(file.read())
 
@@ -200,11 +128,6 @@ def sketch_map():
 def map_frame():
     """Map frame of original Sketch Map."""
     return cv2.imread(str(FIXTURE_DIR / "map-frame.png"))
-
-
-@pytest.fixture
-def sketch_map_frame_markings():
-    return cv2.imread(str(FIXTURE_DIR / "sketch-map-frame-markings.png"))
 
 
 @pytest.fixture
@@ -232,30 +155,3 @@ def file(sketch_map_buffer):
 @pytest.fixture
 def files(file):
     return [file, file]
-
-
-@pytest.fixture()
-def file_ids(files, flask_app):
-    """IDs of uploaded files stored in the database."""
-    with flask_app.app_context():
-        # setup
-        ids = db_client_flask.insert_files(files)
-        yield ids
-        # teardown
-        for i in ids:
-            db_client_flask.delete_file(i)
-
-
-@pytest.fixture()
-def uuids(map_frame_buffer, db_conn_celery):
-    """UUIDs of map frames stored in the database."""
-    # setup
-    uuids = []
-    for i in range(3):
-        uuid = uuid4()
-        uuids.append(uuid)
-        db_client_celery.insert_map_frame(map_frame_buffer, uuid)
-    yield uuids
-    # teardown
-    for i in uuids:
-        db_client_celery.delete_map_frame(i)
