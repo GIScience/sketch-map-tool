@@ -294,8 +294,9 @@ def sketch_map_marked(uuid_create, sketch_map, tmp_path_factory) -> bytes:
 
     # Convert PDF to PNG
     pdf = fitz.open(stream=sketch_map)  # type: ignore
-    page = pdf.load_page(0)
-    page.get_pixmap().save(path, output="png")
+    pag = pdf.load_page(0)
+    mat = fitz.Matrix(2, 2)
+    pag.get_pixmap(matrix=mat).save(path, output="png")
 
     # Draw shapes on PNG (Sketch Map)
     img1 = Image.open(path)  # Sketch Map (primary image)
