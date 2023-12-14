@@ -42,7 +42,6 @@ docker run --name smt-redis -d -p 6379:6379 redis:7
 # install local versions of esbuild, eslint and stylelint to build and check JS and CSS
 npm install
 npm run build  # build/bundle JS and CSS
-# hack away
 ```
 
 ## Configuration
@@ -71,11 +70,24 @@ flask --app sketch_map_tool/routes.py --debug run
 
 ## Back-End
 
+### Linter and Formatter
+
+```bash
+ruff
+ruff format
+```
+
 ### Tests
 
 ```bash
 pytest
 ```
+
+#### Integration Tests
+
+The integration test suite utilizes the Testcontainers framework to run unique instances of Redis and Postgres for each test session. It also configures and starts Flask and Celery workers in the background.
+
+Many fixtures are written to a temporary directory on disk managed by Pytest. This makes it easy to inspect the results at various steps of the program (E.g. Marking detection pipeline). Unix users usually find this directory under `/tmp/pytest-of-{user}/pytest-current/{uuid}/`. The UUID of requests triggered by the tests (E.g. Create or digitize) is the directory name.
 
 ### Update dependencies
 
