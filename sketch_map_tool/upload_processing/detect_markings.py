@@ -11,7 +11,7 @@ def detect_markings(
     image: NDArray,
     yolo_model: YOLO,
     sam_predictor: SamPredictor,
-) -> NDArray:
+) -> tuple[list[NDArray], list]:
     # Sam can only deal with RGB and not RGBA etc.
     img = Image.fromarray(image[:, :, ::-1]).convert("RGB")
     # masks represent markings
@@ -93,22 +93,10 @@ def mask_from_bbox(bbox: list, sam_predictor: SamPredictor) -> tuple:
 
 
 def post_process(masks: list[NDArray], bboxes: list[list[int]]) -> list[NDArray]:
+    """Post-processes masks and bounding boxes to clean-up and fill contours.
+
+    Apply morphological operations to clean the masks, creates contours and fills them.
     """
-    Post-processes masks and bounding boxes to clean up and fill contours.
-
-    This function takes a list of masks and their corresponding bounding boxes, applies
-    morphological operations to clean the masks, and then fills the contours. The result is
-    a list of tuples, each containing a cleaned mask and its contours.
-
-    Parameters:
-    - masks (List[NDArray]): A list of masks, where each mask is a NumPy array.
-    - bboxes (List[List[int]]): A list of bounding boxes, where each bbox is defined as [x1, y1, x2, y2].
-
-    Returns:
-    - List[Tuple[NDArray, List]]: A list of tuples, where each tuple contains a cleaned mask
-      and its contours.
-    """
-
     # Convert and preprocess masks
     preprocessed_masks = np.array([np.vstack(mask) for mask in masks], dtype=np.float32)
     preprocessed_masks[preprocessed_masks == 0] = np.nan
@@ -116,9 +104,7 @@ def post_process(masks: list[NDArray], bboxes: list[list[int]]) -> list[NDArray]
     # Calculate height and width for each bounding box
     bbox_sizes = [np.array([bbox[2] - bbox[0], bbox[3] - bbox[1]]) for bbox in bboxes]
 
-    # Initialize the list for cleaned masks
     cleaned_masks = []
-
     for i, mask in enumerate(preprocessed_masks):
         # Calculate kernel size as 5% of the bounding box dimensions
         kernel_size = tuple((bbox_sizes[i] * 0.05).astype(int))
@@ -129,7 +115,9 @@ def post_process(masks: list[NDArray], bboxes: list[list[int]]) -> list[NDArray]
 
         # Find contours
         contours, _ = cv2.findContours(
-            closed_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+            closed_mask,
+            cv2.RETR_EXTERNAL,
+            cv2.CHAIN_APPROX_SIMPLE,
         )
 
         # Create a blank canvas for filled contours
