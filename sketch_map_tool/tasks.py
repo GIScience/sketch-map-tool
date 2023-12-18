@@ -121,42 +121,23 @@ def digitize_sketches(
     # Initialize ml-models. This has to happen inside of celery context.
     # Custom trained model for object detection of markings and colors
     yolo_path = init_model(get_config_value("neptune_model_id_yolo"))
-    yolo_model = YOLO(yolo_path)
+    yolo_model: YOLO = YOLO(yolo_path)
     # Zero shot segment anything model
     sam_path = init_model(get_config_value("neptune_model_id_sam"))
     sam_model = sam_model_registry["vit_b"](sam_path)
-    sam_predictor = SamPredictor(sam_model)  # mask predictor
+    sam_predictor: SamPredictor = SamPredictor(sam_model)  # mask predictor
 
-    def process_sketch_map(
-        sketch_map_id: int,
-        name: str,
-        uuid: str,
-        bbox: Bbox,
-        sam_predictor: SamPredictor,
-        yolo_model: YOLO,
-    ) -> FeatureCollection:
-        """Process a Sketch Map."""
+    l = []  # noqa: E741
+    for file_id, file_name, uuid, bbox in zip(file_ids, file_names, uuids, bboxes):
         # r = interim result
-        r: BytesIO = db_client_celery.select_file(sketch_map_id)  # type: ignore
+        r: BytesIO = db_client_celery.select_file(file_id)  # type: ignore
         r: NDArray = to_array(r)  # type: ignore
         r: NDArray = clip(r, map_frames[uuid])  # type: ignore
-        r: NDArray = detect_markings(r, yolo_model, sam_predictor)
-        geojsons: list[FeatureCollection] = []
-        for r_ in r:
-            r_: BytesIO = georeference(r_, bbox, bgr=False)  # type: ignore
-            r_: FeatureCollection = polygonize(r_, layer_name=name)
-            r_: FeatureCollection = post_process(r_, name)
-            geojsons.append(r_)
-            # type: ignore
-        return merge(geojsons)
-
-    def process_marking(name, bbox, markings, mask, color):
-        """Process a Marking."""
-        pass
-
-    return merge(
-        [
-            process_sketch_map(file_id, name, uuid, bbox, sam_predictor, yolo_model)
-            for file_id, name, uuid, bbox in zip(file_ids, file_names, uuids, bboxes)
-        ]
-    )
+        r: NDArray = detect_markings(r, yolo_model, sam_predictor)  # type: ignore
+        # m = marking
+        for m in r:
+            m: BytesIO = georeference(m, bbox, bgr=False)  # type: ignore
+            m: FeatureCollection = polygonize(m, layer_name=file_name)  # type: ignore
+            m: FeatureCollection = post_process(m, file_name)
+            l.append(m)
+    return merge(l)
