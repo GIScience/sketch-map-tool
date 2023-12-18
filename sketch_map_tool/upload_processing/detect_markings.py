@@ -11,14 +11,14 @@ def detect_markings(
     image: NDArray,
     yolo_model: YOLO,
     sam_predictor: SamPredictor,
-) -> tuple[list[NDArray], list]:
-    # Sam can only deal with RGB and not RGBA etc.
+) -> list[NDArray]:
+    # SAM can only deal with RGB and not RGBA etc.
     img = Image.fromarray(image[:, :, ::-1]).convert("RGB")
     # masks represent markings
     masks, bboxes, colors = apply_ml_pipeline(img, yolo_model, sam_predictor)
     colors = [int(c) + 1 for c in colors]  # +1 because 0 is background
-    masks_processed = post_process(masks, bboxes)
-    return masks_processed, colors
+    processed_markings = post_process(masks, bboxes, colors)
+    return processed_markings
 
 
 def apply_ml_pipeline(
@@ -92,7 +92,21 @@ def mask_from_bbox(bbox: list, sam_predictor: SamPredictor) -> tuple:
     return masks[0], scores[0]
 
 
-def post_process(masks: list[NDArray], bboxes: list[list[int]]) -> list[NDArray]:
+def create_marking_array(
+    mask: NDArray,
+    color: int,
+) -> NDArray:
+    """Create a single color marking array based on masks and colors."""
+    single_color_marking = np.zeros(mask.shape, dtype=np.uint8)
+    single_color_marking[mask] = color
+    return single_color_marking
+
+
+def post_process(
+    masks: list[NDArray],
+    bboxes: list[list[int]],
+    colors,
+) -> list[NDArray]:
     """Post-processes masks and bounding boxes to clean-up and fill contours.
 
     Apply morphological operations to clean the masks, creates contours and fills them.
@@ -104,25 +118,26 @@ def post_process(masks: list[NDArray], bboxes: list[list[int]]) -> list[NDArray]
     # Calculate height and width for each bounding box
     bbox_sizes = [np.array([bbox[2] - bbox[0], bbox[3] - bbox[1]]) for bbox in bboxes]
 
-    cleaned_masks = []
-    for i, mask in enumerate(preprocessed_masks):
+    processed_markings = []
+    for i, (mask, color) in enumerate(zip(preprocessed_masks, colors)):
         # Calculate kernel size as 5% of the bounding box dimensions
         kernel_size = tuple((bbox_sizes[i] * 0.05).astype(int))
         kernel = np.ones(kernel_size, np.uint8)
 
         # Apply morphological closing operation
-        closed_mask = cv2.morphologyEx(mask.astype("uint8"), cv2.MORPH_CLOSE, kernel)
+        mask_closed = cv2.morphologyEx(mask.astype("uint8"), cv2.MORPH_CLOSE, kernel)
 
         # Find contours
-        contours, _ = cv2.findContours(
-            closed_mask,
+        mask_contour, _ = cv2.findContours(
+            mask_closed,
             cv2.RETR_EXTERNAL,
             cv2.CHAIN_APPROX_SIMPLE,
         )
 
         # Create a blank canvas for filled contours
-        filled_contours = np.zeros_like(closed_mask, dtype=np.uint8)
-        cv2.drawContours(filled_contours, contours, -1, 1, thickness=cv2.FILLED)
-        cleaned_masks.append(filled_contours.astype(bool))
+        mask_filled = np.zeros_like(mask_closed, dtype=np.uint8)
+        cv2.drawContours(mask_filled, mask_contour, -1, 1, thickness=cv2.FILLED)
 
-    return cleaned_masks
+        # Mask to markings array
+        processed_markings.append(create_marking_array(mask_filled.astype(bool), color))
+    return processed_markings

@@ -18,7 +18,6 @@ from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
 from sketch_map_tool.oqt_analyses import get_report
 from sketch_map_tool.upload_processing import (
     clip,
-    create_marking_array,
     georeference,
     merge,
     polygonize,
@@ -91,13 +90,7 @@ def georeference_sketch_maps(
     bboxes: list[Bbox],
 ) -> AsyncResult | BytesIO:
     def process(sketch_map_id: int, uuid: str, bbox: Bbox) -> BytesIO:
-        """Process a Sketch Map.
-
-        :param sketch_map_id: ID under which uploaded file is stored in the database.
-        :param uuid: UUID under which the sketch map was created.
-        :bbox: Bounding box of the AOI on the sketch map.
-        :return: Georeferenced image (GeoTIFF) of the sketch map .
-        """
+        """Process a Sketch Map."""
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
@@ -147,10 +140,9 @@ def digitize_sketches(
         r: BytesIO = db_client_celery.select_file(sketch_map_id)  # type: ignore
         r: NDArray = to_array(r)  # type: ignore
         r: NDArray = clip(r, map_frames[uuid])  # type: ignore
-        masks, colors = detect_markings(r, yolo_model, sam_predictor)
+        r: NDArray = detect_markings(r, yolo_model, sam_predictor)
         geojsons: list[FeatureCollection] = []
-        for mask, color in zip(masks, colors):
-            r_: NDArray = create_marking_array([mask], [color], r)
+        for r_ in r:
             r_: BytesIO = georeference(r_, bbox, bgr=False)  # type: ignore
             r_: FeatureCollection = polygonize(r_, layer_name=name)
             r_: FeatureCollection = post_process(r_, name)
