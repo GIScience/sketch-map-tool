@@ -6,8 +6,6 @@ from PIL import Image
 from segment_anything import SamPredictor
 from ultralytics import YOLO
 
-from sketch_map_tool.upload_processing.create_marking_array import create_marking_array
-
 
 def detect_markings(
     image: NDArray,
@@ -17,9 +15,9 @@ def detect_markings(
     # Sam can only deal with RGB and not RGBA etc.
     img = Image.fromarray(image[:, :, ::-1]).convert("RGB")
     # masks represent markings
-    masks, bboxes,colors = apply_ml_pipeline(img, yolo_model, sam_predictor)
+    masks, bboxes, colors = apply_ml_pipeline(img, yolo_model, sam_predictor)
     colors = [int(c) + 1 for c in colors]  # +1 because 0 is background
-    masks_processed = post_process(masks,bboxes)
+    masks_processed = post_process(masks, bboxes)
     return masks_processed, colors
 
 
@@ -84,7 +82,7 @@ def apply_sam(
     return masks, scores
 
 
-def mask_from_bbox(bbox:list, sam_predictor: SamPredictor) -> tuple:
+def mask_from_bbox(bbox: list, sam_predictor: SamPredictor) -> tuple:
     """Generate a mask using SAM (Segment Anything) predictor for a given bounding box.
 
     Returns:
@@ -127,10 +125,12 @@ def post_process(masks: list[NDArray], bboxes: list[list[int]]) -> list[NDArray]
         kernel = np.ones(kernel_size, np.uint8)
 
         # Apply morphological closing operation
-        closed_mask = cv2.morphologyEx(mask.astype('uint8'), cv2.MORPH_CLOSE, kernel)
+        closed_mask = cv2.morphologyEx(mask.astype("uint8"), cv2.MORPH_CLOSE, kernel)
 
         # Find contours
-        contours, _ = cv2.findContours(closed_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv2.findContours(
+            closed_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+        )
 
         # Create a blank canvas for filled contours
         filled_contours = np.zeros_like(closed_mask, dtype=np.uint8)
@@ -138,6 +138,3 @@ def post_process(masks: list[NDArray], bboxes: list[list[int]]) -> list[NDArray]
         cleaned_masks.append(filled_contours.astype(bool))
 
     return cleaned_masks
-
-
-
