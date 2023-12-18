@@ -35,7 +35,7 @@ def clean(fc: FeatureCollection) -> FeatureCollection:
 
 
 def enrich(fc: FeatureCollection, properties):
-    """Enrich GeoJSON properties and map colors."""
+    """Enrich GeoJSON properties and add color information to them."""
     for feature in fc.features:
         feature.properties = feature.properties | properties
         if "color" in feature.properties.keys():
@@ -44,23 +44,17 @@ def enrich(fc: FeatureCollection, properties):
 
 
 def simplify(fc: FeatureCollection) -> FeatureCollection:
-    """
-    Simplifies the geometries in a GeoJSON FeatureCollection.
+    """Simplifies the geometries in a GeoJSON FeatureCollection.
 
-    This function simplifies the geometries in a given FeatureCollection. It applies a buffer operation
-    to each geometry based on a percentage of the maximum width, dissolves the geometries based on a
-    'color' attribute, removes inner rings, and then re-applies a negative buffer to restore the original
-    size. The function assumes that the 'color' field exists in the properties of the features.
+    Buffers each geometry based on a percentage of the maximum width, dissolves the
+    geometries based on the 'color' attribute, removes inner rings, and then re-applies
+    a negative buffer to restore the original size.
 
-    Parameters:
-    - fc (geojson.FeatureCollection): The FeatureCollection to be simplified.
-
-    Returns:
-    - geojson.FeatureCollection: The simplified FeatureCollection.
+    The function assumes that the 'color' field exists in the properties of the
+    features.
     """
     features = fc["features"]
     properties = features[0]["properties"]
-
     geometries = [shape(feature["geometry"]) for feature in features]
 
     # Buffer operation
@@ -104,19 +98,7 @@ def simplify(fc: FeatureCollection) -> FeatureCollection:
 
 
 def remove_inner_rings(geometry: Polygon | MultiPolygon) -> Polygon | MultiPolygon:
-    """
-    Removes inner rings (holes) from a given Shapely geometry object.
-
-    This function checks the type of the geometry object. If it is a Polygon, it creates
-    a new Polygon with just the exterior ring. If it is a MultiPolygon, it does the same
-    for each Polygon in it. Other geometry types are not supported and will raise an error.
-
-    Parameters:
-    - geometry (Polygon, MultiPolygon): A Shapely geometry object, either a Polygon or MultiPolygon.
-
-    Returns:
-    - Polygon, MultiPolygon: A Shapely geometry object with inner rings removed.
-    """
+    """Removes inner rings (holes) from a given Shapely geometry object."""
     if geometry.is_empty:
         return geometry
     elif geometry.type == "Polygon":
@@ -128,18 +110,11 @@ def remove_inner_rings(geometry: Polygon | MultiPolygon) -> Polygon | MultiPolyg
 
 
 def smooth(fc: FeatureCollection) -> FeatureCollection:
-    """
-    Smoothens the polygon geometries in a GeoJSON FeatureCollection.
+    """Smoothens the polygon geometries in a GeoJSON FeatureCollection.
 
-    This function applies a Chaikin smoothing algorithm to each polygon geometry in the given
-    FeatureCollection. Non-polygon geometries are skipped. The function updates the geometries
-    while retaining the properties of each feature.
-
-    Parameters:
-    - fc (geojson.FeatureCollection): The FeatureCollection to be smoothed.
-
-    Returns:
-    - geojson.FeatureCollection: The FeatureCollection with smoothed polygon geometries.
+    This function applies a Chaikin smoothing algorithm to each polygon geometry in the
+    given FeatureCollection. Non-polygon geometries are skipped. The function updates
+    the geometries while retaining the properties of each feature.
     """
     features = fc["features"]
     updated_features = []
