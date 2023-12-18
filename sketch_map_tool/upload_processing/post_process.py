@@ -1,14 +1,12 @@
 import geojson
 from geojson import FeatureCollection
-from shapely.geometry import shape
-from shapely import Polygon, MultiPolygon
-from shapely.geometry import mapping
+from shapely import MultiPolygon, Polygon
+from shapely.geometry import mapping, shape
 from shapely.ops import cascaded_union
 from shapelysmooth import chaikin_smooth
 
 from sketch_map_tool.definitions import COLORS
 
-from typing import Union
 
 def post_process(fc: FeatureCollection, name: str) -> FeatureCollection:
     fc = clean(fc)
@@ -68,30 +66,44 @@ def simplify(fc: FeatureCollection) -> FeatureCollection:
     # Buffer operation
     buffer_distance_percentage = 0.1
     max_diag = max(
-        ((geometry.bounds[2] - geometry.bounds[0]) ** 2 + (geometry.bounds[3] - geometry.bounds[1]) ** 2) ** 0.5 for
-        geometry in geometries)  # check for webmercator
+        (
+            (geometry.bounds[2] - geometry.bounds[0]) ** 2
+            + (geometry.bounds[3] - geometry.bounds[1]) ** 2
+        )
+        ** 0.5
+        for geometry in geometries
+    )  # check for webmercator
     buffer_distance = buffer_distance_percentage * max_diag
     buffered_geometries = [geometry.buffer(buffer_distance) for geometry in geometries]
     # Dissolve by color field (assuming there's a "color" field)
     try:
-        dissolved_geometrie = [remove_inner_rings(geometry) for geometry in cascaded_union(buffered_geometries)]
+        dissolved_geometrie = [
+            remove_inner_rings(geometry)
+            for geometry in cascaded_union(buffered_geometries)
+        ]
     except:
-        dissolved_geometrie = [remove_inner_rings(geometry) for geometry in [cascaded_union(buffered_geometries)]]
+        dissolved_geometrie = [
+            remove_inner_rings(geometry)
+            for geometry in [cascaded_union(buffered_geometries)]
+        ]
 
-    simplified_geometries = [geometry.buffer(-buffer_distance).simplify(0.0025 * max_diag) for geometry in dissolved_geometrie]
+    simplified_geometries = [
+        geometry.buffer(-buffer_distance).simplify(0.0025 * max_diag)
+        for geometry in dissolved_geometrie
+    ]
 
     # Create a single GeoJSON feature
-    features = [geojson.Feature(
-        geometry=mapping(geometry),
-        properties=properties
-    ) for geometry in simplified_geometries]
+    features = [
+        geojson.Feature(geometry=mapping(geometry), properties=properties)
+        for geometry in simplified_geometries
+    ]
 
     # Create a GeoJSON feature collection with the single feature
     fc = geojson.FeatureCollection(features)
     return fc
 
 
-def remove_inner_rings(geometry: Polygon | MultiPolygon) -> Polygon  | MultiPolygon:
+def remove_inner_rings(geometry: Polygon | MultiPolygon) -> Polygon | MultiPolygon:
     """
     Removes inner rings (holes) from a given Shapely geometry object.
 
@@ -107,9 +119,9 @@ def remove_inner_rings(geometry: Polygon | MultiPolygon) -> Polygon  | MultiPoly
     """
     if geometry.is_empty:
         return geometry
-    elif geometry.type == 'Polygon':
+    elif geometry.type == "Polygon":
         return Polygon(geometry.exterior)
-    elif geometry.type == 'MultiPolygon':
+    elif geometry.type == "MultiPolygon":
         return MultiPolygon([Polygon(poly.exterior) for poly in geometry.geoms])
     else:
         raise ValueError("Unsupported geometry type")
@@ -143,12 +155,10 @@ def smooth(fc: FeatureCollection) -> FeatureCollection:
 
         corrected_geometry = chaikin_smooth(geometry)
 
-        updated_features.append(geojson.Feature(
-            geometry=mapping(corrected_geometry),
-            properties=properties
-        ))
+        updated_features.append(
+            geojson.Feature(geometry=mapping(corrected_geometry), properties=properties)
+        )
 
     # Create a GeoJSON feature collection with the updated features
     fc = geojson.FeatureCollection(updated_features)
     return fc
-
