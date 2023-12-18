@@ -54,36 +54,37 @@ def simplify(fc: FeatureCollection) -> FeatureCollection:
     features.
     """
     features = fc["features"]
-    properties = features[0]["properties"]
+    properties = features[0]["properties"]  # properties for each features are the same
     geometries = [shape(feature["geometry"]) for feature in features]
 
     # Buffer operation
     buffer_distance_percentage = 0.1
+
+    # TODO: does this work for bbox including antimeridian?
+    # (Currently SMT does not allow bbox including antimeridian as input)
     max_diag = max(
         (
+            # bounds: (minx, miny, maxx, maxy)
             (geometry.bounds[2] - geometry.bounds[0]) ** 2
             + (geometry.bounds[3] - geometry.bounds[1]) ** 2
         )
         ** 0.5
         for geometry in geometries
-    )  # check for webmercator
+    )
     buffer_distance = buffer_distance_percentage * max_diag
     buffered_geometries = [geometry.buffer(buffer_distance) for geometry in geometries]
     # Dissolve by color field (assuming there's a "color" field)
-    try:
-        dissolved_geometrie = [
-            remove_inner_rings(geometry)
-            for geometry in cascaded_union(buffered_geometries)
+    dissolved_geometries = cascaded_union(buffered_geometries)
+    if isinstance(dissolved_geometries, list):
+        dissolved_geometries = [
+            remove_inner_rings(geometry) for geometry in dissolved_geometries
         ]
-    except:
-        dissolved_geometrie = [
-            remove_inner_rings(geometry)
-            for geometry in [cascaded_union(buffered_geometries)]
-        ]
+    else:
+        dissolved_geometries = [remove_inner_rings(dissolved_geometries)]
 
     simplified_geometries = [
         geometry.buffer(-buffer_distance).simplify(0.0025 * max_diag)
-        for geometry in dissolved_geometrie
+        for geometry in dissolved_geometries
     ]
 
     # Create a single GeoJSON feature
@@ -124,7 +125,7 @@ def smooth(fc: FeatureCollection) -> FeatureCollection:
         properties = feature["properties"]
 
         if geometry["type"] == "Polygon":
-            geometry = Polygon(geometry["coordinates"][0])
+            geometry = Polygon(geometry["coordinates"][0])  # Exterior ring
         else:
             continue  # Skip non-polygon geometries
 
@@ -134,6 +135,5 @@ def smooth(fc: FeatureCollection) -> FeatureCollection:
             geojson.Feature(geometry=mapping(corrected_geometry), properties=properties)
         )
 
-    # Create a GeoJSON feature collection with the updated features
     fc = geojson.FeatureCollection(updated_features)
     return fc
