@@ -8,7 +8,6 @@ from sketch_map_tool.config import get_config_value
 from sketch_map_tool.upload_processing.detect_markings import (
     apply_ml_pipeline,
     detect_markings,
-    post_process,
 )
 from sketch_map_tool.upload_processing.ml_models import init_model
 
@@ -56,7 +55,3 @@ def test_apply_ml_pipeline_show_masks(
     for mask in masks:
         plt.imshow(mask, cmap="viridis", alpha=0.7)
         plt.show()
-
-
-def test_post_process():
-    assert post_process([], []) is not None
