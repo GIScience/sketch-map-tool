@@ -18,7 +18,7 @@ from sketch_map_tool.upload_processing.ml_models import init_model
 def sam_predictor():
     # Zero shot segment anything model
     sam_path = init_model(get_config_value("neptune_model_id_sam"))
-    sam_model = sam_model_registry["vit_b"](sam_path)
+    sam_model = sam_model_registry[get_config_value("model_type_sam")](sam_path)
     return SamPredictor(sam_model)  # mask predictor
 
 
