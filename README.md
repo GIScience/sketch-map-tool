@@ -23,6 +23,12 @@ Please refer to the [development setup documentation](/docs/development-setup.md
 
 ![](/docs/component-diagram.png)
 
+
+<p float="left">
+  <img src="/docs/component-diagram.png" width="100" />
+  <img src="/docs/action-diagram.png" width="100" /> 
+</p>
+
 ## Funding
 
 The initial proof of concept has been developed in the project T2S Waterproofing Data which is financially supported by the Belmont Forum

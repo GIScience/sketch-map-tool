@@ -1,0 +1,35 @@
+@startuml
+start
+partition Digitize Sketches {
+    -> ids, names, uuids, map frame, bboxes;
+    :Initialize ML-models;
+    -> id, name, uuid, bbox, sam, yolo;
+    :Load sketch-map;
+    :To array;
+    :Clip;
+    group Detect Markings {
+        group Apply ML-Pipeline {
+          :Object Detection by Yolo v8;
+          -> bboxes, colors;
+          :Segementation by SAM;
+          -> masks, bboxes, colors;
+        }
+        group Post-Process Masks {
+          :Morphological closing;
+          :Identify contour and fill;
+          :Create marking array;
+        }
+        -> marking array;
+    }
+    :Georeference;
+    :Polygonize;
+    -> vector;
+    group Post-process {
+      :Clean;
+      :Enrich;
+      :Simplify;
+      :Smooth;
+    }
+}
+stop
+@enduml
