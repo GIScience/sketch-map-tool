@@ -21,7 +21,7 @@ Please refer to the [development setup documentation](/docs/development-setup.md
 
 ## Components
 
-![](/docs/component-diagram.png)
+![](/docs/component-diagram.png) ![](/docs/action-diagram.png)
 
 
 <p float="left">
