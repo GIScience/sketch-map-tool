@@ -19,11 +19,13 @@ Please refer to [this document](/CONTRIBUTING.md).
 
 Please refer to the [development setup documentation](/docs/development-setup.md).
 
-## Components
+## Technical Background and Components
 
-![](/docs/component-diagram.png) 
+![](/docs/component-diagram.png)
 
-For an outline of how the Sketch Map Tool digitizes sketches (part of the `upload_processing` depicted above) please see [this action diagram](/docs/action-diagram.png)
+For an outline of how the Sketch Map Tool digitizes sketches (part of the `upload_processing` depicted above) please see [this action diagram](/docs/action-diagram.png).
+
+The [`tasks.py` module](/sketch-map-tool/tasks.py) is recommended as entry point for code exploration.
 
 ## Funding
 

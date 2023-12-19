@@ -4,12 +4,12 @@ partition Digitize Sketches {
     -> ids, names, uuids, map frame, bboxes;
     :Initialize ML-models;
     -> id, name, uuid, bbox, sam, yolo;
-    :Load sketch-map;
+    :Load sketch map;
     :To array;
-    :Clip;
+    :Clip out map frame;
     group Detect Markings {
         group Apply ML-Pipeline {
-          :Object Detection by Yolo v8;
+          :Object detection by Yolo v8;
           -> bboxes, colors;
           :Segementation by SAM;
           -> masks, bboxes, colors;
@@ -30,6 +30,7 @@ partition Digitize Sketches {
       :Simplify;
       :Smooth;
     }
+    -> vector;
 }
 stop
 @enduml
