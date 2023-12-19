@@ -23,7 +23,7 @@ Please refer to the [development setup documentation](/docs/development-setup.md
 
 ![](/docs/component-diagram.png) 
 
-For how the Sketch Map Tool digitize sketches/markings (part of the `upload_processing` depicted above) please see [this action diagram](/docs/action-diagram.png)
+For an outline of how the Sketch Map Tool digitizes sketches (part of the `upload_processing` depicted above) please see [this action diagram](/docs/action-diagram.png)
 
 ## Funding
 
