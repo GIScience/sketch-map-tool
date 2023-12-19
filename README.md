@@ -21,13 +21,9 @@ Please refer to the [development setup documentation](/docs/development-setup.md
 
 ## Components
 
-![](/docs/component-diagram.png) ![](/docs/action-diagram.png)
+![](/docs/component-diagram.png) 
 
-
-<p float="left">
-  <img src="/docs/component-diagram.png" width="100" />
-  <img src="/docs/action-diagram.png" width="100" /> 
-</p>
+For how the Sketch Map Tool digitize sketches/markings (part of the `upload_processing` depicted above) please see [this action diagram](/docs/action-diagram.png)
 
 ## Funding
 
