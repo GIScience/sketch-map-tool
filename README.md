@@ -25,7 +25,7 @@ Please refer to the [development setup documentation](/docs/development-setup.md
 
 For an outline of how the Sketch Map Tool digitizes sketches (part of the `upload_processing` depicted above) please see [this action diagram](/docs/action-diagram.png).
 
-The [`tasks.py` module](/sketch-map-tool/tasks.py) is recommended as entry point for code exploration.
+The [`tasks.py` module](/sketch_map_tool/tasks.py) is recommended as entry point for code exploration.
 
 ## Funding
 
