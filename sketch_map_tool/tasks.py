@@ -124,7 +124,7 @@ def digitize_sketches(
     yolo_model: YOLO = YOLO(yolo_path)
     # Zero shot segment anything model
     sam_path = init_model(get_config_value("neptune_model_id_sam"))
-    sam_model = sam_model_registry["vit_b"](sam_path)
+    sam_model = sam_model_registry[get_config_value("model_type_sam")](sam_path)
     sam_predictor: SamPredictor = SamPredictor(sam_model)  # mask predictor
 
     l = []  # noqa: E741

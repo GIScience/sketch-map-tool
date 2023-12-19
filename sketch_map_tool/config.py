@@ -1,5 +1,3 @@
-"""Load configuration from environment variables or configuration file on disk."""
-
 import os
 from types import MappingProxyType
 from typing import Dict
@@ -33,6 +31,7 @@ def load_config_default() -> Dict[str, str | int | float]:
         "neptune_api_token": "",
         "neptune_model_id_yolo": "SMT-OSM-1",
         "neptune_model_id_sam": "SMT-SAM-1",
+        "model_type_sam": "vit_b",
     }
 
 
@@ -61,7 +60,9 @@ def load_config_from_env() -> Dict[str, str]:
         "neptune_api_token": os.getenv("SMT_NEPTUNE_API_TOKEN"),
         "neptune_model_id_yolo": os.getenv("SMT_NEPTUNE_MODEL_ID_YOLO"),
         "neptune_model_id_sam": os.getenv("SMT_NEPTUNE_MODEL_ID_SAM"),
+        "model_type_sam": os.getenv("SMT_MODEL_TYPE_SAM"),
     }
+
     return {k: v for k, v in cfg.items() if v is not None}
 
 

@@ -32,6 +32,7 @@ def config_keys():
         "neptune_api_token",
         "neptune_model_id_yolo",
         "neptune_model_id_sam",
+        "model_type_sam",
     )
 
 
