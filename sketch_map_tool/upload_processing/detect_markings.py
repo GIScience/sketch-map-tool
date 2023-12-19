@@ -13,7 +13,8 @@ def detect_markings(
     sam_predictor: SamPredictor,
 ) -> list[NDArray]:
     # SAM can only deal with RGB and not RGBA etc.
-    img = Image.fromarray(image[:, :, ::-1]).convert("RGB")
+    img = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+
     # masks represent markings
     masks, bboxes, colors = apply_ml_pipeline(img, yolo_model, sam_predictor)
     colors = [int(c) + 1 for c in colors]  # +1 because 0 is background
