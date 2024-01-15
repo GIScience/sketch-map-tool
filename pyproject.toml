@@ -26,12 +26,12 @@ matplotlib-scalebar = "^0.8.1"
 redis = "^4.5.4"
 pyproj = "^3.6.1"
 neptune = "^1.8.3"
-torch = {version = "^2.1.0+cpu", source = "pytorch"}
-torchvision = {version = "^0.16.0+cpu", source = "pytorch"}
 ultralytics = "^8.0.209"
 segment-anything = {git = "https://github.com/facebookresearch/segment-anything.git"}
 pyzbar = "^0.1.9"
 shapelysmooth = "^0.1.1"
+torch = "^2.1.2"
+torchvision = "^0.16.2"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
@@ -47,11 +47,6 @@ testcontainers-postgres = "^0.0.1rc1"
 testcontainers-redis = "^0.0.1rc1"
 hypothesis = "^6.88.4"
 ruff = "^0.1.7"
-
-[[tool.poetry.source]]
-name = "pytorch"
-url = "https://download.pytorch.org/whl/cpu"
-priority = "explicit"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
