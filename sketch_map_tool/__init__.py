@@ -18,6 +18,7 @@ CELERY_CONFIG = {
     "task_serializer": "pickle",
     "task_track_started": True,  # report ‘started’ status worker executes task
     "task_send_sent_event": True,
+    "task_time_limit": 900,  # kill task after 15 minutes
     "result_serializer": "pickle",
     "result_extended": True,  # save result attributes to backend (e.g. name)
     "result_compression": "gzip",
