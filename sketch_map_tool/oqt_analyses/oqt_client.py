@@ -34,7 +34,11 @@ def bbox_to_feature_collection(bbox: Bbox) -> dict:
 def get_report(bbox: Bbox, include_svg: bool = True, include_html: bool = False):
     url = OQT_API_URL + "/" + "reports" + "/" + OQT_REPORT_NAME
     parameters = {"bpolys": bbox_to_feature_collection(bbox)}
-    req = requests.post(url, json=parameters)
+    req = requests.post(
+        url,
+        json=parameters,
+        timeout=(10, 600),  # connect timeout (5 seconds), read_timeout (10 minutes)
+    )
     if req.status_code == 422:
         if req.json()["type"] == "SizeRestrictionError":
             raise OQTReportError(

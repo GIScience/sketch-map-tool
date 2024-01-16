@@ -38,7 +38,11 @@ def get_map_image(bbox: Bbox, size: Size) -> Response:
     }
     try:
         return requests.get(
-            url, params, stream=True, timeout=int(get_config_value("wms-read-timeout"))
+            url,
+            params,
+            stream=True,
+            # connect timeout (5 seconds), read_timeout (10 minutes)
+            timeout=(10, int(get_config_value("wms-read-timeout"))),
         )
     except ReadTimeout:
         raise MapGenerationError(
