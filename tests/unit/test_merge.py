@@ -7,3 +7,9 @@ def test_merge(detected_markings_cleaned):
     fc = merge([detected_markings_cleaned, detected_markings_cleaned])
     assert isinstance(fc, FeatureCollection)
     assert len(fc.features) == len(detected_markings_cleaned.features) * 2
+
+
+def test_merge_empyt_fc():
+    fc = merge([FeatureCollection(features=[])])
+    assert isinstance(fc, FeatureCollection)
+    assert len(fc.features) == 0
