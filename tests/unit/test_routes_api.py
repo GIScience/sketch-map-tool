@@ -1,4 +1,5 @@
 import pytest
+from celery.app.control import Control as CeleryControl
 
 from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.routes import app
@@ -115,6 +116,24 @@ def mock_async_results_failed_hard(request, monkeypatch):
     )
 
 
+@pytest.fixture
+def mock_celery_control_ping_ok(monkeypatch):
+    monkeypatch.setattr(
+        CeleryControl,
+        "ping",
+        lambda *args, **kwargs: [{"workerid": {"ok": "pong"}}],
+    )
+
+
+@pytest.fixture
+def mock_celery_control_ping_fail(monkeypatch):
+    monkeypatch.setattr(
+        CeleryControl,
+        "ping",
+        lambda *args, **kwargs: [],
+    )
+
+
 @pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
 def test_status_successful(
     client,
@@ -172,3 +191,17 @@ def test_status_failed_hard(
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 500
+
+
+@pytest.mark.usefixtures("mock_celery_control_ping_ok")
+def test_ping_ok(client):
+    resp = client.get("/api/ping")
+    assert resp.status_code == 200
+    assert resp.json == {"status": "ok"}
+
+
+@pytest.mark.usefixtures("mock_celery_control_ping_fail")
+def test_ping_fail(client):
+    resp = client.get("/api/ping")
+    assert resp.status_code == 200
+    assert resp.json == {"status": "fail"}

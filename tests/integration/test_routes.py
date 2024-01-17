@@ -83,3 +83,9 @@ def test_api_download_uuid_sketch_map(uuid_create, flask_client):
 def test_api_download_uuid_digitize(uuid_digitize, type_, flask_client):
     resp = flask_client.get(f"/api/download/{uuid_digitize}/{type_}")
     assert resp.status_code == 200
+
+
+def test_ping_ok(flask_client):
+    resp = flask_client.get("/api/ping")
+    assert resp.status_code == 200
+    assert resp.json == {"status": "ok"}
