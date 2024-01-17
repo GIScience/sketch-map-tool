@@ -1,6 +1,7 @@
 import json
 from io import BytesIO
 from uuid import UUID
+from pathlib import Path
 
 import fitz
 import pytest
@@ -286,11 +287,25 @@ def map_frame(uuid_create, flask_app, tmp_path_factory) -> bytes:
     return map_frame
 
 
+@pytest.fixture(scope="session", params=["closed", "filled", "overshot", "open"])
+def marking_type(request):
+    return request.param
+
+
 @pytest.fixture(scope="session")
-def sketch_map_marked(uuid_create, sketch_map, tmp_path_factory) -> bytes:
+def sketch_map_marked(
+    uuid_create,
+    sketch_map,
+    tmp_path_factory,
+    marking_type,
+) -> tuple[bytes, str]:
     """Sketch map with markings as PNG."""
     # TODO: increase resolution of PNG
-    path = tmp_path_factory.getbasetemp() / uuid_create / "sketch-map-marked.png"
+    path = (
+        tmp_path_factory.getbasetemp()
+        / uuid_create
+        / f"sketch-map-marked-{marking_type}.png"
+    )
 
     # Convert PDF to PNG
     pdf = fitz.open(stream=sketch_map)  # type: ignore
@@ -301,7 +316,10 @@ def sketch_map_marked(uuid_create, sketch_map, tmp_path_factory) -> bytes:
     # Draw shapes on PNG (Sketch Map)
     img1 = Image.open(path)  # Sketch Map (primary image)
     img2 = Image.open(
-        FIXTURE_DIR / "upload-processing" / "markings-transparent.png"
+        FIXTURE_DIR
+        / "upload-processing"
+        / "markings-transparent"
+        / Path(marking_type).with_suffix(".png")
     )  # Markings (overlay image)
     img2 = ImageOps.cover(img2, img1.size)  # type: ignore
     img1.paste(img2, (0, 0), mask=img2)  # Overlay images starting at 0, 0
@@ -333,6 +351,7 @@ def map_frame_marked(
 @pytest.fixture(scope="session")
 def uuid_digitize(
     sketch_map_marked,
+    marking_type,
     flask_client,
     flask_app,
     celery_app,
@@ -358,8 +377,8 @@ def uuid_digitize(
     result_raster = task_raster.get(timeout=90)
     # Write sketch map to temporary test directory
     dir = tmp_path_factory.mktemp(uuid, numbered=False)
-    path_vector = dir / "vector.geojson"
-    path_raster = dir / "raster.zip"
+    path_vector = dir / f"vector-{marking_type}.geojson"
+    path_raster = dir / f"raster-{marking_type}.zip"
     with open(path_vector, "w") as file:
         file.write(json.dumps(result_vector))
     with open(path_raster, "wb") as file:
