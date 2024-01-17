@@ -220,6 +220,15 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
     return send_file(file, mimetype, download_name=download_name)
 
 
+@app.route("/api/ping")
+def ping():
+    """Ping Celery workers."""
+    result: list = celery_app.control.ping(timeout=1)
+    if result:
+        return {"status": "ok"}
+    return {"status": "fail"}
+
+
 @app.errorhandler(QRCodeError)
 @app.errorhandler(CustomFileNotFoundError)
 @app.errorhandler(UploadLimitsExceededError)
