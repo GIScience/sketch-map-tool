@@ -194,14 +194,14 @@ def test_status_failed_hard(
 
 
 @pytest.mark.usefixtures("mock_celery_control_ping_ok")
-def test_ping_ok(client):
-    resp = client.get("/api/ping")
+def test_health_ok(client):
+    resp = client.get("/api/health")
     assert resp.status_code == 200
     assert resp.json == {"status": "ok"}
 
 
 @pytest.mark.usefixtures("mock_celery_control_ping_fail")
-def test_ping_fail(client):
-    resp = client.get("/api/ping")
+def test_health_fail(client):
+    resp = client.get("/api/health")
     assert resp.status_code == 200
     assert resp.json == {"status": "fail"}
