@@ -139,7 +139,7 @@ def flask_app():
         view_func=routes.download,
         methods=["get"],
     )
-    app.add_url_rule("/api/ping", view_func=routes.ping, methods=["GET"])
+    app.add_url_rule("/api/health", view_func=routes.health, methods=["GET"])
     app.add_url_rule("/create", view_func=routes.create, methods=["GET"])
     app.add_url_rule("/digitize", view_func=routes.digitize, methods=["GET"])
     app.add_url_rule("/", view_func=routes.index, methods=["GET"])

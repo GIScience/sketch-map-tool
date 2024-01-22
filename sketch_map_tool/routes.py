@@ -220,8 +220,8 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
     return send_file(file, mimetype, download_name=download_name)
 
 
-@app.route("/api/ping")
-def ping():
+@app.route("/api/health")
+def health():
     """Ping Celery workers."""
     result: list = celery_app.control.ping(timeout=1)
     if result:
