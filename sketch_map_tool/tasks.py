@@ -1,4 +1,5 @@
 from io import BytesIO
+from typing import Literal
 from uuid import UUID
 from zipfile import ZipFile
 
@@ -47,12 +48,13 @@ def generate_sketch_map(
     uuid: UUID,
     bbox: Bbox,
     format_: PaperFormat,
-    orientation: str,
+    orientation: str,  # TODO: is not accessed
     size: Size,
     scale: float,
+    layer: Literal["osm", "satellite"],
 ) -> BytesIO | AsyncResult:
     """Generate and returns a sketch map as PDF and stores the map frame in DB."""
-    raw = wms_client.get_map_image(bbox, size)
+    raw = wms_client.get_map_image(bbox, size, layer)
     map_image = wms_client.as_image(raw)
     qr_code_ = map_generation.qr_code(
         str(uuid),

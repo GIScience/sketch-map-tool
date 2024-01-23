@@ -64,13 +64,14 @@ def create_results_post() -> Response:
     size_raw = json.loads(request.form["size"])
     size = Size(**size_raw)
     scale = float(request.form["scale"])
+    layer = request.form["layer"]
 
     # Unique id for current request
     uuid = str(uuid4())
 
     # Tasks
     task_sketch_map = tasks.generate_sketch_map.apply_async(
-        args=(uuid, bbox, format_, orientation, size, scale)
+        args=(uuid, bbox, format_, orientation, size, scale, layer)
     )
     task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox_wgs84,))
 

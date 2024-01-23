@@ -77,6 +77,11 @@ def scale():
     return 10231.143861780083
 
 
+@pytest.fixture(params=["osm", "satellite"])
+def layer(request):
+    return request.param
+
+
 @pytest.fixture
 def uuid():
     return "654dd0d3-7bb0-4a05-8a68-517f0d9fc98e"

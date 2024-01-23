@@ -89,6 +89,8 @@ The integration test suite utilizes the Testcontainers framework to run unique i
 
 Many fixtures are written to a temporary directory on disk managed by Pytest. This makes it easy to inspect the results at various steps of the program (E.g. Marking detection pipeline). Unix users usually find this directory under `/tmp/pytest-of-{user}/pytest-current/{uuid}/`. The UUID of requests triggered by the tests (E.g. Create or digitize) is the directory name.
 
+The integration tests will make requests external services. Among others requests are made to HeiGIT Maps (WMS) to retrieve basemap images. Those requests can only be made from HeiGITs internal network.
+
 ### Update dependencies
 
 When dependencies changed the environment can be updated by running:
