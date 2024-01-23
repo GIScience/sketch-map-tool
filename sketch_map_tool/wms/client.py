@@ -2,6 +2,7 @@
 
 from dataclasses import astuple
 from io import BytesIO
+from typing import Literal
 
 import requests
 from markupsafe import escape
@@ -16,15 +17,14 @@ from sketch_map_tool.models import Bbox, Size
 
 # TODO: request errors in a response format which can be parsed.
 # Currently errors are rendered into the image.
-def get_map_image(bbox: Bbox, size: Size) -> Response:
-    """Request a map image from the given WMS with the given arguments.
-
-    :param bbox: Bounding box (EPSG: 3857)
-    :param width: Width in pixels
-    :param height: Height in pixels
-    """
-    url = get_config_value("wms-url")
-    layers = get_config_value("wms-layers")
+def get_map_image(
+    bbox: Bbox,
+    size: Size,
+    layer: Literal["osm", "satellite"],
+) -> Response:
+    """Request a map image from the given WMS with the given arguments."""
+    url = get_config_value(f"wms-url-{layer}")
+    layers = get_config_value(f"wms-layers-{layer}")
     params = {
         "REQUEST": "GetMap",
         "FORMAT": "image/png",

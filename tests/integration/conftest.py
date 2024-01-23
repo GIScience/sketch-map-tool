@@ -208,6 +208,11 @@ def scale():
     return 10231.143861780083
 
 
+@pytest.fixture(scope="session", params=["osm", "satellite"])
+def layer(request):
+    return request.param
+
+
 @pytest.fixture
 def uuid():
     return "654dd0d3-7bb0-4a05-8a68-517f0d9fc98e"
@@ -219,22 +224,22 @@ def bbox_wgs84():
 
 
 # TODO: Fixture `sketch_map_marked` only works for landscape orientation.
-a4 = {
-    "format": "A4",
-    "orientation": "landscape",
-    "bbox": ("[964445.3646475708,6343463.48326091,967408.255014792,6345943.466874749]"),
-    "bboxWGS84": (
-        "[8.66376011761138,49.40266507327297,8.690376214631833,49.41716014123875]"
-    ),
-    "size": '{"width": 1716,"height": 1436}',
-    "scale": "9051.161965312804",
-}
-
-
 # TODO: Add other params
-@pytest.fixture(scope="session", params=[a4])
-def params(request):
-    return request.param
+@pytest.fixture(scope="session")
+def params(layer):
+    return {
+        "format": "A4",
+        "orientation": "landscape",
+        "bbox": (
+            "[964445.3646475708,6343463.48326091,967408.255014792,6345943.466874749]"
+        ),
+        "bboxWGS84": (
+            "[8.66376011761138,49.40266507327297,8.690376214631833,49.41716014123875]"
+        ),
+        "size": '{"width": 1716,"height": 1436}',
+        "scale": "9051.161965312804",
+        "layer": layer,
+    }
 
 
 @pytest.fixture(scope="session")

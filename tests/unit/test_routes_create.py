@@ -41,11 +41,12 @@ def test_create_result_get(client):
     assert resp.status_code == 302  # Redirect
 
 
-def test_create_result_post(client, mock_tasks, monkeypatch, bbox, bbox_wgs84):
+def test_create_result_post(client, mock_tasks, monkeypatch, bbox, bbox_wgs84, layer):
     """Redirect to /create/results/<uuid>"""
     monkeypatch.setattr(
         "sketch_map_tool.database.client_flask.set_async_result_ids", lambda x, y: None
     )
+    # TODO: use params fixture from conftest
     data = {
         "bbox": json.dumps(astuple(bbox)),
         "bboxWGS84": json.dumps(astuple(bbox_wgs84)),
@@ -53,6 +54,7 @@ def test_create_result_post(client, mock_tasks, monkeypatch, bbox, bbox_wgs84):
         "orientation": "landscape",
         "size": '{"width":1867,"height":1587}',
         "scale": "11545.36",
+        "layer": layer,
     }
     resp = client.post("/create/results", data=data)
     assert resp.status_code == 302

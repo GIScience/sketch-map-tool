@@ -22,8 +22,10 @@ def load_config_default() -> Dict[str, str | int | float]:
         "user-agent": "sketch-map-tool",
         "broker-url": "redis://localhost:6379",
         "result-backend": "db+postgresql://smt:smt@localhost:5432",
-        "wms-url": "https://maps.heigit.org/osm-carto/service?SERVICE=WMS&VERSION=1.1.1",
-        "wms-layers": "heigit:osm-carto@2xx",
+        "wms-url-osm": "https://maps.heigit.org/osm-carto/service?SERVICE=WMS&VERSION=1.1.1",
+        "wms-url-satellite": "https://maps.heigit.org/sketch-map-tool/service?SERVICE=WMS&VERSION=1.1.1",
+        "wms-layers-osm": "heigit:osm-carto@2xx",
+        "wms-layers-satellite": "world_imagery",
         "wms-read-timeout": 600,
         "max-nr-simultaneous-uploads": 100,
         "max_pixel_per_image": 10e8,  # 10.000*10.000
