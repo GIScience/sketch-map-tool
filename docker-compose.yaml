@@ -81,7 +81,7 @@ services:
       POSTGRES_PASSWORD: smt
       POSTGRES_USER: smt
     ports:
-      - "5432:5432"
+      - "5444:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
 volumes:
