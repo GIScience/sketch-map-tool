@@ -72,6 +72,7 @@ def test_generate_pdf(
     qr_code,
     paper_format: PaperFormat,
     orientation,
+    layer,
     expected_sketch_map,
     request,
 ) -> None:
@@ -80,6 +81,7 @@ def test_generate_pdf(
         qr_code,
         paper_format,
         1283.129,
+        layer,
     )
     assert isinstance(sketch_map, BytesIO)
     assert isinstance(sketch_map_template, BytesIO)

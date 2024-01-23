@@ -1,7 +1,7 @@
 """ Generate a sketch map PDF. """
 import io
 from io import BytesIO
-from typing import Tuple
+from typing import Literal, Tuple
 
 import fitz
 import reportlab.pdfgen.canvas
@@ -30,6 +30,7 @@ def generate_pdf(  # noqa: C901
     qr_code: Drawing,
     format_: PaperFormat,
     scale: float,
+    layer: Literal["osm", "satellite"],
 ) -> Tuple[BytesIO, BytesIO]:
     """
     Generate a sketch map pdf, i.e. a PDF containing the given map image
@@ -116,6 +117,7 @@ def generate_pdf(  # noqa: C901
         qr_code,
         scale,
         format_,
+        layer,
         portrait,
     )
 
@@ -143,8 +145,9 @@ def draw_right_column(
     y: float,
     margin: float,
     qr_code: Drawing,
-    scale,
+    scale,  # TODO: is not accessed
     format_,
+    layer: Literal["osm", "satellite"],
     portrait=False,
 ) -> None:
     normal_style = scale_style(format_, "Normal", 50)
@@ -161,7 +164,19 @@ def draw_right_column(
     compass = get_compass(compass_size, portrait)
 
     # Add copyright information:
-    p_copyright = Paragraph("Map: © OpenStreetMap Contributors", normal_style)
+    if layer == "osm":
+        p_copyright = Paragraph(
+            "Powered by OpenStreetMap<br />©openstreetmap.org/copyright",
+            normal_style,
+        )
+    elif layer == "satellite":
+        p_copyright = Paragraph(
+            "Powered by Esri<br />© Esri, Maxar, GeoEye, Earthstar Geographics, "
+            + "CNES/Airbus DS, USD, USGS, AeroGRID, IGN, and the GIS User Community",
+            normal_style,
+        )
+    else:
+        raise ValueError("Unexpected value")
 
     # Add QR-Code:
     qr_size = min(width, height) - margin

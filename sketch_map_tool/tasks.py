@@ -66,6 +66,7 @@ def generate_sketch_map(
         qr_code_,
         format_,
         scale,
+        layer,
     )
     db_client_celery.insert_map_frame(map_img, uuid)
     return map_pdf
