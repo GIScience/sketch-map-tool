@@ -34,6 +34,7 @@ RUN python -m poetry install --no-ansi --no-interaction --no-root
 
 COPY --chown=smt:smt sketch_map_tool sketch_map_tool
 COPY --chown=smt:smt data/ data/
+COPY --chown=smt:smt config/ config/
 RUN python -m poetry install --no-ansi --no-interaction
 
 # get JS dependencies
