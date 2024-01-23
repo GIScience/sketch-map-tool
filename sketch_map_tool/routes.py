@@ -225,8 +225,8 @@ def health():
     """Ping Celery workers."""
     result: list = celery_app.control.ping(timeout=1)
     if result:
-        return {"status": "ok"}
-    return {"status": "fail"}
+        return Response(None, status=200)
+    return Response(None, status=503)
 
 
 @app.errorhandler(QRCodeError)

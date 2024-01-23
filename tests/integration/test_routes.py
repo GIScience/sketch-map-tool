@@ -88,4 +88,3 @@ def test_api_download_uuid_digitize(uuid_digitize, type_, flask_client):
 def test_health_ok(flask_client):
     resp = flask_client.get("/api/health")
     assert resp.status_code == 200
-    assert resp.json == {"status": "ok"}
