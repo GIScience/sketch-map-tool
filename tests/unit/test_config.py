@@ -35,6 +35,7 @@ def config_keys():
         "neptune_model_id_yolo",
         "neptune_model_id_sam",
         "model_type_sam",
+        "esri-api-key",
     )
 
 
