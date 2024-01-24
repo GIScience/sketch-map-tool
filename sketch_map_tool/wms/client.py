@@ -20,7 +20,7 @@ from sketch_map_tool.models import Bbox, Size
 def get_map_image(
     bbox: Bbox,
     size: Size,
-    layer: Literal["osm", "satellite"],
+    layer: Literal["osm", "esri-world-imagery"],
 ) -> Response:
     """Request a map image from the given WMS with the given arguments."""
     url = get_config_value(f"wms-url-{layer}")
