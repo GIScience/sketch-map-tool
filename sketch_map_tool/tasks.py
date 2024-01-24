@@ -51,7 +51,7 @@ def generate_sketch_map(
     orientation: str,  # TODO: is not accessed
     size: Size,
     scale: float,
-    layer: Literal["osm", "satellite"],
+    layer: Literal["osm", "esri-world-imagery"],
 ) -> BytesIO | AsyncResult:
     """Generate and returns a sketch map as PDF and stores the map frame in DB."""
     raw = wms_client.get_map_image(bbox, size, layer)
