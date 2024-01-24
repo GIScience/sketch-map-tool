@@ -30,7 +30,7 @@ def generate_pdf(  # noqa: C901
     qr_code: Drawing,
     format_: PaperFormat,
     scale: float,
-    layer: Literal["osm", "satellite"],
+    layer: Literal["osm", "esri-world-imagery"],
 ) -> Tuple[BytesIO, BytesIO]:
     """
     Generate a sketch map pdf, i.e. a PDF containing the given map image
@@ -147,7 +147,7 @@ def draw_right_column(
     qr_code: Drawing,
     scale,  # TODO: is not accessed
     format_,
-    layer: Literal["osm", "satellite"],
+    layer: Literal["osm", "esri-world-imagery"],
     portrait=False,
 ) -> None:
     normal_style = scale_style(format_, "Normal", 50)
@@ -169,7 +169,7 @@ def draw_right_column(
             "Powered by OpenStreetMap<br />©openstreetmap.org/copyright",
             normal_style,
         )
-    elif layer == "satellite":
+    elif layer == "esri-world-imagery":
         p_copyright = Paragraph(
             "Powered by Esri<br />© Esri, Maxar, GeoEye, Earthstar Geographics, "
             + "CNES/Airbus DS, USD, USGS, AeroGRID, IGN, and the GIS User Community",
