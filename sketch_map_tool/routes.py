@@ -7,7 +7,7 @@ import geojson
 # from celery import chain, group
 from flask import Response, redirect, render_template, request, send_file, url_for
 
-from sketch_map_tool import celery_app, definitions, tasks, upload_processing
+from sketch_map_tool import celery_app, config, definitions, tasks, upload_processing
 from sketch_map_tool import flask_app as app
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
@@ -47,7 +47,10 @@ def about() -> str:
 @app.get("/create")
 def create() -> str:
     """Serve forms for creating a sketch map"""
-    return render_template("create.html")
+    return render_template(
+        "create.html",
+        esri_api_key=config.get_config_value("esri-api-key"),
+    )
 
 
 @app.post("/create/results")

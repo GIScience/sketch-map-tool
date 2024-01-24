@@ -2,7 +2,9 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for("static", filename="bundles/create.css") }}">
-
+    <script>
+        const esriApiKey = "{{ esri_api_key }}"
+    </script>
     <script type="module" src="{{ url_for("static", filename="bundles/create.js") }}"></script>
 {% endblock head %}
 

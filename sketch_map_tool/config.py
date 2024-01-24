@@ -34,6 +34,7 @@ def load_config_default() -> Dict[str, str | int | float]:
         "neptune_model_id_yolo": "SMT-OSM-1",
         "neptune_model_id_sam": "SMT-SAM-1",
         "model_type_sam": "vit_b",
+        "esri-api-key": "",
     }
 
 
@@ -63,6 +64,7 @@ def load_config_from_env() -> Dict[str, str]:
         "neptune_model_id_yolo": os.getenv("SMT_NEPTUNE_MODEL_ID_YOLO"),
         "neptune_model_id_sam": os.getenv("SMT_NEPTUNE_MODEL_ID_SAM"),
         "model_type_sam": os.getenv("SMT_MODEL_TYPE_SAM"),
+        "esri-api-key": os.getenv("SMT_ESRI_API_KEY"),
     }
 
     return {k: v for k, v in cfg.items() if v is not None}
