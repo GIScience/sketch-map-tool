@@ -208,7 +208,7 @@ def scale():
     return 10231.143861780083
 
 
-@pytest.fixture(scope="session", params=["osm", "satellite"])
+@pytest.fixture(scope="session", params=["osm", "esri-world-imagery"])
 def layer(request):
     return request.param
 
