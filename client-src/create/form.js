@@ -132,7 +132,7 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
     printLayoutControl.on("change:bbox", (event) => {
         // update the URL when the selection is changed  (e.g. to bookmark the current selection)
         const newCenter = printLayoutControl.getMap().getView().getCenter();
-        window.history.replaceState({}, document.title, `?center=${newCenter}`);
+        window.history.replaceState({}, "", `?center=${newCenter}`);
         // show warning and disable form if bbox crosses the antimeridian
         handleAntimeridian(event.target.getBboxAsLonLat());
     });
