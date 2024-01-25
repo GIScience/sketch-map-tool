@@ -11,6 +11,7 @@ import {
     Fill, Stroke, Style, Text,
 } from "ol/style";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins.js";
+import { LayerSwitcher } from "./olLayersitcherControl";
 
 function createAntiMeridianLayer() {
     // Create a LineString feature
@@ -58,10 +59,21 @@ function createAntiMeridianLayer() {
  * @returns {Map}
  */
 function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965], zoom = 15, baselayer = "OSM") {
-    const esriApiKey = "AAPKe1520d4c006c4b19941f009329c58e22bGmaXWiqR_M_Y0gPJVEcYNjplvkD1n4bIukV28vgPe1ZVTdNl6OTKI5uNsX9BzC2";
+    const osmBaselayer = new Tile({
+        name: "OSM Baselayer",
+        visible: baselayer !== "ESRI:World_Imagery",
+        source: new OSM(),
+    });
+
     const esriWorldImageryLayer = new Tile({
+        name: "ESRI:World_Imagery",
         visible: baselayer === "ESRI:World_Imagery",
         source: new XYZ({
+            // esriApiKey seems to be undefined, but:
+            // esriApiKey will be injected by flask template into create.html
+            // and is defined in config.toml to avoid pushing it to a repository
+
+            // eslint-disable-next-line no-undef
             url: `https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?token=${esriApiKey}`,
             // TODO attribution
         }),
@@ -76,10 +88,7 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
             enableRotation: false,
         }),
         layers: [
-            new Tile({
-                visible: baselayer !== "ESRI:World_Imagery",
-                source: new OSM(),
-            }),
+            osmBaselayer,
             esriWorldImageryLayer,
             createAntiMeridianLayer(),
         ],
@@ -122,8 +131,32 @@ function addGeocoderControl(map) {
     return geocoder;
 }
 
+/**
+ * Add a layerswitcher to an Openlayers Map
+ * @param map
+ * @param layers an array of objects of type {name: string; label: string; class: string}.
+ *
+ *              "name" is used to identify switchable layers from th ol-Map so this should
+ *              correspond to a name property set to the ol-layers.
+ *
+ *              "label" is a string that will be rendered as text on the layerswitcher button
+ *
+ *              "class" a custom class name that will be added to the button to indicate what is the
+ *              next layer when a user clicks on the button, e.g. to specify a background image etc
+ * @returns {LayerSwitcher}
+ */
+function addLayerswitcherControl(map, layers) {
+    const layerswitcher = new LayerSwitcher({
+        layers,
+    });
+    map.addControl(layerswitcher);
+    layerswitcher.initialize();
+    return layerswitcher;
+}
+
 export {
     createMap,
     addPrintLayoutControl,
     addGeocoderControl,
+    addLayerswitcherControl,
 };

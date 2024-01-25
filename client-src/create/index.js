@@ -4,7 +4,12 @@ import "ol-geocoder/dist/ol-geocoder.css";
 import "./geocoder.css";
 import "./create.css";
 
-import { addGeocoderControl, addPrintLayoutControl, createMap } from "./map.js";
+import {
+    addGeocoderControl,
+    addLayerswitcherControl,
+    addPrintLayoutControl,
+    createMap,
+} from "./map.js";
 import { bindFormToPrintLayoutControl } from "./form.js";
 import { MessageController } from "./messageController";
 
@@ -38,3 +43,15 @@ const messageController = new MessageController();
 
 bindFormToPrintLayoutControl(printLayoutControl, messageController);
 addGeocoderControl(map);
+addLayerswitcherControl(map, [
+    {
+        name: "OSM Baselayer",
+        label: "OSM",
+        class: "osm",
+    },
+    {
+        name: "ESRI:World_Imagery",
+        label: "Satellite",
+        class: "esri-world-imagery",
+    },
+]);
