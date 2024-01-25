@@ -2,6 +2,52 @@ import { Control } from "ol/control";
 import { CLASS_CONTROL, CLASS_UNSELECTABLE } from "ol/css";
 import "./olLayerswitcherControl.css";
 
+/**
+ * This layerswitcher control is made to switch between one of 2 or more other baselayers.
+ * The ol Map can have more other overlay layers which are not affected by this control.
+ * There will be one button iterating through all configured layers and then start from the
+ * beginning again.
+ *
+ * How to use:
+ * 1. The layers that should be handled by this control must have the following properties set
+ *      in the options object when creating the layers:
+ *
+ *      "name" {string} - give your layer a name such that we can identify it with the LayerSwitcher
+ *
+ *      "visible" {boolean} -   only one of your baselayers should be visible when the control is
+ *                              added to the map and initialized
+ * 2. When initializing the new LayerSwitcher(options) pass an options Object
+ *      with the following properties:
+ *
+ *      "target" - optional. If you don't specify a different DIV it will be shown in the Map
+ *      "layers" - required. An array of objects {Array<LSLayerConfig>}
+ *
+ *      @example
+ *      {layers: [
+ *        {
+ *          name: "OSM Basemap",
+ *          label: "OSM",
+ *          class: "osm"
+ *        },
+ *        {
+ *          name: "Some Satellite Layer Provider",
+ *          label: "Satellite",
+ *          class: "satellite"
+ *        }
+ *      ]}
+ * 3. Add css "classes" to your code to style the LayerSwitcher Button for each Layer differently
+ *      @example:
+ *      .ol-control.layerswitcher button.osm {
+ *        background-color: palegoldenrod;
+ *      }
+ *      .ol-control.layerswitcher button.satellite {
+ *        background-color: darkolivegreen;
+ *      }
+ * 4. Add it to the map as usual with map.addControl(layerswitcher);
+ * 5. run layerswitcher.initialize() once after adding it to the map.
+ *      The Layerswitcher will iterate over the Layers already attached to the map an link them by
+ *      their "name" property to the LayerSwitcher
+ */
 export class LayerSwitcher extends Control {
     constructor(options = {}) {
         const {
@@ -78,8 +124,7 @@ export class LayerSwitcher extends Control {
     }
 
     getNextLayersButtonClass() {
-        const nextLayersIndex = (this.activeLayerIdx + 1) % this.layersList.length;
-        return this.layers[this.layersList[nextLayersIndex]].class;
+        return this.getNextLayersProperty("class");
     }
 
     getNextLayersButtonLabel() {
