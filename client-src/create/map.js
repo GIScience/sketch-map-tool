@@ -12,6 +12,7 @@ import {
 } from "ol/style";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins.js";
 import { LayerSwitcher } from "./ol-LayerSwitcherControl";
+import { EsriAttributionService } from "./esriAttributionService";
 
 function createAntiMeridianLayer() {
     // Create a LineString feature
@@ -78,8 +79,7 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
             url: `https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?token=${esriApiKey}`,
             // the exact zoomlevel and bbox defined attributions can be retrieved here:
             // https://static.arcgis.com/attribution/World_Imagery?f=json
-            // The follwing Attribution text is based on (retrieved 2024-01-25): https://tiledbasemaps.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/0
-            attributions: "Satellite Layer \"World_Imagery\" powered by Esri. Source: ESRI, Maxar, Earthstar Geographics, and the GIS User Community",
+            attributions: new EsriAttributionService().createAttributionFunction(),
         }),
     });
 
