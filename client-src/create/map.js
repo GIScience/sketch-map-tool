@@ -10,6 +10,7 @@ import VectorLayer from "ol/layer/Vector";
 import {
     Fill, Stroke, Style, Text,
 } from "ol/style";
+import { ScaleLine } from "ol/control";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins.js";
 import { LayerSwitcher } from "./ol-LayerSwitcherControl";
 import { EsriAttributionService } from "./esriAttributionService";
@@ -98,6 +99,8 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
             createAntiMeridianLayer(),
         ],
     });
+
+    map.addControl(new ScaleLine());
 
     return map;
 }
