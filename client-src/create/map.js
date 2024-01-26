@@ -70,6 +70,7 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
     const esriWorldImageryLayer = new Tile({
         name: "ESRI:World_Imagery",
         visible: activeBaselayer === "ESRI:World_Imagery",
+        maxZoom: 19,
         source: new XYZ({
             // esriApiKey seems to be undefined, but:
             // esriApiKey will be injected by flask template into create.html
@@ -88,7 +89,7 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
         view: new View({
             center: lonLat,
             zoom,
-            maxZoom: 20,
+            maxZoom: 19,
             enableRotation: false,
         }),
         layers: [
