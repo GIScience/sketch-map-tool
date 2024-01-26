@@ -1,9 +1,9 @@
 import { Control } from "ol/control";
 import { CLASS_CONTROL, CLASS_UNSELECTABLE } from "ol/css";
-import "./olLayerswitcherControl.css";
+import "./ol-LayerSwitcherControl.css";
 
 /**
- * This layerswitcher control is made to switch between one of 2 or more other baselayers.
+ * This layerSwitcher control is made to switch between one of 2 or more other baselayers.
  * The ol Map can have more other overlay layers which are not affected by this control.
  * There will be one button iterating through all configured layers and then start from the
  * beginning again.
@@ -43,9 +43,9 @@ import "./olLayerswitcherControl.css";
  *      .ol-control.layerswitcher button.satellite {
  *        background-color: darkolivegreen;
  *      }
- * 4. Add it to the map as usual with map.addControl(layerswitcher);
- * 5. run layerswitcher.initialize() once after adding it to the map.
- *      The Layerswitcher will iterate over the Layers already attached to the map an link them by
+ * 4. Add it to the map as usual with map.addControl(layerSwitcher);
+ * 5. run layerSwitcher.initialize() once after adding it to the map.
+ *      The LayerSwitcher will iterate over the Layers already attached to the map and link them by
  *      their "name" property to the LayerSwitcher
  */
 export class LayerSwitcher extends Control {
