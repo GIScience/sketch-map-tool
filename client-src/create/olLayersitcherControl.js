@@ -75,6 +75,10 @@ export class LayerSwitcher extends Control {
             [currentValue.name]: currentValue,
         }), {});
         this.layersList = Object.keys(this.layers);
+
+        // observable properties
+        // start with setting the first layer in the list and update in the initialize() method
+        this.set("activeLayer", layers[0]);
     }
 
     initialize() {
@@ -94,6 +98,8 @@ export class LayerSwitcher extends Control {
                         this.button.innerText = this.getNextLayersButtonLabel();
                     }
                 }
+                // update observable property
+                this.set("activeLayer", this.layers[this.layersList[this.activeLayerIdx]]);
             });
         this.button.addEventListener("click", this.activateNextLayer.bind(this));
     }
@@ -110,6 +116,7 @@ export class LayerSwitcher extends Control {
         this.activeLayerIdx = ++this.activeLayerIdx % this.layersList.length;
 
         this.layers[this.layersList[this.activeLayerIdx]].layerRef.setVisible(true);
+        this.set("activeLayer", this.layers[this.layersList[this.activeLayerIdx]]);
 
         // update css class
         // remove old class
