@@ -138,6 +138,17 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
     });
 }
 
+function bindFormToLayerSwitcherControl(layerSwitcherControl) {
+// set initial form value from ol-control
+    document.getElementById("layer").value = layerSwitcherControl.get("activeLayer").name;
+
+    function handleLayerSwitch(event) {
+        const activeLayerName = event.target.get("activeLayer").name;
+        document.getElementById("layer").value = activeLayerName;
+    }
+    layerSwitcherControl.on("change:activeLayer", handleLayerSwitch);
+}
 export {
     bindFormToPrintLayoutControl,
+    bindFormToLayerSwitcherControl,
 };

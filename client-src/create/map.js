@@ -11,7 +11,7 @@ import {
     Fill, Stroke, Style, Text,
 } from "ol/style";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins.js";
-import { LayerSwitcher } from "./olLayersitcherControl";
+import { LayerSwitcher } from "./ol-LayerSwitcherControl";
 
 function createAntiMeridianLayer() {
     // Create a LineString feature
@@ -55,19 +55,20 @@ function createAntiMeridianLayer() {
  * @param {number[]} [lonLat=[8.68, 49.41]] - an Array with two numbers representing
  *     latitude and longitude
  * @param {number} [zoom=15] - the zoomlevel in which the map will be initialized
- * @param {string} [baselayer="OSM"] - the baselayer to be displayed 'OSM' | 'ESRI:World_Imagery'
+ * @param {string} [activeBaselayer="OSM"] - the baselayer to be displayed
+ *                                           either 'OSM' | 'ESRI:World_Imagery'
  * @returns {Map}
  */
-function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965], zoom = 15, baselayer = "OSM") {
+function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965], zoom = 15, activeBaselayer = "OSM") {
     const osmBaselayer = new Tile({
-        name: "OSM Baselayer",
-        visible: baselayer !== "ESRI:World_Imagery",
+        name: "OSM",
+        visible: activeBaselayer !== "ESRI:World_Imagery",
         source: new OSM(),
     });
 
     const esriWorldImageryLayer = new Tile({
         name: "ESRI:World_Imagery",
-        visible: baselayer === "ESRI:World_Imagery",
+        visible: activeBaselayer === "ESRI:World_Imagery",
         source: new XYZ({
             // esriApiKey seems to be undefined, but:
             // esriApiKey will be injected by flask template into create.html
@@ -75,7 +76,10 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
 
             // eslint-disable-next-line no-undef
             url: `https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?token=${esriApiKey}`,
-            // TODO attribution
+            // the exact zoomlevel and bbox defined attributions can be retrieved here:
+            // https://static.arcgis.com/attribution/World_Imagery?f=json
+            // The follwing Attribution text is based on (retrieved 2024-01-25): https://tiledbasemaps.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/0
+            attributions: "Satellite Layer \"World_Imagery\" powered by Esri. Source: ESRI, Maxar, Earthstar Geographics, and the GIS User Community",
         }),
     });
 
@@ -132,26 +136,26 @@ function addGeocoderControl(map) {
 }
 
 /**
- * Add a layerswitcher to an Openlayers Map
+ * Add a layerSwitcher to an Openlayers Map
  * @param map
  * @param layers an array of objects of type {name: string; label: string; class: string}.
  *
  *              "name" is used to identify switchable layers from th ol-Map so this should
  *              correspond to a name property set to the ol-layers.
  *
- *              "label" is a string that will be rendered as text on the layerswitcher button
+ *              "label" is a string that will be rendered as text on the layerSwitcher button
  *
  *              "class" a custom class name that will be added to the button to indicate what is the
  *              next layer when a user clicks on the button, e.g. to specify a background image etc
  * @returns {LayerSwitcher}
  */
 function addLayerswitcherControl(map, layers) {
-    const layerswitcher = new LayerSwitcher({
+    const layerSwitcher = new LayerSwitcher({
         layers,
     });
-    map.addControl(layerswitcher);
-    layerswitcher.initialize();
-    return layerswitcher;
+    map.addControl(layerSwitcher);
+    layerSwitcher.initialize();
+    return layerSwitcher;
 }
 
 export {
