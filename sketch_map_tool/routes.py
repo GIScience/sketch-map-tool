@@ -67,7 +67,7 @@ def create_results_post() -> Response:
     size_raw = json.loads(request.form["size"])
     size = Size(**size_raw)
     scale = float(request.form["scale"])
-    layer = request.form["layer"].replace(":", "-").lower()
+    layer = request.form["layer"].replace(":", "-").replace("_", "-").lower()
 
     # Unique id for current request
     uuid = str(uuid4())
