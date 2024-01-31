@@ -1,3 +1,4 @@
+import os
 from io import BytesIO
 from typing import Literal
 from uuid import UUID
@@ -122,6 +123,10 @@ def digitize_sketches(
     bboxes: list[Bbox],
 ) -> AsyncResult | FeatureCollection:
     # Initialize ml-models. This has to happen inside of celery context.
+    #
+    # Prevent usage of CUDA while transforming Tensor objects to numpy arrays
+    # during marking detection
+    os.environ["CUDA_VISIBLE_DEVICES"] = ""
     # Custom trained model for object detection of markings and colors
     yolo_path = init_model(get_config_value("neptune_model_id_yolo"))
     yolo_model: YOLO = YOLO(yolo_path)
