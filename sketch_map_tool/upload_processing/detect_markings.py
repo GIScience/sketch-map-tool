@@ -26,7 +26,7 @@ def apply_ml_pipeline(
     image: Image.Image,
     yolo_model: YOLO,
     sam_predictor: SamPredictor,
-) -> tuple[list, list, list]:
+) -> tuple[list[NDArray], NDArray, NDArray]:
     """Apply the entire machine learning pipeline on an image.
 
     Steps:
@@ -47,7 +47,7 @@ def apply_ml_pipeline(
 def apply_yolo(
     image: Image.Image,
     yolo_model: YOLO,
-) -> tuple[list, list]:
+) -> tuple[NDArray, NDArray]:
     """Apply fine-tuned YOLO object detection on an image.
 
     Returns:
@@ -55,8 +55,8 @@ def apply_yolo(
         class labels (colors).
     """
     result = yolo_model(image, conf=0.7)[0].boxes  # TODO set conf parameter
-    bounding_boxes = result.xyxy
-    class_labels = result.cls
+    bounding_boxes = result.xyxy.numpy()
+    class_labels = result.cls.numpy()
     return bounding_boxes, class_labels
 
 
@@ -64,7 +64,7 @@ def apply_sam(
     image: Image.Image,
     bounding_boxes: list,
     sam_predictor: SamPredictor,
-) -> tuple:
+) -> tuple[list[NDArray], list[np.float32]]:
     """Apply zero-shot SAM (Segment Anything) on an image using bounding boxes.
 
     Creates masks (numpy arrays) based on image segmentation and bounding boxes from
@@ -77,18 +77,19 @@ def apply_sam(
     masks = []
     scores = []
     for bbox in bounding_boxes:
-        mask, score = mask_from_bbox(np.array(bbox), sam_predictor)
+        mask, score = mask_from_bbox(bbox, sam_predictor)
         masks.append(mask)
         scores.append(score)
     return masks, scores
 
 
-def mask_from_bbox(bbox: list, sam_predictor: SamPredictor) -> tuple:
+def mask_from_bbox(bbox: NDArray, sam_predictor: SamPredictor) -> tuple:
     """Generate a mask using SAM (Segment Anything) predictor for a given bounding box.
 
     Returns:
         tuple: Mask and corresponding score.
     """
+    breakpoint()
     masks, scores, _ = sam_predictor.predict(box=bbox, multimask_output=False)
     return masks[0], scores[0]
 
@@ -106,7 +107,7 @@ def create_marking_array(
 def post_process(
     masks: list[NDArray],
     bboxes: list[list[int]],
-    colors,
+    colors: list,
 ) -> list[NDArray]:
     """Post-processes masks and bounding boxes to clean-up and fill contours.
 
