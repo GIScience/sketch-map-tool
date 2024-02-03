@@ -1,6 +1,5 @@
 import os
 from io import BytesIO
-from typing import Literal
 from uuid import UUID
 from zipfile import ZipFile
 
@@ -15,7 +14,7 @@ from sketch_map_tool import celery_app as celery
 from sketch_map_tool import get_config_value, map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.helpers import to_array
-from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
 from sketch_map_tool.oqt_analyses import get_report
 from sketch_map_tool.upload_processing import (
@@ -52,7 +51,7 @@ def generate_sketch_map(
     orientation: str,  # TODO: is not accessed
     size: Size,
     scale: float,
-    layer: Literal["osm", "esri-world-imagery"],
+    layer: Layer,
 ) -> BytesIO | AsyncResult:
     """Generate and returns a sketch map as PDF and stores the map frame in DB."""
     raw = wms_client.get_map_image(bbox, size, layer)
@@ -60,6 +59,7 @@ def generate_sketch_map(
     qr_code_ = map_generation.qr_code(
         str(uuid),
         bbox,
+        layer,
         format_,
     )
     map_pdf, map_img = map_generation.generate_pdf(

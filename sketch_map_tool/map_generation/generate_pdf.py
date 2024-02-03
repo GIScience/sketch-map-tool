@@ -1,7 +1,7 @@
 """ Generate a sketch map PDF. """
 import io
 from io import BytesIO
-from typing import Literal, Tuple
+from typing import Tuple
 
 import fitz
 import reportlab.pdfgen.canvas
@@ -19,7 +19,7 @@ from svglib.svglib import svg2rlg
 
 from sketch_map_tool.definitions import PDF_RESOURCES_PATH
 from sketch_map_tool.helpers import resize_rlg_by_width
-from sketch_map_tool.models import PaperFormat
+from sketch_map_tool.models import Layer, PaperFormat
 
 # PIL should be able to open high resolution PNGs of large Maps:
 Image.MAX_IMAGE_PIXELS = None
@@ -30,7 +30,7 @@ def generate_pdf(  # noqa: C901
     qr_code: Drawing,
     format_: PaperFormat,
     scale: float,
-    layer: Literal["osm", "esri-world-imagery"],
+    layer: Layer,
 ) -> Tuple[BytesIO, BytesIO]:
     """
     Generate a sketch map pdf, i.e. a PDF containing the given map image
@@ -147,7 +147,7 @@ def draw_right_column(
     qr_code: Drawing,
     scale,  # TODO: is not accessed
     format_,
-    layer: Literal["osm", "esri-world-imagery"],
+    layer: Layer,
     portrait=False,
 ) -> None:
     normal_style = scale_style(format_, "Normal", 50)
@@ -164,12 +164,12 @@ def draw_right_column(
     compass = get_compass(compass_size, portrait)
 
     # Add copyright information:
-    if layer == "osm":
+    if layer.value == "osm":
         p_copyright = Paragraph(
             "Powered by OpenStreetMap<br />©openstreetmap.org/copyright",
             normal_style,
         )
-    elif layer == "esri-world-imagery":
+    elif layer.value == "esri-world-imagery":
         p_copyright = Paragraph(
             "Powered by Esri<br />© Esri, Maxar, GeoEye, Earthstar Geographics, "
             + "CNES/Airbus DS, USD, USGS, AeroGRID, IGN, and the GIS User Community",

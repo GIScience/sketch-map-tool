@@ -56,10 +56,11 @@ def map_image(request):
 
 
 @pytest.fixture
-def qr_code(bbox, format_, size):
+def qr_code(bbox, layer, format_):
     return generate_qr_code(
         str(uuid4()),
         bbox,
+        layer,
         format_,
     )
 

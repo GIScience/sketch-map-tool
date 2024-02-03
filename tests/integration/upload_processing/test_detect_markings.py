@@ -34,7 +34,6 @@ def test_detect_markings(sam_predictor, yolo_model, map_frame_marked):
     markings = detect_markings(map_frame_marked, yolo_model, sam_predictor)
     img = Image.fromarray(markings)
     ImageEnhance.Contrast(img).enhance(10).show()
-    breakpoint()
 
 
 def test_apply_ml_pipeline(sam_predictor, yolo_model, map_frame_marked):

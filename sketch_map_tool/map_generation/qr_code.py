@@ -6,12 +6,13 @@ from reportlab.graphics.shapes import Drawing
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool import __version__
-from sketch_map_tool.models import Bbox, PaperFormat
+from sketch_map_tool.models import Bbox, Layer, PaperFormat
 
 
 def qr_code(
     uuid: str,
     bbox: Bbox,
+    layer: Layer,
     format_: PaperFormat,
     version: str = __version__,
 ) -> Drawing:
@@ -19,16 +20,16 @@ def qr_code(
 
     :uuid: The uuid of a celery task associated with the creation of the PDF map.
     """
-    data = _encode_data(uuid, bbox, version)
+    data = _encode_data(uuid, bbox, layer, version)
     qr_code_svg = _make_qr_code(data)
     qr_code_rlg = _to_report_lab_graphic(format_, qr_code_svg)
     return qr_code_rlg
 
 
-def _encode_data(uuid: str, bbox: Bbox, version_nr: str) -> str:
+def _encode_data(uuid: str, bbox: Bbox, layer: Layer, version_nr: str) -> str:
     return (
         f"{version_nr},{uuid},{bbox.lon_min},"
-        f"{bbox.lat_min},{bbox.lon_max},{bbox.lat_max}"
+        f"{bbox.lat_min},{bbox.lon_max},{bbox.lat_max},{layer.value}"
     )
 
 
