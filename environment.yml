@@ -2,7 +2,7 @@ name: smt
 channels:
   - conda-forge
 dependencies:
-  - python=3.10.*
+  - python=3.11.*
   - poetry=1.7.*
   - gdal=3.7.1
   - zbar=0.10  # dependency of pyzbar
