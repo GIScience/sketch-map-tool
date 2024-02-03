@@ -11,10 +11,11 @@ from sketch_map_tool.map_generation.qr_code import (
 )
 
 
-def test_encode_data(bbox, format_, size, scale, uuid):
+def test_encode_data(bbox, layer, uuid):
     result = _encode_data(
         uuid,
         bbox,
+        layer,
         "0.1.0",
     )
     assert isinstance(result, str)
@@ -38,12 +39,13 @@ def test_to_report_lab_graphic(format_):
 
 def test_qr_code(
     bbox,
+    layer,
     format_,
-    size,
 ):
     result = qr_code(
         str(uuid4()),
         bbox,
+        layer,
         format_,
     )
     assert isinstance(result, Drawing)
