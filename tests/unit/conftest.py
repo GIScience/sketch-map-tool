@@ -5,7 +5,7 @@ import geojson
 import pytest
 from werkzeug.datastructures import FileStorage
 
-from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from tests import FIXTURE_DIR
 
 
@@ -79,7 +79,7 @@ def scale():
 
 @pytest.fixture(params=["osm", "esri-world-imagery"])
 def layer(request):
-    return request.param
+    return Layer(request.param)
 
 
 @pytest.fixture

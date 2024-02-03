@@ -9,7 +9,7 @@ from numpy.typing import NDArray
 from pyzbar import pyzbar
 
 from sketch_map_tool.exceptions import QRCodeError
-from sketch_map_tool.models import Bbox
+from sketch_map_tool.models import Bbox, Layer
 from sketch_map_tool.validators import validate_uuid
 
 
@@ -58,9 +58,21 @@ def _decode_data(data) -> MappingProxyType:
         bbox = Bbox(
             *[float(coordinate) for coordinate in contents[2:]]
         )  # Raises ValueError for non-float values
+        try:
+            layer = Layer(contents[6])
+        except IndexError:
+            # backward compatibility
+            layer = Layer("osm")
     except ValueError as error:
         raise QRCodeError("QR-Code does not have expected content.") from error
-    return MappingProxyType({"uuid": uuid, "bbox": bbox, "version": version_nr})
+    return MappingProxyType(
+        {
+            "uuid": uuid,
+            "bbox": bbox,
+            "version": version_nr,
+            "layer": layer,
+        }
+    )
 
 
 def _decode_data_legacy(data) -> MappingProxyType:

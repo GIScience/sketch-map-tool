@@ -2,7 +2,6 @@
 
 from dataclasses import astuple
 from io import BytesIO
-from typing import Literal
 
 import requests
 from markupsafe import escape
@@ -12,7 +11,7 @@ from requests import ReadTimeout, Response
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.exceptions import MapGenerationError
-from sketch_map_tool.models import Bbox, Size
+from sketch_map_tool.models import Bbox, Layer, Size
 
 
 # TODO: request errors in a response format which can be parsed.
@@ -20,11 +19,11 @@ from sketch_map_tool.models import Bbox, Size
 def get_map_image(
     bbox: Bbox,
     size: Size,
-    layer: Literal["osm", "esri-world-imagery"],
+    layer: Layer,
 ) -> Response:
     """Request a map image from the given WMS with the given arguments."""
-    url = get_config_value(f"wms-url-{layer}")
-    layers = get_config_value(f"wms-layers-{layer}")
+    url = get_config_value(f"wms-url-{layer.value}")
+    layers = get_config_value(f"wms-layers-{layer.value}")
     params = {
         "REQUEST": "GetMap",
         "FORMAT": "image/png",
