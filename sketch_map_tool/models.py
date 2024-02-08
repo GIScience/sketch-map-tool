@@ -34,6 +34,20 @@ class Layer(StrEnum):
     ESRI_WORLD_IMAGERY = "esri-world-imagery"
 
 
+class MapAttributions:
+    def __init__(self):
+        self.attributions = {
+            "osm": "Powered by OpenStreetMap<br />©openstreetmap.org/copyright",
+            "esri-world-imagery": "Powered by Esri<br />© Esri, Maxar, GeoEye, "
+            "Earthstar Geographics, CNES/Airbus DS, USD,"
+            " USGS, AeroGRID, IGN, and the GIS User Community",
+        }
+
+    def get_attribution(self, key):
+        if key in self.attributions:
+            return self.attributions[key]
+
+
 @dataclass(frozen=True)
 class PaperFormat:
     """Properties of sketch maps to be printed on a certain paper format.

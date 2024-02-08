@@ -19,7 +19,7 @@ from svglib.svglib import svg2rlg
 
 from sketch_map_tool.definitions import PDF_RESOURCES_PATH
 from sketch_map_tool.helpers import resize_rlg_by_width
-from sketch_map_tool.models import Layer, PaperFormat
+from sketch_map_tool.models import Layer, MapAttributions, PaperFormat
 
 # PIL should be able to open high resolution PNGs of large Maps:
 Image.MAX_IMAGE_PIXELS = None
@@ -164,19 +164,8 @@ def draw_right_column(
     compass = get_compass(compass_size, portrait)
 
     # Add copyright information:
-    if layer.value == "osm":
-        p_copyright = Paragraph(
-            "Powered by OpenStreetMap<br />©openstreetmap.org/copyright",
-            normal_style,
-        )
-    elif layer.value == "esri-world-imagery":
-        p_copyright = Paragraph(
-            "Powered by Esri<br />© Esri, Maxar, GeoEye, Earthstar Geographics, "
-            + "CNES/Airbus DS, USD, USGS, AeroGRID, IGN, and the GIS User Community",
-            normal_style,
-        )
-    else:
-        raise ValueError("Unexpected value")
+    map_attributions = MapAttributions()
+    p_copyright = Paragraph(map_attributions.get_attribution(layer.value), normal_style)
 
     # Add QR-Code:
     qr_size = min(width, height) - margin
