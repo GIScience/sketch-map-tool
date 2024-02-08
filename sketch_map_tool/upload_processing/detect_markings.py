@@ -89,7 +89,6 @@ def mask_from_bbox(bbox: NDArray, sam_predictor: SamPredictor) -> tuple:
     Returns:
         tuple: Mask and corresponding score.
     """
-    breakpoint()
     masks, scores, _ = sam_predictor.predict(box=bbox, multimask_output=False)
     return masks[0], scores[0]
 
