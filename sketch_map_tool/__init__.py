@@ -10,8 +10,13 @@ from sketch_map_tool.database import client_flask as db_client
 
 __version__ = "1.1.5"
 
-waitress_logger = logging.getLogger("waitress")
-waitress_logger.setLevel(logging.INFO)
+# Setup logging
+LEVEL = getattr(logging, get_config_value("log-level").upper())
+FORMAT = "%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s"
+logging.basicConfig(
+    level=LEVEL,
+    format=FORMAT,
+)
 
 CELERY_CONFIG = {
     "broker_url": get_config_value("broker-url"),
