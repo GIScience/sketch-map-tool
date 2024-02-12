@@ -83,9 +83,17 @@ def _decode_data_legacy(data) -> MappingProxyType:
         bbox = Bbox(
             *[float(coordinate) for coordinate in contents["bbox"].values()]
         )  # Raises ValueError for non-float values
+        layer = Layer("osm")
     except ValueError as error:
         raise QRCodeError("QR-Code does not have expected content.") from error
-    return MappingProxyType({"uuid": uuid, "bbox": bbox, "version": version_nr})
+    return MappingProxyType(
+        {
+            "uuid": uuid,
+            "bbox": bbox,
+            "version": version_nr,
+            "layer": layer,
+        }
+    )
 
 
 def _resize(img, scale: float = 0.75):
