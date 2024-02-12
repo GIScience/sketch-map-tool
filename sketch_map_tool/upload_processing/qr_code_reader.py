@@ -51,6 +51,9 @@ def read(img: NDArray, depth=0) -> MappingProxyType:
 def _decode_data(data) -> MappingProxyType:
     try:
         contents = data.split(",")
+        if len(contents) == 6:
+            # Legacy support (before satellite imagery feature)
+            contents.append(Layer("osm"))
         if not len(contents) == 7:  # version nr, uuid, bbox coordinates and layer
             raise ValueError("Unexpected length of QR-code contents.")
         version_nr = contents[0]
