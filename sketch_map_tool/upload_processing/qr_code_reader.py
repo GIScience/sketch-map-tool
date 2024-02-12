@@ -51,18 +51,18 @@ def read(img: NDArray, depth=0) -> MappingProxyType:
 def _decode_data(data) -> MappingProxyType:
     try:
         contents = data.split(",")
-        if not len(contents) == 6:  # version nr, uuid and bbox coordinates
+        if not len(contents) == 7:  # version nr, uuid, bbox coordinates and layer
             raise ValueError("Unexpected length of QR-code contents.")
         version_nr = contents[0]
         uuid = contents[1]
         bbox = Bbox(
-            *[float(coordinate) for coordinate in contents[2:]]
+            *[float(coordinate) for coordinate in contents[2:-1]]
         )  # Raises ValueError for non-float values
         try:
-            layer = Layer(contents[6])
+            layer = getattr(Layer, (contents[7]))
         except IndexError:
             # backward compatibility
-            layer = Layer("osm")
+            layer = getattr(Layer, "OSM")
     except ValueError as error:
         raise QRCodeError("QR-Code does not have expected content.") from error
     return MappingProxyType(

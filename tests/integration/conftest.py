@@ -15,7 +15,7 @@ from sketch_map_tool import celery_app as smt_celery_app
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.helpers import to_array
-from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.upload_processing import clip
 from tests import FIXTURE_DIR
 
@@ -210,7 +210,7 @@ def scale():
 
 @pytest.fixture(scope="session", params=["osm", "esri-world-imagery"])
 def layer(request):
-    return request.param
+    return Layer(request.param)
 
 
 @pytest.fixture
