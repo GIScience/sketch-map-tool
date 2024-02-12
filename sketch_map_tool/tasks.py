@@ -108,7 +108,7 @@ def georeference_sketch_maps(
         r = to_array(r)
         r = clip(r, map_frames[uuid])
         r = georeference(r, bbox)
-        attribution = re.sub("<.*?>", " ", attribution)
+        attribution = re.sub("<.*?>", "\n", attribution)
         attribution_info = BytesIO(attribution.encode())
         return [r, attribution_info]
 
