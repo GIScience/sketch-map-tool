@@ -1,8 +1,10 @@
 import json
+import logging
 import os
 from pathlib import Path
 from typing import Literal
 
+import requests
 from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
@@ -24,6 +26,19 @@ COLORS = {
 }
 # Resources for PDF generation
 PDF_RESOURCES_PATH = Path(__file__).parent.resolve() / "resources"
+
+
+def get_esri_attribution() -> str:
+    """Get attribution text for ESRI World Imagery layer."""
+    url = "https://basemaps-api.arcgis.com/arcgis/rest/services/styles/ArcGIS:Imagery"
+    params = {"type": "style", "token": get_config_value("esri-api-key")}
+    response = requests.get(url, params, timeout=10)
+    result = response.json()
+    sources = result["sources"]
+    if len(sources) != 2:
+        logging.warning("Attribution retrieved from ESRI API has unexpected format.")
+    sources.pop("esri", None)
+    return list(sources.values())[0]["attribution"]
 
 
 def get_literature_references() -> list[LiteratureReference]:
