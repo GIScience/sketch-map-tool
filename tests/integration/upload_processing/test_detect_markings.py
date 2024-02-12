@@ -29,7 +29,7 @@ def yolo_model():
     return YOLO(yolo_path)
 
 
-@pytest.mark.skip("For manuel testing")
+# @pytest.mark.skip("For manuel testing")
 def test_detect_markings(sam_predictor, yolo_model, map_frame_marked):
     markings = detect_markings(map_frame_marked, yolo_model, sam_predictor)
     img = Image.fromarray(markings)
