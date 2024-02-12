@@ -8,7 +8,7 @@ import requests
 from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
-from sketch_map_tool.models import LiteratureReference, PaperFormat
+from sketch_map_tool.models import Layer, LiteratureReference, PaperFormat
 
 # Types of requests
 REQUEST_TYPES = Literal[
@@ -28,17 +28,25 @@ COLORS = {
 PDF_RESOURCES_PATH = Path(__file__).parent.resolve() / "resources"
 
 
-def get_esri_attribution() -> str:
+def get_attribution(layer: Layer) -> str:
     """Get attribution text for ESRI World Imagery layer."""
-    url = "https://basemaps-api.arcgis.com/arcgis/rest/services/styles/ArcGIS:Imagery"
-    params = {"type": "style", "token": get_config_value("esri-api-key")}
-    response = requests.get(url, params, timeout=10)
-    result = response.json()
-    sources = result["sources"]
-    if len(sources) != 2:
-        logging.warning("Attribution retrieved from ESRI API has unexpected format.")
-    sources.pop("esri", None)
-    return list(sources.values())[0]["attribution"]
+    if layer.value == "esri-world-imagery":
+        url = (
+            "https://basemaps-api.arcgis.com/arcgis/rest/services/styles/ArcGIS:Imagery"
+        )
+        params = {"type": "style", "token": get_config_value("esri-api-key")}
+        response = requests.get(url, params, timeout=10)
+        result = response.json()
+        sources = result["sources"]
+        if len(sources) != 2:
+            logging.warning(
+                "Attribution retrieved from ESRI API has unexpected format."
+            )
+        sources.pop("esri", None)
+        attribution = "Powered by Esri<br />" + list(sources.values())[0]["attribution"]
+        return attribution
+    else:
+        return "Powered by OpenStreetMap<br />©openstreetmap.org/copyright"
 
 
 def get_literature_references() -> list[LiteratureReference]:
