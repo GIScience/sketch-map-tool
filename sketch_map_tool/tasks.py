@@ -1,5 +1,4 @@
 import os
-import re
 from io import BytesIO
 from uuid import UUID
 from zipfile import ZipFile
@@ -100,29 +99,34 @@ def georeference_sketch_maps(
         sketch_map_id: int,
         uuid: str,
         bbox: Bbox,
-        attribution: str,
-    ) -> list[BytesIO]:
+    ) -> BytesIO:
         """Process a Sketch Map and its attribution."""
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
         r = clip(r, map_frames[uuid])
         r = georeference(r, bbox)
-        attribution = re.sub("<.*?>", "\n", attribution)
-        attribution_info = BytesIO(attribution.encode())
-        return [r, attribution_info]
+        return r
 
-    def zip_(file: list[BytesIO], file_name: str):
+    def get_attribution_text(layer: Layer) -> BytesIO:
+        attribution = get_attribution(layer)
+        attribution = attribution.replace("<br />", "\n")
+        return BytesIO(attribution.encode())
+
+    def zip_(file: BytesIO, file_name: str):
         with ZipFile(buffer, "a") as zip_file:
             name = ".".join(file_name.split(".")[:-1])
-            zip_file.writestr(f"{name}.geotiff", file[0].read())
-            zip_file.writestr("attributions.txt", file[1].read())
+            zip_file.writestr(f"{name}.geotiff", file.read())
 
     buffer = BytesIO()
     for file_id, uuid, bbox, layer, file_name in zip(
         file_ids, uuids, bboxes, layers, file_names
     ):
-        zip_(process(file_id, uuid, bbox, get_attribution(layer)), file_name)
+        zip_(process(file_id, uuid, bbox), file_name)
+    for layer in layers:
+        with ZipFile(buffer, "a") as zip_file:
+            zip_file.writestr("attributions.txt", get_attribution_text(layer).read())
+
     buffer.seek(0)
     return buffer
 
