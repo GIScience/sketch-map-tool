@@ -108,10 +108,13 @@ def georeference_sketch_maps(
         r = georeference(r, bbox)
         return r
 
-    def get_attribution_text(layer: Layer) -> BytesIO:
-        attribution = get_attribution(layer)
-        attribution = attribution.replace("<br />", "\n")
-        return BytesIO(attribution.encode())
+    def get_attribution_file(layers: list[Layer]) -> BytesIO:
+        attributions = []
+        for index, layer in enumerate(layers):
+            attribution = get_attribution(layer)
+            attribution = attribution.replace("<br />", "\n")
+            attributions.append(attribution)
+        return BytesIO("\n".join(attributions).encode())
 
     def zip_(file: BytesIO, file_name: str):
         with ZipFile(buffer, "a") as zip_file:
@@ -119,13 +122,10 @@ def georeference_sketch_maps(
             zip_file.writestr(f"{name}.geotiff", file.read())
 
     buffer = BytesIO()
-    for file_id, uuid, bbox, layer, file_name in zip(
-        file_ids, uuids, bboxes, layers, file_names
-    ):
+    for file_id, uuid, bbox, file_name in zip(file_ids, uuids, bboxes, file_names):
         zip_(process(file_id, uuid, bbox), file_name)
-    for layer in layers:
-        with ZipFile(buffer, "a") as zip_file:
-            zip_file.writestr("attributions.txt", get_attribution_text(layer).read())
+    with ZipFile(buffer, "a") as zip_file:
+        zip_file.writestr("attributions.txt", get_attribution_file(layers).read())
 
     buffer.seek(0)
     return buffer
