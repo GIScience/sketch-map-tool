@@ -17,9 +17,9 @@ from reportlab.platypus import Frame, Paragraph
 from reportlab.platypus.flowables import Image, Spacer
 from svglib.svglib import svg2rlg
 
-from sketch_map_tool.definitions import PDF_RESOURCES_PATH
+from sketch_map_tool.definitions import PDF_RESOURCES_PATH, get_attribution
 from sketch_map_tool.helpers import resize_rlg_by_width
-from sketch_map_tool.models import Layer, MapAttributions, PaperFormat
+from sketch_map_tool.models import Layer, PaperFormat
 
 # PIL should be able to open high resolution PNGs of large Maps:
 Image.MAX_IMAGE_PIXELS = None
@@ -164,8 +164,7 @@ def draw_right_column(
     compass = get_compass(compass_size, portrait)
 
     # Add copyright information:
-    map_attributions = MapAttributions()
-    p_copyright = Paragraph(map_attributions.get_attribution(layer.value), normal_style)
+    p_copyright = Paragraph(get_attribution(layer), normal_style)
 
     # Add QR-Code:
     qr_size = min(width, height) - margin
