@@ -9,6 +9,7 @@ from geojson import FeatureCollection
 from numpy.typing import NDArray
 from segment_anything import SamPredictor, sam_model_registry
 from ultralytics import YOLO
+from ultralytics_4bands import YOLO as YOLO_4
 
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool import get_config_value, map_generation
@@ -120,6 +121,7 @@ def digitize_sketches(
     file_names: list[str],
     uuids: list[str],
     map_frames: dict[str, NDArray],
+    layer_types: list[str],
     bboxes: list[Bbox],
 ) -> AsyncResult | FeatureCollection:
     # Initialize ml-models. This has to happen inside of celery context.
@@ -128,20 +130,42 @@ def digitize_sketches(
     # during marking detection
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
     # Custom trained model for object detection of markings and colors
-    yolo_path = init_model(get_config_value("neptune_model_id_yolo"))
-    yolo_model: YOLO = YOLO(yolo_path)
+    if "OSM" in layer_types:
+        yolo_path_osm = init_model(get_config_value("neptune_model_id_yolo_osm_obj"))
+        yolo_model_osm_obj: YOLO_4 = YOLO_4(yolo_path_osm)
+    if "ELSE" in layer_types:
+        yolo_path_esri = init_model(get_config_value("neptune_model_id_yolo_esri_obj"))
+        yolo_model_esri_obj: YOLO_4 = YOLO_4(yolo_path_esri)
+
+    if "OSM" not in layer_types and "ESRI" not in layer_types:
+        raise ValueError("Unexpected layer type, only OSM and ESRI are supported")
+
+    yolo_path_cls = init_model(get_config_value("neptune_model_id_yolo_cls"))
+    yolo_model_cls: YOLO = YOLO(yolo_path_cls)
+
     # Zero shot segment anything model
     sam_path = init_model(get_config_value("neptune_model_id_sam"))
     sam_model = sam_model_registry[get_config_value("model_type_sam")](sam_path)
     sam_predictor: SamPredictor = SamPredictor(sam_model)  # mask predictor
 
     l = []  # noqa: E741
-    for file_id, file_name, uuid, bbox in zip(file_ids, file_names, uuids, bboxes):
+    for file_id, file_name, uuid, bbox, layer in zip(
+        file_ids, file_names, uuids, bboxes, layer_types
+    ):
         # r = interim result
         r: BytesIO = db_client_celery.select_file(file_id)  # type: ignore
         r: NDArray = to_array(r)  # type: ignore
         r: NDArray = clip(r, map_frames[uuid])  # type: ignore
-        r: NDArray = detect_markings(r, yolo_model, sam_predictor)  # type: ignore
+        if layer == "OSM":
+            yolo_model_obj = yolo_model_osm_obj
+        elif layer == "ESRI":
+            yolo_model_obj = yolo_model_esri_obj
+        else:
+            raise ValueError(
+                f"Unexpected layer type {layer} only OSM and ESRI are supported"
+            )
+
+        r: NDArray = detect_markings(r, yolo_model_obj, yolo_model_cls, sam_predictor)  # type: ignore
         # m = marking
         for m in r:
             m: BytesIO = georeference(m, bbox, bgr=False)  # type: ignore
