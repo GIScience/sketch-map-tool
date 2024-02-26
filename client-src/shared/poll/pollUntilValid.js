@@ -43,7 +43,8 @@ class PollUntilValid {
                 await onValid(response);
                 return response;
             }
-            /* eslint-enable */
+
+            // eslint-disable-next-line no-constant-condition
         } while (true);
     }
 

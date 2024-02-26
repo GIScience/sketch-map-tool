@@ -56,12 +56,9 @@ def generate_sketch_map(
     raw = wms_client.get_map_image(bbox, size)
     map_image = wms_client.as_image(raw)
     qr_code_ = map_generation.qr_code(
-        uuid,
+        str(uuid),
         bbox,
         format_,
-        orientation,
-        size,
-        scale,
     )
     map_pdf, map_img = map_generation.generate_pdf(
         map_image,
@@ -89,48 +86,54 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 def georeference_sketch_maps(
     file_ids: list[int],
     file_names: list[str],
-    map_frame: NDArray,
-    bbox: Bbox,
+    uuids: list[str],
+    map_frames: dict[str, NDArray],
+    bboxes: list[Bbox],
 ) -> AsyncResult | BytesIO:
-    def process(sketch_map_id: int) -> BytesIO:
+    def process(sketch_map_id: int, uuid: str, bbox: Bbox) -> BytesIO:
         """Process a Sketch Map.
 
-        :param sketch_map_id: ID under which the uploaded file is stored in the database.
+        :param sketch_map_id: ID under which uploaded file is stored in the database.
+        :param uuid: UUID under which the sketch map was created.
+        :bbox: Bounding box of the AOI on the sketch map.
         :return: Georeferenced image (GeoTIFF) of the sketch map .
         """
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
-        r = clip(r, map_frame)
+        r = clip(r, map_frames[uuid])
         r = georeference(r, bbox)
         return r
 
-    def zip_(files: list, file_names: list[str]) -> BytesIO:
-        buffer = BytesIO()
-        with ZipFile(buffer, "w") as zip_file:
-            for upload_name, file in zip(file_names, files):
-                name = ".".join(upload_name.split(".")[:-1])
-                zip_file.writestr(f"{name}.geotiff", file.read())
-        buffer.seek(0)
-        return buffer
+    def zip_(file: BytesIO, file_name: str):
+        with ZipFile(buffer, "a") as zip_file:
+            name = ".".join(file_name.split(".")[:-1])
+            zip_file.writestr(f"{name}.geotiff", file.read())
 
-    return zip_([process(file_id) for file_id in file_ids], file_names)
+    buffer = BytesIO()
+    for file_id, uuid, bbox, file_name in zip(file_ids, uuids, bboxes, file_names):
+        zip_(process(file_id, uuid, bbox), file_name)
+    buffer.seek(0)
+    return buffer
 
 
 @celery.task()
 def digitize_sketches(
     file_ids: list[int],
     file_names: list[str],
-    map_frame: NDArray,
-    bbox: Bbox,
+    uuids: list[str],
+    map_frames: dict[str, NDArray],
+    bboxes: list[Bbox],
 ) -> AsyncResult | FeatureCollection:
-    def process(sketch_map_id: int, name: str) -> FeatureCollection:
+    def process(
+        sketch_map_id: int, name: str, uuid: str, bbox: Bbox
+    ) -> FeatureCollection:
         """Process a Sketch Map."""
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
-        r = clip(r, map_frame)
-        r = prepare_img_for_markings(map_frame, r)
+        r = clip(r, map_frames[uuid])
+        r = prepare_img_for_markings(map_frames[uuid], r)
         geojsons = []
         for color in COLORS:
             r_ = detect_markings(r, color)
@@ -143,5 +146,8 @@ def digitize_sketches(
         return merge(geojsons)
 
     return merge(
-        [process(file_id, name) for file_id, name in zip(file_ids, file_names)]
+        [
+            process(file_id, name, uuid, bbox)
+            for file_id, name, uuid, bbox in zip(file_ids, file_names, uuids, bboxes)
+        ]
     )

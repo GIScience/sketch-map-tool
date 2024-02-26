@@ -22,7 +22,7 @@
     --card-sectionning-background-color: #e6e6e6 !important;
 }
 
-@media (min-width: 576px) {
+@media (width >= 576px) {
     :root {
         --logo-text-size: 2.8rem;
     }
@@ -81,12 +81,15 @@ body {
     display: inline-block;
 }
 
-.infobox {
+.infobox,
+.warningbox {
     position: relative;
     padding-left: 3.5rem;
+    margin: 0.5rem 0;
 }
 
-.infobox::before {
+.infobox::before,
+.warningbox::before {
     content: "i";
     position: absolute;
     width: 2rem;
@@ -99,6 +102,12 @@ body {
     font-size: 1.5rem;
     border-radius: 1rem;
     top: calc(50% - 1rem);
+}
+
+.warningbox::before {
+    content: "!";
+    background-color: var(--heigit-red);
+    color: white;
 }
 
 .github-icon {

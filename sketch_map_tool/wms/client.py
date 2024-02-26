@@ -44,7 +44,8 @@ def get_map_image(bbox: Bbox, size: Size) -> Response:
     except ReadTimeout:
         raise MapGenerationError(
             gettext(
-                "Map area couldn't be processed with the current resources. Please try again once."
+                "Map area couldn't be processed with the current resources."
+                " Please try again once."
             )
         )
 

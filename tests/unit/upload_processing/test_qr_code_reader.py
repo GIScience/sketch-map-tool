@@ -33,7 +33,7 @@ def qr_code_img_no():
 
 @pytest.fixture
 def qr_code_invalid_uuid():
-    return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code-invalid-uuid.jpg"))
+    return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code-invalid-uuid.png"))
 
 
 @pytest.fixture
@@ -42,15 +42,12 @@ def qr_code_invalid_contents():
 
 
 @pytest.fixture
-def decoded_content(uuid, format_, bbox, size, scale):
+def decoded_content(uuid, bbox, version_nr):
     return MappingProxyType(
         {
             "uuid": uuid,
             "bbox": bbox,
-            "format_": format_,
-            "orientation": "landscape",
-            "size": size,
-            "scale": scale,
+            "version": version_nr,
         }
     )
 
@@ -69,7 +66,7 @@ def test_read_qr_code_sketch_map(sketch_map, decoded_content):
 
 # TODO: Find fixture which need to be downscaled
 # def test_read_qr_code_big(qr_code_img_big):
-#     """Test reading a QR-Code image which size is too big and need to be down-scaled ...
+#     """Test reading a QR-Code image which size is too big and need to be down-scaled..
 
 #     ... before content can be detected.
 #     """

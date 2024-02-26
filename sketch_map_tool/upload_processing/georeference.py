@@ -9,8 +9,8 @@ from osgeo import gdal, osr
 from sketch_map_tool.models import Bbox
 
 
-def georeference(img: NDArray, bbox: Bbox, BGR: bool = True) -> BytesIO:
-    """Create a GeoTIFF from a image (numpy array) and bounding box coordinates.
+def georeference(img: NDArray, bbox: Bbox, bgr: bool = True) -> BytesIO:
+    """Create a GeoTIFF from an image (numpy array) and bounding box coordinates.
 
     The image (numpy array) has to be in BGR (3 channels).
     The Bounding Box is in WGS 84 / Pseudo-Mercator.
@@ -41,10 +41,10 @@ def georeference(img: NDArray, bbox: Bbox, BGR: bool = True) -> BytesIO:
         # set geo transform
         # fmt: off
         transform = [
-            bbox.lon_min,   # x-coordinate of the upper-left corner of the upper-left pixel
+            bbox.lon_min,   # x-coordinate of upper-left corner of upper-left pixel
             pixel_width,
             0,              # row rotation (typically zero)
-            bbox.lat_max,   # y-coordinate of the upper-left corner of the upper-left pixel
+            bbox.lat_max,   # y-coordinate of upper-left corner of upper-left pixel
             0,              # column rotation (typically zero)
             -pixel_height,  # negative value for a north-up image
         ]

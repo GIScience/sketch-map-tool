@@ -7,8 +7,8 @@ from numpy.typing import NDArray
 class Bbox:
     """Bounding Box in WGS 84 / Pseudo-Mercator (EPSG:3857)
 
-    Be aware that the argument order is relevant to the API and the JavaScript client. Keep the
-    order in sync with the client.
+    Be aware that the argument order is relevant to the API and the JavaScript client.
+    Keep the order in sync with the client.
     """
 
     lon_min: float
@@ -42,8 +42,13 @@ class PaperFormat:
         qr_scale: Scale factor of the QR-code
         compass_scale: Scale factor of the compass
         globe_scale: Scale factor of the globes
-        scale_height: Height of the scale [cm].
-            The width is calculated in proportion to the map (bounding box).
+        scale_height: Height of the scale [px].
+        scale_relative_xy: Position of the scale relative to the map frame width or
+            height respectively
+        scale_background_params: (x relative to scale, y relative to scale,
+            length additional to scale, height)
+        scale_distance_to_text: Distance from the scale bar
+            to the text describing it [px]
         qr_y: Vertical distance from origin to the QR-code [cm]
         indent: Indentation of the margin's content relative to the map area [cm]
         qr_contents_distances_not_rotated: Tuple of distances [cm]
@@ -64,7 +69,10 @@ class PaperFormat:
     qr_scale: float
     compass_scale: float
     globe_scale: float
-    scale_height: float
+    scale_height: int
+    scale_relative_xy: tuple[int, int]
+    scale_background_params: tuple[int, int, int, int]
+    scale_distance_to_text: int
     qr_y: float
     indent: float
     qr_contents_distances_not_rotated: tuple[int, int]

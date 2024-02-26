@@ -1,0 +1,9 @@
+name: smt
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10.*
+  - poetry=1.*
+  - gdal=3.7.1
+  - pyzbar=0.1.9
+  - psycopg2=2.9.7

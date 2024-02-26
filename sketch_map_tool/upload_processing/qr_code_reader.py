@@ -2,8 +2,6 @@
 Read QR codes from photos / scans
 """
 
-import json
-from json import JSONDecodeError
 from types import MappingProxyType
 
 import cv2
@@ -11,9 +9,8 @@ from flask_babel import gettext
 from numpy.typing import NDArray
 from pyzbar import pyzbar
 
-from sketch_map_tool import definitions
 from sketch_map_tool.exceptions import QRCodeError
-from sketch_map_tool.models import Bbox, Size
+from sketch_map_tool.models import Bbox
 from sketch_map_tool.validators import validate_uuid
 
 
@@ -51,22 +48,18 @@ def read(img: NDArray, depth=0) -> MappingProxyType:
 
 def _decode_data(data) -> MappingProxyType:
     try:
-        d = json.loads(data)
-    except JSONDecodeError as error:
+        contents = data.split(",")
+        if not len(contents) == 6:  # version nr, uuid and bbox coordinates
+            # todo: ADD i18n
+            raise ValueError("Unexpected length of QR-code contents.")
+        version_nr = contents[0]
+        uuid = contents[1]
+        bbox = Bbox(
+            *[float(coordinate) for coordinate in contents[2:]]
+        )  # Raises ValueError for non-float values
+    except ValueError as error:
         raise QRCodeError(gettext("QR-Code does not have expected content.")) from error
-    try:
-        return MappingProxyType(
-            {
-                "uuid": d["id"],
-                "bbox": Bbox(**d["bbox"]),
-                "format_": getattr(definitions, d["format"].upper()),
-                "orientation": d["orientation"],
-                "size": Size(**d["size"]),
-                "scale": float(d["scale"]),
-            }
-        )
-    except KeyError as error:
-        raise QRCodeError(gettext("QR-Code does not have expected content.")) from error
+    return MappingProxyType({"uuid": uuid, "bbox": bbox, "version": version_nr})
 
 
 def _resize(img, scale: float = 0.75):

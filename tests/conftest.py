@@ -10,6 +10,13 @@ from sketch_map_tool import make_flask
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.routes import (
+    about,
+    digitize,
+    digitize_results_post,
+    help,
+    index,
+)
 from tests import FIXTURE_DIR
 
 
@@ -49,7 +56,26 @@ def db_conn_celery():
 
 @pytest.fixture()
 def flask_app():
-    yield make_flask()
+    app = make_flask()
+    app.config.update(
+        {
+            "TESTING": True,
+        }
+    )
+    # Register routes to be tested:
+    app.add_url_rule(
+        "/digitize/results", view_func=digitize_results_post, methods=["POST", "GET"]
+    )
+    app.add_url_rule("/digitize", view_func=digitize, methods=["GET"])
+    app.add_url_rule("/", view_func=index, methods=["GET"])
+    app.add_url_rule("/about", view_func=about, methods=["GET"])
+    app.add_url_rule("/help", view_func=help, methods=["GET"])
+    yield app
+
+
+@pytest.fixture()
+def flask_client(flask_app):
+    return flask_app.test_client()
 
 
 @pytest.fixture
@@ -79,7 +105,10 @@ def format_():
         qr_scale=0.6,
         compass_scale=0.25,
         globe_scale=0.125,
-        scale_height=0.33,
+        scale_height=1,
+        scale_relative_xy=(-15, -30),
+        scale_background_params=(-15, -30, 30, 60),
+        scale_distance_to_text=20,
         qr_y=1.0,
         indent=0.25,
         qr_contents_distances_not_rotated=(2, 3),
@@ -95,6 +124,11 @@ def scale():
 @pytest.fixture
 def uuid():
     return "654dd0d3-7bb0-4a05-8a68-517f0d9fc98e"
+
+
+@pytest.fixture
+def version_nr():
+    return "0.9.0"
 
 
 @pytest.fixture

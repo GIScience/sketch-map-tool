@@ -7,23 +7,26 @@ import geojson
 # from celery import chain, group
 from flask import Response, redirect, render_template, request, send_file, url_for
 
-from sketch_map_tool import celery_app, definitions
+from sketch_map_tool import celery_app, definitions, tasks, upload_processing
 from sketch_map_tool import flask_app as app
-from sketch_map_tool import tasks, upload_processing
-from sketch_map_tool.database import client_flask as db_client
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
-    FileNotFoundError_,
+    CustomFileNotFoundError,
     MapGenerationError,
     OQTReportError,
     QRCodeError,
+    UploadLimitsExceededError,
     UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.tasks import digitize_sketches, georeference_sketch_maps
-from sketch_map_tool.validators import validate_type, validate_uuid
+from sketch_map_tool.validators import (
+    validate_type,
+    validate_uploaded_sketchmaps,
+    validate_uuid,
+)
 
 
 @app.get("/")
@@ -76,7 +79,7 @@ def create_results_post() -> Response:
         "sketch-map": str(task_sketch_map.id),
         "quality-report": str(task_quality_report.id),
     }
-    db_client.set_async_result_ids(uuid, map_)
+    db_client_flask.set_async_result_ids(uuid, map_)
     return redirect(url_for("create_results_get", uuid=uuid))
 
 
@@ -87,8 +90,8 @@ def create_results_get(uuid: str | None = None) -> Response | str:
         return redirect(url_for("create"))
     validate_uuid(uuid)
     # Check if celery tasks for UUID exists
-    _ = db_client.get_async_result_id(uuid, "sketch-map")
-    _ = db_client.get_async_result_id(uuid, "quality-report")
+    _ = db_client_flask.get_async_result_id(uuid, "sketch-map")
+    _ = db_client_flask.get_async_result_id(uuid, "quality-report")
     return render_template("create-results.html")
 
 
@@ -105,18 +108,27 @@ def digitize_results_post() -> Response:
     if "file" not in request.files:
         return redirect(url_for("digitize"))
     files = request.files.getlist("file")
-    ids = db_client.insert_files(files)
-    file = db_client_flask.select_file(ids[0])
+    validate_uploaded_sketchmaps(files)
+    ids = db_client_flask.insert_files(files)
     file_names = [db_client_flask.select_file_name(i) for i in ids]
-    args = upload_processing.read_qr_code(to_array(file))
-    uuid = args["uuid"]
-    bbox = args["bbox"]
-    map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
-    map_frame = to_array(map_frame_buffer.read())
+    args = [
+        upload_processing.read_qr_code(to_array(db_client_flask.select_file(_id)))
+        for _id in ids
+    ]
+    uuids = [args_["uuid"] for args_ in args]
+    bboxes = [args_["bbox"] for args_ in args]
+    map_frames = dict()
+    for uuid in set(uuids):  # Only retrieve map_frame once per uuid to save memory
+        map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
+        map_frames[uuid] = to_array(map_frame_buffer.read())
     result_id_1 = (
-        georeference_sketch_maps.s(ids, file_names, map_frame, bbox).apply_async().id
+        georeference_sketch_maps.s(ids, file_names, uuids, map_frames, bboxes)
+        .apply_async()
+        .id
     )
-    result_id_2 = digitize_sketches.s(ids, file_names, map_frame, bbox).apply_async().id
+    result_id_2 = (
+        digitize_sketches.s(ids, file_names, uuids, map_frames, bboxes).apply_async().id
+    )
     # Unique id for current request
     uuid = str(uuid4())
     # Mapping of request id to multiple tasks id's
@@ -125,8 +137,7 @@ def digitize_results_post() -> Response:
         "vector-results": str(result_id_2),
     }
     db_client_flask.set_async_result_ids(uuid, map_)
-    id_ = uuid
-    return redirect(url_for("digitize_results_get", uuid=id_))
+    return redirect(url_for("digitize_results_get", uuid=uuid))
 
 
 @app.get("/digitize/results")
@@ -143,7 +154,7 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    id_ = db_client.get_async_result_id(uuid, type_)
+    id_ = db_client_flask.get_async_result_id(uuid, type_)
     task = celery_app.AsyncResult(id_)
 
     href = None
@@ -151,32 +162,24 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
     if task.ready():
         if task.successful():  # SUCCESS
             http_status = 200
-            status = "SUCCESSFUL"
             href = "/api/download/" + uuid + "/" + type_
         elif task.failed():  # REJECTED, REVOKED, FAILURE
             try:
                 task.get(propagate=True)
-            except MapGenerationError as err:
-                http_status = 408  # Request Timeout
-                status = "FAILED"
-                error = str(err)
-            except (QRCodeError, OQTReportError) as err:
-                # The request was well-formed but was unable to be followed due to semantic
-                # errors.
+            except (QRCodeError, OQTReportError, MapGenerationError) as err:
+                # The request was well-formed but was unable to be followed due
+                # to semantic errors.
                 http_status = 422  # Unprocessable Entity
-                status = "FAILED"
                 error = str(err)
             except (Exception) as err:
                 http_status = 500  # Internal Server Error
-                status = "FAILED"
                 error = str(err)
-    else:  # PENDING, RETRY, RECEIVED, STARTED
+    else:  # PENDING, RETRY, STARTED
         # Accepted for processing, but has not been completed
         http_status = 202  # Accepted
-        status = "PROCESSING"
     body_raw = {
         "id": uuid,
-        "status": status,
+        "status": task.status,
         "type": type_,
         "href": href,
         "error": error,
@@ -190,7 +193,7 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    id_ = db_client.get_async_result_id(uuid, type_)
+    id_ = db_client_flask.get_async_result_id(uuid, type_)
     task = celery_app.AsyncResult(id_)
 
     match type_:
@@ -218,7 +221,8 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
 
 
 @app.errorhandler(QRCodeError)
-@app.errorhandler(FileNotFoundError_)
+@app.errorhandler(CustomFileNotFoundError)
+@app.errorhandler(UploadLimitsExceededError)
 def handle_exception(error):
     return render_template("error.html", error_msg=str(error)), 422
 

@@ -10,6 +10,10 @@ class OQTReportError(Exception):
     pass
 
 
+class UploadLimitsExceededError(Exception):
+    pass
+
+
 class DatabaseError(Exception):
     pass
 
@@ -18,5 +22,5 @@ class UUIDNotFoundError(DatabaseError):
     pass
 
 
-class FileNotFoundError_(DatabaseError):
+class CustomFileNotFoundError(DatabaseError):
     pass

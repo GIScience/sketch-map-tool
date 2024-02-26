@@ -4,8 +4,7 @@ from io import BytesIO
 from typing import Tuple
 
 import fitz
-import matplotlib.pyplot as plt
-from matplotlib_scalebar.scalebar import ScaleBar
+import reportlab.pdfgen.canvas
 from PIL import Image as PILImage
 from reportlab.graphics import renderPDF
 from reportlab.graphics.shapes import Drawing
@@ -33,9 +32,9 @@ def generate_pdf(  # noqa: C901
     scale: float,
 ) -> Tuple[BytesIO, BytesIO]:
     """
-    Generate a sketch map pdf, i.e. a PDF containing the given map image as well as a code for
-    georeferencing, a scale, copyright information, and objects to help the feature detection
-    during the upload processing.
+    Generate a sketch map pdf, i.e. a PDF containing the given map image
+    as well as a code for georeferencing, a scale, copyright information,
+    and objects to help the feature detection during the upload processing.
 
     Also generate template image (PNG) as Pillow object for later upload processing
 
@@ -69,7 +68,7 @@ def generate_pdf(  # noqa: C901
     column_origin_y = 0
     column_margin = map_margin * cm
 
-    map_image_reportlab = PIL_image_to_image_reader(map_image_input)
+    map_image_reportlab = pil_image_to_image_reader(map_image_input)
 
     # calculate m per px in map frame
     cm_per_px = frame_width * scale / map_width_px
@@ -107,7 +106,6 @@ def generate_pdf(  # noqa: C901
     canv_map.setFontSize(format_.font_size)
     canv_map.setFillColorRGB(0, 0, 0)
 
-    # TODO implement for portrait
     draw_right_column(
         canv_map,
         column_width,
@@ -118,6 +116,7 @@ def generate_pdf(  # noqa: C901
         qr_code,
         scale,
         format_,
+        portrait,
     )
 
     # Generate PDFs:
@@ -146,6 +145,7 @@ def draw_right_column(
     qr_code: Drawing,
     scale,
     format_,
+    portrait=False,
 ) -> None:
     normal_style = scale_style(format_, "Normal", 50)
     em = normal_style.fontSize
@@ -158,7 +158,7 @@ def draw_right_column(
 
     # Add compass
     compass_size = width * 0.25  # this is the current ratio of the right column width
-    compass = get_compass(compass_size)
+    compass = get_compass(compass_size, portrait)
 
     # Add copyright information:
     p_copyright = Paragraph("Map: © OpenStreetMap Contributors", normal_style)
@@ -167,7 +167,8 @@ def draw_right_column(
     qr_size = min(width, height) - margin
     qr_code = resize_rlg_by_width(qr_code, qr_size)
 
-    # fills up the remaining space, placed between the TOP and the BOTTOM aligned elements
+    # fills up the remaining space, placed between
+    # the TOP and the BOTTOM aligned elements
     space_filler = Spacer(width, 0)  # height will be filled after list creation
     # order all elements in column
     flowables = [
@@ -216,7 +217,7 @@ def scale_style(format_: PaperFormat, style_name: str, factor: float) -> Paragra
     return normal_style
 
 
-def PIL_image_to_image_reader(map_image_input):
+def pil_image_to_image_reader(map_image_input):
     map_image_raw = io.BytesIO()
     map_image_input.save(map_image_raw, format="png")
     map_image_reportlab = ImageReader(map_image_raw)
@@ -226,8 +227,8 @@ def PIL_image_to_image_reader(map_image_input):
 def create_map_frame(
     map_image: ImageReader,
     format_: PaperFormat,
-    height: float,
-    width: float,
+    height: int,
+    width: int,
     portrait: bool,
     m_per_px: float,
 ) -> BytesIO:
@@ -248,6 +249,9 @@ def create_map_frame(
         )
         canv.rotate(-90)
         add_globes(canv, globe_size, height=width, width=height)
+        add_scalebar(
+            canv, width=height, height=width, m_per_px=m_per_px, paper_format=format_
+        )
     else:
         canv.drawImage(
             map_image,
@@ -258,37 +262,11 @@ def create_map_frame(
             height=height,
         )
         add_globes(canv, globe_size, height, width)
+        add_scalebar(canv, width, height, m_per_px, format_)
 
     canv.save()
     map_frame.seek(0)
-    return add_scalebar(pdf_page_to_img(map_frame), m_per_px)
-
-
-def add_scalebar(input_image: BytesIO, m_per_px: float) -> BytesIO:
-    # render legend with matplotlib
-    img = plt.imread(input_image)
-    width, height = img.shape[1], img.shape[0]
-    # dpi do not have to be correct, just should be fixed during processing
-    dpi = 192
-    plt.figure(figsize=(width / dpi, height / dpi), dpi=dpi)
-    plt.axis("off")
-    # add image to plot
-    plt.imshow(img)
-    plt.tight_layout(pad=0)
-    scalebar = ScaleBar(m_per_px)
-    plt.gca().add_artist(scalebar)
-
-    # write output
-    figure_output = BytesIO()
-    plt.savefig(figure_output, dpi="figure", format="png")
-    plt.close()
-    figure_output.seek(0)
-
-    # convert from RGB to RGBA
-    output_image = BytesIO()
-    PILImage.open(figure_output).convert("RGB").save(output_image, format="png")
-    output_image.seek(0)
-    return output_image
+    return pdf_page_to_img(map_frame)
 
 
 def add_globes(canv: canvas.Canvas, size: float, height: float, width: float):
@@ -339,10 +317,70 @@ def get_globes(expected_size) -> Tuple[Drawing, ...]:
     return tuple(globes)
 
 
-def get_compass(size: float) -> Drawing:
-    compass = svg2rlg(PDF_RESOURCES_PATH / "north.svg")
+def get_compass(size: float, portrait=False) -> Drawing:
+    file_name = "north.svg"
+    if portrait:
+        file_name = "north_rotated.svg"
+    compass = svg2rlg(PDF_RESOURCES_PATH / file_name)
     compass = resize_rlg_by_width(compass, size)
     return compass
+
+
+def add_scalebar(
+    canv: reportlab.pdfgen.canvas.Canvas,
+    width: int,
+    height: int,
+    m_per_px: float,
+    paper_format: PaperFormat,
+):
+    scale_bar_length = round(width * 0.075)
+    corresponding_meters = round(m_per_px * scale_bar_length)
+    if corresponding_meters >= 1000:
+        corresponding_meters = (
+            corresponding_meters - corresponding_meters % 1000 + 1000
+        )  # Round up to the next 1000m
+    elif corresponding_meters >= 500:
+        corresponding_meters = (
+            corresponding_meters - corresponding_meters % 500 + 500
+        )  # Round up to the next 500m
+    elif corresponding_meters >= 100:
+        corresponding_meters = (
+            corresponding_meters - corresponding_meters % 100 + 100
+        )  # Round up to the next 100m
+    elif corresponding_meters >= 50:
+        corresponding_meters = (
+            corresponding_meters - corresponding_meters % 50 + 50
+        )  # Round up to the next 50m
+    else:
+        corresponding_meters = (
+            corresponding_meters - corresponding_meters % 10 + 10
+        )  # Round up to the next 10m
+    scale_bar_length = round(corresponding_meters / m_per_px)
+    scale_bar_x, scale_bar_y = (
+        width + paper_format.scale_relative_xy[0] - scale_bar_length,
+        height + paper_format.scale_relative_xy[1],
+    )
+    canv.setFillColorRGB(255, 255, 255)
+    background_params = paper_format.scale_background_params
+    canv.rect(
+        scale_bar_x + background_params[0],
+        scale_bar_y + background_params[1],
+        scale_bar_length + background_params[2],
+        background_params[3],
+        fill=True,
+    )
+    canv.setFillColorRGB(0, 0, 0)
+    canv.rect(
+        scale_bar_x, scale_bar_y, scale_bar_length, paper_format.scale_height, fill=True
+    )
+    canv.setFont(
+        "Times-Roman", paper_format.font_size * 2
+    )  # Should be a bit bigger than e.g. the copyright note
+    canv.drawString(
+        scale_bar_x,
+        scale_bar_y - paper_format.scale_distance_to_text,
+        f"{corresponding_meters}m",
+    )
 
 
 def pdf_page_to_img(pdf: BytesIO, page_id=0) -> BytesIO:

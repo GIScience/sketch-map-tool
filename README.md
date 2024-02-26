@@ -7,7 +7,7 @@
 [![status: active](https://github.com/GIScience/badges/raw/master/status/active.svg)](https://github.com/GIScience/badges#active)
 [![Python Tests](https://github.com/GIScience/sketch-map-tool/actions/workflows/python.yml/badge.svg)](https://github.com/GIScience/sketch-map-tool/actions/workflows/python.yml)
 
-The Sketch Map Tool is an easy-to-use tool for participatory sketch mapping through offline collection, digitization and georeferencing of local spatial knowledge.
+The Sketch Map Tool is an easy-to-use tool for participatory sketch mapping through offline collection, digitization and georeferencing of local spatial knowledge.
 
 The tool has a variety of applications. For example, do you want to work together with people in a community to map their experience and perception of risk in their neighbourhood in a paper-based format, but still be able to quickly analyse the results digitally? Then, the Sketch Map Tool is exactly what you need!
 

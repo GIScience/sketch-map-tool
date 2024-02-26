@@ -1,10 +1,52 @@
-import { Map, View } from "ol";
+import { Feature, Map, View } from "ol";
 import { Tile } from "ol/layer";
-import { fromLonLat } from "ol/proj";
 import { OSM } from "ol/source";
-import Geocoder from "@kirtandesai/ol-geocoder";
+import Geocoder from "ol-geocoder";
 import { PrintLayout, PAPER_FORMAT, ORIENTATION } from "@giscience/ol-print-layout-control";
+import { fromLonLat } from "ol/proj";
+import { LineString } from "ol/geom";
+import VectorSource from "ol/source/Vector";
+import VectorLayer from "ol/layer/Vector";
+import {
+    Fill, Stroke, Style, Text,
+} from "ol/style";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins.js";
+
+function createAntiMeridianLayer() {
+    // Create a LineString feature
+    const lineString = new LineString([
+        fromLonLat([180, -90]), // Start point just to the east of the antimeridian
+        fromLonLat([180, 90]), // End point just to the west of the antimeridian
+    ]);
+
+    // Create a vector source and add the LineString feature to it
+    const vectorSource = new VectorSource({
+        features: [new Feature({
+            geometry: lineString,
+        })],
+    });
+
+    // Create a vector layer and set the source
+    return new VectorLayer({
+        name: "Antimeridian",
+        source: vectorSource,
+        visible: false,
+        style: new Style({
+            stroke: new Stroke({
+                color: "red",
+                width: 3,
+            }),
+            text: new Text({
+                text: "Antimeridian\nPlease move it out of the map",
+                placement: "line",
+                offsetY: 2,
+                fill: new Fill({ color: "red" }),
+                font: "16px sans-serif",
+                repeat: 400,
+            }),
+        }),
+    });
+}
 
 /**
  * Creates an OpenLayers Map to an element
@@ -14,11 +56,11 @@ import { SKETCH_MAP_MARGINS } from "./sketchMapMargins.js";
  * @param {number} [zoom=15] - the zoomlevel in which the map will be initialized
  * @returns {Map}
  */
-function createMap(target = "map", lonLat = [8.68, 49.41], zoom = 15) {
+function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965], zoom = 15) {
     const map = new Map({
         target,
         view: new View({
-            center: fromLonLat(lonLat),
+            center: lonLat,
             zoom,
             maxZoom: 20,
             enableRotation: false,
@@ -27,6 +69,7 @@ function createMap(target = "map", lonLat = [8.68, 49.41], zoom = 15) {
             new Tile({
                 source: new OSM(),
             }),
+            createAntiMeridianLayer(),
         ],
     });
 

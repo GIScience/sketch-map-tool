@@ -1,6 +1,3 @@
-import json
-from dataclasses import asdict
-from datetime import datetime, timezone
 from io import BytesIO
 
 import qrcode
@@ -9,59 +6,29 @@ from reportlab.graphics.shapes import Drawing
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool import __version__
-from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.models import Bbox, PaperFormat
 
 
 def qr_code(
     uuid: str,
     bbox: Bbox,
     format_: PaperFormat,
-    orientation: str,
-    size: Size,
-    scale: float,
     version: str = __version__,
-    timestamp: datetime = datetime.now(timezone.utc),
 ) -> Drawing:
     """Generate a QR code holding the Celery task id and parameters of the map creation.
 
     :uuid: The uuid of a celery task associated with the creation of the PDF map.
     """
-    data = _encode_data(
-        uuid,
-        bbox,
-        format_,
-        orientation,
-        size,
-        scale,
-        version,
-        timestamp,
-    )
+    data = _encode_data(uuid, bbox, version)
     qr_code_svg = _make_qr_code(data)
     qr_code_rlg = _to_report_lab_graphic(format_, qr_code_svg)
     return qr_code_rlg
 
 
-def _encode_data(
-    uuid: str,
-    bbox: Bbox,
-    format_: PaperFormat,
-    orientation: str,
-    size: Size,
-    scale: float,
-    version: str,
-    timestamp: datetime,
-) -> str:
-    return json.dumps(
-        {
-            "id": uuid,
-            "bbox": asdict(bbox),
-            "format": format_.title,
-            "orientation": orientation,
-            "size": asdict(size),
-            "scale": str(scale),
-            "version": version,
-            "timestamp": timestamp.isoformat(),
-        }
+def _encode_data(uuid: str, bbox: Bbox, version_nr: str) -> str:
+    return (
+        f"{version_nr},{uuid},{bbox.lon_min},"
+        f"{bbox.lat_min},{bbox.lon_max},{bbox.lat_max}"
     )
 
 

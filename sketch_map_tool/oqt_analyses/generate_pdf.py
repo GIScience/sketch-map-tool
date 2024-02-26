@@ -1,5 +1,7 @@
 from io import BytesIO
 
+import plotly.graph_objects as go
+import plotly.io as pio
 from reportlab.graphics.shapes import Circle, Drawing, Rect
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
@@ -13,7 +15,7 @@ from sketch_map_tool.helpers import resize_rlg_by_height
 def generate_pdf(report_properties: dict) -> BytesIO:
     report_light_radius = 15
     indicator_light_radius = 10
-    indicator_img_size = 200
+    indicator_img_width = 300
     indicator_table_margin = 10
 
     metadata = report_properties["report"]["metadata"]
@@ -53,33 +55,35 @@ def generate_pdf(report_properties: dict) -> BytesIO:
         result = indicator["result"]
 
         indicator_heading = Paragraph(
-            "{} ({})".format(indicator["metadata"]["name"], indicator["layer"]["name"]),
+            "{} ({})".format(indicator["metadata"]["name"], indicator["topic"]["name"]),
             styles["Heading3"],
         )
         indicator_heading.keepWithNext = True
         indicator_description = Paragraph(metadata["description"])
         indicator_description.keepWithNext = True
         # indicator_heading.keepWithNext = True
-        # convert svg string to bytes file-like object
-        svg_bytes = BytesIO(result["svg"].encode())
+
+        # Create figure
+        fig = go.Figure(result["figure"])
+        svg_bytes = BytesIO(pio.to_image(fig, format="svg"))
+
         # fix width/height ratio because OQT only produces squared SVGs
         indicator_traffic_light = generate_traffic_light(
             result["label"], radius=indicator_light_radius
         )
         indicator_img = svg2rlg(svg_bytes)
         indicator_img.scale(
-            indicator_img_size / indicator_img.width,
-            indicator_img_size / indicator_img.height,
+            indicator_img_width / indicator_img.width,
+            indicator_img_width / indicator_img.width,
         )
-        indicator_img.width = indicator_img_size
-        indicator_img.height = indicator_img_size
+        indicator_img.width = indicator_img_width
+        indicator_img.height = indicator_img_width
         indicator_result_description = Paragraph(result["description"])
         indicator_result_table = Table(
-            [[indicator_traffic_light, indicator_img, indicator_result_description]],
+            [[indicator_traffic_light, indicator_img]],
             colWidths=[
                 indicator_light_radius * 3 + indicator_table_margin,
-                indicator_img_size + indicator_table_margin,
-                None,
+                indicator_img_width + indicator_table_margin,
             ],
             style=[
                 ("ALIGN", (0, 0), (-1, -1), "CENTER"),
@@ -90,6 +94,7 @@ def generate_pdf(report_properties: dict) -> BytesIO:
             indicator_heading,
             indicator_description,
             indicator_result_table,
+            indicator_result_description,
         ]
         components += indicator_components
 

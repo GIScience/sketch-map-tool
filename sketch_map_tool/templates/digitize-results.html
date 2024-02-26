@@ -5,7 +5,7 @@
 {% endblock head %}
 
 {% block header_message %}
-    <div class="circle" style="display: inline-block" ;>2</div>{{ _('Paper to GIS:') }}
+    <div class="circle" style="display: inline-block;">2</div>{{ _('Paper to GIS:') }}
     <span style="font-size: smaller">{{ _('Automatically Digitize Your Sketch&nbsp;Maps') }}</span>
 {% endblock %}
 
@@ -44,6 +44,8 @@
                     </p>
                     <a id="raster-data-download-button" href="#" download aria-busy="true"
                        role="button" disabled="disabled">{{ _('Download ZIP') }}</a>
+                    <div id="raster-data-status" class="task-status"></div>
+
                 </article>
             </div>
             <div>
@@ -71,6 +73,8 @@
                     <a id="vector-data-download-button" href="#" download aria-busy="true"
                        role="button"
                        disabled="disabled">{{ _('Download GeoJSON') }}</a>
+                    <div id="vector-data-status" class="task-status"></div>
+
                 </article>
             </div>
         </div>

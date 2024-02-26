@@ -61,9 +61,6 @@ def qr_code(bbox, format_, size):
         str(uuid4()),
         bbox,
         format_,
-        "landscape",
-        size,
-        0.75,
     )
 
 
@@ -86,7 +83,7 @@ def test_generate_pdf(
     )
     assert isinstance(sketch_map, BytesIO)
     assert isinstance(sketch_map_template, BytesIO)
-    # if you want the maps to be saved for visual inspection, use the parameter --save-maps with pytest
+    # if you want the maps to be saved for visual inspection -> --save-maps with pytest
     save_test_file(
         request,
         "--save-maps",

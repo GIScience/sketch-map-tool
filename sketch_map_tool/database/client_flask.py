@@ -9,7 +9,10 @@ from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
-from sketch_map_tool.exceptions import FileNotFoundError_, UUIDNotFoundError
+from sketch_map_tool.exceptions import (
+    CustomFileNotFoundError,
+    UUIDNotFoundError,
+)
 
 
 def open_connection():
@@ -88,14 +91,12 @@ def insert_files(files) -> list[int]:
         )
         """
     insert_query = "INSERT INTO blob(file_name, file) VALUES (%s, %s) RETURNING id"
-    data = [(secure_filename(file.filename), file.read()) for file in files]
     db_conn = open_connection()
     with db_conn.cursor() as curs:
-        # executemany and fetchall does not work together
         curs.execute(create_query)
         ids = []
-        for d in data:
-            curs.execute(insert_query, d)
+        for file in files:
+            curs.execute(insert_query, (secure_filename(file.filename), file.read()))
             ids.append(curs.fetchone()[0])
     return ids
 
@@ -110,7 +111,7 @@ def select_file(id_: int) -> bytes:
         if raw:
             return raw[0]
         else:
-            raise FileNotFoundError_(
+            raise CustomFileNotFoundError(
                 gettext("There is no file in the database with the id: ") + str(id_)
             )
 
@@ -132,7 +133,7 @@ def select_file_name(id_: int) -> str:
         if raw:
             return raw[0]
         else:
-            raise FileNotFoundError_(
+            raise CustomFileNotFoundError(
                 gettext("There is no file in the database with the id: ") + str(id_)
             )
 
@@ -145,9 +146,10 @@ def select_map_frame(uuid: UUID) -> bytes:
         try:
             curs.execute(query, [str(uuid)])
         except psycopg2.errors.UndefinedTable:
-            raise FileNotFoundError_(
+            raise CustomFileNotFoundError(
                 gettext(
-                    "In this Sketch Map Tool instance no sketch map has been generated yet. You can only upload sketch "
+                    "In this Sketch Map Tool instance no sketch map has been "
+                    "generated yet. You can only upload sketch "
                     "maps to the instance on which they have been created."
                 )
             )
@@ -155,9 +157,10 @@ def select_map_frame(uuid: UUID) -> bytes:
         if raw:
             return raw[0]
         else:
-            raise FileNotFoundError_(
+            raise CustomFileNotFoundError(
                 gettext(
-                    "There is no map frame in the database with the uuid: {}. You can only upload sketch maps to the "
+                    "There is no map frame in the database with the uuid: {}."
+                    " You can only upload sketch maps to the "
                     "instance on which they have been created."
                 ).format(uuid)
             )

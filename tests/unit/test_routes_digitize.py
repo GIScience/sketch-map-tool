@@ -62,7 +62,7 @@ def test_digitize_results_uuid(client):
 
 
 def test_digitize_results_uuid_not_found(client):
-    """A valid UUID format should still be evaluated for existence in the result store"""
+    """A valid UUID format should be evaluated for existence in the result store"""
     uuid = "16fd2706-8baf-433b-82eb-8c7fada847db"
     resp = client.get("/digitize/results/{0}".format(uuid))
     assert resp.status_code == 200

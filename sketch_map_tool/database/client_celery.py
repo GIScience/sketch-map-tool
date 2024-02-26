@@ -6,7 +6,7 @@ from flask_babel import gettext
 from psycopg2.extensions import connection
 
 from sketch_map_tool.config import get_config_value
-from sketch_map_tool.exceptions import FileNotFoundError_
+from sketch_map_tool.exceptions import CustomFileNotFoundError
 
 db_conn: connection | None = None
 
@@ -59,7 +59,7 @@ def select_file(id_: int) -> bytes:
         if raw:
             return raw[0]
         else:
-            raise FileNotFoundError_(
+            raise CustomFileNotFoundError(
                 gettext("There is no file in the database with the id: ") + str(id_)
             )
 
