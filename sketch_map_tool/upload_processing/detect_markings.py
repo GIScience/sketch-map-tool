@@ -93,7 +93,7 @@ def apply_ml_pipeline(
             (map frame), masking the dominant segment inside of a bbox detected by YOLO.
             Class labels are colors.
     """
-    bounding_boxes, class_labels = apply_yolo_obj(image, diffrence, yolo_model_obj)
+    bounding_boxes, _ = apply_yolo_obj(image, diffrence, yolo_model_obj)
     colors = apply_yolo_cls(image, bounding_boxes, yolo_model_cls)
     masks, _ = apply_sam(image, bounding_boxes, sam_predictor)
     return masks, bounding_boxes, colors

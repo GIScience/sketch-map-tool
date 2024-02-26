@@ -130,14 +130,14 @@ def digitize_sketches(
     # during marking detection
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
     # Custom trained model for object detection of markings and colors
-    if "OSM" in layer_types:
+    if "osm" in layer_types:
         yolo_path_osm = init_model(get_config_value("neptune_model_id_yolo_osm_obj"))
         yolo_model_osm_obj: YOLO_4 = YOLO_4(yolo_path_osm)
-    if "ELSE" in layer_types:
+    if "esri-world-imagery" in layer_types:
         yolo_path_esri = init_model(get_config_value("neptune_model_id_yolo_esri_obj"))
         yolo_model_esri_obj: YOLO_4 = YOLO_4(yolo_path_esri)
 
-    if "OSM" not in layer_types and "ESRI" not in layer_types:
+    if "osm" not in layer_types and "esri-world-imagery" not in layer_types:
         raise ValueError("Unexpected layer type, only OSM and ESRI are supported")
 
     yolo_path_cls = init_model(get_config_value("neptune_model_id_yolo_cls"))
@@ -156,14 +156,12 @@ def digitize_sketches(
         r: BytesIO = db_client_celery.select_file(file_id)  # type: ignore
         r: NDArray = to_array(r)  # type: ignore
         r: NDArray = clip(r, map_frames[uuid])  # type: ignore
-        if layer == "OSM":
+        if layer == "osm":
             yolo_model_obj = yolo_model_osm_obj
-        elif layer == "ESRI":
+        elif layer == "esri-world-imagery":
             yolo_model_obj = yolo_model_esri_obj
         else:
-            raise ValueError(
-                f"Unexpected layer type {layer} only OSM and ESRI are supported"
-            )
+            raise ValueError(f"Unexpected layer type '{layer}' only ")
 
         r: NDArray = detect_markings(r, yolo_model_obj, yolo_model_cls, sam_predictor)  # type: ignore
         # m = marking
