@@ -61,7 +61,7 @@ celery --app sketch_map_tool.tasks worker --loglevel=INFO
 
 ```bash
 mamba activate smt
-flask --app sketch_map_tool/routes.py --debug run
+flask --app sketch_map_tool/routes.py --debug run -p 5000
 # Go to http://127.0.0.1:5000
 ```
 

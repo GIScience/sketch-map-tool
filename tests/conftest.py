@@ -4,6 +4,7 @@ from uuid import uuid4
 import cv2
 import geojson
 import pytest
+from flask_babel import Babel
 from werkzeug.datastructures import FileStorage
 
 from sketch_map_tool import make_flask
@@ -70,6 +71,9 @@ def flask_app():
     app.add_url_rule("/", view_func=index, methods=["GET"])
     app.add_url_rule("/about", view_func=about, methods=["GET"])
     app.add_url_rule("/help", view_func=help, methods=["GET"])
+
+    Babel(app)
+
     yield app
 
 
