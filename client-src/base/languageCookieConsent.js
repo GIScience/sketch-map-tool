@@ -4,6 +4,9 @@
 // there is no tracking etc. involved.
 
 function getConsentToStoreLanguageSelection(lang) {
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const searchParams = new URLSearchParams(window.location.href.search);
     if (document.cookie === "languageSet=true" || confirm(
         "If you set a language, cookies are used to store your selection and to apply it on all sub-pages. "
         + "This data is used only to retrieve your selected language and whether you allowed these cookies.\n\n"
@@ -15,7 +18,16 @@ function getConsentToStoreLanguageSelection(lang) {
         + "permitiu esses cookies.\n\n",
     )) {
         document.cookie = "languageSet=true";
-        window.location = `/?lang=${lang}`;
+
+        if (searchParams.has("lang")) {
+            searchParams.set("lang", lang);
+        } else {
+            searchParams.append("lang", lang);
+        }
+
+        url.search = searchParams.toString();
+
+        window.location.href = url.href;
     }
 }
 
