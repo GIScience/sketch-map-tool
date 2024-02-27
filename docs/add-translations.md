@@ -1,7 +1,10 @@
-# Add translations
-The Sketch Map Tool uses [Flask-babel](https://github.com/python-babel/flask-babel) for internationalisation. 
-It is configured in [babel.cfg](../babel.cfg) to look for strings to be translated in all Python files and Jinja2 
-templates.
+# Translation
+
+The Sketch Map Tool uses [Babel](https://babel.pocoo.org/en/latest/) through [Flask-babel](https://github.com/python-babel/flask-babel) for internationalization.
+It is configured in [babel.cfg](../babel.cfg) to look for strings to be translated in all Jinja2 HTML templates.
+
+- What happens if new text is added to Jinja HTML templates?
+- What happens if text is removed from Jinja HTML templates?
 
 1.  To add a string to be translated, use `gettext("my string")` (imported from `flask_babel`) in the Python code and 
 `{{ _("my string") }}` in the templates.
