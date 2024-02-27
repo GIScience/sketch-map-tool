@@ -14,7 +14,6 @@ def validate_type(type_: REQUEST_TYPES):
     """Validate result type values for API parameter `type_`"""
     if type_ not in list(get_args(REQUEST_TYPES)):
         raise ValueError(
-            # todo: add i18n ?
             f"'{type_}' is not a valid value for the request parameter 'type'."
             + f" Allowed values are: {REQUEST_TYPES}"
         )
@@ -28,7 +27,6 @@ def validate_uploaded_sketchmaps(files: list[FileStorage]):
 
     if len(files) > max_nr_simultaneous_uploads:
         raise UploadLimitsExceededError(
-            # todo: add i18n ?
             f"You can only upload up to {max_nr_simultaneous_uploads} files at once."
         )
 
@@ -37,7 +35,6 @@ def validate_uploaded_sketchmaps(files: list[FileStorage]):
         total_pxl_cnt = img.size[0] * img.size[1]
         if total_pxl_cnt > max_pixel_per_image:
             raise UploadLimitsExceededError(
-                # todo: add i18n ?
                 f"You can only upload pictures up to "
                 f"a total pixel count of {max_pixel_per_image}."
             )
@@ -50,25 +47,23 @@ def validate_uuid(uuid: str):
     try:
         _ = UUID(uuid, version=4)
     except ValueError as error:
-        # todo: add i18n ?
         raise ValueError("The provided URL does not contain a valid UUID") from error
 
 
 def validate_literature_reference(literature_reference: LiteratureReference):
     """Validate literature reference to not include empty strings."""
-    # todo: add i18n ?
     if literature_reference.citation == "":
         raise ValueError(
-            "Literature reference JSON fields should not contain"
-            " empty strings as values."
+            "Literature reference JSON fields "
+            + "should not contain empty strings as values."
         )
     if literature_reference.img_src == "":
         raise ValueError(
-            "Literature reference JSON fields should not contain"
-            " empty strings as values."
+            "Literature reference JSON fields should "
+            + "not contain empty strings as values."
         )
     if literature_reference.url == "":
         raise ValueError(
-            "Literature reference JSON fields should not contain"
-            " empty strings as values."
+            "Literature reference JSON fields should "
+            + "not contain empty strings as values."
         )
