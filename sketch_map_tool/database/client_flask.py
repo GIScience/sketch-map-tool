@@ -3,7 +3,6 @@ from uuid import UUID
 
 import psycopg2
 from flask import g
-from flask_babel import gettext
 from psycopg2.extensions import connection
 from werkzeug.utils import secure_filename
 
@@ -112,7 +111,7 @@ def select_file(id_: int) -> bytes:
             return raw[0]
         else:
             raise CustomFileNotFoundError(
-                gettext("There is no file in the database with the id: ") + str(id_)
+                "There is no file in the database with the id: " + str(id_)
             )
 
 
@@ -134,7 +133,7 @@ def select_file_name(id_: int) -> str:
             return raw[0]
         else:
             raise CustomFileNotFoundError(
-                gettext("There is no file in the database with the id: ") + str(id_)
+                "There is no file in the database with the id: " + str(id_)
             )
 
 
@@ -147,22 +146,18 @@ def select_map_frame(uuid: UUID) -> bytes:
             curs.execute(query, [str(uuid)])
         except psycopg2.errors.UndefinedTable:
             raise CustomFileNotFoundError(
-                gettext(
-                    "In this Sketch Map Tool instance no sketch map has been "
-                    "generated yet. You can only upload sketch "
-                    "maps to the instance on which they have been created."
-                )
+                "In this Sketch Map Tool instance no sketch map has been "
+                "generated yet. You can only upload sketch "
+                "maps to the instance on which they have been created."
             )
         raw = curs.fetchone()
         if raw:
             return raw[0]
         else:
             raise CustomFileNotFoundError(
-                gettext(
-                    "There is no map frame in the database with the uuid: {}."
-                    " You can only upload sketch maps to the "
-                    "instance on which they have been created."
-                ).format(uuid)
+                f"There is no map frame in the database with the uuid: {uuid}."
+                " You can only upload sketch maps to the "
+                "instance on which they have been created."
             )
 
 

@@ -2,7 +2,6 @@ from typing import get_args
 from uuid import UUID
 
 import PIL.Image as Image
-from flask_babel import gettext
 from werkzeug.datastructures import FileStorage
 
 from sketch_map_tool import get_config_value
@@ -52,9 +51,7 @@ def validate_uuid(uuid: str):
         _ = UUID(uuid, version=4)
     except ValueError as error:
         # todo: add i18n ?
-        raise ValueError(
-            gettext("The provided URL does not contain a valid UUID")
-        ) from error
+        raise ValueError("The provided URL does not contain a valid UUID") from error
 
 
 def validate_literature_reference(literature_reference: LiteratureReference):

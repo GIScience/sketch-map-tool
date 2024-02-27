@@ -1,8 +1,8 @@
 import { Feature, Map, View } from "ol";
 import { Tile } from "ol/layer";
-import { OSM } from "ol/source";
+import { OSM, XYZ } from "ol/source";
 import Geocoder from "ol-geocoder";
-import { PrintLayout, PAPER_FORMAT, ORIENTATION } from "@giscience/ol-print-layout-control";
+import { ORIENTATION, PAPER_FORMAT, PrintLayout } from "@giscience/ol-print-layout-control";
 import { fromLonLat } from "ol/proj";
 import { LineString } from "ol/geom";
 import VectorSource from "ol/source/Vector";
@@ -10,7 +10,10 @@ import VectorLayer from "ol/layer/Vector";
 import {
     Fill, Stroke, Style, Text,
 } from "ol/style";
+import { ScaleLine } from "ol/control";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins.js";
+import { LayerSwitcher } from "./ol-LayerSwitcherControl";
+import { EsriAttributionService } from "./esriAttributionService";
 
 function createAntiMeridianLayer() {
     // Create a LineString feature
@@ -54,24 +57,50 @@ function createAntiMeridianLayer() {
  * @param {number[]} [lonLat=[8.68, 49.41]] - an Array with two numbers representing
  *     latitude and longitude
  * @param {number} [zoom=15] - the zoomlevel in which the map will be initialized
+ * @param {string} [activeBaselayer="OSM"] - the baselayer to be displayed
+ *                                           either 'OSM' | 'ESRI:World_Imagery'
  * @returns {Map}
  */
-function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965], zoom = 15) {
+function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965], zoom = 15, activeBaselayer = "OSM") {
+    const osmBaselayer = new Tile({
+        name: "OSM",
+        visible: activeBaselayer !== "ESRI:World_Imagery",
+        source: new OSM(),
+    });
+
+    const esriWorldImageryLayer = new Tile({
+        name: "ESRI:World_Imagery",
+        visible: activeBaselayer === "ESRI:World_Imagery",
+        maxZoom: 19,
+        source: new XYZ({
+            // esriApiKey seems to be undefined, but:
+            // esriApiKey will be injected by flask template into create.html
+            // and is defined in config.toml to avoid pushing it to a repository
+
+            // eslint-disable-next-line no-undef
+            url: `https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?token=${esriApiKey}`,
+            // the exact zoomlevel and bbox defined attributions can be retrieved here:
+            // https://static.arcgis.com/attribution/World_Imagery?f=json
+            attributions: new EsriAttributionService().createAttributionFunction(),
+        }),
+    });
+
     const map = new Map({
         target,
         view: new View({
             center: lonLat,
             zoom,
-            maxZoom: 20,
+            maxZoom: 19,
             enableRotation: false,
         }),
         layers: [
-            new Tile({
-                source: new OSM(),
-            }),
+            osmBaselayer,
+            esriWorldImageryLayer,
             createAntiMeridianLayer(),
         ],
     });
+
+    map.addControl(new ScaleLine());
 
     return map;
 }
@@ -110,8 +139,32 @@ function addGeocoderControl(map) {
     return geocoder;
 }
 
+/**
+ * Add a layerSwitcher to an Openlayers Map
+ * @param map
+ * @param layers an array of objects of type {name: string; label: string; class: string}.
+ *
+ *              "name" is used to identify switchable layers from th ol-Map so this should
+ *              correspond to a name property set to the ol-layers.
+ *
+ *              "label" is a string that will be rendered as text on the layerSwitcher button
+ *
+ *              "class" a custom class name that will be added to the button to indicate what is the
+ *              next layer when a user clicks on the button, e.g. to specify a background image etc
+ * @returns {LayerSwitcher}
+ */
+function addLayerswitcherControl(map, layers) {
+    const layerSwitcher = new LayerSwitcher({
+        layers,
+    });
+    map.addControl(layerSwitcher);
+    layerSwitcher.initialize();
+    return layerSwitcher;
+}
+
 export {
     createMap,
     addPrintLayoutControl,
     addGeocoderControl,
+    addLayerswitcherControl,
 };

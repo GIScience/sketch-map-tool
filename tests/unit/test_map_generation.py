@@ -56,10 +56,11 @@ def map_image(request):
 
 
 @pytest.fixture
-def qr_code(bbox, format_, size):
+def qr_code(bbox, layer, format_):
     return generate_qr_code(
         str(uuid4()),
         bbox,
+        layer,
         format_,
     )
 
@@ -72,6 +73,7 @@ def test_generate_pdf(
     qr_code,
     paper_format: PaperFormat,
     orientation,
+    layer,
     expected_sketch_map,
     request,
 ) -> None:
@@ -80,6 +82,7 @@ def test_generate_pdf(
         qr_code,
         paper_format,
         1283.129,
+        layer,
     )
     assert isinstance(sketch_map, BytesIO)
     assert isinstance(sketch_map_template, BytesIO)

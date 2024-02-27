@@ -17,9 +17,9 @@ from reportlab.platypus import Frame, Paragraph
 from reportlab.platypus.flowables import Image, Spacer
 from svglib.svglib import svg2rlg
 
-from sketch_map_tool.definitions import PDF_RESOURCES_PATH
+from sketch_map_tool.definitions import PDF_RESOURCES_PATH, get_attribution
 from sketch_map_tool.helpers import resize_rlg_by_width
-from sketch_map_tool.models import PaperFormat
+from sketch_map_tool.models import Layer, PaperFormat
 
 # PIL should be able to open high resolution PNGs of large Maps:
 Image.MAX_IMAGE_PIXELS = None
@@ -30,6 +30,7 @@ def generate_pdf(  # noqa: C901
     qr_code: Drawing,
     format_: PaperFormat,
     scale: float,
+    layer: Layer,
 ) -> Tuple[BytesIO, BytesIO]:
     """
     Generate a sketch map pdf, i.e. a PDF containing the given map image
@@ -116,6 +117,7 @@ def generate_pdf(  # noqa: C901
         qr_code,
         scale,
         format_,
+        layer,
         portrait,
     )
 
@@ -143,8 +145,9 @@ def draw_right_column(
     y: float,
     margin: float,
     qr_code: Drawing,
-    scale,
+    scale,  # TODO: is not accessed
     format_,
+    layer: Layer,
     portrait=False,
 ) -> None:
     normal_style = scale_style(format_, "Normal", 50)
@@ -161,7 +164,7 @@ def draw_right_column(
     compass = get_compass(compass_size, portrait)
 
     # Add copyright information:
-    p_copyright = Paragraph("Map: © OpenStreetMap Contributors", normal_style)
+    p_copyright = Paragraph(get_attribution(layer), normal_style)
 
     # Add QR-Code:
     qr_size = min(width, height) - margin

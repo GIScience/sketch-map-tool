@@ -1,5 +1,4 @@
 import requests
-from flask_babel import gettext
 
 from sketch_map_tool.exceptions import OQTReportError
 from sketch_map_tool.models import Bbox
@@ -35,14 +34,16 @@ def bbox_to_feature_collection(bbox: Bbox) -> dict:
 def get_report(bbox: Bbox, include_svg: bool = True, include_html: bool = False):
     url = OQT_API_URL + "/" + "reports" + "/" + OQT_REPORT_NAME
     parameters = {"bpolys": bbox_to_feature_collection(bbox)}
-    req = requests.post(url, json=parameters)
+    req = requests.post(
+        url,
+        json=parameters,
+        timeout=(10, 600),  # connect timeout (5 seconds), read_timeout (10 minutes)
+    )
     if req.status_code == 422:
         if req.json()["type"] == "SizeRestrictionError":
             raise OQTReportError(
-                gettext(
-                    "Selected Area-of-Interest is too large "
-                    "for a Map Quality Check Report."
-                )
+                "Selected Area-of-Interest is too large "
+                "for a Map Quality Check Report."
             )
         else:
             raise OQTReportError(req.json()["detail"])
@@ -50,6 +51,6 @@ def get_report(bbox: Bbox, include_svg: bool = True, include_html: bool = False)
         req.raise_for_status()
     except requests.exceptions.HTTPError:
         raise OQTReportError(
-            gettext("There seems to be a problem with OQT. Please try again later.")
+            "There seems to be a problem with OQT. Please try again later."
         )
     return req.json()["features"][0]["properties"]

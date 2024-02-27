@@ -8,15 +8,15 @@ repos:
       - id: check-added-large-files
         args: ["--maxkb=1024"]
   # Python
-  - repo: https://github.com/psf/black
-    rev: 22.8.0
-    hooks:
-      - id: black
-        args: ["--check", "--diff"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.0.292
+    # Ruff version.
+    rev: v0.1.7
     hooks:
+      # Run the linter.
       - id: ruff
+      # Run the formatter.
+      - id: ruff-format
+        args: ["--check"]
   # Javascript
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: "v8.51.0"

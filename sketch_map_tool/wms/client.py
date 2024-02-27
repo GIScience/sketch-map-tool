@@ -4,7 +4,6 @@ from dataclasses import astuple
 from io import BytesIO
 
 import requests
-from flask_babel import gettext
 from markupsafe import escape
 from PIL import Image, UnidentifiedImageError
 from PIL.PngImagePlugin import PngImageFile
@@ -12,20 +11,19 @@ from requests import ReadTimeout, Response
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.exceptions import MapGenerationError
-from sketch_map_tool.models import Bbox, Size
+from sketch_map_tool.models import Bbox, Layer, Size
 
 
 # TODO: request errors in a response format which can be parsed.
 # Currently errors are rendered into the image.
-def get_map_image(bbox: Bbox, size: Size) -> Response:
-    """Request a map image from the given WMS with the given arguments.
-
-    :param bbox: Bounding box (EPSG: 3857)
-    :param width: Width in pixels
-    :param height: Height in pixels
-    """
-    url = get_config_value("wms-url")
-    layers = get_config_value("wms-layers")
+def get_map_image(
+    bbox: Bbox,
+    size: Size,
+    layer: Layer,
+) -> Response:
+    """Request a map image from the given WMS with the given arguments."""
+    url = get_config_value(f"wms-url-{layer.value}")
+    layers = get_config_value(f"wms-layers-{layer.value}")
     params = {
         "REQUEST": "GetMap",
         "FORMAT": "image/png",
@@ -39,14 +37,16 @@ def get_map_image(bbox: Bbox, size: Size) -> Response:
     }
     try:
         return requests.get(
-            url, params, stream=True, timeout=int(get_config_value("wms-read-timeout"))
+            url,
+            params,
+            stream=True,
+            # connect timeout (5 seconds), read_timeout (10 minutes)
+            timeout=(10, int(get_config_value("wms-read-timeout"))),
         )
     except ReadTimeout:
         raise MapGenerationError(
-            gettext(
-                "Map area couldn't be processed with the current resources."
-                " Please try again once."
-            )
+            "Map area couldn't be processed with the current resources."
+            " Please try again once."
         )
 
 
@@ -57,9 +57,8 @@ def as_image(response: Response) -> PngImageFile:
     try:
         return Image.open(BytesIO(response_content))
     except UnidentifiedImageError:
-        error_msg = gettext(
-            "The Web Map Service returned an error. Please try again later."
-        )
+        error_msg = "The Web Map Service returned an error. Please try again later."
+
         if (
             content_type == "application/vnd.ogc.se_xml"
         ):  # Response is an XML error report

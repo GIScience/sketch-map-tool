@@ -1,5 +1,7 @@
 # Development Setup
 
+For contributing to this project please also read the [Contribution Guideline](/CONTRIBUTING.md)
+
 ## Prerequisites (Requirements)
 
 - Python: `>=3.10`
@@ -34,18 +36,19 @@ poetry install  # poetry installs directly into activated mamba environment
 pre-commit install
 
 # fetch and run backend (postgres) and broker (redis) using docker
-docker run --name smt-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres
-docker run --name smt-redis -d -p 6379:6379 redis
+docker run --name smt-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres:15
+docker run --name smt-redis -d -p 6379:6379 redis:7
 
 # install local versions of esbuild, eslint and stylelint to build and check JS and CSS
 npm install
 npm run build  # build/bundle JS and CSS
-# hack away
 ```
 
 ## Configuration
 
 Please refer to the [configuration documentation](/docs/configuration.md).
+
+> TL;DR: Except of the API token (`SMT-NEPTUNE-API-TOKEN`) for neptune.ai all configuration values come with defaults for development purposes. Please make sure to configure the API token for your environment.
 
 ## Usage
 
@@ -65,17 +68,43 @@ flask --app sketch_map_tool/routes.py --debug run -p 5000
 # Go to http://127.0.0.1:5000
 ```
 
-## Tests
+## Back-End
+
+### Linter and Formatter
 
 ```bash
-# make sure celery is running
+ruff
+ruff format
+```
+
+### Tests
+
+```bash
 pytest
 ```
 
-## JS and CSS
+#### Integration Tests
+
+The integration test suite utilizes the Testcontainers framework to run unique instances of Redis and Postgres for each test session. It also configures and starts Flask and Celery workers in the background.
+
+Many fixtures are written to a temporary directory on disk managed by Pytest. This makes it easy to inspect the results at various steps of the program (E.g. Marking detection pipeline). Unix users usually find this directory under `/tmp/pytest-of-{user}/pytest-current/{uuid}/`. The UUID of requests triggered by the tests (E.g. Create or digitize) is the directory name.
+
+The integration tests will make requests external services. Among others requests are made to HeiGIT Maps (WMS) to retrieve basemap images. Those requests can only be made from HeiGITs internal network.
+
+### Update dependencies
+
+When dependencies changed the environment can be updated by running:
+
+```bash
+mamba activate smt
+mamba env update --file environment.yml
+poetry install
+```
+
+## Front-End (HTML, CSS and JS)
 
 For the individual html pages the js and css code should be developed in `client-src/**` as 
-ES6 modules. 
+ES6 modules.
 
 To use the code in the HTML Templates it must be build (bundled). The bundler 
 ([esbuild](https://esbuild.github.io/)) will write the result to `static/bundles/**` 
@@ -89,28 +118,16 @@ Bundle the code with:
 npm run build
 ```
 
-## Project Setup for PyCharm
+## Project Setup using and IDE
 
-If you like to develop using an IDE like [PyCharm](https://www.jetbrains.com/pycharm/), you can use the PyCharm Run Configurations instead of running Python manually.
+If you setup sketch-map-tool in an IDE like PyCharm please make sure that your IDE does not setup a Poetry managed project/virtual environment.
+Go thought the setup steps above in the terminal and change interpreter settings in the IDE to point to the mamba/conda environment.
 
-1. Add different configurations:
-   1. Docker Image Configuration:
-      * Image ID: `redis`
-      * Container name: `redis`
-      * Bind ports: `6379:6379`
-   2. Docker Image Configuration:
-      * Image ID: `postgres`
-      * Container name: `postgres`
-      * Bind ports: `5432:5432`
-   3. Flask server:
-      * Target type: Script path
-      * Target: `project_path/sketch_map_tool/routes.py`
-   4. Python:
-      * Module name: `celery`
-      * Parameters: `-A sketch_map_tool.tasks worker`
-      * Working directory: `project_path`
-      * Before launch: Run Another Configuration for both Docker Image Configurations
-   5. Python tests — pytest:
-      * Script path: `project_path/tests/unit`
-      * Working Directory: `project_path`
-2. For development: Run or Debug Celery and Flask Configurations
+Also make sure the environment variable `PROJ_LIB` to point to the `proj` directory of the mamba/conda environment:
+```
+PROJ_LIB=/home/$USERDIR/mambaforge/envs/smt/share/proj
+```
+
+## Troubleshooting
+
+Make sure that Poetry does not try to manage the virtual environment. Check with `poetry env list`. If any environment are listed remove them: `poetry env remove ...`

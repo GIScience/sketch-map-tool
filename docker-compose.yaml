@@ -11,8 +11,8 @@ services:
       - redis
       - postgres
     environment:
-      SMT-BROKER-URL: "redis://redis:6379"
-      SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
+      SMT_BROKER_URL: "redis://redis:6379"
+      SMT_RESULT_BACKEND: "db+postgresql://smt:smt@postgres:5432"
     ports:
       - "127.0.0.1:8081:8080"
     entrypoint:
@@ -35,8 +35,8 @@ services:
       - redis
       - postgres
     environment:
-      SMT-BROKER-URL: "redis://redis:6379"
-      SMT-RESULT-BACKEND: "db+postgresql://smt:smt@postgres:5432"
+      SMT_BROKER_URL: "redis://redis:6379"
+      SMT_RESULT_BACKEND: "db+postgresql://smt:smt@postgres:5432"
     entrypoint:
       [
         "mamba",
@@ -61,7 +61,7 @@ services:
     restart: unless-stopped
     ports:
       - "5555:5555"
-    entrypoint: ["celery", "--broker=redis://redis:6379", "flower"]
+    entrypoint: ["celery", "--broker=redis://redis:6379", "flower", "--url_prefix=flower"]
   redis:
     # Message broker
     image: redis:7
@@ -81,7 +81,7 @@ services:
       POSTGRES_PASSWORD: smt
       POSTGRES_USER: smt
     ports:
-      - "5432:5432"
+      - "5444:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
 volumes:

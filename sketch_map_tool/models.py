@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import StrEnum
 
 from numpy.typing import NDArray
 
@@ -26,6 +27,11 @@ class Size:
 
     width: float
     height: float
+
+
+class Layer(StrEnum):
+    OSM = "osm"
+    ESRI_WORLD_IMAGERY = "esri-world-imagery"
 
 
 @dataclass(frozen=True)

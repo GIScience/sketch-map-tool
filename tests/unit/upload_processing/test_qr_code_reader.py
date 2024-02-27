@@ -4,6 +4,7 @@ import cv2
 import pytest
 
 from sketch_map_tool.exceptions import QRCodeError
+from sketch_map_tool.models import Layer
 from sketch_map_tool.upload_processing import qr_code_reader
 from tests import FIXTURE_DIR
 
@@ -48,6 +49,7 @@ def decoded_content(uuid, bbox, version_nr):
             "uuid": uuid,
             "bbox": bbox,
             "version": version_nr,
+            "layer": Layer.OSM,
         }
     )
 

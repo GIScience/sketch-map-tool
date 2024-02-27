@@ -37,8 +37,12 @@ package "HeiGIT Maps" #line.dotted {
 }
 
 package "HeiGIT Services" #line.dotted {
-    cloud oqt as "OQT API" #line.dotted
+    cloud oqt as "ohsome quality API" #line.dotted
     cloud ohsome as "ohsome API" #line.dotted
+}
+
+package "ML-Model Registry" #line.dotted {
+    cloud neptune as "neptune.ai API" #line.dotted
 }
 
 internet --> client
@@ -49,4 +53,5 @@ wms --> osmdb
 oqt_analyses --> oqt
 oqt --> ohsome
 
+upload_processing --> neptune
 @enduml

@@ -132,12 +132,23 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
     printLayoutControl.on("change:bbox", (event) => {
         // update the URL when the selection is changed  (e.g. to bookmark the current selection)
         const newCenter = printLayoutControl.getMap().getView().getCenter();
-        window.history.replaceState({}, document.title, `?center=${newCenter}`);
+        window.history.replaceState({}, "", `?center=${newCenter}`);
         // show warning and disable form if bbox crosses the antimeridian
         handleAntimeridian(event.target.getBboxAsLonLat());
     });
 }
 
+function bindFormToLayerSwitcherControl(layerSwitcherControl) {
+// set initial form value from ol-control
+    document.getElementById("layer").value = layerSwitcherControl.get("activeLayer").name;
+
+    function handleLayerSwitch(event) {
+        const activeLayerName = event.target.get("activeLayer").name;
+        document.getElementById("layer").value = activeLayerName;
+    }
+    layerSwitcherControl.on("change:activeLayer", handleLayerSwitch);
+}
 export {
     bindFormToPrintLayoutControl,
+    bindFormToLayerSwitcherControl,
 };

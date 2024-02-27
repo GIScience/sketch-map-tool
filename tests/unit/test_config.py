@@ -23,16 +23,24 @@ def config_keys():
         "user-agent",
         "broker-url",
         "result-backend",
-        "wms-url",
-        "wms-layers",
+        "wms-url-osm",
+        "wms-layers-osm",
+        "wms-url-esri-world-imagery",
+        "wms-layers-esri-world-imagery",
         "wms-read-timeout",
         "max-nr-simultaneous-uploads",
         "max_pixel_per_image",
+        "neptune_project",
+        "neptune_api_token",
+        "neptune_model_id_yolo",
+        "neptune_model_id_sam",
+        "model_type_sam",
+        "esri-api-key",
     )
 
 
 def test_get_config_path_empty_env(monkeypatch):
-    monkeypatch.delenv("SMT-CONFIG", raising=False)
+    monkeypatch.delenv("SMT_CONFIG", raising=False)
     assert config.get_config_path() == os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
@@ -45,19 +53,19 @@ def test_get_config_path_empty_env(monkeypatch):
 
 
 def test_get_config_path_set_env(monkeypatch):
-    monkeypatch.setenv("SMT-CONFIG", "/some/absolute/path")
+    monkeypatch.setenv("SMT_CONFIG", "/some/absolute/path")
     assert config.get_config_path() == "/some/absolute/path"
 
 
 def test_config_default(monkeypatch, config_keys):
-    monkeypatch.delenv("SMT-CONFIG", raising=False)
+    monkeypatch.delenv("SMT_CONFIG", raising=False)
     cfg = config.load_config_default()
     assert tuple(cfg.keys()) == config_keys
 
 
 def test_load_config_from_file(monkeypatch):
     monkeypatch.setenv(
-        "SMT-CONFIG",
+        "SMT_CONFIG",
         os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "fixtures", "config.toml"
         ),
@@ -76,7 +84,7 @@ def test_load_config_from_env_empty():
 
 @mock.patch.dict(
     "os.environ",
-    {"SMT-DATA-DIR": "foo", "SMT-USER-AGENT": "bar"},
+    {"SMT_DATA_DIR": "foo", "SMT_USER_AGENT": "bar"},
     clear=True,
 )
 def test_load_config_from_env_set():
@@ -106,7 +114,7 @@ def test_get_config_value(config_keys):
 
 @mock.patch.dict(
     "os.environ",
-    {"SMT-CONFIG": ""},
+    {"SMT_CONFIG": ""},
     clear=True,
 )
 def test_get_config_env_empty_str(config_keys):

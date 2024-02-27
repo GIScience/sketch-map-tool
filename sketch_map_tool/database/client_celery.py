@@ -2,7 +2,6 @@ from io import BytesIO
 from uuid import UUID
 
 import psycopg2
-from flask_babel import gettext
 from psycopg2.extensions import connection
 
 from sketch_map_tool.config import get_config_value
@@ -60,7 +59,7 @@ def select_file(id_: int) -> bytes:
             return raw[0]
         else:
             raise CustomFileNotFoundError(
-                gettext("There is no file in the database with the id: ") + str(id_)
+                "There is no file in the database with the id: " + str(id_)
             )
 
 

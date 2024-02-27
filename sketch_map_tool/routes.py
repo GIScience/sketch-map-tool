@@ -7,7 +7,7 @@ import geojson
 # from celery import chain, group
 from flask import Response, redirect, render_template, request, send_file, url_for
 
-from sketch_map_tool import celery_app, definitions, tasks, upload_processing
+from sketch_map_tool import celery_app, config, definitions, tasks, upload_processing
 from sketch_map_tool import flask_app as app
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
@@ -20,7 +20,7 @@ from sketch_map_tool.exceptions import (
     UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import to_array
-from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.tasks import digitize_sketches, georeference_sketch_maps
 from sketch_map_tool.validators import (
     validate_type,
@@ -47,7 +47,10 @@ def about() -> str:
 @app.get("/create")
 def create() -> str:
     """Serve forms for creating a sketch map"""
-    return render_template("create.html")
+    return render_template(
+        "create.html",
+        esri_api_key=config.get_config_value("esri-api-key"),
+    )
 
 
 @app.post("/create/results")
@@ -64,13 +67,14 @@ def create_results_post() -> Response:
     size_raw = json.loads(request.form["size"])
     size = Size(**size_raw)
     scale = float(request.form["scale"])
+    layer = Layer(request.form["layer"].replace(":", "-").replace("_", "-").lower())
 
     # Unique id for current request
     uuid = str(uuid4())
 
     # Tasks
     task_sketch_map = tasks.generate_sketch_map.apply_async(
-        args=(uuid, bbox, format_, orientation, size, scale)
+        args=(uuid, bbox, format_, orientation, size, scale, layer)
     )
     task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox_wgs84,))
 
@@ -171,7 +175,7 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
                 # to semantic errors.
                 http_status = 422  # Unprocessable Entity
                 error = str(err)
-            except (Exception) as err:
+            except Exception as err:
                 http_status = 500  # Internal Server Error
                 error = str(err)
     else:  # PENDING, RETRY, STARTED
@@ -218,6 +222,15 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
             if task.successful():
                 file = BytesIO(geojson.dumps(task.get()).encode("utf-8"))
     return send_file(file, mimetype, download_name=download_name)
+
+
+@app.route("/api/health")
+def health():
+    """Ping Celery workers."""
+    result: list = celery_app.control.ping(timeout=1)
+    if result:
+        return Response(None, status=200)
+    return Response(None, status=503)
 
 
 @app.errorhandler(QRCodeError)

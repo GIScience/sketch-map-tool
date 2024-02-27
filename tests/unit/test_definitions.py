@@ -15,3 +15,15 @@ def test_get_literatur_references():
         " ISPRS International Journal of Geo-Information. 10:130."
     )
     assert result[0].url == "https://doi.org/10.3390/ijgi10030130"
+
+
+def test_get_attribution(layer):
+    # It is possible that the attribution text retrieved from the ESRI API changes
+    result = definitions.get_attribution(layer)
+    assert result in (
+        (
+            "Powered by Esri<br />Source: Esri, Maxar, GeoEye, Earthstar Geographics, "
+            + "CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community"
+        ),
+        ("Powered by OpenStreetMap<br />©openstreetmap.org/copyright"),
+    )

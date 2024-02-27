@@ -25,13 +25,57 @@ interactions:
       Connection:
       - Upgrade, Keep-Alive
       Content-length:
-      - '886610'
+      - '892167'
       Content-type:
       - image/png
       Date:
-      - Mon, 21 Aug 2023 14:06:13 GMT
+      - Tue, 23 Jan 2024 10:58:34 GMT
       Expires:
-      - Tue, 22 Aug 2023 14:06:13 GMT
+      - Wed, 24 Jan 2024 10:58:34 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubdomains;
+      Upgrade:
+      - h2
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.31.0
+    method: GET
+    uri: https://maps.heigit.org/sketch-map-tool/service?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=FALSE&LAYERS=world_imagery&WIDTH=1867&HEIGHT=1587&SRS=EPSG%3A3857&STYLES=&BBOX=964472.1973848869%2C6343459.035638228%2C967434.6098457306%2C6345977.635778541
+  response:
+    body:
+      string: !!binary |
+        iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGNgYGAAAAAEAAH2FzhV
+        AAAAAElFTkSuQmCC
+    headers:
+      Access-control-allow-origin:
+      - '*'
+      Cache-Control:
+      - max-age=86400
+      Connection:
+      - Upgrade, Keep-Alive
+      Content-length:
+      - '1902433'
+      Content-type:
+      - image/png
+      Date:
+      - Tue, 23 Jan 2024 10:58:36 GMT
+      Expires:
+      - Wed, 24 Jan 2024 10:58:36 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:

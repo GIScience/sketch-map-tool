@@ -10,7 +10,7 @@ def clean(fc: FeatureCollection) -> FeatureCollection:
     """
     # f   -> feature
     # fc  -> feature collection
-    fc.features = [f for f in fc.features if f.properties["color"] == "255"]
+    fc.features = [f for f in fc.features if f.properties["color"] != "0"]
     for f in fc.features:
         if not isinstance(f.geometry, geojson.Polygon):
             raise TypeError(
