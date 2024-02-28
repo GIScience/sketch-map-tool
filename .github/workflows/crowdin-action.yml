@@ -11,16 +11,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: crowdin action
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python3.11 -m pip install pybabel
+          pybabel extract -F sketch_map_tool/config/babel.cfg -o messages.pot .
+      - name: Sync GH and Crowdin
         uses: crowdin/github-action@v1.19.0
         with:
           upload_sources: true
           upload_translations: false
           download_translations: true
-
           localization_branch_name: i18n_crowdin
           create_pull_request: true
+          push_sources: false
           pull_request_title: 'New Crowdin Translations'
           pull_request_body: 'New Crowdin translations by [Crowdin GH Action](https://github.com/crowdin/github-action)'
           pull_request_base_branch_name: 'main'
