@@ -10,10 +10,9 @@ In short following steps need to be executed:
 ## Add a new translation
 
 ```bash
-cd sketch_map_tool
 pybabel extract -F config/babel.cfg -o messages.pot .
-pybabel init -i messages.pot -d translations -l de
-pybabel compile -d translations
+pybabel init -i messages.pot -d sketch_map_tool/translations -l de
+pybabel compile -d sketch_map_tool/translations
 ```
 
 ## Update an existing translation
@@ -21,6 +20,6 @@ pybabel compile -d translations
 ```bash
 cd sketch_map_tool
 pybabel extract -F config/babel.cfg -o messages.pot .
-pybabel update -i messages.pot -d translations
-pybabel compile -d translations
+pybabel update -i messages.pot -d sketch_map_tool/translations
+pybabel compile -d sketch_map_tool/translations
 ```
