@@ -17,7 +17,7 @@
     <nav>
         <ul id="nav-left">
             <li id="logo-item">
-                <a href="{{ url_for("index") }}">
+                <a href="{{ url_for("index", lang=lang) }}">
                     <img alt="SketchMap Logo"
                          src="{{ url_for('static', filename='assets/SketchMap_Logo_Icon.svg') }}">
                     <span style="color: var(--heigit-red)">SketchMap</span><span
@@ -29,9 +29,9 @@
             </li>
         </ul>
         <ul id="nav-right">
-            <li><a href="{{ url_for('index') }}" class="nav-link secondary">{{ _('Home') }}</a></li>
-            <li><a href="{{ url_for('about') }}" class="nav-link secondary">{{ _('About') }}</a></li>
-            <li><a href="{{ url_for('help') }}" class="nav-link secondary">{{ _('Help') }}</a></li>
+            <li><a href="{{ url_for('index', lang=lang) }}" class="nav-link secondary">{{ _('Home') }}</a></li>
+            <li><a href="{{ url_for('about', lang=lang) }}" class="nav-link secondary">{{ _('About') }}</a></li>
+            <li><a href="{{ url_for('help', lang=lang) }}" class="nav-link secondary">{{ _('Help') }}</a></li>
             <li><a href="https://github.com/GIScience/sketch-map-tool" class="nav-link secondary" target="_blank"><span class="github-icon"></span> Code</a></li>
             <li><details role="list">
                 <summary aria-haspopup="listbox"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-globe2" viewBox="0 0 16 16">
