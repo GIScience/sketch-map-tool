@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: |
           python3.11 -m pip install Flask-Babel
-          pybabel extract -F sketch_map_tool/config/babel.cfg -o messages.pot .
+          pybabel extract -F config/babel.cfg -o messages.pot .
 
       - name: Sync GH and Crowdin
         uses: crowdin/github-action@v1.19.0
