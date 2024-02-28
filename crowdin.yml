@@ -27,7 +27,7 @@ files: [
     # Where translations will be placed
     # e.g. "/resources/%two_letters_code%/%original_file_name%"
     #
-    "translation": "sketch_map_tool/translations/%two_letters_code%/LS_MESSAGES/messages.po",
+    "translation": "sketch_map_tool/translations/%two_letters_code%/LC_MESSAGES/messages.po",
 
     #
     # Files or directories for ignore
