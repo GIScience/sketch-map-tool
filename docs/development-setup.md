@@ -124,7 +124,7 @@ If you setup sketch-map-tool in an IDE like PyCharm please make sure that your I
 Go thought the setup steps above in the terminal and change interpreter settings in the IDE to point to the mamba/conda environment.
 
 Also make sure the environment variable `PROJ_LIB` to point to the `proj` directory of the mamba/conda environment:
-```
+```bash
 PROJ_LIB=/home/$USERDIR/mambaforge/envs/smt/share/proj
 ```
 

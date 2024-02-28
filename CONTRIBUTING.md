@@ -1,8 +1,14 @@
-# Contribution Guideline
+# Contribution
 
-Please contribute to this repository through creating [issues](https://github.com/GIScience/sketch-map-tool/issues/new) and [pull requests](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests).
+Please always feel free to reach out to us via E-Mail (sketch-map-tool@heigit.org) to report any bug, to give feedbag or to receive support.
 
-### Issues
+There are various other ways to contribute to the Sketch Map Tool: 
+
+- Help to translate the Sketch Map Tool.
+- Create [issues](https://github.com/GIScience/sketch-map-tool/issues/new) to report bugs or suggest new features.
+- Create [pull requests](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) to address issues.
+
+## Issues
 
 Bugs reports and enhancement suggestions are tracked via issues. Each issue should contain following information:
 
@@ -13,7 +19,7 @@ Bugs reports and enhancement suggestions are tracked via issues. Each issue shou
 
 Issues should serve as the basis for creating a pull request. They should have at least one tag associated with them.
 
-### Pull Requests (PR)
+## Pull Requests (PR)
 
 Pull requests (PR) are created to address one single issue or multiple. Either the assignee or the creator of the PR is responsible for merging.
 Each PR has to be approved by at least one reviewer before merging it. A person can be assigned as reviewer by either mark them as such or asking for a review by tagging the person in the description/comment of the PR.
@@ -22,7 +28,7 @@ A draft pull request can be made even if the branch is not ready to be merged ye
 
 The [CHANGELOG.md](CHANGELOG.md) describes changes made in a pull request. It should contain a short description of the performed changes, as well as (a) link(s) to issue(s) or pull request.
 
-#### Review Process
+### Review Process
 
 1. Dev makes a PR.
 2. Rev reviews and raises some comments if necessary.
@@ -33,7 +39,7 @@ The [CHANGELOG.md](CHANGELOG.md) describes changes made in a pull request. It sh
 5. Restart from 3 until all comments are resolved.
 6. If all issues are resolved the PR gets marked as approved and can be merged.
 
-### Git Workflow
+## Git Workflow
 
 All development work is based on the main branch (`main`). Pull requests are expected to target the `main` branch.
 
@@ -80,8 +86,3 @@ npm run lint:fix
 [pre-commit](https://pre-commit.com/) is set up to run above mentioned tools (linters and formatters) prior to any git commit. In contrast to above described commands running these hooks will not apply any changes to the code base. Instead, 'pre-commit' checks if there would be any changes to be made.
 
 Tip: To run all hooks once execute `pre-commit run --all-files`
-
-
-## Tests
-
-Please provide tests.
