@@ -1,9 +1,8 @@
 import logging
-import os
 from datetime import timedelta
 
 from celery import Celery
-from flask import Flask, request, session
+from flask import Flask, request
 from flask_babel import Babel
 
 from sketch_map_tool.config import get_config_value
@@ -62,26 +61,11 @@ def make_celery(flask_app: Flask) -> Celery:
     return celery_app
 
 
-def get_locale() -> str:
-    """
-    Get locality of user to provide translations if available.
-
-    :return: Language code for language either actively selected by the user or,
-     otherwise, best matching language depending on the request from the available ones.
-    """
-    if request.args.get("lang"):
-        session["lang"] = request.args.get("lang")
-    return session.get(
-        "lang",
-        request.accept_languages.best_match(flask_app.config["LANGUAGES"].keys()),
-    )
+def get_locale() -> str | None:
+    if request.view_args is not None and "lang" in request.view_args.keys():
+        return request.view_args["lang"]
 
 
 flask_app = make_flask()
-# todo: see why this is necessary
-flask_app.secret_key = os.urandom(
-    24
-)  # Only for language settings, thus, not problematic to be regenerated on restart
 babel = Babel(flask_app, locale_selector=get_locale)  # for translations
-
 celery_app = make_celery(flask_app)

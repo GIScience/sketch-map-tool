@@ -30,21 +30,25 @@ from sketch_map_tool.validators import (
 
 
 @app.get("/")
-def index() -> str:
+@app.get("/<lang>")
+def index() -> str:  # pyright
     return render_template("index.html")
 
 
 @app.get("/help")
+@app.get("/<lang>/help")
 def help() -> str:
     return render_template("help.html")
 
 
 @app.get("/about")
+@app.get("/<lang>/about")
 def about() -> str:
     return render_template("about.html", literature=definitions.LITERATURE_REFERENCES)
 
 
 @app.get("/create")
+@app.get("/<lang>/create")
 def create() -> str:
     """Serve forms for creating a sketch map"""
     return render_template(
@@ -54,6 +58,7 @@ def create() -> str:
 
 
 @app.post("/create/results")
+@app.post("/<lang>/create/results")
 def create_results_post() -> Response:
     """Create the sketch map"""
     # Request parameters
@@ -88,7 +93,9 @@ def create_results_post() -> Response:
 
 
 @app.get("/create/results")
+@app.get("/<lang>/create/results")
 @app.get("/create/results/<uuid>")
+@app.get("/<lang>/create/results/<uuid>")
 def create_results_get(uuid: str | None = None) -> Response | str:
     if uuid is None:
         return redirect(url_for("create"))
@@ -100,12 +107,14 @@ def create_results_get(uuid: str | None = None) -> Response | str:
 
 
 @app.get("/digitize")
+@app.get("/<lang>/digitize")
 def digitize() -> str:
     """Serve a file upload form for sketch map processing"""
     return render_template("digitize.html")
 
 
 @app.post("/digitize/results")
+@app.post("/<lang>/digitize/results")
 def digitize_results_post() -> Response:
     """Upload files to create geodata results"""
     # No files uploaded
@@ -145,7 +154,9 @@ def digitize_results_post() -> Response:
 
 
 @app.get("/digitize/results")
+@app.get("/<lang>/digitize/results")
 @app.get("/digitize/results/<uuid>")
+@app.get("/<lang>/digitize/results/<uuid>")
 def digitize_results_get(uuid: str | None = None) -> Response | str:
     if uuid is None:
         return redirect(url_for("digitize"))
@@ -154,6 +165,7 @@ def digitize_results_get(uuid: str | None = None) -> Response | str:
 
 
 @app.get("/api/status/<uuid>/<type_>")
+@app.get("/<lang>/api/status/<uuid>/<type_>")
 def status(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
@@ -193,6 +205,7 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
 
 
 @app.route("/api/download/<uuid>/<type_>")
+@app.route("/<lang>/api/download/<uuid>/<type_>")
 def download(uuid: str, type_: REQUEST_TYPES) -> Response:
     validate_uuid(uuid)
     validate_type(type_)
@@ -225,6 +238,7 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
 
 
 @app.route("/api/health")
+@app.route("/<lang>/api/health")
 def health():
     """Ping Celery workers."""
     result: list = celery_app.control.ping(timeout=1)
