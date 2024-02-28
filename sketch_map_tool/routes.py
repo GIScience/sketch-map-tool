@@ -31,25 +31,25 @@ from sketch_map_tool.validators import (
 
 @app.get("/")
 @app.get("/<lang>")
-def index() -> str:  # pyright
+def index(lang="en") -> str:  # pyright
     return render_template("index.html")
 
 
 @app.get("/help")
 @app.get("/<lang>/help")
-def help() -> str:
+def help(lang="en") -> str:
     return render_template("help.html")
 
 
 @app.get("/about")
 @app.get("/<lang>/about")
-def about() -> str:
+def about(lang="en") -> str:
     return render_template("about.html", literature=definitions.LITERATURE_REFERENCES)
 
 
 @app.get("/create")
 @app.get("/<lang>/create")
-def create() -> str:
+def create(lang="en") -> str:
     """Serve forms for creating a sketch map"""
     return render_template(
         "create.html",
@@ -59,7 +59,7 @@ def create() -> str:
 
 @app.post("/create/results")
 @app.post("/<lang>/create/results")
-def create_results_post() -> Response:
+def create_results_post(lang="en") -> Response:
     """Create the sketch map"""
     # Request parameters
     bbox_raw = json.loads(request.form["bbox"])
@@ -96,7 +96,7 @@ def create_results_post() -> Response:
 @app.get("/<lang>/create/results")
 @app.get("/create/results/<uuid>")
 @app.get("/<lang>/create/results/<uuid>")
-def create_results_get(uuid: str | None = None) -> Response | str:
+def create_results_get(lang="en", uuid: str | None = None) -> Response | str:
     if uuid is None:
         return redirect(url_for("create"))
     validate_uuid(uuid)
@@ -108,14 +108,14 @@ def create_results_get(uuid: str | None = None) -> Response | str:
 
 @app.get("/digitize")
 @app.get("/<lang>/digitize")
-def digitize() -> str:
+def digitize(lang="en") -> str:
     """Serve a file upload form for sketch map processing"""
     return render_template("digitize.html")
 
 
 @app.post("/digitize/results")
 @app.post("/<lang>/digitize/results")
-def digitize_results_post() -> Response:
+def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
     # No files uploaded
     if "file" not in request.files:
@@ -157,7 +157,7 @@ def digitize_results_post() -> Response:
 @app.get("/<lang>/digitize/results")
 @app.get("/digitize/results/<uuid>")
 @app.get("/<lang>/digitize/results/<uuid>")
-def digitize_results_get(uuid: str | None = None) -> Response | str:
+def digitize_results_get(lang="en", uuid: str | None = None) -> Response | str:
     if uuid is None:
         return redirect(url_for("digitize"))
     validate_uuid(uuid)
@@ -166,7 +166,7 @@ def digitize_results_get(uuid: str | None = None) -> Response | str:
 
 @app.get("/api/status/<uuid>/<type_>")
 @app.get("/<lang>/api/status/<uuid>/<type_>")
-def status(uuid: str, type_: REQUEST_TYPES) -> Response:
+def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
@@ -206,7 +206,7 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
 
 @app.route("/api/download/<uuid>/<type_>")
 @app.route("/<lang>/api/download/<uuid>/<type_>")
-def download(uuid: str, type_: REQUEST_TYPES) -> Response:
+def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
@@ -239,7 +239,7 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
 
 @app.route("/api/health")
 @app.route("/<lang>/api/health")
-def health():
+def health(lang="en"):
     """Ping Celery workers."""
     result: list = celery_app.control.ping(timeout=1)
     if result:
