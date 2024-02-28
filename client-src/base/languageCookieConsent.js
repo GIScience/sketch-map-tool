@@ -33,4 +33,3 @@ function getConsentToStoreLanguageSelection(lang) {
 
 document.getElementById("lang_en").onclick = () => getConsentToStoreLanguageSelection("en");
 document.getElementById("lang_de").onclick = () => getConsentToStoreLanguageSelection("de");
-document.getElementById("lang_pt").onclick = () => getConsentToStoreLanguageSelection("pt");
