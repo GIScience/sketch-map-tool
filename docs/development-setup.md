@@ -39,6 +39,9 @@ pre-commit install
 docker run --name smt-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres:15
 docker run --name smt-redis -d -p 6379:6379 redis:7
 
+# compile languages:
+pybabel compile -d sketch_map_tool/translations
+
 # install local versions of esbuild, eslint and stylelint to build and check JS and CSS
 npm install
 npm run build  # build/bundle JS and CSS
