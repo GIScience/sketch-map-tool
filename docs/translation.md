@@ -5,6 +5,7 @@ It is configured ([babel.cfg](../babel.cfg)) to look for strings to be translate
 Text to be translated in Python files need to be manually selected and wrapped in a `gettext` function call (E.g. Error messages in `routes.py`).
 Please refer to to the official documentation of [Flask Babel](https://python-babel.github.io/flask-babel/index.html#translating-applications) regarding the process of translating the application.
 
+Additionally a function called N_ was added to mark strings for translation, this is mainly used in the context of errors, since they should not be translated in the error log, but need to be translated later when send to the users. If you want to raise a new Exception in the Code, please look at the already implemented examples.
 
 # Automatic Approach:
 
