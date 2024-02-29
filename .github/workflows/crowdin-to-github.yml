@@ -2,7 +2,7 @@ name:  Crowdin To GitHub
 
 on:
   schedule:
-    - cron: '*/5 * * * *' # sync daily
+    - cron: '0 * * * *' # sync every hour
 
 jobs:
   synchronize-with-crowdin:
