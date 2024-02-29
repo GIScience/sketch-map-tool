@@ -13,11 +13,11 @@ class TranslatableError(Exception):
         self._repr(translate=False)
 
     def _repr(self, translate: bool):
-        if self.args:
-            return str(self.__class__)
+        if not self.args:
+            return str(self.__class__.__name__)
 
         if len(self.args) > 2:
-            raise ValueError("Unexpected arguments to " + str(self.__class__))
+            raise ValueError("Unexpected arguments to " + str(self.__class__.__name__))
 
         if translate:
             message = gettext(self.args[0])
@@ -27,7 +27,9 @@ class TranslatableError(Exception):
         if len(self.args) == 2:
             message = message.format(**self.args[1])
 
-        return "{class_}: {message}".format(class_=self.__class__, message=message)
+        return "{class_}: {message}".format(
+            class_=self.__class__.__name__, message=message
+        )
 
     def translate(self):
         return self._repr(translate=True)
