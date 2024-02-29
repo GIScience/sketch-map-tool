@@ -193,7 +193,7 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
                 error = err.translate()
             except Exception as err:
                 http_status = 500  # Internal Server Error
-                error = str(err)
+                error = repr(err)
     else:  # PENDING, RETRY, STARTED
         # Accepted for processing, but has not been completed
         http_status = 202  # Accepted

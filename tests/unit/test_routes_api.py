@@ -177,7 +177,7 @@ def test_status_failed(
     assert resp.status_code == 422
     assert resp.json["id"] == uuid
     assert resp.json["status"] == "FAILED"
-    assert resp.json["error"] == "Mock error"
+    assert resp.json["error"] == "QRCodeError: Mock error"
     assert "href" not in resp.json.keys()
 
 
