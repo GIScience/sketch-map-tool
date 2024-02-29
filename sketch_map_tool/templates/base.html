@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ _('en') }}" data-theme="light">
+<html lang="{{ lang }}" data-theme="light">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="{{ url_for("static", filename="bundles/pico.css") }}">
     <link rel="stylesheet" href="{{ url_for("static", filename="bundles/base.css") }}">
     <script type="module" src="{{ url_for("static", filename="bundles/base.js") }}"></script>
-    {% block head %}
-    {% endblock head %}
+    {% block head %} {% endblock head %}
 </head>
 <body>
 <div id="main-flex-box">

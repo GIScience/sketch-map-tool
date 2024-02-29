@@ -29,18 +29,17 @@
             <div id="right">
                 <div class="sketchy h1 center-text">{{ _('Page Setup') }}</div>
                 <div id="message-container" class="" style="height: 11rem; overflow-y: scroll; padding: 1rem; ">
-                    <article id="infobox" class="infobox invisible">{{ _('Your Area of Interest is too large!
+                    <article id="zoom-info" class="infobox hidden">{{ _('Your Area of Interest is too large!
                         <br>Zoom further in to be able to create a Sketch Map.') }}
                     </article>
-                    <!--TODO: ADD LOCALIZATION! -->
-                    <article id="antimeridian-info" class="infobox">You are currently trying to
+                    <article id="antimeridian-info" class="infobox">{{ _('You are currently trying to
                         request a map that crosses the +/-180° <a href="https://en.wikipedia.org/wiki/180th_meridian" target="_blank">antimeridian</a>. This is currently not
                         supported, please move the map such that your extent is either left or right of
-                        the antimeridian.
+                        the antimeridian.') }}
                     </article>
                 </div>
 
-                <form id="page-setup-form" action="/create/results" method="post">
+                <form id="page-setup-form" action="/{{ lang }}/create/results" method="post">
                     <label for="format">{{ _('Paper Format') }}</label>
                     <select id="format" name="format"></select>
 
