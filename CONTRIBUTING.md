@@ -4,7 +4,8 @@ Please always feel free to reach out to us via E-Mail (sketch-map-tool@heigit.or
 
 There are various other ways to contribute to the Sketch Map Tool: 
 
-- Help to translate the Sketch Map Tool.
+- Help to translate the Sketch Map Tool via [crowdin](https://crowdin.com/project/sketch-map-tool). If you have an active community
+using the Sketch Map Tool using a currently unsupported language, feel free to reach out to us, so we can talk about adding it. 
 - Create [issues](https://github.com/GIScience/sketch-map-tool/issues/new) to report bugs or suggest new features.
 - Create [pull requests](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) to address issues.
 
