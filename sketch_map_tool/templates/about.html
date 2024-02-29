@@ -38,11 +38,6 @@
             base map data through the HeiGIT
             <a href="https://oqt.ohsome.org/" target="_blank">ohsome quality analyst</a>.') }}
         </p>
-        <p>
-            {{ _('Learn more about how to use the tool in the <a href="#learning-material">Learning
-            Material</a> section below or on
-            the <a href="/help">Help page</a>!') }}
-        </p>
         <figure>
             <img src="{{ url_for("static", filename="assets/images/about/sketchmaptool_markiertekarte.webp") }}"
                  alt="{{ _('SketchMap Preview') }}">
@@ -102,7 +97,7 @@
         <h1 id="learning-material">{{ _('Learning Material') }}</h1>
         <p>
             {{ _('Detailed Step-by-Step Instructions about how to use the tool and FAQs can be found on
-            the <a href="/help">Help page</a>.') }}
+            the <a href=url_for("help", lang=lang)>Help page</a>.') }}
         </p>
         <p>
             {{ _('The code of the Sketch Map Tool is released on GitHub (
