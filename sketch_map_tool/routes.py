@@ -31,35 +31,38 @@ from sketch_map_tool.validators import (
 
 @app.get("/")
 @app.get("/<lang>")
-def index() -> str:  # pyright
-    return render_template("index.html")
+def index(lang="en") -> str:  # pyright
+    return render_template("index.html", lang=lang)
 
 
 @app.get("/help")
 @app.get("/<lang>/help")
-def help() -> str:
-    return render_template("help.html")
+def help(lang="en") -> str:
+    return render_template("help.html", lang=lang)
 
 
 @app.get("/about")
 @app.get("/<lang>/about")
-def about() -> str:
-    return render_template("about.html", literature=definitions.LITERATURE_REFERENCES)
+def about(lang="en") -> str:
+    return render_template(
+        "about.html", lang=lang, literature=definitions.LITERATURE_REFERENCES
+    )
 
 
 @app.get("/create")
 @app.get("/<lang>/create")
-def create() -> str:
+def create(lang="en") -> str:
     """Serve forms for creating a sketch map"""
     return render_template(
         "create.html",
+        lang=lang,
         esri_api_key=config.get_config_value("esri-api-key"),
     )
 
 
 @app.post("/create/results")
 @app.post("/<lang>/create/results")
-def create_results_post() -> Response:
+def create_results_post(lang="en") -> Response:
     """Create the sketch map"""
     # Request parameters
     bbox_raw = json.loads(request.form["bbox"])
@@ -89,37 +92,37 @@ def create_results_post() -> Response:
         "quality-report": str(task_quality_report.id),
     }
     db_client_flask.set_async_result_ids(uuid, map_)
-    return redirect(url_for("create_results_get", uuid=uuid))
+    return redirect(url_for("create_results_get", lang=lang, uuid=uuid))
 
 
 @app.get("/create/results")
 @app.get("/<lang>/create/results")
 @app.get("/create/results/<uuid>")
 @app.get("/<lang>/create/results/<uuid>")
-def create_results_get(uuid: str | None = None) -> Response | str:
+def create_results_get(lang="en", uuid: str | None = None) -> Response | str:
     if uuid is None:
-        return redirect(url_for("create"))
+        return redirect(url_for("create", lang=lang))
     validate_uuid(uuid)
     # Check if celery tasks for UUID exists
     _ = db_client_flask.get_async_result_id(uuid, "sketch-map")
     _ = db_client_flask.get_async_result_id(uuid, "quality-report")
-    return render_template("create-results.html")
+    return render_template("create-results.html", lang=lang)
 
 
 @app.get("/digitize")
 @app.get("/<lang>/digitize")
-def digitize() -> str:
+def digitize(lang="en") -> str:
     """Serve a file upload form for sketch map processing"""
-    return render_template("digitize.html")
+    return render_template("digitize.html", lang=lang)
 
 
 @app.post("/digitize/results")
 @app.post("/<lang>/digitize/results")
-def digitize_results_post() -> Response:
+def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
     # No files uploaded
     if "file" not in request.files:
-        return redirect(url_for("digitize"))
+        return redirect(url_for("digitize", lang=lang))
     files = request.files.getlist("file")
     validate_uploaded_sketchmaps(files)
     ids = db_client_flask.insert_files(files)
@@ -150,23 +153,23 @@ def digitize_results_post() -> Response:
         "vector-results": str(result_id_2),
     }
     db_client_flask.set_async_result_ids(uuid, map_)
-    return redirect(url_for("digitize_results_get", uuid=uuid))
+    return redirect(url_for("digitize_results_get", lang=lang, uuid=uuid))
 
 
 @app.get("/digitize/results")
 @app.get("/<lang>/digitize/results")
 @app.get("/digitize/results/<uuid>")
 @app.get("/<lang>/digitize/results/<uuid>")
-def digitize_results_get(uuid: str | None = None) -> Response | str:
+def digitize_results_get(lang="en", uuid: str | None = None) -> Response | str:
     if uuid is None:
-        return redirect(url_for("digitize"))
+        return redirect(url_for("digitize", lang=lang))
     validate_uuid(uuid)
-    return render_template("digitize-results.html")
+    return render_template("digitize-results.html", lang=lang)
 
 
 @app.get("/api/status/<uuid>/<type_>")
 @app.get("/<lang>/api/status/<uuid>/<type_>")
-def status(uuid: str, type_: REQUEST_TYPES) -> Response:
+def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
@@ -206,7 +209,7 @@ def status(uuid: str, type_: REQUEST_TYPES) -> Response:
 
 @app.route("/api/download/<uuid>/<type_>")
 @app.route("/<lang>/api/download/<uuid>/<type_>")
-def download(uuid: str, type_: REQUEST_TYPES) -> Response:
+def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
@@ -239,7 +242,7 @@ def download(uuid: str, type_: REQUEST_TYPES) -> Response:
 
 @app.route("/api/health")
 @app.route("/<lang>/api/health")
-def health():
+def health(lang="en"):
     """Ping Celery workers."""
     result: list = celery_app.control.ping(timeout=1)
     if result:
