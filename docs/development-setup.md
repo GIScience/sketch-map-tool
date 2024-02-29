@@ -80,6 +80,16 @@ ruff
 ruff format
 ```
 
+### Exceptions
+
+The use of custom exceptions is highly encouraged.
+
+To translate error messages all custom exceptions should inherit from the `TranslatableError` class (see `exceptions.py`).
+A `TranslatableError` should have as first argument a message wrapped in a `N_()` function (see `helper.py`), to mark it for translation, and optionally a dictionary with values for interpolation.
+
+> Note: For more information on translation please see [/docs/translation.md]
+
+
 ### Tests
 
 ```bash
