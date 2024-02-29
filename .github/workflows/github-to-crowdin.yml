@@ -2,7 +2,7 @@ name: GitHub To Crowdin
 
 on:
   push:
-    branches: [ 12-add-translations ]
+    branches: [ main ]
 
 jobs:
   synchronize-with-crowdin:
