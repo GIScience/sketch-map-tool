@@ -17,7 +17,7 @@ require("esbuild")
         entryNames: "[dir]", // will name the result files by their folder names
         outbase: "./client-src",
         bundle: true,
-        // minify: true,
+        minify: true,
         outdir: "./sketch_map_tool/static/bundles",
         format: "esm",
         external: [
