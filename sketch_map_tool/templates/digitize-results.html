@@ -16,7 +16,16 @@
         <div class="active">{{ _('Download collected Markings as Geodata') }}</div>
     </div>
     <main class="container">
-        <div id="main-message" class="sketchy h1 center-text">{{ _('Your results are being processed ...') }}
+        <div id="main-message">
+            <div class="sketchy h1 center-text pending">{{ _('Your results are being processed ...') }}
+            </div>
+            <div class="sketchy h1 center-text success hidden">{{ _('Your results are ready for download!') }}
+            </div>
+            <div class="sketchy h1 center-text partial-success hidden">{{ _('Sorry. Only some of your results could be generated for download.') }}
+            </div>
+            <div class="sketchy h1 center-text error hidden">{{ _('Your results should have been downloadable from here, but we are having troubles on our servers!') }}
+            </div>
+        </div>
         </div>
 
         <div class="grid">
