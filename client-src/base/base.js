@@ -1,3 +1,5 @@
+// TODO: factor out list of supported language
+//
 const languages = ["en", "de"];
 
 function setLanguage(lang) {
