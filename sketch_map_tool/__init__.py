@@ -42,7 +42,7 @@ def make_flask() -> Flask:
     flask_app.config.update(
         CELERY_CONFIG=CELERY_CONFIG,
         BABEL_DEFAULT_LOCALE="en",
-        LANGUAGES={"en": "English", "de": "Deutsch", "pt": "Portuguese"},
+        LANGUAGES={"en": "English", "de": "Deutsch", "es": "Español", "fr": "Francais"},
     )
     flask_app.teardown_appcontext(db_client.close_connection)
     return flask_app

@@ -1,6 +1,6 @@
 // TODO: factor out list of supported language
 //
-const languages = ["en", "de"];
+const languages = ["en", "de", "es", "fr"];
 
 function setLanguage(lang) {
     const path = window.location.pathname.slice(1); // remove first slash
