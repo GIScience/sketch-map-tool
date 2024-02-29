@@ -32,7 +32,7 @@ from sketch_map_tool.validators import (
 
 @app.get("/")
 @app.get("/<lang>")
-def index(lang="en") -> str:  # pyright
+def index(lang="en") -> str:
     return render_template("index.html", lang=lang)
 
 
