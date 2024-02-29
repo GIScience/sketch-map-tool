@@ -11,6 +11,7 @@ from requests import ReadTimeout, Response
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.exceptions import MapGenerationError
+from sketch_map_tool.helpers import N_
 from sketch_map_tool.models import Bbox, Layer, Size
 
 
@@ -45,8 +46,10 @@ def get_map_image(
         )
     except ReadTimeout:
         raise MapGenerationError(
-            "Map area couldn't be processed with the current resources."
-            " Please try again once."
+            N_(
+                "Map area couldn't be processed with the current resources."
+                " Please try again once."
+            )
         )
 
 
@@ -57,12 +60,17 @@ def as_image(response: Response) -> PngImageFile:
     try:
         return Image.open(BytesIO(response_content))
     except UnidentifiedImageError:
-        error_msg = "The Web Map Service returned an error. Please try again later."
-
         if (
             content_type == "application/vnd.ogc.se_xml"
         ):  # Response is an XML error report
-            error_msg += " Response from the WMS:\n" + escape(
-                response_content.decode("utf8")
+            raise MapGenerationError(
+                N_(
+                    "The Web Map Service returned an error. Please try again later."
+                    " Response from the WMS:\n{ERROR_MSG}"
+                ),
+                {"ERROR_MSG": escape(response_content.decode("utf8"))},
             )
-        raise MapGenerationError(error_msg)
+
+        raise MapGenerationError(
+            N_("The Web Map Service returned an error. Please try again later.")
+        )

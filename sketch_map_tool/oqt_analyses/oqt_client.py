@@ -1,6 +1,7 @@
 import requests
 
 from sketch_map_tool.exceptions import OQTReportError
+from sketch_map_tool.helpers import N_
 from sketch_map_tool.models import Bbox
 
 OQT_API_URL = "https://oqt.ohsome.org/api"
@@ -42,8 +43,10 @@ def get_report(bbox: Bbox, include_svg: bool = True, include_html: bool = False)
     if req.status_code == 422:
         if req.json()["type"] == "SizeRestrictionError":
             raise OQTReportError(
-                "Selected Area-of-Interest is too large "
-                "for a Map Quality Check Report."
+                N_(
+                    "Selected Area-of-Interest is too large "
+                    "for a Map Quality Check Report."
+                )
             )
         else:
             raise OQTReportError(req.json()["detail"])
@@ -51,6 +54,6 @@ def get_report(bbox: Bbox, include_svg: bool = True, include_html: bool = False)
         req.raise_for_status()
     except requests.exceptions.HTTPError:
         raise OQTReportError(
-            "There seems to be a problem with OQT. Please try again later."
+            N_("There seems to be a problem with OQT. Please try again later.")
         )
     return req.json()["features"][0]["properties"]

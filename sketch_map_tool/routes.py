@@ -16,6 +16,7 @@ from sketch_map_tool.exceptions import (
     MapGenerationError,
     OQTReportError,
     QRCodeError,
+    TranslatableError,
     UploadLimitsExceededError,
     UUIDNotFoundError,
 )
@@ -189,7 +190,7 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
                 # The request was well-formed but was unable to be followed due
                 # to semantic errors.
                 http_status = 422  # Unprocessable Entity
-                error = str(err)
+                error = err.translate()
             except Exception as err:
                 http_status = 500  # Internal Server Error
                 error = str(err)
@@ -253,10 +254,10 @@ def health(lang="en"):
 @app.errorhandler(QRCodeError)
 @app.errorhandler(CustomFileNotFoundError)
 @app.errorhandler(UploadLimitsExceededError)
-def handle_exception(error):
-    return render_template("error.html", error_msg=str(error)), 422
+def handle_exception(error: TranslatableError):
+    return render_template("error.html", error_msg=error.translate()), 422
 
 
 @app.errorhandler(UUIDNotFoundError)
-def handle_not_found_exception(error):
-    return render_template("error.html", error_msg=str(error)), 404
+def handle_not_found_exception(error: TranslatableError):
+    return render_template("error.html", error_msg=error.translate()), 404
