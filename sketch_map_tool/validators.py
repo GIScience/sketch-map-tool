@@ -1,3 +1,4 @@
+from string import Template
 from typing import get_args
 from uuid import UUID
 
@@ -6,16 +7,24 @@ from werkzeug.datastructures import FileStorage
 
 from sketch_map_tool import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
-from sketch_map_tool.exceptions import UploadLimitsExceededError
+from sketch_map_tool.exceptions import ValueError, UploadLimitsExceededError
 from sketch_map_tool.models import LiteratureReference
+
+
+def N_(s: str) -> str:  # noqa
+    """Mark for translation."""
+    return s
 
 
 def validate_type(type_: REQUEST_TYPES):
     """Validate result type values for API parameter `type_`"""
     if type_ not in list(get_args(REQUEST_TYPES)):
         raise ValueError(
-            f"'{type_}' is not a valid value for the request parameter 'type'."
-            + f" Allowed values are: {REQUEST_TYPES}"
+            N_(
+                "{type} is not a valid value for the request parameter 'type'. "
+                + "Allowed values are: {request_type}"
+            ),
+            {"type": type_, "request_type": REQUEST_TYPES},
         )
 
 
