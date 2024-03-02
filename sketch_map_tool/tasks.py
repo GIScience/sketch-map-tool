@@ -163,7 +163,9 @@ def digitize_sketches(
         else:
             raise ValueError(f"Unexpected layer type '{layer}' only ")
 
-        r: NDArray = detect_markings(r, yolo_model_obj, yolo_model_cls, sam_predictor)  # type: ignore
+        r: NDArray = detect_markings(
+            r, map_frames[uuid], yolo_model_obj, yolo_model_cls, sam_predictor
+        )  # type: ignore
         # m = marking
         for m in r:
             m: BytesIO = georeference(m, bbox, bgr=False)  # type: ignore

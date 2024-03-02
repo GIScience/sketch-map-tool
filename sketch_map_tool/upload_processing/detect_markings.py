@@ -16,17 +16,25 @@ def detect_markings(
     sam_predictor: SamPredictor,
 ) -> list[NDArray]:
     """
-    1. apply ML-Pipeline to the SketchMap and the generated grayscale diffrence image
-    2. update colors indexes since 0 represents background
-    3. apply postprocessing
-    params:
+    This function applies a machine learning pipeline to detect markings on a sketch map
+    and a postprocessing of the binary masks.
 
-    image: NDArray: Image of the clipped scan of the sketch map
-    mapframe: NDArray: Image with the original base layer
-    yolo_model_obj: YOLO_4 (multibands version): YOLO model for object detection
-    yolo_model_cls: YOLO: YOLO model for classification
-    sam_predictor: SamPredictor: SAM model for segmentation
-    return: list[NDArray]: List of numpy arrays representing the detected markings
+
+    The pipeline consists of the following steps:
+    1. Apply the machine learning pipeline to the sketch
+    map.
+    2. Update color indexes since 0 represents the background.
+    3. Apply post-processing to the results.
+
+    Parameters:
+    image (NDArray): The image of the clipped scan of the sketch map.
+    mapframe (NDArray): The image with the original base layer.
+    yolo_model_obj (YOLO_4): The YOLO model for object detection (multibands version).
+    yolo_model_cls (YOLO): The YOLO model for classification.
+    sam_predictor (SamPredictor): The SAM model for segmentation.
+
+    Returns:
+    list[NDArray]: A list of numpy arrays representing the detected markings.
     """
     # SAM can only deal with RGB and not RGBA etc.
     img = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
@@ -111,7 +119,7 @@ def apply_yolo_obj(
         class labels (colors).
     """
     image = Image.merge("RGBA", (*image.split(), diffrence))
-    result = yolo_model(image)[0].boxes  # TODO set conf parameter
+    result = yolo_model.predict(image)[0].boxes  # TODO set conf parameter
     bounding_boxes = result.xyxy.numpy()
     class_labels = result.cls.numpy()
     return bounding_boxes, class_labels
@@ -128,12 +136,14 @@ def apply_yolo_cls(
     Returns: list of labels predicted by the model.
     """
     labels = []
-    image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)  #
+    image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
     for b in bounding_boxes:
         x_min, y_min, x_max, y_max = b
-        cropped_image = cv2.cvtColor(image[y_min:y_max, x_min:x_max], cv2.COLOR_BGR2RGB)
-        res = yolo_model_cls(Image.fromarray(cropped_image))
-        labels.append(res.cls)  # todo check format of results
+        cropped_image = image[y_min:y_max, x_min:x_max]
+        res = yolo_model_cls(
+            Image.fromarray(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
+        )
+        labels.append(res.cls)
     return labels
 
 
