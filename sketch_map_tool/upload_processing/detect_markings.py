@@ -143,7 +143,8 @@ def apply_yolo_cls(
         res = yolo_model_cls(
             Image.fromarray(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
         )
-        labels.append(res.cls)
+        # get names from the model and label append to the list
+        labels.append(res[0].names[res[0].probs.top1])
     return labels
 
 
