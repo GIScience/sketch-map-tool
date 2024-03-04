@@ -133,17 +133,25 @@ def digitize_sketches(
     if "osm" in layer_types:
         yolo_path_osm = init_model(get_config_value("neptune_model_id_yolo_osm_obj"))
         yolo_model_osm_obj: YOLO_4 = YOLO_4(yolo_path_osm)
+
+        yolo_path_osm_cls = init_model(
+            get_config_value("neptune_model_id_yolo_osm_cls")
+        )
+        yolo_model_osm_cls: YOLO = YOLO(yolo_path_osm_cls)
+
     if "esri-world-imagery" in layer_types:
         yolo_path_esri = init_model(get_config_value("neptune_model_id_yolo_esri_obj"))
         yolo_model_esri_obj: YOLO_4 = YOLO_4(yolo_path_esri)
 
+        yolo_path_esri_cls = init_model(
+            get_config_value("neptune_model_id_yolo_esri_cls")
+        )
+        yolo_model_esri_cls: YOLO = YOLO(yolo_path_esri_cls)
+
     if "osm" not in layer_types and "esri-world-imagery" not in layer_types:
         raise ValueError("Unexpected layer type, only OSM and ESRI are supported")
 
-    yolo_path_cls = init_model(get_config_value("neptune_model_id_yolo_cls"))
-    yolo_model_cls: YOLO = YOLO(yolo_path_cls)
-
-    # Zero shot segment anything model
+    # Zero shot segment anything model for automatic mask generation
     sam_path = init_model(get_config_value("neptune_model_id_sam"))
     sam_model = sam_model_registry[get_config_value("model_type_sam")](sam_path)
     sam_predictor: SamPredictor = SamPredictor(sam_model)  # mask predictor
@@ -158,8 +166,10 @@ def digitize_sketches(
         r: NDArray = clip(r, map_frames[uuid])  # type: ignore
         if layer == "osm":
             yolo_model_obj: YOLO_4 = yolo_model_osm_obj
+            yolo_model_cls: YOLO = yolo_model_osm_cls
         elif layer == "esri-world-imagery":
             yolo_model_obj: YOLO_4 = yolo_model_esri_obj
+            yolo_model_cls: YOLO = yolo_model_esri_cls
         else:
             raise ValueError(
                 f"Unexpected layer type '{layer}' only "

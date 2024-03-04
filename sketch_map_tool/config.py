@@ -31,7 +31,8 @@ def load_config_default() -> Dict[str, str | int | float]:
         "max_pixel_per_image": 10e8,  # 10.000*10.000
         "neptune_project": "HeiGIT/SketchMapTool",
         "neptune_api_token": "",
-        "neptune_model_id_yolo_cls": "SMT-CLS-1",
+        "neptune_model_id_yolo_osm_cls": "SMT-CLR-1",
+        "neptune_model_id_yolo_esri_cls": "SMT-CLR-2",
         "neptune_model_id_yolo_osm_obj": "SMT-OSM-1",
         "neptune_model_id_yolo_esri_obj": "SMT-ESRI-1",
         "neptune_model_id_sam": "SMT-SAM-1",
@@ -69,7 +70,10 @@ def load_config_from_env() -> Dict[str, str]:
         "neptune_model_id_yolo_esri_obj": os.getenv(
             "SMT_NEPTUNE_MODEL_ID_YOLO_ESRI_OBJ"
         ),
-        "neptune_model_id_yolo_cls": os.getenv("SMT_NEPTUNE_MODEL_ID_YOLO_CLS"),
+        "neptune_model_id_yolo_osm_cls": os.getenv("SMT_NEPTUNE_MODEL_ID_YOLO_OSM_CLS"),
+        "neptune_model_id_yolo_esri_cls": os.getenv(
+            "SMT_NEPTUNE_MODEL_ID_YOLO_ESRI_CLS"
+        ),
         "neptune_model_id_sam": os.getenv("SMT_NEPTUNE_MODEL_ID_SAM"),
         "model_type_sam": os.getenv("SMT_MODEL_TYPE_SAM"),
         "esri-api-key": os.getenv("SMT_ESRI_API_KEY"),
