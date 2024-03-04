@@ -39,6 +39,9 @@ pre-commit install
 docker run --name smt-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres:15
 docker run --name smt-redis -d -p 6379:6379 redis:7
 
+# compile languages:
+pybabel compile -d sketch_map_tool/translations
+
 # install local versions of esbuild, eslint and stylelint to build and check JS and CSS
 npm install
 npm run build  # build/bundle JS and CSS
@@ -76,6 +79,16 @@ flask --app sketch_map_tool/routes.py --debug run
 ruff
 ruff format
 ```
+
+### Exceptions
+
+The use of custom exceptions is highly encouraged.
+
+To translate error messages all custom exceptions should inherit from the `TranslatableError` class (see `exceptions.py`).
+A `TranslatableError` should have as first argument a message wrapped in a `N_()` function (see `helper.py`), to mark it for translation, and optionally a dictionary with values for interpolation.
+
+> Note: For more information on translation please see [/docs/translation.md]
+
 
 ### Tests
 
@@ -123,7 +136,10 @@ npm run build
 If you setup sketch-map-tool in an IDE like PyCharm please make sure that your IDE does not setup a Poetry managed project/virtual environment.
 Go thought the setup steps above in the terminal and change interpreter settings in the IDE to point to the mamba/conda environment.
 
-Also make sure the environment variable `PROJ_LIB` to point to the `proj` directory of the mamba/conda environment.
+Also make sure the environment variable `PROJ_LIB` to point to the `proj` directory of the mamba/conda environment:
+```bash
+PROJ_LIB=/home/$USERDIR/mambaforge/envs/smt/share/proj
+```
 
 ## Troubleshooting
 

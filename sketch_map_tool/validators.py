@@ -6,7 +6,8 @@ from werkzeug.datastructures import FileStorage
 
 from sketch_map_tool import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
-from sketch_map_tool.exceptions import UploadLimitsExceededError
+from sketch_map_tool.exceptions import UploadLimitsExceededError, ValueError
+from sketch_map_tool.helpers import N_
 from sketch_map_tool.models import LiteratureReference
 
 
@@ -14,8 +15,11 @@ def validate_type(type_: REQUEST_TYPES):
     """Validate result type values for API parameter `type_`"""
     if type_ not in list(get_args(REQUEST_TYPES)):
         raise ValueError(
-            f"'{type_}' is not a valid value for the request parameter 'type'."
-            + f" Allowed values are: {REQUEST_TYPES}"
+            N_(
+                "{TYPE} is not a valid value for the request parameter 'type'. "
+                "Allowed values are: {REQUEST_TYPES}"
+            ),
+            {"TYPE": type_, "REQUEST_TYPES": REQUEST_TYPES},
         )
 
 
@@ -27,7 +31,10 @@ def validate_uploaded_sketchmaps(files: list[FileStorage]):
 
     if len(files) > max_nr_simultaneous_uploads:
         raise UploadLimitsExceededError(
-            f"You can only upload up to {max_nr_simultaneous_uploads} files at once."
+            N_(
+                "You can only upload up to {MAX_NR_SIMULTANEOUS_UPLOADS} files at once."
+            ),
+            {"MAX_NR_SIMULTANEOUS_UPLOADS": max_nr_simultaneous_uploads},
         )
 
     for file in files:
@@ -35,8 +42,11 @@ def validate_uploaded_sketchmaps(files: list[FileStorage]):
         total_pxl_cnt = img.size[0] * img.size[1]
         if total_pxl_cnt > max_pixel_per_image:
             raise UploadLimitsExceededError(
-                f"You can only upload pictures up to "
-                f"a total pixel count of {max_pixel_per_image}."
+                N_(
+                    "You can only upload pictures up to "
+                    "a total pixel count of {MAX_PIXEL_PER_IMAGE}."
+                ),
+                {"MAX_PIXEL_PER_IMAGE": max_pixel_per_image},
             )
         del img
         file.seek(0)
@@ -47,23 +57,31 @@ def validate_uuid(uuid: str):
     try:
         _ = UUID(uuid, version=4)
     except ValueError as error:
-        raise ValueError("The provided URL does not contain a valid UUID") from error
+        raise ValueError(
+            N_("The provided URL does not contain a valid UUID")
+        ) from error
 
 
 def validate_literature_reference(literature_reference: LiteratureReference):
     """Validate literature reference to not include empty strings."""
     if literature_reference.citation == "":
         raise ValueError(
-            "Literature reference JSON fields "
-            + "should not contain empty strings as values."
+            N_(
+                "Literature reference JSON fields should "
+                "not contain empty strings as values."
+            )
         )
     if literature_reference.img_src == "":
         raise ValueError(
-            "Literature reference JSON fields should "
-            + "not contain empty strings as values."
+            N_(
+                "Literature reference JSON fields should "
+                "not contain empty strings as values."
+            )
         )
     if literature_reference.url == "":
         raise ValueError(
-            "Literature reference JSON fields should "
-            + "not contain empty strings as values."
+            N_(
+                "Literature reference JSON fields should "
+                "not contain empty strings as values."
+            )
         )

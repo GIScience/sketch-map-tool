@@ -5,17 +5,14 @@
  * @param responses
  */
 function handleMainMessage(responses) {
+    const element = document.querySelector("#main-message");
+    element.querySelector(".pending").classList.toggle("hidden");
     if (responses.every((response) => response.status === 200)) {
-        document.getElementById("main-message")
-            .innerText = "Your results are ready for download!";
+        element.querySelector(".success").classList.toggle("hidden");
     } else if (responses.some((response) => response.status === 200)) {
-        document.getElementById("main-message")
-            .innerText = "Sorry. "
-            + "Only some of your results could be generated for download.";
+        element.querySelector(".partial-success").classList.toggle("hidden");
     } else {
-        document.getElementById("main-message")
-            .innerText = "Your results should have been downloadable from here, "
-            + "but we are having troubles on our servers!";
+        element.querySelector(".error").classList.toggle("hidden");
     }
 }
 

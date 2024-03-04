@@ -5,18 +5,27 @@
 {% endblock head %}
 
 {% block header_message %}
-    <div class="circle" style="display: inline-block;">2</div>Paper to GIS:
-    <span style="font-size: smaller">Automatically Digitize Your Sketch&nbsp;Maps</span>
+    <div class="circle" style="display: inline-block;">2</div>{{ _('Paper to GIS:') }}
+    <span style="font-size: smaller">{{ _('Automatically Digitize Your Sketch&nbsp;Maps') }}</span>
 {% endblock %}
 
 {% block body %}
     <div class="container-fluid horizontal step-arrows">
-        <div>Scan or photograph your marked Sketch&nbsp;Maps</div>
-        <div>Upload your Sketch&nbsp;Maps</div>
-        <div class="active">Download collected Markings as Geodata</div>
+        <div>{{ _('Scan or photograph your marked Sketch&nbsp;Maps') }}</div>
+        <div>{{ _('Upload your Sketch&nbsp;Maps') }}</div>
+        <div class="active">{{ _('Download collected Markings as Geodata') }}</div>
     </div>
     <main class="container">
-        <div id="main-message" class="sketchy h1 center-text">Your results are being processed ...
+        <div id="main-message">
+            <div class="sketchy h1 center-text pending">{{ _('Your results are being processed ...') }}
+            </div>
+            <div class="sketchy h1 center-text success hidden">{{ _('Your results are ready for download!') }}
+            </div>
+            <div class="sketchy h1 center-text partial-success hidden">{{ _('Sorry. Only some of your results could be generated for download.') }}
+            </div>
+            <div class="sketchy h1 center-text error hidden">{{ _('Your results should have been downloadable from here, but we are having troubles on our servers!') }}
+            </div>
+        </div>
         </div>
 
         <div class="grid">
@@ -24,55 +33,57 @@
                 <article id="raster-data" class="result">
                     <header>
                         <img src="{{ url_for("static", filename="assets/images/digitize-results/raster-marking-icon.svg") }}"
-                             alt="raster data icon"><br>
-                        <span class="brand-font sub-icon">Raster</span>
+                             alt="{{ _('raster data icon') }}"><br>
+                        <span class="brand-font sub-icon">{{ _('Raster') }}</span>
                     </header>
-                    <h6>Geo-referenced markings as GeoTiffs</h6>
+                    <h6>{{ _('Geo-referenced markings as GeoTiffs') }}</h6>
                     <p class="pending">
-                        We are extracting and geo-referencing the color markings of your Sketch
+                        {{ _('We are extracting and geo-referencing the color markings of your Sketch
                         Maps.<br>
-                        Please be patient this can take 2-3 minutes.
+                        Please be patient this can take 2-3 minutes.') }}
                     </p>
                     <p class="success hidden">
-                        We have extracted and geo-referenced the color markings of your Sketch
+                        {{ _('We have extracted and geo-referenced the color markings of your Sketch
                         Maps.<br>
                         You can download them as rasterized GeoTIFFs and use them for further
-                        analysis in your favorite GIS Software.
+                        analysis in your favorite GIS Software.') }}
                     </p>
                     <p class="error hidden">
-                        Sorry! <br>Something went wrong while trying to generate the Result.
+                        {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}
                     </p>
                     <a id="raster-data-download-button" href="#" download aria-busy="true"
-                       role="button" disabled="disabled">Download ZIP</a>
+                       role="button" disabled="disabled">{{ _('Download ZIP') }}</a>
                     <div id="raster-data-status" class="task-status"></div>
+
                 </article>
             </div>
             <div>
                 <article id="vector-data" class="result">
                     <header>
                         <img src="{{ url_for("static", filename="assets/images/digitize-results/vector-marking-icon.svg") }}"
-                             alt="vector data icon"><br>
-                        <span class="brand-font sub-icon">Vector</span>
+                             alt="{{ _('vector data icon') }}"><br>
+                        <span class="brand-font sub-icon">{{ _('Vector') }}</span>
                     </header>
-                    <h6>Geo-referenced markings as GeoJSON</h6>
+                    <h6>{{ _('Geo-referenced markings as GeoJSON') }}</h6>
                     <p class="pending">
-                        We are extracting and geo-referencing the color markings of your Sketch
+                        {{ _('We are extracting and geo-referencing the color markings of your Sketch
                         Maps.<br>
-                        Please be patient this can take 2-3 minutes.
+                        Please be patient this can take 2-3 minutes.') }}
                     </p>
                     <p class="success hidden">
-                        We have extracted and geo-referenced the color markings of your Sketch
+                        {{ _('We have extracted and geo-referenced the color markings of your Sketch
                         Maps.<br>
                         You can download them as vectorized polygons and use them for further
-                        analysis in your favorite GIS Software.
+                        analysis in your favorite GIS Software.') }}
                     </p>
                     <p class="error hidden">
-                        Sorry! <br>Something went wrong while trying to generate the Result.
+                        {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}
                     </p>
                     <a id="vector-data-download-button" href="#" download aria-busy="true"
                        role="button"
-                       disabled="disabled">Download GeoJSON</a>
+                       disabled="disabled">{{ _('Download GeoJSON') }}</a>
                     <div id="vector-data-status" class="task-status"></div>
+
                 </article>
             </div>
         </div>
