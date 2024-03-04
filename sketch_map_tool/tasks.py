@@ -157,11 +157,14 @@ def digitize_sketches(
         r: NDArray = to_array(r)  # type: ignore
         r: NDArray = clip(r, map_frames[uuid])  # type: ignore
         if layer == "osm":
-            yolo_model_obj = yolo_model_osm_obj
+            yolo_model_obj: YOLO_4 = yolo_model_osm_obj
         elif layer == "esri-world-imagery":
-            yolo_model_obj = yolo_model_esri_obj
+            yolo_model_obj: YOLO_4 = yolo_model_esri_obj
         else:
-            raise ValueError(f"Unexpected layer type '{layer}' only ")
+            raise ValueError(
+                f"Unexpected layer type '{layer}' only "
+                f"OSM and ESRI World Imagery are supported. "
+            )
 
         r: NDArray = detect_markings(
             r, map_frames[uuid], yolo_model_obj, yolo_model_cls, sam_predictor
