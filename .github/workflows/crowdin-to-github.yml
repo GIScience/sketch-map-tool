@@ -1,6 +1,7 @@
 name:  Crowdin To GitHub
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '15 * * * *' # sync every hour
 
@@ -12,10 +13,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python3.11 -m pip install Flask-Babel
+          pybabel extract -F config/babel.cfg -o messages.pot .
+
       - name: Sync Crowdin to Github
         uses: crowdin/github-action@v1.19.0
         with:
-          upload_sources: false
+          upload_sources: true
           upload_translations: false
           download_translations: true
           localization_branch_name: i18n_crowdin

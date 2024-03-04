@@ -19,6 +19,5 @@ files: [
   {
     "source": "messages.pot",
     "translation": "sketch_map_tool/translations/%two_letters_code%/LC_MESSAGES/messages.po",
-
   }
 ]
