@@ -138,7 +138,7 @@ def apply_yolo_cls(
     labels = []
     image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
     for b in bounding_boxes:
-        x_min, y_min, x_max, y_max = b
+        x_min, y_min, x_max, y_max = [int(i) for i in b[:4]]
         cropped_image = image[y_min:y_max, x_min:x_max]
         res = yolo_model_cls(
             Image.fromarray(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
