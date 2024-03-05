@@ -63,10 +63,10 @@ def _decode_data(data) -> MappingProxyType:
             *[float(coordinate) for coordinate in contents[2:6]]
         )  # Raises ValueError for non-float values
         try:
-            layer = getattr(Layer, (contents[6]))
+            layer = Layer(contents[6])
         except IndexError:
             # backward compatibility
-            layer = getattr(Layer, "OSM")
+            layer = Layer("osm")
     except ValueError as error:
         raise QRCodeError(N_("QR-Code does not have expected content.")) from error
     return MappingProxyType(
