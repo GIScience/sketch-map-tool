@@ -5,28 +5,28 @@
 {% endblock head %}
 
 {% block header_message %}
-    What is this all about?
+    {{ _('What is this all about?') }}
 {% endblock header_message %}
 
 {% block body %}
     <main class="container">
-        <h1>The Tool</h1>
+        <h1>{{ _('The Tool') }}</h1>
         <p>
-            The Sketch Map Tool is an easy-to-use tool for participatory sketch mapping through
+            {{ _('The Sketch Map Tool is an easy-to-use tool for participatory sketch mapping through
             offline
             collection, digitization and georeferencing of field data. The tool is designed to
             simplify the collection and analysis of local spatial knowledge for the sake of engaging
-            non-experts in these processes.
+            non-experts in these processes.') }}
         </p>
         <p>
-            It can for example be used by local stakeholders to engage communities in gathering
+            {{ _('It can for example be used by local stakeholders to engage communities in gathering
             information about their experience and perception of previous flood events or other
             hazards in their neighbourhood. Thus, the tool can support risk assessments, the design
             of risk reduction measures, or communication by increasing risk awareness among
-            citizens.
+            citizens.') }}
         </p>
         <p>
-            The Sketch Map Tool is an open-source web application with several functions, including
+            {{ _('The Sketch Map Tool is an open-source web application with several functions, including
             the creation of paper maps of an area of interest, the uploading of pictures and scans
             of the marked Sketch Maps, the colour-detection of the markings, and the downloading of
             the results in multiple geodata formats. The tool uses computer vision methods to
@@ -36,28 +36,23 @@
             evaluate how well-suited an area is for participatory mapping based on a quality
             analysis of the <a href="https://wiki.osm.org" target="_blank">OpenStreetMap (OSM)</a>
             base map data through the HeiGIT
-            <a href="https://oqt.ohsome.org/" target="_blank">ohsome quality analyst</a>.
-        </p>
-        <p>
-            Learn more about how to use the tool in the <a href="#learning-material">Learning
-            Material</a> section below or on
-            the <a href="/help">Help page</a>!
+            <a href="https://oqt.ohsome.org/" target="_blank">ohsome quality analyst</a>.') }}
         </p>
         <figure>
             <img src="{{ url_for("static", filename="assets/images/about/sketchmaptool_markiertekarte.webp") }}"
-                 alt="SketchMap Preview">
+                 alt="{{ _('SketchMap Preview') }}">
         </figure>
 
-        <h1 id="the-project">The Project</h1>
+        <h1 id="the-project">{{ _('The Project') }}</h1>
         <p>
-            The Sketch Map Tool project has been developed in close cooperation between the <a
+            {{ _('The Sketch Map Tool project has been developed in close cooperation between the <a
                 href="https://heigit.org" target="_blank">HeiGIT</a> and the <a
                 href="https://www.geog.uni-heidelberg.de/gis/index_en.html" target="_blank">GIScience
             Research Group</a> from Heidelberg University with the generous contributions of several
-            sponsors and support by partner organizations.
+            sponsors and support by partner organizations.') }}
         </p>
         <p>
-            The first prototype of the tool has been created within the <a
+            {{ _('The first prototype of the tool has been created within the <a
                 href="https://www.geog.uni-heidelberg.de/gis/waterproofing.html" target="_blank">Waterproofing
             Data project</a>. The project T2S Waterproofing Data has been financially supported by
             the Belmont Forum and NORFACE Joint Research Programme on Transformations to Sustainability,
@@ -69,78 +64,78 @@
             Federal Foreign Office within the frame of the <em>Globalprojekt II ,,Stärkung und Weiterentwicklung
             der Internationalen Humanitären Hilfe und des Internationalen Humanitären Systems"</em>,
             the Sketch Map Tool has been improved and extended in order to make it available for usage
-            by the Red Cross Red Crescent Movement and similar organizations.
+            by the Red Cross Red Crescent Movement and similar organizations.') }}
         </p>
         <p>
-            As part of the <a href="https://heigit.org/de/woran-wir-arbeiten/#projects">HeiGIT
+            {{ _('As part of the <a href="https://heigit.org/de/woran-wir-arbeiten/#projects">HeiGIT
             tools</a>, the Sketch Map Tool will be tested in other settings to gather user feedback.
             Its functionalities will be further developed and adjusted to fit the needs of the
-            humanitarian and development sector.
+            humanitarian and development sector.') }}
         </p>
         <p>
-            If you have questions or would like to provide feedback, please reach out to the project
-            team (<a href="#contact">&rarr; Contact</a>).
+            {{ _('If you have questions or would like to provide feedback, please reach out to the project
+            team (<a href="#contact">&rarr; Contact</a>).') }}
         </p>
         <figure>
             <img src="{{ url_for("static", filename="assets/images/about/June2019MappingSaoPaulo.webp") }}"
-                 alt="Picture of a group mapping situation.">
-            <figcaption>Group Mapping. Waterproofing Data Project. C. Klonner, June 2019
+                 alt="{{ _('Picture of a group mapping situation.') }}">
+            <figcaption>{{ _('Group Mapping. Waterproofing Data Project. C. Klonner, June 2019') }}
             </figcaption>
         </figure>
 
-        <h1 id="sponsors-and-partners">Former and current Sponsors and Partner Organisations</h1>
+        <h1 id="sponsors-and-partners">{{ _('Former and current Sponsors and Partner Organisations') }}</h1>
 <div class="logos">
-    <img src="/static/assets/logos/DRK/DRKLogokompaktEng_4c.jpg" alt="Logo German Red Cross">
-    <img src="/static/assets/logos/Logo_GIScience_HD_cropped.svg" alt="GIScience Research Group Heidelberg University">
-    <img src="/static/assets/logos/AA_logo_ELdZ_Uni_rgb_en.jpg" alt="Logo german humanitarian assistance">
-    <img src="/static/assets/logos/logo_fona.png" alt="Logo FONA">
-    <img src="/static/assets/logos/logo_bmbf.png" alt="Logo BMBF">
-    <img src="/static/assets/logos/logo_belmont_forum.png" alt="Logo Belmont">
-    <img src="/static/assets/logos/logo_norface.png" alt="Logo Norface">
+    <img src="/static/assets/logos/DRK/DRKLogokompaktEng_4c.jpg" alt="{{ _('Logo German Red Cross') }}">
+    <img src="/static/assets/logos/Logo_GIScience_HD_cropped.svg" alt="{{ _('GIScience Research Group Heidelberg University') }}">
+    <img src="/static/assets/logos/AA_logo_ELdZ_Uni_rgb_en.jpg" alt="{{ _('Logo german humanitarian assistance') }}">
+    <img src="/static/assets/logos/logo_fona.png" alt="{{ _('Logo FONA') }}">
+    <img src="/static/assets/logos/logo_bmbf.png" alt="{{ _('Logo BMBF') }}">
+    <img src="/static/assets/logos/logo_belmont_forum.png" alt="{{ _('Logo Belmont') }}">
+    <img src="/static/assets/logos/logo_norface.png" alt="{{ _('Logo Norface') }}">
 </div>
 
-        <h1 id="learning-material">Learning Material</h1>
+        <h1 id="learning-material">{{ _('Learning Material') }}</h1>
         <p>
-            Detailed Step-by-Step Instructions about how to use the tool and FAQs can be found on
-            the <a href="/help">Help page</a>.
+            {{ _('Detailed Step-by-Step Instructions about how to use the tool and FAQs can be found on
+            the <a href=url_for("help", lang=lang)>Help page</a>.') }}
         </p>
         <p>
-            The code of the Sketch Map Tool is released on GitHub (
+            {{ _('The code of the Sketch Map Tool is released on GitHub (
             <a href="https://github.com/GIScience/sketch-map-tool">
                 https://github.com/GIScience/sketch-map-tool
             </a>
-            ).</p>
+            ).') }}</p>
         <p>
-            If you would like to learn more about the idea behind the approach and development of
+            {{ _('If you would like to learn more about the idea behind the approach and development of
             the Sketch Map Tool, you can watch the video of the lightning talk
             “OpenStreetMap Sketch Map Tool - The Future of OpenStreetMap Field Papers” at GeOnG
-            2020.
+            2020.') }}
         </p>
         <p>
             <a href="https://www.youtube-nocookie.com/embed/Dmj41KRH-SA" target="_blank"><img
                     src="/static/assets/images/about/preview-GeOnG-LightningTalk_Klonner.webp"
-                    alt="Video preview image for Lightning Talk about Sketch Maps at GeOnG 2020"></a>
+                    alt="{{ _('Video preview image for Lightning Talk about Sketch Maps at GeOnG 2020') }}"></a>
         </p>
         <p>
-            Additionally, you can listen to<a
+            {{ _('Additionally, you can listen to<a
                 href="https://www.chaberlin.org/news/chatroom-7-mapping-in-der-humanitaeren-hilfe/">
             Episode 7 ,,Mapping in der Humanitären
             Hilfe”</a> of the
             Podcast CHAtroom (in German). In this Podcast of the CHA (Center for Humanitarian
             Action) Dr. Natascha Bing (GRC - German Red Cross) and Dr. Carolin Klonner (GIScience
             Heidelberg) discuss the role of maps in disaster management and the possibilities of
-            using the Sketch Map Tool in humanitarian organizations.
+            using the Sketch Map Tool in humanitarian organizations.') }}
         </p>
 
-        <h1>Related Publications</h1>
-        <p>The following scientific articles have been published about Sketch Maps and the Sketch
-            Map Tool:</p>
+        <h1>{{ _('Related Publications') }}</h1>
+        <p>{{ _('The following scientific articles have been published about Sketch Maps and the Sketch
+            Map Tool:') }}</p>
 
 
         {% for reference in literature %}
             <article>
                 {% if reference.img_src %}
-                    <img class="preview" src="{{ reference.img_src }}" alt="Article preview image">
+                    <img class="preview" src="{{ reference.img_src }}" alt="{{ _('Article preview image') }}">
                 {% else %}
                     <div class="no preview"></div>
                 {% endif %}
@@ -159,12 +154,12 @@
         <hr>
         <br><br>
         <div class="center-text">
-            <h4 id="contact" class="widget-title">Contact</h4>
+            <h4 id="contact" class="widget-title">{{ _('Contact') }}</h4>
             <p>
-                HeiGIT gGmbH<br>
+                {{ _('HeiGIT gGmbH<br>
                 Heidelberg, Germany<br>
                 Email: <a href="mailto:sketch-map-tool@heigit.org">sketch-map-tool@heigit.org</a><br>
-                Web: <a href="https://heigit.org" target="_blank">heigit.org</a><br><br>
+                Web: <a href="https://heigit.org" target="_blank">heigit.org</a>') }}<br><br>
             </p>
         </div>
     </main>

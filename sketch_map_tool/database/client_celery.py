@@ -6,6 +6,7 @@ from psycopg2.extensions import connection
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.exceptions import CustomFileNotFoundError
+from sketch_map_tool.helpers import N_
 
 db_conn: connection | None = None
 
@@ -59,7 +60,7 @@ def select_file(id_: int) -> bytes:
             return raw[0]
         else:
             raise CustomFileNotFoundError(
-                "There is no file in the database with the id: " + str(id_)
+                N_("There is no file in the database with the id: {ID}"), {"ID", id_}
             )
 
 

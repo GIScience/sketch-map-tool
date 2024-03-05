@@ -5,12 +5,13 @@ from uuid import UUID
 import fitz
 import pytest
 from celery.contrib.testing.tasks import ping  # noqa: F401
+from flask_babel import Babel
 from numpy.typing import NDArray
 from PIL import Image, ImageOps
 from testcontainers.postgres import PostgresContainer
 from testcontainers.redis import RedisContainer
 
-from sketch_map_tool import CELERY_CONFIG, make_flask, routes
+from sketch_map_tool import CELERY_CONFIG, get_locale, make_flask, routes
 from sketch_map_tool import celery_app as smt_celery_app
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.database import client_flask as db_client_flask
@@ -145,6 +146,9 @@ def flask_app():
     app.add_url_rule("/", view_func=routes.index, methods=["GET"])
     app.add_url_rule("/about", view_func=routes.about, methods=["GET"])
     app.add_url_rule("/help", view_func=routes.help, methods=["GET"])
+
+    Babel(app, locale_selector=get_locale)  # for translations
+
     yield app
 
 

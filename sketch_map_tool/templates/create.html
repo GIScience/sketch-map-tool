@@ -9,42 +9,41 @@
 {% endblock head %}
 
 {% block header_message %}
-    <div class="circle" style="display: inline-block";>1</div>Create paper maps to collect data
+    <div class="circle" style="display: inline-block";>1</div>{{ _('Create paper maps to collect data') }}
 {% endblock %}
 
 {% block body %}
     <div class="container-fluid horizontal step-arrows">
-        <div class="active">Define your Area of Interest</div>
-        <div>Map Quality Check</div>
-        <div>PDF Export of Sketch&nbsp;Map</div>
+        <div class="active">{{ _('Define your Area of Interest') }}</div>
+        <div>{{ _('Map Quality Check') }}</div>
+        <div>{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
     </div>
     <main class="container-fluid">
 
         <div id="main-grid" class="grid">
             <div id="left">
-                <div class="sketchy h1 center-text">Area of Interest</div>
+                <div class="sketchy h1 center-text">{{ _('Area of Interest') }}</div>
                 <div id="map"></div>
             </div>
 
             <div id="right">
-                <div class="sketchy h1 center-text">Page Setup</div>
+                <div class="sketchy h1 center-text">{{ _('Page Setup') }}</div>
                 <div id="message-container" class="" style="height: 11rem; overflow-y: scroll; padding: 1rem; ">
-                    <article id="zoom-info" class="infobox hidden">Your Area of Interest is too large!
-                        <br>Zoom further in to be able to create a Sketch Map.
+                    <article id="zoom-info" class="infobox hidden">{{ _('Your Area of Interest is too large!
+                        <br>Zoom further in to be able to create a Sketch Map.') }}
                     </article>
-                    <article id="antimeridian-info" class="infobox">You are currently trying to
+                    <article id="antimeridian-info" class="infobox">{{ _('You are currently trying to
                         request a map that crosses the +/-180° <a href="https://en.wikipedia.org/wiki/180th_meridian" target="_blank">antimeridian</a>. This is currently not
                         supported, please move the map such that your extent is either left or right of
-                        the antimeridian.
+                        the antimeridian.') }}
                     </article>
                 </div>
 
-
-                <form id="page-setup-form" action="/create/results" method="post">
-                    <label for="format">Paper Format</label>
+                <form id="page-setup-form" action="/{{ lang }}/create/results" method="post">
+                    <label for="format">{{ _('Paper Format') }}</label>
                     <select id="format" name="format"></select>
 
-                    <label for="orientation">Paper Orientation</label>
+                    <label for="orientation">{{ _('Paper Orientation') }}</label>
                     <select id="orientation" name="orientation"></select>
 
                     <input type="hidden" id="bbox" name="bbox" value="1,1,5,5">
@@ -53,7 +52,7 @@
                            value='{"width": 6055, "height": 8658}'>
                     <input type="hidden" id="scale" name="scale" value='11545.36'>
                     <input type="hidden" id="layer" name="layer" value="satellite">
-                    <button id="next-button" type="button">NEXT &rarr;</button>
+                    <button id="next-button" type="button">{{ _('NEXT') }} &rarr;</button>
                 </form>
             </div>
 

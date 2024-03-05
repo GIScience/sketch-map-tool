@@ -4,6 +4,7 @@ require("esbuild")
         entryPoints: [
             "./client-src/pico/pico.css",
             "./client-src/base/base.css",
+            "./client-src/base/base.js",
             "./client-src/index/index.css",
             "./client-src/help/index.css",
             "./client-src/help/index.js",

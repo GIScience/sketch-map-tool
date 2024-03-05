@@ -28,7 +28,10 @@ def test_digitize_result_get(client):
     """GET /digitize/results without UUID should redirect to /digitize"""
     resp = client.get("/digitize/results")
     redirect_path = "/digitize"
-    assert resp.status_code == 302 and resp.headers.get("Location") == redirect_path
+    assert (
+        resp.status_code == 302
+        and resp.headers.get("Location") == "/en" + redirect_path
+    )
 
 
 @pytest.mark.skip(reason="Mocking of chained/grouped tasks is too complex for now")
@@ -51,7 +54,10 @@ def test_digitize_result_post_no_files(client, mock_task):
     data = {}
     resp = client.post("/digitize/results", data=data)
     redirect_path = "/digitize"
-    assert resp.status_code == 302 and resp.headers.get("Location") == redirect_path
+    assert (
+        resp.status_code == 302
+        and resp.headers.get("Location") == "/en" + redirect_path
+    )
 
 
 def test_digitize_results_uuid(client):
