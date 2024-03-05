@@ -59,10 +59,10 @@ def _decode_data(data) -> MappingProxyType:
         version_nr = contents[0]
         uuid = contents[1]
         bbox = Bbox(
-            *[float(coordinate) for coordinate in contents[2:-1]]
+            *[float(coordinate) for coordinate in contents[2:6]]
         )  # Raises ValueError for non-float values
         try:
-            layer = getattr(Layer, (contents[7]))
+            layer = getattr(Layer, (contents[6]))
         except IndexError:
             # backward compatibility
             layer = getattr(Layer, "OSM")
