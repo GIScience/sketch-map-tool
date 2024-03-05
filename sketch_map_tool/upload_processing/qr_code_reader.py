@@ -46,7 +46,7 @@ def read(img: NDArray, depth=0) -> MappingProxyType:
                 raise QRCodeError(N_("The provided UUID is invalid."))
             return data
         case _:
-            raise QRCodeError("Multiple QR-Codes detected.")
+            raise QRCodeError(N_("Multiple QR-Codes detected."))
 
 
 def _decode_data(data) -> MappingProxyType:
