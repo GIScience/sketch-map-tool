@@ -12,6 +12,7 @@ from sketch_map_tool.exceptions import (
     CustomFileNotFoundError,
     UUIDNotFoundError,
 )
+from sketch_map_tool.helpers import N_
 
 
 def open_connection():
@@ -59,7 +60,9 @@ def _select_id_map(uuid) -> dict:
     if raw:
         return raw[0][0]
     else:
-        raise UUIDNotFoundError("There are no tasks in the broker for UUID: " + uuid)
+        raise UUIDNotFoundError(
+            N_("There are no tasks in the broker for UUID: {UUID}"), {"UUID": uuid}
+        )
 
 
 def get_async_result_id(request_uuid: str, request_type: REQUEST_TYPES) -> str:
@@ -69,9 +72,11 @@ def get_async_result_id(request_uuid: str, request_type: REQUEST_TYPES) -> str:
         return map_[request_type]  # AsyncResult ID
     except KeyError as error:
         raise UUIDNotFoundError(
-            "There are no tasks in the broker for UUID and request type: {}, {}".format(
-                request_uuid, request_type
-            )
+            N_(
+                "There are no tasks in the broker for UUID and request type:"
+                " {REQUEST_UUID}, {REQUEST_TYPE}"
+            ),
+            {"REQUEST_UUID": request_uuid, "REQUEST_TYPE": request_type},
         ) from error
 
 
@@ -111,7 +116,7 @@ def select_file(id_: int) -> bytes:
             return raw[0]
         else:
             raise CustomFileNotFoundError(
-                "There is no file in the database with the id: " + str(id_)
+                N_("There is no file in the database with the id: {ID}"), {"ID": id_}
             )
 
 
@@ -133,7 +138,7 @@ def select_file_name(id_: int) -> str:
             return raw[0]
         else:
             raise CustomFileNotFoundError(
-                "There is no file in the database with the id: " + str(id_)
+                N_("There is no file in the database with the id: {ID}"), {"ID": id_}
             )
 
 
@@ -146,18 +151,23 @@ def select_map_frame(uuid: UUID) -> bytes:
             curs.execute(query, [str(uuid)])
         except psycopg2.errors.UndefinedTable:
             raise CustomFileNotFoundError(
-                "In this Sketch Map Tool instance no sketch map "
-                "has been generated yet. You can only upload sketch"
-                " maps to the instance on which they have been created."
+                N_(
+                    "In this Sketch Map Tool instance no sketch map has been "
+                    "generated yet. You can only upload sketch "
+                    "maps to the instance on which they have been created."
+                )
             )
         raw = curs.fetchone()
         if raw:
             return raw[0]
         else:
             raise CustomFileNotFoundError(
-                f"There is no map frame in the database with the uuid: {uuid}."
-                f" You can only upload sketch maps to the "
-                "instance on which they have been created."
+                N_(
+                    "There is no map frame in the database with the uuid: {UUID}."
+                    " You can only upload sketch maps to the "
+                    "instance on which they have been created."
+                ),
+                {"UUID", uuid},
             )
 
 

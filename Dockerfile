@@ -37,6 +37,9 @@ COPY --chown=smt:smt data/ data/
 COPY --chown=smt:smt config/ config/
 RUN python -m poetry install --no-ansi --no-interaction
 
+# Compile translations
+RUN python -m poetry run pybabel compile -d sketch_map_tool/translations
+
 # get JS dependencies
 COPY --from=bundler --chown=smt:smt /sketch_map_tool/static/bundles sketch_map_tool/static/bundles
 

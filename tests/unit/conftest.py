@@ -24,16 +24,6 @@ def pytest_addoption(parser):
     )
 
 
-# TODO: remove if not used
-# @pytest.fixture()
-# def db_conn_flask():
-#     # setup
-#     db_client_flask.open_connection()
-#     yield None
-#     # teardown
-#     db_client_flask.close_connection()
-
-
 @pytest.fixture
 def bbox():
     return Bbox(

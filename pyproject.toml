@@ -32,6 +32,7 @@ pyzbar = "^0.1.9"
 shapelysmooth = "^0.1.1"
 torch = "^2.1.2"
 torchvision = "^0.16.2"
+flask-babel = "^4.0.0"
 my-ultralytics-4bands = {git = "https://github.com/itisacloud/ultralytics_multiband_support.git"}
 
 [tool.poetry.group.dev.dependencies]

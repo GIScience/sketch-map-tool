@@ -9,6 +9,7 @@ from numpy.typing import NDArray
 from pyzbar import pyzbar
 
 from sketch_map_tool.exceptions import QRCodeError
+from sketch_map_tool.helpers import N_
 from sketch_map_tool.models import Bbox, Layer
 from sketch_map_tool.validators import validate_uuid
 
@@ -33,7 +34,7 @@ def read(img: NDArray, depth=0) -> MappingProxyType:
                 # Try again with down scaled image
                 return read(_resize(img), depth=depth + 1)
             else:
-                raise QRCodeError("QR-Code could not be detected.")
+                raise QRCodeError(N_("QR-Code could not be detected."))
         case 1:
             try:
                 data = _decode_data(decoded_objects[0].data.decode())
@@ -42,10 +43,10 @@ def read(img: NDArray, depth=0) -> MappingProxyType:
             try:
                 validate_uuid(data["uuid"])
             except ValueError:
-                raise QRCodeError("The provided UUID is invalid.")
+                raise QRCodeError(N_("The provided UUID is invalid."))
             return data
         case _:
-            raise QRCodeError("Multiple QR-Codes detected.")
+            raise QRCodeError(N_("Multiple QR-Codes detected."))
 
 
 def _decode_data(data) -> MappingProxyType:
@@ -55,7 +56,7 @@ def _decode_data(data) -> MappingProxyType:
             # Legacy support (before satellite imagery feature)
             contents.append(Layer("osm"))
         if not len(contents) == 7:  # version nr, uuid, bbox coordinates and layer
-            raise ValueError("Unexpected length of QR-code contents.")
+            raise ValueError(N_("Unexpected length of QR-code contents."))
         version_nr = contents[0]
         uuid = contents[1]
         bbox = Bbox(
@@ -67,7 +68,7 @@ def _decode_data(data) -> MappingProxyType:
             # backward compatibility
             layer = getattr(Layer, "OSM")
     except ValueError as error:
-        raise QRCodeError("QR-Code does not have expected content.") from error
+        raise QRCodeError(N_("QR-Code does not have expected content.")) from error
     return MappingProxyType(
         {
             "uuid": uuid,
@@ -88,7 +89,7 @@ def _decode_data_legacy(data) -> MappingProxyType:
         )  # Raises ValueError for non-float values
         layer = Layer("osm")
     except ValueError as error:
-        raise QRCodeError("QR-Code does not have expected content.") from error
+        raise QRCodeError(N_("QR-Code does not have expected content.")) from error
     return MappingProxyType(
         {
             "uuid": uuid,
