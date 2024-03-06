@@ -138,9 +138,7 @@ def apply_yolo_classification(
     for b in bounding_boxes:
         x_min, y_min, x_max, y_max = [int(i) for i in b[:4]]
         cropped_image = img[y_min:y_max, x_min:x_max]
-        res = yolo(
-            Image.fromarray(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
-        )
+        res = yolo(Image.fromarray(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB)))
         # get names from the model and label append to the list
         labels.append(res[0].probs.top1)
     return labels

@@ -48,7 +48,7 @@ locust = "^2.14.2"
 testcontainers-postgres = "^0.0.1rc1"
 testcontainers-redis = "^0.0.1rc1"
 hypothesis = "^6.88.4"
-ruff = "^0.1.7"
+ruff = "^0.1.15"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

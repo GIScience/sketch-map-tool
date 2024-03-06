@@ -15,7 +15,7 @@ from tests import vcr_app as vcr
         get_config_value("neptune_model_id_yolo_osm_obj"),
         get_config_value("neptune_model_id_yolo_esri_obj"),
         get_config_value("neptune_model_id_sam"),
-    )
+    ),
 )
 def test_init_model(id, monkeypatch, tmpdir):
     monkeypatch.setenv("SMT-DATA-DIR", tmpdir)
