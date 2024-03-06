@@ -121,7 +121,7 @@ def digitize_sketches(
     file_names: list[str],
     uuids: list[str],
     map_frames: dict[str, NDArray],
-    layer_types: list[str],
+    layers: list[str],
     bboxes: list[Bbox],
 ) -> AsyncResult | FeatureCollection:
     # Initialize ml-models. This has to happen inside of celery context.
@@ -129,28 +129,6 @@ def digitize_sketches(
     # Prevent usage of CUDA while transforming Tensor objects to numpy arrays
     # during marking detection
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
-    # Custom trained model for object detection of markings and colors
-    if "osm" in layer_types:
-        yolo_path_osm = init_model(get_config_value("neptune_model_id_yolo_osm_obj"))
-        yolo_model_osm_obj: YOLO_4 = YOLO_4(yolo_path_osm)
-
-        yolo_path_osm_cls = init_model(
-            get_config_value("neptune_model_id_yolo_osm_cls")
-        )
-        yolo_model_osm_cls: YOLO = YOLO(yolo_path_osm_cls)
-
-    if "esri-world-imagery" in layer_types:
-        yolo_path_esri = init_model(get_config_value("neptune_model_id_yolo_esri_obj"))
-        yolo_model_esri_obj: YOLO_4 = YOLO_4(yolo_path_esri)
-
-        yolo_path_esri_cls = init_model(
-            get_config_value("neptune_model_id_yolo_esri_cls")
-        )
-        yolo_model_esri_cls: YOLO = YOLO(yolo_path_esri_cls)
-
-    if "osm" not in layer_types and "esri-world-imagery" not in layer_types:
-        raise ValueError("Unexpected layer type, only OSM and ESRI are supported")
-
     # Zero shot segment anything model for automatic mask generation
     sam_path = init_model(get_config_value("neptune_model_id_sam"))
     sam_model = sam_model_registry[get_config_value("model_type_sam")](sam_path)
@@ -158,26 +136,35 @@ def digitize_sketches(
 
     l = []  # noqa: E741
     for file_id, file_name, uuid, bbox, layer in zip(
-        file_ids, file_names, uuids, bboxes, layer_types
+        file_ids, file_names, uuids, bboxes, layers
     ):
         # r = interim result
         r: BytesIO = db_client_celery.select_file(file_id)  # type: ignore
         r: NDArray = to_array(r)  # type: ignore
         r: NDArray = clip(r, map_frames[uuid])  # type: ignore
+        # Initialize ml-models. This has to happen inside of celery context.
+        #
+        # Custom trained model for object detection (obj) and classification (cls)
+        # of markings and colors.
         if layer == "osm":
-            yolo_model_obj: YOLO_4 = yolo_model_osm_obj
-            yolo_model_cls: YOLO = yolo_model_osm_cls
+            path = init_model(get_config_value("neptune_model_id_yolo_osm_obj"))
+            yolo_obj: YOLO_4 = YOLO_4(path)  # yolo object detection
+            path = init_model(get_config_value("neptune_model_id_yolo_osm_cls"))
+            yolo_cls: YOLO = YOLO(path)  # yolo classification
         elif layer == "esri-world-imagery":
-            yolo_model_obj: YOLO_4 = yolo_model_esri_obj
-            yolo_model_cls: YOLO = yolo_model_esri_cls
+            path = init_model(get_config_value("neptune_model_id_yolo_esri_obj"))
+            yolo_obj: YOLO_4 = YOLO_4(path)
+            path = init_model(get_config_value("neptune_model_id_yolo_esri_cls"))
+            yolo_cls: YOLO = YOLO(path)
         else:
-            raise ValueError(
-                f"Unexpected layer type '{layer}' only "
-                f"OSM and ESRI World Imagery are supported. "
-            )
+            raise ValueError("Unexpected layer: " + layer)
 
         r: NDArray = detect_markings(
-            r, map_frames[uuid], yolo_model_obj, yolo_model_cls, sam_predictor
+            r,
+            map_frames[uuid],
+            yolo_obj,
+            yolo_cls,
+            sam_predictor,
         )  # type: ignore
         # m = marking
         for m in r:

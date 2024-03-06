@@ -33,7 +33,7 @@ def load_config_default() -> Dict[str, str | int | float]:
         "neptune_api_token": "",
         "neptune_model_id_yolo_osm_cls": "SMT-CLR-1",
         "neptune_model_id_yolo_esri_cls": "SMT-CLR-3",
-        "neptune_model_id_yolo_osm_obj": "SMT-OSM-1",
+        "neptune_model_id_yolo_osm_obj": "SMT-OSM-6",
         "neptune_model_id_yolo_esri_obj": "SMT-ESRI-1",
         "neptune_model_id_sam": "SMT-SAM-1",
         "model_type_sam": "vit_b",
@@ -66,14 +66,6 @@ def load_config_from_env() -> Dict[str, str]:
         "max_pixel_per_image": os.getenv("SMT_MAX_PIXEL_PER_IMAGE"),
         "neptune_project": os.getenv("SMT_NEPTUNE_PROJECT"),
         "neptune_api_token": os.getenv("SMT_NEPTUNE_API_TOKEN"),
-        "neptune_model_id_yolo_osm_obj": os.getenv("SMT_NEPTUNE_MODEL_ID_YOLO_OSM_OBJ"),
-        "neptune_model_id_yolo_esri_obj": os.getenv(
-            "SMT_NEPTUNE_MODEL_ID_YOLO_ESRI_OBJ"
-        ),
-        "neptune_model_id_yolo_osm_cls": os.getenv("SMT_NEPTUNE_MODEL_ID_YOLO_OSM_CLS"),
-        "neptune_model_id_yolo_esri_cls": os.getenv(
-            "SMT_NEPTUNE_MODEL_ID_YOLO_ESRI_CLS"
-        ),
         "neptune_model_id_sam": os.getenv("SMT_NEPTUNE_MODEL_ID_SAM"),
         "model_type_sam": os.getenv("SMT_MODEL_TYPE_SAM"),
         "esri-api-key": os.getenv("SMT_ESRI_API_KEY"),

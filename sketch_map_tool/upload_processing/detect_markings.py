@@ -107,7 +107,7 @@ def apply_ml_pipeline(
 def apply_yolo_object_detection(
     image: Image.Image,
     difference: Image.Image,
-    yolo_model: YOLO_4,
+    yolo: YOLO_4,
 ) -> tuple[NDArray, NDArray]:
     """Apply fine-tuned YOLO object detection on an image.
 
@@ -116,7 +116,7 @@ def apply_yolo_object_detection(
         class labels (colors).
     """
     image = Image.merge("RGBA", (*image.split(), difference))
-    result = yolo_model.predict(image)[0].boxes  # TODO set conf parameter
+    result = yolo.predict(image)[0].boxes  # TODO set conf parameter
     bounding_boxes = result.xyxy.numpy()
     class_labels = result.cls.numpy()
     return bounding_boxes, class_labels
@@ -125,7 +125,7 @@ def apply_yolo_object_detection(
 def apply_yolo_classification(
     image: Image.Image,
     bounding_boxes: NDArray,
-    yolo_model_cls: YOLO,
+    yolo: YOLO,
 ) -> list:
     """Apply fine-tuned YOLO image classification on a bounding box level image
     to detect marking characteristics
@@ -138,7 +138,7 @@ def apply_yolo_classification(
     for b in bounding_boxes:
         x_min, y_min, x_max, y_max = [int(i) for i in b[:4]]
         cropped_image = img[y_min:y_max, x_min:x_max]
-        res = yolo_model_cls(
+        res = yolo(
             Image.fromarray(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
         )
         # get names from the model and label append to the list
