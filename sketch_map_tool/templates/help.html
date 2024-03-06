@@ -186,47 +186,107 @@
         </details>
         <details>
             <summary id="data-collection"><strong class="sketchy" style="color: var(--heigit-red)">{{ _('THEN:') }} </strong>
-                &nbsp;{{ _('Data collection in the field') }}
+                &nbsp;{{ _('<strong>Data collection in the field</strong>') }}
             </summary>
             <article>
                 <p>
-                    {{ _('At the moment the Sketch Map Tool detects red, blue, green, yellow, turquoise
-                    and pink markings. Red and blue markings work best in most cases. The detection
-                    works best if the marked areas are filled out entirely.<br>
-                    Please make sure not to accidentally mark the globes on the edge as they are
-                    needed to improve the automatic map detection.') }}
+                    {{ _('The Sketch mapping with pens and the printed map is the key part of the Sketch Map Method. How you mark the maps influences your results and what can be detected. 
+                    Here you can find here some recommendations for your data collection.') }}
                 </p>
-                <h6><em>{{ _('Recommendations:') }}</em></h6>
-                <ul>
-                    <li>
-                        {{ _('Use thick felt-tip pens with intense colours.') }}
-                    </li>
-                    <li>
-                        {{ _('If you have many participants or you want participants to provide a lot of
-                        different information, it is recommended to use individual Sketch Maps for
-                        each purpose/topic or per participant.') }}
-                    </li>
-                    <li>
-                        {{ _('Prepare the same set of pens for all participants/groups for better
-                        comparison of the results.') }}
-                    </li>
-                    <li>
-                        {{ _('Inform all participants that markings should be filled out entirely and
-                        should not cover the globes on the edge of the maps.') }}
-                    </li>
-                    <li>
-                        {{ _('If different colours are used for specific topics it is possible to let
-                        participants include a legend for the meaning of each colour outside the
-                        map extent. However, the tool currently does not use this information.
-                        This needs to be done manually in the subsequent analysis process in
-                        your Geographic Information System software.') }}
-                    </li>
-                    <li>
-                        {{ _('If you collect additional information from the participants with other data
-                        collection methods such as Kobo Collect or ODK, add a number on the Sketch
-                        Map and save this number in the data collection questionnaire.') }}
-                    </li>
-                </ul>
+                <p>
+                    {{ _('Example of marked map:') }}
+                    <!-- figure to be inserted here-->
+                </p>
+                <ol>
+                    <li>{{ _('<strong>Tips to improve color detection</strong>') }}</li>
+                    <p>
+                        {{ _('The latest version of the Sketch Map Tool leverages advanced Deep Learning models trained to analyze images of Sketch Maps and identify marked objects within them. 
+                        Through supervised learning on extensive datasets of labeled images, these models acquire the ability to distinguish markings from the background of Sketch Maps by analyzing patterns and features. 
+                        This enables them to accurately detect and differentiate markings. This predictive capability allows the models to generalize their understanding and accurately identify markings in new and unseen Sketch Maps. 
+                        The Sketch Map Tool also incorporates conventional Computer Vision techniques to precisely position the Sketch Map within real-world coordinates. 
+                        Georeferencing images entails detecting and matching specific points, such as the sketch map's globes, between the reference and current input image, 
+                        enabling precise spatial alignment. Our current algorithm detects all markings, whether they are intended as a line, a point or a polygon as a polygon. ') }}
+                    </p>
+                    <p>
+                        {{ _('Please make sure not to accidentally mark the globes on the edge as they are used for georeferencing purposes in order to ensure the automatic map detection.') }}
+                    </p>
+                    <p>
+                        {{ _('At the moment the Sketch Map Tool detects red, blue, green and black markings best, orange and yellow also work quite well. 
+                        If different colors are used for specific topics, participants can include a legend for the meaning of each color outside the map extent. 
+                        However, the tool does not support the identification of the written information or the matching of meanings to specific colors. 
+                        This needs to be done manually in the subsequent analysis process in your Geographic Information System software. 
+                        The GeoTiff can be used to manually match the geodata layer files to the legend information.') }}
+                    </p>
+
+
+                    <li>{{ _('<strong>Tips for better comparability and interpretation of the maps</strong>') }}</li>
+                    <p>
+                        {{ _('<strong>Map Orientation</strong>') }}
+                    </p>
+                    <p>
+                        {{ _('Orientating on a map can be challenging, depending on the base map, the background of the participants, and their map literacy. 
+                        Mapping in groups can make orientation much easier, as participants can assist each other in reading the map. Before you start with the mapping, we recommend:') }}
+
+                    </p>
+                    <p>
+
+                        <ul>
+                            <li>
+                                {{ _('Start by identifying a common place or points of reference.') }}
+                            </li>
+                            <li>
+                                {{ _('Try to locate the current position or the participant's point of residence on the map.') }}
+                            </li>    
+                        </ul>
+                    </p>
+                    <p>
+                        {{ _('If you like to learn more about the challenges of map orientation and how to choose a good base map, take a look at 
+                        <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex1_.html" target="_blank">Training Exercise 2</a>. In 
+                        <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex3_.html" target="_blank">Training Exercise 3</a>,you can try mapping in groups in a role play.') }}
+                    </p>
+                    <p>
+                        {{ _('<strong>Develop a mapping strategy</strong>') }}
+                    </p>
+                    <p>
+                        {{ _('Prepare a clear data collection and analysis strategy beforehand. 
+                        A consistent drawing/marking approach in different groups or by different people makes the comparison and analysis process easier since the data was collected in a similar way, 
+                        and you know what it means. For this, you should discuss and agree beforehand:') }}
+                    </p>
+                    <ul>
+                        <li>
+                            {{ _('What do you want to map?') }}
+                        </li>
+                        <li>
+                            {{ _('Which colors should be used? For example, with blue, we map the area with the highest flood risk, and with red, we map safe places.') }}
+                        </li>
+                    </ul>
+                    <p>
+                        {{ _('You should test your mapping strategy beforehand: Print out a map, draw some test objects with the pens you are planning to use. 
+                        Upload the map and check if the result is satisfactory.You can practice the development of a mapping strategy in 
+                        <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex3_.html" target="_blank">Training Exercise 3</a>.') }}
+                    </p>
+                    <p>
+                        {{ _('<strong>Organize your maps</strong>') }}
+                    </p>
+                    <ul>
+                        <li>
+                            {{ _('Put a title on your map and add information about the participants, place and time to analyze the maps afterwards. 
+                            Be careful; everything you write/draw on the map could be detected as a marked area (polygon), so use the white space outside the map extent.') }}
+                        </li>
+                        <li>
+                            {{ _('If you collect additional information from the participants with other data collection methods such as <a href="https://www.kobotoolbox.org/" target="_blank">Kobo Collect</a> or 
+                            <a href="https://getodk.org/" target="_blank">ODK</a>, add a number on the Sketch Map and save this number in the data collection questionnaire.') }}
+                        </li>
+                        <li>
+                            {{ _('If you have many participants or you want participants to provide a lot of different information, 
+                            it is recommended to use individual Sketch Maps for each purpose/topic or per participant.') }}
+                        </li>
+                    </ul>
+
+                    
+                </ol>
+                
+                
             </article>
         </details>
         <details>
@@ -362,157 +422,121 @@
         <details>
             <summary>{{ _('What are OSM data?') }}</summary>
             <article>
-                {{ _('OpenStreetMap data are freely accessible geodata. You can find out more about it <a
-                    href="https://wiki.osm.org" target="_blank">here</a>.') }}
+                {{ _('OpenStreetMap data is freely accessible geodata. You can find out more about it <a
+                    href="https://www.openstreetmap.org/" target="_blank">here</a>.') }}
             </article>
         </details>
         <details>
             <summary>{{ _('What are the quality levels for OSM data used in the tool?') }}</summary>
             <article>
-                {{ _('The OSM data are classified with a traffic light system. Green stands for good
-                suitability of the data, yellow for possible problems when carrying out a Sketch
-                Maps
-                study with OSM based Sketch Maps, and red for probable problems. Recommendations
-                are
-                also given on what to consider based on the results.') }}
+                {{ _('The OSM data is classified with a traffic light system. Green stands for good suitability of the data, yellow for possible problems when carrying out a 
+                Sketch Map study with OSM-based Sketch Maps, and red for probable problems. 
+                Recommendations are also given on what to consider based on the results.) }}
             </article>
         </details>
         <details>
             <summary>{{ _('Which analyses are performed and why?') }}</summary>
             <article>
-                {{ _('You can read more about the analyses included in the Sketch Map Tool in <a
-                    href="https://doi.org/10.3390/ijgi10030130" target="_blank">this
+                {{ _('You can read more about the analyses included in the Sketch Map Tool <a
+                    href="https://www.mdpi.com/2220-9964/10/3/130" target="_blank">this
                 paper</a>.') }}
             </article>
         </details>
         <details>
-            <summary>{{ _('Why is it important to analyse the suitability of OSM data before creating a
-                Sketch Map?') }}
+            <summary>{{ _('Why is it important to analyze the suitability of OSM data before creating a Sketch Map') }}
             </summary>
             <article>
-                {{ _('OSM data are used for the creation of the Sketch Maps. If the OSM data in a study
-                area
-                are lacking some important features, they are missing on the maps as well. Thus, the
-                quality of the OSM data is directly related to the quality of the Sketch Maps. The
-                features might be relevant for participants to orientate on the map.') }}
+                {{ _('OSM data is used for the creation of the Sketch Map. If the OSM data in a study area lack some important features, they are missing on the maps as well. 
+                Thus, the quality of the OSM data is directly related to the quality of the Sketch Maps. 
+                The features might be relevant for participants to orientate on the map.') }}
             </article>
         </details>
         <details>
             <summary>{{ _('For which research questions can the Sketch Map Tool be used?') }}</summary>
             <article>
-                {{ _('The Sketch Map Tool has been primarily developed for research questions related to
-                floodings. But as the quality indicators used like the density of landmarks,
-                currentness of the data and data completeness are also important
-                in other use cases, you can also use it to investigate a completely different
-                research question, as long as you check that it fits your purpose.') }}
+                {{ _('The Sketch Map Tool has been primarily developed for research questions related to floodings. 
+                Since then, it has been used world wide for a variety of topics like vulnerability and capacity mapping or risk mapping in general. 
+                You can use the Sketch Maps and the Map Quality Check to investigate all kinds of research questions, as long as you check that it fits your purpose.') }}
             </article>
         </details>
         <details>
             <summary>{{ _('How does mapping work with the Sketch Map Tool?') }}</summary>
             <article>
-                {{ _('The local population can for example draw flooded areas such as streets, parks, etc.
-                on the printed Sketch Maps. The larger paper formats also allow to hold group
-                discussions about flooded areas. The maps with the markings can be photographed and
-                uploaded to the tool. The georeferenced TIFF and vector files can then be further
-                analysed or used.') }}
+                {{ _('The local population can, for example, draw flooded areas such as streets, parks, etc., on the printed Sketch Map. 
+                The larger paper formats also allow to hold group discussions about flooded areas. The maps with the markings can be photographed and uploaded to the tool. 
+                The georeferenced TIFF and shape files can then be further analyzed or used.') }}
             </article>
         </details>
         <details>
             <summary>{{ _('How large can my study area be?') }}</summary>
             <article>
-                {{ _('So far the Sketch Map Tool has only been tested on neighbourhood or city level.
-                The max. size of the study area is limited by the selection tool.') }}
+                {{ _('So far the Sketch Map Tool has only been tested on neighborhood or city level. The tool works best for study areas which are smaller than 50km².') }}
             </article>
         </details>
         <details>
             <summary>{{ _('Why are there a QR code and globes on the Sketch Maps?') }}</summary>
             <article>
-                {{ _('The QR code is required for georeferencing. The globes support the detection of the
-                map in your uploaded images. This is why it is important to have them on the Sketch
-                Maps.') }}
+                {{ _('These are required for georeferencing. This is why it is important to have them on the Sketch Maps.') }}
             </article>
         </details>
         <details>
-            <summary>{{ _('Can I access my results at a later point of time?') }}</summary>
+            <summary>{{ _('Can I access my results at a later point in time?') }}</summary>
             <article>
-                {{ _('No, the results should always be downloaded directly after using the tool. If you
-                forgot to download the files, you can simply upload and process the files again.') }}
+                {{ _('No, the results should always be downloaded directly after using the tool. If you forgot to download the files, you can simply upload and process the files again.') }}
             </article>
         </details>
         <details>
             <summary>{{ _('What do I have to pay attention to in the field?') }}</summary>
             <article>
-                {{ _('Please make sure you do not accidentally mark the globes at the edge as they are
-                needed to improve the automatic map detection. But if someone accidentally marked
-                the globes, it is still possible to upload the Sketch Maps. Use thicker felt tip
-                pens with intense colours. Red and blue markings are best detected in most cases.
-                Prepare the same set of pens for all interviewers. Add a number on the Sketch Maps
-                and save this number in the questionnaire as well, if you use one. An overview of
-                each step with recommendations can be found <a href="#step-by-step">here</a>.') }}
+                {{ _('Please make sure not to accidentally mark the globes at the edge as they are needed to improve the automatic map detection. 
+                But if someone accidentally marked the globes, it might still be possible to upload the Sketch Maps. Try the automatic detection of the map boundaries. 
+                Use thicker felt-tip pens with intense colors; red, blue, and black work best. Prepare the same set of pens for all interviewers. 
+                Add a number on the Sketch Map and save this number in the questionnaire as well, if you use one. 
+                An overview of each step with recommendations can be found <a href="https://sketch-map-tool.heigit.org/tool/help/PDF">here</a>.') }}
             </article>
         </details>
         <details>
             <summary>{{ _('How does the georeferencing work?') }}</summary>
             <article>
-                {{ _('You can find your answer in the
-                <a href="https://doi.org/10.3390/ijgi10030130"
-                   target="_blank">paper about the Sketch Map Tool
-                </a> in the paragraph about "Image Processing".') }}
+                
+                {{ _('You can find your answer in the <a href="https://www.mdpi.com/2220-9964/10/3/130" target="_blank">paper about the Sketch Map Tool</a> in the paragraph about 'Image Processing'.') }}
             </article>
         </details>
         <details>
-            <summary>{{ _('What do I have to consider when photographing the Sketch Maps to get the best
-                possible results?') }}
+            <summary>{{ _('How can I ensure optimal results when photographing the Sketch Maps?') }}
             </summary>
             <article>
-                {{ _('The images need to be in .jpg or .png format. All files together may not be larger
-                than 500&nbsp;MB.
-                The georeferencing works best if you scan the marked Sketch Maps with a resolution
-                of
-                300 dpi. The photos must be taken from above in a 180-degree angle (parallel above
-                the Sketch Maps) to produce the best result.
-                An overview of
-                each step with recommendations can be found <a href="#step-by-step">here</a>.') }}
+                {{ _('The images need to be in JPG or PNG format. The file may not be larger than 500&nbsp; MB. Georeferencing works best if you scan the marked Sketch Map with a resolution of 300 dpi. 
+                The photos must be taken from above at a 180 degree angle (parallel above the Sketch Map) to produce the best result. 
+                An overview of each step with recommendations can be found <a href="https://sketch-map-tool.heigit.org/tool/help/PDF">here</a>.') }}
             </article>
+            
         </details>
         <details>
-            <summary>{{ _('How do I check if the georeferencing is correct?') }}</summary>
+            <summary>{{ _('How do I check if georeferencing is correct?') }}</summary>
             <article>
-                {{ _('You can open the TIFF file in a geographic information system (GIS), such as ArcGIS
-                or QGIS, to check this. If you load the file there and insert a basemap (for example
-                the OSM basemap) you can see if the georeferencing has worked. The Sketch Maps
-                should
-                match the base map.') }}
+                {{ _('You can open the TIFF file in a geographic information system (GIS), such as ArcGIS or QGIS, to check this. 
+                If you upload the file there and insert a basemap (for example the OSM basemap), you can see if georeferencing has worked. The Sketch Map should match the base map.') }}
             </article>
         </details>
 
         <details>
             <summary>{{ _('Why does my generated TIFF file look strange?') }}</summary>
             <article>
-                {{ _('Please first try to open the file in a geographic information system (GIS) such as
-                ArcGIS or QGIS. The georeferencing may have worked even if the TIFF file does not
-                look right. If it is still incorrect in the GIS, the map could not be properly
-                detected by the tool on the photo for which there are various possible reasons. For
-                example, the photo may have been taken from the wrong angle or the globes may have
-                been painted over.') }}
+                {{ _('Please first try to open the file in a geographic information system (GIS) such as ArcGIS or QGIS. 
+                The georeferencing may have worked even if the TIFF file does not look right. If it still appears incorrect in the GIS, 
+                the map might not have been properly detected by the tool in the photo, and there could be various possible reasons. 
+                For example, the photo may have been taken from the wrong angle or the globes may have been painted over.') }}
             </article>
         </details>
 
         <details>
-            <summary>{{ _('How can I see / analyse results for one colour or uploaded sketch map only?') }}</summary>
+            <summary>{{ _('What can I do if the satellite map I printed is too dark?') }}</summary>
             <article>
-                {{ _('You can filter by the attributes <code>color</code> or <code>name</code>. How this is done in QGIS, is
-                explained in
-                <a href="https://github.com/GIScience/sketch-map-tool/tree/main/docs/how-to/filter-results-in-qgis.md">
-                    this guide</a>.') }}
+                {{ _('In case you use a satellite imagery background, please review the color saturation of your image. 
+                If the background is too dark, you might consider to choose OSM as base map.') }}
             </article>
         </details>
-
-        <h1 id="additional-information">{{ _('Additional Information') }}</h1>
-        <p>
-            {{ _('In this section, we will shortly provide more details about how the Sketch Map Tool can
-            be combined with additional data collection methods. Stay tuned!') }}
-        </p>
 
 
     </main>
