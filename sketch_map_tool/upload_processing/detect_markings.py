@@ -15,16 +15,12 @@ def detect_markings(
     yolo_model_cls: YOLO,
     sam_predictor: SamPredictor,
 ) -> list[NDArray]:
-    """
-    This function applies a machine learning pipeline to detect markings on a sketch map
-    and a postprocessing of the binary masks.
-
+    """Run machine learning pipeline and post-processing to detect markings.
 
     The pipeline consists of the following steps:
-    1. Apply the machine learning pipeline to the sketch
-    map.
-    2. Update color indexes since 0 represents the background.
-    3. Apply post-processing to the results.
+    1. Apply the machine learning pipeline to given sketch map
+    2. Update color indexes since 0 represents the background
+    3. Apply post-processing to the results
 
     Parameters:
     image (NDArray): The image of the clipped scan of the sketch map.
@@ -38,10 +34,14 @@ def detect_markings(
     """
     # SAM can only deal with RGB and not RGBA etc.
     img = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-    dif = get_diffrence(image, mapframe)
+    dif = get_diffrence(img, mapframe)
     # masks represent markings
     masks, bboxes, colors = apply_ml_pipeline(
-        img, dif, yolo_model_obj, yolo_model_cls, sam_predictor
+        img,
+        dif,
+        yolo_model_obj,
+        yolo_model_cls,
+        sam_predictor,
     )
     colors = [int(c) + 1 for c in colors]  # +1 because 0 is background
     processed_markings = post_process(masks, bboxes, colors)
@@ -49,17 +49,18 @@ def detect_markings(
 
 
 def get_diffrence(
-    markings: NDArray, mapframe: NDArray, threshold_img_diff: int = 0
-) -> NDArray:
-    """
-    build grayscael image of the absoulute diff between the markings and the mapframe
+    sketch_map_frame: Image.Image,
+    map_frame: NDArray,
+    threshold_img_diff: int = 0,
+) -> Image.Image:
+    """Difference image between original map frame and sketch map frame.
 
-    param: markings Image of the clipped scan of the sketch map
-    param: mapframe Image with the original base layer
-    param: experimental filtering of the markings based on amplitude of the diffrence
+    Build grayscale image of the absolute difference between map frame and the sketch map frame with markings on it.
+
+    The `threshold_img_diff` parameter is an experimental filtering of the markings based on amplitude of the difference.
     """
-    markings = _enhance_contrast(markings)
-    img_diff = cv2.absdiff(mapframe, markings)
+    img = enhance_contrast(sketch_map_frame)
+    img_diff = cv2.absdiff(map_frame, img)
     img_diff_gray = cv2.cvtColor(img_diff, cv2.COLOR_BGR2GRAY)
     mask_markings = img_diff_gray > threshold_img_diff
     img_diff_gray = img_diff_gray * mask_markings
@@ -67,16 +68,9 @@ def get_diffrence(
     return img_diff_gray
 
 
-def _enhance_contrast(img: NDArray, factor: float = 2.0) -> NDArray:
-    """
-    Enhance the contrast of a given image
-
-    :param img: Image of which the contrast should be enhanced.
-    :param factor: Factor for the contrast enhancement.
-    :return: Image with enhanced contrast.
-    """
-    input_img = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-    result = ImageEnhance.Contrast(input_img).enhance(factor)
+def enhance_contrast(img: Image.Image, factor: float = 2.0) -> NDArray:
+    """Enhance the contrast of a given image."""
+    result = ImageEnhance.Contrast(img).enhance(factor)
     return cv2.cvtColor(np.array(result), cv2.COLOR_RGB2BGR)
 
 
@@ -109,7 +103,7 @@ def apply_ml_pipeline(
 
 def apply_yolo_obj(
     image: Image.Image,
-    diffrence: Image.Image,
+    difference: Image.Image,
     yolo_model: YOLO_4,
 ) -> tuple[NDArray, NDArray]:
     """Apply fine-tuned YOLO object detection on an image.
@@ -118,7 +112,7 @@ def apply_yolo_obj(
         tuple: Detected bounding boxes around individual markings and corresponding
         class labels (colors).
     """
-    image = Image.merge("RGBA", (*image.split(), diffrence))
+    image = Image.merge("RGBA", (*image.split(), difference))
     result = yolo_model.predict(image)[0].boxes  # TODO set conf parameter
     bounding_boxes = result.xyxy.numpy()
     class_labels = result.cls.numpy()
@@ -126,7 +120,9 @@ def apply_yolo_obj(
 
 
 def apply_yolo_cls(
-    image: Image, bounding_boxes: NDArray, yolo_model_cls: YOLO
+    image: Image,
+    bounding_boxes: NDArray,
+    yolo_model_cls: YOLO,
 ) -> NDArray:
     """
     Apply fine-tuned YOLO image classification on a bounding box level image
