@@ -134,19 +134,18 @@ def digitize_results_post(lang="en") -> Response:
     ]
     uuids = [args_["uuid"] for args_ in args]
     bboxes = [args_["bbox"] for args_ in args]
-    layer_types = [args_["layer"] for args_ in args]
-
+    layers = [args_["layer"] for args_ in args]
     map_frames = dict()
     for uuid in set(uuids):  # Only retrieve map_frame once per uuid to save memory
         map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
         map_frames[uuid] = to_array(map_frame_buffer.read())
     result_id_1 = (
-        georeference_sketch_maps.s(ids, file_names, uuids, map_frames, bboxes)
+        georeference_sketch_maps.s(ids, file_names, uuids, map_frames, bboxes, layers)
         .apply_async()
         .id
     )
     result_id_2 = (
-        digitize_sketches.s(ids, file_names, uuids, map_frames, layer_types, bboxes)
+        digitize_sketches.s(ids, file_names, uuids, map_frames, layers, bboxes)
         .apply_async()
         .id
     )

@@ -14,6 +14,7 @@ from ultralytics_4bands import YOLO as YOLO_4
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool import get_config_value, map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
+from sketch_map_tool.definitions import get_attribution
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
@@ -93,15 +94,28 @@ def georeference_sketch_maps(
     uuids: list[str],
     map_frames: dict[str, NDArray],
     bboxes: list[Bbox],
+    layers: list[Layer],
 ) -> AsyncResult | BytesIO:
-    def process(sketch_map_id: int, uuid: str, bbox: Bbox) -> BytesIO:
-        """Process a Sketch Map."""
+    def process(
+        sketch_map_id: int,
+        uuid: str,
+        bbox: Bbox,
+    ) -> BytesIO:
+        """Process a Sketch Map and its attribution."""
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
         r = clip(r, map_frames[uuid])
         r = georeference(r, bbox)
         return r
+
+    def get_attribution_file(layers: list[Layer]) -> BytesIO:
+        attributions = []
+        for index, layer in enumerate(layers):
+            attribution = get_attribution(layer)
+            attribution = attribution.replace("<br />", "\n")
+            attributions.append(attribution)
+        return BytesIO("\n".join(attributions).encode())
 
     def zip_(file: BytesIO, file_name: str):
         with ZipFile(buffer, "a") as zip_file:
@@ -111,6 +125,9 @@ def georeference_sketch_maps(
     buffer = BytesIO()
     for file_id, uuid, bbox, file_name in zip(file_ids, uuids, bboxes, file_names):
         zip_(process(file_id, uuid, bbox), file_name)
+    with ZipFile(buffer, "a") as zip_file:
+        zip_file.writestr("attributions.txt", get_attribution_file(layers).read())
+
     buffer.seek(0)
     return buffer
 
