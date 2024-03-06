@@ -17,39 +17,42 @@
             </div>
         </a>
         <p>
-            {{ _('The <strong>Step-by-Step Instructions</strong> will guide you through the Sketch Map Tool
-            and provide useful recommendations. You can download and print the manual here.') }}
-
+            {{ _('The <strong>Step-by-Step Instructions</strong>will guide you through the Sketch Map Tool
+            and provide useful recommendations.<br>
+            You can download and print the manual here. <!-- Hyperlink to be put here-->') }} 
+            
         </p>
         <p>
             {{ _('Answers to the <strong>Frequently Asked Questions</strong> can be found in the <a href="#faq">FAQ</a>
             section below.') }}
         </p>
         <p>
-            {{ _('If you arre interested in a step-by-step guide on using the Sketch Map Tool, from creating the map to
-            importing the result data into QGIS, consider watching these videos.') }}
+            {{ _('If you're interested in a step-by-step guide on using the Sketch Map Tool, 
+            from creating the map to importing the result data into QGIS, consider watching these videos. <!-- Video link to be put here-->') }} 
+            
         </p>
         <p>
-            {{ _('Our new <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html" 
-            target="_blank">training platform</a> provides five distinct training exercises to further explore the Sketch Map Tool 
-            and sketch mapping in general. These exercises are primarily designed for workshop settings, allowing for 
-            collaborative discussion of your experiences') }}
+            {{ _('Our new <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html" target="_blank">training platform</a> 
+            provides five distinct training exercises to further explore the Sketch Map Tool and sketch mapping in general. 
+            These exercises are primarily designed for workshop settings, allowing for collaborative discussion of your experiences.') }} 
+            
+        </p>
+        <p>
+            {{ _('<i>Since the latest version of the Sketch Map Tool was only recently released, you may encounter issues at various stages of the process. We apologize for any inconvenience this may cause. 
+            We are committed to continually enhancing the tool, 
+            so please report any technical problems to your organization's Sketch Map Tool focal point or reach out to the <a href="mailto:sketch-map-tool@heigit.org" target="_blank">Sketch Map Tool user support</a></i>') }}
         </p>
 
-        <p>
-            {{ _('Since the latest version of the Sketch Map Tool was only recently released, you may encounter issues at various stages of the process. 
-            We apologize for any inconvenience this may cause. We are committed to continually enhancing the tool, so please report any technical problems 
-            to your organization's Sketch Map Tool focal point or reach out to the <a href="mailto:sketch-map-tool@heigit.org">Sketch Map Tool user support</a>.') }}
-        </p>
+
 
         <h1 id="step-by-step">{{ _('Step-by-Step Instructions') }}</h1>
         <details>
             <summary id="create-paper-maps">
                 <div class="sketchy circle">1</div>
-                {{ _('Create paper maps to collect data') }}
+                {{ _('<strong>Create paper maps to collect data</strong>') }}
             </summary>
             <details>
-                <summary id="define-your-area-of-interest">1.1 {{ _('Define your area of interest and and choose a base map layer') }}
+                <summary id="define-your-area-of-interest"><strong>1.1</strong> {{ _('<strong>Define your area of interest and choose a base map layer</strong>') }}
                 </summary>
                 <article>
                     <p>
@@ -65,7 +68,8 @@
                             boundaries of your area of interest, which will be printed on the Sketch Map.') }}</li>
                         <li>{{ _('Initiate map creation by clicking the blue "next" button.') }}</li> 
                     </ol>
-                    <figure>
+                    
+                    <figure> <!-- figure needs to be changed. link to the figure-->
                         <img src="{{ url_for("static", filename="assets/images/help/1_1_AOI.webp") }}"
                              alt="{{ _('Picture of a group mapping situation.') }}">
                         <figcaption></figcaption>
@@ -73,37 +77,35 @@
 
                     <h6><em>{{ _('Recommendations:') }}</em></h6>
                     <ul>
-                        <li>{{ _('Adapt the extent of your selected area to your use case. The
-                            following
-                            questions should be kept in mind:') }}
+                        <li>{{ _('Tailor the extent of your selected area to suit your use case, keeping the following questions in mind:') }}
                             <ul>
-                                <li>{{ _('What should be mapped by the participants?') }}</li>
-                                <li>{{ _('What should be visible on the map and in what level of detail?') }}
-                                </li>
-                                <li>{{ _('Which areas should the map cover?') }}</li>
+                                <li>{{ _('What do the participants need to map?') }}</li>
+                                <li>{{ _('What details need to be visible on the map, and at what level of detail?') }}</li>
+                                <li>{{ _('Which areas should the map encompass?') }}</li>
                             </ul>
                         </li>
-                        <li>{{ _('Adapt the area extent to the paper size you want to use.') }}</li>
-                        <li>{{ _('The area is too big? Create multiple Sketch Maps.') }}</li>
-                        <li>{{ _('Aspects you might want to consider for the selection of the area of
-                            interest:') }}
+
+                        <li>{{ _('Aspects to consider when selecting the area of interest:') }}
                             <ul>
-                                <li>{{ _('Ensure orientation on the map: streets (and their names) and
-                                    some landmarks should be visible. Besides visual inspection you
-                                    can check the landmark density result in the quality report.') }}
-                                </li>
-                                <li>{{ _('Cover all relevant areas for your use case: e.g. if
-                                    studying
-                                    flooding,
-                                    cover especially those areas near rivers, creeks and sinkholes
-                                    as
-                                    well
-                                    as critical infrastructure which might be affected by the flood
-                                    event.') }}
-                                </li>
+                                <li>{{ _('Ensure orientation on the map: streets (and their names) and some points of interest (POIs) should be visible.') }}</li>
+                                <li>{{ _('Cover all relevant areas for your use case: for example, if studying flooding, focus on areas near rivers, creeks, sinkholes, and critical infrastructure that might be affected by the flood event.') }}</li>
+                                <li>{{ _('For urban flooding, it is recommended to generate a map on the neighborhood level with streets and buildings. For river flooding, it is recommended to generate a map for a larger extent.  ') }}</li>
+                            </ul>
+                        </li>
+
+                        <li>{{ _('Choose a fitting base map for your mapping. The decision between the OSM or satellite image base map depends on factors like your selected area, the quality of OSM data, your participants, and what you would like to map. 
+                            Sometimes, especially if the satellite image is very dark (e.g., due to large forest areas on the map), it can be helpful to create two Sketch Maps with both base map layers: Satellite and OSM.') }}</li>
+                        <li>{{ _('Customize map format to fit your purpose:') }}
+                            <ul>
+                                <li>{{ _('Group mapping is easier on larger maps (A2 or A1, depending on your group size).') }}</li>
+                                <li>{{ _('For data collection in the field, A4 or A3 are easier to handle. If the area is too big, consider creating multiple Sketch Maps.') }}</li> 
                             </ul>
                         </li>
                     </ul>
+                    <p>
+                        {{ _('If you like to learn more about the challenges of map orientation and how to choose a good base map, 
+                        take a look at <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex2_.html" target="_blank">Training Exercise 2</a>.') }}
+                    </p>
 
                 </article>
 
@@ -112,48 +114,40 @@
                 <summary id="map-quality-check">1.2 {{ _('Map Quality Check') }}</summary>
                 <article>
                     <p>
-                        {{ _('The generated Sketch Map uses a base map layer of <a
-                            href="https://wiki.osm.org" target="_blank">OpenStreetMap
-                        (OSM)</a>. The
-                        Map
-                        Quality Check helps to evaluate the OpenStreetMap data fitness of the area of interest for the
-                        purpose of participatory mapping based on a quality analysis of the
-                        OpenStreetMap data with the
-                        <a href="https://oqt.ohsome.org">HeiGIT ohsome quality analyst (OQT)</a>.
-                        The
-                        fitness
-                        report can be downloaded as PDF file by clicking on the blue button. It
-                        includes
-                        an evaluation of the suitability of the local OSM data and recommendations
-                        for
-                        the subsequent field data collection.') }}
+                        {{ _('The generated Sketch Map uses a base map layer from<a
+                            href="https://osm.org/" target="_blank">OpenStreetMap
+                        (OSM)</a>. The Map Quality Check assists in evaluating the suitability of the area of interest for participatory mapping through a quality analysis of the OSM data with the 
+                        <a href="https://oqt.ohsome.org">HeiGIT ohsome quality analyst</a>.
+                        The fitness report can be downloaded as a PDF file by clicking on the blue button. It provides an evaluation of the suitability of the local OSM data and recommendations for subsequent field data collection.') }}
                     </p>
+
+                    <!-- figure to be inserted here-->
 
                     <h6><em>{{ _('Recommendations:') }}</em></h6>
                     <ul>
                         <li>
-                            {{ _('Before you use OSM based maps of your area of interest for
-                            participatory mapping, please have a look at the results of the Map
-                            Quality Check to ensure that participants can orientate properly on the
-                            paper maps.') }}
+                            {{ _('Before you use these OSM-based maps for participatory mapping in your area of interest, 
+                            review the analysis provided by the Map Quality Check to ensure that participants can orient themselves properly on the paper maps.') }}
                         </li>
                         <li>
-                            {{ _('The analyses are focused on the landmark density, the
-                            up-to-dateness of amenities and streets, as well as the
-                            saturation of amenity and the road network mapping. You can learn more
-                            about the analyses and each indicator in the generated PDF report.') }}
+                            {{ _('The analyses focus on Point of Interest (POI) density, the last edit of amenities and streets, used sources, as well as the saturation of amenity and road network mapping. 
+                            Detailed information about each indicator and the analysis is available in the generated PDF report.') }}
                         </li>
                         <li>
-                            {{ _('The report includes useful recommendations to ensure that the generated
-                            maps are suitable for participatory mapping.') }}
+                            {{ _('The report includes useful recommendations to ensure that the generated maps are suitable for participatory mapping.') }}
                         </li>
                         <li>
-                            {{ _('In case the OSM data of your area of interest is not sufficient for the
-                            purpose of participatory mapping, you can consult the <a
-                                href="https://www.missingmaps.org/">Missing Maps project</a> to
-                            improve the OSM data before using the Sketch Map Tool. For example, you
-                            could conduct a mapathon.') }}
+                            {{ _('In case the OSM data in your area of interest is not sufficient for participatory mapping, consider consulting the <a href="https://www.missingmaps.org/" target="_blank">Missing Maps project</a> 
+                            to improve the OSM data before using the Sketch Map Tool.') }}
                         </li>
+                        <li>
+                            {{ _('Take a look at the map:') }}
+                            <ul>
+                                <li>{{ _('How well can you orient yourself on the map?') }}</li>
+                                <li>{{ _('Are important points of reference, such as hospitals, schools, landmarks, etc. visible on the map?') }}</li>
+            
+                            </ul>
+                        </li>  
                     </ul>
                 </article>
             </details>
@@ -161,9 +155,32 @@
                 <summary id="export-sketch-map-as-pdf">1.3 {{ _('Export Sketch Map as PDF') }}</summary>
                 <article>
                     <p>
-                        {{ _('The generated Sketch Map for your selected area of interest can be
-                        downloaded as PDF file by clicking on the blue button.') }}
+                        {{ _('The generated Sketch Map for your selected area of interest can be downloaded as a PDF file by clicking on the blue button.') }}
                     </p>
+                    <!-- figure to be inserted here-->
+
+                    <h6><em>{{ _('Recommendations:') }}</em></h6>
+                    <ul>
+                        <li>
+                            {{ _('Name your scans/photos appropriately when saving, and before uploading them to the Sketch Map Tool. 
+                            This helps you recognize and allocate your Sketch Maps in the subsequent uploading and analyzing process. 
+                            If you relate Sketch Maps back to questionnaires, use the same number for the map as you did in the questionnaire. ') }}
+                        </li>
+                        <li>
+                            {{ _('Prepare separate maps for each topic or per person/group because it is difficult to read and analyze too many markings from one map. 
+                            You can print out one map layout as often as you want. ') }}
+                        </li>
+                        <li>
+                            {{ _('We recommend printing the maps on matte, non-reflective paper. ') }}
+                        </li>
+                        <li>
+                            {{ _('If you plan on printing our your map in black and white, check the visibility of the background map and reduce saturation in the printing settings if the background becomes too dark.') }}
+                        </li>
+                        <li>
+                            {{ _('In case you use a satellite imagery background, please review the color saturation of your image. If the background is too dark, you might consider to choose OSM as base map.') }}
+                        </li>
+                        
+                    </ul>
                 </article>
             </details>
         </details>
