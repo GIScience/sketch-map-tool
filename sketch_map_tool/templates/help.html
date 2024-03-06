@@ -17,27 +17,29 @@
             </div>
         </a>
         <p>
-            {{ _('These <strong>Step-by-Step Instructions</strong> guide you through the Sketch Map Tool
-            and provide useful recommendations.<br>
-            You can download and print this manual if needed.') }}
+            {{ _('The <strong>Step-by-Step Instructions</strong> will guide you through the Sketch Map Tool
+            and provide useful recommendations. You can download and print the manual here.') }}
 
         </p>
         <p>
-            {{ _('Answers to the Frequently Asked Questions can be found in the <a href="#faq">FAQ</a>
+            {{ _('Answers to the <strong>Frequently Asked Questions</strong> can be found in the <a href="#faq">FAQ</a>
             section below.') }}
         </p>
         <p>
-            {{ _('Learn more about the combination of the Sketch Map Tool with additional data collection
-            methods in the <a href="#additional-information">Additional Information</a> section.') }}
+            {{ _('If you arre interested in a step-by-step guide on using the Sketch Map Tool, from creating the map to
+            importing the result data into QGIS, consider watching these videos.') }}
         </p>
         <p>
-            {{ _('As the current version of the Sketch Map Tool has only been released very recently,
-            problems
-            might still occur during different steps of the process. We are sorry if this causes any
-            inconvenience for you! We strive to continuously improve the product, so kindly inform
-            us about the technical issues via <a
-                href="https://github.com/GIScience/sketch-map-tool/issues/new" target="_blank">GitHub
-            Issues</a>.') }}
+            {{ _('Our new <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html" 
+            target="_blank">training platform</a> provides five distinct training exercises to further explore the Sketch Map Tool 
+            and sketch mapping in general. These exercises are primarily designed for workshop settings, allowing for 
+            collaborative discussion of your experiences') }}
+        </p>
+
+        <p>
+            {{ _('Since the latest version of the Sketch Map Tool was only recently released, you may encounter issues at various stages of the process. 
+            We apologize for any inconvenience this may cause. We are committed to continually enhancing the tool, so please report any technical problems 
+            to your organization's Sketch Map Tool focal point or reach out to the <a href="mailto:sketch-map-tool@heigit.org">Sketch Map Tool user support</a>.') }}
         </p>
 
         <h1 id="step-by-step">{{ _('Step-by-Step Instructions') }}</h1>
@@ -47,20 +49,22 @@
                 {{ _('Create paper maps to collect data') }}
             </summary>
             <details>
-                <summary id="define-your-area-of-interest">1.1 {{ _('Define your Area of Interest') }}
+                <summary id="define-your-area-of-interest">1.1 {{ _('Define your area of interest and and choose a base map layer') }}
                 </summary>
                 <article>
                     <p>
-                        {{ _('Select your area of interest either by zooming into the map preview or with
-                        the
-                        search function in the sidebar.') }}
+                        {{ _('The first step in using the Sketch Map Tool involves creating a printable Sketch Map.') }}
                     </p>
-                    <p>
-                        {{ _('Choose from different paper formats and a suitable page orientation. The
-                        dashed red line represents the boundaries of your area of interest, which
-                        will
-                        be printed on the Sketch Map.') }}
-                    </p>
+                    <ol>
+                        <li>{{ _('Begin by selecting your area of interest, either by zooming into the map preview or using the search 
+                            function in the sidebar.') }}</li>
+                        <li>{{ _('Choose between the two different base map layers: one based on OpenStreetMap (OSM) and the other containing 
+                            satellite imagery (<a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" 
+                            target="_blank">ESRI world imagery</a>)') }}</li>
+                        <li>{{ _('Select from different paper formats and the appropriate page orientation. The dashed red line represents the
+                            boundaries of your area of interest, which will be printed on the Sketch Map.') }}</li>
+                        <li>{{ _('Initiate map creation by clicking the blue "next" button.') }}</li> 
+                    </ol>
                     <figure>
                         <img src="{{ url_for("static", filename="assets/images/help/1_1_AOI.webp") }}"
                              alt="{{ _('Picture of a group mapping situation.') }}">
