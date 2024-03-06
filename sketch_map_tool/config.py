@@ -33,7 +33,7 @@ def load_config_default() -> Dict[str, str | int | float]:
         "neptune_api_token": "",
         "neptune_model_id_yolo_osm_cls": "SMT-CLR-1",
         "neptune_model_id_yolo_esri_cls": "SMT-CLR-3",
-        "neptune_model_id_yolo_osm_obj": "SMT-OSM-6",
+        "neptune_model_id_yolo_osm_obj": "SMT-OSM-9",
         "neptune_model_id_yolo_esri_obj": "SMT-ESRI-1",
         "neptune_model_id_sam": "SMT-SAM-1",
         "model_type_sam": "vit_b",
