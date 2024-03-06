@@ -26,13 +26,14 @@ matplotlib-scalebar = "^0.8.1"
 redis = "^4.5.4"
 pyproj = "^3.6.1"
 neptune = "^1.8.3"
-ultralytics = "^8.0.209"
+ultralytics = "8.1.14"
 segment-anything = {git = "https://github.com/facebookresearch/segment-anything.git"}
 pyzbar = "^0.1.9"
 shapelysmooth = "^0.1.1"
 torch = "^2.1.2"
 torchvision = "^0.16.2"
 flask-babel = "^4.0.0"
+my-ultralytics-4bands = {git = "https://github.com/itisacloud/ultralytics_multiband_support.git"}
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
@@ -47,7 +48,7 @@ locust = "^2.14.2"
 testcontainers-postgres = "^0.0.1rc1"
 testcontainers-redis = "^0.0.1rc1"
 hypothesis = "^6.88.4"
-ruff = "^0.1.7"
+ruff = "^0.1.15"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -38,9 +38,10 @@ def _check_id(id: str):
 
 
 def _get_file_suffix(id: str) -> str:
-    if "SAM" in id:
-        return ".pth"
-    elif "OSM" in id:
-        return ".pt"
-    else:
-        raise ValueError("Unexpected model ID: " + id)
+    suffixes = {"SAM": ".pth", "OSM": ".pt", "ESRI": ".pt", "CLR": ".pt"}
+
+    for key in suffixes:
+        if key in id:
+            return suffixes[key]
+
+    raise ValueError(f"Unexpected model ID: {id}")

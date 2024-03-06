@@ -286,14 +286,14 @@ def sketch_map(uuid_create, tmp_path_factory) -> bytes:
 
 
 @pytest.fixture(scope="session")
-def map_frame(uuid_create, flask_app, tmp_path_factory) -> bytes:
+def map_frame(uuid_create, flask_app, tmp_path_factory) -> BytesIO:
     """Map Frame as PNG."""
     with flask_app.app_context():
         map_frame = db_client_flask.select_map_frame(UUID(uuid_create))
     path = tmp_path_factory.getbasetemp() / uuid_create / "map-frame.png"
     with open(path, "wb") as file:
         file.write(map_frame)
-    return map_frame
+    return BytesIO(map_frame)
 
 
 @pytest.fixture(scope="session")

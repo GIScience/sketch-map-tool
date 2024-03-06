@@ -9,6 +9,7 @@ from geojson import FeatureCollection
 from numpy.typing import NDArray
 from segment_anything import SamPredictor, sam_model_registry
 from ultralytics import YOLO
+from ultralytics_4bands import YOLO as YOLO_4
 
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool import get_config_value, map_generation
@@ -137,6 +138,7 @@ def digitize_sketches(
     file_names: list[str],
     uuids: list[str],
     map_frames: dict[str, NDArray],
+    layers: list[str],
     bboxes: list[Bbox],
 ) -> AsyncResult | FeatureCollection:
     # Initialize ml-models. This has to happen inside of celery context.
@@ -144,21 +146,43 @@ def digitize_sketches(
     # Prevent usage of CUDA while transforming Tensor objects to numpy arrays
     # during marking detection
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
-    # Custom trained model for object detection of markings and colors
-    yolo_path = init_model(get_config_value("neptune_model_id_yolo"))
-    yolo_model: YOLO = YOLO(yolo_path)
-    # Zero shot segment anything model
+    # Zero shot segment anything model for automatic mask generation
     sam_path = init_model(get_config_value("neptune_model_id_sam"))
     sam_model = sam_model_registry[get_config_value("model_type_sam")](sam_path)
     sam_predictor: SamPredictor = SamPredictor(sam_model)  # mask predictor
 
     l = []  # noqa: E741
-    for file_id, file_name, uuid, bbox in zip(file_ids, file_names, uuids, bboxes):
+    for file_id, file_name, uuid, bbox, layer in zip(
+        file_ids, file_names, uuids, bboxes, layers
+    ):
         # r = interim result
         r: BytesIO = db_client_celery.select_file(file_id)  # type: ignore
         r: NDArray = to_array(r)  # type: ignore
         r: NDArray = clip(r, map_frames[uuid])  # type: ignore
-        r: NDArray = detect_markings(r, yolo_model, sam_predictor)  # type: ignore
+        # Initialize ml-models. This has to happen inside of celery context.
+        #
+        # Custom trained model for object detection (obj) and classification (cls)
+        # of markings and colors.
+        if layer == "osm":
+            path = init_model(get_config_value("neptune_model_id_yolo_osm_obj"))
+            yolo_obj: YOLO_4 = YOLO_4(path)  # yolo object detection
+            path = init_model(get_config_value("neptune_model_id_yolo_osm_cls"))
+            yolo_cls: YOLO = YOLO(path)  # yolo classification
+        elif layer == "esri-world-imagery":
+            path = init_model(get_config_value("neptune_model_id_yolo_esri_obj"))
+            yolo_obj: YOLO_4 = YOLO_4(path)
+            path = init_model(get_config_value("neptune_model_id_yolo_esri_cls"))
+            yolo_cls: YOLO = YOLO(path)
+        else:
+            raise ValueError("Unexpected layer: " + layer)
+
+        r: NDArray = detect_markings(
+            r,
+            map_frames[uuid],
+            yolo_obj,
+            yolo_cls,
+            sam_predictor,
+        )  # type: ignore
         # m = marking
         for m in r:
             m: BytesIO = georeference(m, bbox, bgr=False)  # type: ignore
