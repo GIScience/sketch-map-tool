@@ -217,7 +217,147 @@
                         This needs to be done manually in the subsequent analysis process in your Geographic Information System software. 
                         The GeoTiff can be used to manually match the geodata layer files to the legend information.') }}
                     </p>
-
+                    <table border="1" style="border-collapse: collapse;">
+                        <tr>
+                            <th>{{ _('The photo of the Sketch Map') }}</th>
+                            <th>{{ _('The result of the Color detection (the geojson)') }}</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    {{ _('Image of a Sketch Map marked with red/blue polygons.') }}
+                                    
+                                </p>
+                                <figure>
+                                    <!-- figure needs to be inserted-->   
+                                </figure>
+                            </td>
+                            <td>
+                                <p>
+                                    {{ _('Closed circles are detected as one polygon 
+                                    and the whole area will be detected/filled by the software.') }}    
+                                </p>
+                                <figure>
+                                    <!-- figure needs to be inserted-->
+                                </figure>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    {{ _('Image of a Sketch Map marked with different shapes.') }}
+                                </p>
+                                <figure>
+                                    <!-- figure needs to be inserted-->
+                                </figure>
+                            </td>
+                            <td>
+                                <p>
+                                    {{ _('The shape of everything you write or draw on the map with a colour that the
+                                    tool recognizes can be detected as a marked area (polygon). 
+                                    However, in some cases, they may not be detected at all.') }}
+                                </p>
+                                <figure>
+                                    <!-- figure needs to be inserted-->
+                                </figure>
+                            </td>
+                        </tr>
+                    </table>
+                    <h6><em>{{ _('Recommendations:') }}</em></h6>
+                    <table border="1" style="border-collapse: collapse;">
+                        <tr>
+                            <th>{{ _('To Do') }}</th>
+                            <th>{{ _('Not recommended') }} <br> {{ _('You will likely discover problems in the color- detected results') }}</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    {{ _('Use thick felt-tip pens with intense colors.') }}
+                                </p>
+                                <figure>
+                                    <!-- figure needs to be inserted-->  
+                                </figure>
+                            </td>
+                            <td>
+                                <p>
+                                    {{ _('Thin lines in light colors might not be detected. If you decide to use additional colors, 
+                                    test which colors work best with the SMT before the mapping activity.') }}  
+                                </p>
+                                <figure>
+                                    <!-- figure needs to be inserted--> 
+                                </figure>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    {{ _('For polygons, draw their outline as a closed, strong, and continues shape. 
+                                    You don´t need to fill the polygons, and the pattern you draw in the middle will not be detected. 
+                                    In general, smaller polygons are detected better than large polygons.') }}   
+                                </p>
+                                <figure>
+                                    <!-- figure needs to be inserted-->
+                                </figure>
+                            </td>
+                            <td>
+                                <p>
+                                    {{ _('Gaps in the outline could lead to mistakes in the detection.') }} 
+                                </p>
+                                <figure>
+                                    <!-- figure needs to be inserted-->
+                                </figure>
+                                <p>
+                                    {{ _('Large polygons might not be detected properly.') }} 
+                                </p>
+                                <figure>
+                                    <!-- figure needs to be inserted-->
+                                </figure>
+                                <p>
+                                    {{ _('If you just draw a line, the marked area of the line will be detected. 
+                                    Nevertheless, we recommend not using lines so far, 
+                                    as this could lead to mistakes in the marking detection.') }} 
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+            
+                            </td>
+                            <td>
+                                <figure>
+                                    <!-- figure to be inserted here -->
+                                </figure>
+                                <p>
+                                    {{ _('If you want to draw a point, draw a larger circle or other shape, 
+                                    such as a cross or square in order to be detected well. 
+                                    If you want to draw lines, draw simple, non-dashed, and bright enough lines.') }}  
+                                </p>
+                                <p>
+                                    {{ _('Hint: If you need the marking as a line or a point shape, 
+                                    you can easily transfer it manually or digitalize it yourself, 
+                                    for example, in QGIS (see <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex4_.html#exercise-a-exploration-basic-visualization-of-sketch-map-tool-outputs-in-qgis" 
+                                    target="_blank">Training Exercise 4</a> )') }}
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> 
+                                <p><strong>{{ _('Satellite Base maps:') }}</strong></p>
+                                <p>
+                                    {{ _('Check the darkness of the Satellite base map, especially before printing it in black-and-white.') }}   
+                                </p>
+                                <p>
+                                    {{ _('Make sure you use bright colors and mark the maps especially clearly. Sometimes 
+                                    it might be helpful to use both Sketch maps with satellite images 
+                                    and OSM base maps for the mapping.') }}   
+                                </p>
+                            </td>
+                            <td>
+                                <p>{{ _('Small polygons can be especially difficult to detected.') }}</p>
+                                <figure></figure>
+                            </td>
+                        </tr>
+                    </table>
 
                     <li>{{ _('<strong>Tips for better comparability and interpretation of the maps</strong>') }}</li>
                     <p>
@@ -226,10 +366,8 @@
                     <p>
                         {{ _('Orientating on a map can be challenging, depending on the base map, the background of the participants, and their map literacy. 
                         Mapping in groups can make orientation much easier, as participants can assist each other in reading the map. Before you start with the mapping, we recommend:') }}
-
                     </p>
                     <p>
-
                         <ul>
                             <li>
                                 {{ _('Start by identifying a common place or points of reference.') }}
@@ -248,9 +386,9 @@
                         {{ _('<strong>Develop a mapping strategy</strong>') }}
                     </p>
                     <p>
-                        {{ _('Prepare a clear data collection and analysis strategy beforehand. 
-                        A consistent drawing/marking approach in different groups or by different people makes the comparison and analysis process easier since the data was collected in a similar way, 
-                        and you know what it means. For this, you should discuss and agree beforehand:') }}
+                        {{ _('Prepare a clear data collection and analysis strategy beforehand. A consistent drawing/marking approach in different groups or 
+                        by different people makes the comparison and analysis process easier since the data was collected in a similar way, and you know what it means. 
+                        For this, you should discuss and agree beforehand:') }}
                     </p>
                     <ul>
                         <li>
@@ -278,12 +416,9 @@
                             <a href="https://getodk.org/" target="_blank">ODK</a>, add a number on the Sketch Map and save this number in the data collection questionnaire.') }}
                         </li>
                         <li>
-                            {{ _('If you have many participants or you want participants to provide a lot of different information, 
-                            it is recommended to use individual Sketch Maps for each purpose/topic or per participant.') }}
+                            {{ _('If you have many participants or you want participants to provide a lot of different information, it is recommended to use individual Sketch Maps for each purpose/topic or per participant.') }}
                         </li>
-                    </ul>
-
-                    
+                    </ul>    
                 </ol>
                 
                 
