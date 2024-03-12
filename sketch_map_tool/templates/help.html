@@ -435,30 +435,28 @@
                 </summary>
                 <article>
                     <p>
-                        {{ _('After the field data collection, scan or photograph the marked Sketch Maps.
-                        The colour detection works best when scanning the Sketch Maps. When taking a
-                        picture instead, make sure that the QR-Code is complete and that all globes
-                        are visible on the image. The scans or photographs must be in jpg or png
-                        file format for the upload to work.') }}
+                        {{ _('After the field data collection, scan or photograph the marked Sketch Maps.</p>') }}
+                    <p>
                     </p>
                     <h6><em>{{ _('Recommendations:') }}</em></h6>
                     <ul>
                         <li>
-                            {{ _('If you cannot scan, the photos must be taken from above in a 180-degree
-                            angle (parallel above the Sketch Maps) to produce the best possible
-                            result.') }}
+                            {{ _('The photos must be taken from directly above, at a 180-degree angle
+                            (parallel to the Sketch Map), for optimal image quality.') }}
                         </li>
                         <li>
-                            {{ _('Please upload a complete image of the Sketch Maps and do not try to cut
-                            out the map from the photo.') }}
+                            {{ _('Pay attention to the lighting conditions when taking a picture.') }}
                         </li>
                         <li>
-                            {{ _('Take care of the lighting conditions when taking a picture.') }}
+                            {{ _('The image of the Sketch Map needs to be uploaded as JPG or PNG (max. file size is 50 MB).
+                            The georeferencing and color-detection work even better if you scan the marked Sketch Map
+                            with a resolution of 300 dpi. Attention! The file size will be too large when scanning with a
+                            600 dpi resolution.') }}
                         </li>
                         <li>
-                            {{ _('The georeferencing works best if you scan the marked Sketch Maps with a
-                            resolution of 300 dpi. Attention! The file size will be too large when
-                            scanning with a 600 dpi resolution.') }}
+                            {{ _('If the color detection does not work satisfactorily, you can improve the color contrast
+                            of the markings (with a pen, a new photo, or with photo editing software such as Paint, GIMP,
+                            or Windows Cut & Resize).') }}
                         </li>
                     </ul>
                 </article>
@@ -467,90 +465,113 @@
                 <summary id="upload-sketch-maps">2.2 {{ _('Upload your Sketch Maps') }}</summary>
                 <article>
                     <p>
-                        {{ _('To upload files you can click on the upload field or drag and drop your
-                        files directly in the upload field and then click on the Upload button. You
-                        can upload one or more marked Sketch Maps at once. The upload works
-                        for jpg or png files.') }}
+                        {{ _('To upload files, you can click on the upload field or drag and drop your files directly into
+                        the upload field and then click on the Upload button. You can upload one or more marked Sketch Maps
+                        at once. However, they all must be the same base map (same QR-Code) , and all maps will be
+                        automatically combined in one Geojson in the download files for each color and Sketch Map.
+                        The upload works for JPG or PNG files. It is possible to upload more than one Sketch Map at the
+                        same time, but the upload will take longer. For one Sketch Map, it can take up to 100 seconds
+                        to produce a result, and for a package of 10 Sketch Maps, it can take up to 16 minutes.') }}
                     </p>
 
                     <h6><em>{{ _('Recommendations:') }}</em></h6>
                     <ul>
                         <li>
-                            {{ _('It is possible to upload more than one Sketch Map at the same
-                            time, but the upload will take longer.') }}
-                        </li>
-                        <li>
-                            {{ _('If you are experiencing problems during the upload process, please check
-                            out the <a href="#faq">FAQ section</a> below.') }}
+                            {{ _('If you experience problems during the upload process, please check out
+                            the FAQ section below or contact your Sketch Map Tool focal point in your
+                            organization or the Sketch Map Tool user support sketch-map-tool@heigit.org .') }}
                         </li>
                     </ul>
                 </article>
             </details>
             <details>
-                <summary id="download-results-as-geodata">2.3 {{ _('Download collected Markings as
-                    Geodata') }}
+                <summary id="download-results-as-geodata">2.3 {{ _('Download detected Markings as Geodata') }}
                 </summary>
                 <article>
                     <p>
-                        {{ _('You can download the georeferenced Sketch Maps as GeoTIFFs (zip) and the
-                        colour-detected markings as vector data in a GeoJSON file.') }}
-                    </p>
-                    <p>
-                        {{ _('The GeoTIFF raster data output files consist of georeferenced
-                        images for each of your uploaded Sketch Maps.<br>
-                        The GeoJSON vector data output file contains polygons for the markings of
-                        each
-                        uploaded Sketch Map. Each polygon has attributes about its colour and its
-                        source filename (from the uploaded image).') }}
+                        {{ _('Download the markings of the Sketch Maps in different geodata formats (raster data as
+                        GeoTIFF, vector data as a GeoJSON file). You can download the georeferenced Sketch Maps as a
+                        GeoTIFF or the color-detected markings as vector data in a GeoJSON file.  The vector data output
+                        file consists of different layers for each color and Sketch Map, if you have uploaded more than
+                        one Sketch Map at once. The GeoTIFF output file consists of a georeferenced picture for each
+                        of your uploaded Sketch Maps. The GeoJSON file (vector file) consists of the color-detected
+                        markings from your Sketch Map as a vector layer.') }}
                     </p>
 
                     <h6><em>{{ _('Recommendations:') }}</em></h6>
                     <ul>
                         <li>
-                            {{ _('If you are experiencing problems during the upload process, please check
-                            out the <a href="#faq">FAQ section</a> below.') }}
+                            {{ _('If you experience problems during the download process, please check out the FAQ section
+                            below or contact your Sketch Map Tool focal point in your organization or the Sketch Map Tool
+                            user support sketch-map-tool@heigit.org if you cannot find your answers there.') }}
                         </li>
                     </ul>
                 </article>
             </details>
         </details>
+        
         <details>
             <summary id="import-geodata-in-qgis"><strong class="sketchy"
-                                                         style="color: var(--heigit-red)">{{ _('FINALLY:') }} </strong>
-                {{ _('Import Geodata in a GIS, e.g. QGIS') }}
+                                                        style="color: var(--heigit-red)">{{ _('FINALLY:') }} </strong>
+                {{ _('Import Geodata in a Geographic Information System (GIS), e.g. QGIS') }}
             </summary>
             <article>
                 <p>
-                    {{ _('You can load the vector data file into your GIS software. The layers have
-                    different attributes (check attribute table) which correspond to the different
-                    colours and file names of the uploads. You can also open the GeoTIFF file for
-                    validating the colour-detection of the markings. The GeoTIFF output files consist
-                    of georeferenced images for each of your uploaded Sketch Maps.') }}
+                    {{ _('The gained geodata can be even more valuable for the communities and humanitarian
+                    organizations if you create result maps or analyze it further. There are many different
+                    analyses possible based on your gained map data. If you would like more tips on different
+                    steps for basic analysis and how to create a result map, take a look at the following QGIS
+                    Training Lectures
+                    https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html') }}
                 </p>
                 <p>
-                    {{ _('When you open the files in QGIS, it should look similar to this example and show
-                    all the markings of your Sketch Map(s).') }}
+                    {{ _('You can load your resulting geodata files into your GIS software.') }}
                 </p>
                 <img src="/static/assets/images/help/Finally_Import-Results-to-QGIS.webp" alt="{{ _('Screenshot of vector results in QGIS') }}">
                 <h6><em>{{ _('Recommendations:') }}</em></h6>
                 <ul>
                     <li>
-                        {{ _('In case some of the sketches have not been digitized correctly, you can use
-                        the GeoTIFF file to manually create/adjust the polygon layers.') }}
+                        {{ _('Usage of the GeoTIFF file (raster file) in QGIS:') }}
+                        <ul>
+                            <li>
+                                {{ _('It can be used, for example, as a background to combine
+                                it with other data or to manually digitize your results yourself in
+                                case some markings are not detected correctly.') }}
+                            </li>
+                        </ul>
                     </li>
                     <li>
-                        {{ _('If the imported data looks strange and does not represent the actual
-                        markings of the sketch maps, please check your uploaded sketch map files and
-                        if necessary, scan them again or take new pictures according to the
-                        recommendations above. Please review the recommendations
-                        in the sections about the data collection, the scan or photograph and the
-                        upload above and consult our <a href="#faq">FAQ section</a> about the
-                        problems in the colour
-                        detection.') }}
+                        {{ _('Usage of the GeoJSON file (vector file) in QGIS:') }}
+                        <ul>
+                            <li>
+                                {{ _('You can compare the vector output with the raster file to verify the
+                                marking detection. In case features are not detected or are incorrectly detected,
+                                you can manipulate your vector file based on the GeoTIFF.') }}
+                            </li>
+                            <li>
+                                {{ _('It can be visualized in a clear and concise map in order to use it for
+                                reporting (see <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex4_.html"
+                                                target="_blank">Training Exercise 4</a>)') }}
+                            </li>
+                            <li>
+                                {{ _('Based on the vector outputs you can analyze your data and combine it with additional
+                                data (e.g. prepare heatmaps, see <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex5_.html"
+                                                                    target="_blank">Training Exercise 5 </a>)') }}
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        {{ _('If the imported data looks strange and does not represent the actual markings of
+                        the sketch maps, please check your uploaded sketch map files and, if necessary, scan them again
+                        or take new pictures. Please review the recommendations in the sections about the data collection,
+                        then scan, photograph or the upload above and consult our FAQ section about the problems in the colour
+                        detection. If you cannot find your answers there, please contact your Sketch Map Tool focal point in your
+                        organization or the Sketch Map Tool user support (sketch-map-tool@heigit.org).') }}
                     </li>
                 </ul>
             </article>
         </details>
+
 
 
         <h1 id="faq">{{ _('FAQs') }}</h1>
