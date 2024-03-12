@@ -17,9 +17,9 @@
             </div>
         </a>
         <p>
-            {{ _('The <strong>Step-by-Step Instructions</strong>will guide you through the Sketch Map Tool
+            {{ _('The <strong>Step-by-Step Instructions</strong> will guide you through the Sketch Map Tool
             and provide useful recommendations.<br>
-            You can download and print the manual here. <!-- Hyperlink to be put here-->') }} 
+            You can also download and print the manual.') }} 
             
         </p>
         <p>
@@ -52,7 +52,7 @@
                 {{ _('<strong>Create paper maps to collect data</strong>') }}
             </summary>
             <details>
-                <summary id="define-your-area-of-interest"><strong>1.1</strong> {{ _('<strong>Define your area of interest and choose a base map layer</strong>') }}
+                <summary id="define-your-area-of-interest">1.1 {{ _('Define your area of interest and choose a base map layer') }}
                 </summary>
                 <article>
                     <p>
@@ -61,7 +61,8 @@
                     <ol>
                         <li>{{ _('Begin by selecting your area of interest, either by zooming into the map preview or using the search 
                             function in the sidebar.') }}</li>
-                        <li>{{ _('Choose between the two different base map layers: one based on OpenStreetMap (OSM) and the other containing 
+                        <li>{{ _('Choose between the two different base map layers: one based on <a
+                            href="https://osm.org/" target="_blank">OpenStreetMap (OSM)</a> and the other containing 
                             satellite imagery (<a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" 
                             target="_blank">ESRI world imagery</a>)') }}</li>
                         <li>{{ _('Select from different paper formats and the appropriate page orientation. The dashed red line represents the
@@ -114,9 +115,7 @@
                 <summary id="map-quality-check">1.2 {{ _('Map Quality Check') }}</summary>
                 <article>
                     <p>
-                        {{ _('The generated Sketch Map uses a base map layer from<a
-                            href="https://osm.org/" target="_blank">OpenStreetMap
-                        (OSM)</a>. The Map Quality Check assists in evaluating the suitability of the area of interest for participatory mapping through a quality analysis of the OSM data with the 
+                        {{ _('You can use <a href="https://osm.org/" target="_blank">OpenStreetMap(OSM)</a> as a base map for the generated Sketch Maps. The Map Quality Check assists in evaluating the suitability of the area of interest for participatory mapping through a quality analysis of the OSM data with the 
                         <a href="https://oqt.ohsome.org">HeiGIT ohsome quality analyst</a>.
                         The fitness report can be downloaded as a PDF file by clicking on the blue button. It provides an evaluation of the suitability of the local OSM data and recommendations for subsequent field data collection.') }}
                     </p>
@@ -186,7 +185,7 @@
         </details>
         <details>
             <summary id="data-collection"><strong class="sketchy" style="color: var(--heigit-red)">{{ _('THEN:') }} </strong>
-                &nbsp;{{ _('<strong>Data collection in the field</strong>') }}
+                &nbsp;{{ _('Data collection in the field') }}
             </summary>
             <article>
                 <p>
@@ -427,7 +426,7 @@
         <details>
             <summary id="paper-to-geodata">
                 <div class="sketchy circle">2</div>
-                {{ _('Paper to GIS: Automatically digitize collected data') }}
+                {{ _('<strong>Paper to GIS: Automatically digitize collected data</strong>') }}
             </summary>
             <details>
                 <summary id="scan-or-photo-marked-sketch-maps">2.1 {{ _('Scan or photograph your marked
@@ -437,6 +436,21 @@
                     <p>
                         {{ _('After the field data collection, scan or photograph the marked Sketch Maps.</p>') }}
                     <p>
+                    <table border="1" style="border-collapse: collapse;">
+                        <tr>
+                            <th>{{ _('Can be digitized properly') }}
+                            </th>
+                            <th>{{ _('Problem: Missing or cut QR-Code </br>
+                                Without the whole QR-code the map cannot be recognized by the Sketch Map Tool.') }}
+                            </th>
+                            <th>{{ _('Problem: Missing Globs and missing part of the map </br>
+                                This could lead to mistakes in the georeferencing and missing information on your map..') }}
+                            </th>
+                            <th>{{ _('Problem: Tilted photos of the map </br>
+                                Can lead to mistakes in the georeferencing.') }}
+                            </th>
+                        </tr>
+                    </table>
                     </p>
                     <h6><em>{{ _('Recommendations:') }}</em></h6>
                     <ul>
@@ -509,7 +523,7 @@
                 </article>
             </details>
         </details>
-        
+
         <details>
             <summary id="import-geodata-in-qgis"><strong class="sketchy"
                                                         style="color: var(--heigit-red)">{{ _('FINALLY:') }} </strong>
@@ -527,7 +541,29 @@
                 <p>
                     {{ _('You can load your resulting geodata files into your GIS software.') }}
                 </p>
-                <img src="/static/assets/images/help/Finally_Import-Results-to-QGIS.webp" alt="{{ _('Screenshot of vector results in QGIS') }}">
+
+                <table border="1" style="border-collapse: collapse;">
+                    <tr>
+                        <th>{{ _('GeoTiff') }}</th>
+                        <th>{{ _('GeoJSON') }}
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>{{ _('The GeoTIFF output file consists of a georeferenced "picture" for each of your uploaded Sketch
+                                Maps.
+                                When you open the GeoTIFF files in QGIS, it should look similar to this example and show all the
+                                markings on
+                                your sketch map(s) as separate layers. You can view only one of your maps at a time.') }}</p>
+                        </td>
+                        <td>
+                            <p></p>{{ _('If you open the GeoJSON, you can see the detected markings from all uploaded maps as polygons.
+                            When
+                            you check the attribute table, you can see that for each marking, the name of the map and the detected color
+                            are specified. With the help of these attributes, you can style your map or conduct analyses.') }}</p>
+                        </td>
+                    </tr>
+                </table>
+
                 <h6><em>{{ _('Recommendations:') }}</em></h6>
                 <ul>
                     <li>
