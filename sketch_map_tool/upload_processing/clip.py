@@ -7,18 +7,11 @@ import numpy as np
 from numpy.typing import NDArray
 
 
-def filter_matrix(tran_matrix:NDArray) -> bool:
-    """
-       Filters a failed transformation matrix based on specified conditions.
+def filter_matrix(tran_matrix: NDArray) -> bool:
+    """Filters a failed transformation matrix based on specified conditions."""
+    h13 = tran_matrix[0, 2]
+    h23 = tran_matrix[1, 2]
 
-       :param tran_matrix (NDArray): The transformation matrix to be filtered.
-       :return: bool: True if the condition is met, False otherwise.
-    """
-    # Extracting elements from the transformation matrix
-    h13 = tran_matrix[0,2]
-    h23 = tran_matrix[1,2]
-
-    #Checking confition
     if h13 > 1500 and h23 > 0:
         return False
     else:
@@ -40,7 +33,6 @@ def clip(photo: NDArray, template: NDArray) -> NDArray:
     :param template: Matching template of the sketch map
     :return: The resulting image (the cutout)
     """
-    # Create a BRISK detector
     brisk = cv2.BRISK_create()
 
     # Convert images to grayscale
@@ -52,7 +44,12 @@ def clip(photo: NDArray, template: NDArray) -> NDArray:
     kpts2, desc2 = brisk.detectAndCompute(template_gray, None)
 
     # FLANN parameters
-    flann_params = dict(algorithm=6,  table_number=6, key_size=12, multi_probe_level=1)
+    flann_params = {
+        "algorithm": 6,
+        "table_number": 6,
+        "key_size": 12,
+        "multi_probe_level": 1,
+    }
 
     # FLANN matcher
     matcher = cv2.FlannBasedMatcher(flann_params, {})
