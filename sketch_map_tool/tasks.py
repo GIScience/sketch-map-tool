@@ -150,6 +150,18 @@ def digitize_sketches(
     sam_path = init_model(get_config_value("neptune_model_id_sam"))
     sam_model = sam_model_registry[get_config_value("model_type_sam")](sam_path)
     sam_predictor: SamPredictor = SamPredictor(sam_model)  # mask predictor
+    # Custom trained model for object detection (obj) and classification (cls)
+    # of markings and colors.
+    if "osm" in layers:
+        path = init_model(get_config_value("neptune_model_id_yolo_osm_obj"))
+        yolo_obj_osm: YOLO_4 = YOLO_4(path)  # yolo object detection
+        path = init_model(get_config_value("neptune_model_id_yolo_osm_cls"))
+        yolo_cls_osm: YOLO = YOLO(path)  # yolo classification
+    if "esri-world-imagery" in layers:
+        path = init_model(get_config_value("neptune_model_id_yolo_esri_obj"))
+        yolo_obj_esri: YOLO_4 = YOLO_4(path)
+        path = init_model(get_config_value("neptune_model_id_yolo_esri_cls"))
+        yolo_cls_esri: YOLO = YOLO(path)
 
     l = []  # noqa: E741
     for file_id, file_name, uuid, bbox, layer in zip(
@@ -159,20 +171,12 @@ def digitize_sketches(
         r: BytesIO = db_client_celery.select_file(file_id)  # type: ignore
         r: NDArray = to_array(r)  # type: ignore
         r: NDArray = clip(r, map_frames[uuid])  # type: ignore
-        # Initialize ml-models. This has to happen inside of celery context.
-        #
-        # Custom trained model for object detection (obj) and classification (cls)
-        # of markings and colors.
         if layer == "osm":
-            path = init_model(get_config_value("neptune_model_id_yolo_osm_obj"))
-            yolo_obj: YOLO_4 = YOLO_4(path)  # yolo object detection
-            path = init_model(get_config_value("neptune_model_id_yolo_osm_cls"))
-            yolo_cls: YOLO = YOLO(path)  # yolo classification
+            yolo_obj = yolo_obj_osm
+            yolo_cls = yolo_cls_osm
         elif layer == "esri-world-imagery":
-            path = init_model(get_config_value("neptune_model_id_yolo_esri_obj"))
-            yolo_obj: YOLO_4 = YOLO_4(path)
-            path = init_model(get_config_value("neptune_model_id_yolo_esri_cls"))
-            yolo_cls: YOLO = YOLO(path)
+            yolo_obj = yolo_obj_esri
+            yolo_cls = yolo_cls_esri
         else:
             raise ValueError("Unexpected layer: " + layer)
 
