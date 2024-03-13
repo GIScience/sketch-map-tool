@@ -7,17 +7,6 @@ import numpy as np
 from numpy.typing import NDArray
 
 
-def filter_matrix(tran_matrix: NDArray) -> bool:
-    """Filters a failed transformation matrix based on specified conditions."""
-    h13 = tran_matrix[0, 2]
-    h23 = tran_matrix[1, 2]
-
-    if h13 > 1500 and h23 > 0:
-        return False
-    else:
-        return True
-
-
 def clip(photo: NDArray, template: NDArray) -> NDArray:
     """Clip out the map frame from the photo of the map using the original map frame.
 
@@ -77,3 +66,16 @@ def clip(photo: NDArray, template: NDArray) -> NDArray:
         selected_map = np.zeros((width, height))
 
     return selected_map
+
+
+def filter_matrix(tran_matrix: NDArray) -> bool:
+    """Filters a failed transformation matrix based on specified conditions."""
+    h13 = tran_matrix[0, 2]
+    h23 = tran_matrix[1, 2]
+
+    if h13 > 1500 and h23 > 0:
+        print(False)
+        return False
+    else:
+        print(True)
+        return True
