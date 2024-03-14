@@ -2,7 +2,7 @@
 
 For contributing to this project please also read the [Contribution Guideline](/CONTRIBUTING.md).
 
-> Note: To just run the tool locally, provide the required [configuration](https://github.com/GIScience/sketch-map-tool/blob/main/docs/configuration.md)
+> Note: To just run the tool locally, provide the required [configuration](/docs/configuration.md)
 > and use Docker Compose: `docker compose up -d`
 
 ## Prerequisites (Requirements)
