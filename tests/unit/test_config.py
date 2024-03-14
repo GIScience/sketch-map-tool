@@ -32,10 +32,14 @@ def config_keys():
         "max_pixel_per_image",
         "neptune_project",
         "neptune_api_token",
-        "neptune_model_id_yolo",
+        "neptune_model_id_yolo_osm_cls",
+        "neptune_model_id_yolo_esri_cls",
+        "neptune_model_id_yolo_osm_obj",
+        "neptune_model_id_yolo_esri_obj",
         "neptune_model_id_sam",
         "model_type_sam",
         "esri-api-key",
+        "log-level",
     )
 
 
@@ -77,22 +81,6 @@ def test_load_config_from_file(monkeypatch):
 
 
 @mock.patch.dict("os.environ", {}, clear=True)
-def test_load_config_from_env_empty():
-    cfg = config.load_config_from_env()
-    assert cfg == {}
-
-
-@mock.patch.dict(
-    "os.environ",
-    {"SMT_DATA_DIR": "foo", "SMT_USER_AGENT": "bar"},
-    clear=True,
-)
-def test_load_config_from_env_set():
-    cfg = config.load_config_from_env()
-    assert cfg == {"data-dir": "foo", "user-agent": "bar"}
-
-
-@mock.patch.dict("os.environ", {}, clear=True)
 def test_get_config(config_keys):
     cfg = config.get_config()
     assert tuple(cfg.keys()) == config_keys
@@ -123,7 +111,7 @@ def test_get_config_env_empty_str(config_keys):
 
 
 @mock.patch.dict("os.environ", {}, clear=True)
-def test_get_data_dir_unset_env(config_keys):
+def test_get_data_dir_unset_env():
     data_dir = config.get_default_data_dir()
     expected = os.path.abspath(
         os.path.join(

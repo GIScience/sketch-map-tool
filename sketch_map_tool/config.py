@@ -51,43 +51,14 @@ def load_config_from_file(path: str) -> Dict[str, str]:
         return {}
 
 
-def load_config_from_env() -> Dict[str, str]:
-    """Load configuration from environment variables."""
-    cfg = {
-        "data-dir": os.getenv("SMT_DATA_DIR"),
-        "user-agent": os.getenv("SMT_USER_AGENT"),
-        "broker-url": os.getenv("SMT_BROKER_URL"),
-        "result-backend": os.getenv("SMT_RESULT_BACKEND"),
-        "wms-url-osm": os.getenv("SMT_WMS_URL"),
-        "wms-layers-osm": os.getenv("SMT_WMS_LAYERS"),
-        "wms-url-esri-world-imagery": os.getenv("SMT_WMS_URL_ESRI_WORLD_IMAGERY"),
-        "wms-layers-esri-world-imagery": os.getenv("SMT_WMS_LAYERS_ESRI_WORLD_IMAGERY"),
-        "wms-read-timeout": os.getenv("SMT_WMS_READ_TIMEOUT"),
-        "max-nr-simultaneous-uploads": os.getenv("SMT_MAX_NR_SIM_UPLOADS"),
-        "max_pixel_per_image": os.getenv("SMT_MAX_PIXEL_PER_IMAGE"),
-        "neptune_project": os.getenv("SMT_NEPTUNE_PROJECT"),
-        "neptune_api_token": os.getenv("SMT_NEPTUNE_API_TOKEN"),
-        "neptune_model_id_sam": os.getenv("SMT_NEPTUNE_MODEL_ID_SAM"),
-        "model_type_sam": os.getenv("SMT_MODEL_TYPE_SAM"),
-        "esri-api-key": os.getenv("SMT_ESRI_API_KEY"),
-        "log-level": os.getenv("SMT_LOG_LEVEL"),
-    }
-
-    return {k: v for k, v in cfg.items() if v is not None}
-
-
 def get_config() -> MappingProxyType:
     """Get configuration variables from environment and file.
 
-    Configuration values from file will be given precedence over default vaules.
-    Configuration values from environment variables will be given precedence over file
-    values.
+    Configuration values from file will be given precedence over default values.
     """
     cfg = load_config_default()
     cfg_file = load_config_from_file(get_config_path())
-    cfg_env = load_config_from_env()
     cfg.update(cfg_file)
-    cfg.update(cfg_env)
     return MappingProxyType(cfg)
 
 

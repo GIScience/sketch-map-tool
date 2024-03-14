@@ -10,9 +10,6 @@ services:
       - celery
       - redis
       - postgres
-    environment:
-      SMT_BROKER_URL: "redis://redis:6379"
-      SMT_RESULT_BACKEND: "db+postgresql://smt:smt@postgres:5432"
     ports:
       - "127.0.0.1:8081:8080"
     entrypoint:
@@ -34,9 +31,6 @@ services:
     depends_on:
       - redis
       - postgres
-    environment:
-      SMT_BROKER_URL: "redis://redis:6379"
-      SMT_RESULT_BACKEND: "db+postgresql://smt:smt@postgres:5432"
     entrypoint:
       [
         "mamba",
