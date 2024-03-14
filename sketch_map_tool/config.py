@@ -27,10 +27,10 @@ def load_config_default() -> Dict[str, str | int | float]:
         "wms-url-esri-world-imagery": "https://maps.heigit.org/sketch-map-tool/service?SERVICE=WMS&VERSION=1.1.1",
         "wms-layers-esri-world-imagery": "world_imagery",
         "wms-read-timeout": 600,
-        "max-nr-simultaneous-uploads": 100,
+        "max-nr-simultaneous-uploads": 25,
         "max_pixel_per_image": 10e8,  # 10.000*10.000
-        "neptune_project": "HeiGIT/SketchMapTool",
         "neptune_api_token": "",
+        "neptune_project": "HeiGIT/SketchMapTool",
         "neptune_model_id_yolo_osm_cls": "SMT-CLR-1",
         "neptune_model_id_yolo_esri_cls": "SMT-CLR-3",
         "neptune_model_id_yolo_osm_obj": "SMT-OSM-9",
