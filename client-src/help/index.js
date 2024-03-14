@@ -23,3 +23,14 @@ window.printPage = () => {
     window.print();
     closeAllDetailsElements();
 };
+
+// Open detail element, if jumped to via hyperlink
+window.addEventListener("hashchange", () => {
+    const hash = document.location.hash.substring(1);
+    if (hash) {
+        const element = document.getElementById(hash);
+        if (element && element.tagName.toLowerCase() === "details") {
+            element.open = true;
+        }
+    }
+});
