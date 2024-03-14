@@ -50,7 +50,7 @@ def yolo_esri_cls() -> YOLO:
     return YOLO(path)
 
 
-# @pytest.mark.skip("For manuel testing")
+@pytest.mark.skip("For manuel testing")
 def test_detect_markings(
     layer,
     map_frame_marked,
