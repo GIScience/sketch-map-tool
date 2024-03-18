@@ -7,7 +7,7 @@ The Sketch Map Tool can be configured using a configuration file.
 The default path of the configuration file is `config/config.toml`.
 A sample configuration file can be found in the same directory: `config/sample.config.toml`.
 All configuration files in this directory (`config`) will be ignored by Git.
-To change the default configuration file path for OQT set the environment variable `SMT_CONFIG` to the desired path.
+To change the default configuration file path set the environment variable `SMT_CONFIG` to the desired path.
 
 To create a new configuration file simply copy the sample configuration file and change the values.
 
