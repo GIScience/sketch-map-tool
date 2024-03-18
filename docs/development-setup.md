@@ -95,6 +95,9 @@ A `TranslatableError` should have as first argument a message wrapped in a `N_()
 
 ### Tests
 
+Provide required [configuration variables](/docs/configuration.md#required-configuration) in `config/test.config.toml`.
+
+To run all tests:
 ```bash
 pytest
 ```
