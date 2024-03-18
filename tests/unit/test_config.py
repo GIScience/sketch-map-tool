@@ -30,8 +30,8 @@ def config_keys():
         "wms-read-timeout",
         "max-nr-simultaneous-uploads",
         "max_pixel_per_image",
-        "neptune_api_token",
         "neptune_project",
+        "neptune_api_token",
         "neptune_model_id_yolo_osm_cls",
         "neptune_model_id_yolo_esri_cls",
         "neptune_model_id_yolo_osm_obj",
@@ -63,8 +63,7 @@ def test_get_config_path_set_env(monkeypatch):
 
 def test_config_default(monkeypatch, config_keys):
     monkeypatch.delenv("SMT_CONFIG", raising=False)
-    cfg = config.load_config_default()
-    assert tuple(cfg.keys()) == config_keys
+    assert tuple(config.DEFAULT_CONFIG.keys()) == config_keys
 
 
 def test_load_config_from_file(monkeypatch):
@@ -110,9 +109,7 @@ def test_get_config_env_empty_str(config_keys):
     assert tuple(cfg.keys()) == config_keys
 
 
-@mock.patch.dict("os.environ", {}, clear=True)
-def test_get_data_dir_unset_env():
-    data_dir = config.get_default_data_dir()
+def test_data_dir():
     expected = os.path.abspath(
         os.path.join(
             os.path.dirname(
@@ -123,4 +120,4 @@ def test_get_data_dir_unset_env():
             "data",
         )
     )
-    assert data_dir == expected
+    assert config.DEFAULT_CONFIG["data-dir"] == expected
