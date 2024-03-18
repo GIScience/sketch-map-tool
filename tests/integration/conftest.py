@@ -13,6 +13,7 @@ from testcontainers.redis import RedisContainer
 
 from sketch_map_tool import CELERY_CONFIG, get_locale, make_flask, routes
 from sketch_map_tool import celery_app as smt_celery_app
+from sketch_map_tool.config import DEFAULT_CONFIG
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.helpers import to_array
@@ -24,12 +25,6 @@ from tests import FIXTURE_DIR
 #
 # Session wide test setup of DB (redis and postgres) and workers (flask and celery)
 #
-@pytest.fixture(scope="session")
-def monkeypatch_session():
-    with pytest.MonkeyPatch.context() as mp:
-        yield mp
-
-
 @pytest.fixture(scope="session", autouse=True)
 def postgres_container(monkeypatch_session):
     """Spin up a Postgres container available for all tests.
@@ -43,7 +38,7 @@ def postgres_container(monkeypatch_session):
             port=postgres.get_exposed_port(5432),  # 5432 is default port of postgres
             database=postgres.POSTGRES_DB,
         )
-        monkeypatch_session.setenv("SMT_RESULT_BACKEND", conn)
+        monkeypatch_session.setitem(DEFAULT_CONFIG, "result-backend", conn)
         yield {"connection_url": conn}
     # cleanup
 
@@ -57,7 +52,7 @@ def redis_container(monkeypatch_session):
     with RedisContainer("redis:7") as redis:
         port = redis.get_exposed_port(6379)  # 6379 is default port of redis
         conn = f"redis://127.0.0.1:{port}"
-        monkeypatch_session.setenv("SMT_BROKER_URL", conn)
+        monkeypatch_session.setitem(DEFAULT_CONFIG, "broker-url", conn)
         yield {"connection_url": conn}
     # cleanup
 
