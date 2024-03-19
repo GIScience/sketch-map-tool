@@ -45,7 +45,13 @@ def clip(photo: NDArray, template: NDArray) -> NDArray:
     matches = matcher.knnMatch(queryDescriptors=desc1, trainDescriptors=desc2, k=2)
 
     # Filter good matches
-    good_matches = [m for m, n in matches if m.distance < 0.75 * n.distance]
+    good_matches = []
+    for match in matches:
+        # TODO: evaluate workaround
+        if len(match) != 2:
+            continue
+        if match[0].distance < 0.75 * match[1].distance:
+            good_matches.append(match[0])
 
     # Extract corresponding points
     src_pts = np.float32([kpts1[m.queryIdx].pt for m in good_matches]).reshape(-1, 1, 2)
