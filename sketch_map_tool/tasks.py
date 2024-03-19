@@ -1,10 +1,11 @@
+import logging
 import os
 from io import BytesIO
 from uuid import UUID
 from zipfile import ZipFile
 
 from celery.result import AsyncResult
-from celery.signals import worker_process_init, worker_process_shutdown
+from celery.signals import setup_logging, worker_process_init, worker_process_shutdown
 from geojson import FeatureCollection
 from numpy.typing import NDArray
 from segment_anything import SamPredictor, sam_model_registry
@@ -41,6 +42,16 @@ def init_worker(**kwargs):
 def shutdown_worker(**kwargs):
     """Closing database connection for worker"""
     db_client_celery.close_connection()
+
+
+@setup_logging.connect
+def on_setup_logging(**kwargs):
+    level = getattr(logging, get_config_value("log-level").upper())
+    format = "%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s"
+    logging.basicConfig(
+        level=level,
+        format=format,
+    )
 
 
 # 1. GENERATE SKETCH MAP & QUALITY REPORT

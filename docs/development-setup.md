@@ -2,7 +2,7 @@
 
 For contributing to this project please also read the [Contribution Guideline](/CONTRIBUTING.md).
 
-> Note: To just run the tool locally, provide the required [configuration](https://github.com/GIScience/sketch-map-tool/blob/main/docs/configuration.md)
+> Note: To just run the tool locally, provide the required [configuration](/docs/configuration.md)
 > and use Docker Compose: `docker compose up -d`
 
 ## Prerequisites (Requirements)
@@ -95,6 +95,9 @@ A `TranslatableError` should have as first argument a message wrapped in a `N_()
 
 ### Tests
 
+Provide required [configuration variables](/docs/configuration.md#required-configuration) in `config/test.config.toml`.
+
+To run all tests:
 ```bash
 pytest
 ```

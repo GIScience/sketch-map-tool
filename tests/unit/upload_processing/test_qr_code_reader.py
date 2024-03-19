@@ -16,10 +16,9 @@ def qr_code_img():
     return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code.png"))
 
 
-# TODO: Find fixture which need to be downscaled
-# @pytest.fixture
-# def qr_code_img_big():
-#     return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code-sketch-map-big.png"))
+@pytest.fixture
+def qr_code_img_big():
+    return cv2.imread(str(QR_CODES_FIXTURE_DIR / "qr-code-sketch-map-big.png"))
 
 
 @pytest.fixture
@@ -66,13 +65,14 @@ def test_read_qr_code_sketch_map(sketch_map, decoded_content):
     assert qr_code_reader.read(sketch_map) == decoded_content
 
 
-# TODO: Find fixture which need to be downscaled
-# def test_read_qr_code_big(qr_code_img_big):
-#     """Test reading a QR-Code image which size is too big and need to be down-scaled..
+def test_read_qr_code_big(qr_code_img_big):
+    """Test reading a QR-Code image which size is too big and need to be down-scaled ...
 
-#     ... before content can be detected.
-#     """
-#     result = qr_code_reader.read(qr_code_img_big)
+    ... before content can be detected.
+    """
+    assert qr_code_reader.read(qr_code_img_big) is not None
+    with pytest.raises(QRCodeError):
+        qr_code_reader.read(qr_code_img_big, depth=6)  # Disable recursion (resizing)
 
 
 def test_read_qr_code_multiple(qr_code_img_mutliple):

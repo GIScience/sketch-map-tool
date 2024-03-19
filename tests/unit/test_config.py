@@ -32,10 +32,14 @@ def config_keys():
         "max_pixel_per_image",
         "neptune_project",
         "neptune_api_token",
-        "neptune_model_id_yolo",
+        "neptune_model_id_yolo_osm_cls",
+        "neptune_model_id_yolo_esri_cls",
+        "neptune_model_id_yolo_osm_obj",
+        "neptune_model_id_yolo_esri_obj",
         "neptune_model_id_sam",
         "model_type_sam",
         "esri-api-key",
+        "log-level",
     )
 
 
@@ -59,8 +63,7 @@ def test_get_config_path_set_env(monkeypatch):
 
 def test_config_default(monkeypatch, config_keys):
     monkeypatch.delenv("SMT_CONFIG", raising=False)
-    cfg = config.load_config_default()
-    assert tuple(cfg.keys()) == config_keys
+    assert tuple(config.DEFAULT_CONFIG.keys()) == config_keys
 
 
 def test_load_config_from_file(monkeypatch):
@@ -74,22 +77,6 @@ def test_load_config_from_file(monkeypatch):
     cfg = config.load_config_from_file(path)
     expected = {"data-dir": "/some/absolute/path", "user-agent": "sketch-map-tool"}
     assert cfg == expected
-
-
-@mock.patch.dict("os.environ", {}, clear=True)
-def test_load_config_from_env_empty():
-    cfg = config.load_config_from_env()
-    assert cfg == {}
-
-
-@mock.patch.dict(
-    "os.environ",
-    {"SMT_DATA_DIR": "foo", "SMT_USER_AGENT": "bar"},
-    clear=True,
-)
-def test_load_config_from_env_set():
-    cfg = config.load_config_from_env()
-    assert cfg == {"data-dir": "foo", "user-agent": "bar"}
 
 
 @mock.patch.dict("os.environ", {}, clear=True)
@@ -122,9 +109,7 @@ def test_get_config_env_empty_str(config_keys):
     assert tuple(cfg.keys()) == config_keys
 
 
-@mock.patch.dict("os.environ", {}, clear=True)
-def test_get_data_dir_unset_env(config_keys):
-    data_dir = config.get_default_data_dir()
+def test_data_dir():
     expected = os.path.abspath(
         os.path.join(
             os.path.dirname(
@@ -135,4 +120,4 @@ def test_get_data_dir_unset_env(config_keys):
             "data",
         )
     )
-    assert data_dir == expected
+    assert config.DEFAULT_CONFIG["data-dir"] == expected
