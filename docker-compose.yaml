@@ -50,12 +50,27 @@ services:
         "-E",
       ]
   flower:
-    # Monitoring of Celery
-    image: mher/flower
+    # Monitore of Celery events
+    build:
+      context: ./
+      dockerfile: Dockerfile
     restart: unless-stopped
     ports:
       - "5555:5555"
-    entrypoint: ["celery", "--broker=redis://redis:6379", "flower", "--url_prefix=flower"]
+    depends_on:
+      - celery
+    entrypoint:
+      [
+        "mamba",
+        "run",
+        "--no-capture-output",
+        "--name",
+        "smt",
+        "celery",
+        "--app",
+        "sketch_map_tool.tasks",
+        "flower",
+      ]
   redis:
     # Message broker
     image: redis:7
