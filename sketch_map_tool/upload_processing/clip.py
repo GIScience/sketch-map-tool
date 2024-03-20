@@ -69,8 +69,7 @@ def clip(photo: NDArray, template: NDArray) -> NDArray:
     if succeed:
         selected_map = cv2.warpPerspective(photo, homography_matrix, (width, height))
     else:
-        selected_map = np.zeros((width, height))
-
+        np.zeros(template.shape, dtype=np.uint8)
     return selected_map
 
 
