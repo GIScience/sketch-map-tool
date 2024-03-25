@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-12 14:59+0000\n"
-"PO-Revision-Date: 2024-03-19 18:25\n"
+"POT-Creation-Date: 2024-03-25 09:30+0000\n"
+"PO-Revision-Date: 2024-03-25 12:36\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -334,16 +334,16 @@ msgstr "Inicio"
 
 #: sketch_map_tool/templates/base.html:32
 msgid "About"
-msgstr ""
+msgstr "Acerca de"
 
 #: sketch_map_tool/templates/base.html:33
 msgid "Help"
-msgstr ""
+msgstr "Ayuda"
 
 #: sketch_map_tool/templates/base.html:62
 msgid "Privacy\n"
 "            Policy"
-msgstr ""
+msgstr "Política de privacidad"
 
 #: sketch_map_tool/templates/base.html:65
 msgid "Imprint"
@@ -356,14 +356,14 @@ msgstr ""
 #: sketch_map_tool/templates/create-results.html:9
 #: sketch_map_tool/templates/create.html:12
 msgid "Create paper maps to collect data"
-msgstr ""
+msgstr "Crear mapas de papel para recolectar datos"
 
 #: sketch_map_tool/templates/create-results.html:14
 #: sketch_map_tool/templates/create.html:17
 #: sketch_map_tool/templates/index.html:52
 #: sketch_map_tool/templates/index.html:67
 msgid "Define your Area of Interest"
-msgstr ""
+msgstr "Defina su área de interés"
 
 #: sketch_map_tool/templates/create-results.html:15
 #: sketch_map_tool/templates/create.html:18
@@ -371,7 +371,7 @@ msgstr ""
 #: sketch_map_tool/templates/index.html:53
 #: sketch_map_tool/templates/index.html:68
 msgid "Map Quality Check"
-msgstr ""
+msgstr "Map Quality Check"
 
 #: sketch_map_tool/templates/create-results.html:16
 #: sketch_map_tool/templates/create.html:19
@@ -383,34 +383,34 @@ msgstr ""
 #: sketch_map_tool/templates/create-results.html:20
 #: sketch_map_tool/templates/digitize-results.html:20
 msgid "Your results are being processed ..."
-msgstr ""
+msgstr "Sus resultados están siendo procesados..."
 
 #: sketch_map_tool/templates/create-results.html:22
 #: sketch_map_tool/templates/digitize-results.html:22
 msgid "Your results are ready for download!"
-msgstr ""
+msgstr "¡Tus resultados están listos para ser descargados!"
 
 #: sketch_map_tool/templates/create-results.html:24
 #: sketch_map_tool/templates/digitize-results.html:24
 msgid "Sorry. Only some of your results could be generated for download."
-msgstr ""
+msgstr "Lo sentimos, solo algunos de tus resultados pudieron ser generados para la descarga."
 
 #: sketch_map_tool/templates/create-results.html:26
 #: sketch_map_tool/templates/digitize-results.html:26
 msgid "Your results should have been downloadable from here, but we are having troubles on our servers!"
-msgstr ""
+msgstr "¡Tus resultados deberían poderse descargar, pero estamos teniendo problemas en nuestros servidores!"
 
 #: sketch_map_tool/templates/create-results.html:34
 msgid "quality report icon"
-msgstr ""
+msgstr "icono del informe de calidad"
 
 #: sketch_map_tool/templates/create-results.html:35
 msgid "ohsome quality analyst logo"
-msgstr ""
+msgstr "ohsome quality analyst logo"
 
 #: sketch_map_tool/templates/create-results.html:37
 msgid "Map Quality Check Report"
-msgstr ""
+msgstr "Informe del Map Quality Check"
 
 #: sketch_map_tool/templates/create-results.html:39
 msgid "We are analyzing the <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap\n"
@@ -419,7 +419,12 @@ msgid "We are analyzing the <a href=\"https://wiki.osm.org\" target=\"_blank\">O
 "                        collection</strong>. It is\n"
 "                        created with the help of the <a href=\"https://oqt.ohsome.org/\"\n"
 "                                                        target=\"_blank\">ohsome quality analyst</a>."
-msgstr ""
+msgstr "Estamos analizando los datos de <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap\n"
+"                        (OSM)</a> en el área de interés seleccionada.<br>El Map Quality Check\n"
+"                        Report ofrece información acerca de la <strong>idoneidad para coleccionar datos de campo\n"
+"                        </strong>. Es\n"
+"                        creado con la ayuda del <a href=\"https://oqt.ohsome.org/\"\n"
+"                                                        target=\"_blank\">Ohsome Quality Analyst."
 
 #: sketch_map_tool/templates/create-results.html:47
 msgid "We have analyzed the <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap\n"
@@ -428,31 +433,40 @@ msgid "We have analyzed the <a href=\"https://wiki.osm.org\" target=\"_blank\">O
 "                        collection</strong>. It has been\n"
 "                        created with the help of the <a href=\"https://oqt.ohsome.org/\"\n"
 "                                                        target=\"_blank\">ohsome quality analyst</a>."
-msgstr ""
+msgstr "Hemos analizado los datos de <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap\n"
+"                        (OSM)</a> en el área de interés seleccionada.<br>El Map Quality Check\n"
+"                        Report ofrece información acerca de la <strong>idoneidad para coleccionar datos de campo\n"
+"                        </strong>. Es\n"
+"                        creado con la ayuda del <a href=\"https://oqt.ohsome.org/\"\n"
+"                                                        target=\"_blank\">Ohsome Quality Analyst."
 
 #: sketch_map_tool/templates/create-results.html:55
 #: sketch_map_tool/templates/create-results.html:85
 #: sketch_map_tool/templates/digitize-results.html:52
 #: sketch_map_tool/templates/digitize-results.html:80
 msgid "Sorry! <br>Something went wrong while trying to generate the Result."
-msgstr ""
+msgstr "¡Lo sentimos! <br>Algo salió mal al intentar generar el resultado."
 
 #: sketch_map_tool/templates/create-results.html:58
 #: sketch_map_tool/templates/create-results.html:89
 msgid "Download PDF"
-msgstr ""
+msgstr "Descargar PDF"
 
 #: sketch_map_tool/templates/create-results.html:68
 msgid "Sketch Map Template"
-msgstr ""
+msgstr "Plantilla del Sketch Map"
 
 #: sketch_map_tool/templates/create-results.html:70
 msgid "We are creating the Sketch Map template that you can use for offline\n"
 "                        participatory mapping.<br>\n"
-"                        <strong>Please be patient, this can take 2-3 minutes.</strong> We use up-to-date\n"
+"                        <strong>Please be patient, this can take 2-10 minutes.</strong> We use up-to-date\n"
 "                        <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> data\n"
 "                        or satellite imagery powered by ESRI to create a high resolution printable map for you."
-msgstr ""
+msgstr "Estamos creando la plantilla del Sketch Map que podrá utilizar para el mapeo participativo\n"
+"                        sin conexión.<br>\n"
+"                        <strong>Por favor, tenga paciencia, esto puede tardar entre 2 y 10 minutos.</strong> Utilizamos datos actuales de \n"
+"                        <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> \n"
+"                        o imágenes satelitales de ESRI para crear un mapa imprimible de alta resolución."
 
 #: sketch_map_tool/templates/create-results.html:77
 msgid "We have created the Sketch Map template that you can use for offline\n"
@@ -461,44 +475,52 @@ msgid "We have created the Sketch Map template that you can use for offline\n"
 "                        <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> data\n"
 "                        or satellite imagery powered by ESRI to create a high resolution printable map for you.<br>\n"
 "                        <strong>You can now start collecting data in the field!</strong>"
-msgstr ""
+msgstr "Hemos creado la plantilla del Sketch Map que podrá utilizar para el mapeo participativo\n"
+"                        sin conexión.<br>\n"
+"                        Se han utilizado datos actuales de \n"
+"                        <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> \n"
+"                        o imágenes satelitales de ESRI para crear un mapa imprimible de alta resolución. <br>\n"
+"                        <strong>¡Ahora puedes empezar a recoger datos en el campo! </strong>"
 
 #: sketch_map_tool/templates/create.html:25
 msgid "Area of Interest"
-msgstr ""
+msgstr "Área de interés"
 
 #: sketch_map_tool/templates/create.html:30
 msgid "Page Setup"
-msgstr ""
+msgstr "Configuración de la página"
 
 #: sketch_map_tool/templates/create.html:32
 msgid "Your Area of Interest is too large!\n"
 "                        <br>Zoom further in to be able to create a Sketch Map."
-msgstr ""
+msgstr "¡El área de interés seleccionada es demasiado  grande! \n"
+"                        <br>Aumenta el zoom para poder crear el Sketch Map."
 
 #: sketch_map_tool/templates/create.html:35
 msgid "You are currently trying to\n"
 "                        request a map that crosses the +/-180° <a href=\"https://en.wikipedia.org/wiki/180th_meridian\" target=\"_blank\">antimeridian</a>. This is currently not\n"
 "                        supported, please move the map such that your extent is either left or right of\n"
 "                        the antimeridian."
-msgstr ""
+msgstr "Estás intentando\n"
+"                        solicitar un mapa que cruza el <a href=\"https://en.wikipedia.org/wiki/180th_meridian\" target=\"_blank\">antimeridiano +/-180°</a>. Esto actualmente no es posible, por favor mueve el mapa de tal manera que los bordes se encuentren a la  izquierda o a la derecha del\n"
+"                        antimeridiano."
 
 #: sketch_map_tool/templates/create.html:43
 msgid "Paper Format"
-msgstr ""
+msgstr "Formato del papel"
 
 #: sketch_map_tool/templates/create.html:46
 msgid "Paper Orientation"
-msgstr ""
+msgstr "Orientación del papel"
 
 #: sketch_map_tool/templates/create.html:55
 msgid "NEXT"
-msgstr ""
+msgstr "SIGUIENTE"
 
 #: sketch_map_tool/templates/digitize-results.html:8
 #: sketch_map_tool/templates/digitize.html:10
 msgid "Paper to GIS:"
-msgstr ""
+msgstr "Del papel al SIG:"
 
 #: sketch_map_tool/templates/digitize-results.html:9
 #: sketch_map_tool/templates/digitize.html:11
@@ -524,77 +546,85 @@ msgstr ""
 #: sketch_map_tool/templates/index.html:60
 #: sketch_map_tool/templates/index.html:75
 msgid "Download collected Markings as Geodata"
-msgstr ""
+msgstr "Descargar los trazos colectados como geodatos"
 
 #: sketch_map_tool/templates/digitize-results.html:36
 msgid "raster data icon"
-msgstr ""
+msgstr "icono de datos raster"
 
 #: sketch_map_tool/templates/digitize-results.html:37
 msgid "Raster"
-msgstr ""
+msgstr "Ráster"
 
 #: sketch_map_tool/templates/digitize-results.html:39
 msgid "Geo-referenced markings as GeoTiffs"
-msgstr ""
+msgstr "Trazos georeferenciados como GeoTiffs"
 
 #: sketch_map_tool/templates/digitize-results.html:41
 #: sketch_map_tool/templates/digitize-results.html:69
 msgid "We are extracting and geo-referencing the color markings of your Sketch\n"
 "                        Maps.<br>\n"
-"                        Please be patient this can take 2-3 minutes."
-msgstr ""
+"                        Please be patient this can take 2-10 minutes."
+msgstr "Estamos extrayendo y georeferenciando las trazos de color de sus Sketch\n"
+"                        Maps.<br>\n"
+"                        Por favor, tenga paciencia, esto puede tardar entre 2 y 10 minutos."
 
 #: sketch_map_tool/templates/digitize-results.html:46
 msgid "We have extracted and geo-referenced the color markings of your Sketch\n"
 "                        Maps.<br>\n"
 "                        You can download them as rasterized GeoTIFFs and use them for further\n"
 "                        analysis in your favorite GIS Software."
-msgstr ""
+msgstr "Hemos extraído y georeferenciado los trazos de color de tus Sketch\n"
+"                       Maps<br>\n"
+"                        Puedes descargarlos como GeoTIFFs rasterizados y analizarlos\n"
+"                        en tu software SIG favorito."
 
 #: sketch_map_tool/templates/digitize-results.html:55
 msgid "Download ZIP"
-msgstr ""
+msgstr "Descargar Zip"
 
 #: sketch_map_tool/templates/digitize-results.html:64
 msgid "vector data icon"
-msgstr ""
+msgstr "icono de datos vectoriales"
 
 #: sketch_map_tool/templates/digitize-results.html:65
 msgid "Vector"
-msgstr ""
+msgstr "Vector"
 
 #: sketch_map_tool/templates/digitize-results.html:67
 msgid "Geo-referenced markings as GeoJSON"
-msgstr ""
+msgstr "Trazos georeferenciados como GeoJSON"
 
 #: sketch_map_tool/templates/digitize-results.html:74
 msgid "We have extracted and geo-referenced the color markings of your Sketch\n"
 "                        Maps.<br>\n"
 "                        You can download them as vectorized polygons and use them for further\n"
 "                        analysis in your favorite GIS Software."
-msgstr ""
+msgstr "Hemos extraído y georeferenciado los trazos de color de tus Sketch\n"
+"                       Maps<br>\n"
+"                        Puedes descargarlos como GeoTIFFs rasterizados y analizarlos\n"
+"                        en tu software SIG favorito."
 
 #: sketch_map_tool/templates/digitize-results.html:84
 msgid "Download GeoJSON"
-msgstr ""
+msgstr "Descargar GeoJSON"
 
 #: sketch_map_tool/templates/digitize.html:22
 msgid "Scan or photograph your marked Sketch Maps after data collection.<br>Then, upload one or\n"
 "            more marked Sketch Maps at once as .jpg or .png file."
-msgstr ""
+msgstr "Escanea o fotografia tus Sketch Maps trazados después de haber recolectado los datos. Después puedes subir todos los Sketch Maps digitalizados al mismo tiempo. Es importante que los Sketch Maps escaneados hayan sido guardados en formato .jpg o .png. "
 
 #: sketch_map_tool/templates/digitize.html:31
 msgid "red cloud icon"
-msgstr ""
+msgstr "icono de red cloud"
 
 #: sketch_map_tool/templates/digitize.html:32
 msgid "Choose file(s)"
-msgstr ""
+msgstr "Seleccionar archivo(s)"
 
 #: sketch_map_tool/templates/digitize.html:33
 msgid "or drag them here<br>(.png or .jpg)"
-msgstr ""
+msgstr "o arrástralos aquí<br>(.png o .jpg)"
 
 #: sketch_map_tool/templates/digitize.html:46
 msgid "Files:"
