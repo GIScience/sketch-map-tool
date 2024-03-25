@@ -8,7 +8,7 @@ from flask_babel import Babel
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.database import client_flask as db_client
 
-__version__ = "1.1.5"
+__version__ = "2.0.0"
 
 # Setup logging
 LEVEL = getattr(logging, get_config_value("log-level").upper())
