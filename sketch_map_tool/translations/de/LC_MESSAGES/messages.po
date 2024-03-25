@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-12 14:59+0000\n"
-"PO-Revision-Date: 2024-03-25 03:24\n"
+"POT-Creation-Date: 2024-03-25 09:30+0000\n"
+"PO-Revision-Date: 2024-03-25 12:36\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -339,7 +339,7 @@ msgstr "Erstellen Sie Papierkarten zur Datenerhebung"
 #: sketch_map_tool/templates/index.html:52
 #: sketch_map_tool/templates/index.html:67
 msgid "Define your Area of Interest"
-msgstr "Definieren Sie Ihr Interessengebiet"
+msgstr "Definieren Sie Ihr Untersuchungsgebiet"
 
 #: sketch_map_tool/templates/create-results.html:15
 #: sketch_map_tool/templates/create.html:18
@@ -378,7 +378,7 @@ msgstr "Ihre Ergebnisse sollten von hier herunterladbar sein, aber wir haben Pro
 
 #: sketch_map_tool/templates/create-results.html:34
 msgid "quality report icon"
-msgstr "Symbol für den Qualitätsbericht"
+msgstr "Qualitätsbericht-Icon"
 
 #: sketch_map_tool/templates/create-results.html:35
 msgid "ohsome quality analyst logo"
@@ -435,13 +435,10 @@ msgstr "Sketch-Map-Template"
 #: sketch_map_tool/templates/create-results.html:70
 msgid "We are creating the Sketch Map template that you can use for offline\n"
 "                        participatory mapping.<br>\n"
-"                        <strong>Please be patient, this can take 2-3 minutes.</strong> We use up-to-date\n"
+"                        <strong>Please be patient, this can take 2-10 minutes.</strong> We use up-to-date\n"
 "                        <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> data\n"
 "                        or satellite imagery powered by ESRI to create a high resolution printable map for you."
-msgstr "Wir erstellen die Sketch-Map-Vorlage, die Sie für die Offline-Kartierung verwenden können.<br>\n"
-"                        <strong>Bitte haben Sie Geduld; dies kann 2-3 Minuten dauern.</strong> Wir verwenden aktuelle\n"
-"                        <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a>-Daten\n"
-"                        oder Satellitenbilder von ESRI, um eine hochauflösende, ausdruckbare Karte für Sie zu erstellen."
+msgstr ""
 
 #: sketch_map_tool/templates/create-results.html:77
 msgid "We have created the Sketch Map template that you can use for offline\n"
@@ -451,22 +448,22 @@ msgid "We have created the Sketch Map template that you can use for offline\n"
 "                        or satellite imagery powered by ESRI to create a high resolution printable map for you.<br>\n"
 "                        <strong>You can now start collecting data in the field!</strong>"
 msgstr "Wir haben die Sketch Map Vorlage erstellt, die Sie für die Offline-Kartierung\n"
-"                        verwenden können.<br>\n"
-"                        <strong>Sie können nun mit dem Sammeln von Daten im Feld beginnen!</strong>"
+"                        verwenden können.<br> Wir nutzen hierfür entweder aktuelle                         <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM) </a> Daten oder Satellitenbilder von ESRI, um eine hochauflösende, ausdruckbare Karte für Sie zu erstellen.<br>\n"
+"                        <strong>Sie können jetzt mit der Datenerfassung im Feld beginnen!</strong>"
 
 #: sketch_map_tool/templates/create.html:25
 msgid "Area of Interest"
-msgstr "Kartenausschnitt wählen"
+msgstr "Untersuchungsgebiet"
 
 #: sketch_map_tool/templates/create.html:30
 msgid "Page Setup"
-msgstr "Formateinstellungen"
+msgstr "Seiteneinstellungen"
 
 #: sketch_map_tool/templates/create.html:32
 msgid "Your Area of Interest is too large!\n"
 "                        <br>Zoom further in to be able to create a Sketch Map."
 msgstr "Ihr ausgewähltes Gebiet ist zu groß!\n"
-"                        <br>Wählen Sie einen kleineren Kartenausschnitt, um eine Sketch Map erstellen zu können."
+"                        <br>Zoomen Sie näher heran, um eine Sketch Map erstellen zu können."
 
 #: sketch_map_tool/templates/create.html:35
 msgid "You are currently trying to\n"
@@ -474,9 +471,9 @@ msgid "You are currently trying to\n"
 "                        supported, please move the map such that your extent is either left or right of\n"
 "                        the antimeridian."
 msgstr "Sie versuchen zur Zeit\n"
-"                        eine Karte anzufordern, die den +/-180° <a href=\"https://de.wikipedia.org/wiki/Nullmeridian\" target=\"_blank\">Nullmeridian</a>überquert. Dies wird derzeit nicht\n"
-"                        unterstützt, Bitte verschieben Sie die Karte so, dass Ihr Umfang ist entweder links oder rechts des\n"
-"                        Nullmeridians ist."
+"                        eine Karte anzufordern, die den +/-180° <a href=\"https://en.wikipedia.org/wiki/180th_meridian\" target=\"_blank\">Nullmeridian</a>überquert. Dies wird derzeit nicht\n"
+"                        unterstützt. Bitte verschieben Sie die Karte so, dass Ihr Umfang entweder links oder rechts des\n"
+"                        Nullmeridians verläuft."
 
 #: sketch_map_tool/templates/create.html:43
 msgid "Paper Format"
@@ -484,7 +481,7 @@ msgstr "Papierformat"
 
 #: sketch_map_tool/templates/create.html:46
 msgid "Paper Orientation"
-msgstr "Ausrichtung (portrait=Hochformat, landscape=Querformat)"
+msgstr "Ausrichtung der Karte"
 
 #: sketch_map_tool/templates/create.html:55
 msgid "NEXT"
@@ -505,7 +502,7 @@ msgstr "Automatische Digitalisierung Ihrer Sketch-Maps"
 #: sketch_map_tool/templates/index.html:58
 #: sketch_map_tool/templates/index.html:73
 msgid "Scan or photograph your marked Sketch&nbsp;Maps"
-msgstr "Scannen/photographieren Sie die ausgefüllten Sketch-Maps"
+msgstr "Scannen oder fotografieren Sie die markierten Sketch-Maps"
 
 #: sketch_map_tool/templates/digitize-results.html:15
 #: sketch_map_tool/templates/digitize.html:17
@@ -519,7 +516,7 @@ msgstr "Sketch-Maps hochladen"
 #: sketch_map_tool/templates/index.html:60
 #: sketch_map_tool/templates/index.html:75
 msgid "Download collected Markings as Geodata"
-msgstr "Markierungen als Geodaten herunterladen"
+msgstr "Erfasste Markierungen als Geodaten herunterladen"
 
 #: sketch_map_tool/templates/digitize-results.html:36
 msgid "raster data icon"
@@ -527,25 +524,25 @@ msgstr "Rasterdaten-Icon"
 
 #: sketch_map_tool/templates/digitize-results.html:37
 msgid "Raster"
-msgstr "Rasterdaten"
+msgstr "Raster"
 
 #: sketch_map_tool/templates/digitize-results.html:39
 msgid "Geo-referenced markings as GeoTiffs"
-msgstr "Georeferenzierte Sketch-Map(s) als GeoTIFF(s)"
+msgstr "Georeferenzierte Markierungen als GeoTIFFs"
 
 #: sketch_map_tool/templates/digitize-results.html:41
 #: sketch_map_tool/templates/digitize-results.html:69
 msgid "We are extracting and geo-referencing the color markings of your Sketch\n"
 "                        Maps.<br>\n"
-"                        Please be patient this can take 2-3 minutes."
-msgstr "Die ausgefüllten Sketch-Maps sowie die Markierungen darauf werden extrahiert und georeferenziert.<br>Bitte haben Sie einen Moment Geduld. Der Vorgang kann 2-3 Minuten in Anspruch nehmen."
+"                        Please be patient this can take 2-10 minutes."
+msgstr ""
 
 #: sketch_map_tool/templates/digitize-results.html:46
 msgid "We have extracted and geo-referenced the color markings of your Sketch\n"
 "                        Maps.<br>\n"
 "                        You can download them as rasterized GeoTIFFs and use them for further\n"
 "                        analysis in your favorite GIS Software."
-msgstr "Die ausgefüllten Sketch-Maps sowie die Markierungen darauf wurden extrahiert und georeferenziert.<br>Sie können nun die Ergebnisse herunterladen und z.B. weitere Analysen in einer GIS-Software (z.B. QGIS) durchführen."
+msgstr "Wir haben die Farbmarkierungen Ihrer Sketch-Map extrahiert und georeferenziert.<br>Sie können sie als gerasterte GeoTIFFs herunterladen und für weitere Analysen in einer GIS-Software Ihrer Wahl nutzen."
 
 #: sketch_map_tool/templates/digitize-results.html:55
 msgid "Download ZIP"
@@ -557,7 +554,7 @@ msgstr "Vektordaten-Icon"
 
 #: sketch_map_tool/templates/digitize-results.html:65
 msgid "Vector"
-msgstr "Vektordaten"
+msgstr "Vektor"
 
 #: sketch_map_tool/templates/digitize-results.html:67
 msgid "Geo-referenced markings as GeoJSON"
@@ -568,7 +565,7 @@ msgid "We have extracted and geo-referenced the color markings of your Sketch\n"
 "                        Maps.<br>\n"
 "                        You can download them as vectorized polygons and use them for further\n"
 "                        analysis in your favorite GIS Software."
-msgstr "Die Markierungen auf Ihren Sketch Maps wurden extrahiert und georeferenziert. Sie können die vektorisierten Polygone herunterladen und in einer GIS-Software (z.B. QGIS) analysieren."
+msgstr "Wir haben die Farbmarkierungen Ihrer Sketch-Map extrahiert und georeferenziert.<br>Sie können sie als vektorisierte Polygone herunterladen und für weitere Analysen in einer GIS-Software Ihrer Wahl nutzen."
 
 #: sketch_map_tool/templates/digitize-results.html:84
 msgid "Download GeoJSON"
@@ -577,15 +574,15 @@ msgstr "GeoJSON herunterladen"
 #: sketch_map_tool/templates/digitize.html:22
 msgid "Scan or photograph your marked Sketch Maps after data collection.<br>Then, upload one or\n"
 "            more marked Sketch Maps at once as .jpg or .png file."
-msgstr "Scannen oder photographieren Sie die ausgefüllten Sketch-Maps nach der Datenerhebung.<br>Laden Sie die Photos oder Scans dann als JPEG- oder PNG-Dateien hoch."
+msgstr "Scannen oder fotografieren Sie Ihre markierten Sketch-Maps nach der Datenerhebung.<br>Im Anschluss können Sie eine oder mehrere Sketch-Maps als JPEG- oder PNG-Dateien hochladen."
 
 #: sketch_map_tool/templates/digitize.html:31
 msgid "red cloud icon"
-msgstr "Icon rote Wolke"
+msgstr "Rote Wolke-Icon"
 
 #: sketch_map_tool/templates/digitize.html:32
 msgid "Choose file(s)"
-msgstr "Wählen Sie die Dateien zum Hochladen aus"
+msgstr "Datei(en) auswählen"
 
 #: sketch_map_tool/templates/digitize.html:33
 msgid "or drag them here<br>(.png or .jpg)"
@@ -609,7 +606,7 @@ msgstr "Fehler"
 
 #: sketch_map_tool/templates/help.html:9
 msgid "Need some help?"
-msgstr "Benötigen Sie Hilfe bei der Verwendung des Tools?"
+msgstr "Benötigen Sie Hilfe?"
 
 #: sketch_map_tool/templates/help.html:16
 msgid "Print"
@@ -619,7 +616,7 @@ msgstr "Drucken"
 msgid "The <strong>Step-by-Step Instructions</strong> will guide you through the Sketch Map Tool\n"
 "            and provide useful recommendations.<br>\n"
 "            You can also download and print the manual."
-msgstr "In dieser <strong>Anleitung</strong> wird Ihnen das Sketch Map Tool Schritt für Schritt näher gebracht und sie enthält nützliche Anwendungsempfehlungen.<br>\n"
+msgstr "Die <strong>Schritt-für-Schritt-Anleitung</strong> wird Sie durch das Sketch-Map Tool führen und enthält nützliche Anwendungsempfehlungen.<br>\n"
 "Sie können die Anleitung auch herunterladen und ausdrucken."
 
 #: sketch_map_tool/templates/help.html:26
@@ -643,7 +640,7 @@ msgid "Our new <a\n"
 "            experiences."
 msgstr "Unsere neue <a\n"
 "                href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html\"\n"
-"                target=\"_blank\">Trainingsplattform</a> bietet fünf verschiedene Übungsaufgaben, mit denen Sie das Sketch Map Tool und Sketch-Mapping im Allgemeinen weiter erforschen können. Diese Übungen wurden in erster Linie für Workshops entwickelt und ermöglichen die gemeinsame Diskussion Ihrer Erfahrungen."
+"                target=\"_blank\">Trainingsplattform</a> bietet fünf verschiedene Übungsaufgaben, mit denen Sie das Sketch-Map Tool und Sketch-Mapping im Allgemeinen weiter erforschen können. Diese Übungen wurden in erster Linie für Workshops entwickelt und ermöglichen die gemeinsame Diskussion Ihrer Erfahrungen."
 
 #: sketch_map_tool/templates/help.html:45
 msgid "<i>Since the latest version of the Sketch Map Tool was only recently released, you may encounter issues at\n"
@@ -651,12 +648,12 @@ msgid "<i>Since the latest version of the Sketch Map Tool was only recently rele
 "                We are committed to continually enhancing the tool,\n"
 "                so please report any technical problems to the <a href=\"mailto:sketch-map-tool@heigit.org\"\n"
 "                    target=\"_blank\">Sketch Map Tool user support</a></i>"
-msgstr "<i>Da die neueste Version des Sketch Map Tools erst vor Kurzem veröffentlicht wurde, kann es bei diversen Schritten im Arbeitsprozess möglicherweise zu Schwierigkeiten kommen. Wir entschuldigen uns für etwaige Unannehmlichkeiten, die dadurch entstehen können. Wir sind bestrebt, das Tool kontinuierlich zu verbessern. Melden Sie also bitte alle technischen Probleme dem <a href=\"mailto:sketch-map-tool@heigit.org\"\n"
-"                    target=\"_blank\"> Sketch Map Tool User Support</a></i>"
+msgstr "<i>Da die neueste Version des Sketch-Map Tools erst vor Kurzem veröffentlicht wurde, kann es bei diversen Abschnitten des Prozesses zu Schwierigkeiten kommen. Wir entschuldigen uns für daraus entstandene Unannehmlichkeiten. Wir sind bestrebt, das Tool kontinuierlich zu verbessern. Melden Sie daher bitte alle technischen Probleme dem <a href=\"mailto:sketch-map-tool@heigit.org\"\n"
+"                    target=\"_blank\"> Sketch-Map Tool User Support</a></i>"
 
 #: sketch_map_tool/templates/help.html:53
 msgid "Step-by-Step Instructions"
-msgstr "Schritt-für-Schritt-Instruktionen"
+msgstr "Schritt-für-Schritt-Anleitungen"
 
 #: sketch_map_tool/templates/help.html:57
 msgid "<strong>Create paper maps to collect data</strong>"
@@ -664,35 +661,35 @@ msgstr "<strong>Erstellen Sie Papierkarten zur Datenerhebung</strong>"
 
 #: sketch_map_tool/templates/help.html:60
 msgid "Define your area of interest and choose a base map layer"
-msgstr "Legen Sie einen relevanten Bereich fest und wählen Sie eine Basiskarte."
+msgstr "Legen Sie Ihr Untersuchungsgebiet fest und wählen Sie eine Basiskartenebene"
 
 #: sketch_map_tool/templates/help.html:64
 msgid "The first step in using the Sketch Map Tool involves creating a printable Sketch Map."
-msgstr "Im ersten Schritt bei der Anwendung des Sketch Map Tools werden Sketch Maps zum Ausdrucken erstellt."
+msgstr "Der erste Schritt bei der Verwendung des Sketch Map Tools ist die Erstellung einer ausdruckbaren Sketch-Map."
 
 #: sketch_map_tool/templates/help.html:67
 msgid "Begin by selecting your area of interest, either by zooming into the map preview or using the search\n"
 "                            function in the sidebar."
-msgstr "Fange Sie an, indem Sie ihren relevanten Bereich auswählen. Um dies zu tun, zoomen Sie entweder an die Vorschaukarte heran oder nutzen Sie die Suchfunktion in der Seitenleiste."
+msgstr "Wählen Sie zunächst das Gebiet aus, das Sie untersuchen wollen, indem Sie entweder in die Kartenvorschau zoomen oder die Suchfunktion in der Seitenleiste verwenden."
 
 #: sketch_map_tool/templates/help.html:69
 msgid "Choose between the two different base map layers: one based on <a href=\"https://osm.org/\"\n"
 "                                target=\"_blank\">OpenStreetMap (OSM)</a> and the other containing\n"
 "                            satellite imagery (<a href=\"https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9\"\n"
 "                                target=\"_blank\">ESRI world imagery</a>)"
-msgstr "Wählen Sie eine der beiden unterschiedlichen Basiskarten aus: Eine basiert auf <a href=\"https://osm.org/\"\n"
-"                                target=\"_blank\">OpenStreetMap (OSM)</a>, die andere auf Satellitenbildern (<a href=\"https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9\"\n"
+msgstr "Wählen Sie eine der beiden unterschiedlichen Basiskartenebenen aus: Eine basiert auf <a href=\"https://osm.org/\"\n"
+"                                target=\"_blank\">OpenStreetMap (OSM)</a> und die andere auf Satellitenbildern (<a href=\"https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9\"\n"
 "                                target=\"_blank\">ESRI world imagery</a>)"
 
 #: sketch_map_tool/templates/help.html:73
 msgid "Select from different paper formats and the appropriate page orientation. The dashed red line\n"
 "                            represents the\n"
 "                            boundaries of your area of interest, which will be printed on the Sketch Map."
-msgstr "Wählen Sie aus unterschiedlichen Papierformaten und legen Sie die entsprechende Seitenausrichtung fest. Die gestrichelte rote Linie markiert die Grenze ihres ausgewählten Bereichs, der auf die Sketch Map gedruckt wird."
+msgstr "Wählen Sie aus unterschiedlichen Papierformaten und legen Sie die entsprechende Seitenausrichtung fest. Die gestrichelte rote Linie markiert die Grenze ihres ausgewählten Bereichs, der auf die Sketch-Map gedruckt wird."
 
 #: sketch_map_tool/templates/help.html:76
 msgid "Initiate map creation by clicking the blue \"next\" button."
-msgstr "Durch Klicken auf den blauen \"next\" Button starten Sie die Kartenerstellung."
+msgstr "Starten Sie die Kartenerstellung, indem Sie auf den blauen Button \"Weiter\" klicken."
 
 #: sketch_map_tool/templates/help.html:85
 #: sketch_map_tool/templates/help.html:146
@@ -708,15 +705,15 @@ msgstr "Empfehlungen:"
 #: sketch_map_tool/templates/help.html:87
 msgid "Tailor the extent of your selected area to suit your use case, keeping the following questions in\n"
 "                            mind:"
-msgstr "Passen Sie die Größe Ihres ausgewählten Bereichs Ihrem Anwendungsfall an. Beachten Sie dabei Folgendes:"
+msgstr "Passen Sie die Größe Ihres ausgewählten Bereichs Ihrem Anwendungsfall an. Beachten Sie dabei folgende Fragestellungen:"
 
 #: sketch_map_tool/templates/help.html:90
 msgid "What do the participants need to map?"
-msgstr "Was sollen die Teilnehmenden kartieren?"
+msgstr "Was müssen die Teilnehmenden kartieren?"
 
 #: sketch_map_tool/templates/help.html:91
 msgid "What details need to be visible on the map, and at what level of detail?"
-msgstr "Welche Details sollen in welchem Detailgrad auf der Karte sichtbar?"
+msgstr "Welche Details müssen in welchem Detailgrad auf der Karte sichtbar sein?"
 
 #: sketch_map_tool/templates/help.html:92
 msgid "Which areas should the map encompass?"
@@ -724,23 +721,23 @@ msgstr "Welche Gebiete soll die Karte umfassen?"
 
 #: sketch_map_tool/templates/help.html:96
 msgid "Aspects to consider when selecting the area of interest:"
-msgstr "Was Sie bei der Auswahl des relevanten Bereichs beachten sollten:"
+msgstr "Die folgenden Aspekte sollten Sie bei der Auswahl des Untersuchungsgebiets beachten:"
 
 #: sketch_map_tool/templates/help.html:98
 msgid "Ensure orientation on the map: streets (and their names) and some points of interest (POIs)\n"
 "                                    should be visible."
-msgstr "Stellen Sie sicher, dass man sich auf der Karte orientieren kann: Straßen (und deren Namen) und einige Interessenspunkte (engl. Points of Interest- POI) sollten zu erkennen sein."
+msgstr "Stellen Sie sicher, dass man sich auf der Karte orientieren kann: Straßen (und deren Bezeichnungen) und einige Points of Interest (POIs) sollten zu erkennen sein."
 
 #: sketch_map_tool/templates/help.html:100
 msgid "Cover all relevant areas for your use case: for example, if studying flooding, focus on areas\n"
 "                                    near rivers, creeks, sinkholes, and critical infrastructure that might be affected by the flood\n"
 "                                    event."
-msgstr "Erfassen Sie alle Gebiete, die für Ihren Anwendungsfall relevant sind. Beispiel: Wenn Sie Hochwasser erforschen, legen sie den Fokus auf Gebiete, die nah an Flüssen, Bächen und Dolinen liegen und auf kritische Infrastruktur, die im Falle einer Überschwemmung betroffen sein könnte."
+msgstr "Erfassen Sie alle Gebiete, die für Ihren Anwendungsfall relevant sind. Ein Beispiel: Wenn Sie Hochwasser erforschen, legen sie den Fokus auf Gebiete, die nah an Flüssen, Bächen und Dolinen liegen sowie auf kritische Infrastruktur, die im Falle einer Überschwemmung betroffen sein könnte."
 
 #: sketch_map_tool/templates/help.html:103
 msgid "For urban flooding, it is recommended to generate a map on the neighborhood level with streets\n"
 "                                    and buildings. For river flooding, it is recommended to generate a map for a larger extent. "
-msgstr "Bei Überschwemmungen in städtischen Gebieten empfehlen wir, dass Sie Karten erstellen, die in der Größenordnung von Wohnvierteln Straßen und Gebäude darstellen. Bei Hochwasser von Flüssen empfehlen wir, weitläufigere Karten zu erstellen."
+msgstr "Bei Überschwemmungen in städtischen Gebieten empfehlen wir, dass Sie Karten auf Stadtteilebene mit Straßen und Gebäude erstellen. Bei Hochwasser von Flüssen empfehlen wir, eine Karte für einen größeren Bereich zu erstellen. "
 
 #: sketch_map_tool/templates/help.html:109
 msgid "Choose a fitting base map for your mapping. The decision between the OSM or satellite image base map\n"
