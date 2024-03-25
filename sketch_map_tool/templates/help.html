@@ -269,8 +269,10 @@
                                     {{ _('Image of a Sketch Map marked with red/blue polygons.') }}
                                     
                                 </p>
-                                <figure>
-                                    <!-- figure needs to be inserted-->   
+                                <figure> 
+                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}"
+                                        alt="{{ _('Picture of a Sketch Map.') }}">
+                                    <figcaption></figcaption>
                                 </figure>
                             </td>
                             <td>
@@ -278,8 +280,10 @@
                                     {{ _('Closed circles are detected as one polygon 
                                     and the whole area will be detected/filled by the software.') }}    
                                 </p>
-                                <figure>
-                                    <!-- figure needs to be inserted-->
+                                <figure> 
+                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red_result.webp" ) }}"
+                                        alt="{{ _('Result of Marking Detection.') }}">
+                                    <figcaption></figcaption>
                                 </figure>
                             </td>
                         </tr>
@@ -288,8 +292,10 @@
                                 <p>
                                     {{ _('Image of a Sketch Map marked with different shapes.') }}
                                 </p>
-                                <figure>
-                                    <!-- figure needs to be inserted-->
+                                <figure> 
+                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_different_shapes.webp" ) }}"
+                                        alt="{{ _('Picture of a Sketch Map.') }}">
+                                    <figcaption></figcaption>
                                 </figure>
                             </td>
                             <td>
@@ -298,8 +304,10 @@
                                     tool recognizes can be detected as a marked area (polygon). 
                                     However, in some cases, they may not be detected at all.') }}
                                 </p>
-                                <figure>
-                                    <!-- figure needs to be inserted-->
+                                <figure> 
+                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_different_shapes_result.webp" ) }}"
+                                        alt="{{ _('Result of Marking Detection.') }}">
+                                    <figcaption></figcaption>
                                 </figure>
                             </td>
                         </tr>
@@ -316,19 +324,21 @@
                                 <p>
                                     {{ _('Use thick felt-tip pens with intense colors.') }}
                                 </p>
-                                <figure>
-                                    <!-- figure needs to be inserted-->
-                                </figure>
+                                    <figure>
+                                        <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}"
+                                            alt="{{ _('Picture of a Sketch Map.') }}">
+                                        <figcaption></figcaption>
+                                    </figure>
                             </td>
                             <td>
                                 <p>
                                     {{ _('Thin lines in light colors might not be detected. If you decide to use additional colors,
                                     test which colors work best with the SMT before the mapping activity.') }}
-                                </p>
-                                <figure>
-                                    <!-- figure needs to be inserted-->
-                                </figure>
-                            </td>
+                                    <figure> 
+                                        <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_thin_lines.webp" ) }}"
+                                            alt="{{ _('Picture of a Sketch Map.') }}">
+                                        <figcaption></figcaption>
+                                    </figure>
                         </tr>
                         <tr>
                             <td>
@@ -338,7 +348,9 @@
                                     In general, smaller polygons are detected better than large polygons.') }}
                                 </p>
                                 <figure>
-                                    <!-- figure needs to be inserted-->
+                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}"
+                                        alt="{{ _('Picture of a Sketch Map.') }}">
+                                    <figcaption></figcaption>
                                 </figure>
                             </td>
                             <td>
@@ -346,28 +358,27 @@
                                     {{ _('Gaps in the outline could lead to mistakes in the detection.') }}
                                 </p>
                                 <figure>
-                                    <!-- figure needs to be inserted-->
+                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_dotted_lines.webp" ) }}"
+                                        alt="{{ _('Picture of a Sketch Map.') }}">
+                                    <figcaption></figcaption>
                                 </figure>
                                 <p>
                                     {{ _('Large polygons might not be detected properly.') }}
                                 </p>
                                 <figure>
-                                    <!-- figure needs to be inserted-->
+                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_large_polys.webp" ) }}"
+                                        alt="{{ _('Picture of a Sketch Map.') }}">
+                                    <figcaption></figcaption>
                                 </figure>
                                 <p>
                                     {{ _('If you just draw a line, the marked area of the line will be detected.
                                     Nevertheless, we recommend not using lines so far,
                                     as this could lead to mistakes in the marking detection.') }}
                                 </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                    
-                            </td>
-                            <td>
                                 <figure>
-                                    <!-- figure to be inserted here -->
+                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_lines.webp" ) }}"
+                                        alt="{{ _('Picture of a Sketch Map.') }}">
+                                    <figcaption></figcaption>
                                 </figure>
                                 <p>
                                     {{ _('If you want to draw a point, draw a larger circle or other shape,
@@ -398,7 +409,11 @@
                             </td>
                             <td>
                                 <p>{{ _('Small polygons can be especially difficult to detected.') }}</p>
-                                <figure></figure>
+                                <figure>
+                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_small_polys_result.webp" ) }}"
+                                        alt="{{ _('Picture of a Sketch Map.') }}">
+                                    <figcaption></figcaption>
+                                </figure>
                             </td>
                         </tr>
                     </table>
