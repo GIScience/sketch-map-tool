@@ -67,10 +67,9 @@ def clip(photo: NDArray, template: NDArray) -> NDArray:
 
     # Warp perspective if homography matrix passes filter
     if succeed:
-        selected_map = cv2.warpPerspective(photo, homography_matrix, (width, height))
+        return cv2.warpPerspective(photo, homography_matrix, (width, height))
     else:
-        np.zeros(template.shape, dtype=np.uint8)
-    return selected_map
+        return np.zeros(template.shape, dtype=np.uint8)
 
 
 def filter_matrix(tran_matrix: NDArray) -> bool:
