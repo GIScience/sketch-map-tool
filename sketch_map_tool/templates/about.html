@@ -122,8 +122,7 @@
 
         <h1 id="learning-material">{{ _('Learning Material') }}</h1>
         <p>
-            {{ _('Detailed step-by-step instructions about how to use the tool and FAQs can be found on the <a
-                href=url_for("help", lang=lang)>Help page</a>.') }}
+            {{ _('Detailed step-by-step instructions about how to use the tool and FAQs can be found on the <a id="link-to-help-page">Help page</a>.') }}
         </p>
         <p>
             {{ _('The code of the Sketch Map Tool is released on GitHub (
@@ -193,4 +192,8 @@
             </p>
         </div>
     </main>
+    <script>
+    const a = document.getElementById("link-to-help-page");
+    a.setAttribute("href", "{{ url_for('help', lang=lang) }}");
+    </script>
 {% endblock body %}
