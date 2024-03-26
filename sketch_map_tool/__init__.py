@@ -7,6 +7,7 @@ from flask_babel import Babel
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.database import client_flask as db_client
+from sketch_map_tool.definitions import LANGUAGES
 
 __version__ = "2.0.1"
 
@@ -45,9 +46,7 @@ CELERY_CONFIG = {
 def make_flask() -> Flask:
     flask_app = Flask(__name__)
     flask_app.config.update(
-        CELERY_CONFIG=CELERY_CONFIG,
-        BABEL_DEFAULT_LOCALE="en",
-        LANGUAGES={"en": "English", "de": "Deutsch", "es": "Español", "fr": "Français"},
+        CELERY_CONFIG=CELERY_CONFIG, BABEL_DEFAULT_LOCALE="en", LANGUAGES=LANGUAGES
     )
     flask_app.teardown_appcontext(db_client.close_connection)
     return flask_app
@@ -68,7 +67,10 @@ def make_celery(flask_app: Flask) -> Celery:
 
 def get_locale() -> str | None:
     if request.view_args is not None and "lang" in request.view_args.keys():
-        return request.view_args["lang"]
+        # only return if path prefix is a language key (not in the case of /favicon)
+        if request.view_args["lang"] in LANGUAGES.keys():
+            return request.view_args["lang"]
+    return "en"
 
 
 flask_app = make_flask()
