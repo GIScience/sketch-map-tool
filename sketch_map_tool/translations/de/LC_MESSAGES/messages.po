@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2024-03-26 12:01+0000\n"
-"PO-Revision-Date: 2024-03-26 12:37\n"
+"PO-Revision-Date: 2024-03-26 15:21\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -236,7 +236,7 @@ msgstr "Lernmaterial"
 
 #: sketch_map_tool/templates/about.html:125
 msgid "Detailed step-by-step instructions about how to use the tool and FAQs can be found on the <a id=\"link-to-help-page\">Help page</a>."
-msgstr "Eine detaillierte Schritt-für-Schritt-Anleitung zur Anwendung des Tools sowie häufig gestellte Fragen finden Sie auf der<a id=\"link-to-help-page\">Hilfe-Seite</a>."
+msgstr "Eine detaillierte Schritt-für-Schritt-Anleitung zur Anwendung des Tools sowie häufig gestellte Fragen finden Sie auf der <a id=\"link-to-help-page\">Hilfe-Seite</a>."
 
 #: sketch_map_tool/templates/about.html:128
 msgid "The code of the Sketch Map Tool is released on GitHub (\n"
