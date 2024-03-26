@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-25 09:30+0000\n"
-"PO-Revision-Date: 2024-03-25 12:36\n"
+"POT-Creation-Date: 2024-03-26 12:01+0000\n"
+"PO-Revision-Date: 2024-03-26 12:37\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -191,7 +191,6 @@ msgstr "Falls Sie Fragen haben oder gerne Feedback geben würden, wenden Sie sic
 "                href=\"mailto:sketch-map-tool@heigit.org\">Projekt-Team</a>."
 
 #: sketch_map_tool/templates/about.html:106
-#: sketch_map_tool/templates/help.html:81
 msgid "Picture of a group mapping situation."
 msgstr "Bild einer Gruppenkartierung."
 
@@ -236,12 +235,10 @@ msgid "Learning Material"
 msgstr "Lernmaterial"
 
 #: sketch_map_tool/templates/about.html:125
-msgid "Detailed step-by-step instructions about how to use the tool and FAQs can be found on the <a\n"
-"                href=url_for(\"help\", lang=lang)>Help page</a>."
-msgstr "Eine detaillierte Schritt-für-Schritt-Anleitung zur Anwendung des Tools sowie häufig gestellte Fragen finden Sie auf der<a\n"
-"                href=url_for(\"help\", lang=lang)>Hilfe-Seite</a>."
+msgid "Detailed step-by-step instructions about how to use the tool and FAQs can be found on the <a id=\"link-to-help-page\">Help page</a>."
+msgstr "Eine detaillierte Schritt-für-Schritt-Anleitung zur Anwendung des Tools sowie häufig gestellte Fragen finden Sie auf der<a id=\"link-to-help-page\">Hilfe-Seite</a>."
 
-#: sketch_map_tool/templates/about.html:129
+#: sketch_map_tool/templates/about.html:128
 msgid "The code of the Sketch Map Tool is released on GitHub (\n"
 "            <a href=\"https://github.com/GIScience/sketch-map-tool\">\n"
 "                https://github.com/GIScience/sketch-map-tool\n"
@@ -249,7 +246,7 @@ msgid "The code of the Sketch Map Tool is released on GitHub (\n"
 "            )."
 msgstr "Der Quellcode des Sketch Map Tools ist auf GitHub veröffentlicht (<a href=\"https://github.com/GIScience/sketch-map-tool\">https://github.com/GIScience/sketch-map-tool</a>)."
 
-#: sketch_map_tool/templates/about.html:136
+#: sketch_map_tool/templates/about.html:135
 msgid "On the IFRC Network <a\n"
 "                href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html\">GIS\n"
 "                Training Platform</a>, developed by HeiGIT gGmbH, there are five exercises and trainers` instructions\n"
@@ -257,7 +254,7 @@ msgid "On the IFRC Network <a\n"
 msgstr "Auf der <a\n"
 "                href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html\">GIS-Trainigsplattfrom</a> des IFRC Network, die von der HeiGIT gGmbH entwickelt wurde, gibt es fünf Übungen sowie Trainingsanweisungen, mit denen Sie lernen könne, wie man das Sketch Map Tool benutzt und wie mit den daraus resultierenden Ergebnissen umzugehen ist."
 
-#: sketch_map_tool/templates/about.html:142
+#: sketch_map_tool/templates/about.html:141
 msgid "If you are interested in learning more about the concept and development of the\n"
 "            the Sketch Map Tool, consider watching the video of the lightning talk <a\n"
 "                href=\"https://www.youtube.com/watch?v=Dmj41KRH-SA\"> “OpenStreetMap Sketch Map Tool - The Future of OpenStreetMap\n"
@@ -265,11 +262,11 @@ msgid "If you are interested in learning more about the concept and development 
 msgstr "Wenn Sie mehr über das Konzept und die Entwicklung des Sketch Map Tools erfahren möchten, können Sie sich die Aufzeichnung des Lightning Talks <a\n"
 "                href=\"https://www.youtube.com/watch?v=Dmj41KRH-SA\">“OpenStreetMap Sketch Map Tool - The Future of OpenStreetMap Field Papers”</a> von der GeOnG 2020 anschauen."
 
-#: sketch_map_tool/templates/about.html:150
+#: sketch_map_tool/templates/about.html:149
 msgid "Video preview image for Lightning Talk about Sketch Maps at GeOnG 2020"
 msgstr "Video-Vorschaubild für den Kurzvortrag über das Sketch Map Tool auf der GeOnG 2020"
 
-#: sketch_map_tool/templates/about.html:153
+#: sketch_map_tool/templates/about.html:152
 msgid "Additionally, Episode 7 <a href=\"https://www.chaberlin.org/news/chatroom-7-mapping-in-der-humanitaeren-hilfe/\">\n"
 "                \"Mapping in der Humanitären\n"
 "                Hilfe”</a> of the Podcast CHAtroom (in German) offers further insights. In this episode from the Center for\n"
@@ -278,23 +275,23 @@ msgid "Additionally, Episode 7 <a href=\"https://www.chaberlin.org/news/chatroom
 "            organizations."
 msgstr "Zusätzlich bietet Ihnen Episode 7 des Podcasts CHAtroom <a href=\"https://www.chaberlin.org/news/chatroom-7-mapping-in-der-humanitaeren-hilfe/\"> \"Mapping in der humanitären Hilfe”</a> (in Deutsch) weitere Einblicke. In dieser Episode, die vom Center for Humanitarian Action (CHA) ist, diskutieren Dr. Natascha Bing (GRC) und Dr. Carolin Klonner (GIScience Heidelberg) die Bedeutung von Karten im Katastrophenmanagement und erläutern, wie das Sketch Map Tool von humanitären Organisationen verwendet werden kann."
 
-#: sketch_map_tool/templates/about.html:161
+#: sketch_map_tool/templates/about.html:160
 msgid "Related Publications"
 msgstr "Ähnliche Publikationen"
 
-#: sketch_map_tool/templates/about.html:162
+#: sketch_map_tool/templates/about.html:161
 msgid "The following scientific articles have been published about the Sketch Map Tool:"
 msgstr "Folgende wissenschaftliche Artikel über das Sketch Map Tool wurden veröffentlicht:"
 
-#: sketch_map_tool/templates/about.html:168
+#: sketch_map_tool/templates/about.html:167
 msgid "Article preview image"
 msgstr "Artikel-Vorschaubild"
 
-#: sketch_map_tool/templates/about.html:187
+#: sketch_map_tool/templates/about.html:186
 msgid "Contact"
 msgstr "Kontakt"
 
-#: sketch_map_tool/templates/about.html:189
+#: sketch_map_tool/templates/about.html:188
 msgid "HeiGIT gGmbH<br>\n"
 "                Heidelberg, Germany<br>\n"
 "                Email: <a href=\"mailto:sketch-map-tool@heigit.org\">sketch-map-tool@heigit.org</a><br>\n"
@@ -343,7 +340,6 @@ msgstr "Definieren Sie Ihr Untersuchungsgebiet"
 
 #: sketch_map_tool/templates/create-results.html:15
 #: sketch_map_tool/templates/create.html:18
-#: sketch_map_tool/templates/help.html:133
 #: sketch_map_tool/templates/index.html:53
 #: sketch_map_tool/templates/index.html:68
 msgid "Map Quality Check"
@@ -438,7 +434,7 @@ msgid "We are creating the Sketch Map template that you can use for offline\n"
 "                        <strong>Please be patient, this can take 2-10 minutes.</strong> We use up-to-date\n"
 "                        <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> data\n"
 "                        or satellite imagery powered by ESRI to create a high resolution printable map for you."
-msgstr ""
+msgstr "Wir erstellen die Sketch-Map Vorlage, die Sie für partizipative Offline-Kartierungen verwenden können.<br> <strong>Bitte haben Sie etwas Geduld; dieser Prozess kann 2-10 Minuten dauern.</strong> Wir nutzen aktuelle <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a>-Daten oder Satellitenbilder von ESRI, um hochauflösende, ausdruckbare Karten für Sie zu generieren."
 
 #: sketch_map_tool/templates/create-results.html:77
 msgid "We have created the Sketch Map template that you can use for offline\n"
@@ -535,7 +531,8 @@ msgstr "Georeferenzierte Markierungen als GeoTIFFs"
 msgid "We are extracting and geo-referencing the color markings of your Sketch\n"
 "                        Maps.<br>\n"
 "                        Please be patient this can take 2-10 minutes."
-msgstr ""
+msgstr "Wir extrahieren und georeferenzieren die Farbmarkierungen Ihrer Sketch-Maps.<br>\n"
+"Bitte haben Sie etwas Geduld; dieser Prozess kann 2-10 Minuten dauern."
 
 #: sketch_map_tool/templates/digitize-results.html:46
 msgid "We have extracted and geo-referenced the color markings of your Sketch\n"
@@ -603,844 +600,6 @@ msgstr "Hochladen"
 #: sketch_map_tool/templates/error.html:8
 msgid "Error"
 msgstr "Fehler"
-
-#: sketch_map_tool/templates/help.html:9
-msgid "Need some help?"
-msgstr "Benötigen Sie Hilfe?"
-
-#: sketch_map_tool/templates/help.html:16
-msgid "Print"
-msgstr "Drucken"
-
-#: sketch_map_tool/templates/help.html:20
-msgid "The <strong>Step-by-Step Instructions</strong> will guide you through the Sketch Map Tool\n"
-"            and provide useful recommendations.<br>\n"
-"            You can also download and print the manual."
-msgstr "Die <strong>Schritt-für-Schritt-Anleitung</strong> wird Sie durch das Sketch-Map Tool führen und enthält nützliche Anwendungsempfehlungen.<br>\n"
-"Sie können die Anleitung auch herunterladen und ausdrucken."
-
-#: sketch_map_tool/templates/help.html:26
-msgid "Answers to the <strong>Frequently Asked Questions</strong> can be found in the <a href=\"#faq\">FAQ</a>\n"
-"            section below."
-msgstr "Antworten auf <strong>häufig gestellte Fragen</strong> finden sie unten im Abschnitt <a href=\"#faq\">FAQ</a>."
-
-#: sketch_map_tool/templates/help.html:30
-msgid "If you are interested in a step-by-step guide on using the Sketch Map Tool,\n"
-"            from creating the map to importing the result data into QGIS, consider watching these videos.\n"
-"            <!-- Video link to be put here-->"
-msgstr "Haben Sie Interesse an einer Schritt-Für-Schritt-Anleitung zur Anwendung des Sketch-Map-Tools? Alle wichtigen Informationen, vom Anfertigen der Karte bis zum Import der Ergebnisse in QGIS, finden Sie in diesen Videos.\n"
-"<!-- Video link to be put here-->"
-
-#: sketch_map_tool/templates/help.html:36
-msgid "Our new <a\n"
-"                href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html\"\n"
-"                target=\"_blank\">training platform</a>\n"
-"            provides five distinct training exercises to further explore the Sketch Map Tool and sketch mapping in general.\n"
-"            These exercises are primarily designed for workshop settings, allowing for collaborative discussion of your\n"
-"            experiences."
-msgstr "Unsere neue <a\n"
-"                href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html\"\n"
-"                target=\"_blank\">Trainingsplattform</a> bietet fünf verschiedene Übungsaufgaben, mit denen Sie das Sketch-Map Tool und Sketch-Mapping im Allgemeinen weiter erforschen können. Diese Übungen wurden in erster Linie für Workshops entwickelt und ermöglichen die gemeinsame Diskussion Ihrer Erfahrungen."
-
-#: sketch_map_tool/templates/help.html:45
-msgid "<i>Since the latest version of the Sketch Map Tool was only recently released, you may encounter issues at\n"
-"                various stages of the process. We apologize for any inconvenience this may cause.\n"
-"                We are committed to continually enhancing the tool,\n"
-"                so please report any technical problems to the <a href=\"mailto:sketch-map-tool@heigit.org\"\n"
-"                    target=\"_blank\">Sketch Map Tool user support</a></i>"
-msgstr "<i>Da die neueste Version des Sketch-Map Tools erst vor Kurzem veröffentlicht wurde, kann es bei diversen Abschnitten des Prozesses zu Schwierigkeiten kommen. Wir entschuldigen uns für daraus entstandene Unannehmlichkeiten. Wir sind bestrebt, das Tool kontinuierlich zu verbessern. Melden Sie daher bitte alle technischen Probleme dem <a href=\"mailto:sketch-map-tool@heigit.org\"\n"
-"                    target=\"_blank\"> Sketch-Map Tool User Support</a></i>"
-
-#: sketch_map_tool/templates/help.html:53
-msgid "Step-by-Step Instructions"
-msgstr "Schritt-für-Schritt-Anleitungen"
-
-#: sketch_map_tool/templates/help.html:57
-msgid "<strong>Create paper maps to collect data</strong>"
-msgstr "<strong>Erstellen Sie Papierkarten zur Datenerhebung</strong>"
-
-#: sketch_map_tool/templates/help.html:60
-msgid "Define your area of interest and choose a base map layer"
-msgstr "Legen Sie Ihr Untersuchungsgebiet fest und wählen Sie eine Basiskartenebene"
-
-#: sketch_map_tool/templates/help.html:64
-msgid "The first step in using the Sketch Map Tool involves creating a printable Sketch Map."
-msgstr "Der erste Schritt bei der Verwendung des Sketch Map Tools ist die Erstellung einer ausdruckbaren Sketch-Map."
-
-#: sketch_map_tool/templates/help.html:67
-msgid "Begin by selecting your area of interest, either by zooming into the map preview or using the search\n"
-"                            function in the sidebar."
-msgstr "Wählen Sie zunächst das Gebiet aus, das Sie untersuchen wollen, indem Sie entweder in die Kartenvorschau zoomen oder die Suchfunktion in der Seitenleiste verwenden."
-
-#: sketch_map_tool/templates/help.html:69
-msgid "Choose between the two different base map layers: one based on <a href=\"https://osm.org/\"\n"
-"                                target=\"_blank\">OpenStreetMap (OSM)</a> and the other containing\n"
-"                            satellite imagery (<a href=\"https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9\"\n"
-"                                target=\"_blank\">ESRI world imagery</a>)"
-msgstr "Wählen Sie eine der beiden unterschiedlichen Basiskartenebenen aus: Eine basiert auf <a href=\"https://osm.org/\"\n"
-"                                target=\"_blank\">OpenStreetMap (OSM)</a> und die andere auf Satellitenbildern (<a href=\"https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9\"\n"
-"                                target=\"_blank\">ESRI world imagery</a>)"
-
-#: sketch_map_tool/templates/help.html:73
-msgid "Select from different paper formats and the appropriate page orientation. The dashed red line\n"
-"                            represents the\n"
-"                            boundaries of your area of interest, which will be printed on the Sketch Map."
-msgstr "Wählen Sie aus unterschiedlichen Papierformaten und legen Sie die entsprechende Seitenausrichtung fest. Die gestrichelte rote Linie markiert die Grenze ihres ausgewählten Bereichs, der auf die Sketch-Map gedruckt wird."
-
-#: sketch_map_tool/templates/help.html:76
-msgid "Initiate map creation by clicking the blue \"next\" button."
-msgstr "Starten Sie die Kartenerstellung, indem Sie auf den blauen Button \"Weiter\" klicken."
-
-#: sketch_map_tool/templates/help.html:85
-#: sketch_map_tool/templates/help.html:146
-#: sketch_map_tool/templates/help.html:188
-#: sketch_map_tool/templates/help.html:307
-#: sketch_map_tool/templates/help.html:500
-#: sketch_map_tool/templates/help.html:536
-#: sketch_map_tool/templates/help.html:560
-#: sketch_map_tool/templates/help.html:612
-msgid "Recommendations:"
-msgstr "Empfehlungen:"
-
-#: sketch_map_tool/templates/help.html:87
-msgid "Tailor the extent of your selected area to suit your use case, keeping the following questions in\n"
-"                            mind:"
-msgstr "Passen Sie die Größe Ihres ausgewählten Bereichs Ihrem Anwendungsfall an. Beachten Sie dabei folgende Fragestellungen:"
-
-#: sketch_map_tool/templates/help.html:90
-msgid "What do the participants need to map?"
-msgstr "Was müssen die Teilnehmenden kartieren?"
-
-#: sketch_map_tool/templates/help.html:91
-msgid "What details need to be visible on the map, and at what level of detail?"
-msgstr "Welche Details müssen in welchem Detailgrad auf der Karte sichtbar sein?"
-
-#: sketch_map_tool/templates/help.html:92
-msgid "Which areas should the map encompass?"
-msgstr "Welche Gebiete soll die Karte umfassen?"
-
-#: sketch_map_tool/templates/help.html:96
-msgid "Aspects to consider when selecting the area of interest:"
-msgstr "Die folgenden Aspekte sollten Sie bei der Auswahl des Untersuchungsgebiets beachten:"
-
-#: sketch_map_tool/templates/help.html:98
-msgid "Ensure orientation on the map: streets (and their names) and some points of interest (POIs)\n"
-"                                    should be visible."
-msgstr "Stellen Sie sicher, dass man sich auf der Karte orientieren kann: Straßen (und deren Bezeichnungen) und einige Points of Interest (POIs) sollten zu erkennen sein."
-
-#: sketch_map_tool/templates/help.html:100
-msgid "Cover all relevant areas for your use case: for example, if studying flooding, focus on areas\n"
-"                                    near rivers, creeks, sinkholes, and critical infrastructure that might be affected by the flood\n"
-"                                    event."
-msgstr "Erfassen Sie alle Gebiete, die für Ihren Anwendungsfall relevant sind. Ein Beispiel: Wenn Sie Hochwasser erforschen, legen sie den Fokus auf Gebiete, die nah an Flüssen, Bächen und Dolinen liegen sowie auf kritische Infrastruktur, die im Falle einer Überschwemmung betroffen sein könnte."
-
-#: sketch_map_tool/templates/help.html:103
-msgid "For urban flooding, it is recommended to generate a map on the neighborhood level with streets\n"
-"                                    and buildings. For river flooding, it is recommended to generate a map for a larger extent. "
-msgstr "Bei Überschwemmungen in städtischen Gebieten empfehlen wir, dass Sie Karten auf Stadtteilebene mit Straßen und Gebäude erstellen. Bei Hochwasser von Flüssen empfehlen wir, eine Karte für einen größeren Bereich zu erstellen. "
-
-#: sketch_map_tool/templates/help.html:109
-msgid "Choose a fitting base map for your mapping. The decision between the OSM or satellite image base map\n"
-"                            depends on factors like your selected area, the quality of OSM data, your participants, and what you would\n"
-"                            like to map.\n"
-"                            Sometimes, especially if the satellite image is very dark (e.g., due to large forest areas on the map), it\n"
-"                            can be helpful to create two Sketch Maps with both base map layers: Satellite and OSM."
-msgstr "Wählen Sie zum Kartieren eine passende Basiskarte. Ob Sie sich für OSM oder Satellitenbilder als Basiskarte entscheiden, ist abhängig von Faktoren ihres ausgewählten Gebiets, der OSM-Datenqualität, Ihren Teilnehmer*innen und davon, was Sie Kartieren möchten. Manchmal kann es nützlich sein, zwei Sketch Maps mit jeweils OSM und Satellitenbildern als Basiskarte zu erstellen, besonders wenn das Satellitenbild sehr dunkel ist (z.B. wegen großen Waldgebieten auf der Karte)."
-
-#: sketch_map_tool/templates/help.html:114
-msgid "Customize map format to fit your purpose:"
-msgstr "Passen Sie das Format der Karte zweckgemäß an."
-
-#: sketch_map_tool/templates/help.html:116
-msgid "Group mapping is easier on larger maps (A2 or A1, depending on your group size)."
-msgstr "Kartieren in Gruppen ist auf größeren Karten einfacher (A2 oder A1, je nachdem, wie groß Ihre Gruppe ist)."
-
-#: sketch_map_tool/templates/help.html:117
-msgid "For data collection in the field, A4 or A3 are easier to handle. If the area is too big,\n"
-"                                    consider creating multiple Sketch Maps."
-msgstr "Während der Datenerhebung im Feld sind Karten im A4 oder A3 Format einfacher zu handhaben. Wenn das Gebiet zu groß ist, ziehen Sie in Erwägung, mehrere Sketch-Maps zu erstellen."
-
-#: sketch_map_tool/templates/help.html:123
-msgid "If you like to learn more about the challenges of map orientation and how to choose a good base map,\n"
-"                        take a look at <a\n"
-"                            href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex2_.html\"\n"
-"                            target=\"_blank\">Training Exercise 2</a>."
-msgstr "Wenn Sie mehr darüber erfahren möchten, welche Herausforderungen es beim Orientieren auf Karten geben kann und wie man eine gute Basiskarte auswählt, schauen Sie sich <a\n"
-"                            href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex2_.html\"\n"
-"                            target=\"_blank\">Übungsaufgabe 2</a> an."
-
-#: sketch_map_tool/templates/help.html:136
-msgid "You can use <a href=\"https://osm.org/\" target=\"_blank\">OpenStreetMap(OSM)</a> as a base map for the\n"
-"                        generated Sketch Maps. The Map Quality Check assists in evaluating the suitability of the area of interest for\n"
-"                        participatory mapping through a quality analysis of the OSM data with the\n"
-"                        <a href=\"https://oqt.ohsome.org\">HeiGIT ohsome quality analyst</a>.\n"
-"                        The fitness report can be downloaded as a PDF file by clicking on the blue button. It provides an evaluation of\n"
-"                        the suitability of the local OSM data and recommendations for subsequent field data collection."
-msgstr "Sie können <a href=\"https://osm.org/\" target=\"_blank\">OpenStreetMap (OSM)</a> als Basiskarte zum Generieren Ihrer Sketch-Maps verwenden. Der Map Quality Check unterstützt Sie dabei, ihr ausgewähltes Gebiet darauf zu überprüfen, ob es zum partizipativen Kartieren geeignet ist. Dafür wird mit dem <a href=\"https://oqt.ohsome.org\"> HeiGIT ohsome Quality Analyst</a> eine Qualitätsanalyse der OSM-Daten durchgeführt. Durch klicken auf den blauen Button können sie den Eignungsbericht als PDF-Datei herunterladen. Darin befindet sich eine Bewertung der lokalen ODM-Daten sowie Empfehlungen für die weitere Erhebung von Felddaten."
-
-#: sketch_map_tool/templates/help.html:149
-msgid "Before you use these OSM-based maps for participatory mapping in your area of interest,\n"
-"                            review the analysis provided by the Map Quality Check to ensure that participants can orient themselves\n"
-"                            properly on the paper maps."
-msgstr "Bevor diese OSM-basierten Karten zum partizipativen Kartieren in ihrem ausgewählten Gebiet verwenden, sehen Sie sich die Analyse des Map Quality Checks an, um sicherzustellen, dass sich die Teilnehmenden auf den Papierkarten richtig orientieren können."
-
-#: sketch_map_tool/templates/help.html:154
-msgid "The analyses focus on Point of Interest (POI) density, the last edit of amenities and streets, used\n"
-"                            sources, as well as the saturation of amenity and road network mapping.\n"
-"                            Detailed information about each indicator and the analysis is available in the generated PDF report."
-msgstr "Der Fokus der Analysen liegt auf der Dichte von Interessenspunkten (engl. Points of Interest - POI), den letzten Bearbeitungen von Einrichtungen und Straßen, verwendeten Quellen, sowie der Sättigung von kartierten Einrichtungen und Straßennetzen. Genauere Informationen zu jedem Indikator und zur Analyse finden Sie im erzeugten PDF Bericht."
-
-#: sketch_map_tool/templates/help.html:159
-msgid "The report includes useful recommendations to ensure that the generated maps are suitable for\n"
-"                            participatory mapping."
-msgstr "Der Bericht enthält Empfehlungen für Maßnahmen, die Sie ergreifen können, um sicherzustellen, dass die erstellten Karten zum partizipativen Kartieren geeignet sind."
-
-#: sketch_map_tool/templates/help.html:163
-msgid "In case the OSM data in your area of interest is not sufficient for participatory mapping, consider\n"
-"                            consulting the <a href=\"https://www.missingmaps.org/\" target=\"_blank\">Missing Maps project</a>\n"
-"                            to improve the OSM data before using the Sketch Map Tool."
-msgstr "Falls die OSM-Daten über ihr ausgewähltes Gebiet nicht zum partizipativen kartieren ausreichen, können Sie sich an das<a href=\"https://www.missingmaps.org/\" target=\"_blank\">Missing Maps Project</a> um die OSM-Daten zu verbessern, bevor sie das Sketch Map Tool verwenden."
-
-#: sketch_map_tool/templates/help.html:168
-msgid "Take a look at the map:"
-msgstr "Schauen Sie sich die Karte an:"
-
-#: sketch_map_tool/templates/help.html:170
-msgid "How well can you orient yourself on the map?"
-msgstr "Wie gut können Sie sich auf der Karte orientieren?"
-
-#: sketch_map_tool/templates/help.html:171
-msgid "Are important points of reference, such as hospitals, schools, landmarks, etc. visible on the\n"
-"                                    map?"
-msgstr "Sind wichtige Referenzpunkte wie Krankenhäuser, Schulen, Wahrzeichen, etc. auf der Karte sichtbar?"
-
-#: sketch_map_tool/templates/help.html:180
-msgid "Export Sketch Map as PDF"
-msgstr "Herunterladen der Sketch-Map als PDF"
-
-#: sketch_map_tool/templates/help.html:183
-msgid "The generated Sketch Map for your selected area of interest can be downloaded as a PDF file by clicking on\n"
-"                        the blue button."
-msgstr "Die Sketch-Map, die für den von Ihnen ausgewählten Bereich generiert wurde, kann als PDF heruntergeladen werden, indem Sie auf den blauen Knopf drücken."
-
-#: sketch_map_tool/templates/help.html:191
-msgid "Name your scans/photos appropriately when saving, and before uploading them to the Sketch Map Tool.\n"
-"                            This helps you recognize and allocate your Sketch Maps in the subsequent uploading and analyzing process.\n"
-"                            If you relate Sketch Maps back to questionnaires, use the same number for the map as you did in the\n"
-"                            questionnaire. "
-msgstr "Benennen Sie ihre Scans/Fotos entsprechend beim Speichern und bevor Sie sie in das Sketch Map Tool hochladen. Dadurch können Sie ihre Sketch-Maps in nachfolgenden Upload- und Analysevorgängen besser wiedererkennen und zuordnen. Wenn sie Sketch-Maps in Verbindung mit Fragebögen verwenden, ordnen Sie der Karte und dem Fragebogen dieselbe Nummer zu."
-
-#: sketch_map_tool/templates/help.html:197
-msgid "Prepare separate maps for each topic or per person/group because it is difficult to read and analyze\n"
-"                            too many markings from one map.\n"
-"                            You can print out one map layout as often as you want. "
-msgstr "Erstellen Sie für jedes Thema oder für jede Person/Gruppe eigene Karten, da es zu schwierig ist, zu viele Markierungen auf einer Karte zu lesen und zu analysieren. Sie können ein Kartenlayout beliebig oft ausdrucken."
-
-#: sketch_map_tool/templates/help.html:202
-msgid "We recommend printing the maps on matte, non-reflective paper. "
-msgstr "Wir empfehlen, die Karten auf mattem, nicht-reflektierendem Papier zu drucken."
-
-#: sketch_map_tool/templates/help.html:205
-msgid "If you plan on printing our your map in black and white, check the visibility of the background map\n"
-"                            and reduce saturation in the printing settings if the background becomes too dark."
-msgstr "Sollten Sie ihre Karten in Schwarz-Weiß ausdrucken wollen, überprüfen Sie, ob die Hintergrundkarte gut zu erkennen ist. Wenn der Hintergrund zu dunkel ist, verringern Sie die Sättigung in den Druckereinstellungen."
-
-#: sketch_map_tool/templates/help.html:209
-msgid "In case you use a satellite imagery background, please review the color saturation of your image. If\n"
-"                            the background is too dark, you might consider to choose OSM as base map."
-msgstr "Falls Sie ein Satellitenbild als Hintergrund verwenden, überprüfen Sie bitte die Farbsättigung ihres Bildes. Wenn der Hintergrund zu dunkel ist, können sie auch OSM als Basiskarte verwenden."
-
-#: sketch_map_tool/templates/help.html:218
-msgid "THEN:"
-msgstr "DANN:"
-
-#: sketch_map_tool/templates/help.html:219
-msgid "Data collection in the field"
-msgstr "Datenerhebung im Feld"
-
-#: sketch_map_tool/templates/help.html:223
-msgid "The Sketch mapping with pens and the printed map is the key part of the Sketch Map Method. How you mark the\n"
-"                    maps influences your results and what can be detected.\n"
-"                    Here you can find here some recommendations for your data collection."
-msgstr "Kartieren mit Stiften und ausgedruckten Karten ist das grundlegende Element der Sketch-Map-Methode. Die Art und Weise, wie Sie die Karten markieren, hat Auswirkungen auf die Ergebnisse und darauf, was erfasst werden kann. Hier finden Sie einige Empfehlungen für Ihre Datenerhebung. "
-
-#: sketch_map_tool/templates/help.html:228
-msgid "Example of marked map:"
-msgstr "Beispiel einer markierten Karte:"
-
-#: sketch_map_tool/templates/help.html:232
-msgid "<strong>Tips to improve color detection</strong>"
-msgstr "<strong>Tips für bessere Farberkennung</strong>"
-
-#: sketch_map_tool/templates/help.html:234
-msgid "The latest version of the Sketch Map Tool leverages advanced Deep Learning models trained to analyze images of\n"
-"                        Sketch Maps and identify marked objects within them.\n"
-"                        Through supervised learning on extensive datasets of labeled images, these models acquire the ability to distinguish\n"
-"                        markings from the background of Sketch Maps by analyzing patterns and features.\n"
-"                        This enables them to accurately detect and differentiate markings. This predictive capability allows the models to\n"
-"                        generalize their understanding and accurately identify markings in new and unseen Sketch Maps.\n"
-"                        The Sketch Map Tool also incorporates conventional Computer Vision techniques to precisely position the Sketch Map\n"
-"                        within real-world coordinates.\n"
-"                        Georeferencing images entails detecting and matching specific points, such as the globes one the sketch maps,\n"
-"                        between the reference and current input image,\n"
-"                        enabling precise spatial alignment. Our current algorithm detects all markings, whether they are intended as a line,\n"
-"                        a point or a polygon as a polygon. "
-msgstr "Die neueste Version des Sketch Map Tools nutzt fortschrittliche Deep-Learning-Modelle, die für die Analyse von Bildern von Sketch Maps trainiert wurden und darin markierte Objekte identifizieren können.\n\n"
-"Durch überwachtes Lernen anhand umfangreicher Datensätze mit gekennzeichneten Bildern erwerben diese Modelle die Fähigkeit, durch analysieren von Mustern und Eigenschaften, Markierungen und den Hintergrund der Sketch-Maps voneinander zu unterscheiden. Dadurch können auch die Markierungen genau erkannt und unterschieden werden. \n\n"
-"Diese Vorhersagefähigkeit ermöglicht es den Modellen, ein allgemeineres Verständnis ihr Verständnis über Markierungen zu erlangen und diese in neuen und ungesehenen Sketch Maps genau zu identifizieren. \n\n"
-"In das Sketch Map Tool sind außerdem konventionelle Computer-Vision-Technologien integriert, um die Sketch Maps innerhalb realer Koordinaten präzise zu positionieren.\n\n"
-"Die georeferenzierung von Bildern beinhaltet, dass bestimmte Punkte, wie die Globen auf den Sketch Maps, erfasst und zwischen dem Referenz- und dem aktuellen Input-Bild miteinander abgeglichen werden. Dadurch wird eine präzise räumliche Ausrichtung ermöglicht.\n\n"
-"Unser aktueller Algorithmus erkennt alle Markierungen, egal, ob Linie, Punkt der Polygon. "
-
-#: sketch_map_tool/templates/help.html:248
-msgid "Please make sure not to accidentally mark the globes on the edge as they are used for georeferencing purposes\n"
-"                        in order to ensure the automatic map detection."
-msgstr "Bitte stellen Sie sicher, dass die Globen am Rand nicht versehentlich markiert werden, da diese bei der Georeferenzierung benötigt werden, um die automatische Kartenerkennung gewährleisten."
-
-#: sketch_map_tool/templates/help.html:252
-msgid "At the moment the Sketch Map Tool detects red, blue, green and black markings best, orange and yellow also\n"
-"                        work quite well.\n"
-"                        If different colors are used for specific topics, participants can include a legend for the meaning of each color\n"
-"                        outside the map extent.\n"
-"                        However, the tool does not support the identification of the written information or the matching of meanings to\n"
-"                        specific colors.\n"
-"                        This needs to be done manually in the subsequent analysis process in your Geographic Information System software.\n"
-"                        The GeoTiff can be used to manually match the geodata layer files to the legend information."
-msgstr "Momentan erkennt das Sketch-Map-Tool Markierungen in Rot, Blau, Grün und Schwarz am besten, Orange und Gelb funktionieren auch recht gut. Die Teilnehmenden können außerhalb des Kartenausschnitts eine Legende mit der Bedeutung jeder einzelnen Farbe anführen, wenn unterschiedliche Farben für spezifische Themen verwendet werden. Funktionen die das Tool allerdings nicht unterstützt, sind die Identifikation schriftlicher Informationen oder die Zuordnung von Bedeutungen zu bestimmten Farben. Dies muss während der folgenden Analyse in ihrer Geoinformationssystem-Software manuell erledigt werden. Sie können das GeoTIFF benutzen, um die Geodaten-Layer-Dateien den Informationen aus der Legende manuell zuzuordnen. "
-
-#: sketch_map_tool/templates/help.html:263
-msgid "The photo of the Sketch Map"
-msgstr "Das Foto der Sketch-Map"
-
-#: sketch_map_tool/templates/help.html:264
-msgid "The result of the Color detection (the geojson)"
-msgstr "Das Ergebnis der Farberkennung (GeoJSON-Datei)"
-
-#: sketch_map_tool/templates/help.html:269
-msgid "Image of a Sketch Map marked with red/blue polygons."
-msgstr "Bild einer Sketch-Map, markiert mit roten/blauen Polygonen."
-
-#: sketch_map_tool/templates/help.html:278
-msgid "Closed circles are detected as one polygon \n"
-"                                    and the whole area will be detected/filled by the software."
-msgstr "Geschlossene Kreise werden als ein Polygon erkannt und die gesamte Fläche wird durch die Software erfasst/ausgefüllt."
-
-#: sketch_map_tool/templates/help.html:289
-msgid "Image of a Sketch Map marked with different shapes."
-msgstr "Bild einer Sketch-Map, die mit verschiedenen Formen markiert ist."
-
-#: sketch_map_tool/templates/help.html:297
-msgid "The shape of everything you write or draw on the map with a colour that the\n"
-"                                    tool recognizes can be detected as a marked area (polygon). \n"
-"                                    However, in some cases, they may not be detected at all."
-msgstr "Die Form von allem, was Sie in Farben, die das Tool erkennt, auf die Karte schreiben oder zeichnen, kann als markiertes Gebiet (Polygon) erfasst werden. In manchen Fällen kann es jedoch vorkommen, dass sie überhaupt nicht erfasst werden."
-
-#: sketch_map_tool/templates/help.html:310
-msgid "To Do"
-msgstr "Zu Erledigen"
-
-#: sketch_map_tool/templates/help.html:311
-msgid "Not recommended"
-msgstr "Nicht empfohlen"
-
-#: sketch_map_tool/templates/help.html:311
-msgid "You will likely discover problems in the color- detected results"
-msgstr "Wahrscheinlich gibt es Probleme mit den Ergebnissen der Farberkennung."
-
-#: sketch_map_tool/templates/help.html:317
-msgid "Use thick felt-tip pens with intense colors."
-msgstr "Verwenden Sie dicke Filzstifte mit kräftigen Farben. "
-
-#: sketch_map_tool/templates/help.html:325
-msgid "Thin lines in light colors might not be detected. If you decide to use additional colors,\n"
-"                                    test which colors work best with the SMT before the mapping activity."
-msgstr "Dünne Linien in hellen Farben werden möglicherweise nicht erfasst. Wenn Sie zusätzliche Farben verwenden möchten, testen Sie bevor Sie mit dem Kartieren beginnen, mit welchen Farben das SMT am besten funktioniert. "
-
-#: sketch_map_tool/templates/help.html:336
-msgid "For polygons, draw their outline as a closed, strong, and continues shape.\n"
-"                                    You do not need to fill the polygons, and the pattern you draw in the middle will not be detected.\n"
-"                                    In general, smaller polygons are detected better than large polygons."
-msgstr "Wenn Sie Polygone einzeichnen, achten Sie darauf, dass die Ränder eine geschlossene, starke und durchgängige Form ergeben. Sie müssen die Polygone nicht ausfüllen. Muster, die Sie in die Mitte eines Polygons einzeichnen, werden nicht erkannt. Allgemein gilt: Kleinere Polygone werden besser erkannt als große Polygone."
-
-#: sketch_map_tool/templates/help.html:346
-msgid "Gaps in the outline could lead to mistakes in the detection."
-msgstr "Lücken in den Rändern können zu Fehlern bei der Erkennung führen."
-
-#: sketch_map_tool/templates/help.html:352
-msgid "Large polygons might not be detected properly."
-msgstr "Große Polygone werden möglicherweise nicht richtig erkannt."
-
-#: sketch_map_tool/templates/help.html:358
-msgid "If you just draw a line, the marked area of the line will be detected.\n"
-"                                    Nevertheless, we recommend not using lines so far,\n"
-"                                    as this could lead to mistakes in the marking detection."
-msgstr "Wenn Sie nur eine Linie zeichnen, dann wird die markierte Fläche der Linie erfasst. Dennoch empfehlen wir, zurzeit keine Linien zu verwenden, da dies zu Fehlern bei der Erfassung der Markierungen führen könnte. "
-
-#: sketch_map_tool/templates/help.html:373
-msgid "If you want to draw a point, draw a larger circle or other shape,\n"
-"                                    such as a cross or square in order to be detected well.\n"
-"                                    If you want to draw lines, draw simple, non-dashed, and bright enough lines."
-msgstr "Wenn Sie einen Punkt zeichnen wollen, zeichnen Sie für eine bessere Erfassung einen größeren Kreis oder eine andere Form wie zum Beispiel ein Kreuz oder Quadrat. Wenn Sie Linien zeichnen wollen, zeichnen Sie einfache, nicht gestrichelte und ausreichend helle Linien."
-
-#: sketch_map_tool/templates/help.html:378
-msgid "Hint: If you need the marking as a line or a point shape,\n"
-"                                    you can easily transfer it manually or digitalize it yourself,\n"
-"                                    for example, in QGIS (see <a\n"
-"                                        href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex4_.html#exercise-a-exploration-basic-visualization-of-sketch-map-tool-outputs-in-qgis\"\n"
-"                                        target=\"_blank\">Training Exercise 4</a> )"
-msgstr "Hinweis: Wenn Sie die Markierung in Form einer Linie oder eines Punkts benötigen, dann können Sie sie einfach selbst manuell übertragen oder digitalisieren. Dies können SIe z.B. mit QGIS tun (sehen Sie hierzu<a\n"
-"                                        href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex4_.html#exercise-a-exploration-basic-visualization-of-sketch-map-tool-outputs-in-qgis\"\n"
-"                                        target=\"_blank\">Übungsaufgabe 4</a>)"
-
-#: sketch_map_tool/templates/help.html:388
-msgid "Satellite Base maps:"
-msgstr "Satelliten-Basiskarten:"
-
-#: sketch_map_tool/templates/help.html:390
-msgid "Check the darkness of the Satellite base map, especially before printing it in black-and-white."
-msgstr "Überprüfen Sie, wie dunkel Ihre Satelliten-Basiskarte ist, besonders bevor Sie sie in Schwarzweiß ausdrucken."
-
-#: sketch_map_tool/templates/help.html:394
-msgid "Make sure you use bright colors and mark the maps especially clearly. Sometimes\n"
-"                                    it might be helpful to use both Sketch maps with satellite images\n"
-"                                    and OSM base maps for the mapping."
-msgstr "Benutzen Sie kräftige Farben und markieren Sie die Karten besonders deutlich. Manchmal könnte es hilfreich sein, zum Kartieren Sketch-Maps mit sowohl Satelliten- als auch OSM-Basiskarten zu verwenden."
-
-#: sketch_map_tool/templates/help.html:400
-msgid "Small polygons can be especially difficult to detected."
-msgstr "Kleine Polygone können besonders schwierig zu erfassen sein."
-
-#: sketch_map_tool/templates/help.html:406
-msgid "<strong>Tips for better comparability and interpretation of the maps</strong>"
-msgstr "<strong>Tips für bessere Vergleichbarkeit und Auswertbarkeit der Karten</strong>"
-
-#: sketch_map_tool/templates/help.html:408
-msgid "<strong>Map Orientation</strong>"
-msgstr "<strong>Ausrichtung der Karte</strong>"
-
-#: sketch_map_tool/templates/help.html:411
-msgid "Orientating on a map can be challenging, depending on the base map, the background of the participants, and their map literacy. \n"
-"                        Mapping in groups can make orientation much easier, as participants can assist each other in reading the map. Before you start with the mapping, we recommend:"
-msgstr "Je nach Basiskarte, persönlichem Hintergrund der Teilnehmenden und deren Fähigkeit Karten zu lesen, kann es zur Herausforderung werden, sich auf einer Karte zu orientieren. Krtieren in Gruppen kann die Orientierung vereinfachen, da sich die Teilnehmenden beim Lesen der Karte gegenseitig unterstützen können. Befor Sie mit dem Kartieren beginnen empfehlen wir Folgendes:"
-
-#: sketch_map_tool/templates/help.html:417
-msgid "Start by identifying a common place or points of reference."
-msgstr "Beginnen Sie damit, einen gemeinsamen Ort oder Bezugspunkte zu finden."
-
-#: sketch_map_tool/templates/help.html:420
-msgid "Try to locate the current position or the  place of residence of the participant on the map."
-msgstr "Versuchen Sie, den aktuellen Standort oder den Wohnort des/der Teilnehmer*in auf der Karte zu finden."
-
-#: sketch_map_tool/templates/help.html:425
-msgid "If you like to learn more about the challenges of map orientation and how to choose a good base map, take a look at \n"
-"                        <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex1_.html\" target=\"_blank\">Training Exercise 2</a>. In \n"
-"                        <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex3_.html\" target=\"_blank\">Training Exercise 3</a>,you can try mapping in groups in a role play."
-msgstr "Wenn Sie mehr darüber erfahren möchten, welche Herausforderungen es beim Orientieren auf Karten geben kann und wie man eine gute Basiskarte auswählt, schauen Sie sich<a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex1_.html\" target=\"_blank\">Übungsaufgabe 2</a> an. Im Rahmen von <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex3_.html\" target=\"_blank\">Übungsaufgabe 3</a> können Sie in einem Rollenspiel das Kartieren in Gruppen ausprobieren."
-
-#: sketch_map_tool/templates/help.html:430
-msgid "<strong>Develop a mapping strategy</strong>"
-msgstr "<strong>Entwickeln Sie eine Kartierungs-Strategie</strong>"
-
-#: sketch_map_tool/templates/help.html:433
-msgid "Prepare a clear data collection and analysis strategy beforehand. A consistent drawing/marking approach in different groups or \n"
-"                        by different people makes the comparison and analysis process easier since the data was collected in a similar way, and you know what it means. \n"
-"                        For this, you should discuss and agree beforehand:"
-msgstr "Bereiten Sie im Vorfeld eine klare Strategie zum Erheben und Analysieren der Daten vor. Es vereinfacht den Vergelichs- und Analyseprozess, wenn verschiedene Personen oder Gruppen eine einheitliche Zeichen-/Markierungsmethode anwenden, da die Daten in ähnlicher Weise gesammelt wurden, und Sie wissen was sie bedeuten. Folgendes sollten Sie vorher besprechen und vereinbaren:"
-
-#: sketch_map_tool/templates/help.html:439
-msgid "What do you want to map?"
-msgstr "Was möchten Sie kartieren?"
-
-#: sketch_map_tool/templates/help.html:442
-msgid "Which colors should be used? For example, with blue, we map the area with the highest flood risk, and with red, we map safe places."
-msgstr "Welche Farben möchten Sie verwenden? Beispiel: Die gebiete mit dem höchsten Überschwemmungsrisiko werden blau kartiert, sichere Orte werden rot kartiert."
-
-#: sketch_map_tool/templates/help.html:446
-msgid "You should test your mapping strategy beforehand: Print out a map, draw some test objects with the pens you are planning to use. \n"
-"                        Upload the map and check if the result is satisfactory.You can practice the development of a mapping strategy in \n"
-"                        <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex3_.html\" target=\"_blank\">Training Exercise 3</a>."
-msgstr "Sie sollten Ihre Kartierungsstrategie im Vorfeld testen: Drucken Sie eine Karte aus und Zeichnen Sie einige Testobjekte mit den Stiften, die Sie verwenden wollen, ein. Laden Sie die Karte hoch un düberprüfen Sie, ob das Ergebnis zufriedenstellend ist. In <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex3_.html\" target=\"_blank\">Übungsaufgabe 3</a> können Sie üben, wie man eine Kartierungsstrategie entwickelt."
-
-#: sketch_map_tool/templates/help.html:451
-msgid "<strong>Organize your maps</strong>"
-msgstr "<strong>Organisieren Sie ihre Karten</strong>"
-
-#: sketch_map_tool/templates/help.html:455
-msgid "Put a title on your map and add information about the participants, place and time to analyze the maps afterwards. \n"
-"                            Be careful; everything you write/draw on the map could be detected as a marked area (polygon), so use the white space outside the map extent."
-msgstr "Versehen Sie ihre Karte mit einem Titel und fügen sie Informationen über Teilnehmende, Ort und Zeit hinzu, um die Karten anschließend zu analysieren. Vorsicht: Verwenden Sie dafür die weiße Fläche außerhalb des Kartenbereichs, da alles, was sie auf die Karte zeichnen oder Schreiben, als markiertes Gebiet (Polygon) erfasst werden könnte."
-
-#: sketch_map_tool/templates/help.html:459
-msgid "If you collect additional information from the participants with other data collection methods such as <a href=\"https://www.kobotoolbox.org/\" target=\"_blank\">Kobo Collect</a> or \n"
-"                            <a href=\"https://getodk.org/\" target=\"_blank\">ODK</a>, add a number on the Sketch Map and save this number in the data collection questionnaire."
-msgstr "Wenn Sie mit anderen Methoden wie <a href=\"https://www.kobotoolbox.org/\" target=\"_blank\">Kobo Collect</a> oder <a href=\"https://getodk.org/\" target=\"_blank\">ODK</a> zusätzliche Informationen über die Teilnehmenden sammeln wollen, versehen Sie die Sketch-Map mit einer Nummer und tragen Sie die Nummer in den Fragebogen ein."
-
-#: sketch_map_tool/templates/help.html:463
-msgid "If you have many participants or you want participants to provide a lot of different information, it is recommended to use individual Sketch Maps for each purpose/topic or per participant."
-msgstr "Bei großer Teilnehmendenzahl oder wenn die Teilnehmenden viele unterschiedliche Informationen bereitstellen sollen, empfehlen wir, dass Sie für jeden Zweck/jedes Thema oder für alle Teilnehmenden individuelle Sketch Maps verwenden."
-
-#: sketch_map_tool/templates/help.html:474
-msgid "<strong>Paper to GIS: Automatically digitize collected data</strong>"
-msgstr "<strong>Papier zu GIS: Automatische Digitalisierung der gesammelten Daten</strong>"
-
-#: sketch_map_tool/templates/help.html:477
-msgid "Scan or photograph your marked\n"
-"                    Sketch Maps"
-msgstr "Scannen oder photographieren Sie die ausgefüllten Sketch-Maps"
-
-#: sketch_map_tool/templates/help.html:482
-msgid "After the field data collection, scan or photograph the marked Sketch Maps.</p>"
-msgstr "Nachdem die Daten aus dem Feld erfasst wurden, scannen oder fotografieren sie die markierten Sketch-Maps.</p>"
-
-#: sketch_map_tool/templates/help.html:486
-msgid "Can be digitized properly"
-msgstr "Kann richtig digitalisiert werden"
-
-#: sketch_map_tool/templates/help.html:488
-msgid "Problem: Missing or cut QR-Code </br>\n"
-"                                Without the whole QR-code the map cannot be recognized by the Sketch Map Tool."
-msgstr "Problem: Fehlender oder abgeschnittener QR-Code</br>\n"
-"Ohne den vollständigen QR-Code kann das Sketch Map Tool die Karte nicht erkennen."
-
-#: sketch_map_tool/templates/help.html:491
-msgid "Problem: Missing Globs and missing part of the map </br>\n"
-"                                This could lead to mistakes in the georeferencing and missing information on your map.."
-msgstr "Problem: Globen und Teile der Karte fehlen.</br>\n"
-"Dies kann zu fehlerhafter Georeferenzierung oder fehlenden Informationen auf Ihrer Karte führen."
-
-#: sketch_map_tool/templates/help.html:494
-msgid "Problem: Tilted photos of the map </br>\n"
-"                                Can lead to mistakes in the georeferencing."
-msgstr "Problem: Gekippte Kartenfotos.</br>\n"
-"Kann zu Fehlern bei der Georeferenzierung führen."
-
-#: sketch_map_tool/templates/help.html:503
-msgid "The photos must be taken from directly above, at a 180-degree angle\n"
-"                            (parallel to the Sketch Map), for optimal image quality."
-msgstr "Für optimale Bildqualität müssen die Fotos direkt von oben in einem 180-Grad-Winkel (parallel zur Sketch-Map) aufgenommen werden."
-
-#: sketch_map_tool/templates/help.html:507
-msgid "Pay attention to the lighting conditions when taking a picture."
-msgstr "Achten Sie beim Aufnehmen der Fotos auf die Lichtverhältnisse."
-
-#: sketch_map_tool/templates/help.html:510
-msgid "The image of the Sketch Map needs to be uploaded as JPG or PNG (max. file size is 50 MB).\n"
-"                            The georeferencing and color-detection work even better if you scan the marked Sketch Map\n"
-"                            with a resolution of 300 dpi. Attention! The file size will be too large when scanning with a\n"
-"                            600 dpi resolution."
-msgstr "Das Foto der Sketch Map muss im JPG oder PNG Format hochgeladen werden (die maximale Dateigröße beträgt 50 MB). Die Georeferenzierung und die Farberkennung funktionieren noch besser, wenn Sie die markierte Sketch-Map in einer Auflösung von 300 dpi einscannen. Achtung! Einscannen in einer Auflösung von 600 dpi führt zu einer zu hohen Dateigröße."
-
-#: sketch_map_tool/templates/help.html:516
-msgid "If the color detection does not work satisfactorily, you can improve the color contrast\n"
-"                            of the markings (with a pen, a new photo, or with photo editing software such as Paint, GIMP,\n"
-"                            or Windows Cut & Resize)."
-msgstr "Wenn Sie mit der Farberkennung nicht zufrieden sind, können Sie den Kontrast zwischen den Farben der Markierungen verbessern (mit einem Stift, einem neuen Foto oder mit Bildbearbeitungssoftware wie Paint, GIMP oder Windows Cut & Resize)."
-
-#: sketch_map_tool/templates/help.html:524
-msgid "Upload your Sketch Maps"
-msgstr "Hochladen der Sketch-Maps"
-
-#: sketch_map_tool/templates/help.html:527
-msgid "To upload files, you can click on the upload field or drag and drop your files directly into\n"
-"                        the upload field and then click on the Upload button. You can upload one or more marked Sketch Maps\n"
-"                        at once. However, they all must be the same base map (same QR-Code) , and all maps will be\n"
-"                        automatically combined in one Geojson in the download files for each color and Sketch Map.\n"
-"                        The upload works for JPG or PNG files. It is possible to upload more than one Sketch Map at the\n"
-"                        same time, but the upload will take longer. For one Sketch Map, it can take up to 100 seconds\n"
-"                        to produce a result, and for a package of 10 Sketch Maps, it can take up to 16 minutes."
-msgstr "Um Dateien hochzuladen, klicken Sie auf das Upload-Feld oder fügen Sie Ihre Dateien per Drag & Drop in das Upload-Feld. Klicken Sie dann auf den Upload-Button. Sie können eine oder mehrere markierte Sketch-Maps gleichzeitig hochladen. Diese müssen jedoch alle dieselbe Basiskarte (also denselben QR-Code) besitzen und in den Download-Dateien für jede Farbe und jede Sketch Map werden alle Karten automatisch zu einer GeoJSON-Datei kombiniert. Es können JPG und PNG Dateien hochgeladen werden. Es ist möglich, mehrere Sketch Maps gleichzeitig hochzuladen, was jedoch mehr Zeit zum Hochladen in Anspruch nimmt. Bei einer Sketch Map kann es bis zu 100 Sekunden dauern, bis ein Ergebnis erreicht wird. Bei Paketen von zehn Sketch Maps kann es bis zu 16 Minuten dauern."
-
-#: sketch_map_tool/templates/help.html:539
-msgid "If you experience problems during the upload process, please check out\n"
-"                            the FAQ section below or contact your Sketch Map Tool focal point in your\n"
-"                            organization or the Sketch Map Tool user support sketch-map-tool@heigit.org ."
-msgstr "Wenn es während des Uploads zu Problemen kommt, schauen Sie bitte weiter unten in den FAQ-Bereich oder kontaktieren Sie die für Sketch Map Tool zuständige Stelle in Ihrer Organisation oder den Sketch Map Tool User-Support unter sketch-map-tool@heigit.org."
-
-#: sketch_map_tool/templates/help.html:547
-msgid "Download detected Markings as Geodata"
-msgstr "Erfasste Markierungen als Geodaten herunterladen"
-
-#: sketch_map_tool/templates/help.html:551
-msgid "Download the markings of the Sketch Maps in different geodata formats (raster data as\n"
-"                        GeoTIFF, vector data as a GeoJSON file). You can download the georeferenced Sketch Maps as a\n"
-"                        GeoTIFF or the color-detected markings as vector data in a GeoJSON file.  The vector data output\n"
-"                        file consists of different layers for each color and Sketch Map, if you have uploaded more than\n"
-"                        one Sketch Map at once. The GeoTIFF output file consists of a georeferenced picture for each\n"
-"                        of your uploaded Sketch Maps. The GeoJSON file (vector file) consists of the color-detected\n"
-"                        markings from your Sketch Map as a vector layer."
-msgstr "Laden Sie die Markierungen der Sketch Maps in verschiedenen Geodaten-Formaten herunter (Rasterdaten als GeoTIFF-, Vektordaten als GeoJSON-Datei). Sie können die georeferenzierten Sketch Maps als GeoTiff-Datei, oder die durch die Farberkennung erfassten Vektordaten als GeoJSON-Datei herunterladen. Wenn Sie mehrere Sketch-Maps gleichzeitig hochgeladen haben, besteht die herausgegebene Vektordatei aus verschiedenen Ebenen für jede Farbe und Sketch Map. Die herausgegebene GeoTIFF-Datei besteht aus georeferenzierten Bildern von jeder Ihrer hochgeladenen Karten. Die GeoJSON-Datei (Vektordatei) enthält die durch die Farberkennung erfassten Markierunngen Ihrer Sketch Map als Vektorebene."
-
-#: sketch_map_tool/templates/help.html:563
-msgid "If you experience problems during the download process, please check out the FAQ section\n"
-"                            below or contact your Sketch Map Tool focal point in your organization or the Sketch Map Tool\n"
-"                            user support sketch-map-tool@heigit.org if you cannot find your answers there."
-msgstr "Wenn es beim Herunterladen zu Problemen kommt, schauen Sie sich bitte unten den FAQ_Abschnitt an. Wenn Sie dort keine Antwort finden, kontaktieren Sie die für das Sketch Map Tool zuständige Abteilung Ihrer Organisation oder den Sketch Map Tool User Support (sketch-map-tool@heigit.org)."
-
-#: sketch_map_tool/templates/help.html:574
-msgid "FINALLY:"
-msgstr "SCHLIESSLICH:"
-
-#: sketch_map_tool/templates/help.html:575
-msgid "Import Geodata in a Geographic Information System (GIS), e.g. QGIS"
-msgstr "Geodaten in ein Geoinformationssystem (GIS), z.B. QGIS, importieren"
-
-#: sketch_map_tool/templates/help.html:579
-msgid "The gained geodata can be even more valuable for the communities and humanitarian\n"
-"                    organizations if you create result maps or analyze it further. There are many different\n"
-"                    analyses possible based on your gained map data. If you would like more tips on different\n"
-"                    steps for basic analysis and how to create a result map, take a look at the following QGIS\n"
-"                    Training Lectures\n"
-"                    https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html"
-msgstr "Die gewonnenen Geodaten können für Gemeinschaften und humanitäre Organisationen noch wertvoller sein, wenn Sie diese noch weiter analysieren oder daraus Ergebniskarten erstellen. Auf Grundlage der gewonnenen Kartendaten können viele verschiedene Analysen durchgeführt werden. Wenn Sie mehr Tips zu verschiedenen grundlegenden Analyseschritten oder dazu wie man Ergebniskarten erstellt haben möchten, schauen Sie sich die folgenden QGIS Trainingsvorlesungen an: https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html"
-
-#: sketch_map_tool/templates/help.html:587
-msgid "You can load your resulting geodata files into your GIS software."
-msgstr "Sie können die Geodaten, die Sie als Ergebnis erhalten haben, in ihre GIS-Software hochladen. "
-
-#: sketch_map_tool/templates/help.html:592
-msgid "GeoTiff"
-msgstr "GeoTiff"
-
-#: sketch_map_tool/templates/help.html:593
-msgid "GeoJSON"
-msgstr "GeoJSON\n"
-
-#: sketch_map_tool/templates/help.html:597
-msgid "The GeoTIFF output file consists of a georeferenced \"picture\" for each of your uploaded Sketch\n"
-"                                Maps.\n"
-"                                When you open the GeoTIFF files in QGIS, it should look similar to this example and show all the\n"
-"                                markings on\n"
-"                                your sketch map(s) as separate layers. You can view only one of your maps at a time."
-msgstr "Die herausgegebene GeoTIFF-Datei enthält ein georeferenziertes \"Bild\" von jeder Ihrer hochgeladenen Sketch Maps. Wenn Sie die GeoTIFF-Dateien in QGIS öffnen, sollten sie so ähnlich aussehen wie dieses Beispiel und alle Markierungen auf Ihren Sketch Maps sollten als separate Ebenen angezeigt werden. Sie können ihre Karten nur einzeln ansehen."
-
-#: sketch_map_tool/templates/help.html:604
-msgid "If you open the GeoJSON, you can see the detected markings from all uploaded maps as polygons.\n"
-"                            When\n"
-"                            you check the attribute table, you can see that for each marking, the name of the map and the detected color\n"
-"                            are specified. With the help of these attributes, you can style your map or conduct analyses."
-msgstr "Wenn Sie das GeoJSON öffnen, sehen Sie alle erfassten Markierungen von allen hochgeladenen Karten als Polygone. Ein Blick auf die Attribute-Tabelle zeigt, dass für jede Markierung der Name der Karte und die erkannte Farbe angegeben sind. Diese Attribute sind hilfreich beim Gestalten Ihrer Karte oder bei der Durchführing von Analysen."
-
-#: sketch_map_tool/templates/help.html:615
-msgid "Usage of the GeoTIFF file (raster file) in QGIS:"
-msgstr "So verwenden Sie die GeoTIFF-Datei (Rasterdatei) in QGIS:"
-
-#: sketch_map_tool/templates/help.html:618
-msgid "It can be used, for example, as a background to combine\n"
-"                                it with other data or to manually digitize your results yourself in\n"
-"                                case some markings are not detected correctly."
-msgstr "Sie können zum Beispiel als Hintergrund mit anderen Daten kombiniert werden oder dazu verwendet werde, Ihre Ergebnisse eigenständig zu digitalisieren, falls einige Markierungen nicht korrekt erfasst wurden."
-
-#: sketch_map_tool/templates/help.html:625
-msgid "Usage of the GeoJSON file (vector file) in QGIS:"
-msgstr "Verwendung der GeoJSON-Datei (Vektordatei) in QGIS:"
-
-#: sketch_map_tool/templates/help.html:628
-msgid "You can compare the vector output with the raster file to verify the\n"
-"                                marking detection. In case features are not detected or are incorrectly detected,\n"
-"                                you can manipulate your vector file based on the GeoTIFF."
-msgstr "Sie können die herausgegebenen Vektoren mit der Rasterdatei vergleichen, um zu überprüfen, ob die Markierungserkennung korrekt ist. Falls Eigenschaften nicht oder nur fehlerhaft erfasst wurden, können Sie Ihre Vektordatei basierend auf der GeoTIFF-Datei verändern."
-
-#: sketch_map_tool/templates/help.html:633
-msgid "It can be visualized in a clear and concise map in order to use it for\n"
-"                                reporting (see <a\n"
-"                                    href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex4_.html\"\n"
-"                                    target=\"_blank\">Training Exercise 4</a>)"
-msgstr "Zum Zwecke der Berichterstattung, kann es als klare und übersichtliche Karte dargestellt werden (sehen Sie hierzu auch <a\n"
-"                                    href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex4_.html\"\n"
-"                                    target=\"_blank\">Übungsaufgabe 4</a>)"
-
-#: sketch_map_tool/templates/help.html:639
-msgid "Based on the vector outputs you can analyze your data and combine it with additional\n"
-"                                data (e.g. prepare heatmaps, see <a\n"
-"                                    href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex5_.html\"\n"
-"                                    target=\"_blank\">Training Exercise 5 </a>)"
-msgstr "Auf Grundlage der herausgegebenen Vektoren können Sie Ihre Daten analysieren und mit zusätzlichen Daten kombinieren (z.B. zum Vorbereiten von Hitzekarten, wie Sie in<a\n"
-"                                    href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex5_.html\"\n"
-"                                    target=\"_blank\">Übungsaufgabe 5 </a> sehen können)."
-
-#: sketch_map_tool/templates/help.html:647
-msgid "If the imported data looks strange and does not represent the actual markings of\n"
-"                        the sketch maps, please check your uploaded sketch map files and, if necessary, scan them again\n"
-"                        or take new pictures. Please review the recommendations in the sections about the data collection,\n"
-"                        then scan, photograph or the upload above and consult our FAQ section about the problems in the colour\n"
-"                        detection. If you cannot find your answers there, please contact your Sketch Map Tool focal point in your\n"
-"                        organization or the Sketch Map Tool user support (sketch-map-tool@heigit.org)."
-msgstr "Wenn die importierten Daten ungewöhnlich aussehen und nicht die tatsächlichen Markierungen der Sketch Maps wiedergeben, überprüfen Sie die hochgeladenen Sketch-Map-Dateien und scannen Sie sie, wenn nötig, nochmal oder machen Sie neue Fotos. Bitte lesen Sie nochmal die Empfehlungen im Abschnitt über Datenerhebung. Dann scannen oder fotografieren Sie den obigen Upload und wenden sich an den FAQ-Abschnitt über Probleme bei der Farberkennung. Wenn Sie dort keine Antworten finden, kontaktirern Sie bitte die für das Sketch Map Tool zuständige Abteilung Ihrer Organisation oder den Sketch Map Tool User Support (sketch-map-tool@heigit.org)."
-
-#: sketch_map_tool/templates/help.html:659
-msgid "FAQs"
-msgstr "Häufig gestellte Fragen"
-
-#: sketch_map_tool/templates/help.html:661
-msgid "What are OSM data?"
-msgstr "Was sind OSM-Daten?"
-
-#: sketch_map_tool/templates/help.html:663
-msgid "OpenStreetMap data is freely accessible geodata. You can find out more about it <a\n"
-"                    href=\"https://www.openstreetmap.org/\" target=\"_blank\">here</a>."
-msgstr "OpenStreetMap-Daten sind frei zugängliche Geodaten. <a\n"
-"                    href=\"https://www.openstreetmap.org/\" target=\"_blank\">Hier</a> erfahren Sie mehr darüber."
-
-#: sketch_map_tool/templates/help.html:668
-msgid "What are the quality levels for OSM data used in the tool?"
-msgstr "Was sind die Qualitätsstufen, anhand derer die OSM-Daten bewertet werden?"
-
-#: sketch_map_tool/templates/help.html:671
-msgid "The OSM data is classified with a traffic light system. Green stands for good suitability of the data,\n"
-"                yellow for possible problems when carrying out a\n"
-"                Sketch Map study with OSM-based Sketch Maps, and red for probable problems.\n"
-"                Recommendations are also given on what to consider based on the results."
-msgstr "Die OSM-Daten sind nach einem Ampelsystem eingeteilt. Grün steht für gut geeignete Daten. Gelb steht dafür, dass beim Durchführen einer Sketch-Map-Studie mit OSM-basierten Sketch-Maps möglicherweise Probleme auftreten können. Rot steht dafür, dass es wahrscheinlich zu Problemen kommen wird. Weitere Empfehlungen werden auf Grundlage der Ergebnisse gegeben. "
-
-#: sketch_map_tool/templates/help.html:678
-msgid "Which analyses are performed and why?"
-msgstr "Welche Analysen von OSM-Daten werden durchgeführt und warum?"
-
-#: sketch_map_tool/templates/help.html:680
-msgid "You can read more about the analyses included in the Sketch Map Tool <a\n"
-"                    href=\"https://www.mdpi.com/2220-9964/10/3/130\" target=\"_blank\">this\n"
-"                    paper</a>."
-msgstr "<a\n"
-"                    href=\"https://www.mdpi.com/2220-9964/10/3/130\" target=\"_blank\"> In diesem Paper</a> können Sie mehr über die Analysen, die im Sketch Map Tool enthalten sind, lesen."
-
-#: sketch_map_tool/templates/help.html:686
-msgid "Why is it important to analyze the suitability of OSM data\n"
-"                before creating a Sketch Map"
-msgstr "Warum ist es wichtig, die Eignung der OSM-Daten Map zu überprüfen, bevor eine Sketch Map erstellt wird?"
-
-#: sketch_map_tool/templates/help.html:690
-msgid "OSM data is used for the creation of the Sketch Map. If the OSM data in a study area lack some important\n"
-"                features, they are missing on the maps as well.\n"
-"                Thus, the quality of the OSM data is directly related to the quality of the Sketch Maps.\n"
-"                The features might be relevant for participants to orientate on the map."
-msgstr "Für das Erstellen der Sketch Map werden OSM-Daten verwendet. Wenn die OSM-Daten eines zu untersuchenden Gebiets einige wichtige Eigenschaften nicht enthalten, werden diese auch auf der Karte fehlen. Deshalb steht die OSM-Datenqualität in direktem Zusammenhang mit der Qualität der Sketch Maps. Die Eigenschaften könnten für die Teilnehmenden wichtig zur Orientierung auf der Karte sein."
-
-#: sketch_map_tool/templates/help.html:697
-msgid "For which research questions can the Sketch Map Tool\n"
-"                be used?"
-msgstr "Bei welchen Forschungsfragen kann das Sketch Map Tool verwendet werden?"
-
-#: sketch_map_tool/templates/help.html:700
-msgid "The Sketch Map Tool has been primarily developed for research questions related to floodings.\n"
-"                Since then, it has been used world wide for a variety of topics like vulnerability and capacity mapping or risk\n"
-"                mapping in general.\n"
-"                You can use the Sketch Maps and the Map Quality Check to investigate all kinds of research questions, as long as\n"
-"                you check that it fits your purpose."
-msgstr "Das Sketch Map Tool wurde in erster Linie im Zusammenhang mit Forschungsfragen zum Thema Hochwasser entwickelt. Seit dem kam es für vielfältige Zwecke, zum Beispiel der Kartierung von Anfälligkeit und Kapazität oder dem Erstellen von Risikokarten allgemein. Solange Sie sicherstellen, dass die Sketch Maps und der Map Quality Check Ihrem Anwendungszweck entsprechen, können Sie damit alle erdenklichen Forschungsfragen untersuchen."
-
-#: sketch_map_tool/templates/help.html:708
-msgid "How does mapping work with the Sketch Map Tool?"
-msgstr "Wie funktioniert die Kartierung mit dem Sketch Map Tool?"
-
-#: sketch_map_tool/templates/help.html:710
-msgid "The local population can, for example, draw flooded areas such as streets, parks, etc., on the printed\n"
-"                Sketch Map.\n"
-"                The larger paper formats also allow to hold group discussions about flooded areas. The maps with the markings\n"
-"                can be photographed and uploaded to the tool.\n"
-"                The georeferenced TIFF and shape files can then be further analyzed or used."
-msgstr "Die Einheimischen können zum Beispiel überschwemmte Gebiete wie Straßen, Parks, etc., auf der ausgedruckten Sketch Map einzeichnen. Die größeren Papierformate machen außerdem Gruppendiskussionen über die überschwemmten Gebiete möglich. Die markierten Karten können abfotografiert und in das Tool hochgeladen werden.Die georeferenzierten TIFF- und Shape-Dateien können dann weiter analysiert oder verwendet werden."
-
-#: sketch_map_tool/templates/help.html:718
-msgid "How large can my study area be?"
-msgstr "Wie groß kann mein ausgewählter Bereich sein?"
-
-#: sketch_map_tool/templates/help.html:720
-msgid "So far the Sketch Map Tool has only been tested on neighborhood or city level. The tool works best for\n"
-"                study areas which are smaller than 50km²."
-msgstr "Bisher wurde das Sketch Map Tool nur auf Nachbarschafts- oder Stadtebene getestet. Das Tool funktioniert am besten, wenn das Untersuchungsgebiet kleiner als 50km² ist."
-
-#: sketch_map_tool/templates/help.html:725
-msgid "Why are there a QR code and globes on the Sketch Maps?"
-msgstr "Warum befindet sich ein QR-Code auf den Sketch-Maps?"
-
-#: sketch_map_tool/templates/help.html:727
-msgid "These are required for georeferencing. This is why it is important to have them on the Sketch Maps."
-msgstr "Diese werden für die Georeferenzierung benötigt. Daher ist es wichtig, dass sie auf den Sketch-Maps sind. "
-
-#: sketch_map_tool/templates/help.html:731
-msgid "Can I access my results at a later point in time?"
-msgstr "Kann ich meine Ergebnisse zu einem späteren Zeitpunkt abfragen?"
-
-#: sketch_map_tool/templates/help.html:733
-msgid "No, the results should always be downloaded directly after using the tool. If you forgot to download the\n"
-"                files, you can simply upload and process the files again."
-msgstr "Nein, die Ergebnisse müssen immer direkt nach Verwenden des Tools heruntergeladen werden. Wenn Sie vergessen haben, die Dateien herunterzuladen, können Sie sie einfach erneut hochladen und verarbeiten."
-
-#: sketch_map_tool/templates/help.html:738
-msgid "What do I have to pay attention to in the field?"
-msgstr "Worauf sollte ich bei der Datensammlung im Feld achten?"
-
-#: sketch_map_tool/templates/help.html:740
-msgid "Please make sure not to accidentally mark the globes at the edge as they are needed to improve the\n"
-"                automatic map detection.\n"
-"                But if someone accidentally marked the globes, it might still be possible to upload the Sketch Maps. Try the\n"
-"                automatic detection of the map boundaries.\n"
-"                Use thicker felt-tip pens with intense colors; red, blue, and black work best. Prepare the same set of pens for\n"
-"                all interviewers.\n"
-"                Add a number on the Sketch Map and save this number in the questionnaire as well, if you use one.\n"
-"                An overview of each step with recommendations can be found <a\n"
-"                    href=\"https://sketch-map-tool.heigit.org/tool/help/PDF\">here</a>."
-msgstr "Bitte stellen Sie sicher, dass die Globen am Rand nicht versehentlich markiert werden. Diese werden für eine bessere automatische Kartenerfassung benötigt. Das Hochladen der Sketch-Maps kann auch dann möglich sein, wenn die Globen versehentlich markiert wurden. Greifen Sie in diesem Fall auf die automatische Erfassung der Kartengrenzen zurück. Verwenden sie dickere Filzstifte mit kräftigen Farben; Rot, Blau und Schwarz funktionieren am besten. Statten Sie alle Interviewer*innen mit gleichen Stifte-Sets aus. Versehen Sie die Sketch-Map mit einer Nummer und halten sie diese auch im Fragebogen fest, falls Sie welche verwenden. <a\n"
-"                    href=\"https://sketch-map-tool.heigit.org/tool/help/PDF\">Hier</a> finden sie alle Zwischenschritte mit Empfehlungen im Überblick."
-
-#: sketch_map_tool/templates/help.html:752
-msgid "How does the georeferencing work?"
-msgstr "Wie funktioniert die Georeferenzierung?"
-
-#: sketch_map_tool/templates/help.html:754
-msgid "You can find your answer in the <a href=\"https://www.mdpi.com/2220-9964/10/3/130\" target=\"_blank\">paper\n"
-"                    about the Sketch Map Tool</a> in the paragraph about Image Processing."
-msgstr "Ihre Antwort finden Sie im <a href=\"https://www.mdpi.com/2220-9964/10/3/130\" target=\"_blank\">Paper über das Sketch Map Tool</a> im Abschnitt \"Image Processing\" (Bildverarbeitung)."
-
-#: sketch_map_tool/templates/help.html:759
-msgid "How can I ensure optimal results when photographing the Sketch\n"
-"                Maps?"
-msgstr "Wie kann ich sicherstellen, dass ich beim Fotografieren der Sketch-Maps optimale Ergebnisse erhalte?"
-
-#: sketch_map_tool/templates/help.html:763
-msgid "The images need to be in JPG or PNG format. The file may not be larger than 500&nbsp; MB. Georeferencing\n"
-"                works best if you scan the marked Sketch Map with a resolution of 300 dpi.\n"
-"                The photos must be taken from above at a 180 degree angle (parallel above the Sketch Map) to produce the best\n"
-"                result.\n"
-"                An overview of each step with recommendations can be found <a\n"
-"                    href=\"https://sketch-map-tool.heigit.org/tool/help/PDF\">here</a>."
-msgstr "Die Fotos müssen im JPG oder PNG Format sein. Die Datei darf nicht größer als 500&nbsp; MB sein. Georeferenzierung funktioniert am besten, wenn die markierte Sketch-Map mit einer Auflösung von 300 dpi gescannt wird. Für ein optimales Ergebnis müssen die Fotos von oben im 180-Grad-Winkel (parallel über der Sketch-Map) aufgenommen werden.\n"
-"<a\n"
-"                    href=\"https://sketch-map-tool.heigit.org/tool/help/PDF\">Hier</a> finden sie alle Zwischenschritte mit Empfehlungen im Überblick."
-
-#: sketch_map_tool/templates/help.html:773
-msgid "How do I check if georeferencing is correct?"
-msgstr "Wie kann ich überprüfen, ob die Georeferenzierung korrekt ist?"
-
-#: sketch_map_tool/templates/help.html:775
-msgid "You can open the TIFF file in a geographic information system (GIS), such as ArcGIS or QGIS, to check\n"
-"                this.\n"
-"                If you upload the file there and insert a basemap (for example the OSM basemap), you can see if georeferencing\n"
-"                has worked. The Sketch Map should match the base map."
-msgstr "Um dies zu überprüfen, können Sie die TIFF-Datei in einem Geoinformationssystem (GIS) wie zum Beispiel ArcGIS oder QGIS öffnen. Wenn Sie die Datei dort hochladen und eine Basiskarte (z.B. die OSM Basiskarte) einfügen, sehen Sie, ob die Georeferenzierung funktioniert hat. Die Sketch-Map sollte mit der Basiskarte übereinstimmen."
-
-#: sketch_map_tool/templates/help.html:783
-msgid "Why does my generated TIFF file look strange?"
-msgstr "Warum sieht die erstellte GeoTIFF-Datei so verzerrt aus?"
-
-#: sketch_map_tool/templates/help.html:785
-msgid "Please first try to open the file in a geographic information system (GIS) such as ArcGIS or QGIS.\n"
-"                The georeferencing may have worked even if the TIFF file does not look right. If it still appears incorrect in\n"
-"                the GIS,\n"
-"                the map might not have been properly detected by the tool in the photo, and there could be various possible\n"
-"                reasons.\n"
-"                For example, the photo may have been taken from the wrong angle or the globes may have been painted over."
-msgstr "Bitte versuchen Sie zuerst, die Datei in einem Geoinformationssystem (GIS) wie ArcGIS oder QGIS zu öffnen. Die Georeferenzierung könnte funktioniert haben, selbst wenn die TIFF-Datei fehlerhaft aussieht. Falls sie im GIS immer noch fehlerhaft erscheint, hat das Tool die Karte auf dem Foto womöglich nicht richtig erfasst, wofür es verschiedene mögliche Ursachen gibt. Beispiel: Das Foto wurde aus dem falschen Winkel aufgenommen oder die Globen wurden übermalt."
-
-#: sketch_map_tool/templates/help.html:795
-msgid "What can I do if the satellite map I printed is too dark?"
-msgstr "Was kann ich tun, wenn meine ausgedruckte Satellitenkarte zu dunkel ist?"
-
-#: sketch_map_tool/templates/help.html:798
-msgid "In case you use a satellite imagery background, please review the color saturation of your image.\n"
-"                If the background is too dark, you might consider to choose OSM as base map."
-msgstr "Falls Sie Satellitenbilder als Hintergrund verwenden, überprüfen Sie bitte die Farbsättigung Ihres Bildes.\n"
-"                Falls der Hintergrund zu dunkel ist, können Sie auch OSM als Basiskarte verwenden."
 
 #: sketch_map_tool/templates/index.html:8
 msgid "Create re-digitizable paper maps for offline data collection in the field"

@@ -77,7 +77,7 @@
                 
                     <figure> <!-- figure needs to be changed. link to the figure-->
                         <img src="{{ url_for("static", filename="assets/images/help/1_1_AOI.webp" ) }}"
-                            alt="{{ _('Picture of a group mapping situation.') }}">
+                            alt="{{ _('Screenshot of the Sketch Map Tool.') }}">
                         <figcaption></figcaption>
                     </figure>
                 
@@ -140,7 +140,11 @@
                         the suitability of the local OSM data and recommendations for subsequent field data collection.') }}
                     </p>
                 
-                    <!-- figure to be inserted here-->
+                    <figure> <!-- figure needs to be changed. link to the figure-->
+                        <img src="{{ url_for("static", filename="assets/images/help/1_2_map_quality_report.webp" ) }}"
+                            alt="{{ _('Map Quality Report.') }}">
+                        <figcaption></figcaption>
+                    </figure>
                 
                     <h6><em>{{ _('Recommendations:') }}</em></h6>
                     <ul>
@@ -182,7 +186,11 @@
                         {{ _('The generated Sketch Map for your selected area of interest can be downloaded as a PDF file by clicking on
                         the blue button.') }}
                     </p>
-                    <!-- figure to be inserted here-->
+                    <figure> 
+                        <img src="{{ url_for("static", filename="assets/images/help/1_3_empty_sketch_map_osm.webp" ) }}"
+                            alt="{{ _('Empty Sketch Map, OSM') }}">
+                        <figcaption></figcaption>
+                    </figure>
                 
                     <h6><em>{{ _('Recommendations:') }}</em></h6>
                     <ul>
@@ -225,8 +233,13 @@
                 </p>
                 <p>
                     {{ _('Example of marked map:') }}
-                    <!-- figure to be inserted here-->
                 </p>
+
+                <figure> 
+                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}"
+                        alt="{{ _('Empty Sketch Map, OSM') }}">
+                    <figcaption>"Empty Sketch Map, Base Map: OpenStreetMap"</figcaption>
+                </figure>
                 <ol>
                     <li>{{ _('<strong>Tips to improve color detection</strong>') }}</li>
                     <p>
@@ -509,9 +522,51 @@
                                 Can lead to mistakes in the georeferencing.') }}
                             </th>
                         </tr>
+                        <tr>
+                            <td>
+                                <figure> 
+                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}"
+                                        alt="{{ _('Picture of a Sketch Map.') }}">
+                                    <figcaption></figcaption>
+                                </figure>
+                            </td>
+                            <td>
+                                <figure> 
+                                    <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_no_qr.webp" ) }}"
+                                        alt="{{ _('Sketch Map, No QR Code') }}">
+                                    <figcaption></figcaption>
+                                </figure>
+                                <figure> 
+                                    <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_cut_qr.webp" ) }}"
+                                        alt="{{ _('Sketch Map, Cutted QR Code.') }}">
+                                    <figcaption></figcaption>
+                                </figure>
+                            </td>
+                            <td>
+
+                                <figure> 
+                                    <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_missing_globes.webp" ) }}"
+                                        alt="{{ _('Sketch Map, Missing Globes.') }}">
+                                    <figcaption></figcaption>
+                                </figure>
+                            </td>
+                            <td>
+
+                                <figure> 
+                                    <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_tiled.webp" ) }}"
+                                        alt="{{ _('Sketch Map, Tiled Picture.') }}">
+                                    <figcaption></figcaption>
+                                </figure>
+                            </td>
+                        </tr>
                     </table>
                     </p>
                     <h6><em>{{ _('Recommendations:') }}</em></h6>
+                    <figure>
+                        <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_photo.webp" ) }}"
+                            alt="{{ _('Picture of a Sketch Map.') }}">
+                        <figcaption></figcaption>
+                    </figure>
                     <ul>
                         <li>
                             {{ _('The photos must be taken from directly above, at a 180-degree angle
@@ -537,6 +592,11 @@
             <details>
                 <summary id="upload-sketch-maps">2.2 {{ _('Upload your Sketch Maps') }}</summary>
                 <article>
+                    <figure>
+                        <img src="{{ url_for("static", filename="assets/images/help/2_2_sketch_map_upload.webp" ) }}"
+                            alt="{{ _('Screenshot: Upload of a Sketch Map.') }}">
+                        <figcaption></figcaption>
+                    </figure>
                     <p>
                         {{ _('To upload files, you can click on the upload field or drag and drop your files directly into
                         the upload field and then click on the Upload button. You can upload one or more marked Sketch Maps
@@ -610,16 +670,28 @@
                     <tr>
                         <td>
                             <p>{{ _('The GeoTIFF output file consists of a georeferenced "picture" for each of your uploaded Sketch
-                                Maps.
-                                When you open the GeoTIFF files in QGIS, it should look similar to this example and show all the
-                                markings on
-                                your sketch map(s) as separate layers. You can view only one of your maps at a time.') }}</p>
+                                Maps. When you open the GeoTIFF files in QGIS, it should look similar to this example and show all the
+                                markings on your sketch map(s) as separate layers. You can view only one of your maps at a time.') }}</p>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/finally_qgis_geotiff.webp" ) }}"
+                                    alt="{{ _('GeoTiff in QGIS.') }}">
+                                <figcaption></figcaption>
+                            </figure>
                         </td>
                         <td>
                             <p>{{ _('If you open the GeoJSON, you can see the detected markings from all uploaded maps as polygons.
-                            When
-                            you check the attribute table, you can see that for each marking, the name of the map and the detected color
-                            are specified. With the help of these attributes, you can style your map or conduct analyses.') }}</p>
+                                When you check the attribute table, you can see that for each marking, the name of the map and the detected color
+                                are specified. With the help of these attributes, you can style your map or conduct analyses.') }}</p>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/finally_qgis_geojson_1.webp" ) }}"
+                                    alt="{{ _('GeoJSON in QGIS.') }}">
+                                <figcaption></figcaption>
+                            </figure>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/finally_qgis_geojson_2.webp" ) }}"
+                                    alt="{{ _('GEOJSON in QGIS.') }}">
+                                <figcaption></figcaption>
+                            </figure>
                         </td>
                     </tr>
                 </table>
@@ -759,7 +831,11 @@
                 automatic detection of the map boundaries.
                 Use thicker felt-tip pens with intense colors; red, blue, and black work best. Prepare the same set of pens for
                 all interviewers.
+<<<<<<< HEAD
                 Add a number on the Sketch Map and save this number in the questionnaire as well, if you use one.') }}
+=======
+                Add a number on the Sketch Map and save this number in the questionnaire as well, if you use one.) }}
+>>>>>>> main
             </article>
         </details>
         <details>
@@ -777,7 +853,11 @@
                 {{ _('The images need to be in JPG or PNG format. The file may not be larger than 500&nbsp; MB. Georeferencing
                 works best if you scan the marked Sketch Map with a resolution of 300 dpi.
                 The photos must be taken from above at a 180 degree angle (parallel above the Sketch Map) to produce the best
+<<<<<<< HEAD
                 result.') }}
+=======
+                result.) }}
+>>>>>>> main
             </article>
         
         </details>
