@@ -77,12 +77,7 @@ async function poll(url, prefix) {
             status: taskStatus,
         } = resonseJSON;
         // display error
-        if (httpStatus === 500) {
-            handleError(prefix, `${new Date().toISOString()} ${taskStatus} <br>
-            There was an Internal Server Error.`);
-        } else {
-            handleError(prefix, `${new Date().toISOString()} ${taskStatus} <br> ${errorText}`);
-        }
+        handleError(prefix, `${new Date().toISOString()} ${httpStatus} ${taskStatus} <br> ${errorText}`);
         // remove task status
         setTaskStatus(`${prefix}-status`, "");
     }
