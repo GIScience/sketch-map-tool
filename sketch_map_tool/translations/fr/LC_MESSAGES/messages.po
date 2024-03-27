@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-26 15:27+0000\n"
-"PO-Revision-Date: 2024-03-26 16:28\n"
+"POT-Creation-Date: 2024-03-27 07:11+0000\n"
+"PO-Revision-Date: 2024-03-27 07:20\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -1593,39 +1593,35 @@ msgid "Please make sure not to accidentally mark the globes at the edge as they 
 "                But if someone accidentally marked the globes, it might still be possible to upload the Sketch Maps. Try the\n"
 "                automatic detection of the map boundaries.\n"
 "                Use thicker felt-tip pens with intense colors; red, blue, and black work best. Prepare the same set of pens for\n"
-"                all interviewers.\n"
-"<<<<<<< HEAD\n"
-"                Add a number on the Sketch Map and save this number in the questionnaire as well, if you use one."
+"                all interviewers. Add a number on the Sketch Map and save this number in the questionnaire as well, if you use one."
 msgstr ""
 
-#: sketch_map_tool/templates/help.html:842
+#: sketch_map_tool/templates/help.html:838
 msgid "How does the georeferencing work?"
 msgstr "Comment fonctionne le géoréférencement?"
 
-#: sketch_map_tool/templates/help.html:844
+#: sketch_map_tool/templates/help.html:840
 msgid "You can find your answer in the <a href=\"https://www.mdpi.com/2220-9964/10/3/130\" target=\"_blank\">paper\n"
 "                    about the Sketch Map Tool</a> in the paragraph about Image Processing."
 msgstr "Vous trouverez la réponse dans le <a href=\"https://www.mdpi.com/2220-9964/10/3/130\" target=\"_blank\">document\n"
 "                    sur le Sketch Map Tool</a> dans le paragraphe sur le traitement des images (Image Processing)."
 
-#: sketch_map_tool/templates/help.html:849
+#: sketch_map_tool/templates/help.html:845
 msgid "How can I ensure optimal results when photographing the Sketch\n"
 "                Maps?"
 msgstr "Comment puis-je assurer des résultats optimaux afin de photographier les croquis ?"
 
-#: sketch_map_tool/templates/help.html:853
+#: sketch_map_tool/templates/help.html:849
 msgid "The images need to be in JPG or PNG format. The file may not be larger than 500&nbsp; MB. Georeferencing\n"
 "                works best if you scan the marked Sketch Map with a resolution of 300 dpi.\n"
-"                The photos must be taken from above at a 180 degree angle (parallel above the Sketch Map) to produce the best\n"
-"<<<<<<< HEAD\n"
-"                result."
+"                The photos must be taken from above at a 180 degree angle (parallel above the Sketch Map) to produce the best result."
 msgstr ""
 
-#: sketch_map_tool/templates/help.html:865
+#: sketch_map_tool/templates/help.html:856
 msgid "How do I check if georeferencing is correct?"
 msgstr "Comment vérifier si le géoréférencement est correct ?"
 
-#: sketch_map_tool/templates/help.html:867
+#: sketch_map_tool/templates/help.html:858
 msgid "You can open the TIFF file in a geographic information system (GIS), such as ArcGIS or QGIS, to check\n"
 "                this.\n"
 "                If you upload the file there and insert a basemap (for example the OSM basemap), you can see if georeferencing\n"
@@ -1635,11 +1631,11 @@ msgstr "Vous pouvez ouvrir le fichier TIFF dans un système d'information géogr
 "                Si vous téléchargez le fichier et insérez une carte de base (par exemple la carte de base OSM), vous pouvez voir si le géoréférencement\n"
 "                a fonctionné. La carte croquis doit correspondre à la carte de base."
 
-#: sketch_map_tool/templates/help.html:875
+#: sketch_map_tool/templates/help.html:866
 msgid "Why does my generated TIFF file look strange?"
 msgstr "Pourquoi mon fichier TIFF généré paraît-il étrange ?"
 
-#: sketch_map_tool/templates/help.html:877
+#: sketch_map_tool/templates/help.html:868
 msgid "Please first try to open the file in a geographic information system (GIS) such as ArcGIS or QGIS.\n"
 "                The georeferencing may have worked even if the TIFF file does not look right. If it still appears incorrect in\n"
 "                the GIS,\n"
@@ -1653,11 +1649,11 @@ msgstr "Essayez d'abord d'ouvrir le fichier dans un système d'information géog
 "                raisons.\n"
 "                Par exemple, la photo peut avoir été prise sous un mauvais angle ou les globes peuvent avoir été peints."
 
-#: sketch_map_tool/templates/help.html:887
+#: sketch_map_tool/templates/help.html:878
 msgid "What can I do if the satellite map I printed is too dark?"
 msgstr "Que puis-je faire si la carte satellite imprimée est trop sombre ?"
 
-#: sketch_map_tool/templates/help.html:890
+#: sketch_map_tool/templates/help.html:881
 msgid "In case you use a satellite imagery background, please review the color saturation of your image.\n"
 "                If the background is too dark, you might consider to choose OSM as base map."
 msgstr "Dans le cas où vous utiliseriez un fond d'image de satellite, veuillez vérifier la saturation des couleurs de votre image.\n"
