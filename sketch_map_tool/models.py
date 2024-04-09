@@ -32,6 +32,7 @@ class Size:
 class Layer(StrEnum):
     OSM = "osm"
     ESRI_WORLD_IMAGERY = "esri-world-imagery"
+    ESRI_WORLD_IMAGERY_FALLBACK = "esri-world-imagery-fallback"
 
 
 @dataclass(frozen=True)

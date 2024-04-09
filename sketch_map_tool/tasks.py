@@ -16,6 +16,7 @@ from sketch_map_tool import celery_app as celery
 from sketch_map_tool import get_config_value, map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import get_attribution
+from sketch_map_tool.exceptions import MapGenerationError
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
@@ -68,7 +69,16 @@ def generate_sketch_map(
 ) -> BytesIO | AsyncResult:
     """Generate and returns a sketch map as PDF and stores the map frame in DB."""
     raw = wms_client.get_map_image(bbox, size, layer)
-    map_image = wms_client.as_image(raw)
+    try:
+        map_image = wms_client.as_image(raw)
+    except MapGenerationError as e:
+        if layer == Layer.ESRI_WORLD_IMAGERY:
+            raw = wms_client.get_map_image(
+                bbox, size, Layer.ESRI_WORLD_IMAGERY_FALLBACK
+            )
+            map_image = wms_client.as_image(raw)
+        else:
+            raise e
     qr_code_ = map_generation.qr_code(
         str(uuid),
         bbox,

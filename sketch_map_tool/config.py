@@ -14,7 +14,9 @@ DEFAULT_CONFIG = {
     "wms-url-osm": "https://maps.heigit.org/osm-carto/service?SERVICE=WMS&VERSION=1.1.1",
     "wms-layers-osm": "heigit:osm-carto@2xx",
     "wms-url-esri-world-imagery": "https://maps.heigit.org/sketch-map-tool/service?SERVICE=WMS&VERSION=1.1.1",
+    "wms-url-esri-world-imagery-fallback": "https://maps.heigit.org/sketch-map-tool/service?SERVICE=WMS&VERSION=1.1.1",
     "wms-layers-esri-world-imagery": "world_imagery",
+    "wms-layers-esri-world-imagery-fallback": "world_imagery_fallback",
     "wms-read-timeout": 600,
     "max-nr-simultaneous-uploads": 100,
     "max_pixel_per_image": 10e8,  # 10.000*10.000

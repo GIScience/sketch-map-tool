@@ -30,7 +30,7 @@ PDF_RESOURCES_PATH = Path(__file__).parent.resolve() / "resources"
 
 def get_attribution(layer: Layer) -> str:
     """Get attribution text for ESRI World Imagery layer."""
-    if layer.value == "esri-world-imagery":
+    if layer.value in ["esri-world-imagery", "esri-world-imagery-fallback"]:
         url = (
             "https://basemaps-api.arcgis.com/arcgis/rest/services/styles/ArcGIS:Imagery"
         )
