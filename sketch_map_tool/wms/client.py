@@ -1,12 +1,10 @@
-"""Web Map Service Client"""
-
 from dataclasses import astuple
 from io import BytesIO
+from typing import Literal
 
 import requests
 from markupsafe import escape
 from PIL import Image, UnidentifiedImageError
-from PIL.PngImagePlugin import PngImageFile
 from requests import ReadTimeout, Response
 
 from sketch_map_tool.config import get_config_value
@@ -19,11 +17,15 @@ def get_map_image(
     bbox: Bbox,
     size: Size,
     layer: Layer,
-) -> PngImageFile:
+) -> Image.Image:
     """Get a map image from the WMS."""
-    response = get_map(bbox, size, layer)
+    if layer == Layer.ESRI_WORLD_IMAGERY:
+        format = "jpeg"
+    else:
+        format = "png"
+    response = get_map(bbox, size, layer, format)
     try:
-        image = as_image(response)
+        image = as_image(response, format)
     except MapGenerationError as e:
         # WMS errors if no zoom level 19 or 18 is available. In case of this error
         # fallback to zoom level 17 which is available world wide.
@@ -42,13 +44,14 @@ def get_map(
     bbox: Bbox,
     size: Size,
     layer: Layer,
+    format: Literal["png", "jpeg"],
 ) -> Response:
     """Request a map from the WMS."""
     url = get_config_value(f"wms-url-{layer.value}")
     layers = get_config_value(f"wms-layers-{layer.value}")
     params = {
         "REQUEST": "GetMap",
-        "FORMAT": "image/png",
+        "FORMAT": "image/{0}".format(format),
         "TRANSPARENT": "FALSE",
         "LAYERS": layers,
         "WIDTH": size.width,
@@ -74,12 +77,15 @@ def get_map(
         )
 
 
-def as_image(response: Response) -> PngImageFile:
+def as_image(
+    response: Response,
+    format: Literal["png", "jpeg"],
+) -> Image.Image:
     response_content = response.content
     content_type = response.headers["content-type"]
     response.close()
     try:
-        return Image.open(BytesIO(response_content))
+        return Image.open(BytesIO(response_content), formats=[format])
     except UnidentifiedImageError:
         if content_type == "application/vnd.ogc.se_xml":
             # Response is an XML error report
