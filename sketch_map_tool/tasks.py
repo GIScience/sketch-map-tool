@@ -72,9 +72,13 @@ def generate_sketch_map(
     try:
         map_image = wms_client.as_image(raw)
     except MapGenerationError as e:
+        # WMS errors if no zoom level 19 or 18 is available. In case of this error
+        # fallback to zoom level 17 which is available world wide.
         if layer == Layer.ESRI_WORLD_IMAGERY:
             raw = wms_client.get_map_image(
-                bbox, size, Layer.ESRI_WORLD_IMAGERY_FALLBACK
+                bbox,
+                size,
+                Layer.ESRI_WORLD_IMAGERY_FALLBACK,
             )
             map_image = wms_client.as_image(raw)
         else:
