@@ -124,7 +124,7 @@ def test_get_compass(format_):
 
 
 def test_pdf_page_to_img(pdf):
-    img_buffer = pdf_page_to_img(pdf)
+    img_buffer = pdf_page_to_img(pdf, img_format="png")
     try:
         img = Image.open(img_buffer)  # noqa
         # img.show()  # For manual visual test

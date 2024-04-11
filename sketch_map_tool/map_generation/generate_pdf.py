@@ -69,14 +69,25 @@ def generate_pdf(  # noqa: C901
     column_origin_y = 0
     column_margin = map_margin * cm
 
-    map_image_reportlab = pil_image_to_image_reader(map_image_input)
+    if layer == Layer.ESRI_WORLD_IMAGERY:
+        img_format = "jpeg"
+    else:
+        img_format = "png"
+
+    map_image_reportlab = pil_image_to_image_reader(map_image_input, img_format)
 
     # calculate m per px in map frame
     cm_per_px = frame_width * scale / map_width_px
     m_per_px = cm_per_px / 100
     # create map_image by adding globes
     map_img = create_map_frame(
-        map_image_reportlab, format_, map_height_px, map_width_px, portrait, m_per_px
+        map_image_reportlab,
+        format_,
+        map_height_px,
+        map_width_px,
+        portrait,
+        m_per_px,
+        img_format,
     )
 
     map_pdf = BytesIO()
@@ -220,9 +231,11 @@ def scale_style(format_: PaperFormat, style_name: str, factor: float) -> Paragra
     return normal_style
 
 
-def pil_image_to_image_reader(map_image_input):
+def pil_image_to_image_reader(map_image_input, img_format):
     map_image_raw = io.BytesIO()
-    map_image_input.save(map_image_raw, format="png")
+    if map_image_input.mode != "RGB" and img_format == "jpeg":
+        map_image_input = map_image_input.convert("RGB")
+    map_image_input.save(map_image_raw, format=img_format)
     map_image_reportlab = ImageReader(map_image_raw)
     return map_image_reportlab
 
@@ -234,6 +247,7 @@ def create_map_frame(
     width: int,
     portrait: bool,
     m_per_px: float,
+    img_format: str,
 ) -> BytesIO:
     map_frame = BytesIO()
     canv = canvas.Canvas(map_frame)
@@ -269,7 +283,7 @@ def create_map_frame(
 
     canv.save()
     map_frame.seek(0)
-    return pdf_page_to_img(map_frame)
+    return pdf_page_to_img(map_frame, img_format=img_format)
 
 
 def add_globes(canv: canvas.Canvas, size: float, height: float, width: float):
@@ -386,7 +400,7 @@ def add_scalebar(
     )
 
 
-def pdf_page_to_img(pdf: BytesIO, page_id=0) -> BytesIO:
+def pdf_page_to_img(pdf: BytesIO, img_format, page_id=0) -> BytesIO:
     """Extract page from PDF, convert it to PNG and write it as Pillow Image."""
     img = BytesIO()
     with fitz.Document(stream=pdf, filetype="pdf") as doc:
@@ -394,6 +408,6 @@ def pdf_page_to_img(pdf: BytesIO, page_id=0) -> BytesIO:
         # TODO: Is this necessary?
         # if portrait:
         #     page.set_rotation(90)
-        page.get_pixmap().pil_save(img, format="png")
+        page.get_pixmap().pil_save(img, format=img_format)
     img.seek(0)
     return img

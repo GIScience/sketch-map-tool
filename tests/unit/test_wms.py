@@ -1,4 +1,4 @@
-from PIL.PngImagePlugin import PngImageFile
+from PIL import Image
 
 from sketch_map_tool.models import Bbox, Layer, Size
 from sketch_map_tool.wms import client
@@ -9,25 +9,33 @@ from tests import vcr_app as vcr
 def test_get_map_image(bbox, size, layer):
     map_image = client.get_map_image(bbox, size, layer)
     # image.show()  # for showing of the image during manual testing
-    assert isinstance(map_image, PngImageFile)
+    assert isinstance(map_image, Image.Image)
 
 
 @vcr.use_cassette
 def test_get_map(bbox, size, layer):
-    response = client.get_map(bbox, size, layer)
+    if layer == Layer.ESRI_WORLD_IMAGERY:
+        format = "jpeg"
+    else:
+        format = "png"
+    response = client.get_map(bbox, size, layer, format)
     assert response.status_code == 200
 
 
 @vcr.use_cassette
 def test_as_image(bbox, size, layer):
-    response = client.get_map(bbox, size, layer)
-    image = client.as_image(response)
+    if layer == Layer.ESRI_WORLD_IMAGERY:
+        format = "jpeg"
+    else:
+        format = "png"
+    response = client.get_map(bbox, size, layer, format)
+    map_image = client.as_image(response, format)
     # image.show()  # for showing of the image during manual testing
-    assert isinstance(image, PngImageFile)
+    assert isinstance(map_image, Image.Image)
 
 
 @vcr.use_cassette
-def test_as_image_could_not_get_any_sources(bbox, size):
+def test_get_map_image_could_not_get_any_sources(bbox, size):
     """Test case covering issue described in #416.
 
     Without the fallback (try/except) in `get_map_image` this would lead to an Error.
@@ -45,4 +53,4 @@ def test_as_image_could_not_get_any_sources(bbox, size):
     layer = Layer("esri-world-imagery")
     map_image = client.get_map_image(bbox, size, layer)
     # map_image.show()  # for showing of the image during manual testing
-    assert isinstance(map_image, PngImageFile)
+    assert isinstance(map_image, Image.Image)
