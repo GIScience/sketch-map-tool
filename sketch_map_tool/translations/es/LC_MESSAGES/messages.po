@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-04-02 07:38+0000\n"
-"PO-Revision-Date: 2024-04-08 09:23\n"
+"POT-Creation-Date: 2024-04-10 11:45+0000\n"
+"PO-Revision-Date: 2024-04-10 12:37\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -635,7 +635,12 @@ msgstr "Archivos:"
 msgid "Max total size: 500 MB"
 msgstr "Tamaño máximo total: 500 MB"
 
-#: sketch_map_tool/templates/digitize.html:49
+#: sketch_map_tool/templates/digitize.html:51
+msgid "By uploading the file(s), you agree that the content of the files and the time of upload will\n"
+"                    be saved and used for the further development of the service."
+msgstr ""
+
+#: sketch_map_tool/templates/digitize.html:55
 msgid "Upload"
 msgstr "Cargar"
 
@@ -1262,7 +1267,8 @@ msgstr "Las fotos deben tomarse directamente desde arriba, en un ángulo de 180 
 
 #: sketch_map_tool/templates/help.html:575
 msgid "Pay attention to the lighting conditions when taking a picture."
-msgstr "Presta atención a las condiciones de iluminación cuando hagas una foto."
+msgstr "Problema: Faltan globos y parte del mapa  </br>\n"
+"Esto podría dar lugar a errores en la georreferenciación y a que falte información en tu mapa."
 
 #: sketch_map_tool/templates/help.html:578
 msgid "The image of the Sketch Map needs to be uploaded as JPG or PNG (max. file size is 50 MB).\n"
@@ -1438,9 +1444,9 @@ msgid "If the imported data looks strange and does not represent the actual mark
 "                        detection. If you cannot find your answers there, please contact your Sketch Map Tool focal point in your\n"
 "                        organization or the Sketch Map Tool or the <a href=\"mailto:sketch-map-tool@heigit.org\"\n"
 "                        target=\"_blank\">Sketch Map Tool user support</a>."
-msgstr "If the imported data looks strange and does not represent the actual markings of the sketch maps, please check your uploaded sketch map files and, if necessary, scan them again or take new pictures. Please review the recommendations in the sections about the data collection, then scan, photograph or the upload above and consult our FAQ section about the problems in the colour detection. If you cannot find your answers there, please contact your Sketch Map Tool focal point in your organization or the Sketch Map Tool or the <a href=\"mailto:sketch-map-tool@heigit.org\" target=\"_blank\">Sketch Map Tool user support</a>.\n\n\n"
-"Si los datos importados tienen un aspecto extraño y no representan las marcas reales de los Sketch Maps, revisa los archivos de los Sketch Maps cargados y, si es necesario, escanéalos de nuevo o toma nuevas fotografías. \n"
-"Por favor, revisa las recomendaciones en las secciones sobre la recolección de datos, luego escanea, fotografía o carga el archivo de nuevo y consulta nuestra sección de preguntas frecuentes sobre los problemas en la detección de color. \n\n\n\n\n"
+msgstr "Si los datos importados tienen un aspecto extraño y no representan las marcas reales de los Sketch Maps, revisa los archivos de los Sketch Maps cargados y, si es necesario, escanéalos de nuevo o toma nuevas fotografías. \n"
+"Por favor, revisa las recomendaciones en las secciones sobre la recolección de datos, luego escanea, fotografía o carga el archivo de nuevo y consulta nuestra sección de preguntas frecuentes sobre los problemas en la detección de color. \n"
+"Si no encuentras tus respuestas allí,  ponte en contacto con la persona de contacto del Sketch Map Tool de tu organización o con el <a href=\"mailto:sketch-map-tool@heigit.org\" target=\"_blank\">apoyo al usuario del Sketch Map Tool</a>."
 
 #: sketch_map_tool/templates/help.html:746
 msgid "FAQs"
@@ -1521,7 +1527,7 @@ msgid "The local population can, for example, draw flooded areas such as streets
 msgstr "La población local puede, por ejemplo, dibujar zonas inundadas como calles, parques, etc., en el Sketch Map impreso.\n"
 "Los formatos usando papeles grandes también permiten entablar debates en grupo para definir las zonas inundadas. \n"
 "Los mapas con las marcas pueden ser fotografiados y subidos a la herramienta.\n"
-"Los archivos TIFF y geoJSON georreferenciados pueden ser analizados o utlizados posteriormente."
+"Los archivos TIFF y geoJSON georreferenciados pueden ser analizados o utilizados posteriormente."
 
 #: sketch_map_tool/templates/help.html:805
 msgid "How large can my study area be?"
@@ -1588,7 +1594,7 @@ msgid "The images need to be in JPG or PNG format. The file may not be larger th
 "                works best if you scan the marked Sketch Map with a resolution of 300 dpi.\n"
 "                The photos must be taken from above at a 180 degree angle (parallel above the Sketch Map) to produce the best result."
 msgstr "Las imágenes deben estar en formato JPG o PNG. El archivo no puede superar los 500&nbsp; MB. La georreferenciación funciona mejor si escaneas el Sketch Map anotado con una resolución de 300 dpi.\n"
-"Las fotos deben tomarse desde arriba en un ángulo de 180 grados ( paralelo sobre el Sketch Map) para obtener el mejor resultado."
+"Las fotos deben tomarse desde arriba en un ángulo de 180 grados (paralelo sobre el Sketch Map) para obtener el mejor resultado."
 
 #: sketch_map_tool/templates/help.html:855
 msgid "How do I check if georeferencing is correct?"
@@ -1626,11 +1632,11 @@ msgstr "¿Qué puedo hacer si el mapa satelital que he impreso está demasiado o
 msgid "In case you use a satellite imagery background, please review the color saturation of your image.\n"
 "                If the background is too dark, you might consider to choose OSM as base map."
 msgstr "En caso de que utilices un fondo de imágenes satelitales, revisa la saturación del color de tu imagen.\n"
-"Si el fondo está demasiado oscuro, podrías considerar elegir OSM como mapa base.\n"
+"Si el fondo está demasiado oscuro, podrías considerar elegir OSM como mapa base."
 
 #: sketch_map_tool/templates/index.html:8
 msgid "Create re-digitizable paper maps for offline data collection in the field"
-msgstr "Crear mapas de papel redigitalizables para la recolección de datos offline en el campo"
+msgstr "Crear mapas de papel digitalizables para la recolección de datos offline en el campo"
 
 #: sketch_map_tool/templates/index.html:17
 msgid "The <strong>Sketch&nbsp;Map Tool</strong> is an\n"
