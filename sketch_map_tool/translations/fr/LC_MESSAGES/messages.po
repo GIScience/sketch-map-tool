@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-04-02 07:38+0000\n"
-"PO-Revision-Date: 2024-04-02 08:26\n"
+"POT-Creation-Date: 2024-04-10 11:45+0000\n"
+"PO-Revision-Date: 2024-04-10 12:37\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -655,7 +655,12 @@ msgstr "Fichiers :"
 msgid "Max total size: 500 MB"
 msgstr "Taille totale maximale : 500 Mo"
 
-#: sketch_map_tool/templates/digitize.html:49
+#: sketch_map_tool/templates/digitize.html:51
+msgid "By uploading the file(s), you agree that the content of the files and the time of upload will\n"
+"                    be saved and used for the further development of the service."
+msgstr ""
+
+#: sketch_map_tool/templates/digitize.html:55
 msgid "Upload"
 msgstr "Importer"
 
