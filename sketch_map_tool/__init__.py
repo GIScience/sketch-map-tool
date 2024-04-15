@@ -9,7 +9,7 @@ from sketch_map_tool.config import get_config_value
 from sketch_map_tool.database import client_flask as db_client
 from sketch_map_tool.definitions import LANGUAGES
 
-__version__ = "2024-04-11"
+__version__ = "2024.04.15"
 
 # Setup logging
 LEVEL = getattr(logging, get_config_value("log-level").upper())
