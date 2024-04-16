@@ -92,7 +92,7 @@ def insert_files(files) -> list[int]:
         id SERIAL PRIMARY KEY,
         file_name VARCHAR,
         file BYTEA,
-        ts timestamp default current_timestamp
+        ts timestamp with time zone DEFAULT now()
         )
         """
     insert_query = "INSERT INTO blob(file_name, file) VALUES (%s, %s) RETURNING id"
