@@ -1,3 +1,4 @@
+from datetime import datetime
 from io import BytesIO
 from uuid import uuid4
 
@@ -23,7 +24,7 @@ def files(file):
     return [file, file]
 
 
-@pytest.fixture()
+@pytest.fixture
 def file_ids(files, flask_app):
     """IDs of uploaded files stored in the database."""
     with flask_app.app_context():
@@ -123,3 +124,14 @@ def test_select_map_frame_file_not_found(flask_app):
     with flask_app.app_context():
         with pytest.raises(CustomFileNotFoundError):
             client_flask.select_map_frame(uuid4())
+
+
+def test_blob_timestamp(file_ids):
+    """Test if timestamp is created when inserting data."""
+    query = "SELECT ts FROM blob WHERE id = %s"
+    db_conn = client_flask.open_connection()
+    with db_conn.cursor() as curs:
+        curs.execute(query, [file_ids[0]])
+        raw = curs.fetchone()
+    timestamp = raw[0]
+    assert isinstance(timestamp, datetime)
