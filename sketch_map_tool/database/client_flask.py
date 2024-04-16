@@ -91,7 +91,8 @@ def insert_files(files) -> list[int]:
     CREATE TABLE IF NOT EXISTS blob(
         id SERIAL PRIMARY KEY,
         file_name VARCHAR,
-        file BYTEA
+        file BYTEA,
+        ts timestamp default current_timestamp
         )
         """
     insert_query = "INSERT INTO blob(file_name, file) VALUES (%s, %s) RETURNING id"
