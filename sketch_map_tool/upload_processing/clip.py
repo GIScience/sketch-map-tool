@@ -29,8 +29,10 @@ def clip(photo: NDArray, template: NDArray) -> NDArray:
     template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
 
     # Detect keypoints and compute descriptors
-    kpts1, desc1 = brisk.detectAndCompute(photo_gray, None)
-    kpts2, desc2 = brisk.detectAndCompute(template_gray, None)
+    kpts1_, desc1_ = brisk.detectAndCompute(photo_gray, None)
+    kpts2_, desc2_ = brisk.detectAndCompute(template_gray, None)
+    kpts1, desc1 = limit_keypoints(kpts1_, desc1_)
+    kpts2, desc2 = limit_keypoints(kpts2_, desc2_)
 
     # FLANN parameters
     flann_params = {
@@ -70,6 +72,23 @@ def clip(photo: NDArray, template: NDArray) -> NDArray:
         return cv2.warpPerspective(photo, homography_matrix, (width, height))
     else:
         return np.zeros(template.shape, dtype=np.uint8)
+
+
+def limit_keypoints(
+    keypoints: list,
+    descriptors: NDArray,
+    max_keypoints: int = 50000,
+) -> tuple:
+    """Limit the number of keypoints and descriptors.
+
+    This adressess the issue described in #403.
+    """
+    if len(keypoints) > max_keypoints:
+        # randomly select max_keypoints
+        indices = np.random.choice(len(keypoints), max_keypoints, replace=False)
+        keypoints = [keypoints[i] for i in indices]
+        descriptors = descriptors[indices]
+    return keypoints, descriptors
 
 
 def filter_matrix(tran_matrix: NDArray) -> bool:
