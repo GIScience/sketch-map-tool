@@ -49,6 +49,10 @@ testcontainers-postgres = "^0.0.1rc1"
 testcontainers-redis = "^0.0.1rc1"
 hypothesis = "^6.88.4"
 ruff = "^0.4.7"
+approvaltests = "^12.0.0"
+matplotlib = "^3.8.4"
+geopandas = "^0.14.4"
+numpy = "^1.26.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
