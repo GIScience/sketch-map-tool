@@ -1,12 +1,9 @@
-from pathlib import Path
-
 import pytest
 from approvaltests import Options, verify_binary
 
 from tests.comparator import GeoJSONComparator
+from tests.namer import PytestNamer
 from tests.reporter import SketchMapToolReporter
-
-fixtures = Path(__file__).parent / "fixtures"
 
 
 @pytest.mark.use_fixtures("vector")
@@ -26,6 +23,7 @@ def test_smt_approver(sketch_map_marked_path, vector_path):
         Options()
         .with_reporter(SketchMapToolReporter(sketch_map=sketch_map_marked_path))
         .with_comparator(GeoJSONComparator())
+        .with_namer(PytestNamer())
     )
     with open(vector_path, "rb") as f:
         verify_binary(f.read(), ".geojson", options=options)
