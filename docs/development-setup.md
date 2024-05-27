@@ -70,6 +70,7 @@ celery --app sketch_map_tool.tasks worker --loglevel=INFO
 
 ```bash
 mamba activate smt
+pybabel compile -d sketch_map_tool/translations
 flask --app sketch_map_tool/routes.py --debug run
 # Go to http://127.0.0.1:5000
 ```
@@ -101,6 +102,19 @@ To run all tests:
 ```bash
 pytest
 ```
+
+Some test are using the [Approval Testing methodology](https://approvaltests.com/).
+Approval tests capture the output (snapshot) of a piece of code and compare it
+with a previously approved version of the output.
+
+Once the output has been *approved* then as long as the output stays the same the
+test will pass. A test fails if the *received* output is not identical
+to the approved version. In this case, the difference of the received and the
+approved output is reported to the tester.
+
+In the case of the Sketch Map Tool the report takes the form of two images
+side-by-side, the uploaded sketch map with markings (input) and the resulting
+GeoJSON with the detected markings.
 
 #### Integration Tests
 
