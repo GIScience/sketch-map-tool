@@ -103,26 +103,27 @@ To run all tests:
 pytest
 ```
 
-Some test are using the [Approval Testing methodology](https://approvaltests.com/).
-Approval tests capture the output (snapshot) of a piece of code and compare it
-with a previously approved version of the output.
-
-Once the output has been *approved* then as long as the output stays the same the
-test will pass. A test fails if the *received* output is not identical
-to the approved version. In this case, the difference of the received and the
-approved output is reported to the tester.
-
-In the case of the Sketch Map Tool the report takes the form of two images
-side-by-side, the uploaded sketch map with markings (input) and the resulting
-GeoJSON with the detected markings.
-
 #### Integration Tests
 
-The integration test suite utilizes the Testcontainers framework to run unique instances of Redis and Postgres for each test session. It also configures and starts Flask and Celery workers in the background.
+The integration test suite utilizes the [Testcontainers framework](https://testcontainers.com/) to run unique instances of Redis and Postgres for each test session. It also configures and starts Flask and Celery workers in the background.
 
 Many fixtures are written to a temporary directory on disk managed by Pytest. This makes it easy to inspect the results at various steps of the program (E.g. Marking detection pipeline). Unix users usually find this directory under `/tmp/pytest-of-{user}/pytest-current/{uuid}/`. The UUID of requests triggered by the tests (E.g. Create or digitize) is the directory name.
 
 The integration tests will make requests external services. Among others requests are made to HeiGIT Maps (WMS) to retrieve basemap images. Those requests can only be made from HeiGITs internal network.
+
+Some test are using the [Approval Testing methodology](https://approvaltests.com/).
+Approval tests capture the output (snapshot) of a piece of code and compare it
+with a previously approved version of the output.
+
+Once the output has been *approved* then as long as the output stays the same
+the test will pass. A test fails if the *received* output is not identical to
+the approved version. In that case, the difference of the received and the
+approved output is reported to the tester. The representation of the report can
+take any form: A diff-tool comparing received and approved text or images side-by-side.
+
+In the case of the Sketch Map Tool the report takes the form of two images
+side-by-side, the uploaded sketch map with markings (input) and the resulting
+GeoJSON with the detected markings.
 
 ### Update dependencies
 
