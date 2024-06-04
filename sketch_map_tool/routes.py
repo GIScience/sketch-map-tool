@@ -121,12 +121,13 @@ def digitize(lang="en") -> str:
 @app.post("/<lang>/digitize/results")
 def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
+    consent: bool = True
     # No files uploaded
     if "file" not in request.files:
         return redirect(url_for("digitize", lang=lang))
     files = request.files.getlist("file")
     validate_uploaded_sketchmaps(files)
-    ids = db_client_flask.insert_files(files)
+    ids = db_client_flask.insert_files(files, consent)
     file_names = [db_client_flask.select_file_name(i) for i in ids]
     args = [
         upload_processing.read_qr_code(to_array(db_client_flask.select_file(_id)))

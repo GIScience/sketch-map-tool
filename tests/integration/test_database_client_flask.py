@@ -29,7 +29,7 @@ def file_ids(files, flask_app):
     """IDs of uploaded files stored in the database."""
     with flask_app.app_context():
         # setup
-        ids = db_client_flask.insert_files(files)
+        ids = db_client_flask.insert_files(files, consent=True)
         yield ids
         # teardown
         for i in ids:
@@ -80,7 +80,7 @@ def test_get_async_result_id(flask_app, uuid):
 
 def test_insert_files(flask_app, files):
     with flask_app.app_context():
-        ids = client_flask.insert_files(files)
+        ids = client_flask.insert_files(files, consent=True)
         try:
             assert len(ids) == 2
             assert isinstance(ids[0], int)
@@ -92,7 +92,7 @@ def test_insert_files(flask_app, files):
 
 def test_delete_file(flask_app, files):
     with flask_app.app_context():
-        ids = client_flask.insert_files(files)
+        ids = client_flask.insert_files(files, consent=True)
         for i in ids:
             # No error should be raised
             client_flask.delete_file(i)
