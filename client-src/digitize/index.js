@@ -11,6 +11,8 @@ filebokz();
 // disable submit...
 setDisabled("submitBtn", true);
 
+const consentCheckbox = document.getElementById("consent");
+
 // ...until files are added
 const fileElement = document.querySelector(".filebokz");
 fileElement.addEventListener("file-added", () => {
