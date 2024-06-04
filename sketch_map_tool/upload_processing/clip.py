@@ -2,6 +2,7 @@
 Functionality to cut a sketch map out of a photograph containing one,
 based on a matching template
 """
+
 import cv2
 import numpy as np
 from numpy.typing import NDArray

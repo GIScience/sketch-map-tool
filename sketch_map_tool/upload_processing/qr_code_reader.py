@@ -1,6 +1,7 @@
 """
 Read QR codes from photos / scans
 """
+
 import json
 from types import MappingProxyType
 

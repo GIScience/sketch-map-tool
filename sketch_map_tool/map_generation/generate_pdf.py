@@ -1,4 +1,5 @@
-""" Generate a sketch map PDF. """
+"""Generate a sketch map PDF."""
+
 import io
 from io import BytesIO
 from typing import Tuple
