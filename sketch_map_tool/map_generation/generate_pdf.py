@@ -26,7 +26,7 @@ from sketch_map_tool.models import Layer, PaperFormat
 Image.MAX_IMAGE_PIXELS = None
 
 
-def generate_pdf(  # noqa: C901
+def generate_pdf(
     map_image_input: PILImage,
     qr_code: Drawing,
     format_: PaperFormat,

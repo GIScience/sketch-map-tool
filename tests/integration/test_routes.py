@@ -17,6 +17,21 @@ def test_create_results_post(params, flask_client):
 
 
 def test_digitize_results_post(sketch_map_marked, flask_client):
+    data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")], "consent": "True"}
+    response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
+    assert response.status_code == 200
+
+    # Extract UUID from response
+    url_parts = response.request.path.rsplit("/")
+    uuid = url_parts[-1]
+    url_rest = "/".join(url_parts[:-1])
+    assert UUID(uuid).version == 4
+    assert url_rest == "/digitize/results"
+
+
+def test_digitize_results_post_no_consent(sketch_map_marked, flask_client):
+    # do not send consent parameter
+    # -> consent is a checkbox and only send if selected
     data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")]}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
     assert response.status_code == 200
@@ -27,6 +42,8 @@ def test_digitize_results_post(sketch_map_marked, flask_client):
     url_rest = "/".join(url_parts[:-1])
     assert UUID(uuid).version == 4
     assert url_rest == "/digitize/results"
+
+    # TODO: check consent flag in database
 
 
 def test_api_status_uuid_sketch_map(uuid_create, flask_client):

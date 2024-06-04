@@ -37,7 +37,7 @@ def test_digitize_result_get(client):
 @pytest.mark.skip(reason="Mocking of chained/grouped tasks is too complex for now")
 def test_digitize_result_post(client, sketch_map_buffer, mock_task):
     """Redirect to /digitize/results/<uuid>"""
-    data = {"file": [(sketch_map_buffer, "sketch_map.png")]}
+    data = {"file": [(sketch_map_buffer, "sketch_map.png")], "consent": "True"}
     resp = client.post("/digitize/results", data=data)
     print(resp.headers.get("Location"))
     partial_redirect_path = "/digitize/results"
