@@ -10,13 +10,13 @@ repos:
   # Python
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.1.15
+    rev: v0.4.7
     hooks:
       # Run the linter.
       - id: ruff
       # Run the formatter.
       - id: ruff-format
-        args: ["--check"]
+        args: ["--check", "--diff"]
   # Javascript
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: "v8.51.0"
