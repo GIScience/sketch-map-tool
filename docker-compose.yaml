@@ -6,6 +6,10 @@ services:
       context: ./
       dockerfile: Dockerfile
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 1G
     depends_on:
       - celery
       - redis
@@ -31,6 +35,10 @@ services:
     depends_on:
       - redis
       - postgres
+    deploy:
+      resources:
+        limits:
+          memory: 8G
     entrypoint:
       [
         "mamba",
@@ -55,6 +63,10 @@ services:
       context: ./
       dockerfile: Dockerfile
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 1G
     ports:
       - "5555:5555"
     depends_on:
@@ -75,6 +87,10 @@ services:
     # Message broker
     image: redis:7
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2G
     ports:
       - "127.0.0.1:6379:6379"
     # Start with persistent storage
@@ -86,6 +102,10 @@ services:
     # Result backend
     image: postgres:15
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 3G
     environment:
       POSTGRES_PASSWORD: smt
       POSTGRES_USER: smt
