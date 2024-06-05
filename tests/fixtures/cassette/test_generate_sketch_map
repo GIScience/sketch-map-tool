@@ -19947,8 +19947,6 @@ interactions:
       - '"1871091362"'
       Strict-Transport-Security:
       - max-age=63072000
-      Transfer-Encoding:
-      - chunked
       Vary:
       - Accept-Encoding
       Via:
@@ -19967,6 +19965,50 @@ interactions:
       - ArcGIS-Online-Hosted-Services
       X-XSS-Protection:
       - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.3
+    method: GET
+    uri: https://maps.heigit.org/osm-carto/service?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=FALSE&LAYERS=heigit%3Aosm-carto%402xx&WIDTH=1716&HEIGHT=1436&SRS=EPSG%3A3857&STYLES=&BBOX=964445.3646475708%2C6343463.48326091%2C967408.255014792%2C6345943.466874749
+  response:
+    body:
+      string: !!binary |
+        iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGNgYGAAAAAEAAH2FzhV
+        AAAAAElFTkSuQmCC
+    headers:
+      Access-control-allow-origin:
+      - '*'
+      Cache-Control:
+      - max-age=86400
+      Connection:
+      - Upgrade, Keep-Alive
+      Content-length:
+      - '759648'
+      Content-type:
+      - image/png
+      Date:
+      - Tue, 04 Jun 2024 15:02:02 GMT
+      Expires:
+      - Wed, 05 Jun 2024 15:02:02 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubdomains;
+      Upgrade:
+      - h2
     status:
       code: 200
       message: OK
