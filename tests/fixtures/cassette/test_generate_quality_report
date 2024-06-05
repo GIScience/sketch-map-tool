@@ -4204,4 +4204,108 @@ interactions:
     status:
       code: 200
       message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.3
+    method: GET
+    uri: https://maps.heigit.org/sketch-map-tool/service?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fjpeg&TRANSPARENT=FALSE&LAYERS=world_imagery&WIDTH=1716&HEIGHT=1436&SRS=EPSG%3A3857&STYLES=&BBOX=964445.3646475708%2C6343463.48326091%2C967408.255014792%2C6345943.466874749
+  response:
+    body:
+      string: '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+
+        <html><head>
+
+        <title>403 Forbidden</title>
+
+        </head><body>
+
+        <h1>Forbidden</h1>
+
+        <p>You don''t have permission to access this resource.</p>
+
+        <hr>
+
+        <address>Apache/2.4.52 (Ubuntu) Server at maps.heigit.org Port 443</address>
+
+        </body></html>
+
+        '
+    headers:
+      Connection:
+      - Keep-Alive
+      Content-Length:
+      - '281'
+      Content-Type:
+      - text/html; charset=iso-8859-1
+      Date:
+      - Mon, 03 Jun 2024 13:06:07 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubdomains;
+    status:
+      code: 403
+      message: Forbidden
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.3
+    method: GET
+    uri: https://maps.heigit.org/sketch-map-tool/service?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=FALSE&LAYERS=world_imagery_fallback&WIDTH=1716&HEIGHT=1436&SRS=EPSG%3A3857&STYLES=&BBOX=964445.3646475708%2C6343463.48326091%2C967408.255014792%2C6345943.466874749
+  response:
+    body:
+      string: '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+
+        <html><head>
+
+        <title>403 Forbidden</title>
+
+        </head><body>
+
+        <h1>Forbidden</h1>
+
+        <p>You don''t have permission to access this resource.</p>
+
+        <hr>
+
+        <address>Apache/2.4.52 (Ubuntu) Server at maps.heigit.org Port 443</address>
+
+        </body></html>
+
+        '
+    headers:
+      Connection:
+      - Keep-Alive
+      Content-Length:
+      - '281'
+      Content-Type:
+      - text/html; charset=iso-8859-1
+      Date:
+      - Mon, 03 Jun 2024 13:06:08 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+      Server:
+      - Apache/2.4.52 (Ubuntu)
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubdomains;
+    status:
+      code: 403
+      message: Forbidden
 version: 1

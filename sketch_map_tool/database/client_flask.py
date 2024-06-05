@@ -85,23 +85,33 @@ def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
     _insert_id_map(request_uuid, map_)
 
 
-def insert_files(files) -> list[int]:
+def insert_files(files, consent: bool) -> list[int]:
     """Insert uploaded files as blob into the database and return primary keys"""
     create_query = """
     CREATE TABLE IF NOT EXISTS blob(
         id SERIAL PRIMARY KEY,
         file_name VARCHAR,
         file BYTEA,
-        ts timestamp with time zone DEFAULT now()
+        consent BOOLEAN,
+        ts TIMESTAMP WITH TIME ZONE DEFAULT now()
         )
-        """
-    insert_query = "INSERT INTO blob(file_name, file) VALUES (%s, %s) RETURNING id"
+    """
+    insert_query = (
+        "INSERT INTO blob(file_name, file, consent) VALUES (%s, %s, %s) RETURNING id"
+    )
     db_conn = open_connection()
     with db_conn.cursor() as curs:
         curs.execute(create_query)
         ids = []
         for file in files:
-            curs.execute(insert_query, (secure_filename(file.filename), file.read()))
+            curs.execute(
+                insert_query,
+                (
+                    secure_filename(file.filename),
+                    file.read(),
+                    consent,
+                ),
+            )
             ids.append(curs.fetchone()[0])
     return ids
 
