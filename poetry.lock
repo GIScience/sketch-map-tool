@@ -2366,7 +2366,7 @@ develop = false
 
 [package.source]
 type = "git"
-url = "git@github.com:itisacloud/ultralytics_multiband_support.git"
+url = "https://github.com/itisacloud/ultralytics_multiband_support.git"
 reference = "ef61cf9870755ae8b21b03253237d15f5856e1a6"
 resolved_reference = "ef61cf9870755ae8b21b03253237d15f5856e1a6"
 
@@ -5141,4 +5141,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11.0"
-content-hash = "9976415384d735a55cb0fcdb42e666e04a035df60ddf68c434cef8a724916660"
+content-hash = "e85e158c2465586193e8c8880631c56f223a0c6c216533c668bf6411253697c2"
