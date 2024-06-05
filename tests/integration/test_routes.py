@@ -3,6 +3,9 @@ from uuid import UUID
 
 import pytest
 
+from sketch_map_tool import flask_app as app
+from sketch_map_tool.database.client_flask import open_connection
+
 
 def test_create_results_post(params, flask_client):
     response = flask_client.post("/create/results", data=params, follow_redirects=True)
@@ -42,6 +45,9 @@ def test_digitize_results_post_no_consent(sketch_map_marked, flask_client):
     url_rest = "/".join(url_parts[:-1])
     assert UUID(uuid).version == 4
     assert url_rest == "/digitize/results"
+    with app.app_context():
+        raw = select_file(1)
+        assert raw is False
 
     # TODO: check consent flag in database
 
@@ -85,3 +91,14 @@ def test_api_download_uuid_digitize(uuid_digitize, type_, flask_client):
 def test_health_ok(flask_client):
     resp = flask_client.get("/api/health")
     assert resp.status_code == 200
+
+
+def select_file(id_: int) -> bytes:
+    """Get an uploaded file stored in the database by ID."""
+    query = "SELECT * FROM blob WHERE id = %s"
+    db_conn = open_connection()
+    with db_conn.cursor() as curs:
+        curs.execute(query, [id_])
+        raw = curs.fetchone()
+        if raw:
+            return raw[3]
