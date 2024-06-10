@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
+    CustomFileDoesNotExistAnymoreError,
     CustomFileNotFoundError,
     UUIDNotFoundError,
 )
@@ -90,6 +91,7 @@ def insert_files(files, consent: bool) -> list[int]:
     create_query = """
     CREATE TABLE IF NOT EXISTS blob(
         id SERIAL PRIMARY KEY,
+        uuid UUID DEFAULT null,
         file_name VARCHAR,
         file BYTEA,
         consent BOOLEAN,
@@ -170,6 +172,11 @@ def select_map_frame(uuid: UUID) -> bytes:
             )
         raw = curs.fetchone()
         if raw:
+            if raw[0] is None:
+                raise CustomFileDoesNotExistAnymoreError(
+                    N_("The file with the id: {UUID} does not exist anymore"),
+                    {"UUID", uuid},
+                )
             return raw[0]
         else:
             raise CustomFileNotFoundError(

@@ -204,3 +204,9 @@ def digitize_sketches(
             m: FeatureCollection = post_process(m, file_name)
             l.append(m)
     return merge(l)
+
+
+@celery.task
+def cleanup(uuid):
+    """Clean up"""
+    db_client_celery.set_map_frame_to_null(uuid)

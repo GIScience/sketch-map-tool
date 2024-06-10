@@ -5,7 +5,10 @@ import psycopg2
 from psycopg2.extensions import connection
 
 from sketch_map_tool.config import get_config_value
-from sketch_map_tool.exceptions import CustomFileNotFoundError
+from sketch_map_tool.exceptions import (
+    CustomFileDoesNotExistAnymoreError,
+    CustomFileNotFoundError,
+)
 from sketch_map_tool.helpers import N_
 
 db_conn: connection | None = None
@@ -34,7 +37,8 @@ def insert_map_frame(file: BytesIO, uuid: UUID):
     create_query = """
     CREATE TABLE IF NOT EXISTS map_frame(
         uuid UUID PRIMARY KEY,
-        file BYTEA
+        file BYTEA,
+        ts TIMESTAMP WITH TIME ZONE DEFAULT now()
         )
         """
     insert_query = "INSERT INTO map_frame(uuid, file) VALUES (%s, %s)"
@@ -50,6 +54,33 @@ def delete_map_frame(uuid: UUID):
         curs.execute(query, [str(uuid)])
 
 
+def set_map_frame_to_null(uuid: UUID):
+    """Set map frame of the associated UUID from the database to null.
+
+    Keep UUID and timestamp in the database.
+    """
+    # TODO: JOIN with blog to read consent
+    query = """
+    UPDATE
+        map_frame
+    SET
+        file = NULL
+    WHERE
+        uuid = %s
+        AND ts < NOW() - INTERVAL '6 months'
+        AND NOT EXISTS (
+            SELECT
+                *
+            FROM
+                blob
+            WHERE
+                map_frame.uuid = blob.uuid
+                AND conset = TRUE);
+    """
+    with db_conn.cursor() as curs:
+        curs.execute(query, [str(uuid)])
+
+
 def select_file(id_: int) -> bytes:
     """Get an uploaded file stored in the database by ID."""
     query = "SELECT file FROM blob WHERE id = %s"
@@ -57,6 +88,10 @@ def select_file(id_: int) -> bytes:
         curs.execute(query, [id_])
         raw = curs.fetchone()
         if raw:
+            if raw[0] is None:
+                raise CustomFileDoesNotExistAnymoreError(
+                    N_("The file with the id: {ID} does not exist anymore"), {"ID", id_}
+                )
             return raw[0]
         else:
             raise CustomFileNotFoundError(
