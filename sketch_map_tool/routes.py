@@ -140,6 +140,7 @@ def digitize_results_post(lang="en") -> Response:
     uuids = [args_["uuid"] for args_ in args]
     bboxes = [args_["bbox"] for args_ in args]
     layers = [args_["layer"] for args_ in args]
+    db_client_flask.update_files(ids, uuids)
     # TODO: update files with uuid
     map_frames = dict()
     for uuid in set(uuids):  # Only retrieve map_frame once per uuid to save memory

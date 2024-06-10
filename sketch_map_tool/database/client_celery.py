@@ -75,7 +75,7 @@ def set_map_frame_to_null(uuid: UUID):
                 blob
             WHERE
                 map_frame.uuid = blob.uuid
-                AND conset = TRUE);
+                AND consent = TRUE);
     """
     with db_conn.cursor() as curs:
         curs.execute(query, [str(uuid)])
