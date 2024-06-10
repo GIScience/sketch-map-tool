@@ -90,6 +90,11 @@ def test_insert_files(flask_app, files):
                 client_flask.delete_file(i)
 
 
+def test_update_files(flask_app, file_ids):
+    with flask_app.app_context():
+        client_flask.update_files(file_ids, [str(uuid4()) for _ in file_ids])
+
+
 def test_delete_file(flask_app, files):
     with flask_app.app_context():
         ids = client_flask.insert_files(files, consent=True)
