@@ -14,6 +14,7 @@ from sketch_map_tool.exceptions import (
     UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import N_, to_array
+from sketch_map_tool.models import Bbox, Layer
 from sketch_map_tool.upload_processing import read_qr_code
 
 
@@ -87,7 +88,7 @@ def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
     _insert_id_map(request_uuid, map_)
 
 
-def insert_files(files, consent: bool) -> list[tuple[int, str, str]]:
+def insert_files(files, consent: bool) -> list[list[int, str, str, str, str]]:
     """Insert uploaded files as blob into the database and return files metadata.
 
     Metadata of files are derived from decoding the qr-code.
@@ -98,6 +99,9 @@ def insert_files(files, consent: bool) -> list[tuple[int, str, str]]:
         uuid UUID,
         file_name VARCHAR,
         file BYTEA,
+        layer VARCHAR,
+        bbox VARCHAR,
+        centroid VARCHAR,
         consent BOOLEAN,
         ts TIMESTAMP WITH TIME ZONE DEFAULT now()
         )
@@ -107,8 +111,14 @@ def insert_files(files, consent: bool) -> list[tuple[int, str, str]]:
         uuid,
         file_name,
         file,
+        layer,
+        bbox,
+        centroid,
         consent)
     VALUES (
+        %s,
+        %s,
+        %s,
         %s,
         %s,
         %s,
@@ -121,23 +131,28 @@ def insert_files(files, consent: bool) -> list[tuple[int, str, str]]:
     db_conn = open_connection()
     with db_conn.cursor() as curs:
         curs.execute(create_query)
-        metadata = []  # data about the files (including qr code encoded data)
+        metadata = []
         for file in files:
             file_content = file.read()
             qr_code_content = read_qr_code(to_array(file_content))
+            layer: Layer = qr_code_content["layer"]
+            bbox: Bbox = qr_code_content["bbox"]
             curs.execute(
                 insert_query,
                 (
                     qr_code_content["uuid"],
                     secure_filename(file.filename),
                     file_content,
+                    layer,
+                    str(bbox),
+                    ",".join([str(bbox.centroid[0]), str(bbox.centroid[1])]),
                     consent,
                 ),
             )
             result = curs.fetchone()
             if result is None:
                 raise ValueError()
-            metadata.append(result)
+            metadata.append([*result, layer, bbox])
     return metadata
 
 
