@@ -207,6 +207,6 @@ def digitize_sketches(
 
 
 @celery.task
-def cleanup(uuid):
+def cleanup():
     """Clean up"""
-    db_client_celery.set_map_frame_to_null(uuid)
+    db_client_celery.cleanup_map_frames()

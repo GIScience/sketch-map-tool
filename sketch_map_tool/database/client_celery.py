@@ -54,20 +54,18 @@ def delete_map_frame(uuid: UUID):
         curs.execute(query, [str(uuid)])
 
 
-def set_map_frame_to_null(uuid: UUID):
-    """Set map frame of the associated UUID from the database to null.
+def cleanup_map_frames():
+    """Cleanup map frames which are old or do not have a consent by the user.
 
-    Keep UUID and timestamp in the database.
+    Only set file to null. Keep metadata.
     """
-    # TODO: JOIN with blog to read consent
     query = """
     UPDATE
         map_frame
     SET
         file = NULL
     WHERE
-        uuid = %s
-        AND ts < NOW() - INTERVAL '6 months'
+        ts < NOW() - INTERVAL '6 months'
         AND NOT EXISTS (
             SELECT
                 *
@@ -78,7 +76,7 @@ def set_map_frame_to_null(uuid: UUID):
                 AND consent = TRUE);
     """
     with db_conn.cursor() as curs:
-        curs.execute(query, [str(uuid)])
+        curs.execute(query)
 
 
 def select_file(id_: int) -> bytes:
