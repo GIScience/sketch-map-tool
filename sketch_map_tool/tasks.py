@@ -211,5 +211,6 @@ def digitize_sketches(
 
 @celery.task
 def cleanup():
-    """Clean up"""
+    """Cleanup map frames and uploaded files stored in the database."""
     db_client_celery.cleanup_map_frames()
+    # TODO: cleanup uploaded files (blobs)

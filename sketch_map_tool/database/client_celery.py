@@ -1,7 +1,9 @@
+import logging
 from io import BytesIO
 from uuid import UUID
 
 import psycopg2
+from psycopg2.errors import UndefinedTable
 from psycopg2.extensions import connection
 
 from sketch_map_tool.config import get_config_value
@@ -55,7 +57,7 @@ def delete_map_frame(uuid: UUID):
 
 
 def cleanup_map_frames():
-    """Cleanup map frames which are old or do not have a consent by the user.
+    """Cleanup map frames which are old or without consent by the user.
 
     Only set file to null. Keep metadata.
     """
@@ -76,7 +78,10 @@ def cleanup_map_frames():
                 AND consent = TRUE);
     """
     with db_conn.cursor() as curs:
-        curs.execute(query)
+        try:
+            curs.execute(query)
+        except UndefinedTable:
+            logging.info("Table `map_frame` does not exists. Nothing todo.")
 
 
 def select_file(id_: int) -> bytes:
