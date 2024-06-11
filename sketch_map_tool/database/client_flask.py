@@ -13,7 +13,8 @@ from sketch_map_tool.exceptions import (
     CustomFileNotFoundError,
     UUIDNotFoundError,
 )
-from sketch_map_tool.helpers import N_
+from sketch_map_tool.helpers import N_, to_array
+from sketch_map_tool.upload_processing import read_qr_code
 
 
 def open_connection():
@@ -86,36 +87,58 @@ def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
     _insert_id_map(request_uuid, map_)
 
 
-def insert_files(files, consent: bool) -> list[int]:
-    """Insert uploaded files as blob into the database and return primary keys"""
+def insert_files(files, consent: bool) -> list[tuple[int, str, str]]:
+    """Insert uploaded files as blob into the database and return files metadata.
+
+    Metadata of files are derived from decoding the qr-code.
+    """
     create_query = """
     CREATE TABLE IF NOT EXISTS blob(
         id SERIAL PRIMARY KEY,
-        uuid UUID DEFAULT null,
+        uuid UUID,
         file_name VARCHAR,
         file BYTEA,
         consent BOOLEAN,
         ts TIMESTAMP WITH TIME ZONE DEFAULT now()
         )
     """
-    insert_query = (
-        "INSERT INTO blob(file_name, file, consent) VALUES (%s, %s, %s) RETURNING id"
-    )
+    insert_query = """
+    INSERT INTO blob (
+        uuid,
+        file_name,
+        file,
+        consent)
+    VALUES (
+        %s,
+        %s,
+        %s,
+        %s)
+    RETURNING
+        id,
+        uuid,
+        file_name
+    """
     db_conn = open_connection()
     with db_conn.cursor() as curs:
         curs.execute(create_query)
-        ids = []
+        metadata = []  # data about the files (including qr code encoded data)
         for file in files:
+            file_content = file.read()
+            qr_code_content = read_qr_code(to_array(file_content))
             curs.execute(
                 insert_query,
                 (
+                    qr_code_content["uuid"],
                     secure_filename(file.filename),
-                    file.read(),
+                    file_content,
                     consent,
                 ),
             )
-            ids.append(curs.fetchone()[0])
-    return ids
+            result = curs.fetchone()
+            if result is None:
+                raise ValueError()
+            metadata.append(result)
+    return metadata
 
 
 def update_files(ids: list[int], uuids: list[str]):
