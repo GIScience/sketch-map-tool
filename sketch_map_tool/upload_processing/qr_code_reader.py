@@ -15,7 +15,7 @@ from sketch_map_tool.models import Bbox, Layer
 from sketch_map_tool.validators import validate_uuid
 
 
-def read(img: NDArray, depth=0) -> MappingProxyType:
+def read_qr_code(img: NDArray, depth=0) -> MappingProxyType:
     """Detect and decode QR-Code.
 
     If QR-Code is falsely detected but no data exists recursively down scale QR-Code
@@ -33,7 +33,7 @@ def read(img: NDArray, depth=0) -> MappingProxyType:
         case 0:
             if depth <= 5:
                 # Try again with down scaled image
-                return read(_resize(img), depth=depth + 1)
+                return read_qr_code(_resize(img), depth=depth + 1)
             else:
                 raise QRCodeError(N_("QR-Code could not be detected."))
         case 1:
