@@ -156,14 +156,6 @@ def insert_files(files, consent: bool) -> list[list[int, str, str, str, str]]:
     return metadata
 
 
-def update_files(ids: list[int], uuids: list[str]):
-    """Update uploaded files in the database with the UUID from the bar code."""
-    query = "UPDATE blob SET uuid = %s where id = %s"
-    db_conn = open_connection()
-    with db_conn.cursor() as curs:
-        curs.executemany(query, ((uuid, id) for id, uuid in zip(ids, uuids)))
-
-
 def select_file(id_: int) -> bytes:
     """Get an uploaded file stored in the database by ID."""
     query = "SELECT file FROM blob WHERE id = %s"
