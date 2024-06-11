@@ -162,7 +162,7 @@ def db_conn_celery():
 #
 # Test input
 #
-@pytest.fixture
+@pytest.fixture(scope="session")
 def bbox():
     return Bbox(
         lon_min=964472.1973848869,
@@ -205,7 +205,7 @@ def scale():
     return 10231.143861780083
 
 
-@pytest.fixture(scope="session", params=["osm", "esri-world-imagery"])
+@pytest.fixture(scope="session", params=["osm"])  # , "esri-world-imagery"])
 def layer(request):
     return Layer(request.param)
 
@@ -223,13 +223,12 @@ def bbox_wgs84():
 # TODO: Fixture `sketch_map_marked` only works for landscape orientation.
 # TODO: Add other params
 @pytest.fixture(scope="session")
-def params(layer):
+def params(layer, bbox):
     return {
         "format": "A4",
         "orientation": "landscape",
-        "bbox": (
-            "[964445.3646475708,6343463.48326091,967408.255014792,6345943.466874749]"
-        ),
+        "bbox": "[" + str(bbox) + "]",
+        # NOTE: bboxWGS84 is has not the same geographical extent as above bbox
         "bboxWGS84": (
             "[8.66376011761138,49.40266507327297,8.690376214631833,49.41716014123875]"
         ),

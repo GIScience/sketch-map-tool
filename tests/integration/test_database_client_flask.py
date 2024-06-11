@@ -83,7 +83,7 @@ def test_get_async_result_id(flask_app, uuid):
         client_flask._delete_id_map(uuid)
 
 
-def test_insert_files(flask_app, files, uuid_create, layer):
+def test_insert_files(flask_app, files, uuid_create, layer, bbox):
     with flask_app.app_context():
         metadata = client_flask.insert_files(files, consent=True)
         assert len(metadata) == 2
@@ -91,10 +91,10 @@ def test_insert_files(flask_app, files, uuid_create, layer):
             assert isinstance(d[0], int)
             assert d[1] == uuid_create
             assert d[2] == files[i].filename
+            assert d[3] == layer
+            assert d[4] == bbox
         # TODO:
-        # assert layer
         # assert version
-        # assert bbox
 
 
 def test_update_files(flask_app, file_ids):

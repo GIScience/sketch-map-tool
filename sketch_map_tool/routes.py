@@ -7,7 +7,7 @@ import geojson
 # from celery import chain, group
 from flask import Response, redirect, render_template, request, send_file, url_for
 
-from sketch_map_tool import celery_app, config, definitions, tasks, upload_processing
+from sketch_map_tool import celery_app, config, definitions, tasks
 from sketch_map_tool import flask_app as app
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
@@ -131,28 +131,39 @@ def digitize_results_post(lang="en") -> Response:
         return redirect(url_for("digitize", lang=lang))
     files = request.files.getlist("file")
     validate_uploaded_sketchmaps(files)
-    ids = db_client_flask.insert_files(files, consent)
-    file_names = [db_client_flask.select_file_name(i) for i in ids]
-    args = [
-        upload_processing.read_qr_code(to_array(db_client_flask.select_file(_id)))
-        for _id in ids
-    ]
-    uuids = [args_["uuid"] for args_ in args]
-    bboxes = [args_["bbox"] for args_ in args]
-    layers = [args_["layer"] for args_ in args]
-    db_client_flask.update_files(ids, uuids)
-    # TODO: update files with uuid
+    # file metadata containing ids, uuids, file_names, ...
+    metadata = db_client_flask.insert_files(files, consent)
+    file_ids = []
+    uuids = []
+    file_names = []
+    layers = []
+    bboxes = []
+    for d in metadata:
+        file_ids.append(d[0])
+        uuids.append(d[1])
+        file_names.append(d[2])
+        layers.append(d[3])
+        bboxes.append(d[4])
     map_frames = dict()
     for uuid in set(uuids):  # Only retrieve map_frame once per uuid to save memory
         map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
         map_frames[uuid] = to_array(map_frame_buffer.read())
     result_id_1 = (
-        georeference_sketch_maps.s(ids, file_names, uuids, map_frames, bboxes, layers)
+        georeference_sketch_maps.s(
+            file_ids, file_names, uuids, map_frames, bboxes, layers
+        )
         .apply_async()
         .id
     )
     result_id_2 = (
-        digitize_sketches.s(ids, file_names, uuids, map_frames, layers, bboxes)
+        digitize_sketches.s(
+            file_ids,
+            file_names,
+            uuids,
+            map_frames,
+            layers,
+            bboxes,
+        )
         .apply_async()
         .id
     )
