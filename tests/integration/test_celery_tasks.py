@@ -45,7 +45,7 @@ def test_generate_quality_report(bbox_wgs84):
 @pytest.mark.usefixtures("uuid_digitize")
 def test_cleanup_nothing_to_do(uuid_create, flask_app):
     with flask_app.app_context():
-        task = tasks.cleanup.apply_async(args=[uuid_create])
+        task = tasks.cleanup.apply_async()
         task.wait()
         # should not raise an error
         result = select_map_frame(UUID(uuid_create))
@@ -67,7 +67,7 @@ def test_cleanup_old_map_frame(uuid_create, flask_app):
             db_conn = open_connection()
             with db_conn.cursor() as curs:
                 curs.execute(update_query, [uuid_create])
-            task = tasks.cleanup.apply_async(args=[uuid_create])
+            task = tasks.cleanup.apply_async()
             task.wait()
             with pytest.raises(CustomFileDoesNotExistAnymoreError):
                 select_map_frame(UUID(uuid_create))
