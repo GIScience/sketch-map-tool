@@ -17,6 +17,16 @@ class Bbox:
     lon_max: float
     lat_max: float
 
+    @property
+    def centroid(self) -> tuple:
+        """The coordinates of the centroid."""
+        lon_centroid = (self.lon_min + self.lon_max) / 2
+        lat_centroid = (self.lat_min + self.lat_max) / 2
+        return (lon_centroid, lat_centroid)
+
+    def __str__(self):
+        return f"{self.lon_min},{self.lat_min},{self.lon_max},{self.lat_max}"
+
 
 @dataclass(frozen=True, kw_only=True)
 class Size:

@@ -9,6 +9,20 @@ def test_bbox(bbox_as_list):
     assert bbox.lat_max == 6345977.635778541
 
 
+def test_bbox_str(bbox_as_list):
+    bbox = models.Bbox(*bbox_as_list)
+    assert (
+        str(bbox)
+        == "964472.1973848869,6343459.035638228,967434.6098457306,6345977.635778541"
+    )
+
+
+def test_bbox_centroid(bbox_as_list):
+    bbox = models.Bbox(*bbox_as_list)
+    assert isinstance(bbox.centroid, tuple)
+    # TODO: validate centroid
+
+
 def test_size(size_as_dict):
     size = models.Size(**size_as_dict)
     assert size.width == 1867
