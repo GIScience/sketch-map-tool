@@ -210,4 +210,5 @@ def digitize_sketches(
 def cleanup():
     """Cleanup map frames and uploaded files stored in the database."""
     db_client_celery.cleanup_map_frames()
-    # TODO: cleanup uploaded files (blobs)
+    db_client_celery.cleanup_blobs()
+    # TODO: run vacuum
