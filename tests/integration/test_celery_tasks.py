@@ -38,7 +38,7 @@ def test_cleanup_nothing_to_do(uuid_create: str, map_frame: bytes, flask_app):
     with flask_app.app_context():
         task = tasks.cleanup.apply_async()
         task.wait()
-        # should not raise an error
+        # should not raise an error / should not delete the map frame
         map_frame, _, _ = select_map_frame(UUID(uuid_create))
         assert map_frame == map_frame
 
@@ -58,6 +58,7 @@ def test_cleanup_old_map_frame(uuid_create: str, map_frame: bytes, flask_app):
             task = tasks.cleanup.apply_async()
             task.wait()
             with pytest.raises(CustomFileDoesNotExistAnymoreError):
+                # map frame file content should be delete
                 select_map_frame(UUID(uuid_create))
         finally:
             # tear down: Due to usage of session scoped fixture
