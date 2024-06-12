@@ -131,6 +131,29 @@ def cleanup_map_frames():
             logging.info("Table `map_frame` does not exist yet. Nothing todo.")
 
 
+def cleanup_blobs():
+    """Cleanup uploaded files (sketch maps) without consent.
+
+    Only set file and name to null. Keep metadata.
+    """
+    # TODO: Wait one day until deletion or check celery task status?
+    query = """
+    UPDATE
+        blob
+    SET
+        file = NULL,
+        file_name = NULL
+    WHERE
+        ts < NOW() - INTERVAL '1 days'
+        AND consent = FALSE;
+    """
+    with db_conn.cursor() as curs:
+        try:
+            curs.execute(query)
+        except UndefinedTable:
+            logging.info("Table `blob` does not exist yet. Nothing todo.")
+
+
 def select_file(id_: int) -> bytes:
     """Get an uploaded file stored in the database by ID."""
     query = "SELECT file FROM blob WHERE id = %s"

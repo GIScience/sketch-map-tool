@@ -348,7 +348,7 @@ def uuid_digitize(
     celery_app,
     tmp_path_factory,
 ) -> str:
-    data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")]}
+    data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")], "consent": True}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
 
     # Extract UUID from response
