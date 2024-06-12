@@ -40,11 +40,10 @@ def insert_map_frame(
     orientation: str,
     layer: Layer,
 ):
-    """Insert map frame alongside creation parameter as blob into the database.
+    """Insert map frame alongside map generation parameters into the database.
 
-    The uuid is the primary key.
-    The map frame is later on needed for georeferencing the uploaded photo or scan of
-    a sketch map.
+    The UUID is the primary key.
+    The map frame is needed for georeferencing the uploaded files (sketch maps).
     """
     create_query = """
         CREATE TABLE IF NOT EXISTS map_frame(
@@ -105,7 +104,7 @@ def delete_map_frame(uuid: UUID):
 
 
 def cleanup_map_frames():
-    """Cleanup map frames which are old or without consent by the user.
+    """Cleanup old map frames or map frames without consent.
 
     Only set file to null. Keep metadata.
     """
@@ -129,7 +128,7 @@ def cleanup_map_frames():
         try:
             curs.execute(query)
         except UndefinedTable:
-            logging.info("Table `map_frame` does not exists. Nothing todo.")
+            logging.info("Table `map_frame` does not exist yet. Nothing todo.")
 
 
 def select_file(id_: int) -> bytes:
