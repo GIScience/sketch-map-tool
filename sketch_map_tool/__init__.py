@@ -44,7 +44,7 @@ CELERY_CONFIG = {
     "beat_schedule": {
         "cleanup": {
             "task": "sketch_map_tool.tasks.cleanup",
-            "schedule": timedelta(days=1),
+            "schedule": timedelta(hours=1),
         },
     },
 }

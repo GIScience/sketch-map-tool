@@ -95,6 +95,9 @@ class PaperFormat:
     qr_contents_distances_not_rotated: tuple[int, int]
     qr_contents_distance_rotated: int
 
+    def __str__(self):
+        return self.title
+
 
 @dataclass()
 class LiteratureReference:

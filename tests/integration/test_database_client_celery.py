@@ -27,20 +27,22 @@ def test_close_open_connection():
     client_celery.open_connection()
 
 
-def test_write_map_frame(flask_app, map_frame):
+def test_write_map_frame(flask_app, map_frame, bbox, format_, orientation, layer):
     uuid = uuid4()
-    client_celery.insert_map_frame(map_frame, uuid)
+    client_celery.insert_map_frame(map_frame, uuid, bbox, format_, orientation, layer)
     with flask_app.app_context():
-        file = client_flask.select_map_frame(uuid)
+        file, bbox, layer = client_flask.select_map_frame(uuid)
         assert isinstance(file, bytes)
+        assert bbox == str(bbox)
+        assert layer == (layer)
 
 
-# TODO
-def test_delete_map_frame(flask_app, map_frame):
+def test_delete_map_frame(flask_app, map_frame, bbox, format_, orientation, layer):
     uuid = uuid4()
-    client_celery.insert_map_frame(map_frame, uuid)
+    client_celery.insert_map_frame(map_frame, uuid, bbox, format_, orientation, layer)
     with flask_app.app_context():
-        client_flask.select_map_frame(uuid)  # Should not raise a FileNotFoundError_
+        # do not raise a FileNotFoundError_
+        client_flask.select_map_frame(uuid)
     client_celery.delete_map_frame(uuid)
     with pytest.raises(CustomFileNotFoundError):
         with flask_app.app_context():

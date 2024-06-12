@@ -37,7 +37,7 @@ def mock_get_task_id(monkeypatch, uuid):
 def test_generate_sketch_map(monkeypatch, uuid, bbox, format_, size, scale, layer):
     monkeypatch.setattr(
         "sketch_map_tool.tasks.db_client_celery.insert_map_frame",
-        lambda id_, field: uuid,
+        lambda *_: uuid,
     )
     map_pdf = tasks.generate_sketch_map(
         uuid,
