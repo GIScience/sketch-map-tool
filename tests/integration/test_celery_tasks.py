@@ -33,31 +33,19 @@ def test_generate_quality_report(bbox_wgs84):
     assert isinstance(result, BytesIO)
 
 
-# TODO:
-# beat_schedule = {
-#     "cleanup": {
-#         "task": "tasks.cleanup",
-#         "schedule": 10.0,  # seconds
-#     },
-# }
-
-
 @pytest.mark.usefixtures("uuid_digitize")
-def test_cleanup_nothing_to_do(uuid_create, flask_app):
+def test_cleanup_nothing_to_do(uuid_create: str, map_frame: bytes, flask_app):
     with flask_app.app_context():
         task = tasks.cleanup.apply_async()
         task.wait()
         # should not raise an error
-        result = select_map_frame(UUID(uuid_create))
-        assert len(result) != 0
+        map_frame, _, _ = select_map_frame(UUID(uuid_create))
+        assert map_frame == map_frame
 
 
 @pytest.mark.usefixtures("uuid_digitize")
-def test_cleanup_old_map_frame(uuid_create, flask_app):
+def test_cleanup_old_map_frame(uuid_create: str, map_frame: bytes, flask_app):
     with flask_app.app_context():
-        # setup
-        # get file from db for tear down
-        map_frame = select_map_frame(UUID(uuid_create))
         try:
             # test
             # mock map frame which is uploaded a year ago
@@ -76,4 +64,4 @@ def test_cleanup_old_map_frame(uuid_create, flask_app):
             # map frame needs to be reinstatiated
             update_query = "UPDATE map_frame SET file = %s WHERE uuid = %s"
             with db_conn.cursor() as curs:
-                curs.execute(update_query, [map_frame, uuid_create])
+                curs.execute(update_query, [map_frame.read(), uuid_create])

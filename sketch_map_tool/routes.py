@@ -132,22 +132,15 @@ def digitize_results_post(lang="en") -> Response:
     files = request.files.getlist("file")
     validate_uploaded_sketchmaps(files)
     # file metadata containing ids, uuids, file_names, ...
-    metadata = db_client_flask.insert_files(files, consent)
-    file_ids = []
-    uuids = []
-    file_names = []
-    layers = []
-    bboxes = []
-    for d in metadata:
-        file_ids.append(d[0])
-        uuids.append(d[1])
-        file_names.append(d[2])
-        layers.append(d[3])
-        bboxes.append(d[4])
+    file_ids, uuids, file_names = db_client_flask.insert_files(files, consent)
     map_frames = dict()
+    bboxes = dict()
+    layers = dict()
     for uuid in set(uuids):  # Only retrieve map_frame once per uuid to save memory
-        map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
-        map_frames[uuid] = to_array(map_frame_buffer.read())
+        map_frame, bbox, layer = db_client_flask.select_map_frame(UUID(uuid))
+        map_frames[uuid] = to_array(BytesIO(map_frame).read())
+        bboxes[uuid] = Bbox(*[float(c) for c in bbox.split(",")])
+        layers[uuid] = Layer(layer)
     result_id_1 = (
         georeference_sketch_maps.s(
             file_ids, file_names, uuids, map_frames, bboxes, layers

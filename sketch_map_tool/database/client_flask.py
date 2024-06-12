@@ -3,6 +3,7 @@ from uuid import UUID
 
 import psycopg2
 from flask import g
+from psycopg2.errors import UndefinedTable
 from psycopg2.extensions import connection
 from werkzeug.utils import secure_filename
 
@@ -14,7 +15,6 @@ from sketch_map_tool.exceptions import (
     UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import N_, to_array
-from sketch_map_tool.models import Bbox, Layer
 from sketch_map_tool.upload_processing import read_qr_code
 
 
@@ -88,10 +88,10 @@ def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
     _insert_id_map(request_uuid, map_)
 
 
-def insert_files(files, consent: bool) -> list[list[int, str, str, str, str]]:
-    """Insert uploaded files as blob into the database and return files metadata.
+def insert_files(files, consent: bool) -> tuple[list[int], list[str], list[str]]:
+    """Insert uploaded files as blob into the database and return ID, UUID and name.
 
-    Metadata of files are derived from decoding the qr-code.
+    UUID is derived from decoding the qr-code.
     """
     create_query = """
     CREATE TABLE IF NOT EXISTS blob(
@@ -99,9 +99,6 @@ def insert_files(files, consent: bool) -> list[list[int, str, str, str, str]]:
         uuid UUID,
         file_name VARCHAR,
         file BYTEA,
-        layer VARCHAR,
-        bbox VARCHAR,
-        centroid VARCHAR,
         consent BOOLEAN,
         ts TIMESTAMP WITH TIME ZONE DEFAULT now()
         )
@@ -111,14 +108,8 @@ def insert_files(files, consent: bool) -> list[list[int, str, str, str, str]]:
         uuid,
         file_name,
         file,
-        layer,
-        bbox,
-        centroid,
         consent)
     VALUES (
-        %s,
-        %s,
-        %s,
         %s,
         %s,
         %s,
@@ -131,29 +122,28 @@ def insert_files(files, consent: bool) -> list[list[int, str, str, str, str]]:
     db_conn = open_connection()
     with db_conn.cursor() as curs:
         curs.execute(create_query)
-        metadata = []
+        file_ids = []
+        uuids = []
+        file_names = []
         for file in files:
             file_content = file.read()
             qr_code_content = read_qr_code(to_array(file_content))
-            layer: Layer = qr_code_content["layer"]
-            bbox: Bbox = qr_code_content["bbox"]
             curs.execute(
                 insert_query,
                 (
                     qr_code_content["uuid"],
                     secure_filename(file.filename),
                     file_content,
-                    layer,
-                    str(bbox),
-                    ",".join([str(bbox.centroid[0]), str(bbox.centroid[1])]),
                     consent,
                 ),
             )
             result = curs.fetchone()
             if result is None:
                 raise ValueError()
-            metadata.append([*result, layer, bbox])
-    return metadata
+            file_ids.append(result[0])
+            uuids.append(result[1])
+            file_names.append(result[2])
+    return file_ids, uuids, file_names
 
 
 def select_file(id_: int) -> bytes:
@@ -193,14 +183,14 @@ def select_file_name(id_: int) -> str:
             )
 
 
-def select_map_frame(uuid: UUID) -> bytes:
+def select_map_frame(uuid: UUID) -> tuple[bytes, str, str]:
     """Select map frame of the associated UUID."""
-    query = "SELECT file FROM map_frame WHERE uuid = %s"
+    query = "SELECT file, bbox, layer FROM map_frame WHERE uuid = %s"
     db_conn = open_connection()
     with db_conn.cursor() as curs:
         try:
             curs.execute(query, [str(uuid)])
-        except psycopg2.errors.UndefinedTable:
+        except UndefinedTable:
             raise CustomFileNotFoundError(
                 N_(
                     "In this Sketch Map Tool instance no sketch map has been "
@@ -215,7 +205,7 @@ def select_map_frame(uuid: UUID) -> bytes:
                     N_("The file with the id: {UUID} does not exist anymore"),
                     {"UUID", uuid},
                 )
-            return raw[0]
+            return raw
         else:
             raise CustomFileNotFoundError(
                 N_(

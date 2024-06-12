@@ -6,12 +6,14 @@ import psycopg2
 from psycopg2.errors import UndefinedTable
 from psycopg2.extensions import connection
 
+from sketch_map_tool import __version__
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.exceptions import (
     CustomFileDoesNotExistAnymoreError,
     CustomFileNotFoundError,
 )
 from sketch_map_tool.helpers import N_
+from sketch_map_tool.models import Bbox, Layer, PaperFormat
 
 db_conn: connection | None = None
 
@@ -30,23 +32,69 @@ def close_connection():
         db_conn.close()
 
 
-def insert_map_frame(file: BytesIO, uuid: UUID):
-    """Insert map frame as blob into the database with the uuid as primary key.
+def insert_map_frame(
+    file: BytesIO,
+    uuid: UUID,
+    bbox: Bbox,
+    format_: PaperFormat,
+    orientation: str,
+    layer: Layer,
+):
+    """Insert map frame alongside creation parameter as blob into the database.
 
+    The uuid is the primary key.
     The map frame is later on needed for georeferencing the uploaded photo or scan of
     a sketch map.
     """
     create_query = """
-    CREATE TABLE IF NOT EXISTS map_frame(
-        uuid UUID PRIMARY KEY,
-        file BYTEA,
-        ts TIMESTAMP WITH TIME ZONE DEFAULT now()
-        )
-        """
-    insert_query = "INSERT INTO map_frame(uuid, file) VALUES (%s, %s)"
+        CREATE TABLE IF NOT EXISTS map_frame(
+            uuid UUID PRIMARY KEY,
+            file BYTEA,
+            bbox VARCHAR,
+            centroid VARCHAR,
+            format VARCHAR,
+            orientation VARCHAR,
+            layer VARCHAR,
+            version VARCHAR,
+            ts TIMESTAMP WITH TIME ZONE DEFAULT now()
+            )
+    """
+    insert_query = """
+        INSERT INTO map_frame (
+            uuid,
+            file,
+            bbox,
+            centroid,
+            format,
+            orientation,
+            layer,
+            version
+            )
+        VALUES (
+            %s,
+            %s,
+            %s,
+            %s,
+            %s,
+            %s,
+            %s,
+            %s)
+    """
     with db_conn.cursor() as curs:
         curs.execute(create_query)
-        curs.execute(insert_query, (str(uuid), file.read()))
+        curs.execute(
+            insert_query,
+            (
+                str(uuid),
+                file.read(),
+                str(bbox),
+                ",".join([str(bbox.centroid[0]), str(bbox.centroid[1])]),
+                str(format_),
+                orientation,
+                layer,
+                __version__,
+            ),
+        )
 
 
 def delete_map_frame(uuid: UUID):

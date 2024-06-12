@@ -163,7 +163,7 @@ def db_conn_celery():
 # Test input
 #
 @pytest.fixture(scope="session")
-def bbox():
+def bbox() -> Bbox:
     return Bbox(
         lon_min=964472.1973848869,
         lat_min=6343459.035638228,
@@ -173,14 +173,14 @@ def bbox():
 
 
 @pytest.fixture
-def size():
+def size() -> Size:
     return Size(width=1867, height=1587)
 
 
-@pytest.fixture
-def format_():
+@pytest.fixture(scope="session")
+def format_() -> PaperFormat:
     return PaperFormat(
-        "a4",
+        "A4",
         width=29.7,
         height=21,
         right_margin=5,
@@ -200,11 +200,17 @@ def format_():
     )
 
 
+@pytest.fixture(scope="session")
+def orientation() -> str:
+    return "landscape"
+
+
 @pytest.fixture
 def scale():
     return 10231.143861780083
 
 
+# TODO:
 @pytest.fixture(scope="session", params=["osm"])  # , "esri-world-imagery"])
 def layer(request):
     return Layer(request.param)
@@ -223,10 +229,10 @@ def bbox_wgs84():
 # TODO: Fixture `sketch_map_marked` only works for landscape orientation.
 # TODO: Add other params
 @pytest.fixture(scope="session")
-def params(layer, bbox):
+def params(layer, bbox, format_, orientation):
     return {
-        "format": "A4",
-        "orientation": "landscape",
+        "format": format_.title,
+        "orientation": orientation,
         "bbox": "[" + str(bbox) + "]",
         # NOTE: bboxWGS84 is has not the same geographical extent as above bbox
         "bboxWGS84": (
@@ -281,7 +287,7 @@ def sketch_map(uuid_create, tmp_path_factory) -> bytes:
 def map_frame(uuid_create, flask_app, tmp_path_factory) -> BytesIO:
     """Map Frame as PNG."""
     with flask_app.app_context():
-        map_frame = db_client_flask.select_map_frame(UUID(uuid_create))
+        map_frame, _, _ = db_client_flask.select_map_frame(UUID(uuid_create))
     path = tmp_path_factory.getbasetemp() / uuid_create / "map-frame.png"
     with open(path, "wb") as file:
         file.write(map_frame)
@@ -325,7 +331,7 @@ def map_frame_marked(
 ) -> NDArray:
     """Sketch map frame with markings as PNG."""
     with flask_app.app_context():
-        map_frame = db_client_flask.select_map_frame(UUID(uuid_create))
+        map_frame, _, _ = db_client_flask.select_map_frame(UUID(uuid_create))
     return clip(
         to_array(sketch_map_marked),
         to_array(map_frame),
