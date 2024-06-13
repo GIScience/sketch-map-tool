@@ -3,8 +3,7 @@ from io import BytesIO
 from uuid import UUID, uuid4
 
 import geojson
-
-# from celery import chain, group
+from celery import group
 from flask import Response, redirect, render_template, request, send_file, url_for
 
 from sketch_map_tool import celery_app, config, definitions, tasks
@@ -133,6 +132,7 @@ def digitize_results_post(lang="en") -> Response:
     validate_uploaded_sketchmaps(files)
     # file metadata containing ids, uuids, file_names, ...
     file_ids, uuids, file_names = db_client_flask.insert_files(files, consent)
+
     map_frames = dict()
     bboxes = dict()
     layers = dict()
@@ -141,31 +141,21 @@ def digitize_results_post(lang="en") -> Response:
         map_frames[uuid] = to_array(BytesIO(map_frame).read())
         bboxes[uuid] = Bbox(*[float(c) for c in bbox.split(",")])
         layers[uuid] = Layer(layer)
-    result_id_1 = (
-        georeference_sketch_maps.s(
-            file_ids, file_names, uuids, map_frames, bboxes, layers
-        )
-        .apply_async()
-        .id
+
+    task_1 = georeference_sketch_maps.signature(
+        (file_ids, file_names, uuids, map_frames, bboxes, layers)
     )
-    result_id_2 = (
-        digitize_sketches.s(
-            file_ids,
-            file_names,
-            uuids,
-            map_frames,
-            layers,
-            bboxes,
-        )
-        .apply_async()
-        .id
+    task_2 = digitize_sketches.signature(
+        (file_ids, file_names, uuids, map_frames, layers, bboxes)
     )
+
+    results = group([task_1, task_2]).apply_async().results
     # Unique id for current request
     uuid = str(uuid4())
     # Mapping of request id to multiple tasks id's
     map_ = {
-        "raster-results": str(result_id_1),
-        "vector-results": str(result_id_2),
+        "raster-results": str(results[0].id),
+        "vector-results": str(results[1].id),
     }
     db_client_flask.set_async_result_ids(uuid, map_)
     return redirect(url_for("digitize_results_get", lang=lang, uuid=uuid))
