@@ -32,7 +32,14 @@ def test_generate_quality_report(bbox_wgs84):
 
 
 @pytest.mark.usefixtures("uuid_create", "uuid_digitize")
-def test_cleanup():
-    """Map frame is uploaded recently and uploaded sketch map has consent."""
-    task = tasks.cleanup.apply_async()
+def test_cleanup_map_frames():
+    # `cleanup_map_frames()` is tested in `test_database_client_celery.py`
+    task = tasks.cleanup_map_frames.apply_async()
+    task.wait()
+
+
+@pytest.mark.usefixtures("uuid_create", "uuid_digitize")
+def test_cleanup_blobs():
+    # `cleanup_blobs()` is tested in `test_database_client_celery.py`
+    task = tasks.cleanup_blobs.apply_async()
     task.wait()

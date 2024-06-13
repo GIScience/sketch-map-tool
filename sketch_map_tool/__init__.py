@@ -43,7 +43,7 @@ CELERY_CONFIG = {
     # Cleanup map frames and uploaded files stored in the database
     "beat_schedule": {
         "cleanup": {
-            "task": "sketch_map_tool.tasks.cleanup",
+            "task": "sketch_map_tool.tasks.cleanup_map_frames",
             "schedule": timedelta(hours=1),
         },
     },
