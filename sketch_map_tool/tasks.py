@@ -204,18 +204,17 @@ def digitize_sketches(
 
 
 @celery.task
-def cleanup():
-    """Cleanup map frames and uploaded files stored in the database."""
+def cleanup_map_frames():
+    """Cleanup map frames stored in the database."""
     db_client_celery.cleanup_map_frames()
-    # TODO: run vacuum
+    # TODO: run Vacuum or Vacuum full?
 
 
 @celery.task
-def cleanup_blobs(*args, **kwargs):
+def cleanup_blobs(*_):
     """Cleanup uploaded files stored in the database.
 
-    Arguments and keyword arguments are ignored.
-    They are only part of the signature because of usage of celery chain.
+    Arguments are ignored. They are only part of the signature because of usage of
+    celery chain.
     """
-    # db_client_celery.cleanup_blobs()
-    return ""
+    db_client_celery.cleanup_blobs()
