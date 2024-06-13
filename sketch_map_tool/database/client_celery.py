@@ -104,7 +104,7 @@ def delete_map_frame(uuid: UUID):
 
 
 def cleanup_map_frames():
-    """Cleanup old map frames or map frames without consent.
+    """Cleanup map frames which are old and without consent.
 
     Only set file to null. Keep metadata.
     """
@@ -144,8 +144,7 @@ def cleanup_blobs():
         file = NULL,
         file_name = NULL
     WHERE
-        ts < NOW() - INTERVAL '1 days'
-        AND consent = FALSE;
+        consent = FALSE;
     """
     with db_conn.cursor() as curs:
         try:

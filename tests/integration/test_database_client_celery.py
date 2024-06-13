@@ -41,8 +41,16 @@ def sketch_map_without_consent(flask_app, uuid_create, sketch_map_marked):
             curs.execute(update_query, [uuid_create])
 
         yield sketch_map_marked
-
-        update_query = "UPDATE blob SET consent = TRUE, file = %s WHERE uuid = %s;"
+        update_query = """
+            UPDATE
+                blob
+            SET
+                consent = TRUE,
+                file = %s,
+                file_name = 'sketch_map.png'
+            WHERE
+                uuid = %s;
+        """
         with client_flask.open_connection().cursor() as curs:
             curs.execute(update_query, [sketch_map_marked, uuid_create])
 
@@ -173,17 +181,35 @@ def test_cleanup_map_frames_old_without_consent(
             client_flask.select_map_frame(UUID(uuid_create))
 
 
-# TODO:
-# def test_cleanup_blobs_with_consent(
-#     flask_app,
-#     uuid_create: str,
-#     sketch_map_marked: bytes,
-# ):
-#     """Sketch map has been uploaded with consent. Noting should happen"""
-#     client_celery.cleanup_blobs()
-#     with flask_app.app_context():
-#         with client_flask.open_connection().cursor() as curs:
-#             curs.execute("SELECT file FROM blob WHERE uuid = %s", [uuid_create])
-#             result = curs.fetchone()
-#             assert result is not None
-#             assert result[0] == sketch_map_marked.read()
+@pytest.mark.usefixtures("uuid_digitize")
+def test_cleanup_blobs_with_consent(
+    flask_app,
+    uuid_create: str,
+    sketch_map_marked: bytes,
+):
+    """Sketch map has been uploaded with consent. Nothing should happen."""
+    client_celery.cleanup_blobs()
+    with flask_app.app_context():
+        with client_flask.open_connection().cursor() as curs:
+            curs.execute("SELECT file FROM blob WHERE uuid = %s", [uuid_create])
+            result = curs.fetchone()
+            assert result is not None
+            assert result[0] == sketch_map_marked
+
+
+@pytest.mark.usefixtures("uuid_digitize", "sketch_map_without_consent")
+def test_cleanup_blobs_without_consent(flask_app, uuid_create: str):
+    """Sketch map has been uploaded without consent.
+
+    Sketch map file and name should be set to null.
+    """
+    client_celery.cleanup_blobs()
+    with flask_app.app_context():
+        with client_flask.open_connection().cursor() as curs:
+            curs.execute(
+                "SELECT file, file_name FROM blob WHERE uuid = %s", [uuid_create]
+            )
+            result = curs.fetchone()
+            assert result is not None
+            for r in result:
+                assert r is None
