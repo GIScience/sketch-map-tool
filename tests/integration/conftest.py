@@ -254,6 +254,7 @@ def uuid_create(
     celery_app,
     tmp_path_factory,
 ) -> str:
+    """UUID after request to /create and successful sketch map generation."""
     response = flask_client.post("/create/results", data=params, follow_redirects=True)
 
     # Extract UUID from response
@@ -348,6 +349,7 @@ def uuid_digitize(
     celery_app,
     tmp_path_factory,
 ) -> str:
+    """UUID after uploading files to /digitize and successful result generation."""
     data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")], "consent": True}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
 
