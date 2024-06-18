@@ -188,7 +188,7 @@ def test_cleanup_blobs_with_consent(
     sketch_map_marked: bytes,
 ):
     """Sketch map has been uploaded with consent. Nothing should happen."""
-    client_celery.cleanup_blobs()
+    client_celery.cleanup_blob([UUID(uuid_create)])
     with flask_app.app_context():
         with client_flask.open_connection().cursor() as curs:
             curs.execute("SELECT file FROM blob WHERE uuid = %s", [uuid_create])
@@ -203,7 +203,7 @@ def test_cleanup_blobs_without_consent(flask_app, uuid_create: str):
 
     Sketch map file and name should be set to null.
     """
-    client_celery.cleanup_blobs()
+    client_celery.cleanup_blob([UUID(uuid_create)])
     with flask_app.app_context():
         with client_flask.open_connection().cursor() as curs:
             curs.execute(

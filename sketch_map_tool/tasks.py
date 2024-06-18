@@ -211,10 +211,10 @@ def cleanup_map_frames():
 
 
 @celery.task
-def cleanup_blobs(*_):
+def cleanup_blobs(*_, map_frame_uuids: list):
     """Cleanup uploaded files stored in the database.
 
     Arguments are ignored. They are only part of the signature because of usage of
     celery chain.
     """
-    db_client_celery.cleanup_blobs()
+    db_client_celery.cleanup_blob(map_frame_uuids)

@@ -125,10 +125,7 @@ def digitize(lang="en") -> str:
 def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
     # "consent" is a checkbox and value is only send if it is checked
-    if "consent" in request.form.keys():
-        consent: bool = True
-    else:
-        consent: bool = False
+    consent: bool = "consent" in request.form.keys()
     # No files uploaded
     if "file" not in request.files:
         return redirect(url_for("digitize", lang=lang))
@@ -153,7 +150,10 @@ def digitize_results_post(lang="en") -> Response:
         (file_ids, file_names, uuids, map_frames, layers, bboxes)
     )
     group_ = group([task_1, task_2])
-    chain_ = chain(group_, cleanup_blobs.signature())
+    chain_ = chain(
+        group_,
+        cleanup_blobs.signature(kwargs={"map_frame_uuid": list(set(uuids))}),
+    )
     chain_result = chain_.apply_async()
 
     group_results = chain_result.parent  # type: ignore

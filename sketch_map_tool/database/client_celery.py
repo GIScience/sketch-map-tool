@@ -131,12 +131,11 @@ def cleanup_map_frames():
             logging.info("Table `map_frame` does not exist yet. Nothing todo.")
 
 
-def cleanup_blobs():
+def cleanup_blob(map_frame_uuids: list[UUID]):
     """Cleanup uploaded files (sketch maps) without consent.
 
     Only set file and name to null. Keep metadata.
     """
-    # TODO: Wait one day until deletion or check celery task status?
     query = """
     UPDATE
         blob
@@ -144,11 +143,12 @@ def cleanup_blobs():
         file = NULL,
         file_name = NULL
     WHERE
-        consent = FALSE;
+        uuid = %s
+        AND consent = FALSE;
     """
     with db_conn.cursor() as curs:
         try:
-            curs.execute(query)
+            curs.executemany(query, [map_frame_uuids])
         except UndefinedTable:
             logging.info("Table `blob` does not exist yet. Nothing todo.")
 
