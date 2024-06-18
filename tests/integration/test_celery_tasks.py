@@ -38,8 +38,8 @@ def test_cleanup_map_frames():
     task.wait()
 
 
-@pytest.mark.usefixtures("uuid_create", "uuid_digitize")
-def test_cleanup_blobs():
+@pytest.mark.usefixtures("uuid_digitize")
+def test_cleanup_blobs(uuid_create):
     # `cleanup_blobs()` is tested in `test_database_client_celery.py`
-    task = tasks.cleanup_blobs.apply_async()
+    task = tasks.cleanup_blobs.apply_async(kwargs={"map_frame_uuids": [uuid_create]})
     task.wait()
