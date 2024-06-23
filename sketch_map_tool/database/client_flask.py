@@ -96,7 +96,7 @@ def insert_files(files, consent: bool) -> tuple[list[int], list[str], list[str]]
     create_query = """
     CREATE TABLE IF NOT EXISTS blob(
         id SERIAL PRIMARY KEY,
-        uuid UUID,
+        map_frame_uuid UUID,
         file_name VARCHAR,
         file BYTEA,
         consent BOOLEAN,
@@ -105,7 +105,7 @@ def insert_files(files, consent: bool) -> tuple[list[int], list[str], list[str]]
     """
     insert_query = """
     INSERT INTO blob (
-        uuid,
+        map_frame_uuid,
         file_name,
         file,
         consent)
@@ -116,7 +116,7 @@ def insert_files(files, consent: bool) -> tuple[list[int], list[str], list[str]]
         %s)
     RETURNING
         id,
-        uuid,
+        map_frame_uuid,
         file_name
     """
     db_conn = open_connection()

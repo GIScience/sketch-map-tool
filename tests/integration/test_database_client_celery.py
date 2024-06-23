@@ -33,10 +33,12 @@ def map_frame_old(flask_app, uuid_create, map_frame):
 
 
 @pytest.fixture
-def sketch_map_without_consent(flask_app, uuid_create, sketch_map_marked):
+def sketch_map_without_consent(
+    flask_app, uuid_create, sketch_map_marked, uuid_digitize
+):
     """mock uploaded sketch map without consent."""
     with flask_app.app_context():
-        update_query = "UPDATE blob SET consent = FALSE WHERE uuid = %s;"
+        update_query = "UPDATE blob SET consent = FALSE WHERE map_frame_uuid = %s;"
         with client_flask.open_connection().cursor() as curs:
             curs.execute(update_query, [uuid_create])
 
@@ -49,7 +51,7 @@ def sketch_map_without_consent(flask_app, uuid_create, sketch_map_marked):
                 file = %s,
                 file_name = 'sketch_map.png'
             WHERE
-                uuid = %s;
+                map_frame_uuid = %s;
         """
         with client_flask.open_connection().cursor() as curs:
             curs.execute(update_query, [sketch_map_marked, uuid_create])
@@ -191,7 +193,9 @@ def test_cleanup_blobs_with_consent(
     client_celery.cleanup_blob([UUID(uuid_create)])
     with flask_app.app_context():
         with client_flask.open_connection().cursor() as curs:
-            curs.execute("SELECT file FROM blob WHERE uuid = %s", [uuid_create])
+            curs.execute(
+                "SELECT file FROM blob WHERE map_frame_uuid = %s", [uuid_create]
+            )
             result = curs.fetchone()
             assert result is not None
             assert result[0] == sketch_map_marked
@@ -207,7 +211,8 @@ def test_cleanup_blobs_without_consent(flask_app, uuid_create: str):
     with flask_app.app_context():
         with client_flask.open_connection().cursor() as curs:
             curs.execute(
-                "SELECT file, file_name FROM blob WHERE uuid = %s", [uuid_create]
+                "SELECT file, file_name FROM blob WHERE map_frame_uuid = %s",
+                [uuid_create],
             )
             result = curs.fetchone()
             assert result is not None
