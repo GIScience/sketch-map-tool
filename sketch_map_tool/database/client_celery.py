@@ -125,7 +125,7 @@ def cleanup_map_frames():
             FROM
                 blob
             WHERE
-                map_frame.uuid = blob.uuid
+                map_frame.uuid = blob.map_frame_uuid
                 AND consent = TRUE);
     """
     with db_conn.cursor() as curs:
@@ -147,7 +147,7 @@ def cleanup_blob(map_frame_uuids: list[UUID]):
         file = NULL,
         file_name = NULL
     WHERE
-        uuid = %s
+        map_frame_uuid = %s
         AND consent = FALSE;
     """
     with db_conn.cursor() as curs:
