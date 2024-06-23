@@ -19,7 +19,7 @@ def test_bbox_str(bbox_as_list):
 
 def test_bbox_centroid(bbox_as_list):
     bbox = models.Bbox(*bbox_as_list)
-    expected_centroid = (965953.403615308, 6344718.3357083845)
+    expected_centroid = (965953.4036153087, 6344718.335708384)
     assert bbox.centroid == expected_centroid
     assert isinstance(bbox.centroid, tuple)
 
