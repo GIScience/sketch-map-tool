@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-04-10 11:45+0000\n"
-"PO-Revision-Date: 2024-04-10 12:37\n"
+"POT-Creation-Date: 2024-06-05 14:02+0000\n"
+"PO-Revision-Date: 2024-06-05 14:27\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: sketch-map-tool\n"
 "X-Crowdin-Project-ID: 651528\n"
@@ -40,8 +40,8 @@ msgid "Literature reference JSON fields should not contain empty strings as valu
 msgstr "Los campos JSON de referencia literaria no deben contener cadenas de caracteres vacías como valores."
 
 #: sketch_map_tool/database/client_celery.py:63
-#: sketch_map_tool/database/client_flask.py:119
-#: sketch_map_tool/database/client_flask.py:141
+#: sketch_map_tool/database/client_flask.py:130
+#: sketch_map_tool/database/client_flask.py:152
 msgid "There is no file in the database with the id: {ID}"
 msgstr "No existe ningún archivo en la base de datos con el ID: {ID}"
 
@@ -53,11 +53,11 @@ msgstr "No hay tareas en el broker para el UUID: {UUID}"
 msgid "There are no tasks in the broker for UUID and request type: {REQUEST_UUID}, {REQUEST_TYPE}"
 msgstr "No hay tareas en el broker para el UUID y tipo de solicitud: {REQUEST_UUID}, {REQUEST_TYPE}"
 
-#: sketch_map_tool/database/client_flask.py:154
+#: sketch_map_tool/database/client_flask.py:165
 msgid "In this Sketch Map Tool instance no sketch map has been generated yet. You can only upload sketch maps to the instance on which they have been created."
 msgstr "En esta instancia de Sketch Map Tool no se ha generado ningún mapa aún. Sólo puedes subir mapas a la instancia en la que han sido creados."
 
-#: sketch_map_tool/database/client_flask.py:165
+#: sketch_map_tool/database/client_flask.py:176
 msgid "There is no map frame in the database with the uuid: {UUID}. You can only upload sketch maps to the instance on which they have been created."
 msgstr "No existe un marco de mapa en la base de datos con el UUID: {UUID}. Sólo puedes subir mapas a la instancia en la que han sido creados."
 
@@ -342,15 +342,23 @@ msgid "Help"
 msgstr "Ayuda"
 
 #: sketch_map_tool/templates/base.html:62
+msgid "Newsletter"
+msgstr ""
+
+#: sketch_map_tool/templates/base.html:64
+msgid "Further Legal Information"
+msgstr ""
+
+#: sketch_map_tool/templates/base.html:66
 msgid "Privacy\n"
 "            Policy"
 msgstr "Política de privacidad"
 
-#: sketch_map_tool/templates/base.html:65
+#: sketch_map_tool/templates/base.html:69
 msgid "Imprint"
 msgstr "Impreso"
 
-#: sketch_map_tool/templates/base.html:67
+#: sketch_map_tool/templates/base.html:71
 msgid "HeiGIT Logo"
 msgstr ""
 
@@ -635,12 +643,12 @@ msgstr "Archivos:"
 msgid "Max total size: 500 MB"
 msgstr "Tamaño máximo total: 500 MB"
 
-#: sketch_map_tool/templates/digitize.html:51
+#: sketch_map_tool/templates/digitize.html:52
 msgid "By uploading the file(s), you agree that the content of the files and the time of upload will\n"
 "                    be saved and used for the further development of the service."
 msgstr ""
 
-#: sketch_map_tool/templates/digitize.html:55
+#: sketch_map_tool/templates/digitize.html:56
 msgid "Upload"
 msgstr "Cargar"
 
@@ -1681,38 +1689,38 @@ msgstr "Crear un Sketch&nbsp;Map"
 msgid "Digitize your Sketch&nbsp;Maps"
 msgstr "Digitaliza tus Sketch&nbsp;Maps"
 
-#: sketch_map_tool/upload_processing/qr_code_reader.py:37
+#: sketch_map_tool/upload_processing/qr_code_reader.py:38
 msgid "QR-Code could not be detected."
 msgstr "El código QR no pudo ser detectado."
 
-#: sketch_map_tool/upload_processing/qr_code_reader.py:46
+#: sketch_map_tool/upload_processing/qr_code_reader.py:47
 msgid "The provided UUID is invalid."
 msgstr "El UUID proporcionado no es válido."
 
-#: sketch_map_tool/upload_processing/qr_code_reader.py:49
+#: sketch_map_tool/upload_processing/qr_code_reader.py:50
 msgid "Multiple QR-Codes detected."
 msgstr "Múltiples códigos QR detectados."
 
-#: sketch_map_tool/upload_processing/qr_code_reader.py:59
+#: sketch_map_tool/upload_processing/qr_code_reader.py:60
 msgid "Unexpected length of QR-code contents."
 msgstr "Longitud inesperada del contenido del código QR."
 
-#: sketch_map_tool/upload_processing/qr_code_reader.py:71
-#: sketch_map_tool/upload_processing/qr_code_reader.py:92
+#: sketch_map_tool/upload_processing/qr_code_reader.py:72
+#: sketch_map_tool/upload_processing/qr_code_reader.py:93
 msgid "QR-Code does not have expected content."
 msgstr "El código QR no cuenta con el contenido esperado."
 
-#: sketch_map_tool/wms/client.py:49
+#: sketch_map_tool/wms/client.py:73
 msgid "Map area couldn't be processed with the current resources. Please try again once."
 msgstr "El área del mapa no pudo ser procesado con los recursos actuales. Por favor, inténtalo de nuevo."
 
-#: sketch_map_tool/wms/client.py:67
+#: sketch_map_tool/wms/client.py:93
 msgid "The Web Map Service returned an error. Please try again later. Response from the WMS:\n"
 "{ERROR_MSG}"
 msgstr "El Web Map Service (WMS) ha devuelto un error. Por favor inténtalo de nuevo más tarde. Respuesta del WMS:\n"
 "{ERROR_MSG}"
 
-#: sketch_map_tool/wms/client.py:75
+#: sketch_map_tool/wms/client.py:100
 msgid "The Web Map Service returned an error. Please try again later."
 msgstr "El Web Map Service (WMS) ha devuelto un error. Por favor, inténtalo de nuevo más tarde."
 

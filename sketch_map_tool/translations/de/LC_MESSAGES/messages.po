@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-04-10 11:45+0000\n"
-"PO-Revision-Date: 2024-04-10 12:37\n"
+"POT-Creation-Date: 2024-06-05 14:02+0000\n"
+"PO-Revision-Date: 2024-06-05 14:27\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: sketch-map-tool\n"
 "X-Crowdin-Project-ID: 651528\n"
@@ -40,8 +40,8 @@ msgid "Literature reference JSON fields should not contain empty strings as valu
 msgstr "Literaturreferenz JSON-Felder sollten keine leeren Strings als Werte enthalten."
 
 #: sketch_map_tool/database/client_celery.py:63
-#: sketch_map_tool/database/client_flask.py:119
-#: sketch_map_tool/database/client_flask.py:141
+#: sketch_map_tool/database/client_flask.py:130
+#: sketch_map_tool/database/client_flask.py:152
 msgid "There is no file in the database with the id: {ID}"
 msgstr "Es gibt keine Datei in der Datenbank mit der ID: {ID}"
 
@@ -53,11 +53,11 @@ msgstr "Es gibt keine Aufgaben im Broker für UUID: {UUID}"
 msgid "There are no tasks in the broker for UUID and request type: {REQUEST_UUID}, {REQUEST_TYPE}"
 msgstr "Es gibt keine Aufgaben im Broker für die UUID und den Anfragetyp: {REQUEST_UUID}, {REQUEST_TYPE}"
 
-#: sketch_map_tool/database/client_flask.py:154
+#: sketch_map_tool/database/client_flask.py:165
 msgid "In this Sketch Map Tool instance no sketch map has been generated yet. You can only upload sketch maps to the instance on which they have been created."
 msgstr "In dieser Sketch Map Tool-Instanz wurde noch keine Sketch Map generiert. Du kannst Sketch Maps nur in die Instanz hochladen, in der sie erstellt wurden."
 
-#: sketch_map_tool/database/client_flask.py:165
+#: sketch_map_tool/database/client_flask.py:176
 msgid "There is no map frame in the database with the uuid: {UUID}. You can only upload sketch maps to the instance on which they have been created."
 msgstr "Es gibt keinen Kartenrahmen in der Datenbank mit der UUID: {UUID}. Sie können Sketch Maps nur in die Instanz hochladen, in der sie erstellt wurden."
 
@@ -313,15 +313,23 @@ msgid "Help"
 msgstr "Hilfe"
 
 #: sketch_map_tool/templates/base.html:62
+msgid "Newsletter"
+msgstr "Newsletter"
+
+#: sketch_map_tool/templates/base.html:64
+msgid "Further Legal Information"
+msgstr ""
+
+#: sketch_map_tool/templates/base.html:66
 msgid "Privacy\n"
 "            Policy"
 msgstr "Datenschutzerklärung"
 
-#: sketch_map_tool/templates/base.html:65
+#: sketch_map_tool/templates/base.html:69
 msgid "Imprint"
 msgstr "Impressum"
 
-#: sketch_map_tool/templates/base.html:67
+#: sketch_map_tool/templates/base.html:71
 msgid "HeiGIT Logo"
 msgstr "HeiGIT Logo"
 
@@ -593,12 +601,12 @@ msgstr "Dateien:"
 msgid "Max total size: 500 MB"
 msgstr "Maximale Gesamtgröße: 500 MB"
 
-#: sketch_map_tool/templates/digitize.html:51
+#: sketch_map_tool/templates/digitize.html:52
 msgid "By uploading the file(s), you agree that the content of the files and the time of upload will\n"
 "                    be saved and used for the further development of the service."
 msgstr "Mit dem Hochladen der Datei(en) erklärst Du Dich damit einverstanden, dass der Inhalt der Dateien und der Zeitpunkt des Hochladens gespeichert und für die Weiterentwicklung des Dienstes verwendet werden."
 
-#: sketch_map_tool/templates/digitize.html:55
+#: sketch_map_tool/templates/digitize.html:56
 msgid "Upload"
 msgstr "Hochladen"
 
@@ -1541,38 +1549,38 @@ msgstr "Erstelle eine Sketch-Map"
 msgid "Digitize your Sketch&nbsp;Maps"
 msgstr "Digitalisiere deine Sketch-Maps"
 
-#: sketch_map_tool/upload_processing/qr_code_reader.py:37
+#: sketch_map_tool/upload_processing/qr_code_reader.py:38
 msgid "QR-Code could not be detected."
 msgstr "QR-Code konnte nicht erkannt werden."
 
-#: sketch_map_tool/upload_processing/qr_code_reader.py:46
+#: sketch_map_tool/upload_processing/qr_code_reader.py:47
 msgid "The provided UUID is invalid."
 msgstr "Die angegebene UUID ist ungültig."
 
-#: sketch_map_tool/upload_processing/qr_code_reader.py:49
+#: sketch_map_tool/upload_processing/qr_code_reader.py:50
 msgid "Multiple QR-Codes detected."
 msgstr "Mehrere QR-Codes erkannt."
 
-#: sketch_map_tool/upload_processing/qr_code_reader.py:59
+#: sketch_map_tool/upload_processing/qr_code_reader.py:60
 msgid "Unexpected length of QR-code contents."
 msgstr "Unerwartete Länge des QR-Code-Inhalts."
 
-#: sketch_map_tool/upload_processing/qr_code_reader.py:71
-#: sketch_map_tool/upload_processing/qr_code_reader.py:92
+#: sketch_map_tool/upload_processing/qr_code_reader.py:72
+#: sketch_map_tool/upload_processing/qr_code_reader.py:93
 msgid "QR-Code does not have expected content."
 msgstr "QR-Code hat nicht den erwarteten Inhalt."
 
-#: sketch_map_tool/wms/client.py:49
+#: sketch_map_tool/wms/client.py:73
 msgid "Map area couldn't be processed with the current resources. Please try again once."
 msgstr "Kartenbereich konnte nicht mit den aktuellen Ressourcen verarbeitet werden. Bitte versuchen Sie es noch einmal."
 
-#: sketch_map_tool/wms/client.py:67
+#: sketch_map_tool/wms/client.py:93
 msgid "The Web Map Service returned an error. Please try again later. Response from the WMS:\n"
 "{ERROR_MSG}"
 msgstr "Der Web Map Service hat einen Fehler zurückgegeben. Bitte versuchen Sie es später erneut. Antwort des WMS:\n"
 "{ERROR_MSG}"
 
-#: sketch_map_tool/wms/client.py:75
+#: sketch_map_tool/wms/client.py:100
 msgid "The Web Map Service returned an error. Please try again later."
 msgstr "Der Web Map Service hat einen Fehler zurückgegeben. Bitte versuchen Sie es später erneut."
 
