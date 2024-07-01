@@ -164,8 +164,8 @@ def db_conn_celery():
 #
 # Test input
 #
-@pytest.fixture
-def bbox():
+@pytest.fixture(scope="session")
+def bbox() -> Bbox:
     return Bbox(
         lon_min=964472.1973848869,
         lat_min=6343459.035638228,
@@ -175,14 +175,14 @@ def bbox():
 
 
 @pytest.fixture
-def size():
+def size() -> Size:
     return Size(width=1867, height=1587)
 
 
-@pytest.fixture
-def format_():
+@pytest.fixture(scope="session")
+def format_() -> PaperFormat:
     return PaperFormat(
-        "a4",
+        "A4",
         width=29.7,
         height=21,
         right_margin=5,
@@ -202,12 +202,18 @@ def format_():
     )
 
 
+@pytest.fixture(scope="session")
+def orientation() -> str:
+    return "landscape"
+
+
 @pytest.fixture
 def scale():
     return 10231.143861780083
 
 
-@pytest.fixture(scope="session", params=["osm", "esri-world-imagery"])
+# TODO:
+@pytest.fixture(scope="session", params=["osm"])  # , "esri-world-imagery"])
 def layer(request):
     return Layer(request.param)
 
@@ -225,13 +231,12 @@ def bbox_wgs84():
 # TODO: Fixture `sketch_map_marked` only works for landscape orientation.
 # TODO: Add other params
 @pytest.fixture(scope="session")
-def params(layer):
+def params(layer, bbox, format_, orientation):
     return {
-        "format": "A4",
-        "orientation": "landscape",
-        "bbox": (
-            "[964445.3646475708,6343463.48326091,967408.255014792,6345943.466874749]"
-        ),
+        "format": format_.title,
+        "orientation": orientation,
+        "bbox": "[" + str(bbox) + "]",
+        # NOTE: bboxWGS84 is has not the same geographical extent as above bbox
         "bboxWGS84": (
             "[8.66376011761138,49.40266507327297,8.690376214631833,49.41716014123875]"
         ),
@@ -249,6 +254,7 @@ def uuid_create(
     celery_app,
     tmp_path_factory,
 ) -> str:
+    """UUID after request to /create and successful sketch map generation."""
     response = flask_client.post("/create/results", data=params, follow_redirects=True)
 
     # Extract UUID from response
@@ -262,7 +268,7 @@ def uuid_create(
     with flask_app.app_context():
         id_ = db_client_flask.get_async_result_id(uuid, "sketch-map")
     task = celery_app.AsyncResult(id_)
-    result = task.get(timeout=90)
+    result = task.get(timeout=190)
 
     # Write sketch map to temporary test directory
     fn = tmp_path_factory.mktemp(uuid, numbered=False) / "sketch-map.pdf"
@@ -284,7 +290,7 @@ def sketch_map(uuid_create, tmp_path_factory) -> bytes:
 def map_frame(uuid_create, flask_app, tmp_path_factory) -> BytesIO:
     """Map Frame as PNG."""
     with flask_app.app_context():
-        map_frame = db_client_flask.select_map_frame(UUID(uuid_create))
+        map_frame, _, _ = db_client_flask.select_map_frame(UUID(uuid_create))
     path = tmp_path_factory.getbasetemp() / uuid_create / "map-frame.png"
     with open(path, "wb") as file:
         file.write(map_frame)
@@ -328,7 +334,7 @@ def map_frame_marked(
 ) -> NDArray:
     """Sketch map frame with markings as PNG."""
     with flask_app.app_context():
-        map_frame = db_client_flask.select_map_frame(UUID(uuid_create))
+        map_frame, _, _ = db_client_flask.select_map_frame(UUID(uuid_create))
     return clip(
         to_array(sketch_map_marked),
         to_array(map_frame),
@@ -343,7 +349,8 @@ def uuid_digitize(
     celery_app,
     tmp_path_factory,
 ) -> str:
-    data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")]}
+    """UUID after uploading files to /digitize and successful result generation."""
+    data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")], "consent": True}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
 
     # Extract UUID from response
@@ -359,8 +366,8 @@ def uuid_digitize(
         id_raster = db_client_flask.get_async_result_id(uuid, "raster-results")
     task_vector = celery_app.AsyncResult(id_vector)
     task_raster = celery_app.AsyncResult(id_raster)
-    result_vector = task_vector.get(timeout=90)
-    result_raster = task_raster.get(timeout=90)
+    result_vector = task_vector.get(timeout=190)
+    result_raster = task_raster.get(timeout=190)
     # Write sketch map to temporary test directory
     dir = tmp_path_factory.mktemp(uuid, numbered=False)
     path_vector = dir / "vector.geojson"

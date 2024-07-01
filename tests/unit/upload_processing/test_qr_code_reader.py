@@ -58,11 +58,11 @@ def test_read_qr_code(qr_code_img, decoded_content):
     # cv2.imshow('image', qr_code_img)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
-    assert qr_code_reader.read(qr_code_img) == decoded_content
+    assert qr_code_reader.read_qr_code(qr_code_img) == decoded_content
 
 
 def test_read_qr_code_sketch_map(sketch_map, decoded_content):
-    assert qr_code_reader.read(sketch_map) == decoded_content
+    assert qr_code_reader.read_qr_code(sketch_map) == decoded_content
 
 
 def test_read_qr_code_big(qr_code_img_big):
@@ -70,32 +70,34 @@ def test_read_qr_code_big(qr_code_img_big):
 
     ... before content can be detected.
     """
-    assert qr_code_reader.read(qr_code_img_big) is not None
+    assert qr_code_reader.read_qr_code(qr_code_img_big) is not None
     with pytest.raises(QRCodeError):
-        qr_code_reader.read(qr_code_img_big, depth=6)  # Disable recursion (resizing)
+        qr_code_reader.read_qr_code(
+            qr_code_img_big, depth=6
+        )  # Disable recursion (resizing)
 
 
 def test_read_qr_code_multiple(qr_code_img_mutliple):
     with pytest.raises(QRCodeError) as qr_code_error:
-        qr_code_reader.read(qr_code_img_mutliple)
+        qr_code_reader.read_qr_code(qr_code_img_mutliple)
     assert str(qr_code_error.value) == "Multiple QR-Codes detected."
 
 
 def test_read_qr_code_no(qr_code_img_no):
     with pytest.raises(QRCodeError) as qr_code_error:
-        qr_code_reader.read(qr_code_img_no)
+        qr_code_reader.read_qr_code(qr_code_img_no)
     assert str(qr_code_error.value) == "QR-Code could not be detected."
 
 
 def test_read_qr_code_invalid_uuid(qr_code_invalid_uuid):
     with pytest.raises(QRCodeError) as qr_code_error:
-        qr_code_reader.read(qr_code_invalid_uuid)
+        qr_code_reader.read_qr_code(qr_code_invalid_uuid)
     assert str(qr_code_error.value) == "The provided UUID is invalid."
 
 
 def test_read_qr_code_invalid_contents(qr_code_invalid_contents):
     with pytest.raises(QRCodeError) as qr_code_error:
-        qr_code_reader.read(qr_code_invalid_contents)
+        qr_code_reader.read_qr_code(qr_code_invalid_contents)
     assert str(qr_code_error.value) == "QR-Code does not have expected content."
 
 
