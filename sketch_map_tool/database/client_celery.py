@@ -117,6 +117,7 @@ def cleanup_map_frames():
         map_frame
     SET
         file = NULL
+        bbox = NULL
     WHERE
         ts < NOW() - INTERVAL '6 months'
         AND NOT EXISTS (
