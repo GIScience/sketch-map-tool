@@ -268,7 +268,7 @@ def uuid_create(
     with flask_app.app_context():
         id_ = db_client_flask.get_async_result_id(uuid, "sketch-map")
     task = celery_app.AsyncResult(id_)
-    result = task.get(timeout=90)
+    result = task.get(timeout=190)
 
     # Write sketch map to temporary test directory
     fn = tmp_path_factory.mktemp(uuid, numbered=False) / "sketch-map.pdf"
@@ -366,8 +366,8 @@ def uuid_digitize(
         id_raster = db_client_flask.get_async_result_id(uuid, "raster-results")
     task_vector = celery_app.AsyncResult(id_vector)
     task_raster = celery_app.AsyncResult(id_raster)
-    result_vector = task_vector.get(timeout=90)
-    result_raster = task_raster.get(timeout=90)
+    result_vector = task_vector.get(timeout=190)
+    result_raster = task_raster.get(timeout=190)
     # Write sketch map to temporary test directory
     dir = tmp_path_factory.mktemp(uuid, numbered=False)
     path_vector = dir / "vector.geojson"

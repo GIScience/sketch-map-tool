@@ -218,3 +218,12 @@ def test_cleanup_blobs_without_consent(flask_app, uuid_create: str):
             assert result is not None
             for r in result:
                 assert r is None
+
+            curs.execute(
+                "SELECT bbox FROM map_frame WHERE uuid = %s",
+                [uuid_create],
+            )
+            result = curs.fetchone()
+            assert result is not None
+            for r in result:
+                assert r is None
