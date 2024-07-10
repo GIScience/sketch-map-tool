@@ -17,8 +17,7 @@ from tests import vcr_app as vcr
         get_config_value("neptune_model_id_sam"),
     ),
 )
-def test_init_model(id, monkeypatch, tmpdir):
-    monkeypatch.setenv("SMT-DATA-DIR", tmpdir)
+def test_init_model(id):
     path = ml_models.init_model(id)
     assert path.is_file()
 
