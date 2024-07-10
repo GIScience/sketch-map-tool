@@ -33,10 +33,10 @@ def postgres_container(monkeypatch_session):
     """
     with PostgresContainer("postgres:15") as postgres:
         conn = "db+postgresql://{user}:{password}@127.0.0.1:{port}/{database}".format(
-            user=postgres.POSTGRES_USER,
-            password=postgres.POSTGRES_PASSWORD,
+            user=postgres.username,
+            password=postgres.password,
             port=postgres.get_exposed_port(5432),  # 5432 is default port of postgres
-            database=postgres.POSTGRES_DB,
+            database=postgres.dbname,
         )
         monkeypatch_session.setitem(DEFAULT_CONFIG, "result-backend", conn)
         yield {"connection_url": conn}
