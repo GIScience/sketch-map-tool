@@ -5,11 +5,11 @@ interactions:
       Accept:
       - '*/*'
       Accept-Encoding:
-      - gzip, deflate, br
+      - gzip, deflate, br, zstd
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.31.0
+      - python-requests/2.32.3
     method: GET
     uri: https://maps.heigit.org/sketch-map-tool/service?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fjpeg&TRANSPARENT=FALSE&LAYERS=world_imagery&WIDTH=1716&HEIGHT=1436&SRS=EPSG%3A3857&STYLES=&BBOX=3115430.61527546%2C859273.1634149066%2C3116705.00304079%2C860339.8395431428
   response:
@@ -29,7 +29,7 @@ interactions:
       Content-type:
       - application/vnd.ogc.se_xml
       Date:
-      - Mon, 15 Apr 2024 10:33:16 GMT
+      - Wed, 10 Jul 2024 14:31:38 GMT
       Expires:
       - '-1'
       Keep-Alive:
@@ -53,11 +53,11 @@ interactions:
       Accept:
       - '*/*'
       Accept-Encoding:
-      - gzip, deflate, br
+      - gzip, deflate, br, zstd
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.31.0
+      - python-requests/2.32.3
     method: GET
     uri: https://maps.heigit.org/sketch-map-tool/service?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=FALSE&LAYERS=world_imagery_fallback&WIDTH=1716&HEIGHT=1436&SRS=EPSG%3A3857&STYLES=&BBOX=3115430.61527546%2C859273.1634149066%2C3116705.00304079%2C860339.8395431428
   response:
@@ -77,9 +77,9 @@ interactions:
       Content-type:
       - image/png
       Date:
-      - Mon, 15 Apr 2024 10:33:36 GMT
+      - Wed, 10 Jul 2024 14:31:39 GMT
       Expires:
-      - Tue, 16 Apr 2024 10:33:36 GMT
+      - Thu, 11 Jul 2024 14:31:39 GMT
       Keep-Alive:
       - timeout=5, max=100
       Server:
