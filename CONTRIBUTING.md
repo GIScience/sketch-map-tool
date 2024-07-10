@@ -53,12 +53,10 @@ In short:
 
 #### Linters and Autoformatter
 
-This project uses [`ruff`](https://github.com/astral-sh/ruff) to ensure consistent code style. See the `pyproject.toml` file for configuration.
-
-Run those linter's/autoformatter's with following commands:
+This project uses [`ruff`](https://github.com/astral-sh/ruff) to ensure consistent code style.
 
 ```bash
-ruff
+ruff check --fix
 ruff format
 ```
 
