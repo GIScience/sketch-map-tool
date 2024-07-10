@@ -78,12 +78,14 @@ def celery_app(celery_config):
     return smt_celery_app
 
 
-@pytest.mark.usefixtures("postgres_container", "redis_container")
+@pytest.mark.usefixtures(
+    "postgres_container",
+    "redis_container",
+    "celery_worker_parameters",
+)
 @pytest.fixture(scope="session", autouse=True)
 def celery_worker(celery_session_worker):
     return celery_session_worker
-    # yield celery_session_worker
-    # celery_session_worker.terminate()
 
 
 @pytest.fixture(scope="session")
@@ -357,14 +359,14 @@ def uuid_digitize(
     with flask_app.app_context():
         id_vector = db_client_flask.get_async_result_id(uuid, "vector-results")
         id_raster = db_client_flask.get_async_result_id(uuid, "raster-results")
-    task_vector = celery_app.AsyncResult(id_vector)
     task_raster = celery_app.AsyncResult(id_raster)
-    result_vector = task_vector.get(timeout=90)
+    task_vector = celery_app.AsyncResult(id_vector)
     result_raster = task_raster.get(timeout=90)
+    result_vector = task_vector.get(timeout=90)
     # Write sketch map to temporary test directory
     dir = tmp_path_factory.mktemp(uuid, numbered=False)
-    path_vector = dir / "vector.geojson"
     path_raster = dir / "raster.zip"
+    path_vector = dir / "vector.geojson"
     with open(path_vector, "w") as file:
         file.write(json.dumps(result_vector))
     with open(path_raster, "wb") as file:

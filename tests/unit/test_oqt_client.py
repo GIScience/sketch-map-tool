@@ -2,7 +2,7 @@ from sketch_map_tool.oqt_analyses.oqt_client import (
     bbox_to_feature_collection,
     get_report,
 )
-from tests import vcr_app as vcr
+from tests import vcr_app
 
 
 def test_bbox_to_feature_collection(bbox_wgs84):
@@ -29,8 +29,7 @@ def test_bbox_to_feature_collection(bbox_wgs84):
     assert expected == bbox_to_feature_collection(bbox_wgs84)
 
 
-# todo improve test
-@vcr.use_cassette()
+@vcr_app.use_cassette
 def test_get_report(bbox_wgs84):
     report = get_report(bbox_wgs84)
     assert isinstance(report, dict)
