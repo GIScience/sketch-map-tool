@@ -102,9 +102,9 @@ def remove_inner_rings(geometry: Polygon | MultiPolygon) -> Polygon | MultiPolyg
     """Removes inner rings (holes) from a given Shapely geometry object."""
     if geometry.is_empty:
         return geometry
-    elif geometry.type == "Polygon":
+    elif geometry.geom_type == "Polygon":
         return Polygon(geometry.exterior)
-    elif geometry.type == "MultiPolygon":
+    elif geometry.geom_type == "MultiPolygon":
         return MultiPolygon([Polygon(poly.exterior) for poly in geometry.geoms])
     else:
         raise ValueError("Unsupported geometry type")
