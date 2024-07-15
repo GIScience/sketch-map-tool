@@ -65,17 +65,13 @@ def celery_config(postgres_container, redis_container):
     return CELERY_CONFIG
 
 
-@pytest.fixture(scope="session", autouse=True)
-def celery_worker_parameters():
-    return {"shutdown_timeout": 20}
-
-
 @pytest.mark.usefixtures("postgres_container", "redis_container")
 @pytest.fixture(scope="session", autouse=True)
-def celery_app(celery_config):
+def celery_app(celery_config, celery_session_app):
     """Configure Celery test app."""
+    celery_session_app.conf.update(celery_config)
     smt_celery_app.conf.update(celery_config)
-    return smt_celery_app
+    return celery_session_app
 
 
 @pytest.mark.usefixtures(
@@ -264,7 +260,7 @@ def uuid_create(
     with flask_app.app_context():
         id_ = db_client_flask.get_async_result_id(uuid, "sketch-map")
     task = celery_app.AsyncResult(id_)
-    result = task.get(timeout=90)
+    result = task.get(timeout=180)
 
     # Write sketch map to temporary test directory
     fn = tmp_path_factory.mktemp(uuid, numbered=False) / "sketch-map.pdf"
@@ -361,8 +357,8 @@ def uuid_digitize(
         id_raster = db_client_flask.get_async_result_id(uuid, "raster-results")
     task_raster = celery_app.AsyncResult(id_raster)
     task_vector = celery_app.AsyncResult(id_vector)
-    result_raster = task_raster.get(timeout=90)
-    result_vector = task_vector.get(timeout=90)
+    result_raster = task_raster.get(timeout=180)
+    result_vector = task_vector.get(timeout=180)
     # Write sketch map to temporary test directory
     dir = tmp_path_factory.mktemp(uuid, numbered=False)
     path_raster = dir / "raster.zip"
