@@ -111,7 +111,7 @@ pytest
 
 To get live logs, INFO log level and ignore verbose logging messages of VCR run:
 ```bash
-pytest --log-level="INFO" --log-disable="vcr"
+pytest -s --log-level="INFO" --log-disable="vcr"
 ```
 
 The integration test suite utilizes the [Testcontainers framework](https://testcontainers.com/) 
