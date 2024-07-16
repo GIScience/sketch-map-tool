@@ -7,13 +7,13 @@ For contributing to this project please also read the [Contribution Guideline](/
 
 ## Prerequisites (Requirements)
 
-- Python: `>=3.10`
+- Python: `>=3.11`
 - [Mamba](https://github.com/conda-forge/miniforge#install): `>=1.4`
 - Node: `>=14`
 
 This project uses [Mamba](https://github.com/conda-forge/miniforge#install) for environment and dependencies management. Please make sure it is installed on your system: [Installation Guide](https://github.com/conda-forge/miniforge#install). Instead of Mamba, Conda can also be used.
 
-> Actually, Mamba and Poetry together are used to manage environment and dependencies. 
+> Actually, Mamba and Poetry together are used to manage environment and dependencies.
 > But only Mamba is required to be present on the system.
 > Poetry will be installed by Mamba.
 > Mamba installs pre-built binaries for dependencies like GDAL. 
@@ -25,8 +25,11 @@ This project uses [Mamba](https://github.com/conda-forge/miniforge#install) for 
 
 > Note: Editors like Visual Studio Code or PyCharm (IDEA) will try to automatically setup Sketch Map Tool.
 > They will fail if they try to create a virtual environment managed by Poetry.
-> If this happens remove the environment (`poetry env remove 3.10`).
-> Then execute steps below. Please see also the section on [Project Setup using and IDE](#Project-Setup-using-and-IDE).
+> If this happens remove the environment (`poetry env remove 3.11`).
+> Then execute steps below. Please see also the section on [Setup in an IDE](#Setup-in-an-IDE).
+
+> Note: For setup on a Apple Mac with Mx chips please have a look at
+> [this section](#Setup-on-an-Apple-Mac-with-M2-chip) first.
 
 ```bash
 # clone repository
@@ -168,7 +171,7 @@ Bundle the code with:
 npm run build
 ```
 
-## Project Setup using and IDE
+## Setup in an IDE
 
 If you setup sketch-map-tool in an IDE like PyCharm please make sure that your IDE does not setup a Poetry managed project/virtual environment.
 Go thought the setup steps above in the terminal and change interpreter settings in the IDE to point to the mamba/conda environment.
@@ -177,6 +180,12 @@ Also make sure the environment variable `PROJ_LIB` to point to the `proj` direct
 ```bash
 PROJ_LIB=/home/$USERDIR/mambaforge/envs/smt/share/proj
 ```
+
+## Setup on an Apple Mac with M2 chip
+
+1. Install Mambaforge for Intel not for M2 architecture.
+2. Please use [Rosetta 2](https://support.apple.com/en-us/102527) to open terminal.
+3. Switch to x86_64: `$env /usr/bin/arch -x86_64 /bin/zsh --login`
 
 ## Troubleshooting
 
