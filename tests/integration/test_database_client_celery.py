@@ -17,7 +17,7 @@ def map_frame_old(flask_app, uuid_create, map_frame, bbox):
     # NOTE: Maybe mocking a map frame in the database with fake file
     with flask_app.app_context():
         update_query = (
-            "UPDATE map_frame SET ts = NOW() - INTERVAL '6 months' WHERE uuid = %s"
+            "UPDATE map_frame SET ts = NOW() - INTERVAL '12 months' WHERE uuid = %s"
         )
         with client_flask.open_connection().cursor() as curs:
             curs.execute(update_query, [uuid_create])

@@ -111,6 +111,7 @@ def cleanup_map_frames():
     """Cleanup map frames which are old and without consent.
 
     Only set file to null. Keep metadata.
+    This function is called by a periodic celery task.
     """
     query = """
     UPDATE
@@ -119,7 +120,7 @@ def cleanup_map_frames():
         file = NULL,
         bbox = NULL
     WHERE
-        ts < NOW() - INTERVAL '6 months'
+        ts < NOW() - INTERVAL %s
         AND NOT EXISTS (
             SELECT
                 *
@@ -131,7 +132,7 @@ def cleanup_map_frames():
     """
     with db_conn.cursor() as curs:
         try:
-            curs.execute(query)
+            curs.execute(query, [get_config_value("cleanup-map-frames-intervall")])
         except UndefinedTable:
             logging.info("Table `map_frame` does not exist yet. Nothing todo.")
 
@@ -140,6 +141,7 @@ def cleanup_blob(map_frame_uuids: list[UUID]):
     """Cleanup uploaded files (sketch maps) without consent.
 
     Only set file and name to null. Keep metadata.
+    This function is called after digitization.
     """
     query = """
     UPDATE
