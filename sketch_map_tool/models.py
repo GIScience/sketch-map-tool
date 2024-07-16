@@ -25,6 +25,7 @@ class Bbox:
         return (lon_centroid, lat_centroid)
 
     def __str__(self):
+        # NOTE: this should probably be a WKT representation
         return f"{self.lon_min},{self.lat_min},{self.lon_max},{self.lat_max}"
 
 
