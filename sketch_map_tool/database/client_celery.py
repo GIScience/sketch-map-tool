@@ -132,7 +132,7 @@ def cleanup_map_frames():
     """
     with db_conn.cursor() as curs:
         try:
-            curs.execute(query, [get_config_value("cleanup-map-frames-intervall")])
+            curs.execute(query, [get_config_value("cleanup-map-frames-interval")])
         except UndefinedTable:
             logging.info("Table `map_frame` does not exist yet. Nothing todo.")
 

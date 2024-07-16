@@ -287,7 +287,7 @@ def sketch_map(uuid_create, tmp_path_factory) -> bytes:
 def map_frame(uuid_create, flask_app, tmp_path_factory) -> BytesIO:
     """Map Frame as PNG."""
     with flask_app.app_context():
-        map_frame, _, _ = db_client_flask.select_map_frame(UUID(uuid_create))
+        map_frame = db_client_flask.select_map_frame(UUID(uuid_create))
     path = tmp_path_factory.getbasetemp() / uuid_create / "map-frame.png"
     with open(path, "wb") as file:
         file.write(map_frame)
@@ -331,7 +331,7 @@ def map_frame_marked(
 ) -> NDArray:
     """Sketch map frame with markings as PNG."""
     with flask_app.app_context():
-        map_frame, _, _ = db_client_flask.select_map_frame(UUID(uuid_create))
+        map_frame = db_client_flask.select_map_frame(UUID(uuid_create))
     return clip(
         to_array(sketch_map_marked),
         to_array(map_frame),

@@ -11,7 +11,7 @@ DEFAULT_CONFIG = {
     "user-agent": "sketch-map-tool",
     "broker-url": "redis://localhost:6379",
     "result-backend": "db+postgresql://smt:smt@localhost:5432",
-    "cleanup-map-frames-intervall": "12 months",
+    "cleanup-map-frames-interval": "12 months",
     "wms-url-osm": "https://maps.heigit.org/osm-carto/service?SERVICE=WMS&VERSION=1.1.1",
     "wms-layers-osm": "heigit:osm-carto@2xx",
     "wms-url-esri-world-imagery": "https://maps.heigit.org/sketch-map-tool/service?SERVICE=WMS&VERSION=1.1.1",

@@ -81,10 +81,8 @@ def test_write_map_frame(flask_app, map_frame, bbox, format_, orientation, layer
     uuid = uuid4()
     client_celery.insert_map_frame(map_frame, uuid, bbox, format_, orientation, layer)
     with flask_app.app_context():
-        file, bbox, layer = client_flask.select_map_frame(uuid)
+        file = client_flask.select_map_frame(uuid)
         assert isinstance(file, bytes)
-        assert bbox == str(bbox)
-        assert layer == (layer)
 
 
 def test_delete_map_frame(flask_app, map_frame, bbox, format_, orientation, layer):
@@ -111,7 +109,7 @@ def test_cleanup_map_frames_recent(
     client_celery.cleanup_map_frames()
     with flask_app.app_context():
         # should not raise an error / should not delete the map frame
-        map_frame_, _, _ = client_flask.select_map_frame(UUID(uuid_create))
+        map_frame_ = client_flask.select_map_frame(UUID(uuid_create))
     assert map_frame_ == map_frame.getvalue()
 
 
@@ -128,7 +126,7 @@ def test_cleanup_map_frames_recent_with_consent(
     client_celery.cleanup_map_frames()
     with flask_app.app_context():
         # should not raise an error / should not delete the map frame
-        map_frame_received, _, _ = client_flask.select_map_frame(UUID(uuid_create))
+        map_frame_received = client_flask.select_map_frame(UUID(uuid_create))
     assert map_frame_received == map_frame.getvalue()
 
 
@@ -146,7 +144,7 @@ def test_cleanup_map_frames_recent_without_consent(
     client_celery.cleanup_map_frames()
     with flask_app.app_context():
         # should not raise an error / should not delete the map frame
-        map_frame_received, _, _ = client_flask.select_map_frame(UUID(uuid_create))
+        map_frame_received = client_flask.select_map_frame(UUID(uuid_create))
     assert map_frame_received == map_frame.getvalue()
 
 
@@ -163,7 +161,7 @@ def test_cleanup_map_frames_old_with_consent(
     client_celery.cleanup_map_frames()
     # should not raise an error / should not delete the map frame
     with flask_app.app_context():
-        map_frame_received, _, _ = client_flask.select_map_frame(UUID(uuid_create))
+        map_frame_received = client_flask.select_map_frame(UUID(uuid_create))
     assert map_frame_received == map_frame_old.getvalue()
 
 

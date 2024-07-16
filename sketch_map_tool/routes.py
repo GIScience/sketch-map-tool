@@ -4,7 +4,8 @@ from uuid import UUID, uuid4
 
 import geojson
 from celery import chain, group
-from flask import Response, redirect, render_template, request, send_file, url_for
+from flask import redirect, render_template, request, send_file, url_for
+from werkzeug import Response
 
 from sketch_map_tool import celery_app, config, definitions, tasks
 from sketch_map_tool import flask_app as app
@@ -132,22 +133,30 @@ def digitize_results_post(lang="en") -> Response:
     files = request.files.getlist("file")
     validate_uploaded_sketchmaps(files)
     # file metadata containing ids, uuids, file_names, ...
-    file_ids, uuids, file_names = db_client_flask.insert_files(files, consent)
-
+    file_ids, uuids, file_names, bboxes, layers = db_client_flask.insert_files(
+        files,
+        consent,
+    )
+    del files
+    bboxes_ = dict()
+    layers_ = dict()
     map_frames = dict()
-    bboxes = dict()
-    layers = dict()
     for uuid in set(uuids):  # Only retrieve map_frame once per uuid to save memory
-        map_frame, bbox, layer = db_client_flask.select_map_frame(UUID(uuid))
+        # NOTE: bbox and layer could be return once per UUID from DB here
+        # instead of multiple times from QR code above.
+        # But this does not work with legacy map frames (version 2024.04.15),
+        # since those attributes are not stored in the DB.
+        map_frame = db_client_flask.select_map_frame(UUID(uuid))
         map_frames[uuid] = to_array(BytesIO(map_frame).read())
-        bboxes[uuid] = Bbox(*[float(c) for c in bbox.split(",")])
-        layers[uuid] = Layer(layer)
+    for bbox, layer, uuid in zip(bboxes, layers, uuids):
+        bboxes_[uuid] = bbox
+        layers_[uuid] = layer
 
     task_1 = georeference_sketch_maps.signature(
-        (file_ids, file_names, uuids, map_frames, bboxes, layers)
+        (file_ids, file_names, uuids, map_frames, bboxes_, layers_)
     )
     task_2 = digitize_sketches.signature(
-        (file_ids, file_names, uuids, map_frames, layers, bboxes)
+        (file_ids, file_names, uuids, map_frames, layers_, bboxes_)
     )
     group_ = group([task_1, task_2])
     chain_ = chain(

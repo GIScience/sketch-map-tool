@@ -15,6 +15,7 @@ from sketch_map_tool.exceptions import (
     UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import N_, to_array
+from sketch_map_tool.models import Bbox, Layer
 from sketch_map_tool.upload_processing import read_qr_code
 
 
@@ -88,7 +89,7 @@ def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
     _insert_id_map(request_uuid, map_)
 
 
-def insert_files(files, consent: bool) -> tuple[list[int], list[str], list[str]]:
+def insert_files(files, consent: bool) -> tuple[list[int], list[str], list[str], list[Bbox], list[Layer]]:
     """Insert uploaded files as blob into the database and return ID, UUID and name.
 
     UUID is derived from decoding the qr-code.
@@ -125,6 +126,8 @@ def insert_files(files, consent: bool) -> tuple[list[int], list[str], list[str]]
         file_ids = []
         uuids = []
         file_names = []
+        bboxes = []
+        layers = []
         for file in files:
             file_content = file.read()
             qr_code_content = read_qr_code(to_array(file_content))
@@ -143,7 +146,9 @@ def insert_files(files, consent: bool) -> tuple[list[int], list[str], list[str]]
             file_ids.append(result[0])
             uuids.append(result[1])
             file_names.append(result[2])
-    return file_ids, uuids, file_names
+            bboxes.append(qr_code_content["bbox"])
+            layers.append(qr_code_content["layer"])
+    return file_ids, uuids, file_names, bboxes, layers
 
 
 def select_file(id_: int) -> bytes:
@@ -185,7 +190,7 @@ def select_file_name(id_: int) -> str:
 
 def select_map_frame(uuid: UUID) -> tuple[bytes, str, str]:
     """Select map frame, bbox and layer of the associated UUID."""
-    query = "SELECT file, bbox, layer FROM map_frame WHERE uuid = %s"
+    query = "SELECT file FROM map_frame WHERE uuid = %s"
     db_conn = open_connection()
     with db_conn.cursor() as curs:
         try:
@@ -205,7 +210,7 @@ def select_map_frame(uuid: UUID) -> tuple[bytes, str, str]:
                     N_("The file with the id: {UUID} does not exist anymore"),
                     {"UUID", uuid},
                 )
-            return raw
+            return raw[0]
         else:
             raise CustomFileNotFoundError(
                 N_(

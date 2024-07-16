@@ -23,6 +23,7 @@ def config_keys():
         "user-agent",
         "broker-url",
         "result-backend",
+        "cleanup-map-frames-interval",
         "wms-url-osm",
         "wms-layers-osm",
         "wms-url-esri-world-imagery",

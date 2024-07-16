@@ -34,7 +34,7 @@ def file_ids(files, flask_app):
     """IDs of uploaded files stored in the database."""
     with flask_app.app_context():
         # setup
-        file_ids, _, _ = db_client_flask.insert_files(files, consent=True)
+        file_ids, *_ = db_client_flask.insert_files(files, consent=True)
         yield file_ids
         # teardown
         for id in file_ids:
@@ -83,19 +83,38 @@ def test_get_async_result_id(flask_app, uuid):
         client_flask._delete_id_map(uuid)
 
 
-def test_insert_files(flask_app, files, uuid_create):
+def test_insert_files(flask_app, files, uuid_create, bbox, layer):
     with flask_app.app_context():
-        file_ids, uuids, file_names = client_flask.insert_files(files, consent=True)
+        file_ids, uuids, file_names, bboxes, layers = client_flask.insert_files(
+            files,
+            consent=True,
+        )
         assert len(file_ids) == len(uuids) == len(file_names) == 2
-        for i, (id, uuid, name) in enumerate(zip(file_ids, uuids, file_names)):
+        for i, (
+            id,
+            uuid,
+            name,
+            bbox_,
+            layer_,
+        ) in enumerate(
+            zip(
+                file_ids,
+                uuids,
+                file_names,
+                bboxes,
+                layers,
+            )
+        ):
             assert isinstance(id, int)  # file id
             assert uuid == uuid_create
             assert name == files[i].filename
+            assert bbox == bbox_
+            assert layer == layer_
 
 
 def test_delete_file(flask_app, files):
     with flask_app.app_context():
-        file_ids, _, _ = client_flask.insert_files(files, consent=True)
+        file_ids, *_ = client_flask.insert_files(files, consent=True)
         for id in file_ids:
             # No error should be raised
             client_flask.delete_file(id)
@@ -119,10 +138,8 @@ def test_select_file_name(file_ids):
 
 def test_select_map_frame(flask_app, uuid_create, bbox, layer):
     with flask_app.app_context():
-        file, bbox_, layer_ = client_flask.select_map_frame(uuid_create)
+        file = client_flask.select_map_frame(uuid_create)
         assert isinstance(file, bytes)
-        assert bbox_ == str(bbox)
-        assert layer_ == str(layer)
 
 
 def test_select_map_frame_file_not_found(flask_app):
