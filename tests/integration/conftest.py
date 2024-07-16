@@ -33,10 +33,10 @@ def postgres_container(monkeypatch_session):
     """
     with PostgresContainer("postgres:15") as postgres:
         conn = "db+postgresql://{user}:{password}@127.0.0.1:{port}/{database}".format(
-            user=postgres.POSTGRES_USER,
-            password=postgres.POSTGRES_PASSWORD,
+            user=postgres.username,
+            password=postgres.password,
             port=postgres.get_exposed_port(5432),  # 5432 is default port of postgres
-            database=postgres.POSTGRES_DB,
+            database=postgres.dbname,
         )
         monkeypatch_session.setitem(DEFAULT_CONFIG, "result-backend", conn)
         yield {"connection_url": conn}
@@ -65,25 +65,23 @@ def celery_config(postgres_container, redis_container):
     return CELERY_CONFIG
 
 
-@pytest.fixture(scope="session", autouse=True)
-def celery_worker_parameters():
-    return {"shutdown_timeout": 20}
-
-
 @pytest.mark.usefixtures("postgres_container", "redis_container")
 @pytest.fixture(scope="session", autouse=True)
-def celery_app(celery_config):
+def celery_app(celery_config, celery_session_app):
     """Configure Celery test app."""
+    celery_session_app.conf.update(celery_config)
     smt_celery_app.conf.update(celery_config)
-    return smt_celery_app
+    return celery_session_app
 
 
-@pytest.mark.usefixtures("postgres_container", "redis_container")
+@pytest.mark.usefixtures(
+    "postgres_container",
+    "redis_container",
+    "celery_worker_parameters",
+)
 @pytest.fixture(scope="session", autouse=True)
 def celery_worker(celery_session_worker):
     return celery_session_worker
-    # yield celery_session_worker
-    # celery_session_worker.terminate()
 
 
 @pytest.fixture(scope="session")
@@ -212,8 +210,7 @@ def scale():
     return 10231.143861780083
 
 
-# TODO:
-@pytest.fixture(scope="session", params=["osm"])  # , "esri-world-imagery"])
+@pytest.fixture(scope="session", params=["osm", "esri-world-imagery"])
 def layer(request):
     return Layer(request.param)
 
@@ -268,7 +265,7 @@ def uuid_create(
     with flask_app.app_context():
         id_ = db_client_flask.get_async_result_id(uuid, "sketch-map")
     task = celery_app.AsyncResult(id_)
-    result = task.get(timeout=190)
+    result = task.get(timeout=180)
 
     # Write sketch map to temporary test directory
     fn = tmp_path_factory.mktemp(uuid, numbered=False) / "sketch-map.pdf"
@@ -364,14 +361,14 @@ def uuid_digitize(
     with flask_app.app_context():
         id_vector = db_client_flask.get_async_result_id(uuid, "vector-results")
         id_raster = db_client_flask.get_async_result_id(uuid, "raster-results")
-    task_vector = celery_app.AsyncResult(id_vector)
     task_raster = celery_app.AsyncResult(id_raster)
-    result_vector = task_vector.get(timeout=190)
-    result_raster = task_raster.get(timeout=190)
+    task_vector = celery_app.AsyncResult(id_vector)
+    result_raster = task_raster.get(timeout=180)
+    result_vector = task_vector.get(timeout=180)
     # Write sketch map to temporary test directory
     dir = tmp_path_factory.mktemp(uuid, numbered=False)
-    path_vector = dir / "vector.geojson"
     path_raster = dir / "raster.zip"
+    path_vector = dir / "vector.geojson"
     with open(path_vector, "w") as file:
         file.write(json.dumps(result_vector))
     with open(path_raster, "wb") as file:

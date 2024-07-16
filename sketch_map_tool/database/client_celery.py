@@ -116,7 +116,8 @@ def cleanup_map_frames():
     UPDATE
         map_frame
     SET
-        file = NULL
+        file = NULL,
+        bbox = NULL
     WHERE
         ts < NOW() - INTERVAL '6 months'
         AND NOT EXISTS (
@@ -155,7 +156,6 @@ def cleanup_blob(map_frame_uuids: list[UUID]):
             curs.executemany(query, [map_frame_uuids])
         except UndefinedTable:
             logging.info("Table `blob` does not exist yet. Nothing todo.")
-    delete_bbox(map_frame_uuids)
 
 
 def select_file(id_: int) -> bytes:
@@ -180,28 +180,3 @@ def delete_file(id_: int):
     query = "DELETE FROM blob WHERE id = %s"
     with db_conn.cursor() as curs:
         curs.execute(query, [id_])
-
-
-def delete_bbox(map_frame_uuids: list[UUID]):
-    """Set bbox of map frame of the associated UUID from the database to null."""
-    query = """
-    UPDATE
-        map_frame
-    SET
-        bbox = NULL
-    WHERE
-        uuid = %s
-        AND EXISTS (
-            SELECT
-                *
-            FROM
-                blob
-            WHERE
-                blob.map_frame_uuid = map_frame.uuid
-                AND consent = FALSE);
-    """
-    with db_conn.cursor() as curs:
-        try:
-            curs.executemany(query, [map_frame_uuids])
-        except UndefinedTable:
-            logging.info("Table `map_frame` does not exist yet. Nothing todo.")

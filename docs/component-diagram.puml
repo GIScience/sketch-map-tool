@@ -31,12 +31,12 @@ package "Sketch Map Tool" {
 cloud internet as "Internet" #line.dotted
 
 package "HeiGIT Maps" #line.dotted {
-    cloud wms as "WMS" #line.dotted
-    database osmdb as "OSMDB" #line.dotted
+    cloud wms as "Web Map Server (WMS)" #line.dotted
+    database osmdb as "OpenStreetMap Database (OSMDB)" #line.dotted
 
 }
 
-package "HeiGIT Services" #line.dotted {
+package "HeiGIT ohsome Framework" #line.dotted {
     cloud oqt as "ohsome quality API" #line.dotted
     cloud ohsome as "ohsome API" #line.dotted
 }
@@ -45,13 +45,18 @@ package "ML-Model Registry" #line.dotted {
     cloud neptune as "neptune.ai API" #line.dotted
 }
 
+package "ESRI World Imagery (Satellite Imagery)" #line.dotted {
+    cloud arcgis as "ArcGIS REST API" #line.dotted
+}
+
 internet --> client
 
-map_generation --> wms
+map_generation --> wms : Map Image
 wms --> osmdb
+wms --> arcgis
 
-oqt_analyses --> oqt
+oqt_analyses --> oqt : Quality Report
 oqt --> ohsome
 
-upload_processing --> neptune
+upload_processing --> neptune : ML-Model
 @enduml

@@ -2,7 +2,7 @@ import geojson
 from geojson import FeatureCollection
 from shapely import MultiPolygon, Polygon
 from shapely.geometry import mapping, shape
-from shapely.ops import cascaded_union
+from shapely.ops import unary_union
 from shapelysmooth import chaikin_smooth
 
 from sketch_map_tool.definitions import COLORS
@@ -74,7 +74,7 @@ def simplify(fc: FeatureCollection) -> FeatureCollection:
     buffer_distance = buffer_distance_percentage * max_diag
     buffered_geometries = [geometry.buffer(buffer_distance) for geometry in geometries]
     # Dissolve by color field (assuming there's a "color" field)
-    dissolved_geometries = cascaded_union(buffered_geometries)
+    dissolved_geometries = unary_union(buffered_geometries)
     if isinstance(dissolved_geometries, list):
         dissolved_geometries = [
             remove_inner_rings(geometry) for geometry in dissolved_geometries
@@ -102,9 +102,9 @@ def remove_inner_rings(geometry: Polygon | MultiPolygon) -> Polygon | MultiPolyg
     """Removes inner rings (holes) from a given Shapely geometry object."""
     if geometry.is_empty:
         return geometry
-    elif geometry.type == "Polygon":
+    elif geometry.geom_type == "Polygon":
         return Polygon(geometry.exterior)
-    elif geometry.type == "MultiPolygon":
+    elif geometry.geom_type == "MultiPolygon":
         return MultiPolygon([Polygon(poly.exterior) for poly in geometry.geoms])
     else:
         raise ValueError("Unsupported geometry type")

@@ -12,7 +12,7 @@ from sketch_map_tool.exceptions import (
 
 
 @pytest.fixture
-def map_frame_old(flask_app, uuid_create, map_frame):
+def map_frame_old(flask_app, uuid_create, map_frame, bbox):
     """Mock map frame which is uploaded a year ago."""
     # NOTE: Maybe mocking a map frame in the database with fake file
     with flask_app.app_context():
@@ -26,9 +26,9 @@ def map_frame_old(flask_app, uuid_create, map_frame):
 
     map_frame.seek(0)
     with flask_app.app_context():
-        update_query = "UPDATE map_frame SET file = %s WHERE uuid = %s"
+        update_query = "UPDATE map_frame SET file = %s, bbox = %s WHERE uuid = %s"
         with client_flask.open_connection().cursor() as curs:
-            curs.execute(update_query, [map_frame.getvalue(), uuid_create])
+            curs.execute(update_query, [map_frame.getvalue(), str(bbox), uuid_create])
     map_frame.seek(0)
 
 
@@ -212,15 +212,6 @@ def test_cleanup_blobs_without_consent(flask_app, uuid_create: str):
         with client_flask.open_connection().cursor() as curs:
             curs.execute(
                 "SELECT file, file_name FROM blob WHERE map_frame_uuid = %s",
-                [uuid_create],
-            )
-            result = curs.fetchone()
-            assert result is not None
-            for r in result:
-                assert r is None
-
-            curs.execute(
-                "SELECT bbox FROM map_frame WHERE uuid = %s",
                 [uuid_create],
             )
             result = curs.fetchone()

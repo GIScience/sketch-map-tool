@@ -6,13 +6,12 @@ from tests.namer import PytestNamer
 from tests.reporter import SketchMapToolReporter
 
 
-@pytest.mark.use_fixtures("vector")
 @pytest.fixture(scope="session")
 def vector_path(tmp_path_factory, uuid_digitize) -> bytes:
     return tmp_path_factory.getbasetemp() / uuid_digitize / "vector.geojson"
 
 
-@pytest.mark.use_fixtures("sketch_map_marked")
+@pytest.mark.usefixtures("sketch_map_marked")
 @pytest.fixture(scope="session")
 def sketch_map_marked_path(tmp_path_factory, uuid_create) -> bytes:
     return tmp_path_factory.getbasetemp() / uuid_create / "sketch-map-marked.png"
