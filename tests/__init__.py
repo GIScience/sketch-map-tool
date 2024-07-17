@@ -35,8 +35,6 @@ def replace_body(content_types, replacement):
 
 vcr_app = vcr.VCR(
     cassette_library_dir=str(CASSETT_DIR),
-    record_mode="new_episodes",
-    match_on=["uri", "method"],
     before_record_response=replace_body(["image/png"], DUMMY_PNG),
     ignore_localhost=True,
     ignore_hosts=["neptune.ai"],

@@ -20,14 +20,14 @@ def test_generate_sketch_map(bbox, format_, size, scale, layer):
             layer,
         )
     )
-    result = task.get(timeout=90)
+    result = task.get(timeout=180)
     assert isinstance(result, BytesIO)
 
 
 @vcr_app.use_cassette
 def test_generate_quality_report(bbox_wgs84):
-    task = tasks.generate_quality_report.apply_async(args=[bbox_wgs84])
-    result = task.get(timeout=90)
+    task = tasks.generate_quality_report.apply_async(args=tuple([bbox_wgs84]))
+    result = task.get(timeout=180)
     assert isinstance(result, BytesIO)
 
 

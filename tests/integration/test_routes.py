@@ -5,6 +5,7 @@ import pytest
 
 from sketch_map_tool import flask_app as app
 from sketch_map_tool.database import client_flask
+from tests import vcr_app
 
 
 @pytest.fixture
@@ -47,6 +48,7 @@ def get_consent_flag_from_db(file_name: str) -> bool:
         return curs.fetchone()[0]
 
 
+@vcr_app.use_cassette
 def test_create_results_post(params, flask_client):
     response = flask_client.post("/create/results", data=params, follow_redirects=True)
     assert response.status_code == 200
@@ -59,6 +61,7 @@ def test_create_results_post(params, flask_client):
     assert url_rest == "/create/results"
 
 
+@vcr_app.use_cassette
 def test_digitize_results_post(sketch_map_marked, flask_client):
     unique_file_name = str(uuid4())
     data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
@@ -75,6 +78,7 @@ def test_digitize_results_post(sketch_map_marked, flask_client):
         assert get_consent_flag_from_db(unique_file_name) is True
 
 
+@vcr_app.use_cassette
 def test_digitize_results_post_no_consent(sketch_map_marked, flask_client):
     # do not send consent parameter
     # -> consent is a checkbox and only send if selected
@@ -93,6 +97,7 @@ def test_digitize_results_post_no_consent(sketch_map_marked, flask_client):
         assert get_consent_flag_from_db(unique_file_name) is False
 
 
+@vcr_app.use_cassette
 def test_digitize_results_legacy_2024_04_15(
     sketch_map_marked,
     map_frame_legacy_2024_04_15,

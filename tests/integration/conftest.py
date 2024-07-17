@@ -20,6 +20,7 @@ from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.upload_processing import clip
 from tests import FIXTURE_DIR
+from tests import vcr_app as vcr
 
 
 #
@@ -72,6 +73,11 @@ def celery_app(celery_config, celery_session_app):
     celery_session_app.conf.update(celery_config)
     smt_celery_app.conf.update(celery_config)
     return celery_session_app
+
+
+@pytest.fixture(scope="session")
+def celery_worker_pool():
+    return "solo"
 
 
 @pytest.mark.usefixtures(
@@ -243,6 +249,7 @@ def params(layer, bbox, format_, orientation):
     }
 
 
+@vcr.use_cassette
 @pytest.fixture(scope="session")
 def uuid_create(
     params,
@@ -338,6 +345,7 @@ def map_frame_marked(
     )
 
 
+@vcr.use_cassette
 @pytest.fixture(scope="session")
 def uuid_digitize(
     sketch_map_marked,
