@@ -89,7 +89,9 @@ def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
     _insert_id_map(request_uuid, map_)
 
 
-def insert_files(files, consent: bool) -> tuple[list[int], list[str], list[str], list[Bbox], list[Layer]]:
+def insert_files(
+    files, consent: bool
+) -> tuple[list[int], list[str], list[str], list[Bbox], list[Layer]]:
     """Insert uploaded files as blob into the database and return ID, UUID and name.
 
     UUID is derived from decoding the qr-code.
