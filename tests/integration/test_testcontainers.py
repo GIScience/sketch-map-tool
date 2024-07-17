@@ -17,8 +17,6 @@ def test_testcontainers_postgres():
         curs.execute(query)
         raw = curs.fetchone()
         assert raw == (1,)
-    client_celery.close_connection()
-    client_celery.db_conn = None
 
 
 def test_testcontainers_redis():

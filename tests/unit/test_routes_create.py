@@ -17,6 +17,7 @@ def mock_tasks(monkeypatch):
     """Mock celery tasks results."""
 
     class MockTask:
+        status = "SUCCESSFUL"
         id = uuid4()
 
     mock_task = MockTask()
