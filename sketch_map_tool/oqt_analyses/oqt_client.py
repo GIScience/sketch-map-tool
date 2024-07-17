@@ -4,7 +4,7 @@ from sketch_map_tool.exceptions import OQTReportError
 from sketch_map_tool.helpers import N_
 from sketch_map_tool.models import Bbox
 
-OQT_API_URL = "https://oqt.ohsome.org/api"
+OQT_API_URL = "https://oqapi.ohsome.org/v1"
 OQT_REPORT_NAME = "sketchmap-fitness"
 
 
