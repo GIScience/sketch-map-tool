@@ -10,6 +10,8 @@ RUN npm run build
 
 
 FROM condaforge/mambaforge:23.3.1-0
+# HTTP request timeout. Default is 30 seconds.
+ENV POETRY_REQUESTS_TIMEOUT=60
 
 RUN apt-get update \
     && apt-get install -y --no-upgrade \
