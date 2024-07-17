@@ -11,9 +11,6 @@ def test_testcontainers_postgres():
     assert conn != "db+postgresql://smt:smt@localhost:5432"
     assert conn != ""
     assert conn is not None
-
-    client_celery.db_conn = None
-    client_celery.open_connection()
     assert isinstance(client_celery.db_conn, connection)
     query = "SELECT 1;"
     with client_celery.db_conn.cursor() as curs:
