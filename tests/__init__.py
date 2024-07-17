@@ -39,4 +39,5 @@ vcr_app = vcr.VCR(
     match_on=["uri", "method"],
     before_record_response=replace_body(["image/png"], DUMMY_PNG),
     ignore_localhost=True,
+    ignore_hosts=["neptune.ai"],
 )
