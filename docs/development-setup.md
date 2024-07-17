@@ -11,7 +11,9 @@ For contributing to this project please also read the [Contribution Guideline](/
 - [Mamba](https://github.com/conda-forge/miniforge#install): `>=1.4`
 - Node: `>=14`
 
-This project uses [Mamba](https://github.com/conda-forge/miniforge#install) for environment and dependencies management. Please make sure it is installed on your system: [Installation Guide](https://github.com/conda-forge/miniforge#install). Instead of Mamba, Conda can also be used.
+This project uses [Mamba](https://github.com/conda-forge/miniforge#install) for environment and dependencies management.
+Please make sure it is installed on your system: [Installation Guide](https://github.com/conda-forge/miniforge#install).
+Instead of Mamba, Conda can also be used.
 
 > Actually, Mamba and Poetry together are used to manage environment and dependencies. 
 > But only Mamba is required to be present on the system.
@@ -78,6 +80,7 @@ Please refer to the [configuration documentation](/docs/configuration.md).
 mamba activate smt
 docker start smt-postgres smt-redis
 celery --app sketch_map_tool.tasks worker --beat --concurrency 4 --loglevel=INFO
+# celery --app sketch_map_tool.tasks worker --beat --pool solo --loglevel=INFO
 ```
 
 ### 2. Start Flask (Web App)
@@ -102,7 +105,7 @@ ruff format
 
 ### Tests
 
-Provide required [configuration variables](/docs/configuration.md#required-configuration) in `config/test.config.toml`.
+Provide required [configuration variables](/docs/configuration.md#required-configuration) in `config/test.config.toml`. Be sure *not* to set `broker-url` and `result-backend`.
 
 To execute all tests run:
 ```bash
