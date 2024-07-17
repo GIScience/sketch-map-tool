@@ -89,7 +89,9 @@ def create_results_post(lang="en") -> Response:
     task_sketch_map = tasks.generate_sketch_map.apply_async(
         args=(uuid, bbox, format_, orientation, size, scale, layer)
     )
-    task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox_wgs84,))
+    task_quality_report = tasks.generate_quality_report.apply_async(
+        args=tuple([bbox_wgs84])
+    )
 
     # Map of request type to multiple Async Result IDs
     map_ = {
@@ -161,7 +163,7 @@ def digitize_results_post(lang="en") -> Response:
     group_ = group([task_1, task_2])
     chain_ = chain(
         group_,
-        cleanup_blobs.signature(kwargs={"map_frame_uuid": list(set(uuids))}),
+        cleanup_blobs.signature(kwargs={"map_frame_uuids": list(set(uuids))}),
     )
     chain_result = chain_.apply_async()
 

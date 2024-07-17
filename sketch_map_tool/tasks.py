@@ -18,6 +18,8 @@ from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import get_attribution
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
+from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
+from sketch_map_tool.oqt_analyses import get_report
 from sketch_map_tool.upload_processing import (
     clip,
     georeference,
@@ -89,13 +91,8 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
     Fetch quality indicators from the OQT API
     """
-    # TODO: Issue #469
-    # report = get_report(bbox)
-    # return generate_report_pdf(report)
-    return BytesIO(
-        b"We can not create a Quality Report at the moment. "
-        b"Sorry for the inconvenience."
-    )
+    report = get_report(bbox)
+    return generate_report_pdf(report)
 
 
 # 2. DIGITIZE RESULTS
