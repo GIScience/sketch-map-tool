@@ -4365,13 +4365,13 @@ test = ["pytest", "tornado (>=4.5)", "typeguard"]
 
 [[package]]
 name = "testcontainers"
-version = "4.7.1"
+version = "4.7.2"
 description = "Python library for throwaway instances of anything that can run in a Docker container"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "testcontainers-4.7.1-py3-none-any.whl", hash = "sha256:20f45c8a95c0062001d6c8c7030ffcae679b22b585543bb9368902f71d8e09eb"},
-    {file = "testcontainers-4.7.1.tar.gz", hash = "sha256:64f78e18c82d523720dbcb02d2404b10aae7a506e929579a29fd256fbfad0c8b"},
+    {file = "testcontainers-4.7.2-py3-none-any.whl", hash = "sha256:23b13cf8078f615a08c75197f227796d90c46df92d2b282ae7c39b1fc1a9c9ed"},
+    {file = "testcontainers-4.7.2.tar.gz", hash = "sha256:9976b1cdcdeb9feeae6a477073e7c8b02cd40ea44f1daa34b5da6d2c918dff0d"},
 ]
 
 [package.dependencies]
@@ -4410,6 +4410,7 @@ registry = ["bcrypt"]
 selenium = ["selenium"]
 sftp = ["cryptography"]
 test-module-import = ["httpx"]
+trino = ["trino"]
 weaviate = ["weaviate-client (>=4.5.4,<5.0.0)"]
 
 [[package]]
