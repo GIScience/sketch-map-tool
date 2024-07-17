@@ -8,11 +8,13 @@ from sketch_map_tool import tasks
 from tests import vcr_app as vcr
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_task(monkeypatch, uuid):
     """Mock celery tasks results."""
 
     class MockTask:
+        status = "SUCCESSFUL"
+
         def __init__(self, task_id):
             self.id = task_id
 
@@ -26,14 +28,14 @@ def mock_task(monkeypatch, uuid):
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_get_task_id(monkeypatch, uuid):
     monkeypatch.setattr(
         "sketch_map_tool.routes.tasks.get_task_id", lambda id_, field: uuid
     )
 
 
-@vcr.use_cassette()
+@vcr.use_cassette
 def test_generate_sketch_map(monkeypatch, uuid, bbox, format_, size, scale, layer):
     monkeypatch.setattr(
         "sketch_map_tool.tasks.db_client_celery.insert_map_frame",
@@ -51,7 +53,7 @@ def test_generate_sketch_map(monkeypatch, uuid, bbox, format_, size, scale, laye
     assert isinstance(map_pdf, BytesIO)
 
 
-@vcr.use_cassette("test_get_report")
+@vcr.use_cassette
 def test_generate_quality_report(bbox_wgs84):
     result = tasks.generate_quality_report(bbox_wgs84)
     assert isinstance(result, BytesIO)
