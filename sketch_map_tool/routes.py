@@ -241,8 +241,10 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
 
     match type_:
         case "quality-report":
-            mimetype = "application/pdf"
-            download_name = type_ + ".pdf"
+            mimetype = "text/plain"
+            download_name = type_ + ".txt"
+            # mimetype = "application/pdf"
+            # download_name = type_ + ".pdf"
             if task.successful():
                 file: BytesIO = task.get()
         case "sketch-map":

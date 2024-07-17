@@ -18,8 +18,6 @@ from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import get_attribution
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
-from sketch_map_tool.oqt_analyses import generate_pdf as generate_report_pdf
-from sketch_map_tool.oqt_analyses import get_report
 from sketch_map_tool.upload_processing import (
     clip,
     georeference,
@@ -91,8 +89,9 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
     Fetch quality indicators from the OQT API
     """
-    report = get_report(bbox)
-    return generate_report_pdf(report)
+    # report = get_report(bbox)
+    # return generate_report_pdf(report)
+    return ""
 
 
 # 2. DIGITIZE RESULTS
@@ -207,6 +206,7 @@ def digitize_sketches(
 def cleanup_map_frames():
     """Cleanup map frames stored in the database."""
     db_client_celery.cleanup_map_frames()
+    return True
     # TODO: run Vacuum or Vacuum full?
 
 
@@ -218,3 +218,4 @@ def cleanup_blobs(*_, map_frame_uuids: list):
     celery chain.
     """
     db_client_celery.cleanup_blob(map_frame_uuids)
+    return True
