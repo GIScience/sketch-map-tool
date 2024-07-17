@@ -14,7 +14,6 @@ from testcontainers.redis import RedisContainer
 from sketch_map_tool import CELERY_CONFIG, get_locale, make_flask, routes
 from sketch_map_tool import celery_app as smt_celery_app
 from sketch_map_tool.config import DEFAULT_CONFIG
-from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
@@ -78,6 +77,11 @@ def celery_app(celery_config, celery_session_app):
 @pytest.fixture(scope="session")
 def celery_worker_pool():
     return "solo"
+
+
+@pytest.fixture(scope="session")
+def celery_enable_logging():
+    return True
 
 
 @pytest.mark.usefixtures(
@@ -154,15 +158,6 @@ def flask_app():
 @pytest.fixture(scope="session")
 def flask_client(flask_app):
     return flask_app.test_client()
-
-
-@pytest.fixture()
-def db_conn_celery():
-    # setup
-    db_client_celery.open_connection()
-    yield None
-    # teardown
-    db_client_celery.close_connection()
 
 
 #
@@ -249,8 +244,8 @@ def params(layer, bbox, format_, orientation):
     }
 
 
-@vcr.use_cassette
 @pytest.fixture(scope="session")
+@vcr.use_cassette
 def uuid_create(
     params,
     flask_client,
@@ -345,8 +340,8 @@ def map_frame_marked(
     )
 
 
-@vcr.use_cassette
 @pytest.fixture(scope="session")
+@vcr.use_cassette
 def uuid_digitize(
     sketch_map_marked,
     flask_client,
