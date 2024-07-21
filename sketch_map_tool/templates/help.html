@@ -832,6 +832,92 @@
             </article>
         </details>
 
+        <h1 id="data_storage_and_security">{{ _('Data storage and security') }}</h1>
+        <details>
+            <summary id="map_creation">{{ _('Map creation') }}</summary>
+            <article>
+                <ul>
+                    <li>
+                        {{ _('<strong>Functionally necessary data storage:</strong> We need the original map frame to digitize your sketch map. 
+                        The map frames of the created maps are stored for 12 months, giving you the opportunity to digitize your Sketch Map in those 12 months.') }}
+                    </li>
+                </ul>
+            </article>
+        </details>
+
+        <details>
+            <summary id="paper_to_gis">{{ _('Paper to GIS') }}</summary>
+            <article>
+                <ul>
+                    <li>
+                        {{ _('<strong>Functionally necessary data storage:</strong> Uploaded images of Sketch Maps are stored on the HeiGIT-Server in Germany for processing
+                        (georeferencing and marking detection) until the results are generated.') }}
+                    </li>
+                    <li>
+                        {{ _('The results are stored and available for download for a period of 24 hours, after which they are deleted.') }}
+                    </li>
+                </ul>
+            </article>
+        </details>
+
+        <details>
+            <summary id="data_sharing_for_improvement">{{ _('Share your data for the Improvement of the Sketch Map Tool') }}</summary>
+            <article>
+                {{ _('On a voluntary basis, you can enable us to keep the uploaded files beyond processing to further improve the Sketch Map Tool.') }}
+                <table border="1" style="border-collapse: collapse;">
+                    <tr>
+                        <th>{{ _('If you opt-in by checking the check box you enable us to ...') }}</th>
+                        <th>{{ _('If you opt-out by leaving the checkbox unchecked (default) ...') }}</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                {{ _('The image(s) will be stored long term for future improvements of the Sketch Map Tool such as training 
+                                our machine learning models which detect your markings on the uploaded images.') }}
+                            </p>
+                            <p>
+                                {{ _('The Sketch Map Tool uses a sequence of machine learning models (SAM and YOLO) to detect the markings on the maps. 
+                                These models need to be trained with a lot of real-world examples so they are able to identity the markings correctly.') }}
+                            </p>
+                            <p>
+                                {{ _('Further accuracy improvements can be achieved by incorporating additional real-world cases of marked maps into the models. 
+                                You can help us here by giving your consent!') }}
+                            </p>
+                            <p>
+                                {{ _('For more detailed and technical information take a look at our 
+                                    <a href="https://github.com/GIScience/sketch-map-tool/blob/main/docs/action-diagram.png" target="_blank">GitHub</a> 
+                                and the following figure.') }}
+                            </p>
+                                <figure>
+                                    <img src="{{ url_for("static", filename="assets/images/help/data_storage_and_security_workflow.webp" ) }}"
+                                        alt="{{ _('Data storage and security workflow.') }}">
+                                    <figcaption></figcaption>
+                                </figure>
+                        </td>
+                        <td>
+                            <p>
+                                {{ _('The uploaded images will be deleted after the results are generated. The results are stored and available for download 
+                                for a period of 24 hours, after which they are deleted.') }}
+                    </tr>
+            </article>
+        </details>
+
+        <details>
+            <summary id="basic_statistics">{{ _('Basic statistics') }}</summary>
+            <article>
+                {{ _('To get a better insight into the general usage of the Sketch Map Tool we store anonymous data about the map generation 
+                (date, centroid, paper format and orientation, layer and version).') }}
+            </article>
+        </details>
+
+        <details>
+            <summary id="questions_concerns">{{ _('Questions and concerns') }}</summary>
+            <article>
+                {{ _('If you have general concerns about uploading your data online, it is possible to set up the Sketch Map Tool on your individual server. 
+                For any remaining questions or interests, please get in touch with the <a href="mailto:sketch-map-tool@heigit.org"
+                target="_blank">Sketch Map Tool team</a>') }}
+            </article>
+        </details>
 
         <h1 id="faq">{{ _('FAQs') }}</h1>
         <details>
@@ -890,7 +976,7 @@
             </article>
         </details>
         <details>
-            <summary id="why-qr-code-and-globes">{{ _('Why are there a QR code and globes on the Sketch Maps?') }}</summary>
+            <summary id="why-qr-code-and-globes">{{ _('Why is there a QR code and globes on the Sketch Maps?') }}</summary>
             <article>
                 {{ _('These are required for georeferencing. The QR Code contains the ID of the reference mapframe and the bounding box coordinates.
                 The tool employs computer vision algorithms and matching between uploaded and reference mapframes (mainly based on the globes)
@@ -918,8 +1004,16 @@
         <details>
             <summary id="how-does-georeferencing-work">{{ _('How does the georeferencing work?') }}</summary>
             <article>
-                {{ _('You can find your answer in the <a href="https://www.mdpi.com/2220-9964/10/3/130" target="_blank">paper
-                    about the Sketch Map Tool</a> in the paragraph about Image Processing.') }}
+                <p>
+                    Our georeferencing process employs the Binary Robust Invariant Scalable Keypoints (BRISK) method from the OpenCV library for feature matching. 
+                    It begins by extracting bounding box coordinates and an identification number from a QR code on the uploaded Sketch Map to identify the corresponding unmarked reference map. 
+                    Using the BRISK algorithm, the marked Sketch Map is aligned with the unmarked map. 
+                    Later, we use the bounding box's coordinates to transform the marked map into the world coordinate system, resulting in a georeferenced GeoTIFF file suitable for geospatial analysis. 
+                </p>
+                <p>
+                    {{ _('You can find more details in the <a href="https://www.mdpi.com/2220-9964/10/3/130" target="_blank">paper
+                        about the Sketch Map Tool</a> in the paragraph about Image Processing.') }}
+                </p>
             </article>
         </details>
         <details>
@@ -964,6 +1058,25 @@
             </article>
         </details>
 
+        <details>
+            <summary id="how_long_upload_stored">{{ _('How long are uploaded Sketch Maps stored?') }}
+            </summary>
+            <article>
+                {{ _('The uploaded image(s) of your Sketch Map(s) will be stored on our server for processing (georeferencing and marking detection) 
+                until the results are generated. If you consent, the image(s) will be stored long term for future improvements of the Sketch Map Tool such as 
+                training our machine learning models which detect your markings on the uploaded images. 
+                If you do not give consent, the uploaded images will be deleted after the results are generated. 
+                The results are stored and available for download for a period of 24 hours, after which they are deleted.') }}
+            </article>
+        </details>
+
+        <details>
+            <summary id="how_much_time_to_upload">{{ _('How much time do I have to upload the Sketch Maps for the digitization?') }}
+            </summary>
+            <article>
+                {{ _('It is possible up to 12 months after the creation of your maps, afterwards the digitization will not work anymore.') }}
+            </article>
+        </details>
 
     </main>
 {% endblock body %}
