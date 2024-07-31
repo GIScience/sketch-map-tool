@@ -37,8 +37,11 @@ def file_ids(files, flask_app):
         file_ids, *_ = db_client_flask.insert_files(files, consent=True)
         yield file_ids
         # teardown
-        for id in file_ids:
-            db_client_flask.delete_file(id)
+        for id_ in file_ids:
+            db_conn = client_flask.open_connection()
+            query = "DELETE FROM blob WHERE id = %s"
+            with db_conn.cursor() as curs:
+                curs.execute(query, [id_])
 
 
 def test_open_close_connection(flask_app):
@@ -110,14 +113,6 @@ def test_insert_files(flask_app, files, uuid_create, bbox, layer):
             assert name == files[i].filename
             assert bbox == bbox_
             assert layer == layer_
-
-
-def test_delete_file(flask_app, files):
-    with flask_app.app_context():
-        file_ids, *_ = client_flask.insert_files(files, consent=True)
-        for id in file_ids:
-            # No error should be raised
-            client_flask.delete_file(id)
 
 
 def test_select_file(file_ids):

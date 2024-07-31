@@ -7,7 +7,6 @@ from psycopg2.extensions import connection
 from sketch_map_tool.database import client_celery, client_flask
 from sketch_map_tool.exceptions import (
     CustomFileDoesNotExistAnymoreError,
-    CustomFileNotFoundError,
 )
 
 
@@ -85,18 +84,6 @@ def test_write_map_frame(flask_app, map_frame, bbox, format_, orientation, layer
         assert isinstance(file, bytes)
 
 
-def test_delete_map_frame(flask_app, map_frame, bbox, format_, orientation, layer):
-    uuid = uuid4()
-    client_celery.insert_map_frame(map_frame, uuid, bbox, format_, orientation, layer)
-    with flask_app.app_context():
-        # do not raise a FileNotFoundError_
-        client_flask.select_map_frame(uuid)
-    client_celery.delete_map_frame(uuid)
-    with pytest.raises(CustomFileNotFoundError):
-        with flask_app.app_context():
-            client_flask.select_map_frame(uuid)
-
-
 def test_cleanup_map_frames_recent(
     uuid_create: str,
     map_frame: BytesIO,
@@ -140,7 +127,6 @@ def test_cleanup_map_frames_recent_without_consent(
 
     Nothing should happen.
     """
-    # TODO:
     client_celery.cleanup_map_frames()
     with flask_app.app_context():
         # should not raise an error / should not delete the map frame
@@ -174,6 +160,7 @@ def test_cleanup_map_frames_old_without_consent(
 
     Map frame file content should be set to null.
     """
+    # TODO: Also check deletion of bbox
     # map frame file content should be delete
     client_celery.cleanup_map_frames()
     with flask_app.app_context():

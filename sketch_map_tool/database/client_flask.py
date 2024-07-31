@@ -168,13 +168,6 @@ def select_file(id_: int) -> bytes:
             )
 
 
-def delete_file(id_: int):
-    query = "DELETE FROM blob WHERE id = %s"
-    db_conn = open_connection()
-    with db_conn.cursor() as curs:
-        curs.execute(query, [id_])
-
-
 def select_file_name(id_: int) -> str:
     """Get an uploaded file name of a file stored in the database by ID."""
     query = "SELECT file_name FROM blob WHERE id = %s"

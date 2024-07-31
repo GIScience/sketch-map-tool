@@ -100,13 +100,6 @@ def insert_map_frame(
         )
 
 
-def delete_map_frame(uuid: UUID):
-    """Delete map frame of the associated UUID from the database."""
-    query = "DELETE FROM map_frame WHERE uuid = %s"
-    with db_conn.cursor() as curs:
-        curs.execute(query, [str(uuid)])
-
-
 def cleanup_map_frames():
     """Cleanup map frames which are old and without consent.
 
