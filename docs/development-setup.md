@@ -188,7 +188,7 @@ Go thought the setup steps above in the terminal and change interpreter settings
 
 Also make sure the environment variable `PROJ_LIB` to point to the `proj` directory of the mamba/conda environment:
 ```bash
-PROJ_LIB=/home/$USERDIR/mambaforge/envs/smt/share/proj
+PROJ_LIB=/home/$USERDIR/miniforge3/envs/smt/share/proj
 ```
 
 ## Setup on an Apple Mac with M2 chip
