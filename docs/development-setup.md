@@ -3,7 +3,9 @@
 For contributing to this project please also read the [Contribution Guideline](/CONTRIBUTING.md).
 
 > Note: To just run the Sketch Map Tool locally, provide the required [configuration](/docs/configuration.md)
-> and use Docker Compose: `docker compose up -d`
+> and use Docker Compose: `docker compose up -d`.
+> To connect to the Postgres database when running it as Docker Compose service run:
+> `psql -h localhost -d smt -U smt -p 5444 -W`.
 
 ## Prerequisites (Requirements)
 
