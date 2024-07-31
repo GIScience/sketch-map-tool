@@ -4,8 +4,6 @@ For contributing to this project please also read the [Contribution Guideline](/
 
 > Note: To just run the Sketch Map Tool locally, provide the required [configuration](/docs/configuration.md)
 > and use Docker Compose: `docker compose up -d`.
-> To connect to the Postgres database when running it as Docker Compose service run:
-> `psql -h localhost -d smt -U smt -p 5444 -W`.
 
 ## Prerequisites (Requirements)
 
@@ -84,8 +82,7 @@ Please refer to the [configuration documentation](/docs/configuration.md).
 ```bash
 mamba activate smt
 docker start smt-postgres smt-redis
-celery --app sketch_map_tool.tasks worker --beat --concurrency 4 --loglevel=INFO
-# celery --app sketch_map_tool.tasks worker --beat --pool solo --loglevel=INFO
+celery --app sketch_map_tool.tasks worker --beat --pool solo --loglevel=INFO
 ```
 
 ### 2. Start Flask (Web App)
@@ -175,6 +172,14 @@ Bundle the code with:
 ```bash
 npm run build
 ```
+
+## Database
+
+To connect to the Postgres database when running it as Docker container with the before mentioned Docker run command:
+`psql -h localhost -d smt -U smt -p 5432 -W`.
+
+If you run the database as Docker Compose service run:
+`psql -h localhost -d smt -U smt -p 5444 -W`.
 
 ## Setup in an IDE
 
