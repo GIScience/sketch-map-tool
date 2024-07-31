@@ -43,3 +43,7 @@ For running the services using Docker Compose set broker URL and result backend 
 broker-url = "redis://redis:6379"
 result-backend = "db+postgresql://smt:smt@postgres:5432"
 ```
+
+## Default Configuration
+
+For a list of all configuration variables and their default values please take a look at [config.py](sketch_map_tool/config.py).
