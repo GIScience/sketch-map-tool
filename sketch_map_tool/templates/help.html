@@ -19,7 +19,7 @@
         <p>
             {{ _('The <strong>Step-by-Step Instructions</strong> will guide you through the Sketch Map Tool
             and provide useful recommendations.<br>
-            You can download and print the entire manual here.') }}
+            You can also download and print the manual.') }}
         
         </p>
         <p>
@@ -87,15 +87,14 @@
                             alt="{{ _('Screenshot of the Sketch Map Tool.') }}">
                         <figcaption></figcaption>
                     </figure>
-                    <p>
-                        {{ _('<strong>Searching by coordinates</strong>') }}
-                    </p>                
+
+                    <h6><em>{{ _('Searching by coordinates') }}</em></h6>
                     <p>
                         {{ _('Using coordinates to search for an accurate location is particularly useful in rural areas. 
-                        Ensure that the coordinates are in the coordinate system WGS 84 reference system, expressed as latitude and longitude (LAT and LON).') }}
+                        Ensure that the coordinates are in the coordinate reference system WGS 84, expressed as latitude and longitude (LAT and LON).') }}
                     </p>
                     <p>
-                        {{ _('Example: We have the following coordinates of Nairobi in the WGS 84 coordinate reference system:  1.2921° S (latitude) and 36.8219° E (longitude). 
+                        {{ _('Example: We have the following coordinates of Nairobi in WGS 84:  1.2921° S (latitude) and 36.8219° E (longitude). 
                         In the search field just type LAT, LON like shown below:') }}
                     </p>
 
@@ -106,16 +105,16 @@
                     </figure>
                     
                     <p>
-                        {{ _('Be sure to include the hemisphere information (South/North, West/East) to avoid incorrect localization.') }}
+                        {{ _('Be sure to include the hemisphere information (South/North, West/East) to avoid errors.') }}
                     </p>
                     <p>
-                        {{ _('If you need to transform your available coordinates into Lat-Lon coordinates first, we can recommend you to use this tool: 
+                        {{ _('If you need to transform your available coordinates into Lat-Lon coordinates first, we recommend useing this tool: 
                             <a href="https://coordinates-converter.com/en/decimal/51.000000,10.000000?karte=OpenStreetMap&zoom=8" 
                             target="_blank">Online converter to all coordinate systems</a>') }}
                     </p>
                     <p>
-                        {{ _('The marking of your searched point that appears during the map selection, will not be visible on the printed map. 
-                        If you need this point as a point of reference on your paper Sketch Maps please mark it after you downloaded the pdf 
+                        {{ _('The marker of your searched point that appears during the map selection, will not be visible on the printed map. 
+                        If you need this point as a point of reference on your paper Sketch Maps please mark it after you downloaded the PDF 
                         (either manually with a pen or digitally e.g. in a photo editing program like GIMP).') }}
                     </p>
 
@@ -143,7 +142,7 @@
                                 <li>{{ _('Cover all relevant areas for your use case: for example, if studying flooding, focus on areas
                                     near rivers, creeks, sinkholes, and critical infrastructure that might be affected by the flood
                                     event.') }}</li>
-                                <li>{{ _('Choose a suitable level zoom level: For urban flooding, for example, it is recommended to generate 
+                                <li>{{ _('Choose a suitable zoom level: For example in case urban flooding it is recommended to generate 
                                     a map on the neighborhood level with streets and buildings. 
                                     For river flooding, it is recommended to generate a map for a larger extent.') }}
                                 </li>
@@ -178,9 +177,9 @@
                 <article>
                     <p>
                         {{ _('When you choose <a href="https://osm.org/" target="_blank">OpenStreetMap (OSM)</a> as base map layer, you will be 
-                        provided with a report on the map quality in your Area of Interest (AOI). The Map Quality Check provides an evaluation of 
-                        the suitability of the local OSM data of the AOI for participatory mapping through a quality analysis of the OSM data with the
-                        <a href="https://oqt.ohsome.org">HeiGIT ohsome quality API</a> and gives recommendations for subsequent field data collection. 
+                        provided with a report on the map quality in your Area of Interest (AOI). The Map Quality Check gives an evaluation of 
+                        the suitability of the local OSM data of your AOI for participatory mapping. The report is computed by the 
+                        <a href="https://heigit.org/big-spatial-data-analytics-en/ohsome/ohsome-quality-analyst-oqt/">ohsome quality API</a> of <a href="https://heigit.org/">HeiGIT</a>.
                         The Map Quality Check can be downloaded as a PDF file by clicking on the blue button.') }}
                     </p>
                 
@@ -210,7 +209,7 @@
                             {{ _('In case the OSM data in your area of interest is not sufficient for participatory mapping, consider
                             the opportunity to improve the OSM data before printing the Sketch Maps, by organizing an OSM Mapathon. 
                             For more information and help on how to conduct a Mapathon please take a look at the 
-                            <a href="https://www.missingmaps.org/" target="_blank">Missing Maps project</a>') }}
+                            <a href="https://www.missingmaps.org/" target="_blank">Missing Maps project</a>') }}.
                         </li>
                         <li>
                             {{ _('Take a look at the map:') }}
@@ -231,7 +230,6 @@
                         {{ _('The generated Sketch Map for your selected area of interest can be downloaded as a PDF file by clicking on
                         the blue button.') }}
                     </p>
-
                     <figure> 
                         <img src="{{ url_for("static", filename="assets/images/help/1_3_empty_sketch_map_osm.webp" ) }}"
                             alt="{{ _('Empty Sketch Map, OSM') }}">
@@ -278,18 +276,14 @@
             </summary>
             <article>
                 <p>
-                    {{ _('The mapping with pens and printed Sketch Maps is the key part of the Sketch Map Tool. How you mark the
-                    maps influences your results and what can be detected.') }}
+                    {{ _('Mapping through sketches using a pen on a printed Sketch Maps is a core activity of the Sketch Map Tool process. How you mark the Sketch Maps influences your end results: the detected markings.') }}
                 </p>
                 <p>
-                    {{ _('Here you can access and 
-                        <a href="https://nexus.heigit.org/repository/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/Important_mapping_tips.pdf"
-                        target="_blank">download</a>
-                    the most important tips and questions you need to discuss with your team and/or your participants and keep in mind before and during the mapping.
-                    Below you can find more detailed examples of markings and their detection as well as further recommendations.') }}
+                    {{ _('This section as well as <a href="https://nexus.heigit.org/repository/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/Important_mapping_tips.pdf"
+                        target="_blank">this PDF</a> discusses what you should keep in mind before and during mapping.') }}
                 </p>
                 <p>
-                    {{ _('Example of marked map:') }}
+                    {{ _('Example of marked Sketch Map:') }}
                 </p>
 
                 <figure> 
@@ -297,7 +291,7 @@
                         alt="{{ _('Marked Sketch Map, OSM') }}">
                 </figure>
                 <ol>
-                    <li>{{ _('<strong>Tips to improve the marking detection</strong>') }}</li>
+                    <li>{{ _('<strong>Tips to improve marking detection</strong>') }}</li>
                     <p>
                         {{ _('The latest version of the Sketch Map Tool leverages advanced Deep Learning models trained to analyze images of
                         Sketch Maps and identify marked objects within them.
@@ -383,8 +377,8 @@
                     <h6><em>{{ _('Recommendations:') }}</em></h6>
                     <table border="1" style="border-collapse: collapse;">
                         <tr>
-                            <th>{{ _('To Do') }}</th>
-                            <th>{{ _('Not recommended') }} <br> {{ _('You will likely discover problems in the detected results') }}
+                            <th>{{ _('Recommended') }}</th>
+<th>{{ _('Not recommended') }} <br> <small>{{ _('You will likely discover problems in the results') }}</small>
                             </th>
                         </tr>
                         <tr>
@@ -626,25 +620,25 @@
 
                         <figure>
                             <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_how_to_photo.webp" ) }}"
-                                alt="{{ _('Picture of a Sketch Map.') }}">
+                                alt="{{ _('How to take a photo of a Sketch Map.') }}">
                             <figcaption></figcaption>
                         </figure>
 
                         <figure>
                             <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_photo.webp" ) }}"
-                                alt="{{ _('Picture of a Sketch Map.') }}">
+                                alt="{{ _('How to take a photo of a Sketch Map 2') }}">
                             <figcaption></figcaption>
                         </figure>
 
                         <li>
-                            {{ _('For larger maps for example in A2 it can be more challenging to keep the map smooth and to take a proper photo. 
+                            {{ _('For larger paper formats of a Sketch Map (E.g. A2) it can be more challenging to keep the map smooth and to take a proper photo. 
                             Easier than photographing from above by laying the map on a table or ground might be to pin 
-                            or glue your map to a flip-board or a wall first and take a photo from the side.') }}
+                            or glue your map to a flip-board or a wall first and then take a photo.') }}
                         </li>
 
                         <figure>
                             <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_a2_photograph.webp" ) }}"
-                                alt="{{ _('Picture of a Sketch Map.') }}">
+                                alt="{{ _('How to take a photo of a Sketch Map 3') }}">
                             <figcaption></figcaption>
                         </figure>
 
@@ -653,8 +647,7 @@
                             If you experience problems with the results, for example the georeferencing failed or the markings where not 
                             detected probably, please take additional photos of your Sketch Map and upload them again. 
                             Small changes in lighting conditions and angels can make a difference! Additionally, you can consider 
-                            compressing or resizing the original image to a minimum of 1024x1024 pixels before you upload your image. 
-                            This can be done for example by using a photo editing software like GIMP.') }}
+                            compressing or resizing the original image to a minimum of 1024x1024 pixels before you upload your image.') }}
                         </li>
                         <li>
                             {{ _('The image of the Sketch Map needs to be uploaded as JPG or PNG (max. file size is 50 MB).
@@ -863,7 +856,7 @@
         <details>
             <summary id="data_sharing_for_improvement">{{ _('Share your data for the Improvement of the Sketch Map Tool') }}</summary>
             <article>
-                {{ _('On a voluntary basis, you can enable us to keep the uploaded files beyond processing to further improve the Sketch Map Tool.') }}
+                {{ _('On a voluntary basis, you can enable us to keep your uploaded Sketch Maps beyond processing to further improve the Sketch Map Tool.') }}
                 <table border="1" style="border-collapse: collapse;">
                     <tr>
                         <th>{{ _('If you opt-in by checking the check box you enable us to ...') }}</th>
@@ -872,7 +865,7 @@
                     <tr>
                         <td>
                             <p>
-                                {{ _('The image(s) will be stored long term for future improvements of the Sketch Map Tool such as training 
+                                {{ _('... keep your uploaded Sketch Maps for future improvements of the Sketch Map Tool such as training 
                                 our machine learning models which detect your markings on the uploaded images.') }}
                             </p>
                             <p>
@@ -896,9 +889,10 @@
                         </td>
                         <td>
                             <p>
-                                {{ _('The uploaded images will be deleted after the results are generated. The results are stored and available for download 
-                                for a period of 24 hours, after which they are deleted.') }}
+                                {{ _('your uploaded Sketch Maps will be deleted after the results are generated. The results are stored and available for download 
+                                for a period of 24 hours, after which they are deleted too.') }}
                     </tr>
+                </table>
             </article>
         </details>
 
@@ -913,9 +907,9 @@
         <details>
             <summary id="questions_concerns">{{ _('Questions and concerns') }}</summary>
             <article>
-                {{ _('If you have general concerns about uploading your data online, it is possible to set up the Sketch Map Tool on your individual server. 
-                For any remaining questions or interests, please get in touch with the <a href="mailto:sketch-map-tool@heigit.org"
-                target="_blank">Sketch Map Tool team</a>') }}
+                {{ _('If you have further questions or any concerns please reach us via <a href="mailto:sketch-map-tool@heigit.org" target="_blank">E-Mail</a>.') }}
+
+                {{ _('It is also possible to set-up the Sketch Map Tool on your or your orgianitions own server. In this case, please get in touch with the <a href="mailto:sketch-map-tool@heigit.org" target="_blank">Sketch Map Tool team</a>.') }}
             </article>
         </details>
 
@@ -978,9 +972,9 @@
         <details>
             <summary id="why-qr-code-and-globes">{{ _('Why is there a QR code and globes on the Sketch Maps?') }}</summary>
             <article>
-                {{ _('These are required for georeferencing. The QR Code contains the ID of the reference mapframe and the bounding box coordinates.
-                The tool employs computer vision algorithms and matching between uploaded and reference mapframes (mainly based on the globes)
-                before it transforms the uploaded mapframes into the world coordinate system (EPSG: 4326).') }}
+                {{ _('These are required for georeferencing. The QR Code contains the ID of the reference map frame and the bounding box coordinates.
+                The tool employs computer vision algorithms to match uploaded and reference map frames (mainly based on the globes)
+                before it transforms and georeferences the uploaded Sketch Maps.') }}
             </article>
         </details>
         <details>
@@ -993,7 +987,7 @@
         <details>
             <summary id="why-do-i-have-to-pay-attention">{{ _('What do I need keep in mind for the participatory mapping?') }}</summary>
             <article>
-                {{ _('Please make sure not to accidentally mark the globes at the edge as they are needed for the automatic map detection.
+                {{ _('Please make sure not to accidentally mark the globes at the edge as they are needed for automatic map detection.
                 Use thicker felt-tip pens with intense colors; red, blue, and black work best. Prepare the same set of pens for
                 all interviewers.
                     <a href="https://nexus.heigit.org/service/rest/repository/browse/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/" target="_blank">Here </a>
@@ -1008,7 +1002,7 @@
                     Our georeferencing process employs the Binary Robust Invariant Scalable Keypoints (BRISK) method from the OpenCV library for feature matching. 
                     It begins by extracting bounding box coordinates and an identification number from a QR code on the uploaded Sketch Map to identify the corresponding unmarked reference map. 
                     Using the BRISK algorithm, the marked Sketch Map is aligned with the unmarked map. 
-                    Later, we use the bounding box's coordinates to transform the marked map into the world coordinate system, resulting in a georeferenced GeoTIFF file suitable for geospatial analysis. 
+                    Later, we use the bounding box's coordinates to transform the marked map into the world coordinate system (WGS 84), resulting in a georeferenced GeoTIFF file suitable for geospatial analysis. 
                 </p>
                 <p>
                     {{ _('You can find more details in the <a href="https://www.mdpi.com/2220-9964/10/3/130" target="_blank">paper
@@ -1066,7 +1060,7 @@
                 until the results are generated. If you consent, the image(s) will be stored long term for future improvements of the Sketch Map Tool such as 
                 training our machine learning models which detect your markings on the uploaded images. 
                 If you do not give consent, the uploaded images will be deleted after the results are generated. 
-                The results are stored and available for download for a period of 24 hours, after which they are deleted.') }}
+                The results are stored and available for download for a period of 24 hours, after which they are deleted too.') }}
             </article>
         </details>
 
