@@ -51,7 +51,7 @@
                 various stages of the process. We apologize for any inconvenience this may cause.
                 We are committed to continually enhancing the tool,
                 so please report any technical problems to the <a href="mailto:sketch-map-tool@heigit.org"
-                    target="_blank">Sketch Map Tool user support</a></i>') }}
+                    target="_blank">Sketch Map Tool user support</a></i>.') }}
         </p>
 
 
@@ -108,14 +108,13 @@
                         {{ _('Be sure to include the hemisphere information (South/North, West/East) to avoid errors.') }}
                     </p>
                     <p>
-                        {{ _('If you need to transform your available coordinates into Lat-Lon coordinates first, we recommend useing this tool: 
+                        {{ _('If you need to transform your available coordinates into Lat-Lon coordinates first, we recommend using this tool: 
                             <a href="https://coordinates-converter.com/en/decimal/51.000000,10.000000?karte=OpenStreetMap&zoom=8" 
                             target="_blank">Online converter to all coordinate systems</a>') }}
                     </p>
                     <p>
                         {{ _('The marker of your searched point that appears during the map selection, will not be visible on the printed map. 
-                        If you need this point as a point of reference on your paper Sketch Maps please mark it after you downloaded the PDF 
-                        (either manually with a pen or digitally e.g. in a photo editing program like GIMP).') }}
+                        If you need this point as a point of reference on your paper Sketch Maps please mark it after you downloaded the PDF.') }}
                     </p>
 
                     <figure>
@@ -434,8 +433,8 @@
                                 </figure>
                                 <p>
                                     {{ _('If you just draw a line, the marked area of the line will be detected.
-                                    Nevertheless, we recommend not using lines so far, since the model has not been trained enough on 
-                                    lines sufficiently until now and it could lead to mistakes in the marking detection.') }}
+                                    Nevertheless, we do not recommend to use lines, since the model has not been trained to detect lines 
+                                    and doing so could lead to mistakes in detection of marking.') }}
                                 </p>
                                 <figure>
                                     <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_lines.webp" ) }}"
@@ -626,7 +625,7 @@
 
                         <figure>
                             <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_photo.webp" ) }}"
-                                alt="{{ _('How to take a photo of a Sketch Map 2') }}">
+                                alt="{{ _('How to take a photo of a Sketch Map.') }}">
                             <figcaption></figcaption>
                         </figure>
 
@@ -638,7 +637,7 @@
 
                         <figure>
                             <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_a2_photograph.webp" ) }}"
-                                alt="{{ _('How to take a photo of a Sketch Map 3') }}">
+                                alt="{{ _('How to take a photo of a Sketch Map.') }}">
                             <figcaption></figcaption>
                         </figure>
 
@@ -687,7 +686,7 @@
                     <h6><em>{{ _('Recommendations:') }}</em></h6>
                     <ul>
                         <li>
-                            {{ _('If you experience problems during the upload process, please check out "2.1 Scan or photograph your marked Sketch Maps” above and
+                            {{ _('If you experience problems during the upload process, please check out "2.1 Scan or photograph your marked Sketch Maps" above and
                             the FAQ section below or contact your Sketch Map Tool focal point in your
                             organization or the <a href="mailto:sketch-map-tool@heigit.org"
                             target="_blank">Sketch Map Tool user support</a>') }}
@@ -736,10 +735,10 @@
                     Please also keep in mind data security questions when using Online GIS-Applications for visualizing your data!') }} 
                 </p>
                 <p>
-                    {{ _('For more tips on how to open and analyze the downloaded geodata and how to create a result map in QGIS  as well as in uMap,
+                    {{ _('For more tips on how to open and analyze the downloaded geodata and how to create a result map in QGIS as well as in uMap,
                     take a look at the following
                     <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html"
-                        target="_blank">QGIS Training Lectures</a>.') }}
+                    target="_blank">QGIS Training Lectures</a>.') }}
                 </p>
                 <p>
                     {{ _('Here you can see an overview on the characteristics of GeoTIFF and GeoJSON and how the results could look like:') }}
@@ -831,7 +830,7 @@
             <article>
                 <ul>
                     <li>
-                        {{ _('<strong>Functionally necessary data storage:</strong> We need the original map frame to digitize your sketch map. 
+                        {{ _('<strong>Functionally necessary data storage:</strong> We need the original map frame to digitize your Sketch Map.
                         The map frames of the created maps are stored for 12 months, giving you the opportunity to digitize your Sketch Map in those 12 months.') }}
                     </li>
                 </ul>
@@ -843,7 +842,7 @@
             <article>
                 <ul>
                     <li>
-                        {{ _('<strong>Functionally necessary data storage:</strong> Uploaded images of Sketch Maps are stored on the HeiGIT-Server in Germany for processing
+                        {{ _('<strong>Functionally necessary data storage:</strong> Uploaded images of Sketch Maps are stored for processing
                         (georeferencing and marking detection) until the results are generated.') }}
                     </li>
                     <li>
