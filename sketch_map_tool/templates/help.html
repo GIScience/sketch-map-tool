@@ -969,10 +969,13 @@
             <summary id="how-does-georeferencing-work">{{ _('How does the georeferencing work?') }}</summary>
             <article>
                 <p>
-                    Our georeferencing process employs the Binary Robust Invariant Scalable Keypoints (BRISK) method from the OpenCV library for feature matching. 
-                    It begins by extracting bounding box coordinates and an identification number from a QR code on the uploaded Sketch Map to identify the corresponding unmarked reference map. 
-                    Using the BRISK algorithm, the marked Sketch Map is aligned with the unmarked map. 
-                    Later, we use the bounding box's coordinates to transform the marked map into the world coordinate system (WGS 84), resulting in a georeferenced GeoTIFF file suitable for geospatial analysis. 
+                    {{ _('Our georeferencing process employs the Binary Robust Invariant Scalable Keypoints (BRISK)
+                    method from the OpenCV library for feature matching. It begins by extracting bounding box
+                    coordinates and an identification number from a QR code on the uploaded Sketch Map to identify
+                    the corresponding unmarked reference map. Using the BRISK algorithm, the marked Sketch Map is
+                    aligned with the unmarked map. Later, we use the coordinates of the bounding box to transform the
+                    marked map into the world coordinate system (WGS 84), resulting in a georeferenced GeoTIFF file
+                    suitable for geospatial analysis.') }}
                 </p>
                 <p>
                     {{ _('You can find more details in the <a href="https://www.mdpi.com/2220-9964/10/3/130" target="_blank">paper
