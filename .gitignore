@@ -250,3 +250,5 @@ debug-output/
 # ml-models
 *.pt
 *.pth
+
+celerybeat-schedule.*
