@@ -96,6 +96,8 @@ def mock_async_results_failed_hard(request, monkeypatch):
     """Mock celery tasks results."""
 
     class MockTask:
+        status = "FAILED"
+
         def get(*args, **kwargs):
             raise ValueError()
             pass

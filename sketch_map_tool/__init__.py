@@ -40,6 +40,13 @@ CELERY_CONFIG = {
     "worker_send_task_events": True,  # send task-related events to be monitored
     # Avoid errors due to cached db connections going stale through inactivity
     "database_short_lived_sessions": True,
+    # Cleanup map frames and uploaded files stored in the database
+    "beat_schedule": {
+        "cleanup": {
+            "task": "sketch_map_tool.tasks.cleanup_map_frames",
+            "schedule": timedelta(hours=3),
+        },
+    },
 }
 
 

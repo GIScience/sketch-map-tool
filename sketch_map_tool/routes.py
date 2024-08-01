@@ -3,11 +3,11 @@ from io import BytesIO
 from uuid import UUID, uuid4
 
 import geojson
+from celery import chain, group
+from flask import redirect, render_template, request, send_file, url_for
+from werkzeug import Response
 
-# from celery import chain, group
-from flask import Response, redirect, render_template, request, send_file, url_for
-
-from sketch_map_tool import celery_app, config, definitions, tasks, upload_processing
+from sketch_map_tool import celery_app, config, definitions, tasks
 from sketch_map_tool import flask_app as app
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
@@ -22,7 +22,11 @@ from sketch_map_tool.exceptions import (
 )
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
-from sketch_map_tool.tasks import digitize_sketches, georeference_sketch_maps
+from sketch_map_tool.tasks import (
+    cleanup_blobs,
+    digitize_sketches,
+    georeference_sketch_maps,
+)
 from sketch_map_tool.validators import (
     validate_type,
     validate_uploaded_sketchmaps,
@@ -85,7 +89,9 @@ def create_results_post(lang="en") -> Response:
     task_sketch_map = tasks.generate_sketch_map.apply_async(
         args=(uuid, bbox, format_, orientation, size, scale, layer)
     )
-    task_quality_report = tasks.generate_quality_report.apply_async(args=(bbox_wgs84,))
+    task_quality_report = tasks.generate_quality_report.apply_async(
+        args=tuple([bbox_wgs84])
+    )
 
     # Map of request type to multiple Async Result IDs
     map_ = {
@@ -122,44 +128,52 @@ def digitize(lang="en") -> str:
 def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
     # "consent" is a checkbox and value is only send if it is checked
-    if "consent" in request.form.keys():
-        consent: bool = True
-    else:
-        consent: bool = False
+    consent: bool = "consent" in request.form.keys()
     # No files uploaded
     if "file" not in request.files:
         return redirect(url_for("digitize", lang=lang))
     files = request.files.getlist("file")
     validate_uploaded_sketchmaps(files)
-    ids = db_client_flask.insert_files(files, consent)
-    file_names = [db_client_flask.select_file_name(i) for i in ids]
-    args = [
-        upload_processing.read_qr_code(to_array(db_client_flask.select_file(_id)))
-        for _id in ids
-    ]
-    uuids = [args_["uuid"] for args_ in args]
-    bboxes = [args_["bbox"] for args_ in args]
-    layers = [args_["layer"] for args_ in args]
+    # file metadata containing ids, uuids, file_names, ...
+    file_ids, uuids, file_names, bboxes, layers = db_client_flask.insert_files(
+        files,
+        consent,
+    )
+    del files
+    bboxes_ = dict()
+    layers_ = dict()
     map_frames = dict()
     for uuid in set(uuids):  # Only retrieve map_frame once per uuid to save memory
-        map_frame_buffer = BytesIO(db_client_flask.select_map_frame(UUID(uuid)))
-        map_frames[uuid] = to_array(map_frame_buffer.read())
-    result_id_1 = (
-        georeference_sketch_maps.s(ids, file_names, uuids, map_frames, bboxes, layers)
-        .apply_async()
-        .id
+        # NOTE: bbox and layer could be return once per UUID from DB here
+        # instead of multiple times from QR code above.
+        # But this does not work with legacy map frames (version 2024.04.15),
+        # since those attributes are not stored in the DB.
+        map_frame = db_client_flask.select_map_frame(UUID(uuid))
+        map_frames[uuid] = to_array(BytesIO(map_frame).read())
+    for bbox, layer, uuid in zip(bboxes, layers, uuids):
+        bboxes_[uuid] = bbox
+        layers_[uuid] = layer
+
+    task_1 = georeference_sketch_maps.signature(
+        (file_ids, file_names, uuids, map_frames, bboxes_, layers_)
     )
-    result_id_2 = (
-        digitize_sketches.s(ids, file_names, uuids, map_frames, layers, bboxes)
-        .apply_async()
-        .id
+    task_2 = digitize_sketches.signature(
+        (file_ids, file_names, uuids, map_frames, layers_, bboxes_)
     )
+    group_ = group([task_1, task_2])
+    chain_ = chain(
+        group_,
+        cleanup_blobs.signature(kwargs={"map_frame_uuids": list(set(uuids))}),
+    )
+    chain_result = chain_.apply_async()
+
+    group_results = chain_result.parent  # type: ignore
     # Unique id for current request
     uuid = str(uuid4())
     # Mapping of request id to multiple tasks id's
     map_ = {
-        "raster-results": str(result_id_1),
-        "vector-results": str(result_id_2),
+        "raster-results": str(group_results[0].id),
+        "vector-results": str(group_results[1].id),
     }
     db_client_flask.set_async_result_ids(uuid, map_)
     return redirect(url_for("digitize_results_get", lang=lang, uuid=uuid))

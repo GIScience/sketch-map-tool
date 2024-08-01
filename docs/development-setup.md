@@ -3,7 +3,7 @@
 For contributing to this project please also read the [Contribution Guideline](/CONTRIBUTING.md).
 
 > Note: To just run the Sketch Map Tool locally, provide the required [configuration](/docs/configuration.md)
-> and use Docker Compose: `docker compose up -d`
+> and use Docker Compose: `docker compose up -d`.
 
 ## Prerequisites (Requirements)
 
@@ -11,7 +11,9 @@ For contributing to this project please also read the [Contribution Guideline](/
 - [Mamba](https://github.com/conda-forge/miniforge#install): `>=1.4`
 - Node: `>=14`
 
-This project uses [Mamba](https://github.com/conda-forge/miniforge#install) for environment and dependencies management. Please make sure it is installed on your system: [Installation Guide](https://github.com/conda-forge/miniforge#install). Instead of Mamba, Conda can also be used.
+This project uses [Mamba](https://github.com/conda-forge/miniforge#install) for environment and dependencies management.
+Please make sure it is installed on your system: [Installation Guide](https://github.com/conda-forge/miniforge#install).
+Instead of Mamba, Conda can also be used.
 
 > Actually, Mamba and Poetry together are used to manage environment and dependencies.
 > But only Mamba is required to be present on the system.
@@ -80,7 +82,7 @@ Please refer to the [configuration documentation](/docs/configuration.md).
 ```bash
 mamba activate smt
 docker start smt-postgres smt-redis
-celery --app sketch_map_tool.tasks worker --beat --concurrency 4 --loglevel=INFO
+celery --app sketch_map_tool.tasks worker --beat --pool solo --loglevel=INFO
 ```
 
 ### 2. Start Flask (Web App)
@@ -105,7 +107,7 @@ ruff format
 
 ### Tests
 
-Provide required [configuration variables](/docs/configuration.md#required-configuration) in `config/test.config.toml`.
+Provide required [configuration variables](/docs/configuration.md#required-configuration) in `config/test.config.toml`. Be sure *not* to set `broker-url` and `result-backend`.
 
 To execute all tests run:
 ```bash
@@ -114,7 +116,7 @@ pytest
 
 To get live logs, INFO log level and ignore verbose logging messages of VCR run:
 ```bash
-pytest -s --log-level="INFO" --log-disable="vcr"
+pytest --capture=no --log-level="INFO" --log-disable="vcr"
 ```
 
 The integration test suite utilizes the [Testcontainers framework](https://testcontainers.com/) 
@@ -171,6 +173,14 @@ Bundle the code with:
 npm run build
 ```
 
+## Database
+
+To connect to the Postgres database when running it as Docker container with the before mentioned Docker run command:
+`psql -h localhost -d smt -U smt -p 5432 -W`.
+
+If you run the database as Docker Compose service run:
+`psql -h localhost -d smt -U smt -p 5444 -W`.
+
 ## Setup in an IDE
 
 If you setup sketch-map-tool in an IDE like PyCharm please make sure that your IDE does not setup a Poetry managed project/virtual environment.
@@ -178,7 +188,7 @@ Go thought the setup steps above in the terminal and change interpreter settings
 
 Also make sure the environment variable `PROJ_LIB` to point to the `proj` directory of the mamba/conda environment:
 ```bash
-PROJ_LIB=/home/$USERDIR/mambaforge/envs/smt/share/proj
+PROJ_LIB=/home/$USERDIR/miniforge3/envs/smt/share/proj
 ```
 
 ## Setup on an Apple Mac with M2 chip

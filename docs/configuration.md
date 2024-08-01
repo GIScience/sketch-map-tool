@@ -21,6 +21,20 @@ All lot of configuration values come with defaults. Required configuration value
 - `neptune_api_token`
 - `esri-api-key`
 
+### ArcGIS ESRI
+
+To get an ArcGIS/ESRI API key sign-up for [ArcGIS Location Platform](https://location.arcgis.com/sign-up/)
+and follow [this tutorial](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/).
+
+> Note: Keep the referrer field empty.
+
+### neptune.ai
+
+Ask the team to get an invite the Sketch Map Tool project on neptuine.ai.
+
+To get the API key go to "Project Metadata" and copy the key from the example code.
+
+
 ## Configuration for Docker Compose
 
 For running the services using Docker Compose set broker URL and result backend to:
@@ -29,3 +43,7 @@ For running the services using Docker Compose set broker URL and result backend 
 broker-url = "redis://redis:6379"
 result-backend = "db+postgresql://smt:smt@postgres:5432"
 ```
+
+## Default Configuration
+
+For a list of all configuration variables and their default values please take a look at [config.py](sketch_map_tool/config.py).

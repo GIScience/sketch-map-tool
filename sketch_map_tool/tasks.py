@@ -79,7 +79,7 @@ def generate_sketch_map(
         scale,
         layer,
     )
-    db_client_celery.insert_map_frame(map_img, uuid)
+    db_client_celery.insert_map_frame(map_img, uuid, bbox, format_, orientation, layer)
     return map_pdf
 
 
@@ -89,13 +89,9 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
     Fetch quality indicators from the OQT API
     """
-    # TODO: Issue #469
     # report = get_report(bbox)
     # return generate_report_pdf(report)
-    return BytesIO(
-        b"We can not create a Quality Report at the moment. "
-        b"Sorry for the inconvenience."
-    )
+    return BytesIO(b"")
 
 
 # 2. DIGITIZE RESULTS
@@ -106,25 +102,24 @@ def georeference_sketch_maps(
     file_names: list[str],
     uuids: list[str],
     map_frames: dict[str, NDArray],
-    bboxes: list[Bbox],
-    layers: list[Layer],
+    bboxes: dict[str, Bbox],
+    layers: dict[str, Layer],
 ) -> AsyncResult | BytesIO:
     def process(
         sketch_map_id: int,
         uuid: str,
-        bbox: Bbox,
     ) -> BytesIO:
         """Process a Sketch Map and its attribution."""
         # r = interim result
         r = db_client_celery.select_file(sketch_map_id)
         r = to_array(r)
         r = clip(r, map_frames[uuid])
-        r = georeference(r, bbox)
+        r = georeference(r, bboxes[uuid])
         return r
 
-    def get_attribution_file(layers: list[Layer]) -> BytesIO:
+    def get_attribution_file() -> BytesIO:
         attributions = []
-        for index, layer in enumerate(layers):
+        for layer in layers.values():
             attribution = get_attribution(layer)
             attribution = attribution.replace("<br />", "\n")
             attributions.append(attribution)
@@ -136,10 +131,10 @@ def georeference_sketch_maps(
             zip_file.writestr(f"{name}.geotiff", file.read())
 
     buffer = BytesIO()
-    for file_id, uuid, bbox, file_name in zip(file_ids, uuids, bboxes, file_names):
-        zip_(process(file_id, uuid, bbox), file_name)
+    for file_id, uuid, file_name in zip(file_ids, uuids, file_names):
+        zip_(process(file_id, uuid), file_name)
     with ZipFile(buffer, "a") as zip_file:
-        zip_file.writestr("attributions.txt", get_attribution_file(layers).read())
+        zip_file.writestr("attributions.txt", get_attribution_file().read())
 
     buffer.seek(0)
     return buffer
@@ -151,8 +146,8 @@ def digitize_sketches(
     file_names: list[str],
     uuids: list[str],
     map_frames: dict[str, NDArray],
-    layers: list[str],
-    bboxes: list[Bbox],
+    layers: dict[str, Layer],
+    bboxes: dict[str, Bbox],
 ) -> AsyncResult | FeatureCollection:
     # Initialize ml-models. This has to happen inside of celery context.
     #
@@ -165,33 +160,31 @@ def digitize_sketches(
     sam_predictor: SamPredictor = SamPredictor(sam_model)  # mask predictor
     # Custom trained model for object detection (obj) and classification (cls)
     # of markings and colors.
-    if "osm" in layers:
+    if "osm" in layers.values():
         path = init_model(get_config_value("neptune_model_id_yolo_osm_obj"))
         yolo_obj_osm: YOLO_4 = YOLO_4(path)  # yolo object detection
         path = init_model(get_config_value("neptune_model_id_yolo_osm_cls"))
         yolo_cls_osm: YOLO = YOLO(path)  # yolo classification
-    if "esri-world-imagery" in layers:
+    if "esri-world-imagery" in layers.values():
         path = init_model(get_config_value("neptune_model_id_yolo_esri_obj"))
         yolo_obj_esri: YOLO_4 = YOLO_4(path)
         path = init_model(get_config_value("neptune_model_id_yolo_esri_cls"))
         yolo_cls_esri: YOLO = YOLO(path)
 
     l = []  # noqa: E741
-    for file_id, file_name, uuid, bbox, layer in zip(
-        file_ids, file_names, uuids, bboxes, layers
-    ):
+    for file_id, file_name, uuid in zip(file_ids, file_names, uuids):
         # r = interim result
         r: BytesIO = db_client_celery.select_file(file_id)  # type: ignore
         r: NDArray = to_array(r)  # type: ignore
         r: NDArray = clip(r, map_frames[uuid])  # type: ignore
-        if layer == "osm":
+        if layers[uuid] == "osm":
             yolo_obj = yolo_obj_osm
             yolo_cls = yolo_cls_osm
-        elif layer == "esri-world-imagery":
+        elif layers[uuid] == "esri-world-imagery":
             yolo_obj = yolo_obj_esri
             yolo_cls = yolo_cls_esri
         else:
-            raise ValueError("Unexpected layer: " + layer)
+            raise ValueError("Unexpected layer: " + layers[uuid])
 
         r: NDArray = detect_markings(
             r,
@@ -202,8 +195,26 @@ def digitize_sketches(
         )  # type: ignore
         # m = marking
         for m in r:
-            m: BytesIO = georeference(m, bbox, bgr=False)  # type: ignore
+            m: BytesIO = georeference(m, bboxes[uuid], bgr=False)  # type: ignore
             m: FeatureCollection = polygonize(m, layer_name=file_name)  # type: ignore
             m: FeatureCollection = post_process(m, file_name)
             l.append(m)
     return merge(l)
+
+
+@celery.task
+def cleanup_map_frames():
+    """Cleanup map frames stored in the database."""
+    db_client_celery.cleanup_map_frames()
+    return True
+
+
+@celery.task
+def cleanup_blobs(*_, map_frame_uuids: list):
+    """Cleanup uploaded files stored in the database.
+
+    Arguments are ignored. They are only part of the signature because of the usage in
+    a celery chain.
+    """
+    db_client_celery.cleanup_blob(map_frame_uuids)
+    return True

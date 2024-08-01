@@ -8,7 +8,7 @@ from tests import vcr_app as vcr
 @vcr.use_cassette
 def test_get_map_image(bbox, size, layer):
     map_image = client.get_map_image(bbox, size, layer)
-    # image.show()  # for showing of the image during manual testing
+    # map_image.show()  # for showing of the image during manual testing
     assert isinstance(map_image, Image.Image)
 
 
@@ -30,7 +30,7 @@ def test_as_image(bbox, size, layer):
         format = "png"
     response = client.get_map(bbox, size, layer, format)
     map_image = client.as_image(response, format)
-    # image.show()  # for showing of the image during manual testing
+    # map_image.show()  # for showing of the image during manual testing
     assert isinstance(map_image, Image.Image)
 
 

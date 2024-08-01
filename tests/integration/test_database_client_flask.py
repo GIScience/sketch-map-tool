@@ -15,13 +15,18 @@ from sketch_map_tool.exceptions import (
 
 
 @pytest.fixture
-def file(sketch_map):
-    return FileStorage(stream=BytesIO(sketch_map), filename="filename")
+def file(sketch_map_marked):
+    return FileStorage(stream=BytesIO(sketch_map_marked), filename="my-sketch-map")
 
 
 @pytest.fixture
-def files(file):
-    return [file, file]
+def file_2(sketch_map_marked):
+    return FileStorage(stream=BytesIO(sketch_map_marked), filename="my-sketch-map-2")
+
+
+@pytest.fixture
+def files(file, file_2):
+    return [file, file_2]
 
 
 @pytest.fixture
@@ -29,11 +34,14 @@ def file_ids(files, flask_app):
     """IDs of uploaded files stored in the database."""
     with flask_app.app_context():
         # setup
-        ids = db_client_flask.insert_files(files, consent=True)
-        yield ids
+        file_ids, *_ = db_client_flask.insert_files(files, consent=True)
+        yield file_ids
         # teardown
-        for i in ids:
-            db_client_flask.delete_file(i)
+        for id_ in file_ids:
+            db_conn = client_flask.open_connection()
+            query = "DELETE FROM blob WHERE id = %s"
+            with db_conn.cursor() as curs:
+                curs.execute(query, [id_])
 
 
 def test_open_close_connection(flask_app):
@@ -78,24 +86,33 @@ def test_get_async_result_id(flask_app, uuid):
         client_flask._delete_id_map(uuid)
 
 
-def test_insert_files(flask_app, files):
+def test_insert_files(flask_app, files, uuid_create, bbox, layer):
     with flask_app.app_context():
-        ids = client_flask.insert_files(files, consent=True)
-        try:
-            assert len(ids) == 2
-            assert isinstance(ids[0], int)
-        finally:
-            # tear down
-            for i in ids:
-                client_flask.delete_file(i)
-
-
-def test_delete_file(flask_app, files):
-    with flask_app.app_context():
-        ids = client_flask.insert_files(files, consent=True)
-        for i in ids:
-            # No error should be raised
-            client_flask.delete_file(i)
+        file_ids, uuids, file_names, bboxes, layers = client_flask.insert_files(
+            files,
+            consent=True,
+        )
+        assert len(file_ids) == len(uuids) == len(file_names) == 2
+        for i, (
+            id,
+            uuid,
+            name,
+            bbox_,
+            layer_,
+        ) in enumerate(
+            zip(
+                file_ids,
+                uuids,
+                file_names,
+                bboxes,
+                layers,
+            )
+        ):
+            assert isinstance(id, int)  # file id
+            assert uuid == uuid_create
+            assert name == files[i].filename
+            assert bbox == bbox_
+            assert layer == layer_
 
 
 def test_select_file(file_ids):
@@ -114,7 +131,7 @@ def test_select_file_name(file_ids):
     assert isinstance(file, str)
 
 
-def test_select_map_frame(flask_app, uuid_create):
+def test_select_map_frame(flask_app, uuid_create, bbox, layer):
     with flask_app.app_context():
         file = client_flask.select_map_frame(uuid_create)
         assert isinstance(file, bytes)

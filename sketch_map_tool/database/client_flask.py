@@ -3,16 +3,20 @@ from uuid import UUID
 
 import psycopg2
 from flask import g
+from psycopg2.errors import UndefinedTable
 from psycopg2.extensions import connection
 from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
+    CustomFileDoesNotExistAnymoreError,
     CustomFileNotFoundError,
     UUIDNotFoundError,
 )
-from sketch_map_tool.helpers import N_
+from sketch_map_tool.helpers import N_, to_array
+from sketch_map_tool.models import Bbox, Layer
+from sketch_map_tool.upload_processing import read_qr_code
 
 
 def open_connection():
@@ -85,35 +89,68 @@ def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
     _insert_id_map(request_uuid, map_)
 
 
-def insert_files(files, consent: bool) -> list[int]:
-    """Insert uploaded files as blob into the database and return primary keys"""
+def insert_files(
+    files, consent: bool
+) -> tuple[list[int], list[str], list[str], list[Bbox], list[Layer]]:
+    """Insert uploaded files as blob into the database and return ID, UUID and name.
+
+    UUID is derived from decoding the qr-code.
+    """
     create_query = """
     CREATE TABLE IF NOT EXISTS blob(
         id SERIAL PRIMARY KEY,
+        map_frame_uuid UUID,
         file_name VARCHAR,
         file BYTEA,
         consent BOOLEAN,
         ts TIMESTAMP WITH TIME ZONE DEFAULT now()
         )
     """
-    insert_query = (
-        "INSERT INTO blob(file_name, file, consent) VALUES (%s, %s, %s) RETURNING id"
-    )
+    insert_query = """
+    INSERT INTO blob (
+        map_frame_uuid,
+        file_name,
+        file,
+        consent)
+    VALUES (
+        %s,
+        %s,
+        %s,
+        %s)
+    RETURNING
+        id,
+        map_frame_uuid,
+        file_name
+    """
     db_conn = open_connection()
     with db_conn.cursor() as curs:
         curs.execute(create_query)
-        ids = []
+        file_ids = []
+        uuids = []
+        file_names = []
+        bboxes = []
+        layers = []
         for file in files:
+            file_content = file.read()
+            qr_code_content = read_qr_code(to_array(file_content))
             curs.execute(
                 insert_query,
                 (
+                    qr_code_content["uuid"],
                     secure_filename(file.filename),
-                    file.read(),
+                    file_content,
                     consent,
                 ),
             )
-            ids.append(curs.fetchone()[0])
-    return ids
+            result = curs.fetchone()
+            if result is None:
+                raise ValueError()
+            file_ids.append(result[0])
+            uuids.append(result[1])
+            file_names.append(result[2])
+            bboxes.append(qr_code_content["bbox"])
+            layers.append(qr_code_content["layer"])
+    return file_ids, uuids, file_names, bboxes, layers
 
 
 def select_file(id_: int) -> bytes:
@@ -131,13 +168,6 @@ def select_file(id_: int) -> bytes:
             )
 
 
-def delete_file(id_: int):
-    query = "DELETE FROM blob WHERE id = %s"
-    db_conn = open_connection()
-    with db_conn.cursor() as curs:
-        curs.execute(query, [id_])
-
-
 def select_file_name(id_: int) -> str:
     """Get an uploaded file name of a file stored in the database by ID."""
     query = "SELECT file_name FROM blob WHERE id = %s"
@@ -153,14 +183,14 @@ def select_file_name(id_: int) -> str:
             )
 
 
-def select_map_frame(uuid: UUID) -> bytes:
-    """Select map frame of the associated UUID."""
+def select_map_frame(uuid: UUID) -> tuple[bytes, str, str]:
+    """Select map frame, bbox and layer of the associated UUID."""
     query = "SELECT file FROM map_frame WHERE uuid = %s"
     db_conn = open_connection()
     with db_conn.cursor() as curs:
         try:
             curs.execute(query, [str(uuid)])
-        except psycopg2.errors.UndefinedTable:
+        except UndefinedTable:
             raise CustomFileNotFoundError(
                 N_(
                     "In this Sketch Map Tool instance no sketch map has been "
@@ -170,6 +200,11 @@ def select_map_frame(uuid: UUID) -> bytes:
             )
         raw = curs.fetchone()
         if raw:
+            if raw[0] is None:
+                raise CustomFileDoesNotExistAnymoreError(
+                    N_("The file with the id: {UUID} does not exist anymore"),
+                    {"UUID", uuid},
+                )
             return raw[0]
         else:
             raise CustomFileNotFoundError(

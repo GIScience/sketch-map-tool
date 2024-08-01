@@ -61,3 +61,7 @@ class UUIDNotFoundError(TranslatableError):
 
 class CustomFileNotFoundError(TranslatableError):
     pass
+
+
+class CustomFileDoesNotExistAnymoreError(TranslatableError):
+    pass

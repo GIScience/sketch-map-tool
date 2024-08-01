@@ -1,6 +1,9 @@
+import logging
 from pathlib import Path
 
 import vcr
+
+logging.getLogger("vcr").setLevel(logging.WARNING)
 
 FIXTURE_DIR = Path(__file__).parent.resolve() / "fixtures"
 CASSETT_DIR = FIXTURE_DIR / "cassette"
@@ -34,9 +37,9 @@ def replace_body(content_types, replacement):
 
 
 vcr_app = vcr.VCR(
-    cassette_library_dir=str(CASSETT_DIR),
     record_mode="new_episodes",
-    match_on=["uri", "method"],
-    before_record_response=replace_body(["image/png"], DUMMY_PNG),
+    cassette_library_dir=str(CASSETT_DIR),
+    # before_record_response=replace_body(["image/png"], DUMMY_PNG),
     ignore_localhost=True,
+    ignore_hosts=["neptune.ai", "basemaps-api.arcgis.com"],
 )

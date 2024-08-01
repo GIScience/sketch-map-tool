@@ -14,12 +14,12 @@ from testcontainers.redis import RedisContainer
 from sketch_map_tool import CELERY_CONFIG, get_locale, make_flask, routes
 from sketch_map_tool import celery_app as smt_celery_app
 from sketch_map_tool.config import DEFAULT_CONFIG
-from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.upload_processing import clip
 from tests import FIXTURE_DIR
+from tests import vcr_app as vcr
 
 
 #
@@ -72,6 +72,16 @@ def celery_app(celery_config, celery_session_app):
     celery_session_app.conf.update(celery_config)
     smt_celery_app.conf.update(celery_config)
     return celery_session_app
+
+
+@pytest.fixture(scope="session")
+def celery_worker_pool():
+    return "solo"
+
+
+@pytest.fixture(scope="session")
+def celery_enable_logging():
+    return True
 
 
 @pytest.mark.usefixtures(
@@ -150,20 +160,11 @@ def flask_client(flask_app):
     return flask_app.test_client()
 
 
-@pytest.fixture()
-def db_conn_celery():
-    # setup
-    db_client_celery.open_connection()
-    yield None
-    # teardown
-    db_client_celery.close_connection()
-
-
 #
 # Test input
 #
-@pytest.fixture
-def bbox():
+@pytest.fixture(scope="session")
+def bbox() -> Bbox:
     return Bbox(
         lon_min=964472.1973848869,
         lat_min=6343459.035638228,
@@ -173,14 +174,14 @@ def bbox():
 
 
 @pytest.fixture
-def size():
+def size() -> Size:
     return Size(width=1867, height=1587)
 
 
-@pytest.fixture
-def format_():
+@pytest.fixture(scope="session")
+def format_() -> PaperFormat:
     return PaperFormat(
-        "a4",
+        "A4",
         width=29.7,
         height=21,
         right_margin=5,
@@ -198,6 +199,11 @@ def format_():
         qr_contents_distances_not_rotated=(2, 3),
         qr_contents_distance_rotated=3,
     )
+
+
+@pytest.fixture(scope="session")
+def orientation() -> str:
+    return "landscape"
 
 
 @pytest.fixture
@@ -223,13 +229,12 @@ def bbox_wgs84():
 # TODO: Fixture `sketch_map_marked` only works for landscape orientation.
 # TODO: Add other params
 @pytest.fixture(scope="session")
-def params(layer):
+def params(layer, bbox, format_, orientation):
     return {
-        "format": "A4",
-        "orientation": "landscape",
-        "bbox": (
-            "[964445.3646475708,6343463.48326091,967408.255014792,6345943.466874749]"
-        ),
+        "format": format_.title,
+        "orientation": orientation,
+        "bbox": "[" + str(bbox) + "]",
+        # NOTE: bboxWGS84 is has not the same geographical extent as above bbox
         "bboxWGS84": (
             "[8.66376011761138,49.40266507327297,8.690376214631833,49.41716014123875]"
         ),
@@ -240,6 +245,7 @@ def params(layer):
 
 
 @pytest.fixture(scope="session")
+@vcr.use_cassette
 def uuid_create(
     params,
     flask_client,
@@ -247,6 +253,7 @@ def uuid_create(
     celery_app,
     tmp_path_factory,
 ) -> str:
+    """UUID after request to /create and successful sketch map generation."""
     response = flask_client.post("/create/results", data=params, follow_redirects=True)
 
     # Extract UUID from response
@@ -334,6 +341,7 @@ def map_frame_marked(
 
 
 @pytest.fixture(scope="session")
+@vcr.use_cassette
 def uuid_digitize(
     sketch_map_marked,
     flask_client,
@@ -341,7 +349,8 @@ def uuid_digitize(
     celery_app,
     tmp_path_factory,
 ) -> str:
-    data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")]}
+    """UUID after uploading files to /digitize and successful result generation."""
+    data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")], "consent": True}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
 
     # Extract UUID from response
