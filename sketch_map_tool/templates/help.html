@@ -108,8 +108,8 @@
                         {{ _('Be sure to include the hemisphere information (South/North, West/East) to avoid errors.') }}
                     </p>
                     <p>
-                        {{ _('If you need to transform your available coordinates into Lat-Lon coordinates first, we recommend using this tool: 
-                            <a href="https://coordinates-converter.com/en/decimal/51.000000,10.000000?karte=OpenStreetMap&zoom=8" 
+                        {{ _('If you need to transform your available coordinates into Lat-Lon coordinates first, we recommend using this tool:
+                            <a href="https://coordinates-converter.com/en/decimal/51.000000,10.000000?karte=OpenStreetMap&zoom=8"
                             target="_blank">Online converter to all coordinate systems</a>') }}
                     </p>
                     <p>
@@ -855,43 +855,43 @@
         <details>
             <summary id="data_sharing_for_improvement">{{ _('Share your data for the Improvement of the Sketch Map Tool') }}</summary>
             <article>
-                {{ _('On a voluntary basis, you can enable us to keep your uploaded Sketch Maps beyond processing to further improve the Sketch Map Tool.') }}
-                <table border="1" style="border-collapse: collapse;">
-                    <tr>
-                        <th>{{ _('If you opt-in by checking the check box you enable us to ...') }}</th>
-                        <th>{{ _('If you opt-out by leaving the checkbox unchecked (default) ...') }}</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p>
-                                {{ _('... keep your uploaded Sketch Maps for future improvements of the Sketch Map Tool such as training 
-                                our machine learning models which detect your markings on the uploaded images.') }}
-                            </p>
-                            <p>
-                                {{ _('The Sketch Map Tool uses a sequence of machine learning models (SAM and YOLO) to detect the markings on the maps. 
-                                These models need to be trained with a lot of real-world examples so they are able to identity the markings correctly.') }}
-                            </p>
-                            <p>
-                                {{ _('Further accuracy improvements can be achieved by incorporating additional real-world cases of marked maps into the models. 
-                                You can help us here by giving your consent!') }}
-                            </p>
-                            <p>
-                                {{ _('For more detailed and technical information take a look at our 
-                                    <a href="https://github.com/GIScience/sketch-map-tool/blob/main/docs/action-diagram.png" target="_blank">GitHub</a> 
-                                and the following figure.') }}
-                            </p>
-                                <figure>
-                                    <img src="{{ url_for("static", filename="assets/images/help/data_storage_and_security_workflow.webp" ) }}"
-                                        alt="{{ _('Data storage and security workflow.') }}">
-                                    <figcaption></figcaption>
-                                </figure>
-                        </td>
-                        <td>
-                            <p>
-                                {{ _('your uploaded Sketch Maps will be deleted after the results are generated. The results are stored and available for download 
-                                for a period of 24 hours, after which they are deleted too.') }}
-                    </tr>
-                </table>
+                <p>
+                    {{ _('On a voluntary basis, you can enable us to keep your uploaded Sketch Maps beyond processing to further improve the Sketch Map Tool.') }}
+                </p>
+                <div class="grid">
+                    <article>
+                        <p>{{ _('If you <strong>opt-in</strong> by checking the check box you enable us to ...') }}</p>
+                        <p>
+                            {{ _('... keep your uploaded Sketch Maps for future improvements of the Sketch Map Tool such as training
+                            our machine learning models which detect your markings on the uploaded images.') }}
+                        </p>
+                        <p>
+                            {{ _('The Sketch Map Tool uses a sequence of machine learning models (SAM and YOLO) to detect the markings on the maps.
+                            These models need to be trained with a lot of real-world examples so they are able to identity the markings correctly.') }}
+                        </p>
+                        <p>
+                            {{ _('Further accuracy improvements can be achieved by incorporating additional real-world cases of marked maps into the models.
+                            You can help us here by giving your consent!') }}
+                        </p>
+                        <p>
+                            {{ _('For more detailed and technical information take a look at our
+                                <a href="https://github.com/GIScience/sketch-map-tool/blob/main/docs/action-diagram.png" target="_blank">GitHub</a>
+                            and the following figure.') }}
+                        </p>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/data_storage_and_security_workflow.webp" ) }}"
+                                alt="{{ _('Data storage and security workflow.') }}">
+                            <figcaption></figcaption>
+                        </figure>
+                    </article>
+                    <article>
+                        <p>{{ _('If you <strong>opt-out</strong> by leaving the checkbox unchecked (default) ...') }}</p>
+                        <p>
+                            {{ _('... your uploaded Sketch Maps will be deleted after the results are generated. The results are stored and available for download
+                            for a period of 24 hours, after which they are deleted too.') }}
+                        </p>
+                    </article>
+                </div>
             </article>
         </details>
 
@@ -899,16 +899,16 @@
             <summary id="basic_statistics">{{ _('Basic statistics') }}</summary>
             <article>
                 {{ _('To get a better insight into the general usage of the Sketch Map Tool we store anonymous data about the map generation 
-                (date, centroid, paper format and orientation, layer and version).') }}
+                (date, centroid, layer, version, page format and orientation).') }}
             </article>
         </details>
 
         <details>
             <summary id="questions_concerns">{{ _('Questions and concerns') }}</summary>
             <article>
-                {{ _('If you have further questions or any concerns please reach us via <a href="mailto:sketch-map-tool@heigit.org" target="_blank">E-Mail</a>.') }}
+                <p>{{ _('If you have further questions or any concerns please reach us via <a href="mailto:sketch-map-tool@heigit.org" target="_blank">E-Mail</a>.') }}</p>
 
-                {{ _('It is also possible to set-up the Sketch Map Tool on your or your orgianitions own server. In this case, please get in touch with the <a href="mailto:sketch-map-tool@heigit.org" target="_blank">Sketch Map Tool team</a>.') }}
+                <p>{{ _('It is also possible to set-up the Sketch Map Tool on your own server. In this case, please get in touch with the <a href="mailto:sketch-map-tool@heigit.org" target="_blank">Sketch Map Tool team</a>.') }}</p>
             </article>
         </details>
 
