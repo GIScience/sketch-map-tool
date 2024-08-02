@@ -161,7 +161,6 @@ def test_cleanup_map_frames_old_without_consent(
     Map frame file content should be set to null.
     """
     # TODO: Also check deletion of bbox
-    # map frame file content should be delete
     client_celery.cleanup_map_frames()
     with flask_app.app_context():
         with pytest.raises(CustomFileDoesNotExistAnymoreError):
@@ -175,7 +174,7 @@ def test_cleanup_blobs_with_consent(
     sketch_map_marked: bytes,
 ):
     """Sketch map has been uploaded with consent. Nothing should happen."""
-    client_celery.cleanup_blob([UUID(uuid_create)])
+    client_celery.cleanup_blob([UUID(uuid_create), UUID(uuid_create)])
     with flask_app.app_context():
         with client_flask.open_connection().cursor() as curs:
             curs.execute(

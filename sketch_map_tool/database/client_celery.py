@@ -148,7 +148,7 @@ def cleanup_blob(map_frame_uuids: list[UUID]):
     """
     with db_conn.cursor() as curs:
         try:
-            curs.executemany(query, [map_frame_uuids])
+            curs.executemany(query, [[i] for i in map_frame_uuids])
         except UndefinedTable:
             logging.info("Table `blob` does not exist yet. Nothing todo.")
 
