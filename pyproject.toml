@@ -6,7 +6,7 @@ authors = ["HeiGIT <info@heigit.org>"]
 license = "GNU Affero General Public License v3.0"
 
 [tool.poetry.dependencies]
-python="^3.11.0"
+python="^3.11"
 Flask = "^2.2.5"
 waitress = "^2.1.2"
 requests = "^2.28.1"
@@ -30,10 +30,14 @@ ultralytics = "8.1.14"
 segment-anything = {git = "https://github.com/facebookresearch/segment-anything.git"}
 pyzbar = "^0.1.9"
 shapelysmooth = "^0.1.1"
-torch = "^2.1.2"
-torchvision = "^0.16.2"
+torch = "^2.4.0"
+torchvision = "^0.19.0"
 flask-babel = "^4.0.0"
 my-ultralytics-4bands = { git = "https://github.com/itisacloud/ultralytics_multiband_support.git", rev = "ef61cf9870755ae8b21b03253237d15f5856e1a6" }
+numpy = "^2.0.1"  # dependencies of gdal
+wheel = "^0.43.0"  # dependencies of gdal
+setuptools = "^72.1.0"  # dependencies of gdal
+psycopg2 = "^2.9.9"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
@@ -50,7 +54,6 @@ ruff = "^0.4.7"
 approvaltests = "^12.0.0"
 matplotlib = "^3.8.4"
 geopandas = "^0.14.4"
-numpy = "^1.26.4"
 testcontainers = {extras = ["postgres", "redis"], version = "^4.7.1"}
 
 [build-system]
