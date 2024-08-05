@@ -25,7 +25,6 @@ RUN apt update \
     && rm -rf /var/lib/apt/lists/*
 
 ENV POETRY_NO_INTERACTION=1 \
-    POETRY_CACHE_DIR=/tmp/poetry_cache \
     POETRY_REQUESTS_TIMEOUT=600
 
 COPY pyproject.toml poetry.lock .
@@ -39,8 +38,7 @@ COPY config config
 
 RUN python3 -m poetry install --only main --no-root --no-directory \
     && python3 -m poetry run python -m pip install gdal[numpy]=="$(gdal-config --version).*" \
-    && python3 -m poetry run pybabel compile -d sketch_map_tool/translations \
-    && rm -rf $POETRY_CACHE_DIR
+    && python3 -m poetry run pybabel compile -d sketch_map_tool/translations
 
 COPY --from=bundler --chown=smt:smt /sketch_map_tool/static/bundles sketch_map_tool/static/bundles
 # use entry-points defined in docker-compose file
