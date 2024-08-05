@@ -37,7 +37,7 @@ RUN python3 -m pip install --break-system-packages poetry setuptools \
 
 COPY sketch_map_tool sketch_map_tool
 COPY data data
-copy config config
+COPY config config
 
 RUN python3 -m poetry install --only main --no-root --no-directory \
     && python3 -m poetry run python -m pip install gdal[numpy]=="$(gdal-config --version).*" \
