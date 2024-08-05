@@ -4,45 +4,43 @@ FROM node:16-slim AS bundler
 COPY package.json package.json
 COPY esbuild.js esbuild.js
 COPY client-src/ client-src/
+
 RUN npm install
 RUN mkdir -p /sketch_map_tool/static/bundles
 RUN npm run build
 
 
-FROM condaforge/mambaforge:23.3.1-0
-# HTTP request timeout. Default is 30 seconds.
-ENV POETRY_REQUESTS_TIMEOUT=60
+FROM ubuntu:24.04
 
-RUN apt-get update \
-    && apt-get install -y --no-upgrade \
-        libgl1 \
+RUN apt update \
+    && apt install -y --no-upgrade \
+    python3 \
+    python3-pip \
+    python3-gdal \
+    git \
+    libgdal-dev \
+    libpq-dev \
+    libzbar0 \
+    libfreetype6-dev \
     && rm -rf /var/lib/apt/lists/*
-# within docker container: run without root privileges
-RUN useradd -md /home/smt smt
-WORKDIR /opt/smt
-RUN chown smt:smt . -R
-USER smt:smt
 
-COPY --chown=smt:smt environment.yml environment.yml
-RUN mamba env create --file environment.yml
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_REQUESTS_TIMEOUT=600
 
-# make RUN commands use the new environment:
-SHELL ["mamba", "run", "--no-capture-output", "--name", "smt", "/bin/bash", "-c"]
+COPY pyproject.toml poetry.lock .
 
-COPY --chown=smt:smt pyproject.toml pyproject.toml
-COPY --chown=smt:smt poetry.lock poetry.lock
-RUN which python
-RUN python -m poetry install --no-ansi --no-interaction --no-root
+RUN python3 -m pip install --break-system-packages poetry setuptools \
+    && python3 -m poetry install --only main --no-root --no-directory
 
-COPY --chown=smt:smt sketch_map_tool sketch_map_tool
-COPY --chown=smt:smt data/ data/
-COPY --chown=smt:smt config/ config/
-RUN python -m poetry install --no-ansi --no-interaction
+COPY sketch_map_tool sketch_map_tool
+COPY data data
+COPY config config
 
-# Compile translations
-RUN python -m poetry run pybabel compile -d sketch_map_tool/translations
+RUN python3 -m poetry install --only main --no-root --no-directory \
+    && python3 -m poetry run python -m pip install \
+        gdal[numpy]=="$(gdal-config --version).*" \
+        psycopg2 \
+    && python3 -m poetry run pybabel compile -d sketch_map_tool/translations
 
-# get JS dependencies
 COPY --from=bundler --chown=smt:smt /sketch_map_tool/static/bundles sketch_map_tool/static/bundles
-
 # use entry-points defined in docker-compose file

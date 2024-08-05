@@ -17,11 +17,8 @@ services:
       - "127.0.0.1:8081:8080"
     entrypoint:
       [
-        "mamba",
+        "poetry",
         "run",
-        "--no-capture-output",
-        "--name",
-        "smt",
         "waitress-serve",
         "sketch_map_tool.routes:app",
       ]
@@ -40,11 +37,8 @@ services:
           memory: 8G
     entrypoint:
       [
-        "mamba",
+        "poetry",
         "run",
-        "--no-capture-output",
-        "--name",
-        "smt",
         "celery",
         "--app",
         "sketch_map_tool.tasks",
@@ -72,11 +66,8 @@ services:
       - celery
     entrypoint:
       [
-        "mamba",
+        "poetry",
         "run",
-        "--no-capture-output",
-        "--name",
-        "smt",
         "celery",
         "--app",
         "sketch_map_tool.tasks",
