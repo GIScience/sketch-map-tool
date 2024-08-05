@@ -44,7 +44,7 @@ sudo apt install \
     libpq-dev \
     libzbar0
 
-pipx ensurepath
+# For all
 pipx install poetry
 ```
 
