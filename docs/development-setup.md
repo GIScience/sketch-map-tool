@@ -13,30 +13,36 @@ For contributing to this project please also read the [Contribution Guideline](/
 - NPM
 - git
 - GDAL
-- zbar
+- freetype *(dependency of reportlab for creating PDFs)*
+- libpq *(dependency of psycopg2 as interface to postgreSQL)*
+- zbar *(dependency of pyzbar for reading QR-codes)*
 
 This project uses [Poetry]() and [NPM]() for environment and dependencies management.
 
 ```bash
 # Mac OS X:
 # Make sure to have Python (and pip) and Node (and npm) installed
-brew install gdal zbar pipx numpy libpq openssl freetype
+brew install \
+    pipx \
+    git \
+    gdal \
+    freetype \
+    libpq \
+    zbar
 
 # Debian/Ubunutu
 sudo apt install \
     python3 \
     python3-pip \
-    python3-psycopg2 \
-    python3-numpy \
     python3-gdal \
     pipx \
     node \
     npm \
     git \
     libgdal-dev \
+    libfreetype6-dev \
     libpq-dev \
-    libzbar0 \
-    libfreetype6-dev
+    libzbar0
 
 pipx ensurepath
 pipx install poetry

@@ -16,9 +16,7 @@ RUN apt update \
     && apt install -y --no-upgrade \
     python3 \
     python3-pip \
-    python3-numpy \
     python3-gdal \
-    python3-psycopg2 \
     git \
     libgdal-dev \
     libpq-dev \
