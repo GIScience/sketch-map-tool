@@ -29,8 +29,9 @@ brew install \
     freetype \
     libpq \
     zbar
+pipx install poetry
 
-# Debian/Ubunutu
+# Debian/Ubuntu
 sudo apt install \
     python3 \
     python3-pip \
@@ -43,8 +44,6 @@ sudo apt install \
     libfreetype6-dev \
     libpq-dev \
     libzbar0
-
-# For all
 pipx install poetry
 ```
 
