@@ -12,7 +12,7 @@ To change the default configuration file path set the environment variable `SMT_
 To create a new configuration file simply copy the sample configuration file and change the values.
 
 ```bash
-cp sample.config.toml config.toml
+cp config/sample.config.toml config/config.toml
 ```
 
 ## Required Configuration
@@ -26,7 +26,9 @@ All lot of configuration values come with defaults. Required configuration value
 To get an ArcGIS/ESRI API key sign-up for [ArcGIS Location Platform](https://location.arcgis.com/sign-up/)
 and follow [this tutorial](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/).
 
-> Note: Keep the referrer field empty.
+Notes:
+1. During registration enter your username into the "Your portal URL" and "Your portal display name" fields (not `heigit`).
+2. During API key generation keep the referrer field empty.
 
 ### neptune.ai
 
