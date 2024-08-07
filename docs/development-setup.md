@@ -8,43 +8,59 @@ For contributing to this project please also read the [Contribution Guideline](/
 ## Prerequisites (Requirements)
 
 - Python: `>=3.11`
-- [Mamba](https://github.com/conda-forge/miniforge#install): `>=1.4`
+- Poetry
 - Node: `>=14`
+- NPM
+- git
+- GDAL
+- freetype *(dependency of reportlab for creating PDFs)*
+- libpq *(dependency of psycopg2 as interface to postgreSQL)*
+- zbar *(dependency of pyzbar for reading QR-codes)*
 
-This project uses [Mamba](https://github.com/conda-forge/miniforge#install) for environment and dependencies management.
-Please make sure it is installed on your system: [Installation Guide](https://github.com/conda-forge/miniforge#install).
-Instead of Mamba, Conda can also be used.
+This project uses [Poetry]() and [NPM]() for environment and dependencies management.
 
-> Actually, Mamba and Poetry together are used to manage environment and dependencies.
-> But only Mamba is required to be present on the system.
-> Poetry will be installed by Mamba.
-> Mamba installs pre-built binaries for dependencies like GDAL. 
-> Poetry installs the rest of the Python dependencies.
+```bash
+# Mac OS X:
+# Make sure to have Python (and pip) and Node (and npm) installed
+brew install \
+    pipx \
+    git \
+    gdal \
+    freetype \
+    libpq \
+    zbar
+pipx install poetry
+
+# Debian/Ubuntu
+sudo apt install \
+    python3 \
+    python3-pip \
+    python3-gdal \
+    pipx \
+    node \
+    npm \
+    git \
+    libgdal-dev \
+    libfreetype6-dev \
+    libpq-dev \
+    libzbar0
+pipx install poetry
+```
 
 ## Installation
 
 ### Python Package
 
-> Note: Editors like Visual Studio Code or PyCharm (IDEA) will try to automatically setup Sketch Map Tool.
-> They will fail if they try to create a virtual environment managed by Poetry.
-> If this happens remove the environment (`poetry env remove 3.11`).
 > Then execute steps below. Please see also the section on [Setup in an IDE](#Setup-in-an-IDE).
-
-> Note: For setup on a Apple Mac with Mx chips please have a look at
-> [this section](#Setup-on-an-Apple-Mac-with-M2-chip) first.
 
 ```bash
 # clone repository
 git clone https://github.com/GIScience/sketch-map-tool.git
 cd sketch-map-tool
 
-# setup environment and install package
-mamba env create --file environment.yml
-
-mamba activate smt
-poetry install  # poetry installs directly into activated mamba environment
-
-# install git commit hooks
+poetry install
+poetry shell
+pip install gdal[numpy]=="$(gdal-config --version).*"
 pre-commit install
 
 # fetch and run backend (postgres) and broker (redis) using docker
@@ -54,17 +70,8 @@ docker run --name smt-redis -d -p 6379:6379 redis:7
 # compile languages:
 pybabel compile -d sketch_map_tool/translations
 
-# install local versions of esbuild, eslint and stylelint to build and check JS and CSS
 npm install
-npm run build  # build/bundle JS and CSS
-```
-
-Note: When dependencies changed the environment can be updated by running:
-
-```bash
-mamba activate smt
-mamba env update --file environment.yml
-poetry install
+npm run build
 ```
 
 ## Configuration
