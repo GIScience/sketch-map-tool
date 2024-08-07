@@ -37,7 +37,9 @@ COPY data data
 COPY config config
 
 RUN python3 -m poetry install --only main --no-root --no-directory \
-    && python3 -m poetry run python -m pip install gdal[numpy]=="$(gdal-config --version).*" \
+    && python3 -m poetry run python -m pip install \
+        gdal[numpy]=="$(gdal-config --version).*" \
+        psycopg \
     && python3 -m poetry run pybabel compile -d sketch_map_tool/translations
 
 COPY --from=bundler --chown=smt:smt /sketch_map_tool/static/bundles sketch_map_tool/static/bundles
