@@ -37,6 +37,21 @@ def template_upload_few_features():
     )
 
 
+@pytest.fixture
+def photo_of_sketch_map():
+    return cv2.imread(str(FIXTURE_DIR / "clip" / "1-photo-of-sketch-map.jpg"))
+
+
+@pytest.fixture
+def map_frame():
+    return cv2.imread(str(FIXTURE_DIR / "clip" / "1-map-frame.png"))
+
+
+@pytest.fixture
+def photo_of_sketch_map_clipped():
+    return cv2.imread(str(FIXTURE_DIR / "clip" / "1-photo-of-sketch-map-clipped.jpg"))
+
+
 def get_correlation_of_histograms(img_1, img_2):
     hsv_1 = cv2.cvtColor(img_1, cv2.COLOR_BGR2HSV)
     hsv_2 = cv2.cvtColor(img_2, cv2.COLOR_BGR2HSV)
@@ -61,6 +76,14 @@ def test_cut_out_low_resolution(template_upload_expected_low_resolution):
     template, upload, expected = template_upload_expected_low_resolution
     result = clip(upload, template)
     assert get_correlation_of_histograms(expected, result) >= 0.8
+
+
+def test_failed_georeferencing(
+    photo_of_sketch_map, map_frame, photo_of_sketch_map_clipped
+):
+    """Example of failed georeferencing (version 2024.08.02.4) due to filter_matrix."""
+    result = clip(photo_of_sketch_map, map_frame)
+    assert get_correlation_of_histograms(photo_of_sketch_map_clipped, result) >= 0.8
 
 
 # TODO: Improve map cutting to also work in the case of few features

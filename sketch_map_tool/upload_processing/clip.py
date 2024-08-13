@@ -65,14 +65,12 @@ def clip(photo: NDArray, template: NDArray) -> NDArray:
     # Get dimensions of template
     height, width, _ = template.shape
 
-    # Check if homography matrix passes filter
-    succeed = filter_matrix(homography_matrix)
+    # TODO: fix issue demonstrated by the test case
+    # `test_failed_georeferencing` in `test_clip.py`,
+    # then check success before return clipped img.
+    # succeed = filter_matrix(homography_matrix)
 
-    # Warp perspective if homography matrix passes filter
-    if succeed:
-        return cv2.warpPerspective(photo, homography_matrix, (width, height))
-    else:
-        return np.zeros(template.shape, dtype=np.uint8)
+    return cv2.warpPerspective(photo, homography_matrix, (width, height))
 
 
 def limit_keypoints(
@@ -98,8 +96,6 @@ def filter_matrix(tran_matrix: NDArray) -> bool:
     h23 = tran_matrix[1, 2]
 
     if h13 > 1500 and h23 > 0:
-        print(False)
         return False
     else:
-        print(True)
         return True
