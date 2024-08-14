@@ -9,6 +9,12 @@ class TranslatableError(Exception):
     expected to be a dictionary containing values for string interpolation.
     """
 
+    def __init__(self, message: str, params: dict | None = None, *args):
+        if params is not None:
+            super().__init__(message, params, *args)
+        else:
+            super().__init__(message, *args)
+
     def __repr__(self):
         self._repr(translate=False)
 
