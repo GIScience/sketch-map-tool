@@ -1,3 +1,5 @@
+import logging
+
 import cv2
 import pytest
 
@@ -52,6 +54,16 @@ def photo_of_sketch_map_clipped():
     return cv2.imread(str(FIXTURE_DIR / "clip" / "1-photo-of-sketch-map-clipped.jpg"))
 
 
+@pytest.fixture
+def photo_of_sketch_map_2():
+    return cv2.imread(str(FIXTURE_DIR / "clip" / "2-photo-of-sketch-map.jpg"))
+
+
+@pytest.fixture
+def map_frame_2():
+    return cv2.imread(str(FIXTURE_DIR / "clip" / "2-map-frame.png"))
+
+
 def get_correlation_of_histograms(img_1, img_2):
     hsv_1 = cv2.cvtColor(img_1, cv2.COLOR_BGR2HSV)
     hsv_2 = cv2.cvtColor(img_2, cv2.COLOR_BGR2HSV)
@@ -78,12 +90,28 @@ def test_cut_out_low_resolution(template_upload_expected_low_resolution):
     assert get_correlation_of_histograms(expected, result) >= 0.8
 
 
-def test_failed_georeferencing(
-    photo_of_sketch_map, map_frame, photo_of_sketch_map_clipped
+def test_clip_1(
+    photo_of_sketch_map,
+    map_frame,
+    photo_of_sketch_map_clipped,
 ):
-    """Example of failed georeferencing (version 2024.08.02.4) due to filter_matrix."""
+    """Example of previously failed georeferencing (version 2024.08.02.4)."""
     result = clip(photo_of_sketch_map, map_frame)
     assert get_correlation_of_histograms(photo_of_sketch_map_clipped, result) >= 0.8
+
+
+def test_clip_failure(
+    photo_of_sketch_map,
+    map_frame_2,
+    caplog,
+):
+    """Clip produces a distorted image."""
+    with caplog.at_level(logging.WARNING):
+        clip(photo_of_sketch_map, map_frame_2)
+        assert "Something bad happened!" in caplog.text
+    # cv2.imshow("image", result)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
 
 # TODO: Improve map cutting to also work in the case of few features
