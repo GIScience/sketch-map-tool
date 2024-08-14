@@ -108,7 +108,7 @@ def test_clip_failure(
     """Clip produces a distorted image."""
     with caplog.at_level(logging.WARNING):
         clip(photo_of_sketch_map, map_frame_2)
-        assert "Something bad happened!" in caplog.text
+        assert "Georeferencing might have failed." in caplog.text
     # cv2.imshow("image", result)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
