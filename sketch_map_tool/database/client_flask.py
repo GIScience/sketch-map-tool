@@ -203,7 +203,7 @@ def select_map_frame(uuid: UUID) -> tuple[bytes, str, str]:
             if raw[0] is None:
                 raise CustomFileDoesNotExistAnymoreError(
                     N_("The file with the id: {UUID} does not exist anymore"),
-                    {"UUID", uuid},
+                    {"UUID": uuid},
                 )
             return raw[0]
         else:
@@ -213,7 +213,7 @@ def select_map_frame(uuid: UUID) -> tuple[bytes, str, str]:
                     " You can only upload sketch maps to the "
                     "instance on which they have been created."
                 ),
-                {"UUID", uuid},
+                {"UUID": uuid},
             )
 
 
