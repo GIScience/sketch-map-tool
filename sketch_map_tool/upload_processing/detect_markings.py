@@ -1,3 +1,5 @@
+import logging
+
 import cv2
 import numpy as np
 from numpy.typing import NDArray
@@ -41,6 +43,8 @@ def detect_markings(
         yolo_cls,
         sam_predictor,
     )
+    if len(colors) == 0:
+        logging.warning("No markings detected.")
     colors = [int(c) + 1 for c in colors]  # +1 because 0 is background
     processed_markings = post_process(masks, bboxes, colors)
     return processed_markings

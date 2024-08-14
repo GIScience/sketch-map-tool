@@ -1,3 +1,5 @@
+import logging
+
 import numpy as np
 import pytest
 from PIL import Image, ImageEnhance
@@ -77,3 +79,19 @@ def test_detect_markings(
     for m in markings:
         img = Image.fromarray(m)
         ImageEnhance.Contrast(img).enhance(10).show()
+
+
+def test_detectec_markings_failure(yolo_osm_cls, yolo_osm_obj, sam_predictor, caplog):
+    # Empty map and template should not contain any markings
+    empty_map = np.zeros((1024, 1024, 3), dtype=np.uint8)
+    empty_template = np.zeros((1024, 1024, 3), dtype=np.uint8)
+
+    with caplog.at_level(logging.WARNING):
+        detect_markings(
+            empty_map,
+            empty_template,
+            yolo_osm_obj,
+            yolo_osm_cls,
+            sam_predictor,
+        )
+        assert "No markings detected." in caplog.text
