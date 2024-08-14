@@ -162,12 +162,12 @@ def select_file(id_: int) -> bytes:
         if raw:
             if raw[0] is None:
                 raise CustomFileDoesNotExistAnymoreError(
-                    N_("The file with the id: {ID} does not exist anymore"), {"ID", id_}
+                    N_("The file with the id: {ID} does not exist anymore"), {"ID": id_}
                 )
             return raw[0]
         else:
             raise CustomFileNotFoundError(
-                N_("There is no file in the database with the id: {ID}"), {"ID", id_}
+                N_("There is no file in the database with the id: {ID}"), {"ID": id_}
             )
 
 
