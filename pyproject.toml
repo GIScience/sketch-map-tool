@@ -27,13 +27,13 @@ redis = "^4.5.4"
 pyproj = "^3.6.1"
 neptune = "^1.8.3"
 ultralytics = "8.1.14"
-segment-anything = {git = "https://github.com/facebookresearch/segment-anything.git"}
 pyzbar = "^0.1.9"
 shapelysmooth = "^0.1.1"
-torch = "^2.1.2"
-torchvision = "^0.16.2"
 flask-babel = "^4.0.0"
 my-ultralytics-4bands = { git = "https://github.com/itisacloud/ultralytics_multiband_support.git", rev = "ef61cf9870755ae8b21b03253237d15f5856e1a6" }
+torch = {version = "^2.4.0+cpu", source = "pytorch-cpu"}
+torchvision = {version = "^0.19.0+cpu", source = "pytorch-cpu"}
+sam-2 = {git = "https://github.com/facebookresearch/segment-anything-2.git"}
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
@@ -52,6 +52,12 @@ matplotlib = "^3.8.4"
 geopandas = "^0.14.4"
 numpy = "^1.26.4"
 testcontainers = {extras = ["postgres", "redis"], version = "^4.7.1"}
+
+
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
