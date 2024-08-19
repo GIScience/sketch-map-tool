@@ -1,6 +1,8 @@
+import random
+
 import numpy as np
 import pytest
-from PIL import Image
+from PIL import Image, ImageDraw, ImageOps
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 from ultralytics import YOLO
@@ -84,6 +86,24 @@ def test_detect_markings(
         yolo_cls,
         sam_predictor,
     )
+
+    img = Image.fromarray(map_frame_marked)
     for m in markings:
-        img = Image.fromarray(m)
-        ImageEnhance.Contrast(img).enhance(10).show()
+        colors = ["red", "green", "blue", "yellow", "purple", "orange", "pink", "brown"]
+        m[m == m.max()] = 255
+        colored_marking = ImageOps.colorize(
+            Image.fromarray(m).convert("L"), black="black", white=random.choice(colors)
+        )
+        img.paste(colored_marking, (0, 0), Image.fromarray(m))
+        # draw bbox around each marking, derived from the mask m
+        bbox = (
+            np.min(np.where(m)[1]),
+            np.min(np.where(m)[0]),
+            np.max(np.where(m)[1]),
+            np.max(np.where(m)[0]),
+        )
+
+        draw = ImageDraw.Draw(img)
+        draw.rectangle(bbox, outline="red", width=2)
+
+    img.show()
