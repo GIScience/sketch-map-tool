@@ -34,6 +34,7 @@ my-ultralytics-4bands = { git = "https://github.com/itisacloud/ultralytics_multi
 torch = {version = "^2.4.0+cpu", source = "pytorch-cpu"}
 torchvision = {version = "^0.19.0+cpu", source = "pytorch-cpu"}
 sam-2 = {git = "https://github.com/facebookresearch/segment-anything-2.git"}
+setuptools = "^72.2.0"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
