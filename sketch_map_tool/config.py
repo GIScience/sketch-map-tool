@@ -64,6 +64,6 @@ def get_config() -> MappingProxyType:
     return MappingProxyType(cfg)
 
 
-def get_config_value(key: str) -> str | int:
+def get_config_value(key: str):
     config = get_config()
     return config[key]
