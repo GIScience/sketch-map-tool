@@ -11,7 +11,8 @@ from sketch_map_tool.config import get_config_value
 
 def init_model(id: str) -> Path:
     """Initialize model. Download model to data dir if not present."""
-    path = Path(get_config_value("data-dir")) / id
+    raw = Path(get_config_value("data-dir")) / id
+    path = raw.with_suffix(".pt")
     if not path.is_file():
         logging.info(f"Downloading model {id} from neptune.ai to {path}.")
         model = neptune.init_model_version(
@@ -21,7 +22,6 @@ def init_model(id: str) -> Path:
             mode="read-only",
         )
         model["model"].download(str(path))
-        return path
     return path
 
 
