@@ -1,7 +1,8 @@
 import numpy as np
 import pytest
-from PIL import Image, ImageEnhance
-from segment_anything import SamPredictor, sam_model_registry
+from PIL import Image
+from sam2.build_sam import build_sam2
+from sam2.sam2_image_predictor import SAM2ImagePredictor
 from ultralytics import YOLO
 from ultralytics_4bands import YOLO as YOLO_4
 
@@ -9,7 +10,11 @@ from sketch_map_tool.config import get_config_value
 from sketch_map_tool.upload_processing.detect_markings import (
     detect_markings,
 )
-from sketch_map_tool.upload_processing.ml_models import init_model
+from sketch_map_tool.upload_processing.ml_models import (
+    init_model,
+    init_sam2,
+    select_computation_device,
+)
 
 
 # Initialize ml-models.
@@ -17,9 +22,14 @@ from sketch_map_tool.upload_processing.ml_models import init_model
 @pytest.fixture
 def sam_predictor():
     """Zero shot segment anything model"""
-    sam_path = init_model(get_config_value("neptune_model_id_sam"))
-    sam_model = sam_model_registry[get_config_value("model_type_sam")](sam_path)
-    return SamPredictor(sam_model)  # mask predictor
+    path = init_sam2()
+    device = select_computation_device()
+    sam2_model = build_sam2(
+        config_file="sam2_hiera_b+.yaml",
+        ckpt_path=path,
+        device=device,
+    )
+    return SAM2ImagePredictor(sam2_model)
 
 
 @pytest.fixture

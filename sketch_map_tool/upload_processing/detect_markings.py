@@ -1,8 +1,9 @@
 import cv2
 import numpy as np
+import torch
 from numpy.typing import NDArray
 from PIL import Image, ImageEnhance
-from segment_anything import SamPredictor
+from sam2.sam2_image_predictor import SAM2ImagePredictor
 from ultralytics import YOLO
 from ultralytics_4bands import YOLO as YOLO_4
 
@@ -12,7 +13,7 @@ def detect_markings(
     map_frame: NDArray,
     yolo_obj: YOLO_4,
     yolo_cls: YOLO,
-    sam_predictor: SamPredictor,
+    sam_predictor: SAM2ImagePredictor,
 ) -> list[NDArray]:
     """Run machine learning pipeline and post-processing to detect markings.
 
@@ -83,7 +84,7 @@ def apply_ml_pipeline(
     difference: Image.Image,
     yolo_obj: YOLO_4,
     yolo_cls: YOLO,
-    sam_predictor: SamPredictor,
+    sam_predictor: SAM2ImagePredictor,
 ) -> tuple[list[NDArray], NDArray, list]:
     """Apply the entire machine learning pipeline on an image.
 
@@ -147,7 +148,7 @@ def apply_yolo_classification(
 def apply_sam(
     image: Image.Image,
     bounding_boxes: NDArray,
-    sam_predictor: SamPredictor,
+    sam_predictor: SAM2ImagePredictor,
 ) -> tuple[list[NDArray], list[np.float32]]:
     """Apply zero-shot SAM (Segment Anything) on an image using bounding boxes.
 
@@ -157,19 +158,20 @@ def apply_sam(
     Returns:
         tuple: List of masks and corresponding scores.
     """
-    sam_predictor.set_image(np.array(image))
-    masks = []
-    scores = []
-    for bbox in bounding_boxes:
-        mask, score = mask_from_bbox(bbox, sam_predictor)
-        masks.append(mask)
-        scores.append(score)
+    with torch.inference_mode(), torch.autocast("cuda", dtype=torch.bfloat16):
+        sam_predictor.set_image(np.array(image))
+        masks = []
+        scores = []
+        for bbox in bounding_boxes:
+            mask, score = mask_from_bbox(bbox, sam_predictor)
+            masks.append(mask)
+            scores.append(score)
     return masks, scores
 
 
 def mask_from_bbox(
     bbox: NDArray,
-    sam_predictor: SamPredictor,
+    sam_predictor: SAM2ImagePredictor,
 ) -> tuple:
     """Generate a mask using SAM (Segment Anything) predictor for a given bounding box.
 
@@ -177,6 +179,7 @@ def mask_from_bbox(
         tuple: Mask and corresponding score.
     """
     masks, scores, _ = sam_predictor.predict(box=bbox, multimask_output=False)
+    # TODO: should error be raised if lists has more then one element?
     return masks[0], scores[0]
 
 

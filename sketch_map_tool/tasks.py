@@ -1,5 +1,4 @@
 import logging
-import os
 from io import BytesIO
 from uuid import UUID
 from zipfile import ZipFile
@@ -8,7 +7,8 @@ from celery.result import AsyncResult
 from celery.signals import setup_logging, worker_process_init, worker_process_shutdown
 from geojson import FeatureCollection
 from numpy.typing import NDArray
-from segment_anything import SamPredictor, sam_model_registry
+from sam2.build_sam import build_sam2
+from sam2.sam2_image_predictor import SAM2ImagePredictor
 from ultralytics import YOLO
 from ultralytics_4bands import YOLO as YOLO_4
 
@@ -26,7 +26,11 @@ from sketch_map_tool.upload_processing import (
     post_process,
 )
 from sketch_map_tool.upload_processing.detect_markings import detect_markings
-from sketch_map_tool.upload_processing.ml_models import init_model
+from sketch_map_tool.upload_processing.ml_models import (
+    init_model,
+    init_sam2,
+    select_computation_device,
+)
 from sketch_map_tool.wms import client as wms_client
 
 
@@ -151,13 +155,16 @@ def digitize_sketches(
 ) -> AsyncResult | FeatureCollection:
     # Initialize ml-models. This has to happen inside of celery context.
     #
-    # Prevent usage of CUDA while transforming Tensor objects to numpy arrays
-    # during marking detection
-    os.environ["CUDA_VISIBLE_DEVICES"] = ""
     # Zero shot segment anything model for automatic mask generation
-    sam_path = init_model(get_config_value("neptune_model_id_sam"))
-    sam_model = sam_model_registry[get_config_value("model_type_sam")](sam_path)
-    sam_predictor: SamPredictor = SamPredictor(sam_model)  # mask predictor
+    path = init_sam2()
+    device = select_computation_device()
+    sam2_model = build_sam2(
+        config_file="sam2_hiera_b+.yaml",
+        ckpt_path=path,
+        device=device,
+    )
+    sam_predictor = SAM2ImagePredictor(sam2_model)
+
     # Custom trained model for object detection (obj) and classification (cls)
     # of markings and colors.
     if "osm" in layers.values():
