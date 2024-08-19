@@ -3,9 +3,12 @@ Functionality to cut a sketch map out of a photograph containing one,
 based on a matching template
 """
 
+import logging
+
 import cv2
 import numpy as np
 from numpy.typing import NDArray
+from skimage.metrics import structural_similarity as ssim
 
 
 def clip(photo: NDArray, template: NDArray) -> NDArray:
@@ -65,12 +68,14 @@ def clip(photo: NDArray, template: NDArray) -> NDArray:
     # Get dimensions of template
     height, width, _ = template.shape
 
-    # TODO: fix issue demonstrated by the test case
-    # `test_failed_georeferencing` in `test_clip.py`,
-    # then check success before return clipped img.
-    # succeed = filter_matrix(homography_matrix)
+    warped = cv2.warpPerspective(photo, homography_matrix, (width, height))
 
-    return cv2.warpPerspective(photo, homography_matrix, (width, height))
+    # Check if wrapping lead to skewed results.
+    # Various approaches haven been tried (SSIM, pHash, DL embeddings &
+    # analyzing the homography matrix)
+    if ssim(cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY), template_gray) < 0.3:
+        logging.warning("Georeferencing might have failed.")
+    return warped
 
 
 def limit_keypoints(

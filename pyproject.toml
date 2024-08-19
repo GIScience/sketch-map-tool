@@ -34,6 +34,7 @@ torch = "^2.1.2"
 torchvision = "^0.16.2"
 flask-babel = "^4.0.0"
 my-ultralytics-4bands = { git = "https://github.com/itisacloud/ultralytics_multiband_support.git", rev = "ef61cf9870755ae8b21b03253237d15f5856e1a6" }
+scikit-image = "^0.24.0"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
