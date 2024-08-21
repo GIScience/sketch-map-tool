@@ -15,27 +15,20 @@ To create a new configuration file simply copy the sample configuration file and
 cp config/sample.config.toml config/config.toml
 ```
 
+## Default Configuration
+
+For a list of all configuration variables and their default values please take a look at [config.py](sketch_map_tool/config.py).
+
 ## Required Configuration
 
 All lot of configuration values come with defaults. Required configuration values are:
 - `neptune_api_token`
-- `esri-api-key`
-
-### ArcGIS ESRI
-
-To get an ArcGIS/ESRI API key sign-up for [ArcGIS Location Platform](https://location.arcgis.com/sign-up/)
-and follow [this tutorial](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/).
-
-Notes:
-1. During registration enter your username into the "Your portal URL" and "Your portal display name" fields (not `heigit`).
-2. During API key generation keep the referrer field empty.
 
 ### neptune.ai
 
 Ask the team to get an invite the Sketch Map Tool project on neptuine.ai.
 
 To get the API key go to "Project Metadata" and copy the key from the example code.
-
 
 ## Configuration for Docker Compose
 
@@ -46,6 +39,15 @@ broker-url = "redis://redis:6379"
 result-backend = "db+postgresql://smt:smt@postgres:5432"
 ```
 
-## Default Configuration
+## Misc
 
-For a list of all configuration variables and their default values please take a look at [config.py](sketch_map_tool/config.py).
+### ArcGIS/ESRI API Key
+
+To retrieve up-to-date attribution an ArcGIS/ESRI API key is needed.
+For local development you do not need one.
+To get an ArcGIS/ESRI API key sign-up for [ArcGIS Location Platform](https://location.arcgis.com/sign-up/)
+and follow [this tutorial](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/).
+
+Notes:
+1. During registration enter your username into the "Your portal URL" and "Your portal display name" fields (not `heigit`).
+2. During API key generation keep the referrer field empty.
