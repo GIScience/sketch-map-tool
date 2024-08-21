@@ -34,17 +34,24 @@ def get_attribution(layer: Layer) -> str:
         url = (
             "https://basemaps-api.arcgis.com/arcgis/rest/services/styles/ArcGIS:Imagery"
         )
-        params = {"type": "style", "token": get_config_value("esri-api-key")}
-        response = requests.get(url, params, timeout=10)
-        result = response.json()
-        sources = result["sources"]
-        if len(sources) != 2:
+        token = get_config_value("esri-api-key")
+        if token == "":
+            sources = "Esri, Maxar, Earthstar Geographics, and the GIS User Community"
             logging.warning(
-                "Attribution retrieved from ESRI API has unexpected format."
+                "No ESRI API key configured. "
+                + " To retrieve up-to-date attribution from ESRI please add one."
             )
-        sources.pop("esri", None)
-        attribution = "Powered by Esri<br />" + list(sources.values())[0]["attribution"]
-        return attribution
+        else:
+            params = {"type": "style", "token": token}
+            response = requests.get(url, params, timeout=10)
+            result = response.json()
+            result["sources"].pop("esri", None)
+            sources = list(result["sources"].values())[0]["attribution"]
+            if len(sources) != 2:
+                logging.warning(
+                    "Attribution retrieved from ESRI API has unexpected format."
+                )
+        return "Powered by Esri<br />" + sources
     else:
         return "Powered by OpenStreetMap<br />©openstreetmap.org/copyright"
 
