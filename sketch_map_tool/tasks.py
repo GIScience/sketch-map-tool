@@ -3,6 +3,7 @@ from io import BytesIO
 from uuid import UUID
 from zipfile import ZipFile
 
+import celery.states
 from celery.result import AsyncResult
 from celery.signals import setup_logging, worker_process_init, worker_process_shutdown
 from geojson import FeatureCollection
@@ -16,7 +17,8 @@ from sketch_map_tool import celery_app as celery
 from sketch_map_tool import get_config_value, map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import get_attribution
-from sketch_map_tool.helpers import to_array
+from sketch_map_tool.exceptions import MarkingDetectionError
+from sketch_map_tool.helpers import N_, to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.upload_processing import (
     clip,
@@ -100,8 +102,9 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
 # 2. DIGITIZE RESULTS
 #
-@celery.task()
+@celery.task(bind=True)
 def georeference_sketch_maps(
+    self,
     file_ids: list[int],
     file_names: list[str],
     uuids: list[str],
@@ -135,7 +138,11 @@ def georeference_sketch_maps(
             zip_file.writestr(f"{name}.geotiff", file.read())
 
     buffer = BytesIO()
-    for file_id, uuid, file_name in zip(file_ids, uuids, file_names):
+    for i, (file_id, uuid, file_name) in enumerate(zip(file_ids, uuids, file_names)):
+        self.update_state(
+            state="PROGRESS",
+            meta={"current": i, "total": len(file_ids), "failures": []},
+        )
         zip_(process(file_id, uuid), file_name)
     with ZipFile(buffer, "a") as zip_file:
         zip_file.writestr("attributions.txt", get_attribution_file().read())
@@ -144,8 +151,9 @@ def georeference_sketch_maps(
     return buffer
 
 
-@celery.task()
+@celery.task(bind=True)
 def digitize_sketches(
+    self,
     file_ids: list[int],
     file_names: list[str],
     uuids: list[str],
@@ -179,7 +187,12 @@ def digitize_sketches(
         yolo_cls_esri: YOLO = YOLO(path)
 
     l = []  # noqa: E741
-    for file_id, file_name, uuid in zip(file_ids, file_names, uuids):
+    failures = []
+    for i, (file_id, file_name, uuid) in enumerate(zip(file_ids, file_names, uuids)):
+        self.update_state(
+            state="PROGRESS",
+            meta={"current": i, "total": len(file_ids), "failures": failures},
+        )
         # r = interim result
         r: BytesIO = db_client_celery.select_file(file_id)  # type: ignore
         r: NDArray = to_array(r)  # type: ignore
@@ -200,12 +213,18 @@ def digitize_sketches(
             yolo_cls,
             sam_predictor,
         )  # type: ignore
+        if len(r) == 0:
+            logging.warning("No markings were detected for file " + file_name)
+            failures.append(file_name)
+            continue
         # m = marking
         for m in r:
             m: BytesIO = georeference(m, bboxes[uuid], bgr=False)  # type: ignore
             m: FeatureCollection = polygonize(m, layer_name=file_name)  # type: ignore
             m: FeatureCollection = post_process(m, file_name)
             l.append(m)
+    if len(l) == 0:
+        raise MarkingDetectionError(N_("No markings have been detected."))
     return merge(l)
 
 
