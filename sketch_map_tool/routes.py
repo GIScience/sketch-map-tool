@@ -201,6 +201,7 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
 
     href = None
     error = None
+    info = None
     if task.ready():
         if task.successful():  # SUCCESS
             http_status = 200
@@ -216,6 +217,10 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             except Exception as err:
                 http_status = 500  # Internal Server Error
                 error = "{}: {}".format(type(err).__name__, str(err))
+    elif task.status == "PROGRESS":
+        # In progress, but has not been completed
+        http_status = 202  # Accepted
+        info = task.info
     else:  # PENDING, RETRY, STARTED
         # Accepted for processing, but has not been completed
         http_status = 202  # Accepted
@@ -225,6 +230,7 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
         "type": type_,
         "href": href,
         "error": error,
+        "info": info,
     }
     body = {k: v for k, v in body_raw.items() if v is not None}
     return Response(json.dumps(body), status=http_status, mimetype="application/json")

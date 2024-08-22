@@ -1,4 +1,5 @@
 from io import BytesIO
+from time import time
 from uuid import UUID, uuid4
 
 import pytest
@@ -139,6 +140,31 @@ def test_api_status_uuid_digitize(uuid_digitize, type_, flask_client):
     assert resp.json["id"] == uuid_digitize
     assert resp.json["status"] == "SUCCESS"
     assert resp.json["href"] == f"/api/download/{uuid_digitize}/{type_}"
+
+
+# TODO: Make test case work in a run of the whole test suite
+@pytest.mark.skip("Only works in a single test run")
+@vcr_app.use_cassette
+def test_api_status_uuid_digitize_progress(sketch_map_marked, flask_client):
+    """Test if custom task status information is return by /status"""
+    unique_file_name = str(uuid4())
+    data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
+    response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
+    assert response.status_code == 200
+
+    # Extract UUID from response
+    url_parts = response.request.path.rsplit("/")
+    uuid = url_parts[-1]
+
+    # try for 5 sec
+    end = time() + 5
+    while time() < end:
+        resp = flask_client.get(f"/api/status/{uuid}/raster-results")
+        if resp.json["status"] == "PROGRESS":
+            break
+    assert resp.status_code == 202
+    assert resp.json["status"] == "PROGRESS"
+    assert resp.json["info"] == {"current": 0, "total": 1}
 
 
 def test_api_download_uuid_sketch_map(uuid_create, flask_client):

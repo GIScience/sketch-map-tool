@@ -32,7 +32,21 @@ async function poll(url, prefix) {
     async function onProgress(response) {
         // console.log("progress", response);
         const result = await response.json();
-        setTaskStatus(`${prefix}-status`, `Processing ${result.status}`);
+        if (result.status === "PROGRESS" && "info" in result) {
+            const messageProgress = `Processing in ${result.status}: ${result.info.current} of ${result.info.total} uploaded files have been processed.`;
+            if (result.info.failures && result.info.failures.length) {
+                const messageFailure = `For following files no markings were detected: ${result.info.failures.join(", ")}.`;
+                const messageContact = "Please feel free to report this failure (sketch-map-tool@heigit.org)";
+                setTaskStatus(
+                    `${prefix}-status`,
+                    [messageProgress, messageFailure, messageContact].join(" "),
+                );
+            } else {
+                setTaskStatus(`${prefix}-status`, messageProgress);
+            }
+        } else {
+            setTaskStatus(`${prefix}-status`, `Processing ${result.status}`);
+        }
     }
 
     async function onValid(response) {
