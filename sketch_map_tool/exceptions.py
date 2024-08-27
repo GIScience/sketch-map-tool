@@ -16,7 +16,7 @@ class TranslatableError(Exception):
             super().__init__(message, *args)
 
     def __repr__(self):
-        self._repr(translate=False)
+        return self._repr(translate=False)
 
     def _repr(self, translate: bool):
         if not self.args:
@@ -70,4 +70,8 @@ class CustomFileNotFoundError(TranslatableError):
 
 
 class CustomFileDoesNotExistAnymoreError(TranslatableError):
+    pass
+
+
+class MarkingDetectionError(TranslatableError):
     pass
