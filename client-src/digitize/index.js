@@ -11,16 +11,28 @@ filebokz();
 // disable submit...
 setDisabled("submitBtn", true);
 
-const consentCheckbox = document.getElementById("consent");
-
 // ...until files are added
 const fileElement = document.querySelector(".filebokz");
+const errorMessageElement = document.querySelector(".warning-msg");
+
 fileElement.addEventListener("file-added", () => {
     setDisabled("submitBtn", false);
+    const fileCount = +document.querySelector(".file-count").textContent;
+    if (fileCount > 20) {
+        errorMessageElement.textContent = "Warning: Uploading more than 20 files at once can lead to errors!";
+        errorMessageElement.style.display = "block";
+    } else {
+        setDisabled("submitBtn", false);
+        errorMessageElement.style.display = "none";
+    }
 });
 
 // disable it again when all files are removed
 fileElement.addEventListener("file-removed", (e) => {
+    const fileCount = +document.querySelector(".file-count").textContent;
+    if (fileCount <= 20) {
+        errorMessageElement.style.display = "none";
+    }
     if (!e.target.classList.contains("has-files")) {
         setDisabled("submitBtn", true);
     }
