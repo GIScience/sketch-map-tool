@@ -188,4 +188,11 @@ If you run the database as Docker Compose service run:
 
 ## Troubleshooting
 
-Make sure that Poetry does not try to manage the virtual environment. Check with `poetry env list`. If any environment are listed remove them: `poetry env remove ...`
+### NotImplementedError: The operator 'aten::upsample_bicubic2d.out'
+
+If you encounter following error please set the environment variable
+`PYTORCH_ENABLE_MPS_FALLBACK=1`.
+
+```bash
+NotImplementedError: The operator 'aten::upsample_bicubic2d.out' is not currently implemented for the MPS device. If you want this op to be added in priority during the prototype phase of this feature, please comment on https://github.com/pytorch/pytorch/issues/77764. As a temporary fix, you can set the environment variable `PYTORCH_ENABLE_MPS_FALLBACK=1` to use the CPU as a fallback for this op. WARNING: this will be slower than running natively on MPS.
+```
