@@ -32,8 +32,9 @@ sudo apt install \
     python3 \
     python3-pip \
     python3-gdal \
+    python3-dev \
     pipx \
-    node \
+    nodejs \
     npm \
     libgdal-dev \
     libfreetype6-dev \
