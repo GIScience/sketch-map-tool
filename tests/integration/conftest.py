@@ -15,7 +15,11 @@ from sketch_map_tool import CELERY_CONFIG, get_locale, make_flask, routes
 from sketch_map_tool import celery_app as smt_celery_app
 from sketch_map_tool.config import DEFAULT_CONFIG
 from sketch_map_tool.database import client_flask as db_client_flask
-from sketch_map_tool.helpers import to_array
+<<<<<<< HEAD
+from sketch_map_tool.helpers import merge, to_array, zip_
+=======
+from sketch_map_tool.helpers import to_array, zip_
+>>>>>>> 45a63465 (refactor: move `merge` and `zip_` to helpers module)
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.upload_processing import clip
 from tests import FIXTURE_DIR
@@ -278,7 +282,6 @@ def uuid_create(
     fn = tmp_path_factory.mktemp(uuid, numbered=False) / "sketch-map.pdf"
     with open(fn, "wb") as file:
         file.write(result.getbuffer())
-
     return uuid
 
 
@@ -369,18 +372,19 @@ def uuid_digitize(
     with flask_app.app_context():
         id_vector = db_client_flask.get_async_result_id(uuid, "vector-results")
         id_raster = db_client_flask.get_async_result_id(uuid, "raster-results")
-    task_raster = celery_app.AsyncResult(id_raster)
-    task_vector = celery_app.AsyncResult(id_vector)
-    result_raster = task_raster.get(timeout=180)
-    result_vector = task_vector.get(timeout=180)
+    group_raster = celery_app.GroupResult.restore(id_raster)
+    group_vector = celery_app.GroupResult.restore(id_vector)
+    result_raster = group_raster.get(timeout=180)
+    result_vector = group_vector.get(timeout=180)
     # Write sketch map to temporary test directory
     dir = tmp_path_factory.mktemp(uuid, numbered=False)
     path_raster = dir / "raster.zip"
     path_vector = dir / "vector.geojson"
     with open(path_vector, "w") as file:
-        file.write(json.dumps(result_vector))
+        file.write(json.dumps(merge(result_vector)))
     with open(path_raster, "wb") as file:
-        file.write(result_raster.getbuffer())
+        r = zip_(result_raster)
+        file.write(r.getbuffer())
     return uuid
 
 
