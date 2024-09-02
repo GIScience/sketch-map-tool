@@ -5,6 +5,7 @@ from uuid import UUID
 import fitz
 import pytest
 from celery.contrib.testing.tasks import ping  # noqa: F401
+from celery.result import GroupResult
 from flask_babel import Babel
 from numpy.typing import NDArray
 from PIL import Image, ImageOps
@@ -17,6 +18,7 @@ from sketch_map_tool.config import DEFAULT_CONFIG
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
+from sketch_map_tool.routes import create_zip_file
 from sketch_map_tool.upload_processing import clip
 from tests import FIXTURE_DIR
 from tests import vcr_app as vcr
@@ -369,7 +371,9 @@ def uuid_digitize(
     with flask_app.app_context():
         id_vector = db_client_flask.get_async_result_id(uuid, "vector-results")
         id_raster = db_client_flask.get_async_result_id(uuid, "raster-results")
-    task_raster = celery_app.AsyncResult(id_raster)
+    task_raster = celery_app.GroupResult.restore(id_raster)
+    if task_raster is None:
+        task_raster = celery_app.AsyncResult(id_raster)
     task_vector = celery_app.AsyncResult(id_vector)
     result_raster = task_raster.get(timeout=180)
     result_vector = task_vector.get(timeout=180)
@@ -380,7 +384,11 @@ def uuid_digitize(
     with open(path_vector, "w") as file:
         file.write(json.dumps(result_vector))
     with open(path_raster, "wb") as file:
-        file.write(result_raster.getbuffer())
+        if isinstance(task_raster, GroupResult):
+            r = create_zip_file(result_raster)
+        else:
+            r = create_zip_file([result_raster])
+        file.write(r.getbuffer())
     return uuid
 
 

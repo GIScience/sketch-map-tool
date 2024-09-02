@@ -1,7 +1,6 @@
 import logging
 from io import BytesIO
 from uuid import UUID
-from zipfile import ZipFile
 
 import celery.states
 from celery.result import AsyncResult
@@ -19,6 +18,7 @@ from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import get_attribution
 from sketch_map_tool.exceptions import MarkingDetectionError
 from sketch_map_tool.helpers import N_, to_array
+from sketch_map_tool.helpers import to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.upload_processing import (
     clip,
@@ -102,53 +102,19 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
 # 2. DIGITIZE RESULTS
 #
-@celery.task(bind=True)
-def georeference_sketch_maps(
-    self,
-    file_ids: list[int],
-    file_names: list[str],
-    uuids: list[str],
-    map_frames: dict[str, NDArray],
-    bboxes: dict[str, Bbox],
-    layers: dict[str, Layer],
-) -> AsyncResult | BytesIO:
-    def process(
-        sketch_map_id: int,
-        uuid: str,
-    ) -> BytesIO:
-        """Process a Sketch Map and its attribution."""
-        # r = interim result
-        r = db_client_celery.select_file(sketch_map_id)
-        r = to_array(r)
-        r = clip(r, map_frames[uuid])
-        r = georeference(r, bboxes[uuid])
-        return r
-
-    def get_attribution_file() -> BytesIO:
-        attributions = []
-        for layer in layers.values():
-            attribution = get_attribution(layer)
-            attribution = attribution.replace("<br />", "\n")
-            attributions.append(attribution)
-        return BytesIO("\n".join(attributions).encode())
-
-    def zip_(file: BytesIO, file_name: str):
-        with ZipFile(buffer, "a") as zip_file:
-            name = ".".join(file_name.split(".")[:-1])
-            zip_file.writestr(f"{name}.geotiff", file.read())
-
-    buffer = BytesIO()
-    for i, (file_id, uuid, file_name) in enumerate(zip(file_ids, uuids, file_names)):
-        self.update_state(
-            state="PROGRESS",
-            meta={"current": i, "total": len(file_ids), "failures": []},
-        )
-        zip_(process(file_id, uuid), file_name)
-    with ZipFile(buffer, "a") as zip_file:
-        zip_file.writestr("attributions.txt", get_attribution_file().read())
-
-    buffer.seek(0)
-    return buffer
+@celery.task()
+def georeference_sketch_map(
+    file_id: int,
+    file_name: str,
+    map_frame: NDArray,
+    bbox: Bbox,
+) -> AsyncResult | tuple[str, BytesIO]:
+    # r = interim result
+    r = db_client_celery.select_file(file_id)
+    r = to_array(r)
+    r = clip(r, map_frame)
+    r = georeference(r, bbox)
+    return file_name, r
 
 
 @celery.task(bind=True)

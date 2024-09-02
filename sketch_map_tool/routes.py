@@ -2,9 +2,11 @@ import json
 from io import BytesIO
 from pathlib import Path
 from uuid import UUID, uuid4
+from zipfile import ZipFile
 
 import geojson
 from celery import chain, group
+from celery.result import GroupResult
 from flask import (
     redirect,
     render_template,
@@ -33,7 +35,7 @@ from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.tasks import (
     cleanup_blobs,
     digitize_sketches,
-    georeference_sketch_maps,
+    georeference_sketch_map,
 )
 from sketch_map_tool.validators import (
     validate_type,
@@ -161,8 +163,9 @@ def digitize_results_post(lang="en") -> Response:
     if "file" not in request.files:
         return redirect(url_for("digitize", lang=lang))
     files = request.files.getlist("file")
+    # TODO: move verification to `insert_files()` for incremental validation
     validate_uploaded_sketchmaps(files)
-    # file metadata containing ids, uuids, file_names, ...
+    # file metadata parsed from qr-code
     file_ids, uuids, file_names, bboxes, layers = db_client_flask.insert_files(
         files,
         consent,
@@ -182,26 +185,38 @@ def digitize_results_post(lang="en") -> Response:
         bboxes_[uuid] = bbox
         layers_[uuid] = layer
 
-    task_1 = georeference_sketch_maps.signature(
-        (file_ids, file_names, uuids, map_frames, bboxes_, layers_)
-    )
-    task_2 = digitize_sketches.signature(
+    # 1. DIGITIZE SKETCHES
+    #
+    async_result_vector = digitize_sketches.signature(
         (file_ids, file_names, uuids, map_frames, layers_, bboxes_)
-    )
-    group_ = group([task_1, task_2])
-    chain_ = chain(
-        group_,
-        cleanup_blobs.signature([list(set(uuids))], immutable=True),
-    )
-    chain_result = chain_.apply_async()
+    ).apply_async()
 
-    group_results = chain_result.parent  # type: ignore
+    # 2. GEOREFERENCE SKETCHE MAPS
+    #
+    tasks = []
+    for file_id, file_name, uuid in zip(file_ids, file_names, uuids):
+        tasks.append(
+            georeference_sketch_map.signature(
+                (file_id, file_name, map_frames[uuid], bboxes_[uuid])
+            )
+        )
+    # TODO: run `cleanup_blobs()` after both digitize and georeference are done
+    async_result = chain(
+        group(tasks),
+        cleanup_blobs.signature(kwargs={"map_frame_uuids": list(set(uuids))}),
+    ).apply_async()
+    async_result_raster = async_result.parent  # type: ignore
+    # in case of a group w/ only one task the group gets converted to a task
+    if isinstance(async_result_raster, GroupResult):
+        # group results have to be saved for them to be able to be restored
+        async_result_raster.save()
+
     # Unique id for current request
     uuid = str(uuid4())
     # Mapping of request id to multiple tasks id's
     map_ = {
-        "raster-results": str(group_results[0].id),
-        "vector-results": str(group_results[1].id),
+        "raster-results": str(async_result_raster.id),
+        "vector-results": str(async_result_vector.id),
     }
     db_client_flask.set_async_result_ids(uuid, map_)
     return redirect(url_for("digitize_results_get", lang=lang, uuid=uuid))
@@ -271,30 +286,54 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     validate_type(type_)
 
     id_ = db_client_flask.get_async_result_id(uuid, type_)
-    task = celery_app.AsyncResult(id_)
 
     match type_:
         case "quality-report":
             mimetype = "application/pdf"
             download_name = type_ + ".pdf"
-            if task.successful():
-                file: BytesIO = task.get()
+            async_result = celery_app.AsyncResult(id_)
+            if async_result.successful():
+                file: BytesIO = async_result.get()
         case "sketch-map":
             mimetype = "application/pdf"
             download_name = type_ + ".pdf"
-            if task.successful():
-                file: BytesIO = task.get()
+            async_result = celery_app.AsyncResult(id_)
+            if async_result.successful():
+                file: BytesIO = async_result.get()
         case "raster-results":
             mimetype = "application/zip"
             download_name = type_ + ".zip"
-            if task.successful():
-                file = task.get()
+            # group results have to be saved for them to be able to be restored
+            async_result = celery_app.GroupResult.restore(id_)
+            if async_result is None:
+                # in case of a group w/ only one task the group gets converted to a task
+                async_result = celery_app.AsyncResult(id_)
+            if async_result.successful():
+                file: BytesIO = create_zip_file(async_result.get())
         case "vector-results":
             mimetype = "application/geo+json"
             download_name = type_ + ".geojson"
-            if task.successful():
-                file = BytesIO(geojson.dumps(task.get()).encode("utf-8"))
+            async_result = celery_app.AsyncResult(id_)
+            if async_result.successful():
+                file = BytesIO(geojson.dumps(async_result.get()).encode("utf-8"))
     return send_file(file, mimetype, download_name=download_name)
+
+
+def create_zip_file(
+    results: tuple[str, BytesIO] | list[tuple[str, BytesIO]],
+) -> BytesIO:
+    buffer = BytesIO()
+    if isinstance(results, tuple):
+        results = [results]
+    with ZipFile(buffer, "a") as zip_file:
+        for file_name, file in results:
+            # attribution = get_attribution(layer)
+            # attribution = attribution.replace("<br />", "\n")
+            name = ".".join(file_name.split(".")[:-1])
+            zip_file.writestr(f"{name}.geotiff", file.read())
+        # zip_file.writestr("attributions.txt", get_attribution_file().read())
+    buffer.seek(0)
+    return buffer
 
 
 @app.route("/api/health")

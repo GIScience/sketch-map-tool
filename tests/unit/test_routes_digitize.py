@@ -15,7 +15,7 @@ def mock_task(uuid, monkeypatch):
         "sketch_map_tool.routes.tasks.digitize_sketches", lambda args: uuid
     )
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.georeference_sketch_maps", lambda args: uuid
+        "sketch_map_tool.routes.tasks.georeference_sketch_map", lambda args: uuid
     )
 
 
