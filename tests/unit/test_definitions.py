@@ -15,11 +15,17 @@ def test_get_attribution(layer):
     if layer == "osm":
         assert result == "Powered by OpenStreetMap<br />©openstreetmap.org/copyright"
     if layer == "esri-world-imagery":
-        assert result == (
-            "Powered by Esri<br />Source: Esri, Maxar, GeoEye, Earthstar "
-            + "Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS "
-            + "User Community"
-        )
+        assert result in [
+            (
+                "Powered by Esri<br />Source: Esri, Maxar, GeoEye, Earthstar "
+                + "Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS "
+                + "User Community"
+            ),
+            (
+                "Powered by Esri<br />Esri, Maxar, Earthstar Geographics, and the GIS "
+                + "User Community"
+            ),
+        ]
 
 
 def test_get_attribution_no_esri_esri_api_key(monkeypatch):
