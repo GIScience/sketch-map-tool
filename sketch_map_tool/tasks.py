@@ -37,19 +37,52 @@ from sketch_map_tool.wms import client as wms_client
 
 
 @worker_process_init.connect
-def init_worker(**kwargs):
-    """Initializing database connection for worker"""
+def init_worker_db_connection(**_):
+    """Initializing database connection for worker."""
     db_client_celery.open_connection()
 
 
+@worker_process_init.connect
+def init_worker_ml_models(**_):
+    """Initializing machine-learning models for worker.
+
+    Custom trained model for object detection (obj) and classification (cls) of
+    markings and colors.
+
+    Zero shot segment anything model (sam) for automatic mask generation.
+    """
+    logging.info("Initialize ml-models.")
+    global sam_predictor
+    global yolo_obj_osm
+    global yolo_cls_osm
+    global yolo_obj_esri
+    global yolo_cls_esri
+
+    path = init_sam2()
+    device = select_computation_device()
+    sam2_model = build_sam2(
+        config_file="sam2_hiera_b+.yaml",
+        ckpt_path=path,
+        device=device,
+    )
+    sam_predictor = SAM2ImagePredictor(sam2_model)
+
+    yolo_obj_osm = YOLO_4(init_model(get_config_value("neptune_model_id_yolo_osm_obj")))
+    yolo_cls_osm = YOLO(init_model(get_config_value("neptune_model_id_yolo_osm_cls")))
+    yolo_obj_esri = YOLO_4(
+        init_model(get_config_value("neptune_model_id_yolo_esri_obj"))
+    )
+    yolo_cls_esri = YOLO(init_model(get_config_value("neptune_model_id_yolo_esri_cls")))
+
+
 @worker_process_shutdown.connect
-def shutdown_worker(**kwargs):
+def shutdown_worker(**_):
     """Closing database connection for worker"""
     db_client_celery.close_connection()
 
 
 @setup_logging.connect
-def on_setup_logging(**kwargs):
+def on_setup_logging(**_):
     level = getattr(logging, get_config_value("log-level").upper())
     format = "%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s"
     logging.basicConfig(
@@ -65,7 +98,7 @@ def generate_sketch_map(
     uuid: UUID,
     bbox: Bbox,
     format_: PaperFormat,
-    orientation: str,  # TODO: is not accessed
+    orientation: str,
     size: Size,
     scale: float,
     layer: Layer,
@@ -161,31 +194,6 @@ def digitize_sketches(
     layers: dict[str, Layer],
     bboxes: dict[str, Bbox],
 ) -> AsyncResult | FeatureCollection:
-    # Initialize ml-models. This has to happen inside of celery context.
-    #
-    # Zero shot segment anything model for automatic mask generation
-    path = init_sam2()
-    device = select_computation_device()
-    sam2_model = build_sam2(
-        config_file="sam2_hiera_b+.yaml",
-        ckpt_path=path,
-        device=device,
-    )
-    sam_predictor = SAM2ImagePredictor(sam2_model)
-
-    # Custom trained model for object detection (obj) and classification (cls)
-    # of markings and colors.
-    if "osm" in layers.values():
-        path = init_model(get_config_value("neptune_model_id_yolo_osm_obj"))
-        yolo_obj_osm: YOLO_4 = YOLO_4(path)  # yolo object detection
-        path = init_model(get_config_value("neptune_model_id_yolo_osm_cls"))
-        yolo_cls_osm: YOLO = YOLO(path)  # yolo classification
-    if "esri-world-imagery" in layers.values():
-        path = init_model(get_config_value("neptune_model_id_yolo_esri_obj"))
-        yolo_obj_esri: YOLO_4 = YOLO_4(path)
-        path = init_model(get_config_value("neptune_model_id_yolo_esri_cls"))
-        yolo_cls_esri: YOLO = YOLO(path)
-
     l = []  # noqa: E741
     failures = []
     for i, (file_id, file_name, uuid) in enumerate(zip(file_ids, file_names, uuids)):
