@@ -150,53 +150,41 @@ def georeference_sketch_map(
     return file_name, r
 
 
-@celery.task(bind=True)
+@celery.task
 def digitize_sketches(
-    self,
-    file_ids: list[int],
-    file_names: list[str],
-    uuids: list[str],
-    map_frames: dict[str, NDArray],
-    layers: dict[str, Layer],
-    bboxes: dict[str, Bbox],
+    file_id: int,
+    file_name: str,
+    map_frame: NDArray,
+    layer: Layer,
+    bbox: Bbox,
 ) -> AsyncResult | FeatureCollection:
-    l = []  # noqa: E741
-    failures = []
-    for i, (file_id, file_name, uuid) in enumerate(zip(file_ids, file_names, uuids)):
-        self.update_state(
-            state="PROGRESS",
-            meta={"current": i, "total": len(file_ids), "failures": failures},
-        )
-        # r = interim result
-        r: BytesIO = db_client_celery.select_file(file_id)  # type: ignore
-        r: NDArray = to_array(r)  # type: ignore
-        r: NDArray = clip(r, map_frames[uuid])  # type: ignore
-        if layers[uuid] == "osm":
-            yolo_obj = yolo_obj_osm
-            yolo_cls = yolo_cls_osm
-        elif layers[uuid] == "esri-world-imagery":
-            yolo_obj = yolo_obj_esri
-            yolo_cls = yolo_cls_esri
-        else:
-            raise ValueError("Unexpected layer: " + layers[uuid])
+    # r = interim result
+    r: BytesIO = db_client_celery.select_file(file_id)  # type: ignore
+    r: NDArray = to_array(r)  # type: ignore
+    r: NDArray = clip(r, map_frame)  # type: ignore
+    if layer == "osm":
+        yolo_obj = yolo_obj_osm
+        yolo_cls = yolo_cls_osm
+    elif layer == "esri-world-imagery":
+        yolo_obj = yolo_obj_esri
+        yolo_cls = yolo_cls_esri
+    else:
+        raise ValueError("Unexpected layer: " + layer)
 
-        r: NDArray = detect_markings(
-            r,
-            map_frames[uuid],
-            yolo_obj,
-            yolo_cls,
-            sam_predictor,
-        )  # type: ignore
-        if len(r) == 0:
-            logging.warning("No markings were detected for file " + file_name)
-            failures.append(file_name)
-            continue
-        # m = marking
-        for m in r:
-            m: BytesIO = georeference(m, bboxes[uuid], bgr=False)  # type: ignore
-            m: FeatureCollection = polygonize(m, layer_name=file_name)  # type: ignore
-            m: FeatureCollection = post_process(m, file_name)
-            l.append(m)
+    r: NDArray = detect_markings(
+        r,
+        map_frame,
+        yolo_obj,
+        yolo_cls,
+        sam_predictor,
+    )  # type: ignore
+    # m = marking
+    l = []  # noqa: E741
+    for m in r:
+        m: BytesIO = georeference(m, bbox, bgr=False)  # type: ignore
+        m: FeatureCollection = polygonize(m, layer_name=file_name)  # type: ignore
+        m: FeatureCollection = post_process(m, file_name)
+        l.append(m)
     if len(l) == 0:
         raise MarkingDetectionError(N_("No markings have been detected."))
     return merge(l)
