@@ -11,7 +11,7 @@ def merge(fcs: list[FeatureCollection]) -> FeatureCollection:
         color = fc.get("name", "foo")
         for f in fc.features:
             properties = f.properties
-            properties["color"] == color
+            properties["color"] = color
             features.append(Feature(geometry=f.geometry, properties=properties))
     feature_collection = FeatureCollection(features=features)
     return feature_collection
