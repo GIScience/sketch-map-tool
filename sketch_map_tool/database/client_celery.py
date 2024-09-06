@@ -130,7 +130,7 @@ def cleanup_map_frames():
             logging.info("Table `map_frame` does not exist yet. Nothing todo.")
 
 
-def cleanup_blob(map_frame_uuids: list[UUID]):
+def cleanup_blob(file_ids: list[int] | tuple[int]):
     """Cleanup uploaded files (sketch maps) without consent.
 
     Only set file and name to null. Keep metadata.
@@ -143,12 +143,12 @@ def cleanup_blob(map_frame_uuids: list[UUID]):
         file = NULL,
         file_name = NULL
     WHERE
-        map_frame_uuid = %s
+        id = %s
         AND consent = FALSE;
     """
     with db_conn.cursor() as curs:
         try:
-            curs.executemany(query, [[i] for i in map_frame_uuids])
+            curs.executemany(query, [[i] for i in file_ids])
         except UndefinedTable:
             logging.info("Table `blob` does not exist yet. Nothing todo.")
 
