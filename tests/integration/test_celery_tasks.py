@@ -4,6 +4,7 @@ from uuid import uuid4
 import pytest
 
 from sketch_map_tool import tasks
+from sketch_map_tool.database import client_flask
 from tests import vcr_app
 
 
@@ -39,7 +40,11 @@ def test_cleanup_map_frames():
 
 
 @pytest.mark.usefixtures("uuid_digitize")
-def test_cleanup_blobs(uuid_create):
+def test_cleanup_blobs(uuid_create, flask_app):
     # `cleanup_blobs()` is tested in `test_database_client_celery.py`
-    task = tasks.cleanup_blobs.apply_async(kwargs={"map_frame_uuids": [uuid_create]})
+    with flask_app.app_context():
+        with client_flask.open_connection().cursor() as curs:
+            curs.execute("SELECT id FROM blob WHERE map_frame_uuid = %s", [uuid_create])
+            file_ids = curs.fetchall()[0]
+    task = tasks.cleanup_blobs.apply_async(kwargs={"file_ids": file_ids})
     task.wait()
