@@ -2,7 +2,6 @@ import json
 from io import BytesIO
 from pathlib import Path
 from uuid import UUID, uuid4
-from zipfile import ZipFile
 
 import geojson
 from celery import chain, group
@@ -15,7 +14,6 @@ from flask import (
     send_from_directory,
     url_for,
 )
-from geojson import Feature, FeatureCollection
 from werkzeug import Response
 
 from sketch_map_tool import celery_app, config, definitions, tasks
@@ -31,7 +29,7 @@ from sketch_map_tool.exceptions import (
     UploadLimitsExceededError,
     UUIDNotFoundError,
 )
-from sketch_map_tool.helpers import to_array
+from sketch_map_tool.helpers import merge, to_array, zip_
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.tasks import (
     cleanup_blobs,
@@ -332,7 +330,7 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             else:
                 result = async_result.get()
             if async_result.successful():
-                file: BytesIO = create_zip_file(result)
+                file: BytesIO = zip_(result)
         case "vector-results":
             mimetype = "application/geo+json"
             download_name = type_ + ".geojson"
@@ -346,39 +344,6 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             if async_result.successful():
                 file = BytesIO(geojson.dumps(merge(result)).encode("utf-8"))
     return send_file(file, mimetype, download_name=download_name)
-
-
-def create_zip_file(
-    results: tuple[str, BytesIO] | list[tuple[str, BytesIO]],
-) -> BytesIO:
-    buffer = BytesIO()
-    if isinstance(results, tuple):
-        results = [results]
-    with ZipFile(buffer, "a") as zip_file:
-        for file_name, file in results:
-            # attribution = get_attribution(layer)
-            # attribution = attribution.replace("<br />", "\n")
-            name = ".".join(file_name.split(".")[:-1])
-            zip_file.writestr(f"{name}.geotiff", file.read())
-        # zip_file.writestr("attributions.txt", get_attribution_file().read())
-    buffer.seek(0)
-    return buffer
-
-
-def merge(fcs: list[FeatureCollection]) -> FeatureCollection:
-    """Merge multiple GeoJSON Feature Collections."""
-    # f   -> feature
-    # fc  -> feature collection
-    # fcs -> list of feature collections
-    features = []
-    for fc in fcs:
-        color = fc.get("name", "foo")
-        for f in fc.features:
-            properties = f.properties
-            properties["color"] = color
-            features.append(Feature(geometry=f.geometry, properties=properties))
-    feature_collection = FeatureCollection(features=features)
-    return feature_collection
 
 
 @app.route("/api/health")

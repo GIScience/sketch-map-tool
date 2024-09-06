@@ -17,13 +17,11 @@ from sketch_map_tool import get_config_value, map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import get_attribution
 from sketch_map_tool.exceptions import MarkingDetectionError
-from sketch_map_tool.helpers import N_, to_array
-from sketch_map_tool.helpers import to_array
+from sketch_map_tool.helpers import N_, merge, to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.upload_processing import (
     clip,
     georeference,
-    merge,
     polygonize,
     post_process,
 )
