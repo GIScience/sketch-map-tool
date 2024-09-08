@@ -15,7 +15,6 @@ from ultralytics_4bands import YOLO as YOLO_4
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool import get_config_value, map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
-from sketch_map_tool.definitions import get_attribution
 from sketch_map_tool.exceptions import MarkingDetectionError
 from sketch_map_tool.helpers import N_, merge, to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
@@ -188,11 +187,10 @@ def digitize_sketches(
     return merge(l)
 
 
-@celery.task
+@celery.task(ignore_result=True)
 def cleanup_map_frames():
     """Cleanup map frames stored in the database."""
     db_client_celery.cleanup_map_frames()
-    return True
 
 
 @celery.task(ignore_result=True)

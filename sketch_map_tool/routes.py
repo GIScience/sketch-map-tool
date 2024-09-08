@@ -4,7 +4,7 @@ from pathlib import Path
 from uuid import UUID, uuid4
 
 import geojson
-from celery import chain, group
+from celery import chord, group
 from celery.result import GroupResult
 from flask import (
     redirect,
@@ -210,14 +210,17 @@ def digitize_results_post(lang="en") -> Response:
                 )
             )
         )
-    async_result = chain(
+    async_result = chord(
         group(
             [
                 group(tasks_vector),
                 group(tasks_raster),
             ]
         ),
-        cleanup_blobs.signature(kwargs={"map_frame_uuids": list(set(uuids))}),
+        cleanup_blobs.signature(
+            list(set(uuids)),
+            immutable=True,
+        ),
     ).apply_async()
     async_result_vector = async_result.parent[0]  # type: ignore
     async_result_raster = async_result.parent[1]  # type: ignore
