@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-08 14:27+0000\n"
-"PO-Revision-Date: 2024-08-16 14:26\n"
+"POT-Creation-Date: 2024-09-02 13:21+0000\n"
+"PO-Revision-Date: 2024-09-02 13:28\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -17,6 +17,10 @@ msgstr ""
 "X-Crowdin-File: messages.pot\n"
 "X-Crowdin-File-ID: 12\n"
 "Language: de_DE\n"
+
+#: sketch_map_tool/tasks.py:227
+msgid "No markings have been detected."
+msgstr ""
 
 #: sketch_map_tool/validators.py:18
 msgid "{TYPE} is not a valid value for the request parameter 'type'. Allowed values are: {REQUEST_TYPES}"
@@ -739,7 +743,8 @@ msgstr ""
 msgid "If you need to transform your available coordinates into Lat-Lon coordinates first, we recommend using this tool:\n"
 "                            <a href=\"https://coordinates-converter.com/en/decimal/51.000000,10.000000?karte=OpenStreetMap&zoom=8\"\n"
 "                            target=\"_blank\">Online converter to all coordinate systems</a>"
-msgstr ""
+msgstr "Falls Du Deine verfügbaren Koordinaten noch in Längen- und Breitengrade umwandeln musst, empfehlen wir dafür dieses Tool: <a href=\"https://coordinates-converter.com/en/decimal/51.000000,10.000000?karte=OpenStreetMap&zoom=8\"\n"
+"                            target=\"_blank\">Online Converter für alle Koordinatensysteme</a>"
 
 #: sketch_map_tool/templates/help.html:116
 msgid "The marker of your searched point that appears during the map selection, will not be visible on the printed map. \n"
@@ -809,7 +814,7 @@ msgstr ""
 
 #: sketch_map_tool/templates/help.html:156
 msgid "Customize the map format to fit your purpose:"
-msgstr ""
+msgstr "Passe das Format der Karte Deinen Anforderungen entsprechend an:"
 
 #: sketch_map_tool/templates/help.html:158
 msgid "Group mapping is easier on larger maps (A2 or A1, depending on your group size)."
@@ -1020,7 +1025,7 @@ msgstr ""
 
 #: sketch_map_tool/templates/help.html:364
 msgid "Line Thickness"
-msgstr ""
+msgstr "Linienstärke"
 
 #: sketch_map_tool/templates/help.html:367
 #: sketch_map_tool/templates/help.html:395
@@ -1092,7 +1097,7 @@ msgstr "Überprüfe, wie dunkel Deine Satelliten-Hintergrundkarte ist, besonders
 msgid "Make sure you use bright colors and mark the maps especially clearly. Sometimes\n"
 "                                    it might be helpful to use both Sketch Maps with satellite imagery\n"
 "                                    and OSM base maps for the mapping."
-msgstr ""
+msgstr "Benutze kräftige Farben und markiere die Karten besonders deutlich. Manchmal könnte es hilfreich sein, zum Kartieren sowohl Sketch Maps mit Satelliten- als auch OSM-Hintergrundkarten zu verwenden."
 
 #: sketch_map_tool/templates/help.html:466
 msgid "Small polygons can be especially difficult to detected."
@@ -1100,7 +1105,7 @@ msgstr "Kleine Polygone können besonders schwierig zu erfassen sein."
 
 #: sketch_map_tool/templates/help.html:476
 msgid "Tips for better comparability and interpretation of the maps"
-msgstr ""
+msgstr "Tipps für bessere Vergleichbarkeit und Auswertbarkeit der Karten"
 
 #: sketch_map_tool/templates/help.html:477
 msgid "Map Orientation"
@@ -1186,12 +1191,13 @@ msgstr "Beispiele"
 
 #: sketch_map_tool/templates/help.html:544
 msgid "<strong>No Problem:</strong> Can be digitized properly"
-msgstr ""
+msgstr "<strong>Kein Problem:</strong> Kann korrekt digitalisiert werden"
 
 #: sketch_map_tool/templates/help.html:552
 msgid "<strong>Problem:</strong> Missing or cut QR-Code <br>\n"
 "                        Without the whole QR-code the map cannot be recognized by the Sketch Map Tool."
-msgstr ""
+msgstr "<strong>Problem:</strong>: Fehlender oder abgeschnittener QR-Code<br>\n"
+"Ohne den vollständigen QR-Code kann das Sketch Map Tool die Karte nicht erkennen."
 
 #: sketch_map_tool/templates/help.html:557
 msgid "Sketch Map, No QR Code"
@@ -1204,7 +1210,8 @@ msgstr "Sketch Map, abgeschnittener QR-Code."
 #: sketch_map_tool/templates/help.html:567
 msgid "<strong>Problem:</strong> Missing Globs and missing part of the map <br>\n"
 "                        This could lead to mistakes in the georeferencing and missing information on your map.."
-msgstr ""
+msgstr "<strong>Problem:</strong>: Globen und Teile der Karte fehlen</br>\n"
+"Dies kann zu fehlerhafter Georeferenzierung oder fehlenden Informationen auf Deiner Karte führen."
 
 #: sketch_map_tool/templates/help.html:572
 msgid "Sketch Map, Missing Globes."
@@ -1213,7 +1220,8 @@ msgstr "Sketch Map, fehlende Karten."
 #: sketch_map_tool/templates/help.html:577
 msgid "<strong>Problem:</strong> Tilted photos of the map <br>\n"
 "                        Can lead to mistakes in the georeferencing."
-msgstr ""
+msgstr "<strong>Problem:</strong>Gekippte Kartenfotos</br>\n"
+"Kann zu Fehlern bei der Georeferenzierung führen."
 
 #: sketch_map_tool/templates/help.html:582
 msgid "Sketch Map, Tiled Picture."
@@ -1228,7 +1236,7 @@ msgstr "Für optimale Bildqualität müssen die Fotos direkt von oben in einem 1
 #: sketch_map_tool/templates/help.html:601
 #: sketch_map_tool/templates/help.html:613
 msgid "How to take a photo of a Sketch Map."
-msgstr ""
+msgstr "So machst du ein Foto von der Sketch Map."
 
 #: sketch_map_tool/templates/help.html:606
 msgid "For larger paper formats of a Sketch Map (E.g. A2) it can be more challenging to keep the map smooth and to take a proper photo. \n"
@@ -1242,7 +1250,7 @@ msgid "Pay attention to the lighting conditions when taking a picture. \n"
 "                            detected probably, please take additional photos of your Sketch Map and upload them again. \n"
 "                            Small changes in lighting conditions and angels can make a difference! Additionally, you can consider \n"
 "                            compressing or resizing the original image to a minimum of 1024x1024 pixels before you upload your image."
-msgstr ""
+msgstr "Achte beim Fotografieren auf die Lichtverhältnisse. Wenn die Ergebnisse Probleme aufweisen (z.B. fehlgeschlagene Georeferenzierung; Markierungen wurden nicht richtig erkannt), mache bitte zusätzliche Fotos von der Karte und lade sie nochmal hoch. Kleine Änderungen bei den Lichtverhältnissen und den Winkeln können den Unterschied ausmachen! Zusätzlich kannst Du vor dem Hochladen versuchen, das Originalfoto zu komprimieren oder seine Größe auf mindestens 1024x1024 Pixel anzupassen."
 
 #: sketch_map_tool/templates/help.html:625
 msgid "The image of the Sketch Map needs to be uploaded as JPG or PNG (max. file size is 50 MB).\n"
