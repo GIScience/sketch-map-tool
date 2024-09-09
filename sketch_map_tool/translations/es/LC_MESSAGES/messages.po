@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-08 14:27+0000\n"
-"PO-Revision-Date: 2024-08-08 14:27\n"
+"POT-Creation-Date: 2024-09-02 13:21+0000\n"
+"PO-Revision-Date: 2024-09-02 13:28\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -17,6 +17,10 @@ msgstr ""
 "X-Crowdin-File: messages.pot\n"
 "X-Crowdin-File-ID: 12\n"
 "Language: es_ES\n"
+
+#: sketch_map_tool/tasks.py:227
+msgid "No markings have been detected."
+msgstr ""
 
 #: sketch_map_tool/validators.py:18
 msgid "{TYPE} is not a valid value for the request parameter 'type'. Allowed values are: {REQUEST_TYPES}"
