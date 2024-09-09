@@ -26,6 +26,9 @@ CELERY_CONFIG = {
     "task_track_started": True,  # report ‘started’ status worker executes task
     "task_send_sent_event": True,
     "task_time_limit": 900,  # kill task after 15 minutes
+    # Max number of tasks a worker can execute before it’s replaced by a new process.
+    # Useful if for memory leaks.
+    "worker_max_tasks_per_child": 16,
     "result_serializer": "pickle",
     "result_extended": True,  # save result attributes to backend (e.g. name)
     "result_compression": "gzip",
