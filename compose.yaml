@@ -5,10 +5,10 @@ services:
       context: ./
       dockerfile: Dockerfile
     restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 1G
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 1G
     depends_on:
       - celery
       - redis
@@ -34,7 +34,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 8G
+          memory: 16G
     entrypoint:
       [
         "poetry",
@@ -45,7 +45,7 @@ services:
         "worker",
         "--beat",
         "--concurrency",
-        "4",
+        "6",
         "--loglevel",
         "INFO",
         "-E",
@@ -56,10 +56,10 @@ services:
       context: ./
       dockerfile: Dockerfile
     restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 1G
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 1G
     ports:
       - "5555:5555"
     depends_on:
