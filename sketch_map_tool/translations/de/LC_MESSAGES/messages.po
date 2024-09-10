@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2024-09-02 13:21+0000\n"
-"PO-Revision-Date: 2024-09-02 13:28\n"
+"PO-Revision-Date: 2024-09-09 15:27\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: sketch_map_tool/tasks.py:227
 msgid "No markings have been detected."
-msgstr ""
+msgstr "Es wurden keine Markierungen gefunden."
 
 #: sketch_map_tool/validators.py:18
 msgid "{TYPE} is not a valid value for the request parameter 'type'. Allowed values are: {REQUEST_TYPES}"
@@ -737,7 +737,7 @@ msgstr "Screenshot der Koordinaten."
 
 #: sketch_map_tool/templates/help.html:108
 msgid "Be sure to include the hemisphere information (South/North, West/East) to avoid errors."
-msgstr ""
+msgstr "Um Fehler zu vermeiden, achte darauf, dass du auch die Hemisphären (Nord/Süd, West/Ost) angibst."
 
 #: sketch_map_tool/templates/help.html:111
 msgid "If you need to transform your available coordinates into Lat-Lon coordinates first, we recommend using this tool:\n"
@@ -749,11 +749,11 @@ msgstr "Falls Du Deine verfügbaren Koordinaten noch in Längen- und Breitengrad
 #: sketch_map_tool/templates/help.html:116
 msgid "The marker of your searched point that appears during the map selection, will not be visible on the printed map. \n"
 "                        If you need this point as a point of reference on your paper Sketch Maps please mark it after you downloaded the PDF."
-msgstr ""
+msgstr "Der Marker, der deinen gesuchten Punkt beim Auswählen der Karte anzeigt, wird auf der ausgedruckten Karte nicht zu sehen sein. Falls du diesen Punkt als Referenzpunkt auf deiner Papier-Sketch-Map benötigst, markiere ihn, nachdem du die PDF-Datei heruntergeladen hast."
 
 #: sketch_map_tool/templates/help.html:122
 msgid "Screenshot of the searched point marked in pdf."
-msgstr ""
+msgstr "Screenshot einer PDF-Datei mit Markierung des gesuchten Punktes."
 
 #: sketch_map_tool/templates/help.html:126
 #: sketch_map_tool/templates/help.html:191
@@ -802,7 +802,7 @@ msgstr "Erfasse alle Gebiete, die für Deinen Anwendungsfall relevant sind. Ein 
 msgid "Choose a suitable zoom level: For example in case urban flooding it is recommended to generate \n"
 "                                    a map on the neighborhood level with streets and buildings. \n"
 "                                    For river flooding, it is recommended to generate a map for a larger extent."
-msgstr ""
+msgstr "Wähle einen geeigneten Zoomlevel. Beispiel: Wenn Überschwemmungen in Stadtgebieten untersucht werden sollen, empfehlen wir Karten auf Stadteilebene mit Straßen und Gebäuden. Wenn Flussüberschwemmungen untersucht werden sollen, empfehlen wir Karten, die größere Bereiche abdecken."
 
 #: sketch_map_tool/templates/help.html:151
 msgid "Choose a suitable base map for your mapping needs. The decision between the OSM or satellite image base map\n"
@@ -810,7 +810,8 @@ msgid "Choose a suitable base map for your mapping needs. The decision between t
 "                            like to map.\n"
 "                            Sometimes, especially if the satellite image is very dark (e.g., due to large forest areas on the map), it\n"
 "                            can be helpful to create two Sketch Maps with both base map layers: Satellite and OSM."
-msgstr ""
+msgstr "Wähle eine geeignete Basiskarte für Dein Kartierungsprojekt. Ob Du Dich für eine OSM oder Satellitenbild-Basiskarte entscheiden solltest, ist abhängig von Faktoren wie Deinem ausgewählten Gebiet, der OSM-Datenqualität, der Teilnehmenden und davon, was Du kartieren möchtest. \n"
+"In manchen Fällen, besonders bei sehr dunklen Satellitenbildern (was z.B. durch große Waldgebiete auf der Karte verursacht wird), kann es helfen, gleich zwei Sketch Maps jeweils mit Satellitenbild- und OSM-Basiskarten zu erstellen."
 
 #: sketch_map_tool/templates/help.html:156
 msgid "Customize the map format to fit your purpose:"
@@ -840,7 +841,7 @@ msgid "When you choose <a href=\"https://osm.org/\" target=\"_blank\">OpenStreet
 "                        the suitability of the local OSM data of your AOI for participatory mapping. The report is computed by the \n"
 "                        <a href=\"https://api.quality.ohsome.org/\">ohsome quality API</a> of <a href=\"https://heigit.org/\">HeiGIT</a>.\n"
 "                        The Map Quality Check can be downloaded as a PDF file by clicking on the blue button."
-msgstr ""
+msgstr "Wenn Du eine  <a href=\"https://osm.org/\" target=\"_blank\">OpenStreetMap (OSM)</a> Karte als Basiskarte ausgewählt hast, erhältst Du einen Bericht über die Kartenqualität in Deinem ausgewählten Bereich, den Map Quality Check. In diesem Bericht wird bewertet wie gut die lokalen OSM-Daten Deines ausgewählten Bereichs für partizipatives Kartieren geeignet sind. Der Map Quality Check wird berechnet durch die <a href=\"https://api.quality.ohsome.org/\">ohsome quality API</a> von <a href=\"https://heigit.org/\">HeiGIT</a>. Durch klicken auf die blaue Schaltfläche kannst du den Map Quality Check herunterladen."
 
 #: sketch_map_tool/templates/help.html:187
 msgid "Map Quality Report."
@@ -850,7 +851,7 @@ msgstr "Ergebnisse der Qualitätsprüfung."
 msgid "Before you use these OSM-based Sketch Maps for participatory mapping in your area of interest,\n"
 "                            review the analysis provided by the Map Quality Check to ensure that participants can orient themselves\n"
 "                            properly on the paper maps."
-msgstr ""
+msgstr "Bevor Du diese OSM-basierten Sketch Maps zum partizipativen Kartieren in Deinem ausgewählten Gebiet verwendest, überprüfe die Analyse des Map Quality Checks, um sicherzustellen, dass sich die Teilnehmenden auf den Papierkarten richtig orientieren können."
 
 #: sketch_map_tool/templates/help.html:199
 msgid "The analyses focus on Point of Interest (POI) density, the last edit of amenities and streets, used\n"
@@ -868,7 +869,7 @@ msgid "In case the OSM data in your area of interest is not sufficient for parti
 "                            the opportunity to improve the OSM data before printing the Sketch Maps, by organizing an OSM Mapathon. \n"
 "                            For more information and help on how to conduct a Mapathon please take a look at the \n"
 "                            <a href=\"https://www.missingmaps.org/\" target=\"_blank\">Missing Maps project</a>"
-msgstr ""
+msgstr "Falls die OSM-Daten in Deinem ausgewählten Bereich nicht für partizipatives Kartieren ausreichen, hast Du die Möglichkeit, die OSM-Daten zu verbessern, bevor Du die Sketch Maps ausdruckst, indem Du einen OSM Mapathon organisierst. Wenn Du Hilfe oder mehr Informationen darüber brauchst, wie man einen Mapathon organisiert, sieh Dir bitte das <a href=\"https://www.missingmaps.org/\" target=\"_blank\">Missing Maps Projekt</a> an."
 
 #: sketch_map_tool/templates/help.html:214
 msgid "Take a look at the map:"
