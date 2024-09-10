@@ -1,3 +1,5 @@
+from osgeo import gdal, osr  # noqa
+
 import logging
 from datetime import timedelta
 
@@ -9,7 +11,7 @@ from sketch_map_tool.config import get_config_value
 from sketch_map_tool.database import client_flask as db_client
 from sketch_map_tool.definitions import LANGUAGES
 
-__version__ = "2024.08.14.1"
+__version__ = "2024.09.10.1"
 
 # Setup logging
 LEVEL = getattr(logging, get_config_value("log-level").upper())
