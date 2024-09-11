@@ -235,12 +235,7 @@ def cleanup_map_frames():
     return True
 
 
-@celery.task
-def cleanup_blobs(*_, file_ids: list[int]):
-    """Cleanup uploaded files stored in the database.
-
-    Arguments are ignored. They are only part of the signature because of the usage in
-    a celery chain.
-    """
+@celery.task(ignore_result=True)
+def cleanup_blobs(file_ids: list[int]):
+    """Cleanup uploaded files stored in the database."""
     db_client_celery.cleanup_blob(file_ids)
-    return True

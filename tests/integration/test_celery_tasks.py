@@ -46,5 +46,5 @@ def test_cleanup_blobs(uuid_create, flask_app):
         with client_flask.open_connection().cursor() as curs:
             curs.execute("SELECT id FROM blob WHERE map_frame_uuid = %s", [uuid_create])
             file_ids = curs.fetchall()[0]
-    task = tasks.cleanup_blobs.apply_async(kwargs={"file_ids": file_ids})
+    task = tasks.cleanup_blobs.apply_async(file_ids)
     task.wait()

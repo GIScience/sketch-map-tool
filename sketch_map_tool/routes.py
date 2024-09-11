@@ -163,7 +163,7 @@ def digitize_results_post(lang="en") -> Response:
     group_ = group([task_1, task_2])
     chain_ = chain(
         group_,
-        cleanup_blobs.signature(kwargs={"map_frame_uuids": list(set(uuids))}),
+        cleanup_blobs.signature([list(set(uuids))], immutable=True),
     )
     chain_result = chain_.apply_async()
 
