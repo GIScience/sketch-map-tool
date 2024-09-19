@@ -1,10 +1,18 @@
 import json
 from io import BytesIO
+from pathlib import Path
 from uuid import UUID, uuid4
 
 import geojson
 from celery import chain, group
-from flask import redirect, render_template, request, send_file, url_for
+from flask import (
+    redirect,
+    render_template,
+    request,
+    send_file,
+    send_from_directory,
+    url_for,
+)
 from werkzeug import Response
 
 from sketch_map_tool import celery_app, config, definitions, tasks
@@ -52,6 +60,26 @@ def about(lang="en") -> str:
     return render_template(
         "about.html", lang=lang, literature=definitions.LITERATURE_REFERENCES
     )
+
+
+@app.get("/case-studies/cultural-landmarks")
+@app.get("/<lang>/case-studies/cultural-landmarks")
+def case_study_cultural_landmarks(lang="en") -> str:
+    return render_template("case-study-cultural-landmarks.html", lang=lang)
+
+
+@app.get("/case-studies/cultural-landmarks-pdf")
+@app.get("/<lang>/case-studies/cultural-landmarks-pdf")
+def case_study_cultural_landmarks_pdf(lang="en") -> Response:
+    dir = Path(config.get_config_value("data-dir")) / "case-studies"
+    name = "participatory-mapping-for-cultural-landmarks.pdf"
+    return send_from_directory(dir, name, as_attachment=True)
+
+
+@app.get("/case-studies/timor-leste")
+@app.get("/<lang>/case-studies/timor-leste")
+def case_study_timor_leste(lang="en") -> str:
+    return render_template("case-study-timor-leste.html", lang=lang)
 
 
 @app.get("/create")
