@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{url_for("static", filename="bundles/case-studies.css") }}"> 
+{% endblock head %}
+{% block header_message %}
+    {{ _('Case Study') }}
+{% endblock header_message %}
+
+{% block body %}
+
+<main class="container">
+  <h1>{{ _('Participatory Mapping for Cultural Landmarks') }}</h1>
+  <figure>
+    <img src="{{ url_for("static",
+    filename="assets/images/case-study-cultural-landmarks/banner.png") }}"
+    alt="{{ _('') }}">
+    <!-- TODO -->
+    <figcaption>{{ _('') }}</figcaption>
+  </figure>
+  <div class="grid">
+    <div>
+      <small>Claudio Sossio De Simone</small>
+      <br>
+      <small>University of Rome Tor Vergata</small>
+      <br>
+      <small>September 2023 to February 2024</small>
+      <br>
+    </div>
+    <div>
+        <br>
+        <small><a href="{{ url_for('case_study_cultural_landmarks_pdf', lang=lang) }}">Download as PDF</a></small>
+    </div>
+  </div>
+<br>
+  <p>
+    {{ _('Claudio Sossio De Simone is a PhD candidate at the University of Rome
+    Tor Vergata in the field of Cultural Heritage, Education and Territory. His
+    research interests include GIS science and geoinformation applied to
+    cultural heritage, as well as the geo-historical study of rural
+    landscapes.') }}
+  </p>
+  <p>
+    {{ _('The Sketch Map Tool was used as part of his PhD research on the
+    changing territory around an artiﬁcial dam in a rural area in southern
+    Italy. The research aimed to identify signiﬁcant landmarks and provide
+    decision-makers with geographical data to develop cultural, environmental,
+and touristic initiatives <a href="#1">[1]</a>.') }}
+  </p>
+
+  <h2>{{ _('Why was the Sketch Map Tool used?') }}</h2>
+  <p>
+    {{ _('The Sketch Map Tool was used as a means to capture the local
+    perception of the area around the Occhito dam by identifying
+    environmentally, culturally or socially signiﬁcant landmarks as perceived by
+    the local community.') }}
+  </p>
+
+  <h2>{{ _('The Project') }}</h2>
+  <p>
+    {{ _('The study area is a rural region between Molise and Apulia in Southern
+    Italy that is mostly mountainous and only sparsely populated.') }}
+  </p>
+
+  <p>
+    {{ _('In the late 1950s, an artiﬁcial dam was built in this area to form the
+    Lake Occhito. The area is included in the protected areas of the Natura 2000
+    network <a href="#2">[2]</a>, with the vegetation surrounding the lake providing habitats
+    for several protected species. However, the dam has altered the local
+    environment. The instability of the new waterscape has caused frequent
+    ﬂooding. In addition, the agricultural system has been profoundly changed
+    and the local traditional pastoral activities have almost completely
+    disappeared.') }}
+  </p>
+  <p>
+    {{ _(' This changing scenario, along the ongoing efforts by stakeholders and
+    communities to develop a new governance plan, underscores the need for
+    enhanced spatial knowledge of the area by combining institutional data with
+    the local community expertise. ') }}
+  </p>
+
+  <h2>{{ _('How was the Sketch Mapping organized?') }}</h2>
+
+  <p>
+    {{ _('Community mapping was conducted with both local adults and school
+    children aged 11 to 14, who were instructed to jointly work on Sketch Maps
+    in small groups. The mapping session with A3 (large scale) and A0 (small
+    scale) Sketch Maps took place on the ﬁeld as well as in the classroom.
+    Participants could draw landmarks and identify them as “cultural-natural
+    places” (e.g. monuments, archaeological sites, birdwatching sites),
+    “problematic places” (e.g. areas littered with garbage, ﬂood-prone areas),
+    and “special places” with a strong subjective value (e.g. a place for
+    picnicking with family, the spot where the mapper kissed for the ﬁrst time)
+    <a href="#3">[3]</a>.') }}
+  </p>
+  <figure>
+    <img src="{{ url_for("static",
+    filename="assets/images/case-study-cultural-landmarks/1.png") }}" alt="{{
+    _('A Sketch Map of the area around the Occito lake in QGIS software.') }}">
+    <figcaption>
+      {{ _('A Sketch Map of the area around the Occito lake in QGIS software.')
+      }}
+    </figcaption>
+  </figure>
+
+  <h2>{{ _('How were the Sketch Maps analysed?') }}</h2>
+  <p>
+    {{ _('As a ﬁrst step, the geodata from the digitalized Sketch Maps was
+    manually cleaned, corrected and enhanced. Then, the collected markings of
+    landmarks were uploaded to the Google My Maps platform for a quicker and
+    better visualization of the collected data during the mapping session in the
+    classroom.') }}
+  </p>
+  <p>
+    {{ _(' As a further step, the Heatmap Plugin in QGIS was used to perform a
+    density analysis on the point layers, resulting in heatmaps that visualize
+    the intensity of a phenomenon in an area based on the density of points.
+    Multiple heatmaps were created to map the density areas of the selected
+    landmarks, which can later be used to analyze the cultural and social
+    aspects of the area <a href="#4">[4]</a>.') }}
+  </p>
+
+  <h2>{{ _('Results and Impact') }}</h2>
+  <p>
+    {{ _('The VGI data collected with the Sketch Map Tool sessions is to be
+    merged with institutional data (e. g. land use maps, census data, maps of
+    cultural sites) into a GIS platform, creating a web map that can be used to
+    develop new cultural and touristic initiatives as well as a better
+    governance of the problematic areas.') }}
+  </p>
+  <p>{{ _('Lesson learnt:') }}</p>
+  <ol>
+    <li>
+      {{ _('Adult mappers demonstrated greater skills in orienting themselves on
+      the map and geolocating landmarks, while the younger participants had more
+      difficulties in orienting themselves in space, but identiﬁed more
+      unconventional, subjectively relevant landmarks, showing interest in
+      different areas and characteristics of the landscape.') }}
+    </li>
+
+    <li>
+      {{ _('Community mapping clearly showed its potential to highlight some
+      aspects of the local resources and landmarks that are not present in the
+      official cartography, particularly in regard to places with a cultural or
+      subjective value.') }}
+    </li>
+    <li>
+      {{ _('Many community mappers can orientate themselves more easily on a
+      satellite map than on the OSM base maps. Since the Sketch Map Tool 1.0 was
+      used, which only supported OSM as base map, satellite maps were used along
+      OSM-based Sketch Maps to help with the orientation. Sketch Map Tool 2.0.
+      now allows to integrate satellite imagery directly in the base maps.') }}
+    </li>
+  </ol>
+  <p>{{ _(' ') }}</p>
+
+  <h6>{{ _('Sources') }}</h6>
+  <ol class="list-sources">
+    <li id="1">
+      {{ _('La media valle del ﬁume Fortore (Campobasso), un caso di
+      destrutturazione e ristrutturazione di un paesaggio d’acqua: variazioni
+      nell’uso del suolo come indicatore di cambiamento, 2021') }}
+    </li>
+    <li id="2">{{ _('Biodiversity – Enviromental Inforamtion Systems') }}</li>
+    <li id="3">{{ _('Millenium Ecosystem Assessment') }}</li>
+    <li id="4">{{ _('Data Analysis with QGIS – GIS Resource Training Center') }}</li>
+  </ol>
+</main>
+{% endblock body %}

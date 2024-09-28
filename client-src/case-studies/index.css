@@ -1,0 +1,9 @@
+@counter-style decimal-square-bracket {
+  system: extends decimal;
+  suffix: "] ";
+  prefix: "[";
+}
+
+.list-sources {
+  list-style: decimal-square-bracket;
+}
