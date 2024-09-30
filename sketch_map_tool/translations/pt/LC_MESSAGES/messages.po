@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-02 13:21+0000\n"
-"PO-Revision-Date: 2024-09-02 13:28\n"
+"POT-Creation-Date: 2024-09-28 07:04+0000\n"
+"PO-Revision-Date: 2024-09-28 07:23\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -131,6 +131,7 @@ msgid "After mapping, the Sketch Map Tool supports the digitization of the Sketc
 msgstr ""
 
 #: sketch_map_tool/templates/about.html:52
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:58
 msgid "The Project"
 msgstr ""
 
@@ -310,25 +311,191 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: sketch_map_tool/templates/base.html:62
+#: sketch_map_tool/templates/base.html:71
 msgid "Newsletter"
 msgstr ""
 
-#: sketch_map_tool/templates/base.html:64
+#: sketch_map_tool/templates/base.html:73
 msgid "Further Legal Information"
 msgstr ""
 
-#: sketch_map_tool/templates/base.html:66
+#: sketch_map_tool/templates/base.html:75
 msgid "Privacy\n"
 "            Policy"
 msgstr ""
 
-#: sketch_map_tool/templates/base.html:69
+#: sketch_map_tool/templates/base.html:78
 msgid "Imprint"
 msgstr ""
 
-#: sketch_map_tool/templates/base.html:71
+#: sketch_map_tool/templates/base.html:81
 msgid "HeiGIT Logo"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:6
+msgid "Case Study"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:12
+msgid "Participatory Mapping for Cultural Landmarks"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:36
+msgid "Claudio Sossio De Simone is a PhD candidate at the University of Rome\n"
+"    Tor Vergata in the field of Cultural Heritage, Education and Territory. His\n"
+"    research interests include GIS science and geoinformation applied to\n"
+"    cultural heritage, as well as the geo-historical study of rural\n"
+"    landscapes."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:43
+msgid "The Sketch Map Tool was used as part of his PhD research on the\n"
+"    changing territory around an artiﬁcial dam in a rural area in southern\n"
+"    Italy. The research aimed to identify signiﬁcant landmarks and provide\n"
+"    decision-makers with geographical data to develop cultural, environmental,\n"
+"and touristic initiatives <a href=\"#1\">[1]</a>."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:50
+msgid "Why was the Sketch Map Tool used?"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:52
+msgid "The Sketch Map Tool was used as a means to capture the local\n"
+"    perception of the area around the Occhito dam by identifying\n"
+"    environmentally, culturally or socially signiﬁcant landmarks as perceived by\n"
+"    the local community."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:60
+msgid "The study area is a rural region between Molise and Apulia in Southern\n"
+"    Italy that is mostly mountainous and only sparsely populated."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:65
+msgid "In the late 1950s, an artiﬁcial dam was built in this area to form the\n"
+"    Lake Occhito. The area is included in the protected areas of the Natura 2000\n"
+"    network <a href=\"#2\">[2]</a>, with the vegetation surrounding the lake providing habitats\n"
+"    for several protected species. However, the dam has altered the local\n"
+"    environment. The instability of the new waterscape has caused frequent\n"
+"    ﬂooding. In addition, the agricultural system has been profoundly changed\n"
+"    and the local traditional pastoral activities have almost completely\n"
+"    disappeared."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:75
+msgid " This changing scenario, along the ongoing efforts by stakeholders and\n"
+"    communities to develop a new governance plan, underscores the need for\n"
+"    enhanced spatial knowledge of the area by combining institutional data with\n"
+"    the local community expertise. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:81
+msgid "How was the Sketch Mapping organized?"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:84
+msgid "Community mapping was conducted with both local adults and school\n"
+"    children aged 11 to 14, who were instructed to jointly work on Sketch Maps\n"
+"    in small groups. The mapping session with A3 (large scale) and A0 (small\n"
+"    scale) Sketch Maps took place on the ﬁeld as well as in the classroom.\n"
+"    Participants could draw landmarks and identify them as “cultural-natural\n"
+"    places” (e.g. monuments, archaeological sites, birdwatching sites),\n"
+"    “problematic places” (e.g. areas littered with garbage, ﬂood-prone areas),\n"
+"    and “special places” with a strong subjective value (e.g. a place for\n"
+"    picnicking with family, the spot where the mapper kissed for the ﬁrst time)\n"
+"    <a href=\"#3\">[3]</a>."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:98
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:100
+msgid "A Sketch Map of the area around the Occito lake in QGIS software."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:105
+msgid "How were the Sketch Maps analysed?"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:107
+msgid "As a ﬁrst step, the geodata from the digitalized Sketch Maps was\n"
+"    manually cleaned, corrected and enhanced. Then, the collected markings of\n"
+"    landmarks were uploaded to the Google My Maps platform for a quicker and\n"
+"    better visualization of the collected data during the mapping session in the\n"
+"    classroom."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:114
+msgid " As a further step, the Heatmap Plugin in QGIS was used to perform a\n"
+"    density analysis on the point layers, resulting in heatmaps that visualize\n"
+"    the intensity of a phenomenon in an area based on the density of points.\n"
+"    Multiple heatmaps were created to map the density areas of the selected\n"
+"    landmarks, which can later be used to analyze the cultural and social\n"
+"    aspects of the area <a href=\"#4\">[4]</a>."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:122
+msgid "Results and Impact"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:124
+msgid "The VGI data collected with the Sketch Map Tool sessions is to be\n"
+"    merged with institutional data (e. g. land use maps, census data, maps of\n"
+"    cultural sites) into a GIS platform, creating a web map that can be used to\n"
+"    develop new cultural and touristic initiatives as well as a better\n"
+"    governance of the problematic areas."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:130
+msgid "Lesson learnt:"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:133
+msgid "Adult mappers demonstrated greater skills in orienting themselves on\n"
+"      the map and geolocating landmarks, while the younger participants had more\n"
+"      difficulties in orienting themselves in space, but identiﬁed more\n"
+"      unconventional, subjectively relevant landmarks, showing interest in\n"
+"      different areas and characteristics of the landscape."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:141
+msgid "Community mapping clearly showed its potential to highlight some\n"
+"      aspects of the local resources and landmarks that are not present in the\n"
+"      official cartography, particularly in regard to places with a cultural or\n"
+"      subjective value."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:147
+msgid "Many community mappers can orientate themselves more easily on a\n"
+"      satellite map than on the OSM base maps. Since the Sketch Map Tool 1.0 was\n"
+"      used, which only supported OSM as base map, satellite maps were used along\n"
+"      OSM-based Sketch Maps to help with the orientation. Sketch Map Tool 2.0.\n"
+"      now allows to integrate satellite imagery directly in the base maps."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:154
+msgid " "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:156
+msgid "Sources"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:159
+msgid "La media valle del ﬁume Fortore (Campobasso), un caso di\n"
+"      destrutturazione e ristrutturazione di un paesaggio d’acqua: variazioni\n"
+"      nell’uso del suolo come indicatore di cambiamento, 2021"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:163
+msgid "Biodiversity – Enviromental Inforamtion Systems"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:164
+msgid "Millenium Ecosystem Assessment"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-cultural-landmarks.html:165
+msgid "Data Analysis with QGIS – GIS Resource Training Center"
 msgstr ""
 
 #: sketch_map_tool/templates/create-results.html:9
