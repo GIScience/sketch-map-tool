@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2024-09-28 07:04+0000\n"
-"PO-Revision-Date: 2024-09-29 23:24\n"
+"PO-Revision-Date: 2024-10-01 22:29\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -452,7 +452,7 @@ msgstr ""
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:122
 msgid "Results and Impact"
-msgstr ""
+msgstr "Výsledky a dopady"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:124
 msgid "The VGI data collected with the Sketch Map Tool sessions is to be\n"
@@ -460,7 +460,7 @@ msgid "The VGI data collected with the Sketch Map Tool sessions is to be\n"
 "    cultural sites) into a GIS platform, creating a web map that can be used to\n"
 "    develop new cultural and touristic initiatives as well as a better\n"
 "    governance of the problematic areas."
-msgstr ""
+msgstr "Data VGI shromážděná během sezení nástroje Sketch Map Tool mají být spojena s institucionálními daty (např. mapami využití půdy, údaji ze sčítání lidu, mapami kulturních památek) do platformy GIS, čímž vznikne webová mapa, kterou lze využít k rozvoji nových kulturních a turistických iniciativ a také k lepší správě problematických oblastí."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:130
 msgid "Lesson learnt:"
@@ -487,7 +487,7 @@ msgid "Many community mappers can orientate themselves more easily on a\n"
 "      used, which only supported OSM as base map, satellite maps were used along\n"
 "      OSM-based Sketch Maps to help with the orientation. Sketch Map Tool 2.0.\n"
 "      now allows to integrate satellite imagery directly in the base maps."
-msgstr ""
+msgstr "Mnoho komunitních mapovatelů se snáze orientuje na satelitní mapě než na základních mapách OSM. Vzhledem k tomu, že byl použit nástroj Sketch Map Tool 1.0, který podporoval pouze OSM jako základní mapu, byly satelitní mapy použity spolu se skicovými mapami založenými na OSM, aby pomohly s orientací. Nástroj Sketch Map Tool 2.0. nyní umožňuje integrovat satelitní snímky přímo do základních map."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:154
 msgid " "
@@ -495,7 +495,7 @@ msgstr ""
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:156
 msgid "Sources"
-msgstr ""
+msgstr "Zdroje"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:159
 msgid "La media valle del ﬁume Fortore (Campobasso), un caso di\n"
@@ -505,11 +505,11 @@ msgstr ""
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:163
 msgid "Biodiversity – Enviromental Inforamtion Systems"
-msgstr ""
+msgstr "Biodiverzita - Enviromentální informační systémy"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:164
 msgid "Millenium Ecosystem Assessment"
-msgstr ""
+msgstr "Millenium Ecosystem Assessment"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:165
 msgid "Data Analysis with QGIS – GIS Resource Training Center"
@@ -942,7 +942,7 @@ msgstr "Doporučení"
 #: sketch_map_tool/templates/help.html:128
 msgid "Tailor the extent of your selected area to suit your use case, keeping the following questions in\n"
 "                            mind:"
-msgstr ""
+msgstr "Rozsah vybrané oblasti přizpůsobte případu použití a mějte na paměti následující otázky:"
 
 #: sketch_map_tool/templates/help.html:131
 msgid "What do the participants need to map?"
@@ -983,7 +983,7 @@ msgid "Choose a suitable base map for your mapping needs. The decision between t
 "                            like to map.\n"
 "                            Sometimes, especially if the satellite image is very dark (e.g., due to large forest areas on the map), it\n"
 "                            can be helpful to create two Sketch Maps with both base map layers: Satellite and OSM."
-msgstr ""
+msgstr "Vyberte si vhodnou podkladovou mapu pro své mapové potřeby. Rozhodnutí mezi podkladovou mapou OSM nebo satelitním snímkem závisí na faktorech, jako je vybraná oblast, kvalita dat OSM, vaši účastníci a to, co chcete mapovat. Někdy, zejména pokud je satelitní snímek velmi tmavý (např. kvůli velkým lesním plochám na mapě), může být užitečné vytvořit dvě náčrtkové mapy s oběma vrstvami podkladových map: Satelitní a OSM."
 
 #: sketch_map_tool/templates/help.html:156
 msgid "Customize the map format to fit your purpose:"
@@ -1144,7 +1144,7 @@ msgstr ""
 #: sketch_map_tool/templates/help.html:308
 msgid "Please make sure to not accidentally mark the globes on the edge as they are used for georeferencing purposes\n"
 "                        in order to ensure the automatic map detection."
-msgstr ""
+msgstr "Dbejte na to, abyste omylem neoznačili glóby na okraji, protože se používají pro účely georeferencování, aby byla zajištěna automatická detekce mapy."
 
 #: sketch_map_tool/templates/help.html:312
 msgid "At the moment the Sketch Map Tool detects red, blue, green and black markings best, orange and yellow also\n"
@@ -1155,7 +1155,7 @@ msgid "At the moment the Sketch Map Tool detects red, blue, green and black mark
 "                        specific colors.\n"
 "                        This needs to be done manually in the subsequent analysis process in your Geographic Information System software.\n"
 "                        The GeoTiff can be used to manually match the geodata layer files to the legend information."
-msgstr ""
+msgstr "V současné době nástroj Sketch Map Tool nejlépe rozpoznává červené, modré, zelené a černé značky, poměrně dobře funguje i oranžová a žlutá. Pokud se pro určitá témata používají různé barvy, mohou účastníci mimo rozsah mapy připojit legendu k významu jednotlivých barev. Nástroj však nepodporuje identifikaci psaných informací ani přiřazování významů ke konkrétním barvám. To je třeba provést ručně v následném procesu analýzy v softwaru geografického informačního systému. K ručnímu přiřazení souborů geodatových vrstev k informacím v legendě lze použít program GeoTiff."
 
 #: sketch_map_tool/templates/help.html:326
 #: sketch_map_tool/templates/help.html:345
@@ -1747,7 +1747,7 @@ msgstr ""
 
 #: sketch_map_tool/templates/help.html:936
 msgid "How large can my study area be?"
-msgstr ""
+msgstr "Jak velká může být moje studijní oblast?"
 
 #: sketch_map_tool/templates/help.html:938
 msgid "So far the Sketch Map Tool has only been tested on neighborhood or city level. The tool works best for\n"
