@@ -1,3 +1,4 @@
+from copy import copy
 from io import BytesIO
 from time import time
 from uuid import UUID, uuid4
@@ -143,10 +144,10 @@ def test_api_status_uuid_digitize(uuid_digitize, type_, flask_client):
 
 
 # TODO: Make test case work in a run of the whole test suite
-@pytest.mark.skip("Only works in a single test run")
+# @pytest.mark.skip("Only works in a single test run")
 @vcr_app.use_cassette
-def test_api_status_uuid_digitize_progress(sketch_map_marked, flask_client):
-    """Test if custom task status information is return by /status"""
+def test_api_status_uuid_digitize_info(sketch_map_marked, flask_client):
+    """Test if custom task status information is return by /status."""
     unique_file_name = str(uuid4())
     data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
@@ -156,15 +157,44 @@ def test_api_status_uuid_digitize_progress(sketch_map_marked, flask_client):
     url_parts = response.request.path.rsplit("/")
     uuid = url_parts[-1]
 
-    # try for 5 sec
-    end = time() + 5
-    while time() < end:
-        resp = flask_client.get(f"/api/status/{uuid}/raster-results")
-        if resp.json["status"] == "PROGRESS":
-            break
+    resp = flask_client.get(f"/api/status/{uuid}/vector-results")
     assert resp.status_code == 202
-    assert resp.json["status"] == "PROGRESS"
+    assert resp.json["status"] == "PENDING"
     assert resp.json["info"] == {"current": 0, "total": 1}
+
+
+# TODO: Make test case work in a run of the whole test suite
+# @pytest.mark.skip("Only works in a single test run")
+@vcr_app.use_cassette
+def test_api_status_uuid_digitize_info_multiple(sketch_map_marked, flask_client):
+    """Test if custom task status information is return by /status."""
+    sketch_map_unmarked = copy(sketch_map_marked)
+    unique_file_name = str(uuid4())
+    unique_file_name_2 = str(uuid4())
+    data = {
+        "file": [
+            (BytesIO(sketch_map_marked), unique_file_name),
+            (BytesIO(sketch_map_unmarked), unique_file_name_2),
+        ],
+        "consent": "True",
+    }
+    response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
+    assert response.status_code == 200
+
+    # Extract UUID from response
+    url_parts = response.request.path.rsplit("/")
+    uuid = url_parts[-1]
+
+    # try for 10 sec
+    end = time() + 360
+    while time() < end:
+        resp = flask_client.get(f"/api/status/{uuid}/vector-results")
+        if resp.json["status"] == "SUCCESS":
+            break
+        assert resp.json["status"] in ["PENDING", "PROGRESS"]
+        assert resp.json["info"]["current"] in [0, 1, 2]
+    assert resp.status_code == 200
+    assert resp.json["status"] == "SUCCESS"
 
 
 def test_api_download_uuid_sketch_map(uuid_create, flask_client):

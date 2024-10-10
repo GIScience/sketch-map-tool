@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 
 import geojson
 from celery import chord, group
-from celery.result import GroupResult
+from celery.result import AsyncResult
 from flask import (
     redirect,
     render_template,
@@ -210,27 +210,21 @@ def digitize_results_post(lang="en") -> Response:
                 )
             )
         )
+    async_result_raster = group(tasks_raster).apply_async()
     async_result = chord(
-        group(
-            [
-                group(tasks_vector),
-                group(tasks_raster),
-            ]
-        ),
+        group(tasks_vector),
         cleanup_blobs.signature(
-            list(set(uuids)),
+            file_ids=list(set(file_ids)),
             immutable=True,
         ),
     ).apply_async()
-    async_result_vector = async_result.parent[0]  # type: ignore
-    async_result_raster = async_result.parent[1]  # type: ignore
+    async_result_vector = async_result.parent
 
-    # in case of a group w/ only one task the group gets converted to a task
-    if isinstance(async_result_raster, GroupResult):
-        # group results have to be saved for them to be able to be restored
-        async_result_raster.save()
-    if isinstance(async_result_vector, GroupResult):
-        async_result_vector.save()
+    # # in case of a group w/ only one task the group gets converted to a task
+    # if isinstance(async_result_raster, GroupResult):
+    # group results have to be saved for them to be able to be restored
+    async_result_raster.save()
+    async_result_vector.save()
 
     # Unique id for current request
     uuid = str(uuid4())
@@ -262,18 +256,24 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     validate_type(type_)
 
     id_ = db_client_flask.get_async_result_id(uuid, type_)
-    task = celery_app.AsyncResult(id_)
+
+    if type_ in ("sketch-map", "quality-report"):
+        async_result = celery_app.AsyncResult(id_)
+    else:
+        async_result = celery_app.GroupResult.restore(id_)
 
     href = None
     error = None
     info = None
-    if task.ready():
-        if task.successful():  # SUCCESS
+    if async_result.ready():
+        if async_result.successful():  # SUCCESS
+            status = "SUCCESS"
             http_status = 200
             href = "/api/download/" + uuid + "/" + type_
-        elif task.failed():  # REJECTED, REVOKED, FAILURE
+        elif async_result.failed():  # REJECTED, REVOKED, FAILURE
+            status = "FAILURE"
             try:
-                task.get(propagate=True)
+                async_result.get(propagate=True)
             except (QRCodeError, OQTReportError, MapGenerationError) as err:
                 # The request was well-formed but was unable to be followed due
                 # to semantic errors.
@@ -282,16 +282,27 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             except Exception as err:
                 http_status = 500  # Internal Server Error
                 error = "{}: {}".format(type(err).__name__, str(err))
-    elif task.status == "PROGRESS":
-        # In progress, but has not been completed
-        http_status = 202  # Accepted
-        info = task.info
     else:  # PENDING, RETRY, STARTED
         # Accepted for processing, but has not been completed
+        counter = 0
+        status = "PENDING"
+        if isinstance(async_result, AsyncResult):
+            status = async_result.status
+            info = {"current": 0, "total": 1}
+        else:
+            # GroupResult
+            for r in async_result.results:
+                if r.ready():
+                    counter += 1
+                    status = "PROGRESS"
+            info = {
+                "current": counter,
+                "total": len(async_result.results),
+            }
         http_status = 202  # Accepted
     body_raw = {
         "id": uuid,
-        "status": task.status,
+        "status": status,
         "type": type_,
         "href": href,
         "error": error,
@@ -325,27 +336,17 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
         case "raster-results":
             mimetype = "application/zip"
             download_name = type_ + ".zip"
-            async_result = celery_app.GroupResult.restore(id_)
-            if async_result is None:
-                # in case of a group w/ only one task the group gets converted to a task
-                async_result = celery_app.AsyncResult(id_)
-                result = [async_result.get()]
-            else:
-                result = async_result.get()
-            if async_result.successful():
-                file: BytesIO = zip_(result)
+            group_result = celery_app.GroupResult.restore(id_)
+            if group_result.successful():
+                file: BytesIO = zip_(group_result.get())
         case "vector-results":
             mimetype = "application/geo+json"
             download_name = type_ + ".geojson"
-            async_result = celery_app.GroupResult.restore(id_)
-            if async_result is None:
-                # in case of a group w/ only one task the group gets converted to a task
-                async_result = celery_app.AsyncResult(id_)
-                result = [async_result.get()]
-            else:
-                result = async_result.get()
-            if async_result.successful():
-                file = BytesIO(geojson.dumps(merge(result)).encode("utf-8"))
+            group_result = celery_app.GroupResult.restore(id_)
+            if group_result.successful():
+                result = group_result.get()
+                raw = geojson.dumps(merge(result))
+                file = BytesIO(raw.encode("utf-8"))
     return send_file(file, mimetype, download_name=download_name)
 
 
