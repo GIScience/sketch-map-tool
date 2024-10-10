@@ -146,6 +146,8 @@ def cleanup_blob(file_ids: list[int] | tuple[int]):
         id = %s
         AND consent = FALSE;
     """
+    if isinstance(file_ids, int):
+        file_ids = [file_ids]
     with db_conn.cursor() as curs:
         try:
             curs.executemany(query, [[i] for i in file_ids])
