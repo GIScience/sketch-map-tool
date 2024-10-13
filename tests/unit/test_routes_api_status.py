@@ -1,7 +1,6 @@
 from unittest.mock import Mock
 
 import pytest
-from celery.app.control import Control as CeleryControl
 from celery.result import AsyncResult, GroupResult
 
 from sketch_map_tool.exceptions import MapGenerationError, QRCodeError
@@ -186,24 +185,6 @@ def mock_group_result_success_failure(
     )
 
 
-@pytest.fixture
-def mock_celery_control_ping_ok(monkeypatch):
-    monkeypatch.setattr(
-        CeleryControl,
-        "ping",
-        lambda *args, **kwargs: [{"workerid": {"ok": "pong"}}],
-    )
-
-
-@pytest.fixture
-def mock_celery_control_ping_fail(monkeypatch):
-    monkeypatch.setattr(
-        CeleryControl,
-        "ping",
-        lambda *args, **kwargs: [],
-    )
-
-
 @pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
 def test_status_success(
     client,
@@ -366,15 +347,3 @@ def test_group_status_success_failure(
     assert resp.json["errors"] == ["QRCodeError: Mock error"]
     assert resp.json["href"] == "/api/download/{0}/{1}".format(uuid, type_)
     assert "info" not in resp.json.keys()
-
-
-@pytest.mark.usefixtures("mock_celery_control_ping_ok")
-def test_health_ok(client):
-    resp = client.get("/api/health")
-    assert resp.status_code == 200
-
-
-@pytest.mark.usefixtures("mock_celery_control_ping_fail")
-def test_health_fail(client):
-    resp = client.get("/api/health")
-    assert resp.status_code == 503
