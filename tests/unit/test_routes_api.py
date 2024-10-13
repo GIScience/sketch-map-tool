@@ -4,7 +4,7 @@ import pytest
 from celery.app.control import Control as CeleryControl
 from celery.result import AsyncResult, GroupResult
 
-from sketch_map_tool.exceptions import QRCodeError
+from sketch_map_tool.exceptions import MapGenerationError, QRCodeError
 from sketch_map_tool.routes import app
 
 
@@ -45,7 +45,7 @@ def mock_async_result_started(monkeypatch):
     return mock
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_async_result_failure(monkeypatch):
     """Mock task result wich failed w/ expected error"""
     mock = Mock(spec=AsyncResult)
@@ -53,13 +53,27 @@ def mock_async_result_failure(monkeypatch):
     mock.ready.return_value = True
     mock.failed.return_value = True
     mock.successful.return_value = False
-    mock.get.side_effect = QRCodeError("Mock error")
+    mock.get.side_effect = MapGenerationError("Mock error")
     monkeypatch.setattr("sketch_map_tool.routes.celery_app.AsyncResult", lambda _: mock)
     return mock
 
 
-@pytest.fixture()
-def mock_async_results_failure_hard(monkeypatch):
+@pytest.fixture
+def mock_async_result_failure_upload_processing(monkeypatch):
+    """Mock task result wich failed w/ expected error"""
+    mock = Mock(spec=AsyncResult)
+    mock.status = "FAILURE"
+    mock.ready.return_value = True
+    mock.failed.return_value = True
+    mock.successful.return_value = False
+    mock.get.side_effect = QRCodeError("Mock error")
+
+    monkeypatch.setattr("sketch_map_tool.routes.celery_app.AsyncResult", lambda _: mock)
+    return mock
+
+
+@pytest.fixture
+def mock_async_result_failure_hard(monkeypatch):
     """Mock task result wich failed w/ unexpected error"""
     mock = Mock(spec=AsyncResult)
     mock.status = "FAILURE"
@@ -67,19 +81,23 @@ def mock_async_results_failure_hard(monkeypatch):
     mock.failed.return_value = True
     mock.successful.return_value = False
     mock.get.side_effect = ValueError()
+
     monkeypatch.setattr("sketch_map_tool.routes.celery_app.AsyncResult", lambda _: mock)
+    return mock
 
 
-@pytest.fixture()
-def mock_group_result_success(monkeypatch):
+@pytest.fixture
+def mock_group_result_success(mock_async_result_success, monkeypatch):
     mock = Mock(spec=GroupResult)
     mock.ready.return_value = True
     mock.failed.return_value = False
     mock.successful.return_value = True
+    mock.results = [mock_async_result_success]
 
     monkeypatch.setattr(
         "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
     )
+    return mock
 
 
 @pytest.fixture
@@ -93,16 +111,31 @@ def mock_group_result_started(mock_async_result_started, monkeypatch):
     monkeypatch.setattr(
         "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
     )
+    return mock
 
 
 @pytest.fixture
-def mock_group_result_failure(mock_async_result_failure, monkeypatch):
+def mock_group_result_failure(mock_async_result_failure_upload_processing, monkeypatch):
     mock = Mock(spec=GroupResult)
     mock.ready.return_value = True
     mock.failed.return_value = True
     mock.successful.return_value = False
-    mock.results = [mock_async_result_failure]
-    mock.get.side_effect = mock_async_result_failure.get
+    mock.results = [mock_async_result_failure_upload_processing]
+    mock.get.side_effect = mock_async_result_failure_upload_processing.get
+
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
+    )
+
+
+@pytest.fixture
+def mock_group_result_failure_hard(mock_async_result_failure_hard, monkeypatch):
+    mock = Mock(spec=GroupResult)
+    mock.ready.return_value = True
+    mock.failed.return_value = True
+    mock.successful.return_value = False
+    mock.results = [mock_async_result_failure_hard]
+    mock.get.side_effect = mock_async_result_failure_hard.get
 
     monkeypatch.setattr(
         "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
@@ -113,7 +146,7 @@ def mock_group_result_failure(mock_async_result_failure, monkeypatch):
 def mock_group_result_started_success_failure(
     mock_async_result_started,
     mock_async_result_success,
-    mock_async_result_failure,
+    mock_async_result_failure_upload_processing,
     monkeypatch,
 ):
     mock = Mock(spec=GroupResult)
@@ -123,9 +156,30 @@ def mock_group_result_started_success_failure(
     mock.results = [
         mock_async_result_started,
         mock_async_result_success,
-        mock_async_result_failure,
+        mock_async_result_failure_upload_processing,
     ]
-    mock.get.side_effect = mock_async_result_failure.get
+    mock.get.side_effect = mock_async_result_failure_upload_processing.get
+
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
+    )
+
+
+@pytest.fixture
+def mock_group_result_success_failure(
+    mock_async_result_success,
+    mock_async_result_failure_upload_processing,
+    monkeypatch,
+):
+    mock = Mock(spec=GroupResult)
+    mock.ready.return_value = True
+    mock.failed.return_value = True
+    mock.successful.return_value = False
+    mock.results = [
+        mock_async_result_success,
+        mock_async_result_failure_upload_processing,
+    ]
+    mock.get.side_effect = mock_async_result_failure_upload_processing.get
 
     monkeypatch.setattr(
         "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
@@ -165,7 +219,7 @@ def test_status_success(
     assert resp.json["status"] == "SUCCESS"
     assert resp.json["href"] == "/api/download/{0}/{1}".format(uuid, type_)
     assert "info" not in resp.json.keys()
-    assert "error" not in resp.json.keys()
+    assert "errors" not in resp.json.keys()
 
 
 @pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
@@ -183,7 +237,7 @@ def test_status_started(
     assert resp.json["status"] == "STARTED"
     assert resp.json["info"] == {"current": 0, "total": 1}
     assert "href" not in resp.json.keys()
-    assert "error" not in resp.json.keys()
+    assert "errors" not in resp.json.keys()
 
 
 @pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
@@ -199,7 +253,7 @@ def test_status_failure(
     assert resp.json["id"] == uuid
     assert resp.json["type"] == type_
     assert resp.json["status"] == "FAILURE"
-    assert resp.json["error"] == "QRCodeError: Mock error"
+    assert resp.json["errors"] == ["MapGenerationError: Mock error"]
     assert "href" not in resp.json.keys()
 
 
@@ -209,15 +263,10 @@ def test_status_failure_hard(
     uuid,
     type_,
     mock_request_task_mapping,
-    mock_async_results_failure_hard,
+    mock_async_result_failure_hard,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 500
-    assert resp.json["id"] == uuid
-    assert resp.json["type"] == type_
-    assert resp.json["status"] == "FAILURE"
-    assert resp.json["error"] == "ValueError: "
-    assert "href" not in resp.json.keys()
 
 
 @pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
@@ -271,6 +320,18 @@ def test_group_status_failure(
 
 
 @pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
+def test_group_status_failure_hard(
+    client,
+    uuid,
+    type_,
+    mock_request_task_mapping,
+    mock_group_result_failure_hard,
+):
+    resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
+    assert resp.status_code == 500
+
+
+@pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
 def test_group_status_started_success_failure(
     client,
     uuid,
@@ -284,7 +345,27 @@ def test_group_status_started_success_failure(
     assert resp.json["id"] == uuid
     assert resp.json["type"] == type_
     assert resp.json["status"] == "STARTED"
+    assert resp.json["errors"] == ["QRCodeError: Mock error"]
     assert resp.json["info"] == {"current": 2, "total": 3}
+
+
+@pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
+def test_group_status_success_failure(
+    client,
+    uuid,
+    type_,
+    mock_request_task_mapping,
+    mock_group_result_success_failure,
+):
+    resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
+    assert resp.status_code == 200
+    assert resp.mimetype == "application/json"
+    assert resp.json["id"] == uuid
+    assert resp.json["type"] == type_
+    assert resp.json["status"] == "SUCCESS"
+    assert resp.json["errors"] == ["QRCodeError: Mock error"]
+    assert resp.json["href"] == "/api/download/{0}/{1}".format(uuid, type_)
+    assert "info" not in resp.json.keys()
 
 
 @pytest.mark.usefixtures("mock_celery_control_ping_ok")

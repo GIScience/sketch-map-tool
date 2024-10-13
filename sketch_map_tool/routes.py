@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 
 import geojson
 from celery import chord, group
-from celery.result import AsyncResult
+from celery.result import AsyncResult, GroupResult
 from flask import (
     abort,
     redirect,
@@ -23,14 +23,12 @@ from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
     CustomFileNotFoundError,
-    MapGenerationError,
-    OQTReportError,
     QRCodeError,
     TranslatableError,
     UploadLimitsExceededError,
     UUIDNotFoundError,
 )
-from sketch_map_tool.helpers import merge, to_array, zip_
+from sketch_map_tool.helpers import extract_errors, merge, to_array, zip_
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.tasks import (
     cleanup_blobs,
@@ -261,9 +259,9 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     else:
         async_result = celery_app.GroupResult.restore(id_)
 
-    href = None
-    error = None
-    info = None
+    href = ""
+    info = ""
+    errors: list = extract_errors(async_result)
     if async_result.ready():
         if async_result.successful():  # SUCCESS
             status = "SUCCESS"
@@ -271,45 +269,42 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             href = "/api/download/" + uuid + "/" + type_
         elif async_result.failed():  # REJECTED, REVOKED, FAILURE
             status = "FAILURE"
-            try:
-                async_result.get(propagate=True)
-            except (QRCodeError, OQTReportError, MapGenerationError) as err:
-                # The request was well-formed but was unable to be followed due
-                # to semantic errors.
-                http_status = 422  # Unprocessable Entity
-                error = err.translate()
-            except Exception as err:
-                http_status = 500  # Internal Server Error
-                error = "{}: {}".format(type(err).__name__, str(err))
+            http_status = 422  # Unprocessable Entity
+            if isinstance(async_result, GroupResult):
+                if any([r.successful() for r in async_result.results]):  # type: ignore
+                    status = "SUCCESS"
+                    http_status = 200
+                    href = "/api/download/" + uuid + "/" + type_
+        else:
+            abort(500)
     else:  # PENDING, RETRY, STARTED
         # Accepted for processing, but has not been completed
-        counter = 0
-        status = "PENDING"
         http_status = 202  # Accepted
         if isinstance(async_result, AsyncResult):
             status = async_result.status
             info = {"current": 0, "total": 1}
-        else:
-            # GroupResult
-            if any(r.status == "STARTED" for r in async_result.results):
+        elif isinstance(async_result, GroupResult):
+            results = async_result.results
+            if any(r.status == "STARTED" or r.ready() for r in results):  # type: ignore
                 status = "STARTED"
-            for r in async_result.results:
-                if r.ready():
-                    counter += 1
-                    status = "PROGRESS"
+            else:
+                status = "PENDING"
             info = {
-                "current": counter,
-                "total": len(async_result.results),
+                "current": [r.ready() for r in results].count(True),  # type: ignore
+                "total": len(async_result.results),  # type: ignore
             }
+        else:
+            raise TypeError()
     body_raw = {
         "id": uuid,
         "status": status,
         "type": type_,
         "href": href,
-        "error": error,
+        "errors": errors,
         "info": info,
     }
-    body = {k: v for k, v in body_raw.items() if v is not None}
+    # remove items which are empty
+    body = {k: v for k, v in body_raw.items() if v}
     return Response(json.dumps(body), status=http_status, mimetype="application/json")
 
 
@@ -323,10 +318,10 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
 
     if type_ in ("sketch-map", "quality-report"):
         async_result = celery_app.AsyncResult(id_)
+        if not async_result.ready() or async_result.failed():
+            abort(500)
     else:
         async_result = celery_app.GroupResult.restore(id_)
-    if not async_result.successful():
-        abort(202)
 
     match type_:
         case "quality-report":
@@ -340,11 +335,11 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
         case "raster-results":
             mimetype = "application/zip"
             download_name = type_ + ".zip"
-            file: BytesIO = zip_(async_result.get())
+            file: BytesIO = zip_(async_result.get(propagate=False))
         case "vector-results":
             mimetype = "application/geo+json"
             download_name = type_ + ".geojson"
-            result = async_result.get()
+            result = async_result.get(propagate=False)
             raw = geojson.dumps(merge(result))
             file: BytesIO = BytesIO(raw.encode("utf-8"))
     return send_file(file, mimetype, download_name=download_name)

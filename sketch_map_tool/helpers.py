@@ -4,9 +4,12 @@ from zipfile import ZipFile
 
 import cv2
 import numpy as np
+from celery.result import AsyncResult, GroupResult
 from geojson import Feature, FeatureCollection
 from numpy.typing import NDArray
 from reportlab.graphics.shapes import Drawing
+
+from sketch_map_tool.exceptions import TranslatableError
 
 
 def get_project_root() -> Path:
@@ -68,3 +71,23 @@ def zip_(
         # zip_file.writestr("attributions.txt", get_attribution_file().read())
     buffer.seek(0)
     return buffer
+
+
+def extract_errors(async_result: AsyncResult | GroupResult) -> list[str]:
+    """Extract known exceptions propagated by Celery a Task or Group"""
+    if isinstance(async_result, AsyncResult):
+        results = [async_result]
+    elif isinstance(async_result, GroupResult):
+        results = async_result.results
+    else:
+        raise TypeError()
+    errors = []
+    for r in results:  # type: ignore
+        try:
+            if r.ready():
+                r.get(propagate=True)
+        except TranslatableError as error:
+            errors.append(error.translate())
+        except Exception as error:
+            raise error
+    return errors

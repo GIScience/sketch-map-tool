@@ -15,11 +15,7 @@ from sketch_map_tool import CELERY_CONFIG, get_locale, make_flask, routes
 from sketch_map_tool import celery_app as smt_celery_app
 from sketch_map_tool.config import DEFAULT_CONFIG
 from sketch_map_tool.database import client_flask as db_client_flask
-<<<<<<< HEAD
 from sketch_map_tool.helpers import merge, to_array, zip_
-=======
-from sketch_map_tool.helpers import to_array, zip_
->>>>>>> 45a63465 (refactor: move `merge` and `zip_` to helpers module)
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.upload_processing import clip
 from tests import FIXTURE_DIR

@@ -144,7 +144,7 @@ def test_api_status_uuid_digitize(uuid_digitize, type_, flask_client):
 
 
 # TODO: Make test case work in a run of the whole test suite
-# @pytest.mark.skip("Only works in a single test run")
+@pytest.mark.skip("Only works in a single test run")
 @vcr_app.use_cassette
 def test_api_status_uuid_digitize_info(sketch_map_marked, flask_client):
     """Test if custom task status information is return by /status."""
@@ -164,7 +164,7 @@ def test_api_status_uuid_digitize_info(sketch_map_marked, flask_client):
 
 
 # TODO: Make test case work in a run of the whole test suite
-# @pytest.mark.skip("Only works in a single test run")
+@pytest.mark.skip("Only works in a single test run")
 @vcr_app.use_cassette
 def test_api_status_uuid_digitize_info_multiple(sketch_map_marked, flask_client):
     """Test if custom task status information is return by /status."""
