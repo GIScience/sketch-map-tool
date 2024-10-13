@@ -29,30 +29,31 @@ async function poll(url, prefix) {
         return response.status === 200;
     }
 
+    function createUserMessage(result) {
+        let message = `Processing ${result.status}`;
+        if (result.info && result.info.length) {
+            message = message.concat(`: ${result.info.current} of ${result.info.total} uploaded files have been processed.`);
+        }
+        if (result.errors && result.errors.length) {
+            const messageFailure = `Following errors occured:<br>${result.errors.join("<br>")}`;
+            const messageContact = "Please feel free to report this failure (sketch-map-tool@heigit.org)";
+            message = [message, messageFailure, messageContact].join("<br>");
+        }
+        return message;
+    }
+
     async function onProgress(response) {
         // console.log("progress", response);
         const result = await response.json();
-        if (result.status === "PROGRESS" && "info" in result) {
-            const messageProgress = `Processing in ${result.status}: ${result.info.current} of ${result.info.total} uploaded files have been processed.`;
-            if (result.info.failures && result.info.failures.length) {
-                const messageFailure = `For following files no markings were detected: ${result.info.failures.join(", ")}.`;
-                const messageContact = "Please feel free to report this failure (sketch-map-tool@heigit.org)";
-                setTaskStatus(
-                    `${prefix}-status`,
-                    [messageProgress, messageFailure, messageContact].join(" "),
-                );
-            } else {
-                setTaskStatus(`${prefix}-status`, messageProgress);
-            }
-        } else {
-            setTaskStatus(`${prefix}-status`, `Processing ${result.status}`);
-        }
+        const message = createUserMessage(result);
+        setTaskStatus(`${prefix}-status`, message);
     }
 
     async function onValid(response) {
         const result = await response.json();
+        const message = createUserMessage(result);
         const { href } = result;
-        setTaskStatus(`${prefix}-status`, "");
+        setTaskStatus(`${prefix}-status`, message);
         setDownloadLink(`${prefix}-download-button`, href);
         setIsBusy(`${prefix}-download-button`, false);
         setDisabled(`${prefix}-download-button`, false);
@@ -86,10 +87,8 @@ async function poll(url, prefix) {
     async function onError(response) {
         const { status: httpStatus } = response;
         const resonseJSON = await response.json();
-        const {
-            error: errorText,
-            status: taskStatus,
-        } = resonseJSON;
+        const taskStatus = resonseJSON.status;
+        const errorText = resonseJSON.errors.join("<br>");
         // display error
         handleError(prefix, `${new Date().toISOString()} ${httpStatus} ${taskStatus} <br> ${errorText}`);
         // remove task status
