@@ -183,7 +183,9 @@ def digitize_sketches(
         m: FeatureCollection = post_process(m, file_name)
         l.append(m)
     if len(l) == 0:
-        raise MarkingDetectionError(N_("No markings have been detected."))
+        raise MarkingDetectionError(
+            N_(f"For '{file_name}' (ID: {file_id}) no markings have been detected.")
+        )
     return merge(l)
 
 
