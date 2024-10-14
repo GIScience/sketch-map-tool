@@ -322,7 +322,8 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             abort(500)
     else:
         async_result = celery_app.GroupResult.restore(id_)
-
+        if not async_result.ready() or all([r.failed() for r in async_result.results]):
+            abort(500)
     match type_:
         case "quality-report":
             mimetype = "application/pdf"
