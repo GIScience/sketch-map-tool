@@ -36,6 +36,7 @@ from sketch_map_tool.wms import client as wms_client
 @worker_process_init.connect
 def init_worker_db_connection(**_):
     """Initializing database connection for worker."""
+    logging.debug("Initialize database connection.")
     db_client_celery.open_connection()
 
 
@@ -75,6 +76,7 @@ def init_worker_ml_models(**_):
 @worker_process_shutdown.connect
 def shutdown_worker(**_):
     """Closing database connection for worker"""
+    logging.debug("Closing database connection.")
     db_client_celery.close_connection()
 
 
