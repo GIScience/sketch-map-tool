@@ -15,6 +15,7 @@ from ultralytics_4bands import YOLO as YOLO_4
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool import get_config_value, map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
+from sketch_map_tool.definitions import get_attribution
 from sketch_map_tool.exceptions import MarkingDetectionError
 from sketch_map_tool.helpers import N_, merge, to_array
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
@@ -139,14 +140,20 @@ def georeference_sketch_map(
     file_id: int,
     file_name: str,
     map_frame: NDArray,
+    layer: Layer,
     bbox: Bbox,
-) -> AsyncResult | tuple[str, BytesIO]:
+) -> AsyncResult | tuple[str, str, BytesIO]:
+    """Georeference uploaded Sketch Map.
+
+    Returns file name, attribution text and to the map extend clipped and georeferenced
+    sketch map as GeoTiff.
+    """
     # r = interim result
     r = db_client_celery.select_file(file_id)
     r = to_array(r)
     r = clip(r, map_frame)
     r = georeference(r, bbox)
-    return file_name, r
+    return file_name, get_attribution(layer), r
 
 
 @celery.task

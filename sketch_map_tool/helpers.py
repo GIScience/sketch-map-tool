@@ -56,25 +56,26 @@ def merge(fcs: list[FeatureCollection]) -> FeatureCollection:
     return feature_collection
 
 
-def zip_(
-    results: tuple[str, BytesIO] | list[tuple[str, BytesIO]],
-) -> BytesIO:
+def zip_(results: list[tuple[str, str, BytesIO]]) -> BytesIO:
+    """ZIP the results of the Celery group of `georeference_sketch_map` tasks."""
     buffer = BytesIO()
-    if isinstance(results, tuple):
-        results = [results]
+    raw = set([r[1].replace("<br />", "\n") for r in results])
+    attributions = BytesIO("\n".join(raw).encode())
     with ZipFile(buffer, "a") as zip_file:
-        for file_name, file in results:
-            # attribution = get_attribution(layer)
-            # attribution = attribution.replace("<br />", "\n")
-            name = ".".join(file_name.split(".")[:-1])
-            zip_file.writestr(f"{name}.geotiff", file.read())
-        # zip_file.writestr("attributions.txt", get_attribution_file().read())
+        for file_name, _, file in results:
+            stem = Path(file_name).stem
+            name = Path(stem).with_suffix(".geotiff")
+            zip_file.writestr(str(name), file.read())
+        zip_file.writestr("attributions.txt", attributions.read())
     buffer.seek(0)
     return buffer
 
 
 def extract_errors(async_result: AsyncResult | GroupResult) -> list[str]:
-    """Extract known exceptions propagated by Celery a Task or Group"""
+    """Extract known/custom exceptions propagated by Celery a Task or Group.
+
+    raises: Exception if error is not a custom exception.
+    """
     if isinstance(async_result, AsyncResult):
         results = [async_result]
     elif isinstance(async_result, GroupResult):
