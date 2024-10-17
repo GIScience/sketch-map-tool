@@ -157,7 +157,6 @@ def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
     # "consent" is a checkbox and value is only send if it is checked
     consent: bool = "consent" in request.form.keys()
-
     # No files uploaded
     if "file" not in request.files:
         return redirect(url_for("digitize", lang=lang))
@@ -185,7 +184,7 @@ def digitize_results_post(lang="en") -> Response:
         bboxes_[uuid] = bbox
         layers_[uuid] = layer
 
-    tasks_vector = []  # noqa: E741
+    tasks_vector = []
     tasks_raster = []
     for file_id, file_name, uuid in zip(file_ids, file_names, uuids):
         tasks_vector.append(
@@ -231,7 +230,6 @@ def digitize_results_post(lang="en") -> Response:
         "vector-results": str(async_result_vector.id),
     }
     db_client_flask.set_async_result_ids(uuid, map_)
-
     return redirect(url_for("digitize_results_get", lang=lang, uuid=uuid))
 
 
@@ -254,10 +252,10 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
 
     id_ = db_client_flask.get_async_result_id(uuid, type_)
 
-    if type_ in ("sketch-map", "quality-report"):
+    # due to legacy support it is not possible to check only `type_`
+    async_result = celery_app.GroupResult.restore(id_)
+    if async_result is None:
         async_result = celery_app.AsyncResult(id_)
-    else:
-        async_result = celery_app.GroupResult.restore(id_)
 
     href = ""
     info = ""
@@ -316,12 +314,13 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
 
     id_ = db_client_flask.get_async_result_id(uuid, type_)
 
-    if type_ in ("sketch-map", "quality-report"):
+    # due to legacy support it is not possible to check only `type_`
+    async_result = celery_app.GroupResult.restore(id_)
+    if async_result is None:
         async_result = celery_app.AsyncResult(id_)
         if not async_result.ready() or async_result.failed():
             abort(500)
     else:
-        async_result = celery_app.GroupResult.restore(id_)
         if not async_result.ready() or all([r.failed() for r in async_result.results]):
             abort(500)
     match type_:
@@ -336,13 +335,21 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
         case "raster-results":
             mimetype = "application/zip"
             download_name = type_ + ".zip"
-            file: BytesIO = zip_(async_result.get(propagate=False))
+            if isinstance(async_result, GroupResult):
+                file: BytesIO = zip_(async_result.get(propagate=False))
+            else:
+                # support legacy results
+                file: BytesIO = async_result.get()
         case "vector-results":
             mimetype = "application/geo+json"
             download_name = type_ + ".geojson"
-            result = async_result.get(propagate=False)
-            raw = geojson.dumps(merge(result))
-            file: BytesIO = BytesIO(raw.encode("utf-8"))
+            if isinstance(async_result, GroupResult):
+                result: list = async_result.get(propagate=False)
+                raw = geojson.dumps(merge(result))
+                file: BytesIO = BytesIO(raw.encode("utf-8"))
+            else:
+                # support legacy results
+                file = async_result.get()
     return send_file(file, mimetype, download_name=download_name)
 
 
