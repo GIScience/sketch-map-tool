@@ -143,8 +143,7 @@ def test_api_status_uuid_digitize(uuid_digitize, type_, flask_client):
     assert resp.json["href"] == f"/api/download/{uuid_digitize}/{type_}"
 
 
-# TODO: Make test case work in a run of the whole test suite
-@pytest.mark.skip("Only works in a single test run")
+@pytest.mark.skip("Long execution time.")
 @vcr_app.use_cassette
 def test_api_status_uuid_digitize_info(sketch_map_marked, flask_client):
     """Test if custom task status information is return by /status."""
@@ -163,8 +162,7 @@ def test_api_status_uuid_digitize_info(sketch_map_marked, flask_client):
     assert resp.json["info"] == {"current": 0, "total": 1}
 
 
-# TODO: Make test case work in a run of the whole test suite
-@pytest.mark.skip("Only works in a single test run")
+@pytest.mark.skip("Only works in a single test run. Long execution time.")
 @vcr_app.use_cassette
 def test_api_status_uuid_digitize_info_multiple(sketch_map_marked, flask_client):
     """Test if custom task status information is return by /status."""
@@ -191,8 +189,9 @@ def test_api_status_uuid_digitize_info_multiple(sketch_map_marked, flask_client)
         resp = flask_client.get(f"/api/status/{uuid}/vector-results")
         if resp.json["status"] == "SUCCESS":
             break
-        assert resp.json["status"] in ["PENDING", "PROGRESS"]
+        assert resp.json["status"] in ["PENDING", "STARTED"]
         assert resp.json["info"]["current"] in [0, 1, 2]
+        assert resp.json["info"]["total"] == 2
     assert resp.status_code == 200
     assert resp.json["status"] == "SUCCESS"
 
