@@ -204,6 +204,7 @@ def digitize_results_post(lang="en") -> Response:
                     file_id,
                     file_name,
                     map_frames[uuid],
+                    layers_[uuid],
                     bboxes_[uuid],
                 )
             )
