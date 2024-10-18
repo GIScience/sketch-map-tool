@@ -13,10 +13,9 @@ from sketch_map_tool.exceptions import (
 @pytest.fixture
 def map_frame_old(flask_app, uuid_create, map_frame, bbox):
     """Mock map frame which is uploaded a year ago."""
-    # NOTE: Maybe mocking a map frame in the database with fake file
     with flask_app.app_context():
         update_query = (
-            "UPDATE map_frame SET ts = NOW() - INTERVAL '12 months' WHERE uuid = %s"
+            "UPDATE map_frame SET ts = NOW() - INTERVAL '13 months' WHERE uuid = %s"
         )
         with client_flask.open_connection().cursor() as curs:
             curs.execute(update_query, [uuid_create])
@@ -25,15 +24,20 @@ def map_frame_old(flask_app, uuid_create, map_frame, bbox):
 
     map_frame.seek(0)
     with flask_app.app_context():
-        update_query = "UPDATE map_frame SET file = %s, bbox = %s WHERE uuid = %s"
+        update_query = (
+            "UPDATE map_frame SET ts = now(), file = %s, bbox = %s WHERE uuid = %s"
+        )
         with client_flask.open_connection().cursor() as curs:
-            curs.execute(update_query, [map_frame.getvalue(), str(bbox), uuid_create])
+            curs.execute(update_query, [map_frame.getbuffer(), str(bbox), uuid_create])
     map_frame.seek(0)
 
 
 @pytest.fixture
 def sketch_map_without_consent(
-    flask_app, uuid_create, sketch_map_marked, uuid_digitize
+    flask_app,
+    uuid_create,
+    sketch_map_marked,
+    uuid_digitize,  # pyright: ignore
 ):
     """mock uploaded sketch map without consent."""
     with flask_app.app_context():
@@ -41,14 +45,15 @@ def sketch_map_without_consent(
         with client_flask.open_connection().cursor() as curs:
             curs.execute(update_query, [uuid_create])
 
-        yield sketch_map_marked
+    yield sketch_map_marked
+
+    with flask_app.app_context():
         update_query = """
             UPDATE
                 blob
             SET
                 consent = TRUE,
-                file = %s,
-                file_name = 'sketch_map.png'
+                file = %s
             WHERE
                 map_frame_uuid = %s;
         """
@@ -97,7 +102,7 @@ def test_cleanup_map_frames_recent(
     with flask_app.app_context():
         # should not raise an error / should not delete the map frame
         map_frame_ = client_flask.select_map_frame(UUID(uuid_create))
-    assert map_frame_ == map_frame.getvalue()
+    assert map_frame_ == map_frame.getbuffer()
 
 
 @pytest.mark.usefixtures("uuid_digitize")
@@ -114,7 +119,7 @@ def test_cleanup_map_frames_recent_with_consent(
     with flask_app.app_context():
         # should not raise an error / should not delete the map frame
         map_frame_received = client_flask.select_map_frame(UUID(uuid_create))
-    assert map_frame_received == map_frame.getvalue()
+    assert map_frame_received == map_frame.getbuffer()
 
 
 @pytest.mark.usefixtures("sketch_map_without_consent")
@@ -148,7 +153,7 @@ def test_cleanup_map_frames_old_with_consent(
     # should not raise an error / should not delete the map frame
     with flask_app.app_context():
         map_frame_received = client_flask.select_map_frame(UUID(uuid_create))
-    assert map_frame_received == map_frame_old.getvalue()
+    assert map_frame_received == map_frame_old.getbuffer()
 
 
 @pytest.mark.usefixtures("map_frame_old", "sketch_map_without_consent")
@@ -178,7 +183,11 @@ def test_cleanup_blobs_with_consent(
         with client_flask.open_connection().cursor() as curs:
             curs.execute("SELECT id FROM blob WHERE map_frame_uuid = %s", [uuid_create])
             file_ids = curs.fetchall()[0]
-            client_celery.cleanup_blob(file_ids)
+
+    client_celery.cleanup_blob(file_ids)
+
+    with flask_app.app_context():
+        with client_flask.open_connection().cursor() as curs:
             curs.execute(
                 "SELECT file FROM blob WHERE map_frame_uuid = %s", [uuid_create]
             )
@@ -197,7 +206,11 @@ def test_cleanup_blobs_without_consent(flask_app, uuid_create: str):
         with client_flask.open_connection().cursor() as curs:
             curs.execute("SELECT id FROM blob WHERE map_frame_uuid = %s", [uuid_create])
             file_ids = curs.fetchall()[0]
-            client_celery.cleanup_blob(file_ids)
+
+    client_celery.cleanup_blob(file_ids)
+
+    with flask_app.app_context():
+        with client_flask.open_connection().cursor() as curs:
             curs.execute(
                 "SELECT file, file_name FROM blob WHERE map_frame_uuid = %s",
                 [uuid_create],

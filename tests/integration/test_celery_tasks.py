@@ -1,4 +1,5 @@
 from io import BytesIO
+from unittest.mock import Mock, patch
 from uuid import uuid4
 
 import pytest
@@ -33,9 +34,10 @@ def test_generate_quality_report(bbox_wgs84):
     assert isinstance(result, BytesIO)
 
 
-@pytest.mark.usefixtures("uuid_create", "uuid_digitize")
-def test_cleanup_map_frames():
+@patch("sketch_map_tool.tasks.db_client_celery.cleanup_map_frames")
+def test_cleanup_map_frames(mock_cleanup_map_frames):
     # `cleanup_map_frames()` is tested in `test_database_client_celery.py`
+    mock_cleanup_map_frames.get.return_value = Mock()
     task = tasks.cleanup_map_frames.apply_async()
     task.wait()
 
