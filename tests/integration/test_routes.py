@@ -1,11 +1,12 @@
 from copy import copy
 from io import BytesIO
 from time import time
+from unittest.mock import Mock, patch
 from uuid import UUID, uuid4
 
 import pytest
 
-from sketch_map_tool import flask_app as app
+from sketch_map_tool import flask_app
 from sketch_map_tool.database import client_flask
 from tests import vcr_app
 
@@ -63,8 +64,11 @@ def test_create_results_post(params, flask_client):
     assert url_rest == "/create/results"
 
 
+@patch("sketch_map_tool.routes.chord")
 @vcr_app.use_cassette
-def test_digitize_results_post(sketch_map_marked, flask_client):
+def test_digitize_results_post(mock_chord, sketch_map_marked, flask_client):
+    mock_chord.get.side_effect = Mock()
+
     unique_file_name = str(uuid4())
     data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
@@ -76,12 +80,14 @@ def test_digitize_results_post(sketch_map_marked, flask_client):
     url_rest = "/".join(url_parts[:-1])
     assert UUID(uuid).version == 4
     assert url_rest == "/digitize/results"
-    with app.app_context():
+    with flask_app.app_context():
         assert get_consent_flag_from_db(unique_file_name) is True
 
 
+@patch("sketch_map_tool.routes.chord")
 @vcr_app.use_cassette
-def test_digitize_results_post_no_consent(sketch_map_marked, flask_client):
+def test_digitize_results_post_no_consent(mock_chord, sketch_map_marked, flask_client):
+    mock_chord.get.side_effect = Mock()
     # do not send consent parameter
     # -> consent is a checkbox and only send if selected
     unique_file_name = str(uuid4())
@@ -95,17 +101,20 @@ def test_digitize_results_post_no_consent(sketch_map_marked, flask_client):
     url_rest = "/".join(url_parts[:-1])
     assert UUID(uuid).version == 4
     assert url_rest == "/digitize/results"
-    with app.app_context():
+    with flask_app.app_context():
         assert get_consent_flag_from_db(unique_file_name) is False
 
 
+@pytest.mark.usefixtures("map_frame_legacy_2024_04_15")
+@patch("sketch_map_tool.routes.chord")
 @vcr_app.use_cassette
 def test_digitize_results_legacy_2024_04_15(
+    mock_chord,
     sketch_map_marked,
-    map_frame_legacy_2024_04_15,
     flask_client,
 ):
     """Legacy map frames in DB do not have bbox, lon, lat and format set."""
+    mock_chord.get.side_effect = Mock()
     unique_file_name = str(uuid4())
     data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
@@ -117,7 +126,7 @@ def test_digitize_results_legacy_2024_04_15(
     url_rest = "/".join(url_parts[:-1])
     assert UUID(uuid).version == 4
     assert url_rest == "/digitize/results"
-    with app.app_context():
+    with flask_app.app_context():
         assert get_consent_flag_from_db(unique_file_name) is True
 
 
@@ -143,10 +152,11 @@ def test_api_status_uuid_digitize(uuid_digitize, type_, flask_client):
     assert resp.json["href"] == f"/api/download/{uuid_digitize}/{type_}"
 
 
-@pytest.mark.skip("Long execution time.")
 @vcr_app.use_cassette
-def test_api_status_uuid_digitize_info(sketch_map_marked, flask_client):
+@patch("sketch_map_tool.routes.chord")
+def test_api_status_uuid_digitize_info(mock_chord, sketch_map_marked, flask_client):
     """Test if custom task status information is return by /status."""
+    mock_chord.get.side_effect = Mock()
     unique_file_name = str(uuid4())
     data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
