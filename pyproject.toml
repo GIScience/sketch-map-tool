@@ -44,6 +44,7 @@ setuptools = "^72.2.0"  # dependencies of gdal
 numpy = "^2.0.1"  # dependencies of gdal
 wheel = "^0.43.0"  # dependencies of gdal
 flower = "^2.0.1"
+pytest-rerunfailures = "^14.0"
 
 [tool.poetry.group.dev.dependencies]
 # Versions are fixed to match versions used by pre-commit
