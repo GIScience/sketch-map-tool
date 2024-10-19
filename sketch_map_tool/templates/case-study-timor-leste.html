@@ -1,0 +1,174 @@
+{% extends "base.html" %} 
+
+{% block head %} 
+<link rel="stylesheet" href="{{url_for('static', filename='bundles/case-studies.css') }}">
+{% endblock head %}
+
+{% block header_message %}
+{{ _('Case Study') }}
+{% endblock header_message %}
+
+{% block body %}
+<main class="container">
+  <h1>{{ _('Participatory Mapping in Timor Leste') }}</h1>
+  <figure>
+    <img src="{{ url_for("static",
+    filename="assets/images/case-study-timor-leste/banner.png") }}" alt="{{
+    _('') }}">
+    <figcaption>{{ _('') }}</figcaption>
+  </figure>
+  <div class="grid">
+    <div>
+      <small
+        >©Red Cross Red Crescent Climate Centre Team for Anticipatory
+        Action</small
+      >
+      <br />
+      <small>September 2023</small>
+      <br />
+<small><a href="{{ url_for('case_study_timor_leste_pdf') }}">Download as PDF</a></small>
+    </div>
+  </div>
+  <br />
+  <p>
+    {{ _(' The mission of the Climate Centre‘s team is to support the Red Cross
+    and Red Crescent Movement and its partners in reducing the impacts of
+    climate change and extreme-weather events on vulnerable people. ') }}
+  </p>
+  <p>
+    {{ _(' The Anticipatory Action team conducted a pilot project in Timor Leste
+    to implement anticipatory mapping using OpenStreetMap (OSM). This project
+    aimed to address the lack of baseline data necessary for planning effective
+    anticipatory actions in the region. ') }}
+  </p>
+
+  <h2>{{ _('The Project') }}</h2>
+  <p>
+    {{ _(' This project aimed to enhance anticipatory mapping in hazard-prone
+    communities in Timor-Leste by creating and using OSM data. ') }}
+  </p>
+  <p>
+    {{ _(' By providing accurate information, the project promoted the
+    development of proactive strategies and the establishment of early warning
+    systems to mitigate the risks posed by natural hazards. A key objective was
+    to explore innovative methods for capturing community knowledge of historic
+    flood events, their impact on the community, and existing early warning
+    systems. ') }}
+  </p>
+  <p>
+    {{ _(' A thorough nationwide multi-hazard analysis identified high-exposure
+    areas, leading to the prioritization of mapping these regions within the OSM
+    framework. The community mapping with the Sketch Map Tool was part of a
+    broader activity, which began with remote mapping and local mapping to
+    improve building information of residential buildings and critical buildings
+    in OSM via KOBO questionnaires. ') }}
+  </p>
+
+  <h2>{{ _('Why the Sketch Map Tool was used?') }}</h2>
+  <p>
+    {{ _(' The Sketch Map Tool was used to capture the community knowledge of
+    historic flood extents and their impacts as well as capacities. ') }}
+  </p>
+
+  <h2>{{ _('How was the Sketch Mapping organized?') }}</h2>
+  <p>
+    {{ _(' Prior to the mapping activities, the team organized community
+    meetings to ensure resident participation throughout the process. Residents
+    of flood-prone villages were contacted through the trusted network of the
+    Timor-Leste Red Cross and its local branches. Community representatives from
+    each village were invited to these meetings and asked to bring along
+    community members who had been affected by recent floods. The selection
+    process had no age restrictions and emphasized maintaining an equal ratio of
+    men and women at the meetings. ') }}
+  </p>
+  <p>
+    {{ _(' The participants mapped the extent and location of historic flood
+    events on one map, and on a second map, they identified capacities such as
+    evacuation sites and natural protection areas. ') }}
+  </p>
+  <figure>
+    <img src="{{ url_for("static",
+    filename="assets/images/case-study-timor-leste/sketch-map.png") }}">
+    <figcaption>
+      {{ _('This Sketch Map shows the result of community mappers marking
+      historic flood areas in orange. © Red Cross Red Crescent Climate Centre
+      team for Anticipatory Action.') }}
+    </figcaption>
+  </figure>
+
+  <h2>{{ _('How were the Sketch Maps analyzed?') }}</h2>
+  <p>
+    {{ _(' The mappings on the Sketch Maps were combined with other collected
+    local data and visualized in a community map using geoinformation software
+    (in this case, ArcPro was used). The community mapping results were also
+    used to improve OSM data by adding local names to rivers, villages, and
+    including nature conservation areas directly via the OSM editor. ') }}
+  </p>
+  <h2>{{ _('Results and Impact') }}</h2>
+  <p>
+    {{ _(' The gathered information and created maps were used to support local
+    communities and decision- makers in making informed decisions and
+    facilitating anticipatory action planning. ') }}
+  </p>
+  <figure>
+    <img src="{{ url_for("static",
+    filename="assets/images/case-study-timor-leste/community-map.png") }}">
+    <figcaption>
+      {{ _(' This Community map shows the results of the different mapping
+      activities conducted in the area including the historical flood areas
+      mapped in the Sketch Map. © Red Cross Red Crescent Cli- mate Centre team
+      for Anticipatory Action.') }}
+    </figcaption>
+  </figure>
+
+  <h2>{{ _('Lessons learnt') }}</h2>
+  <ol>
+    <li>
+      {{ _('One large format map (A3) proved to be handier than multiple smaller
+      maps with detailed depiction of specific areas.') }}
+    </li>
+
+    <li>
+      {{ _('Best results were achieved in smaller groups of 4-6 people.') }}
+    </li>
+    <li>
+      {{ _('An additional satellite imagery can help the orientation on the OSM
+      base maps.') }}
+    </li>
+    <li>
+      {{ _(' The digitization process is sensitive to the map‘s condition and
+      the quality of the photos taken. Using document folders helps keep fragile
+      paper maps clean and smooth, protecting them during fieldwork. ') }}
+    </li>
+    <li>
+      {{ _(' A pretest of the mapping with the markers/pens you use is very
+      helpful to ensure everything works as planned. ') }}
+    </li>
+  </ol>
+  <figure>
+    <img src="{{ url_for("static",
+    filename="assets/images/case-study-timor-leste/community-meeting.png") }}">
+    <figcaption>
+      {{ _(' Community meeting in the Laclo valley to capture community
+      knowledge of floods, impacts, and capacities. © Red Cross Red Crescent
+      Climate Centre team for Anticipatory Action. ') }}
+    </figcaption>
+  </figure>
+
+  <h6>{{ _('Sources') }}</h6>
+  <ul>
+    <li>
+      <a
+        href="https://drive.google.com/file/d/1xKjBA9eicqon-Qnbiv-pWzSGuX0cldIn/view"
+        >{{ _('Final Report') }}</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://www.climatecentre.org/13645/blog-mapping-for-anticipatory-action-in-timor-leste/"
+        >{{ _('Blogpost') }}</a
+      >
+    </li>
+  </ul>
+</main>
+{% endblock body %}
