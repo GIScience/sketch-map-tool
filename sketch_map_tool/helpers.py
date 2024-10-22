@@ -72,7 +72,7 @@ def zip_(results: list[tuple[str, str, BytesIO]]) -> BytesIO:
 
 
 def extract_errors(async_result: AsyncResult | GroupResult) -> list[str]:
-    """Extract known/custom exceptions propagated by Celery a Task or Group.
+    """Extract known/custom exceptions propagated by a Celery task or group.
 
     raises: Exception if error is not a custom exception.
     """
