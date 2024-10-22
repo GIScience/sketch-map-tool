@@ -210,14 +210,14 @@ def digitize_results_post(lang="en") -> Response:
             )
         )
     async_result_raster = group(tasks_raster).apply_async()
-    async_result = chord(
+    c = chord(
         group(tasks_vector),
         cleanup_blobs.signature(
             kwargs={"file_ids": list(set(file_ids))},
             immutable=True,
         ),
     ).apply_async()
-    async_result_vector = async_result.parent
+    async_result_vector = c.parent
 
     # group results have to be saved for them to be able to be restored later
     async_result_raster.save()
@@ -254,6 +254,7 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     id_ = db_client_flask.get_async_result_id(uuid, type_)
 
     # due to legacy support it is not possible to check only `type_`
+    # (in the past every Celery result was of type `AsyncResult`)
     async_result = celery_app.GroupResult.restore(id_)
     if async_result is None:
         async_result = celery_app.AsyncResult(id_)
@@ -283,6 +284,7 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             status = async_result.status
             info = {"current": 0, "total": 1}
         elif isinstance(async_result, GroupResult):
+            # `GroupResult` has no `status` attribute
             results = async_result.results
             if any(r.status == "STARTED" or r.ready() for r in results):  # type: ignore
                 status = "STARTED"
@@ -316,6 +318,7 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     id_ = db_client_flask.get_async_result_id(uuid, type_)
 
     # due to legacy support it is not possible to check only `type_`
+    # (in the past every Celery result was of type `AsyncResult`)
     async_result = celery_app.GroupResult.restore(id_)
     if async_result is None:
         async_result = celery_app.AsyncResult(id_)
