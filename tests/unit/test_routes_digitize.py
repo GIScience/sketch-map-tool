@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import pytest
 
 from sketch_map_tool.routes import app
@@ -9,13 +11,13 @@ def client():
 
 
 @pytest.fixture()
-def mock_task(uuid, monkeypatch):
+def mock_tasks(uuid, monkeypatch):
     """Mock celery workflow generate digitized results."""
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.digitize_sketches", lambda args: uuid
+        "sketch_map_tool.routes.tasks.digitize_sketches", lambda _: str(uuid4())
     )
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.georeference_sketch_maps", lambda args: uuid
+        "sketch_map_tool.routes.tasks.georeference_sketch_map", lambda _: str(uuid())
     )
 
 
@@ -35,7 +37,7 @@ def test_digitize_result_get(client):
 
 
 @pytest.mark.skip(reason="Mocking of chained/grouped tasks is too complex for now")
-def test_digitize_result_post(client, sketch_map_buffer, mock_task):
+def test_digitize_result_post(client, sketch_map_buffer, mock_tasks):
     """Redirect to /digitize/results/<uuid>"""
     data = {"file": [(sketch_map_buffer, "sketch_map.png")], "consent": "True"}
     resp = client.post("/digitize/results", data=data)
@@ -49,7 +51,7 @@ def test_digitize_result_post(client, sketch_map_buffer, mock_task):
     )
 
 
-def test_digitize_result_post_no_files(client, mock_task):
+def test_digitize_result_post_no_files(client, mock_tasks):
     """Redirect to upload form to stay on the same page and try again"""
     data = {}
     resp = client.post("/digitize/results", data=data)
