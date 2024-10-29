@@ -2,7 +2,9 @@ from io import BytesIO
 from pathlib import Path
 from uuid import uuid4
 
+import numpy as np
 import pytest
+from approvaltests import Options, verify_binary
 from PIL import Image
 from reportlab.graphics.shapes import Drawing
 from reportlab.pdfgen import canvas
@@ -12,13 +14,16 @@ from sketch_map_tool.definitions import A0, A1, A2, A3, A4, LETTER, TABLOID
 from sketch_map_tool.map_generation import qr_code as generate_qr_code
 from sketch_map_tool.map_generation.generate_pdf import (
     generate_pdf,
+    get_aruco_markers,
     get_compass,
     get_globes,
     pdf_page_to_img,
 )
 from sketch_map_tool.models import PaperFormat
 from tests import FIXTURE_DIR
-from tests.unit.helper import save_test_file
+from tests.namer import PytestNamerFactory
+from tests.reporter import NDArrayReporter
+from tests.unit.helper import save_test_file, serialize_ndarray
 
 
 @pytest.fixture
@@ -131,3 +136,27 @@ def test_pdf_page_to_img(pdf):
         assert True
     except:  # noqa
         assert False
+
+
+def test_get_aruco_makers():
+    markers = get_aruco_markers()
+    assert len(markers) == 4
+    for i, m in enumerate(markers):
+        assert isinstance(m, np.ndarray)
+        options = (
+            Options()
+            .with_reporter(NDArrayReporter())
+            .with_namer(PytestNamerFactory.with_parameters(i))
+        )
+        # fmt: on
+        verify_binary(
+            serialize_ndarray(m),
+            ".npy",
+            options=options,
+        )
+        # NOTE: Uncomment to display markers
+        # import cv2
+        # cv2.imshow("Marker", m)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+        # fmt: off

@@ -4,6 +4,7 @@ import io
 from io import BytesIO
 from typing import Tuple
 
+import cv2
 import fitz
 import reportlab.pdfgen.canvas
 from PIL import Image as PILImage
@@ -412,3 +413,12 @@ def pdf_page_to_img(pdf: BytesIO, img_format, page_id=0) -> BytesIO:
         page.get_pixmap().pil_save(img, format=img_format)
     img.seek(0)
     return img
+
+
+# TODO: add typing
+def get_aruco_markers():
+    dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
+    markers = []
+    for i in range(4):
+        markers.append(cv2.aruco.generateImageMarker(dictionary, i, 400))
+    return markers
