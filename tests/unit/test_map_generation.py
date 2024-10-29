@@ -1,7 +1,7 @@
 from io import BytesIO
 from pathlib import Path
-from uuid import uuid4
 
+import fitz
 import numpy as np
 import pytest
 from approvaltests import Options, verify_binary
@@ -21,9 +21,9 @@ from sketch_map_tool.map_generation.generate_pdf import (
 )
 from sketch_map_tool.models import PaperFormat
 from tests import FIXTURE_DIR
-from tests.namer import PytestNamerFactory
-from tests.reporter import NDArrayReporter
-from tests.unit.helper import save_test_file, serialize_ndarray
+from tests.namer import PytestNamer, PytestNamerFactory
+from tests.reporter import ImageReporter, NDArrayReporter
+from tests.unit.helper import serialize_ndarray
 
 
 @pytest.fixture
@@ -36,6 +36,7 @@ def pdf():
     return buffer
 
 
+# TODO: yield appropriate map image for ESRI layer
 @pytest.fixture
 def expected_sketch_map(request) -> tuple:
     """Return paths of complete Sketch Map and the Sketch Map template (Map Area)."""
@@ -61,16 +62,11 @@ def map_image(request):
 
 
 @pytest.fixture
-def qr_code(bbox, layer, format_):
-    return generate_qr_code(
-        str(uuid4()),
-        bbox,
-        layer,
-        format_,
-    )
+def qr_code(uuid, bbox, layer, format_):
+    return generate_qr_code(uuid, bbox, layer, format_, "mock_version_number")
 
 
-# TODO re-add LEGAL
+# TODO: re-add LEGAL
 @pytest.mark.parametrize("paper_format", [A0, A1, A2, A3, A4, LETTER, TABLOID])
 @pytest.mark.parametrize("orientation", ["landscape", "portrait"])
 def test_generate_pdf(
@@ -79,8 +75,6 @@ def test_generate_pdf(
     paper_format: PaperFormat,
     orientation,
     layer,
-    expected_sketch_map,
-    request,
 ) -> None:
     sketch_map, sketch_map_template = generate_pdf(
         map_image,
@@ -90,31 +84,57 @@ def test_generate_pdf(
         layer,
     )
     assert isinstance(sketch_map, BytesIO)
+    # NOTE: The resulting PDFs across multiple test runs have slight non-visual
+    # differences leading to a failure when using `verify_binary` on the PDFs.
+    # That is why here they are converted to images for comparison first.
+    with fitz.open(stream=sketch_map, filetype="pdf") as doc:
+        # NOTE: For high resolution needed to read images such as aruco markers
+        # matrix has to be defined and given to get_pixmap. This will result in
+        # larger file sizes.
+        image = doc.load_page(0).get_pixmap()  # type: ignore
+    # fmt: off
+    options = (
+        Options()
+            .with_reporter(ImageReporter())
+            .with_namer(PytestNamer())
+    )
+    # fmt: off
+    verify_binary(
+        image.tobytes(output="png"),
+        ".png",
+        options=options,
+    )
+
+
+@pytest.mark.parametrize("paper_format", [A0, A1, A2, A3, A4, LETTER, TABLOID])
+@pytest.mark.parametrize("orientation", ["landscape", "portrait"])
+def test_generate_sketch_map_template(
+    map_image,
+    qr_code,
+    paper_format: PaperFormat,
+    orientation,  # pyright: ignore reportUnusedVariable
+    layer,
+) -> None:
+    _, sketch_map_template = generate_pdf(
+        map_image,
+        qr_code,
+        paper_format,
+        1283.129,
+        layer,
+    )
     assert isinstance(sketch_map_template, BytesIO)
-    # if you want the maps to be saved for visual inspection -> --save-maps with pytest
-    save_test_file(
-        request,
-        "--save-maps",
-        "debug-map-{}-{}.pdf".format(paper_format.title, orientation),
-        sketch_map,
+    # fmt: off
+    options = (
+        Options()
+            .with_reporter(ImageReporter())
+            .with_namer(PytestNamer())
     )
-    save_test_file(
-        request,
-        "--save-maps",
-        "debug-map-template-{}-{}.png".format(paper_format.title, orientation),
-        sketch_map_template,
+    # fmt: on
+    verify_binary(
+        sketch_map_template.read(),
+        ".png",
+        options=options,
     )
-    # TODO:
-    # assert filecmp.cmp(
-    #     sketch_map,
-    #     expected_sketch_map[0],
-    #     shallow=False,
-    # )
-    # assert filecmp.cmp(
-    #     sketch_map_template,
-    #     expected_sketch_map[1],
-    #     shallow=False,
-    # )
 
 
 def test_get_globes(format_):
