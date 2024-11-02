@@ -1,5 +1,4 @@
 from io import BytesIO
-from pathlib import Path
 
 import fitz
 import numpy as np
@@ -9,14 +8,12 @@ from PIL import Image
 from reportlab.graphics.shapes import Drawing
 from reportlab.pdfgen import canvas
 
-# TODO re-add LEGAL
 from sketch_map_tool.definitions import A0, A1, A2, A3, A4, LETTER, TABLOID
 from sketch_map_tool.map_generation import qr_code as generate_qr_code
 from sketch_map_tool.map_generation.generate_pdf import (
     generate_pdf,
     get_aruco_markers,
     get_compass,
-    get_globes,
     pdf_page_to_img,
 )
 from sketch_map_tool.models import PaperFormat
@@ -38,22 +35,6 @@ def pdf():
 
 # TODO: yield appropriate map image for ESRI layer
 @pytest.fixture
-def expected_sketch_map(request) -> tuple:
-    """Return paths of complete Sketch Map and the Sketch Map template (Map Area)."""
-    paper_format = request.getfixturevalue("paper_format")
-    directory = (
-        Path(__file__).parent
-        / "fixtures"
-        / "expected"
-        / request.getfixturevalue("orientation")
-    )
-    return (
-        directory / "{}.jpg".format(paper_format.title),
-        directory / "{}_template.jpg".format(paper_format.title),
-    )
-
-
-@pytest.fixture
 def map_image(request):
     """Map image from WMS."""
     orientation = request.getfixturevalue("orientation")
@@ -66,17 +47,16 @@ def qr_code(uuid, bbox, layer, format_):
     return generate_qr_code(uuid, bbox, layer, format_, "mock_version_number")
 
 
-# TODO: re-add LEGAL
 @pytest.mark.parametrize("paper_format", [A0, A1, A2, A3, A4, LETTER, TABLOID])
 @pytest.mark.parametrize("orientation", ["landscape", "portrait"])
-def test_generate_pdf(
+def test_generate_pdf_sketch_map(
     map_image,
     qr_code,
     paper_format: PaperFormat,
-    orientation,
+    orientation,  # pyright: ignore reportUnusedVariable
     layer,
 ) -> None:
-    sketch_map, sketch_map_template = generate_pdf(
+    sketch_map, _ = generate_pdf(
         map_image,
         qr_code,
         paper_format,
@@ -129,18 +109,12 @@ def test_generate_sketch_map_template(
             .with_reporter(ImageReporter())
             .with_namer(PytestNamer())
     )
-    # fmt: on
+    # fmt: off
     verify_binary(
         sketch_map_template.read(),
         ".png",
         options=options,
     )
-
-
-def test_get_globes(format_):
-    globes = get_globes(format_.globe_scale)
-    for globe in globes:
-        assert isinstance(globe, Drawing)
 
 
 def test_get_compass(format_):
@@ -159,8 +133,8 @@ def test_pdf_page_to_img(pdf):
 
 
 def test_get_aruco_makers():
-    markers = get_aruco_markers()
-    assert len(markers) == 4
+    markers = get_aruco_markers(size=400)
+    assert len(markers) == 8
     for i, m in enumerate(markers):
         assert isinstance(m, np.ndarray)
         options = (

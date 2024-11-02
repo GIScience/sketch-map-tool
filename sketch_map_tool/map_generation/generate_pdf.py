@@ -8,13 +8,14 @@ import cv2
 import fitz
 import reportlab.pdfgen.canvas
 from PIL import Image as PILImage
-from reportlab.graphics import renderPDF
 from reportlab.graphics.shapes import Drawing
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
+
+# from reportlab.pdfgen import canvas
 from reportlab.platypus import Frame, Paragraph
 from reportlab.platypus.flowables import Image, Spacer
 from svglib.svglib import svg2rlg
@@ -267,7 +268,7 @@ def create_map_frame(
             height=height,
         )
         canv.rotate(-90)
-        add_globes(canv, globe_size, height=width, width=height)
+        draw_markers(canv, globe_size, height=width, width=height)
         add_scalebar(
             canv, width=height, height=width, m_per_px=m_per_px, paper_format=format_
         )
@@ -280,7 +281,7 @@ def create_map_frame(
             width=width,
             height=height,
         )
-        add_globes(canv, globe_size, height, width)
+        draw_markers(canv, globe_size, height, width)
         add_scalebar(canv, width, height, m_per_px, format_)
 
     canv.save()
@@ -288,24 +289,12 @@ def create_map_frame(
     return pdf_page_to_img(map_frame, img_format=img_format)
 
 
-def add_globes(canv: canvas.Canvas, size: float, height: float, width: float):
-    globe_1, globe_2, globe_3, globe_4 = get_globes(size)
+def draw_markers(canv: canvas.Canvas, size: float, height: float, width: float):
+    markers = get_aruco_markers(int(size))
 
     h = height - size
     w = width - size
 
-    globes = [
-        # corner
-        globe_1,
-        globe_3,
-        globe_4,
-        globe_2,
-        # middle
-        globe_2,
-        globe_1,
-        globe_3,
-        globe_4,
-    ]
     positions = [
         # corner globes
         # bottom left
@@ -322,18 +311,8 @@ def add_globes(canv: canvas.Canvas, size: float, height: float, width: float):
         (w, h / 2),
         (w / 2, 0),
     ]
-    for globe, (x, y) in zip(globes, positions):
-        renderPDF.draw(globe, canv, x, y)
-
-
-def get_globes(expected_size) -> Tuple[Drawing, ...]:
-    """Read globe as SVG from disk, convert to RLG and scale it."""
-    globes = []
-    for i in range(1, 5):
-        globe = svg2rlg(PDF_RESOURCES_PATH / "globe_{0}.svg".format(i))
-        globe = resize_rlg_by_width(globe, expected_size)
-        globes.append(globe)
-    return tuple(globes)
+    for m, (x, y) in zip(markers, positions):
+        canv.drawImage(ImageReader(PILImage.fromarray(m)), x, y)
 
 
 def get_compass(size: float, portrait=False) -> Drawing:
@@ -416,9 +395,9 @@ def pdf_page_to_img(pdf: BytesIO, img_format, page_id=0) -> BytesIO:
 
 
 # TODO: add typing
-def get_aruco_markers():
+def get_aruco_markers(size: int) -> tuple:
     dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
     markers = []
-    for i in range(4):
-        markers.append(cv2.aruco.generateImageMarker(dictionary, i, 400))
-    return markers
+    for i in range(8):
+        markers.append(cv2.aruco.generateImageMarker(dictionary, i, size))
+    return tuple(markers)
