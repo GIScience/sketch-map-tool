@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-28 07:04+0000\n"
-"PO-Revision-Date: 2024-09-28 07:23\n"
+"POT-Creation-Date: 2024-11-08 10:44+0000\n"
+"PO-Revision-Date: 2024-11-08 11:22\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -132,6 +132,7 @@ msgstr "Nach dem Kartieren unterstützt Sie das Sketch Map Tool bei der Digitali
 
 #: sketch_map_tool/templates/about.html:52
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:58
+#: sketch_map_tool/templates/case-study-timor-leste.html:45
 msgid "The Project"
 msgstr "Das Projekt"
 
@@ -325,28 +326,29 @@ msgstr "Über"
 msgid "Help"
 msgstr "Hilfe"
 
-#: sketch_map_tool/templates/base.html:71
+#: sketch_map_tool/templates/base.html:72
 msgid "Newsletter"
 msgstr "Newsletter"
 
-#: sketch_map_tool/templates/base.html:73
+#: sketch_map_tool/templates/base.html:74
 msgid "Further Legal Information"
 msgstr "Weitere rechtliche Informationen"
 
-#: sketch_map_tool/templates/base.html:75
+#: sketch_map_tool/templates/base.html:76
 msgid "Privacy\n"
 "            Policy"
 msgstr "Datenschutzerklärung"
 
-#: sketch_map_tool/templates/base.html:78
+#: sketch_map_tool/templates/base.html:79
 msgid "Imprint"
 msgstr "Impressum"
 
-#: sketch_map_tool/templates/base.html:81
+#: sketch_map_tool/templates/base.html:82
 msgid "HeiGIT Logo"
 msgstr "HeiGIT Logo"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:6
+#: sketch_map_tool/templates/case-study-timor-leste.html:8
 msgid "Case Study"
 msgstr ""
 
@@ -405,6 +407,7 @@ msgid " This changing scenario, along the ongoing efforts by stakeholders and\n"
 msgstr ""
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:81
+#: sketch_map_tool/templates/case-study-timor-leste.html:73
 msgid "How was the Sketch Mapping organized?"
 msgstr ""
 
@@ -448,6 +451,7 @@ msgid " As a further step, the Heatmap Plugin in QGIS was used to perform a\n"
 msgstr ""
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:122
+#: sketch_map_tool/templates/case-study-timor-leste.html:107
 msgid "Results and Impact"
 msgstr ""
 
@@ -460,7 +464,7 @@ msgid "The VGI data collected with the Sketch Map Tool sessions is to be\n"
 msgstr ""
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:130
-msgid "Lesson learnt:"
+msgid "Lesson learnt"
 msgstr ""
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:133
@@ -491,6 +495,7 @@ msgid " "
 msgstr ""
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:156
+#: sketch_map_tool/templates/case-study-timor-leste.html:158
 msgid "Sources"
 msgstr ""
 
@@ -510,6 +515,146 @@ msgstr ""
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:165
 msgid "Data Analysis with QGIS – GIS Resource Training Center"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:13
+msgid "Participatory Mapping in Timor Leste"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:34
+msgid " The mission of the Climate Centre‘s team is to support the Red Cross\n"
+"    and Red Crescent Movement and its partners in reducing the impacts of\n"
+"    climate change and extreme-weather events on vulnerable people. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:39
+msgid " The Anticipatory Action team conducted a pilot project in Timor Leste\n"
+"    to implement anticipatory mapping using OpenStreetMap (OSM). This project\n"
+"    aimed to address the lack of baseline data necessary for planning effective\n"
+"    anticipatory actions in the region. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:47
+msgid " This project aimed to enhance anticipatory mapping in hazard-prone\n"
+"    communities in Timor-Leste by creating and using OSM data. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:51
+msgid " By providing accurate information, the project promoted the\n"
+"    development of proactive strategies and the establishment of early warning\n"
+"    systems to mitigate the risks posed by natural hazards. A key objective was\n"
+"    to explore innovative methods for capturing community knowledge of historic\n"
+"    flood events, their impact on the community, and existing early warning\n"
+"    systems. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:59
+msgid " A thorough nationwide multi-hazard analysis identified high-exposure\n"
+"    areas, leading to the prioritization of mapping these regions within the OSM\n"
+"    framework. The community mapping with the Sketch Map Tool was part of a\n"
+"    broader activity, which began with remote mapping and local mapping to\n"
+"    improve building information of residential buildings and critical buildings\n"
+"    in OSM via KOBO questionnaires. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:67
+msgid "Why the Sketch Map Tool was used?"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:69
+msgid " The Sketch Map Tool was used to capture the community knowledge of\n"
+"    historic flood extents and their impacts as well as capacities. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:75
+msgid " Prior to the mapping activities, the team organized community\n"
+"    meetings to ensure resident participation throughout the process. Residents\n"
+"    of flood-prone villages were contacted through the trusted network of the\n"
+"    Timor-Leste Red Cross and its local branches. Community representatives from\n"
+"    each village were invited to these meetings and asked to bring along\n"
+"    community members who had been affected by recent floods. The selection\n"
+"    process had no age restrictions and emphasized maintaining an equal ratio of\n"
+"    men and women at the meetings. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:85
+msgid " The participants mapped the extent and location of historic flood\n"
+"    events on one map, and on a second map, they identified capacities such as\n"
+"    evacuation sites and natural protection areas. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:93
+msgid "This Sketch Map shows the result of community mappers marking\n"
+"      historic flood areas in orange. © Red Cross Red Crescent Climate Centre\n"
+"      team for Anticipatory Action."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:99
+msgid "How were the Sketch Maps analyzed?"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:101
+msgid " The mappings on the Sketch Maps were combined with other collected\n"
+"    local data and visualized in a community map using geoinformation software\n"
+"    (in this case, ArcPro was used). The community mapping results were also\n"
+"    used to improve OSM data by adding local names to rivers, villages, and\n"
+"    including nature conservation areas directly via the OSM editor. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:109
+msgid " The gathered information and created maps were used to support local\n"
+"    communities and decision- makers in making informed decisions and\n"
+"    facilitating anticipatory action planning. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:117
+msgid " This Community map shows the results of the different mapping\n"
+"      activities conducted in the area including the historical flood areas\n"
+"      mapped in the Sketch Map. © Red Cross Red Crescent Cli- mate Centre team\n"
+"      for Anticipatory Action."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:124
+msgid "Lessons learnt"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:127
+msgid "One large format map (A3) proved to be handier than multiple smaller\n"
+"      maps with detailed depiction of specific areas."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:132
+msgid "Best results were achieved in smaller groups of 4-6 people."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:135
+msgid "An additional satellite imagery can help the orientation on the OSM\n"
+"      base maps."
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:139
+msgid " The digitization process is sensitive to the map‘s condition and\n"
+"      the quality of the photos taken. Using document folders helps keep fragile\n"
+"      paper maps clean and smooth, protecting them during fieldwork. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:144
+msgid " A pretest of the mapping with the markers/pens you use is very\n"
+"      helpful to ensure everything works as planned. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:152
+msgid " Community meeting in the Laclo valley to capture community\n"
+"      knowledge of floods, impacts, and capacities. © Red Cross Red Crescent\n"
+"      Climate Centre team for Anticipatory Action. "
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:163
+msgid "Final Report"
+msgstr ""
+
+#: sketch_map_tool/templates/case-study-timor-leste.html:169
+msgid "Blogpost"
 msgstr ""
 
 #: sketch_map_tool/templates/create-results.html:9
