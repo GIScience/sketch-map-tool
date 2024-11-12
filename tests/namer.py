@@ -20,17 +20,19 @@ class PytestNamer(NamerBase):
         consist of the nodeid and the current stage:
         `relative/path/to/test_file.py::TestClass::test_func[a] (call)`
         """
+        # pytest node ID w/out directories
+        self.nodeid = os.environ["PYTEST_CURRENT_TEST"].split("/")[-1]
         NamerBase.__init__(self, extension)
 
     def get_file_name(self) -> str:
-        # TODO: name clashes are possible.
-        # Include dir names (except tests/integration/) to avoid name clashes
-        nodeid = os.environ["PYTEST_CURRENT_TEST"]
-        nodeid_without_dir = nodeid.split("/")[-1]
-        return nodeid_without_dir.replace(" (call)", "")
+        """File name is pytest nodeid w/out file name and ` (call)` postfix."""
+        return self.nodeid.split("::")[1].replace(" (call)", "")
 
     def get_directory(self) -> Path:
-        return APPROVED_DIR
+        """Directory is `tests/fixtures/approval/{file_name}/`."""
+        # TODO: name clashes are possible.
+        # Include dir names (except tests/integration/) to avoid name clashes
+        return APPROVED_DIR / self.nodeid.split("::")[0].replace(".py", "")
 
     def get_config(self) -> dict:
         return {}
