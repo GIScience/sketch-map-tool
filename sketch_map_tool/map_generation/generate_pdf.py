@@ -7,6 +7,7 @@ from typing import Tuple
 import cv2
 import fitz
 from PIL import Image
+from reportlab.graphics import renderPDF
 from reportlab.graphics.shapes import Drawing
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
@@ -32,6 +33,7 @@ def generate_pdf(
     format_: PaperFormat,
     scale: float,
     layer: Layer,
+    aruco_markers: bool = False,
 ) -> Tuple[BytesIO, BytesIO]:
     """
     Generate a sketch map pdf, i.e. a PDF containing the given map image
@@ -89,6 +91,7 @@ def generate_pdf(
         portrait,
         m_per_px,
         img_format,
+        aruco_markers,
     )
 
     map_pdf = BytesIO()
@@ -250,6 +253,7 @@ def create_map_frame(
     portrait: bool,
     m_per_px: float,
     img_format: str,
+    aruco_markers: bool = False,
 ) -> BytesIO:
     map_frame = BytesIO()
     canvas = Canvas(map_frame)
@@ -280,12 +284,63 @@ def create_map_frame(
             width=width,
             height=height,
         )
-        draw_markers(canvas, globe_size, height, width)
+        if aruco_markers:
+            draw_markers(canvas, globe_size, height, width)
+        else:
+            draw_globes(canvas, globe_size, height, width)
         add_scalebar(canvas, width, height, m_per_px, format_)
 
     canvas.save()
     map_frame.seek(0)
     return pdf_page_to_img(map_frame, img_format=img_format)
+
+
+def draw_globes(canvas: Canvas, size: float, height: float, width: float):
+    globe_1, globe_2, globe_3, globe_4 = get_globes(size)
+
+    h = height - size
+    w = width - size
+
+    globes = [
+        # corner
+        globe_1,
+        globe_3,
+        globe_4,
+        globe_2,
+        # middle
+        globe_2,
+        globe_1,
+        globe_3,
+        globe_4,
+    ]
+    positions = [
+        # corner globes
+        # bottom left
+        (0, 0),
+        # top left
+        (0, h),
+        # top right
+        (w, h),
+        # bottom right
+        (w, 0),
+        # middle globes
+        (0, h / 2),
+        (w / 2, h),
+        (w, h / 2),
+        (w / 2, 0),
+    ]
+    for globe, (x, y) in zip(globes, positions):
+        renderPDF.draw(globe, canvas, x, y)
+
+
+def get_globes(expected_size) -> Tuple[Drawing, ...]:
+    """Read globe as SVG from disk, convert to RLG and scale it."""
+    globes = []
+    for i in range(1, 5):
+        globe = svg2rlg(PDF_RESOURCES_PATH / "globe_{0}.svg".format(i))
+        globe = resize_rlg_by_width(globe, expected_size)
+        globes.append(globe)
+    return tuple(globes)
 
 
 def draw_markers(canvas: Canvas, size: float, height: float, width: float):

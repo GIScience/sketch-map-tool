@@ -49,12 +49,14 @@ def qr_code(uuid, bbox, layer, format_):
 
 @pytest.mark.parametrize("paper_format", [A0, A1, A2, A3, A4, LETTER, TABLOID])
 @pytest.mark.parametrize("orientation", ["landscape", "portrait"])
+@pytest.mark.parametrize("aruco_markers", [True, False])
 def test_generate_pdf_sketch_map(
     map_image,
     qr_code,
     paper_format: PaperFormat,
     orientation,  # pyright: ignore reportUnusedVariable
     layer,
+    aruco_markers,
 ) -> None:
     sketch_map, _ = generate_pdf(
         map_image,
@@ -62,6 +64,7 @@ def test_generate_pdf_sketch_map(
         paper_format,
         1283.129,
         layer,
+        aruco_markers,
     )
     assert isinstance(sketch_map, BytesIO)
     # NOTE: The resulting PDFs across multiple test runs have slight non-visual
@@ -88,12 +91,14 @@ def test_generate_pdf_sketch_map(
 
 @pytest.mark.parametrize("paper_format", [A0, A1, A2, A3, A4, LETTER, TABLOID])
 @pytest.mark.parametrize("orientation", ["landscape", "portrait"])
-def test_generate_sketch_map_template(
+@pytest.mark.parametrize("aruco_markers", [True, False])
+def test_generate_pdf_sketch_map_template(
     map_image,
     qr_code,
     paper_format: PaperFormat,
     orientation,  # pyright: ignore reportUnusedVariable
     layer,
+    aruco_markers,
 ) -> None:
     _, sketch_map_template = generate_pdf(
         map_image,
@@ -101,6 +106,7 @@ def test_generate_sketch_map_template(
         paper_format,
         1283.129,
         layer,
+        aruco_markers,
     )
     assert isinstance(sketch_map_template, BytesIO)
     # fmt: off
