@@ -36,7 +36,7 @@ function setIsBusy(elementId, isBusy) {
 
 function setTaskStatus(elementId, taskStatus) {
     const element = document.getElementById(elementId);
-    element.textContent = taskStatus;
+    element.innerHTML = taskStatus;
 }
 /**
  * set the disabled HTMLAttribute on the given HTMLElement
