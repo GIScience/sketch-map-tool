@@ -2,9 +2,12 @@ import logging
 
 import cv2
 import pytest
+from approvaltests import Options, verify_binary
 
-from sketch_map_tool.upload_processing.clip import clip
+from sketch_map_tool.upload_processing.clip import clip, detect_aruco_markers
 from tests import FIXTURE_DIR
+from tests.namer import PytestNamer
+from tests.reporter import ImageReporter
 
 MAP_CUTTING_FIXTURE_DIR = FIXTURE_DIR / "map-cutting"
 
@@ -113,6 +116,36 @@ def test_clip_failure(
     # cv2.imshow("image", result)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
+
+
+@pytest.fixture(params=["sketch-map-photo-" + str(i) + ".jpg" for i in range(0, 13)])
+def sketch_map_photo(request):
+    image = cv2.imread(str(FIXTURE_DIR / "upload-processing" / request.param))
+    return cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+
+def test_detect_aruco_markers(sketch_map_photo):
+    marker_corners, marker_ids = detect_aruco_markers(sketch_map_photo)
+    cv2.aruco.drawDetectedMarkers(
+        sketch_map_photo,
+        marker_corners,
+        marker_ids,
+        borderColor=(0, 255, 0),  # red
+    )
+    # fmt: off
+    options = (
+            Options()
+            .with_reporter(ImageReporter())
+            .with_namer(PytestNamer())
+    )
+    # fmt: on
+    verify_binary(
+        cv2.imencode(".png", cv2.cvtColor(sketch_map_photo, cv2.COLOR_RGB2BGR))[
+            1
+        ].tobytes(),
+        ".png",
+        options=options,
+    )
 
 
 # TODO: Improve map cutting to also work in the case of few features

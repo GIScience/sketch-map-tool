@@ -73,6 +73,18 @@ def clip(photo: NDArray, template: NDArray) -> NDArray:
     return cv2.warpPerspective(photo, homography_matrix, (width, height))
 
 
+def detect_aruco_markers(image: NDArray):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    parameters = cv2.aruco.DetectorParameters()
+    dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
+    detector = cv2.aruco.ArucoDetector(dictionary=dictionary, detectorParams=parameters)
+    marker_corners, marker_ids, _ = detector.detectMarkers(gray)
+    if marker_ids is None:
+        # TODO: create custom exception
+        raise AssertionError
+    return marker_corners, marker_ids
+
+
 def limit_keypoints(
     keypoints: list,
     descriptors: NDArray,
