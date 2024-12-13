@@ -5,17 +5,17 @@ from io import BytesIO
 from typing import Tuple
 
 import fitz
-import reportlab.pdfgen.canvas
-from PIL import Image as PILImage
+from PIL import Image
 from reportlab.graphics import renderPDF
 from reportlab.graphics.shapes import Drawing
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
-from reportlab.pdfgen import canvas
-from reportlab.platypus import Frame, Paragraph
-from reportlab.platypus.flowables import Image, Spacer
+from reportlab.pdfgen.canvas import Canvas
+
+# from reportlab.pdfgen import canvas
+from reportlab.platypus import Frame, Paragraph, flowables
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool.definitions import PDF_RESOURCES_PATH, get_attribution
@@ -23,11 +23,11 @@ from sketch_map_tool.helpers import resize_rlg_by_width
 from sketch_map_tool.models import Layer, PaperFormat
 
 # PIL should be able to open high resolution PNGs of large Maps:
-Image.MAX_IMAGE_PIXELS = None
+flowables.Image.MAX_IMAGE_PIXELS = None
 
 
 def generate_pdf(
-    map_image_input: PILImage,
+    map_image_input: Image.Image,
     qr_code: Drawing,
     format_: PaperFormat,
     scale: float,
@@ -92,12 +92,11 @@ def generate_pdf(
     )
 
     map_pdf = BytesIO()
-    # create output canvas
-    canv_map = canvas.Canvas(map_pdf)
-    canv_map.setPageSize(landscape((format_.height * cm, format_.width * cm)))
+    canvas = Canvas(map_pdf)
+    canvas.setPageSize(landscape((format_.height * cm, format_.width * cm)))
     # Add map to canvas:
     canv_map_margin = map_margin
-    canv_map.drawImage(
+    canvas.drawImage(
         ImageReader(map_img),
         canv_map_margin * cm,
         canv_map_margin * cm,
@@ -108,7 +107,7 @@ def generate_pdf(
 
     # TODO move to create_map_frame
     # Add a border around the map
-    canv_map.rect(
+    canvas.rect(
         map_margin * cm,
         map_margin * cm,
         frame_width * cm,
@@ -116,11 +115,11 @@ def generate_pdf(
         fill=0,
     )
 
-    canv_map.setFontSize(format_.font_size)
-    canv_map.setFillColorRGB(0, 0, 0)
+    canvas.setFontSize(format_.font_size)
+    canvas.setFillColorRGB(0, 0, 0)
 
     draw_right_column(
-        canv_map,
+        canvas,
         column_width,
         column_height,
         column_origin_x,
@@ -134,14 +133,14 @@ def generate_pdf(
     )
 
     # Generate PDFs:
-    canv_map.save()
+    canvas.save()
 
     map_pdf.seek(0)
     map_img.seek(0)
 
     if portrait:  # Rotate the map frame for correct georeferencing
         map_img_rotated_bytes = BytesIO()
-        map_img_rotated = PILImage.open(map_img).rotate(270, expand=1)
+        map_img_rotated = Image.open(map_img).rotate(270, expand=1)
         map_img_rotated.save(map_img_rotated_bytes, format="png")
         map_img_rotated_bytes.seek(0)
         map_img = map_img_rotated_bytes
@@ -150,7 +149,7 @@ def generate_pdf(
 
 
 def draw_right_column(
-    canv: canvas.Canvas,
+    canvas: Canvas,
     width: float,
     height: float,
     x: float,
@@ -184,21 +183,23 @@ def draw_right_column(
 
     # fills up the remaining space, placed between
     # the TOP and the BOTTOM aligned elements
-    space_filler = Spacer(width, 0)  # height will be filled after list creation
+    space_filler = flowables.Spacer(
+        width, 0
+    )  # height will be filled after list creation
     # order all elements in column
-    flowables = [
+    flowables_ = [
         smt_logo,
-        Spacer(width, 2 * em),
+        flowables.Spacer(width, 2 * em),
         heigit_logo,
         space_filler,
         compass,
-        Spacer(width, 2 * em),
+        flowables.Spacer(width, 2 * em),
         p_copyright,
-        Spacer(width, 2 * em),
+        flowables.Spacer(width, 2 * em),
         qr_code,
     ]
     space_filler.height = calculate_space_filler_height(
-        canv, flowables, width, height, margin
+        canvas, flowables_, width, height, margin
     )
     frame = Frame(
         x,
@@ -210,15 +211,15 @@ def draw_right_column(
         rightPadding=margin,
         topPadding=margin,
     )
-    frame.addFromList(flowables, canv)
+    frame.addFromList(flowables_, canvas)
 
 
-def calculate_space_filler_height(canv, flowables, width, height, margin):
+def calculate_space_filler_height(canvas, flowables_, width, height, margin):
     flowables_height = 0
-    for f in flowables:
+    for f in flowables_:
         if isinstance(f, Paragraph):
             # a Paragraph doesn't have a height without this command
-            f.wrapOn(canv, width - margin, height)
+            f.wrapOn(canvas, width - margin, height)
         flowables_height += f.height
     return height - 2 * margin - flowables_height
 
@@ -251,13 +252,13 @@ def create_map_frame(
     img_format: str,
 ) -> BytesIO:
     map_frame = BytesIO()
-    canv = canvas.Canvas(map_frame)
-    canv.setPageSize(landscape((height, width)))
+    canvas = Canvas(map_frame)
+    canvas.setPageSize(landscape((height, width)))
 
     globe_size = width / 37
     if portrait:
-        canv.rotate(90)
-        canv.drawImage(
+        canvas.rotate(90)
+        canvas.drawImage(
             map_image,
             0,
             -height,
@@ -265,13 +266,13 @@ def create_map_frame(
             width=width,
             height=height,
         )
-        canv.rotate(-90)
-        add_globes(canv, globe_size, height=width, width=height)
+        canvas.rotate(-90)
+        draw_globes(canvas, globe_size, height=width, width=height)
         add_scalebar(
-            canv, width=height, height=width, m_per_px=m_per_px, paper_format=format_
+            canvas, width=height, height=width, m_per_px=m_per_px, paper_format=format_
         )
     else:
-        canv.drawImage(
+        canvas.drawImage(
             map_image,
             0,
             0,
@@ -279,15 +280,15 @@ def create_map_frame(
             width=width,
             height=height,
         )
-        add_globes(canv, globe_size, height, width)
-        add_scalebar(canv, width, height, m_per_px, format_)
+        draw_globes(canvas, globe_size, height, width)
+        add_scalebar(canvas, width, height, m_per_px, format_)
 
-    canv.save()
+    canvas.save()
     map_frame.seek(0)
     return pdf_page_to_img(map_frame, img_format=img_format)
 
 
-def add_globes(canv: canvas.Canvas, size: float, height: float, width: float):
+def draw_globes(canvas: Canvas, size: float, height: float, width: float):
     globe_1, globe_2, globe_3, globe_4 = get_globes(size)
 
     h = height - size
@@ -322,7 +323,7 @@ def add_globes(canv: canvas.Canvas, size: float, height: float, width: float):
         (w / 2, 0),
     ]
     for globe, (x, y) in zip(globes, positions):
-        renderPDF.draw(globe, canv, x, y)
+        renderPDF.draw(globe, canvas, x, y)
 
 
 def get_globes(expected_size) -> Tuple[Drawing, ...]:
@@ -345,7 +346,7 @@ def get_compass(size: float, portrait=False) -> Drawing:
 
 
 def add_scalebar(
-    canv: reportlab.pdfgen.canvas.Canvas,
+    canvas: Canvas,
     width: int,
     height: int,
     m_per_px: float,
@@ -378,23 +379,23 @@ def add_scalebar(
         width + paper_format.scale_relative_xy[0] - scale_bar_length,
         height + paper_format.scale_relative_xy[1],
     )
-    canv.setFillColorRGB(255, 255, 255)
+    canvas.setFillColorRGB(255, 255, 255)
     background_params = paper_format.scale_background_params
-    canv.rect(
+    canvas.rect(
         scale_bar_x + background_params[0],
         scale_bar_y + background_params[1],
         scale_bar_length + background_params[2],
         background_params[3],
         fill=True,
     )
-    canv.setFillColorRGB(0, 0, 0)
-    canv.rect(
+    canvas.setFillColorRGB(0, 0, 0)
+    canvas.rect(
         scale_bar_x, scale_bar_y, scale_bar_length, paper_format.scale_height, fill=True
     )
-    canv.setFont(
+    canvas.setFont(
         "Times-Roman", paper_format.font_size * 2
     )  # Should be a bit bigger than e.g. the copyright note
-    canv.drawString(
+    canvas.drawString(
         scale_bar_x,
         scale_bar_y - paper_format.scale_distance_to_text,
         f"{corresponding_meters}m",
