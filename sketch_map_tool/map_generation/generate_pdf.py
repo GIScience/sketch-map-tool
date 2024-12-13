@@ -4,6 +4,7 @@ import io
 from io import BytesIO
 from typing import Tuple
 
+import cv2
 import fitz
 from PIL import Image
 from reportlab.graphics import renderPDF
@@ -13,8 +14,6 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen.canvas import Canvas
-
-# from reportlab.pdfgen import canvas
 from reportlab.platypus import Frame, Paragraph, flowables
 from svglib.svglib import svg2rlg
 
@@ -32,6 +31,7 @@ def generate_pdf(
     format_: PaperFormat,
     scale: float,
     layer: Layer,
+    aruco_markers: bool = False,
 ) -> Tuple[BytesIO, BytesIO]:
     """
     Generate a sketch map pdf, i.e. a PDF containing the given map image
@@ -89,6 +89,7 @@ def generate_pdf(
         portrait,
         m_per_px,
         img_format,
+        aruco_markers,
     )
 
     map_pdf = BytesIO()
@@ -250,6 +251,7 @@ def create_map_frame(
     portrait: bool,
     m_per_px: float,
     img_format: str,
+    aruco_markers: bool = False,
 ) -> BytesIO:
     map_frame = BytesIO()
     canvas = Canvas(map_frame)
@@ -267,7 +269,10 @@ def create_map_frame(
             height=height,
         )
         canvas.rotate(-90)
-        draw_globes(canvas, globe_size, height=width, width=height)
+        if aruco_markers:
+            draw_markers(canvas, globe_size, height=width, width=height)
+        else:
+            draw_globes(canvas, globe_size, height=width, width=height)
         add_scalebar(
             canvas, width=height, height=width, m_per_px=m_per_px, paper_format=format_
         )
@@ -280,7 +285,10 @@ def create_map_frame(
             width=width,
             height=height,
         )
-        draw_globes(canvas, globe_size, height, width)
+        if aruco_markers:
+            draw_markers(canvas, globe_size, height, width)
+        else:
+            draw_globes(canvas, globe_size, height, width)
         add_scalebar(canvas, width, height, m_per_px, format_)
 
     canvas.save()
@@ -334,6 +342,32 @@ def get_globes(expected_size) -> Tuple[Drawing, ...]:
         globe = resize_rlg_by_width(globe, expected_size)
         globes.append(globe)
     return tuple(globes)
+
+
+def draw_markers(canvas: Canvas, size: float, height: float, width: float):
+    markers = get_aruco_markers(int(size))
+
+    h = height - size
+    w = width - size
+
+    positions = [
+        # corner globes
+        # bottom left
+        (0, 0),
+        # top left
+        (0, h),
+        # top right
+        (w, h),
+        # bottom right
+        (w, 0),
+        # middle globes
+        (0, h / 2),
+        (w / 2, h),
+        (w, h / 2),
+        (w / 2, 0),
+    ]
+    for m, (x, y) in zip(markers, positions):
+        canvas.drawImage(ImageReader(Image.fromarray(m)), x, y)
 
 
 def get_compass(size: float, portrait=False) -> Drawing:
@@ -413,3 +447,24 @@ def pdf_page_to_img(pdf: BytesIO, img_format, page_id=0) -> BytesIO:
         page.get_pixmap().pil_save(img, format=img_format)
     img.seek(0)
     return img
+
+
+def get_aruco_markers(size: int) -> list:
+    dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
+    # TODO: change markers in x direction depending or landscape or
+    # portrait
+    markers = []
+    for i in range(8):
+        marker = cv2.aruco.generateImageMarker(dictionary, i, int((size * 0.9)))
+        w = int(size * 0.1)
+        marker = cv2.copyMakeBorder(
+            src=marker,
+            top=w,
+            bottom=w,
+            left=w,
+            right=w,
+            borderType=cv2.BORDER_CONSTANT,
+            value=(255, 255, 255),  # white border
+        )
+        markers.append(marker)
+    return markers
