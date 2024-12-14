@@ -39,6 +39,7 @@ def insert_map_frame(
     format_: PaperFormat,
     orientation: str,
     layer: Layer,
+    aruco: bool,
 ):
     """Insert map frame alongside map generation parameters into the database.
 
@@ -56,6 +57,7 @@ def insert_map_frame(
             orientation VARCHAR,
             layer VARCHAR,
             version VARCHAR,
+            aruco BOOLEAN DEFAULT FALSE,
             ts TIMESTAMP WITH TIME ZONE DEFAULT now()
             )
     """
@@ -69,9 +71,11 @@ def insert_map_frame(
             format,
             orientation,
             layer,
+            aruco,
             version
             )
         VALUES (
+            %s,
             %s,
             %s,
             %s,
@@ -95,6 +99,7 @@ def insert_map_frame(
                 str(format_),
                 orientation,
                 layer,
+                aruco,
                 __version__,
             ),
         )

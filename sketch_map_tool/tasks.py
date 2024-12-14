@@ -120,7 +120,15 @@ def generate_sketch_map(
         layer,
         aruco,
     )
-    db_client_celery.insert_map_frame(map_img, uuid, bbox, format_, orientation, layer)
+    db_client_celery.insert_map_frame(
+        map_img,
+        uuid,
+        bbox,
+        format_,
+        orientation,
+        layer,
+        aruco,
+    )
     return map_pdf
 
 
