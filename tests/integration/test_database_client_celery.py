@@ -81,9 +81,18 @@ def test_close_open_connection():
     client_celery.open_connection()
 
 
-def test_write_map_frame(flask_app, map_frame, bbox, format_, orientation, layer):
+def test_write_map_frame(
+    flask_app,
+    map_frame,
+    bbox,
+    format_,
+    orientation,
+    layer,
+):
     uuid = uuid4()
-    client_celery.insert_map_frame(map_frame, uuid, bbox, format_, orientation, layer)
+    client_celery.insert_map_frame(
+        map_frame, uuid, bbox, format_, orientation, layer, aruco=False
+    )
     with flask_app.app_context():
         file = client_flask.select_map_frame(uuid)
         assert isinstance(file, bytes)
