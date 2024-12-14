@@ -31,7 +31,7 @@ def generate_pdf(
     format_: PaperFormat,
     scale: float,
     layer: Layer,
-    aruco_markers: bool = False,
+    aruco: bool = False,
 ) -> Tuple[BytesIO, BytesIO]:
     """
     Generate a sketch map pdf, i.e. a PDF containing the given map image
@@ -89,7 +89,7 @@ def generate_pdf(
         portrait,
         m_per_px,
         img_format,
-        aruco_markers,
+        aruco,
     )
 
     map_pdf = BytesIO()
@@ -251,7 +251,7 @@ def create_map_frame(
     portrait: bool,
     m_per_px: float,
     img_format: str,
-    aruco_markers: bool = False,
+    aruco: bool = False,
 ) -> BytesIO:
     map_frame = BytesIO()
     canvas = Canvas(map_frame)
@@ -269,7 +269,7 @@ def create_map_frame(
             height=height,
         )
         canvas.rotate(-90)
-        if aruco_markers:
+        if aruco:
             draw_markers(canvas, globe_size, height=width, width=height)
         else:
             draw_globes(canvas, globe_size, height=width, width=height)
@@ -285,7 +285,7 @@ def create_map_frame(
             width=width,
             height=height,
         )
-        if aruco_markers:
+        if aruco:
             draw_markers(canvas, globe_size, height, width)
         else:
             draw_globes(canvas, globe_size, height, width)

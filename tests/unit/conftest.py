@@ -81,6 +81,11 @@ def layer(request):
     return Layer(request.param)
 
 
+@pytest.fixture(params=[True, False])
+def aruco(request):
+    return request.param
+
+
 @pytest.fixture
 def uuid():
     return "654dd0d3-7bb0-4a05-8a68-517f0d9fc98e"

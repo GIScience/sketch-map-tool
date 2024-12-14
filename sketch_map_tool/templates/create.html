@@ -39,7 +39,11 @@
                     </article>
                 </div>
 
+                {% if aruco == True: %}
+                <form id="page-setup-form" action="/{{ lang }}/create/results?aruco=true" method="post">
+                {% else %}
                 <form id="page-setup-form" action="/{{ lang }}/create/results" method="post">
+                {% endif %}
                     <label for="format">{{ _('Paper Format') }}</label>
                     <select id="format" name="format"></select>
 

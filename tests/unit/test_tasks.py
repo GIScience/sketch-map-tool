@@ -36,19 +36,22 @@ def mock_get_task_id(monkeypatch, uuid):
 
 
 @vcr.use_cassette
-def test_generate_sketch_map(monkeypatch, uuid, bbox, format_, size, scale, layer):
+def test_generate_sketch_map(
+    monkeypatch,
+    uuid,
+    bbox,
+    format_,
+    size,
+    scale,
+    layer,
+    aruco,
+):
     monkeypatch.setattr(
         "sketch_map_tool.tasks.db_client_celery.insert_map_frame",
         lambda *_: uuid,
     )
     map_pdf = tasks.generate_sketch_map(
-        uuid,
-        bbox,
-        format_,
-        "landscape",
-        size,
-        scale,
-        layer,
+        uuid, bbox, format_, "landscape", size, scale, layer, aruco
     )
     assert isinstance(map_pdf, BytesIO)
 
