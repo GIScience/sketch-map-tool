@@ -94,9 +94,16 @@ def case_study_timor_leste_pdf(lang="en") -> Response:  # pyright: ignore
 @app.get("/<lang>/create")
 def create(lang="en") -> str:
     """Serve forms for creating a sketch map"""
+    # feature flag for enabling aruco markers
+    if request.args.get("aruco") is None:
+        aruco = False
+    else:
+        aruco = True
+
     return render_template(
         "create.html",
         lang=lang,
+        aruco=aruco,
         esri_api_key=config.get_config_value("esri-api-key"),
     )
 
@@ -118,12 +125,18 @@ def create_results_post(lang="en") -> Response:
     scale = float(request.form["scale"])
     layer = Layer(request.form["layer"].replace(":", "-").replace("_", "-").lower())
 
+    # feature flag for enabling aruco markers
+    if request.args.get("aruco") is None:
+        aruco = False
+    else:
+        aruco = True
+
     # Unique id for current request
     uuid = str(uuid4())
 
     # Tasks
     task_sketch_map = tasks.generate_sketch_map.apply_async(
-        args=(uuid, bbox, format_, orientation, size, scale, layer)
+        args=(uuid, bbox, format_, orientation, size, scale, layer, aruco)
     )
     task_quality_report = tasks.generate_quality_report.apply_async(
         args=tuple([bbox_wgs84])

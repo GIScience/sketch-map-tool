@@ -102,6 +102,7 @@ def generate_sketch_map(
     size: Size,
     scale: float,
     layer: Layer,
+    aruco: bool,
 ) -> BytesIO | AsyncResult:
     """Generate and returns a sketch map as PDF and stores the map frame in DB."""
     map_image = wms_client.get_map_image(bbox, size, layer)
@@ -117,6 +118,7 @@ def generate_sketch_map(
         format_,
         scale,
         layer,
+        aruco,
     )
     db_client_celery.insert_map_frame(map_img, uuid, bbox, format_, orientation, layer)
     return map_pdf

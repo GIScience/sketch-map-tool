@@ -54,14 +54,13 @@ def qr_code_approval(uuid, bbox):
 
 @pytest.mark.parametrize("paper_format", [A0, A1, A2, A3, A4, LETTER, TABLOID])
 @pytest.mark.parametrize("orientation", ["landscape", "portrait"])
-@pytest.mark.parametrize("aruco_markers", [True, False])
 def test_generate_pdf(
     map_image,
     qr_code,
     paper_format: PaperFormat,
     orientation,  # pyright: ignore reportUnusedVariable
     layer,
-    aruco_markers,
+    aruco,
 ) -> None:
     sketch_map, sketch_map_template = generate_pdf(
         map_image,
@@ -69,7 +68,7 @@ def test_generate_pdf(
         paper_format,
         1283.129,
         layer,
-        aruco_markers,
+        aruco,
     )
     assert isinstance(sketch_map, BytesIO)
     assert isinstance(sketch_map_template, BytesIO)
@@ -77,12 +76,11 @@ def test_generate_pdf(
 
 # NOTE: To reduce number of approvals, parameter numbers are kept low.
 @pytest.mark.parametrize("orientation", ["landscape"])
-@pytest.mark.parametrize("aruco_markers", [True, False])
 def test_generate_pdf_sketch_map_approval(
     map_image,
     qr_code_approval,
     orientation,  # pyright: ignore reportUnusedVariable
-    aruco_markers,
+    aruco,
 ) -> None:
     sketch_map, _ = generate_pdf(
         map_image,
@@ -90,7 +88,7 @@ def test_generate_pdf_sketch_map_approval(
         A4,
         1283.129,
         Layer("osm"),
-        aruco_markers,
+        aruco,
     )
     # NOTE: The resulting PDFs across multiple test runs have slight non-visual
     # differences leading to a failure when using `verify_binary` on the PDFs.
@@ -117,21 +115,15 @@ def test_generate_pdf_sketch_map_approval(
 # NOTE: To reduce number of approvals, parameter numbers are kept low.
 @pytest.mark.parametrize("paper_format", [A4])
 @pytest.mark.parametrize("orientation", ["landscape"])
-@pytest.mark.parametrize("aruco_markers", [True, False])
 def test_generate_pdf_sketch_map_template_approval(
     map_image,
     qr_code_approval,
     paper_format: PaperFormat,
     orientation,  # pyright: ignore reportUnusedVariable
-    aruco_markers,
+    aruco,
 ) -> None:
     _, sketch_map_template = generate_pdf(
-        map_image,
-        qr_code_approval,
-        paper_format,
-        1283.129,
-        Layer("osm"),
-        aruco_markers,
+        map_image, qr_code_approval, paper_format, 1283.129, Layer("osm"), aruco
     )
     # fmt: off
     options = (
