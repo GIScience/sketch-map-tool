@@ -154,6 +154,11 @@ def flask_app():
         view_func=routes.case_study_cultural_landmarks,
         methods=["GET"],
     )
+    app.add_url_rule(
+        "/case-studies/timor-leste",
+        view_func=routes.case_study_timor_leste,
+        methods=["GET"],
+    )
 
     Babel(app, locale_selector=get_locale)  # for translations
 
