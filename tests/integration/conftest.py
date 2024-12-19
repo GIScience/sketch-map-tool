@@ -259,27 +259,18 @@ def params(layer, bbox, format_, orientation):
 def uuid_create(
     params,
     flask_client,
-    flask_app,
     celery_app,
     tmp_path_factory,
 ) -> str:
     """UUID after request to /create and successful sketch map generation."""
     response = flask_client.post("/create/results", data=params, follow_redirects=True)
 
-    # Extract UUID from response
     url_parts = response.request.path.rsplit("/")
     uuid = url_parts[-1]
-    url_rest = "/".join(url_parts[:-1])
-    assert UUID(uuid).version == 4
-    assert url_rest == "/create/results"
 
-    # Wait for task to be finished and retrieve result (the sketch map)
-    with flask_app.app_context():
-        id_ = db_client_flask.get_async_result_id(uuid, "sketch-map")
-    task = celery_app.AsyncResult(id_)
+    task = celery_app.AsyncResult(uuid)
     result = task.get(timeout=180)
 
-    # Write sketch map to temporary test directory
     fn = tmp_path_factory.mktemp(uuid, numbered=False) / "sketch-map.pdf"
     with open(fn, "wb") as file:
         file.write(result.getbuffer())
@@ -354,7 +345,6 @@ def map_frame_marked(
 def uuid_digitize(
     sketch_map_marked,
     flask_client,
-    flask_app,
     celery_app,
     tmp_path_factory,
 ) -> str:
@@ -365,26 +355,18 @@ def uuid_digitize(
     # Extract UUID from response
     url_parts = response.request.path.rsplit("/")
     uuid = url_parts[-1]
-    url_rest = "/".join(url_parts[:-1])
-    assert UUID(uuid).version == 4
-    assert url_rest == "/digitize/results"
 
     # Wait for tasks to be finished and retrieve results (vector and raster)
-    with flask_app.app_context():
-        id_vector = db_client_flask.get_async_result_id(uuid, "vector-results")
-        id_raster = db_client_flask.get_async_result_id(uuid, "raster-results")
-    group_raster = celery_app.GroupResult.restore(id_raster)
-    group_vector = celery_app.GroupResult.restore(id_vector)
-    result_raster = group_raster.get(timeout=180)
-    result_vector = group_vector.get(timeout=180)
+    result = celery_app.GroupResult.restore(uuid).get(timeout=180)
+
     # Write sketch map to temporary test directory
     dir = tmp_path_factory.mktemp(uuid, numbered=False)
     path_raster = dir / "raster.zip"
     path_vector = dir / "vector.geojson"
     with open(path_vector, "w") as file:
-        file.write(json.dumps(merge(result_vector)))
+        file.write(json.dumps(merge(r[-1] for r in result)))
     with open(path_raster, "wb") as file:
-        r = zip_(result_raster)
+        r = zip_([r[:-1] for r in result])
         file.write(r.getbuffer())
     return uuid
 

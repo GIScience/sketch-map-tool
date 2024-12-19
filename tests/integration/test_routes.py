@@ -5,6 +5,7 @@ from unittest.mock import Mock, patch
 from uuid import UUID, uuid4
 
 import pytest
+from celery.result import AsyncResult, GroupResult
 
 from sketch_map_tool import flask_app
 from sketch_map_tool.database import client_flask
@@ -43,6 +44,20 @@ def map_frame_legacy_2024_04_15(flask_app, uuid_create, map_frame):
             curs.execute(update_query, vals + tuple([uuid_create]))
 
 
+@pytest.fixture
+def mock_group_result_pending(monkeypatch):
+    mock_task = Mock(spec=AsyncResult)
+    mock_task.ready.return_value = False
+
+    mock = Mock(spec=GroupResult)
+    mock.ready.return_value = False
+    mock.failed.return_value = False
+    mock.successful.return_value = False
+    mock.results = [mock_task]
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    return mock
+
+
 def get_consent_flag_from_db(file_name: str) -> bool:
     query = "SELECT consent FROM blob WHERE file_name = %s"
     db_conn = client_flask.open_connection()
@@ -51,17 +66,14 @@ def get_consent_flag_from_db(file_name: str) -> bool:
         return curs.fetchone()[0]
 
 
-@patch("sketch_map_tool.routes.tasks.generate_sketch_map.apply_async")
-@patch("sketch_map_tool.routes.tasks.generate_quality_report.apply_async")
+@patch("sketch_map_tool.routes.tasks.generate_sketch_map")
 @vcr_app.use_cassette
 def test_create_results_post(
     mock_generate_sketch_map,
-    mock_generate_quality_report,
     params,
     flask_client,
 ):
-    mock_generate_sketch_map.get.return_value = Mock()
-    mock_generate_quality_report.get.return_value = Mock()
+    mock_generate_sketch_map.apply_async().id = uuid4()
 
     response = flask_client.post("/create/results", data=params, follow_redirects=True)
     assert response.status_code == 200
@@ -77,7 +89,8 @@ def test_create_results_post(
 @patch("sketch_map_tool.routes.chord")
 @vcr_app.use_cassette
 def test_digitize_results_post(mock_chord, sketch_map_marked, flask_client):
-    mock_chord.get.side_effect = Mock()  # mock chord/task execution in Celery
+    # mock chord/task execution in Celery
+    mock_chord.return_value.apply_async.return_value.parent.id = uuid4()
     unique_file_name = str(uuid4())
     data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
@@ -96,7 +109,8 @@ def test_digitize_results_post(mock_chord, sketch_map_marked, flask_client):
 @patch("sketch_map_tool.routes.chord")
 @vcr_app.use_cassette
 def test_digitize_results_post_no_consent(mock_chord, sketch_map_marked, flask_client):
-    mock_chord.get.side_effect = Mock()  # mock chord/task execution in Celery
+    # mock chord/task execution in Celery
+    mock_chord.return_value.apply_async.return_value.parent.id = uuid4()
     # do not send consent parameter
     # -> consent is a checkbox and only send if selected
     unique_file_name = str(uuid4())
@@ -123,7 +137,8 @@ def test_digitize_results_legacy_2024_04_15(
     flask_client,
 ):
     """Legacy map frames in DB do not have bbox, lon, lat and format set."""
-    mock_chord.get.side_effect = Mock()  # mock chord/task execution in Celery
+    # mock chord/task execution in Celery
+    mock_chord.return_value.apply_async.return_value.parent.id = uuid4()
     unique_file_name = str(uuid4())
     data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
@@ -161,21 +176,19 @@ def test_api_status_uuid_digitize(uuid_digitize, type_, flask_client):
     assert resp.json["href"] == f"/api/download/{uuid_digitize}/{type_}"
 
 
-@vcr_app.use_cassette
+@pytest.mark.usefixtures("mock_group_result_pending")
 @patch("sketch_map_tool.routes.chord")
 def test_api_status_uuid_digitize_info(mock_chord, sketch_map_marked, flask_client):
     """Test if custom task status information is return by /status."""
-    mock_chord.get.side_effect = Mock()  # mock chord/task execution in Celery
+    uuid = uuid4()
+    mock_chord.return_value.apply_async.return_value.parent.id = uuid
+
     unique_file_name = str(uuid4())
-    data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
+    data = {"file": [(sketch_map_marked, unique_file_name)], "consent": "True"}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
     assert response.status_code == 200
 
-    # Extract UUID from response
-    url_parts = response.request.path.rsplit("/")
-    uuid = url_parts[-1]
-
-    resp = flask_client.get(f"/api/status/{uuid}/vector-results")
+    resp = flask_client.get(f"/api/status/{str(uuid)}/vector-results")
     assert resp.status_code == 202
     assert resp.json["status"] == "PENDING"
     assert resp.json["info"] == {"current": 0, "total": 1}
