@@ -7,7 +7,7 @@ import pytest
 from celery.result import AsyncResult, GroupResult
 from werkzeug.datastructures import FileStorage
 
-from sketch_map_tool.exceptions import QRCodeError
+from sketch_map_tool.exceptions import QRCodeError, UUIDNotFoundError
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.routes import app
 from tests import FIXTURE_DIR
@@ -161,12 +161,19 @@ def files(file):
     return [file, file]
 
 
-@pytest.fixture()
-def mock_request_task_mapping(uuid, monkeypatch):
-    """Mock request id to task id mapping."""
+@pytest.fixture(autouse=True)
+def mock_request_task_mapping(monkeypatch):
+    """Mock every request id to task id mapping .
+
+    This mapping is only present because of legacy support.
+    """
+
+    def raise_(exception):
+        raise exception
+
     monkeypatch.setattr(
         "sketch_map_tool.routes.db_client_flask.get_async_result_id",
-        lambda *_: uuid,
+        lambda *_: raise_(UUIDNotFoundError("")),
     )
 
 
@@ -226,6 +233,7 @@ def mock_group_result_success(mock_async_result_success, monkeypatch):
     mock.ready.return_value = True
     mock.failed.return_value = False
     mock.successful.return_value = True
+    mock.get.return_value = [[Mock()]]
     mock.results = [mock_async_result_success]
 
     monkeypatch.setattr(

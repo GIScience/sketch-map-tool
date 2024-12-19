@@ -8,7 +8,11 @@ def test_status_success(
     type_,
     mock_request_task_mapping,
     mock_async_result_success,
+    monkeypatch,
 ):
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: None
+    )
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 200
     assert resp.mimetype == "application/json"
@@ -26,7 +30,11 @@ def test_status_started(
     type_,
     mock_request_task_mapping,
     mock_async_result_started,
+    monkeypatch,
 ):
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: None
+    )
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 202
     assert resp.json["id"] == uuid
@@ -44,7 +52,11 @@ def test_status_failure(
     type_,
     mock_request_task_mapping,
     mock_async_result_failure,
+    monkeypatch,
 ):
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: None
+    )
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 422
     assert resp.json["id"] == uuid
@@ -61,7 +73,11 @@ def test_status_failure_hard(
     type_,
     mock_request_task_mapping,
     mock_async_result_failure_hard,
+    monkeypatch,
 ):
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: None
+    )
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 500
 

@@ -56,13 +56,13 @@ def merge(fcs: list[FeatureCollection]) -> FeatureCollection:
     return feature_collection
 
 
-def zip_(results: list[tuple[str, str, BytesIO]]) -> BytesIO:
-    """ZIP the results of the Celery group of `georeference_sketch_map` tasks."""
+def zip_(results: list[tuple[str, str, BytesIO, BytesIO]]) -> BytesIO:
+    """ZIP the results of the Celery group of `upload_processing` tasks."""
     buffer = BytesIO()
     raw = set([r[1].replace("<br />", "\n") for r in results])
     attributions = BytesIO("\n".join(raw).encode())
     with ZipFile(buffer, "a") as zip_file:
-        for file_name, _, file in results:
+        for file_name, _, file, _ in results:
             stem = Path(file_name).stem
             name = Path(stem).with_suffix(".geotiff")
             zip_file.writestr(str(name), file.read())

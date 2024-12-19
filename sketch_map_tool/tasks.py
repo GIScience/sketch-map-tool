@@ -135,14 +135,13 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
 # 2. DIGITIZE RESULTS
 #
-@celery.task()
 def georeference_sketch_map(
     file_id: int,
     file_name: str,
     map_frame: NDArray,
     layer: Layer,
     bbox: Bbox,
-) -> AsyncResult | tuple[str, str, BytesIO]:
+) -> tuple[str, str, BytesIO]:
     """Georeference uploaded Sketch Map.
 
     Returns file name, attribution text and to the map extend clipped and georeferenced
@@ -156,14 +155,13 @@ def georeference_sketch_map(
     return file_name, get_attribution(layer), r
 
 
-@celery.task
 def digitize_sketches(
     file_id: int,
     file_name: str,
     map_frame: NDArray,
     layer: Layer,
     bbox: Bbox,
-) -> AsyncResult | FeatureCollection:
+) -> FeatureCollection:
     # r = interim result
     r: BytesIO = db_client_celery.select_file(file_id)  # type: ignore
     r: NDArray = to_array(r)  # type: ignore
@@ -196,6 +194,31 @@ def digitize_sketches(
             N_(f"For '{file_name}' (ID: {file_id}) no markings have been detected.")
         )
     return merge(l)
+
+
+@celery.task
+def upload_processing(
+    file_id: int,
+    file_name: str,
+    map_frame: NDArray,
+    layer: Layer,
+    bbox: Bbox,
+) -> AsyncResult | tuple[str, str, BytesIO, FeatureCollection]:
+    file_name, attribution, map = georeference_sketch_map(
+        file_id,
+        file_name,
+        map_frame,
+        layer,
+        bbox,
+    )
+    sketches = digitize_sketches(
+        file_id,
+        file_name,
+        map_frame,
+        layer,
+        bbox,
+    )
+    return file_name, attribution, map, sketches
 
 
 @celery.task(ignore_result=True)

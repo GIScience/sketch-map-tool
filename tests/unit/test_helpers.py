@@ -32,11 +32,13 @@ def test_zip_(sketch_map_frame_markings_detected):
                 "file_name.png",
                 "attribution",
                 BytesIO(sketch_map_frame_markings_detected),
+                BytesIO(),
             ),
             (
                 "file_name_2.png",
                 "attribution",
                 BytesIO(sketch_map_frame_markings_detected),
+                BytesIO(),
             ),
         ]
     )

@@ -7,7 +7,10 @@ from celery.result import GroupResult
 
 @pytest.mark.usefixtures("mock_request_task_mapping", "mock_async_result_success")
 @pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
-def test_download_success(client, uuid, type_):
+def test_download_success(client, uuid, type_, monkeypatch):
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: None
+    )
     resp = client.get("/api/download/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 200
     assert resp.mimetype == "application/pdf"
@@ -15,14 +18,20 @@ def test_download_success(client, uuid, type_):
 
 @pytest.mark.usefixtures("mock_request_task_mapping", "mock_async_result_started")
 @pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
-def test_download_started(client, uuid, type_):
+def test_download_started(client, uuid, type_, monkeypatch):
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: None
+    )
     resp = client.get("/api/download/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 500
 
 
 @pytest.mark.usefixtures("mock_request_task_mapping", "mock_async_result_failure")
 @pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
-def test_download_failure(client, uuid, type_):
+def test_download_failure(client, uuid, type_, monkeypatch):
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: None
+    )
     resp = client.get("/api/download/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 500
 
@@ -94,7 +103,7 @@ def test_group_success_failure(
         mock_async_result_success,
         mock_async_result_failure,
     ]
-    mock.get.side_effect = mock_async_result_success.get
+    mock.get.return_value = [[mock_async_result_success.get]]
     monkeypatch.setattr(
         "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
     )
