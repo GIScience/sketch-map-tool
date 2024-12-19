@@ -370,21 +370,16 @@ def uuid_digitize(
     assert url_rest == "/digitize/results"
 
     # Wait for tasks to be finished and retrieve results (vector and raster)
-    with flask_app.app_context():
-        id_vector = db_client_flask.get_async_result_id(uuid, "vector-results")
-        id_raster = db_client_flask.get_async_result_id(uuid, "raster-results")
-    group_raster = celery_app.GroupResult.restore(id_raster)
-    group_vector = celery_app.GroupResult.restore(id_vector)
-    result_raster = group_raster.get(timeout=180)
-    result_vector = group_vector.get(timeout=180)
+    result = celery_app.GroupResult.restore(uuid).get(timeout=180)
+
     # Write sketch map to temporary test directory
     dir = tmp_path_factory.mktemp(uuid, numbered=False)
     path_raster = dir / "raster.zip"
     path_vector = dir / "vector.geojson"
     with open(path_vector, "w") as file:
-        file.write(json.dumps(merge(result_vector)))
+        file.write(json.dumps(merge(r[-1] for r in result)))
     with open(path_raster, "wb") as file:
-        r = zip_(result_raster)
+        r = zip_([r[:-1] for r in result])
         file.write(r.getbuffer())
     return uuid
 

@@ -77,7 +77,8 @@ def test_create_results_post(
 @patch("sketch_map_tool.routes.chord")
 @vcr_app.use_cassette
 def test_digitize_results_post(mock_chord, sketch_map_marked, flask_client):
-    mock_chord.get.side_effect = Mock()  # mock chord/task execution in Celery
+    # mock chord/task execution in Celery
+    mock_chord.return_value.apply_async.return_value.parent.id = uuid4()
     unique_file_name = str(uuid4())
     data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
@@ -96,7 +97,8 @@ def test_digitize_results_post(mock_chord, sketch_map_marked, flask_client):
 @patch("sketch_map_tool.routes.chord")
 @vcr_app.use_cassette
 def test_digitize_results_post_no_consent(mock_chord, sketch_map_marked, flask_client):
-    mock_chord.get.side_effect = Mock()  # mock chord/task execution in Celery
+    # mock chord/task execution in Celery
+    mock_chord.return_value.apply_async.return_value.parent.id = uuid4()
     # do not send consent parameter
     # -> consent is a checkbox and only send if selected
     unique_file_name = str(uuid4())
@@ -123,7 +125,8 @@ def test_digitize_results_legacy_2024_04_15(
     flask_client,
 ):
     """Legacy map frames in DB do not have bbox, lon, lat and format set."""
-    mock_chord.get.side_effect = Mock()  # mock chord/task execution in Celery
+    # mock chord/task execution in Celery
+    mock_chord.return_value.apply_async.return_value.parent.id = uuid4()
     unique_file_name = str(uuid4())
     data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
@@ -165,7 +168,7 @@ def test_api_status_uuid_digitize(uuid_digitize, type_, flask_client):
 @patch("sketch_map_tool.routes.chord")
 def test_api_status_uuid_digitize_info(mock_chord, sketch_map_marked, flask_client):
     """Test if custom task status information is return by /status."""
-    mock_chord.get.side_effect = Mock()  # mock chord/task execution in Celery
+    mock_chord.return_value.apply_async.return_value.parent.id = uuid4()
     unique_file_name = str(uuid4())
     data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
