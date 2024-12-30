@@ -183,6 +183,9 @@ def mock_async_result_success(monkeypatch):
     mock.failed.return_value = False
     mock.successful.return_value = True
 
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: None
+    )
     monkeypatch.setattr("sketch_map_tool.routes.celery_app.AsyncResult", lambda _: mock)
     return mock
 
@@ -194,6 +197,10 @@ def mock_async_result_started(monkeypatch):
     mock.ready.return_value = False
     mock.failed.return_value = False
     mock.successful.return_value = False
+
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: None
+    )
     monkeypatch.setattr("sketch_map_tool.routes.celery_app.AsyncResult", lambda _: mock)
     return mock
 
@@ -207,6 +214,10 @@ def mock_async_result_failure(monkeypatch):
     mock.failed.return_value = True
     mock.successful.return_value = False
     mock.get.side_effect = QRCodeError("Mock error")
+
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: None
+    )
     monkeypatch.setattr("sketch_map_tool.routes.celery_app.AsyncResult", lambda _: mock)
     return mock
 
