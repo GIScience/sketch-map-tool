@@ -1,4 +1,4 @@
-name: pytest
+name: Unit tests
 
 on:
   pull_request:
@@ -27,6 +27,6 @@ jobs:
       - name: Install gdal as python package
         run: |
           poetry run pip install gdal=="$(gdal-config --version).*"
-      - name: Run tests
+      - name: Run unit tests
         run: |
           poetry run pytest tests/unit
