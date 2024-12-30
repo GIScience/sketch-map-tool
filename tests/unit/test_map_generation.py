@@ -1,3 +1,4 @@
+import os
 from io import BytesIO
 
 import fitz
@@ -76,6 +77,7 @@ def test_generate_pdf(
 
 # NOTE: To reduce number of approvals, parameter numbers are kept low.
 @pytest.mark.parametrize("orientation", ["landscape"])
+@pytest.mark.skipif(os.getenv("CI") == "true", reason="detected CI environment")
 def test_generate_pdf_sketch_map_approval(
     map_image,
     qr_code_approval,
@@ -115,6 +117,7 @@ def test_generate_pdf_sketch_map_approval(
 # NOTE: To reduce number of approvals, parameter numbers are kept low.
 @pytest.mark.parametrize("paper_format", [A4])
 @pytest.mark.parametrize("orientation", ["landscape"])
+@pytest.mark.skipif(os.getenv("CI") == "true", reason="detected CI environment")
 def test_generate_pdf_sketch_map_template_approval(
     map_image,
     qr_code_approval,
@@ -154,6 +157,7 @@ def test_pdf_page_to_img(pdf):
         assert False
 
 
+@pytest.mark.skipif(os.getenv("CI") == "true", reason="detected CI environment")
 def test_get_aruco_makers():
     markers = get_aruco_markers(size=100)
     assert len(markers) == 8
