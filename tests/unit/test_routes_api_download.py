@@ -94,10 +94,8 @@ def test_group_success_failure(
         mock_async_result_success,
         mock_async_result_failure,
     ]
-    mock.get.side_effect = mock_async_result_success.get
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
-    )
+    mock.get.return_value = [[mock_async_result_success.get]]
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
 
     resp = client.get("/api/download/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 200

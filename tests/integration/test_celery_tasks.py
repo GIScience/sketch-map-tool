@@ -1,6 +1,5 @@
 from io import BytesIO
 from unittest.mock import Mock, patch
-from uuid import uuid4
 
 import pytest
 
@@ -13,7 +12,6 @@ from tests import vcr_app
 def test_generate_sketch_map(bbox, format_, size, scale, layer):
     task = tasks.generate_sketch_map.apply_async(
         args=(
-            str(uuid4()),
             bbox,
             format_,
             "landscape",

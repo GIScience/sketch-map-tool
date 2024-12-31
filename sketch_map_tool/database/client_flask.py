@@ -1,4 +1,3 @@
-import json
 from uuid import UUID
 
 import psycopg2
@@ -34,27 +33,7 @@ def close_connection(e=None):
         db_conn.close()
 
 
-def _insert_id_map(uuid: str, map_: dict):
-    create_query = """
-    CREATE TABLE IF NOT EXISTS uuid_map(
-      uuid uuid PRIMARY KEY,
-      map json NOT NULL
-    )
-    """
-    insert_query = "INSERT INTO uuid_map(uuid, map) VALUES (%s, %s)"
-    db_conn = open_connection()
-    with db_conn.cursor() as curs:
-        curs.execute(create_query)
-        curs.execute(insert_query, [uuid, json.dumps(map_)])
-
-
-def _delete_id_map(uuid: str):
-    query = "DELETE FROM uuid_map WHERE uuid = %s"
-    db_conn = open_connection()
-    with db_conn.cursor() as curs:
-        curs.execute(query, [uuid])
-
-
+# TODO: Legacy support: Delete this function after PR 515 has been deployed for 1 day
 def _select_id_map(uuid) -> dict:
     query = "SELECT map FROM uuid_map WHERE uuid = %s"
     db_conn = open_connection()
@@ -69,6 +48,7 @@ def _select_id_map(uuid) -> dict:
         )
 
 
+# TODO: Legacy support: Delete this function after PR 515 has been deployed for 1 day
 def get_async_result_id(request_uuid: str, request_type: REQUEST_TYPES) -> str:
     """Get the Celery Async Result IDs for a request."""
     map_ = _select_id_map(request_uuid)
@@ -82,11 +62,6 @@ def get_async_result_id(request_uuid: str, request_type: REQUEST_TYPES) -> str:
             ),
             {"REQUEST_UUID": request_uuid, "REQUEST_TYPE": request_type},
         ) from error
-
-
-def set_async_result_ids(request_uuid, map_: dict[REQUEST_TYPES, str]):
-    """Set the Celery Result IDs for a request."""
-    _insert_id_map(request_uuid, map_)
 
 
 def insert_files(
@@ -215,11 +190,3 @@ def select_map_frame(uuid: UUID) -> tuple[bytes, str, str]:
                 ),
                 {"UUID": uuid},
             )
-
-
-def delete_map_frame(uuid: UUID):
-    """Delete map frame of the associated UUID from the database."""
-    query = "DELETE FROM map_frame WHERE uuid = %s"
-    db_conn = open_connection()
-    with db_conn.cursor() as curs:
-        curs.execute(query, [str(uuid)])

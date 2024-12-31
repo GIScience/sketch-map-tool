@@ -53,39 +53,6 @@ def test_open_close_connection(flask_app):
         assert db_conn.closed != 0  # 0 if the connection is open
 
 
-def test_insert_uuid_map(flask_app, uuid):
-    with flask_app.app_context():
-        map_ = {"sketch-map": str(uuid4()), "quality-report": str(uuid4())}
-        client_flask._insert_id_map(uuid, map_)
-        client_flask._delete_id_map(uuid)
-
-
-def test_delete_uuid_map(flask_app, uuid):
-    with flask_app.app_context():
-        map_ = {"sketch-map": str(uuid4()), "quality-report": str(uuid4())}
-        client_flask._insert_id_map(uuid, map_)
-        client_flask._delete_id_map(uuid)
-
-
-def test_select_uuid_map(flask_app, uuid):
-    with flask_app.app_context():
-        map_ = {"sketch-map": str(uuid4()), "quality-report": str(uuid4())}
-        client_flask._insert_id_map(uuid, map_)
-        client_flask._select_id_map(uuid)
-        client_flask._delete_id_map(uuid)
-
-
-def test_get_async_result_id(flask_app, uuid):
-    with flask_app.app_context():
-        uuid1 = str(uuid4())
-        uuid2 = str(uuid4())
-        map_ = {"sketch-map": uuid1, "quality-report": uuid2}
-        client_flask._insert_id_map(uuid, map_)
-        assert uuid1 == client_flask.get_async_result_id(uuid, "sketch-map")
-        assert uuid2 == client_flask.get_async_result_id(uuid, "quality-report")
-        client_flask._delete_id_map(uuid)
-
-
 def test_insert_files(flask_app, files, uuid_create, bbox, layer):
     with flask_app.app_context():
         file_ids, uuids, file_names, bboxes, layers = client_flask.insert_files(

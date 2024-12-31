@@ -7,7 +7,7 @@ import pytest
 from celery.result import AsyncResult, GroupResult
 from werkzeug.datastructures import FileStorage
 
-from sketch_map_tool.exceptions import QRCodeError
+from sketch_map_tool.exceptions import QRCodeError, UUIDNotFoundError
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.routes import app
 from tests import FIXTURE_DIR
@@ -166,12 +166,19 @@ def files(file):
     return [file, file]
 
 
-@pytest.fixture()
-def mock_request_task_mapping(uuid, monkeypatch):
-    """Mock request id to task id mapping."""
+@pytest.fixture(autouse=True)
+def mock_request_task_mapping(monkeypatch):
+    """Mock every request id to task id mapping .
+
+    This mapping is only present because of legacy support.
+    """
+
+    def raise_(exception):
+        raise exception
+
     monkeypatch.setattr(
         "sketch_map_tool.routes.db_client_flask.get_async_result_id",
-        lambda *_: uuid,
+        lambda *_: raise_(UUIDNotFoundError("")),
     )
 
 
@@ -182,11 +189,7 @@ def mock_async_result_success(monkeypatch):
     mock.ready.return_value = True
     mock.failed.return_value = False
     mock.successful.return_value = True
-
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: None
-    )
-    monkeypatch.setattr("sketch_map_tool.routes.celery_app.AsyncResult", lambda _: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
     return mock
 
 
@@ -197,11 +200,7 @@ def mock_async_result_started(monkeypatch):
     mock.ready.return_value = False
     mock.failed.return_value = False
     mock.successful.return_value = False
-
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: None
-    )
-    monkeypatch.setattr("sketch_map_tool.routes.celery_app.AsyncResult", lambda _: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
     return mock
 
 
@@ -214,11 +213,7 @@ def mock_async_result_failure(monkeypatch):
     mock.failed.return_value = True
     mock.successful.return_value = False
     mock.get.side_effect = QRCodeError("Mock error")
-
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: None
-    )
-    monkeypatch.setattr("sketch_map_tool.routes.celery_app.AsyncResult", lambda _: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
     return mock
 
 
@@ -231,8 +226,7 @@ def mock_async_result_failure_hard(monkeypatch):
     mock.failed.return_value = True
     mock.successful.return_value = False
     mock.get.side_effect = ValueError()
-
-    monkeypatch.setattr("sketch_map_tool.routes.celery_app.AsyncResult", lambda _: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
     return mock
 
 
@@ -242,11 +236,9 @@ def mock_group_result_success(mock_async_result_success, monkeypatch):
     mock.ready.return_value = True
     mock.failed.return_value = False
     mock.successful.return_value = True
+    mock.get.return_value = [[Mock()]]
     mock.results = [mock_async_result_success]
-
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
-    )
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
     return mock
 
 
@@ -257,10 +249,7 @@ def mock_group_result_started(mock_async_result_started, monkeypatch):
     mock.failed.return_value = False
     mock.successful.return_value = True
     mock.results = [mock_async_result_started]
-
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
-    )
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
     return mock
 
 
@@ -272,10 +261,7 @@ def mock_group_result_failure(mock_async_result_failure, monkeypatch):
     mock.successful.return_value = False
     mock.results = [mock_async_result_failure]
     mock.get.side_effect = mock_async_result_failure.get
-
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
-    )
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
 
 
 @pytest.fixture
@@ -286,10 +272,7 @@ def mock_group_result_failure_hard(mock_async_result_failure_hard, monkeypatch):
     mock.successful.return_value = False
     mock.results = [mock_async_result_failure_hard]
     mock.get.side_effect = mock_async_result_failure_hard.get
-
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
-    )
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
 
 
 @pytest.fixture
@@ -309,10 +292,7 @@ def mock_group_result_started_success_failure(
         mock_async_result_failure,
     ]
     mock.get.side_effect = mock_async_result_failure.get
-
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
-    )
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
 
 
 @pytest.fixture
@@ -330,7 +310,4 @@ def mock_group_result_success_failure(
         mock_async_result_failure,
     ]
     mock.get.side_effect = mock_async_result_failure.get
-
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.celery_app.GroupResult.restore", lambda _: mock
-    )
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)

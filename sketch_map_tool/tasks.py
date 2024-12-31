@@ -1,6 +1,5 @@
 import logging
 from io import BytesIO
-from uuid import UUID
 
 import celery.states
 from celery.result import AsyncResult
@@ -93,9 +92,9 @@ def on_setup_logging(**_):
 
 # 1. GENERATE SKETCH MAP & QUALITY REPORT
 #
-@celery.task()
+@celery.task(bind=True)
 def generate_sketch_map(
-    uuid: UUID,
+    self,
     bbox: Bbox,
     format_: PaperFormat,
     orientation: str,
@@ -107,7 +106,7 @@ def generate_sketch_map(
     """Generate and returns a sketch map as PDF and stores the map frame in DB."""
     map_image = wms_client.get_map_image(bbox, size, layer)
     qr_code_ = map_generation.qr_code(
-        str(uuid),
+        self.request.id,
         bbox,
         layer,
         format_,
@@ -122,7 +121,7 @@ def generate_sketch_map(
     )
     db_client_celery.insert_map_frame(
         map_img,
-        uuid,
+        self.request.id,
         bbox,
         format_,
         orientation,
@@ -145,39 +144,14 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
 # 2. DIGITIZE RESULTS
 #
-@celery.task()
-def georeference_sketch_map(
-    file_id: int,
-    file_name: str,
-    map_frame: NDArray,
-    layer: Layer,
-    bbox: Bbox,
-) -> AsyncResult | tuple[str, str, BytesIO]:
-    """Georeference uploaded Sketch Map.
-
-    Returns file name, attribution text and to the map extend clipped and georeferenced
-    sketch map as GeoTiff.
-    """
-    # r = interim result
-    r = db_client_celery.select_file(file_id)
-    r = to_array(r)
-    r = clip(r, map_frame)
-    r = georeference(r, bbox)
-    return file_name, get_attribution(layer), r
-
-
-@celery.task
 def digitize_sketches(
     file_id: int,
     file_name: str,
     map_frame: NDArray,
+    sketch_map_frame: NDArray,
     layer: Layer,
     bbox: Bbox,
-) -> AsyncResult | FeatureCollection:
-    # r = interim result
-    r: BytesIO = db_client_celery.select_file(file_id)  # type: ignore
-    r: NDArray = to_array(r)  # type: ignore
-    r: NDArray = clip(r, map_frame)  # type: ignore
+) -> FeatureCollection:
     if layer == "osm":
         yolo_obj = yolo_obj_osm
         yolo_cls = yolo_cls_osm
@@ -187,16 +161,16 @@ def digitize_sketches(
     else:
         raise ValueError("Unexpected layer: " + layer)
 
-    r: NDArray = detect_markings(
-        r,
+    markings: list[NDArray] = detect_markings(
+        sketch_map_frame,
         map_frame,
         yolo_obj,
         yolo_cls,
         sam_predictor,
-    )  # type: ignore
+    )
     # m = marking
     l = []  # noqa: E741
-    for m in r:
+    for m in markings:
         m: BytesIO = georeference(m, bbox, bgr=False)  # type: ignore
         m: FeatureCollection = polygonize(m, layer_name=file_name)  # type: ignore
         m: FeatureCollection = post_process(m, file_name)
@@ -206,6 +180,30 @@ def digitize_sketches(
             N_(f"For '{file_name}' (ID: {file_id}) no markings have been detected.")
         )
     return merge(l)
+
+
+@celery.task
+def upload_processing(
+    file_id: int,
+    file_name: str,
+    map_frame: NDArray,
+    layer: Layer,
+    bbox: Bbox,
+) -> AsyncResult | tuple[str, str, BytesIO, FeatureCollection]:
+    """Georeference and digitize given sketch map."""
+    sketch_map_uploaded = db_client_celery.select_file(file_id)
+    sketch_map_frame = clip(to_array(sketch_map_uploaded), map_frame)
+    sketch_map_frame_georeferenced = georeference(sketch_map_frame, bbox)
+    sketches = digitize_sketches(
+        file_id,
+        file_name,
+        map_frame,
+        sketch_map_frame,
+        layer,
+        bbox,
+    )
+    attribution = get_attribution(layer)
+    return file_name, attribution, sketch_map_frame_georeferenced, sketches
 
 
 @celery.task(ignore_result=True)
