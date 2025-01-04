@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-11-08 10:44+0000\n"
-"PO-Revision-Date: 2024-11-08 11:22\n"
+"POT-Creation-Date: 2025-01-01 02:00+0000\n"
+"PO-Revision-Date: 2025-01-01 02:00\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -17,10 +17,6 @@ msgstr ""
 "X-Crowdin-File: messages.pot\n"
 "X-Crowdin-File-ID: 12\n"
 "Language: de_DE\n"
-
-#: sketch_map_tool/tasks.py:227
-msgid "No markings have been detected."
-msgstr "Es wurden keine Markierungen gefunden."
 
 #: sketch_map_tool/validators.py:18
 msgid "{TYPE} is not a valid value for the request parameter 'type'. Allowed values are: {REQUEST_TYPES}"
@@ -43,11 +39,11 @@ msgstr "Die angegebene URL enthält keine gültige UUID"
 msgid "Literature reference JSON fields should not contain empty strings as values."
 msgstr "Literaturreferenz JSON-Felder sollten keine leeren Strings als Werte enthalten."
 
-#: sketch_map_tool/database/client_celery.py:165
+#: sketch_map_tool/database/client_celery.py:170
 msgid "The file with the id: {ID} does not exist anymore"
 msgstr "Die Datei mit der id: {ID} existiert nicht mehr"
 
-#: sketch_map_tool/database/client_celery.py:170
+#: sketch_map_tool/database/client_celery.py:175
 #: sketch_map_tool/database/client_flask.py:167
 #: sketch_map_tool/database/client_flask.py:182
 msgid "There is no file in the database with the id: {ID}"
@@ -794,15 +790,15 @@ msgstr "Du versuchst gerade\n"
 "                        unterstützt. Bitte verschiebe die Karte so, dass ihr Umfang entweder links oder rechts des\n"
 "                        Nullmeridians verläuft."
 
-#: sketch_map_tool/templates/create.html:43
+#: sketch_map_tool/templates/create.html:47
 msgid "Paper Format"
 msgstr "Papierformat"
 
-#: sketch_map_tool/templates/create.html:46
+#: sketch_map_tool/templates/create.html:50
 msgid "Paper Orientation"
 msgstr "Ausrichtung der Karte"
 
-#: sketch_map_tool/templates/create.html:55
+#: sketch_map_tool/templates/create.html:59
 msgid "NEXT"
 msgstr "WEITER"
 

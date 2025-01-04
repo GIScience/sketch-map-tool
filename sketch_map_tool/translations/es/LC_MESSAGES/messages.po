@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-11-08 10:44+0000\n"
-"PO-Revision-Date: 2024-11-08 11:22\n"
+"POT-Creation-Date: 2025-01-01 02:00+0000\n"
+"PO-Revision-Date: 2025-01-01 02:00\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -17,10 +17,6 @@ msgstr ""
 "X-Crowdin-File: messages.pot\n"
 "X-Crowdin-File-ID: 12\n"
 "Language: es_ES\n"
-
-#: sketch_map_tool/tasks.py:227
-msgid "No markings have been detected."
-msgstr ""
 
 #: sketch_map_tool/validators.py:18
 msgid "{TYPE} is not a valid value for the request parameter 'type'. Allowed values are: {REQUEST_TYPES}"
@@ -43,11 +39,11 @@ msgstr "La URL proporcionada no contiene un UUID válido"
 msgid "Literature reference JSON fields should not contain empty strings as values."
 msgstr "Los campos JSON de referencia literaria no deben contener cadenas de caracteres vacías como valores."
 
-#: sketch_map_tool/database/client_celery.py:165
+#: sketch_map_tool/database/client_celery.py:170
 msgid "The file with the id: {ID} does not exist anymore"
 msgstr ""
 
-#: sketch_map_tool/database/client_celery.py:170
+#: sketch_map_tool/database/client_celery.py:175
 #: sketch_map_tool/database/client_flask.py:167
 #: sketch_map_tool/database/client_flask.py:182
 msgid "There is no file in the database with the id: {ID}"
@@ -823,15 +819,15 @@ msgstr "Estás intentando\n"
 "                        solicitar un mapa que cruza el <a href=\"https://en.wikipedia.org/wiki/180th_meridian\" target=\"_blank\">antimeridiano +/-180°</a>. Esto actualmente no es posible, por favor mueve el mapa de tal manera que los bordes se encuentren a la izquierda o a la derecha del\n"
 "                        antimeridiano."
 
-#: sketch_map_tool/templates/create.html:43
+#: sketch_map_tool/templates/create.html:47
 msgid "Paper Format"
 msgstr "Formato del papel"
 
-#: sketch_map_tool/templates/create.html:46
+#: sketch_map_tool/templates/create.html:50
 msgid "Paper Orientation"
 msgstr "Orientación del papel"
 
-#: sketch_map_tool/templates/create.html:55
+#: sketch_map_tool/templates/create.html:59
 msgid "NEXT"
 msgstr "SIGUIENTE"
 
