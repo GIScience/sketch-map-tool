@@ -17,13 +17,15 @@
         <div class="active">{{ _('Upload your Sketch&nbsp;Maps') }}</div>
         <div>{{ _('Download collected Markings as Geodata') }}</div>
     </div>
+
     <main class="container-fluid">
+
         <div id="main-message" class="sketchy h1 center-text">
             {{ _('Scan or photograph your marked Sketch Maps after data collection.<br>Then, upload one or
             more marked Sketch Maps at once as .jpg or .png file.') }}
         </div>
 
-        <form name="upload" action="/digitize/results" method="post" enctype=multipart/form-data>
+        <form id="uploadForm" name="upload" action="/digitize/results" method="post" enctype=multipart/form-data>
 
             <div class="filebokz" data-max-size="524288000" data-allowed-extensions="jpeg,jpg,png">
                 <input type="file" id="file" name="file" multiple/>
@@ -51,12 +53,27 @@
                     {{ _(' Files are stored for processing until the results are generated.') }}
                 </p>
                 <p>
-                    <input type="checkbox" id="consent" name="consent" value="True">
+                    <input type="checkbox" id="consentCheckbox" name="consent" value="True">
                     <label for="consent">{{ _('Enable us to keep the uploaded files beyond processing to further improve this service.') }}</label>
                 </p>
             </div>
             <button id="submitBtn" type="submit" class="">{{ _('Upload') }}</button>
         </form>
+
+        <dialog id="consentDialog">
+          <article>
+            <h3>Enable us to improve this service!</h3>
+            <p>
+              You did not consent to us keeping the uploaded files beyond processing. Doing so would really help us to improve this service. Would you like to help us?
+            </p>
+            <p><small>You can find out more about our data storage policy on the <a href="/en/help#data-storage-and-secrurity">Help page</a>.</small></p>
+            <footer style="align-items: unset;">
+            <button id="consentButton" class="primary"><b>Yes</b>, please use my files.</button>
+            <button id="nonConsentButton" class="primary"><b>No</b>, please do not use my files.</button>
+            </footer>
+          </article>
+        </dialog>
+
     <script>
 
     </script>
