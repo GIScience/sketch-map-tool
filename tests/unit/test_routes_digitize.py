@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 import pytest
 
 from sketch_map_tool.routes import app
@@ -12,12 +10,9 @@ def client():
 
 @pytest.fixture()
 def mock_tasks(uuid, monkeypatch):
-    """Mock celery workflow generate digitized results."""
+    """Mock celery workflow of upload processing."""
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.digitize_sketches", lambda _: str(uuid4())
-    )
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.georeference_sketch_map", lambda _: str(uuid())
+        "sketch_map_tool.routes.tasks.upload_processing", lambda _: str(uuid())
     )
 
 

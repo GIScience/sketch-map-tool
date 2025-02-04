@@ -4,6 +4,7 @@ from uuid import uuid4
 
 import pytest
 
+from sketch_map_tool.exceptions import UUIDNotFoundError
 from sketch_map_tool.routes import app
 
 
@@ -42,11 +43,8 @@ def test_create_result_get(client):
     assert resp.status_code == 302  # Redirect
 
 
-def test_create_result_post(client, mock_tasks, monkeypatch, bbox, bbox_wgs84, layer):
+def test_create_result_post(client, mock_tasks, bbox, bbox_wgs84, layer):
     """Redirect to /create/results/<uuid>"""
-    monkeypatch.setattr(
-        "sketch_map_tool.database.client_flask.set_async_result_ids", lambda x, y: None
-    )
     # TODO: use params fixture from conftest
     data = {
         "bbox": json.dumps(astuple(bbox)),
@@ -61,19 +59,21 @@ def test_create_result_post(client, mock_tasks, monkeypatch, bbox, bbox_wgs84, l
     assert resp.status_code == 302
 
 
-def test_create_results_uuid(client, uuid, monkeypatch):
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.db_client_flask.get_async_result_id", lambda a, b: None
-    )
+def test_create_results_uuid(client, uuid):
     resp = client.get("/create/results/{0}".format(uuid))
     assert resp.status_code == 200
 
 
-def test_create_results_uuid_not_found(monkeypatch, client, uuid):
+def test_create_results_uuid_not_found(monkeypatch, client):
+    def raise_(exception):
+        raise exception
+
     monkeypatch.setattr(
-        "sketch_map_tool.database.client_flask._select_id_map", lambda _: {}
+        "sketch_map_tool.routes.get_async_result",
+        lambda *_: raise_(UUIDNotFoundError("")),
     )
-    resp = client.get("/create/results/{0}".format(uuid))
+
+    resp = client.get("/create/results/{0}".format(uuid4()))
     assert resp.status_code == 404
 
 
