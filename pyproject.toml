@@ -29,7 +29,7 @@ ultralytics = "8.1.14"
 pyzbar = "^0.1.9"
 shapelysmooth = "^0.2.0"
 flask-babel = "^4.0.0"
-my-ultralytics-4bands = { git = "https://github.com/itisacloud/ultralytics_multiband_support.git", rev = "ef61cf9870755ae8b21b03253237d15f5856e1a6" }
+ultralytics_MB  = { git = "https://github.com/itisacloud/ultralytics_multiband_support.git", rev = "a6df57294953200de5f09e245809c3a371adac2c" }
 torch = [
     { version = "^2.4.0+cpu", source = "pytorch-cpu", platform = "linux" },
     { version = "^2.4.0", source = "pypi", platform = "darwin" }

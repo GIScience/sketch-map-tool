@@ -2,16 +2,16 @@ import cv2
 import numpy as np
 import torch
 from numpy.typing import NDArray
-from PIL import Image, ImageEnhance
+from PIL import Image
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 from ultralytics import YOLO
-from ultralytics_4bands import YOLO as YOLO_4
+from ultralytics_MB import YOLO as YOLO_MB
 
 
 def detect_markings(
     sketch_map_frame: NDArray,
     map_frame: NDArray,
-    yolo_obj: YOLO_4,
+    yolo_obj: YOLO_MB,
     yolo_cls: YOLO,
     sam_predictor: SAM2ImagePredictor,
 ) -> list[NDArray]:
@@ -33,11 +33,11 @@ def detect_markings(
     """
     # SAM can only deal with RGB (not RGBA)
     image = Image.fromarray(cv2.cvtColor(sketch_map_frame, cv2.COLOR_BGR2RGB))
-    difference = get_difference(image, map_frame)
+
     # masks represent markings
     masks, bboxes, colors = apply_ml_pipeline(
         image,
-        difference,
+        map_frame,
         yolo_obj,
         yolo_cls,
         sam_predictor,
@@ -47,42 +47,10 @@ def detect_markings(
     return processed_markings
 
 
-def get_difference(
-    sketch_map_frame: Image.Image,
-    map_frame: NDArray,
-    threshold: int = 0,
-) -> Image.Image:
-    """Difference image between original map frame and sketch map frame.
-
-    Build grayscale image of the absolute difference between map frame
-    and the sketch map frame with markings on it.
-
-    The `threshold` parameter is an experimental filtering of
-    the markings based on amplitude of the difference.
-    """
-    image = enhance_contrast(sketch_map_frame)
-    difference = cv2.absdiff(map_frame, image)
-    difference_gray = cv2.cvtColor(difference, cv2.COLOR_BGR2GRAY)
-    # TODO:
-    # 1. Pyright: Operator ">" not supported for types "MatLike" and "int"
-    #      Operator ">" not supported for types "NumPyArrayGeneric" and "int"
-    #      [reportGeneralTypeIssues]
-    mask_markings = difference_gray > threshold
-    difference_gray = difference_gray * mask_markings
-    difference_gray = Image.fromarray(difference_gray)
-    return difference_gray
-
-
-def enhance_contrast(image: Image.Image, factor: float = 2.0) -> NDArray:
-    """Enhance the contrast of a given image."""
-    result = ImageEnhance.Contrast(image).enhance(factor)
-    return cv2.cvtColor(np.array(result), cv2.COLOR_RGB2BGR)
-
-
 def apply_ml_pipeline(
     image: Image.Image,
-    difference: Image.Image,
-    yolo_obj: YOLO_4,
+    map_frame: Image.Image,
+    yolo_obj: YOLO_MB,
     yolo_cls: YOLO,
     sam_predictor: SAM2ImagePredictor,
 ) -> tuple[list[NDArray], NDArray, list]:
@@ -99,7 +67,7 @@ def apply_ml_pipeline(
             (map frame), masking the dominant segment inside of a bbox detected by YOLO.
             Class labels are colors.
     """
-    bounding_boxes, _ = apply_yolo_object_detection(image, difference, yolo_obj)
+    bounding_boxes, _ = apply_yolo_object_detection(image, map_frame, yolo_obj)
     colors = apply_yolo_classification(image, bounding_boxes, yolo_cls)
     masks, _ = apply_sam(image, bounding_boxes, sam_predictor)
     return masks, bounding_boxes, colors
@@ -107,8 +75,8 @@ def apply_ml_pipeline(
 
 def apply_yolo_object_detection(
     image: Image.Image,
-    difference: Image.Image,
-    yolo: YOLO_4,
+    map_frame: Image.Image,
+    yolo: YOLO_MB,
 ) -> tuple[NDArray, NDArray]:
     """Apply fine-tuned YOLO object detection on an image.
 
@@ -116,8 +84,8 @@ def apply_yolo_object_detection(
         tuple: Detected bounding boxes around individual markings and corresponding
         class labels (colors).
     """
-    image = Image.merge("RGBA", (*image.split(), difference))
-    result = yolo.predict(image)[0].boxes  # TODO set conf parameter
+    combined = np.concatenate((np.array(image), np.array(map_frame)), axis=2)
+    result = yolo.predict(combined)[0].boxes  # TODO set conf parameter
     bounding_boxes = result.xyxy.numpy()
     class_labels = result.cls.numpy()
     return bounding_boxes, class_labels
