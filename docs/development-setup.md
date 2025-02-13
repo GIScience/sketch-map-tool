@@ -77,7 +77,7 @@ docker run --name smt-redis -d -p 6379:6379 redis:7
 
 Please refer to the [configuration documentation](/docs/configuration.md).
 
-> TL;DR: Except of the API tokens for neptune.ai and arcgis.com (ESRI) all
+> TL;DR: Except of the API token for arcgis.com (ESRI) all
 > configuration values come with defaults for development purposes. Please make
 > sure to configure the API tokens for your environment.
 

@@ -1,7 +1,6 @@
 import logging
 from pathlib import Path
 
-import neptune
 import requests
 import torch
 from torch._prims_common import DeviceLikeType
@@ -10,18 +9,11 @@ from sketch_map_tool.config import get_config_value
 
 
 def init_model(id: str) -> Path:
-    """Initialize model. Download model to data dir if not present."""
+    """Initialize model. Raise error if not found."""
     raw = Path(get_config_value("data-dir")) / id
     path = raw.with_suffix(".pt")
     if not path.is_file():
-        logging.info(f"Downloading model {id} from neptune.ai to {path}.")
-        model = neptune.init_model_version(
-            with_id=id,
-            project=get_config_value("neptune_project"),
-            api_token=get_config_value("neptune_api_token"),
-            mode="read-only",
-        )
-        model["model"].download(str(path))
+        assert False, f"Model {id} not found at {path}."
     return path
 
 

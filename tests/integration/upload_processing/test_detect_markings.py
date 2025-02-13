@@ -37,28 +37,28 @@ def sam_predictor():
 @pytest.fixture
 def yolo_osm_obj() -> YOLO_4:
     """YOLO Object Detection"""
-    path = init_model(get_config_value("neptune_model_id_yolo_osm_obj"))
+    path = init_model(get_config_value("yolo_osm_obj"))
     return YOLO_4(path)
 
 
 @pytest.fixture
 def yolo_osm_cls() -> YOLO:
     """YOLO Classification"""
-    path = init_model(get_config_value("neptune_model_id_yolo_osm_cls"))
+    path = init_model(get_config_value("yolo_osm_cls"))
     return YOLO(path)
 
 
 @pytest.fixture
 def yolo_esri_obj() -> YOLO_4:
     """YOLO Object Detection"""
-    path = init_model(get_config_value("neptune_model_id_yolo_osm_obj"))
+    path = init_model(get_config_value("yolo_osm_obj"))
     return YOLO_4(path)
 
 
 @pytest.fixture
 def yolo_esri_cls() -> YOLO:
     """YOLO Classification"""
-    path = init_model(get_config_value("neptune_model_id_yolo_osm_cls"))
+    path = init_model(get_config_value("yolo_osm_cls"))
     return YOLO(path)
 
 
