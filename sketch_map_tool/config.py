@@ -22,7 +22,7 @@ DEFAULT_CONFIG = {
     "max-nr-simultaneous-uploads": 100,
     "max_pixel_per_image": 10e8,  # 10.000*10.000
     "yolo_osm_cls": "SMT-OSM-CLS",
-    "yolo_esri_cls": "SMT-ESRY-CLS",
+    "yolo_esri_cls": "SMT-ESRI-CLS",
     "yolo_osm_obj": "SMT-OSM",
     "yolo_esri_obj": "SMT-ESRI",
     "model_type_sam": "vit_b",
