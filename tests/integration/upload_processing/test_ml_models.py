@@ -10,11 +10,10 @@ from tests import vcr_app as vcr
 @pytest.mark.parametrize(
     "id",
     (
-        get_config_value("neptune_model_id_yolo_osm_cls"),
-        get_config_value("neptune_model_id_yolo_esri_cls"),
-        get_config_value("neptune_model_id_yolo_osm_obj"),
-        get_config_value("neptune_model_id_yolo_esri_obj"),
-        get_config_value("neptune_model_id_sam"),
+        get_config_value("yolo_osm_cls"),
+        get_config_value("yolo_esri_cls"),
+        get_config_value("yolo_osm_obj"),
+        get_config_value("yolo_esri_obj"),
     ),
 )
 def test_init_model(id):

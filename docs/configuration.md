@@ -22,13 +22,7 @@ For a list of all configuration variables and their default values please take a
 ## Required Configuration
 
 All lot of configuration values come with defaults. Required configuration values are:
-- `neptune_api_token`
-
-### neptune.ai
-
-Ask the team to get an invite the Sketch Map Tool project on neptuine.ai.
-
-To get the API key go to "Project Metadata" and copy the key from the example code.
+- TODO download weights from smt
 
 ## Configuration for Docker Compose
 
