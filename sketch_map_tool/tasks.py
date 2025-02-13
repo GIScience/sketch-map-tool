@@ -65,13 +65,9 @@ def init_worker_ml_models(**_):
     )
     sam_predictor = SAM2ImagePredictor(sam2_model)
 
-    yolo_obj_osm = YOLO_MB(
-        init_model(get_config_value("yolo_osm_obj"))
-    )
+    yolo_obj_osm = YOLO_MB(init_model(get_config_value("yolo_osm_obj")))
     yolo_cls_osm = YOLO(init_model(get_config_value("yolo_osm_cls")))
-    yolo_obj_esri = YOLO_MB(
-        init_model(get_config_value("yolo_esri_obj"))
-    )
+    yolo_obj_esri = YOLO_MB(init_model(get_config_value("yolo_esri_obj")))
     yolo_cls_esri = YOLO(init_model(get_config_value("yolo_esri_cls")))
 
 
