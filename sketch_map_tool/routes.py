@@ -92,7 +92,7 @@ def case_study_timor_leste_pdf(lang="en") -> Response:  # pyright: ignore
 
 @app.get("/weights/smt-osm")
 @app.get("/<lang>/weights/smt-osm")
-def case_study_timor_leste_pdf(lang="en") -> Response:  # pyright: ignore
+def weights_smt_osm(lang="en") -> Response:  # pyright: ignore
     dir = Path(config.get_config_value("data-dir"))
     name = "SMT-OSM.pt"
     return send_from_directory(dir, name, as_attachment=True)
@@ -100,7 +100,7 @@ def case_study_timor_leste_pdf(lang="en") -> Response:  # pyright: ignore
 
 @app.get("/weights/smt-osm-cls")
 @app.get("/<lang>/weights/smt-osm-cls")
-def case_study_timor_leste_pdf(lang="en") -> Response:  # pyright: ignore
+def weights_smt_osm_cls(lang="en") -> Response:  # pyright: ignore
     dir = Path(config.get_config_value("data-dir"))
     name = "SMT-OSM-CLS.pt"
     return send_from_directory(dir, name, as_attachment=True)
@@ -108,7 +108,7 @@ def case_study_timor_leste_pdf(lang="en") -> Response:  # pyright: ignore
 
 @app.get("/weights/smt-esri")
 @app.get("/<lang>/weights/smt-esri")
-def case_study_timor_leste_pdf(lang="en") -> Response:  # pyright: ignore
+def weights_smt_esri(lang="en") -> Response:  # pyright: ignore
     dir = Path(config.get_config_value("data-dir"))
     name = "SMT-ESRI.pt"
     return send_from_directory(dir, name, as_attachment=True)
@@ -116,7 +116,7 @@ def case_study_timor_leste_pdf(lang="en") -> Response:  # pyright: ignore
 
 @app.get("/weights/smt-esri-cls")
 @app.get("/<lang>/weights/smt-esri-cls")
-def case_study_timor_leste_pdf(lang="en") -> Response:  # pyright: ignore
+def weights_smt_esri_cls(lang="en") -> Response:  # pyright: ignore
     dir = Path(config.get_config_value("data-dir"))
     name = "SMT-ESRI-CLS.pt"
     return send_from_directory(dir, name, as_attachment=True)
