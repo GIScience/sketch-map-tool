@@ -34,7 +34,7 @@ dependencies = [
     "torch==2.5.1",
     "torchvision==0.20.1",
     "ultralytics>=8.3.55",
-    "ultralytics-4bands",
+    "ultralytics-mb",
     "waitress>=3.0.2",
     "wheel>=0.45.1",
     "wtforms>=3.2.1",
@@ -48,7 +48,7 @@ torchvision = [
   { index = "pytorch-cpu", marker = "platform_system == 'Windows' or platform_system == 'Linux'" },
 ]
 
-ultralytics-4bands = { git = "https://github.com/itisacloud/ultralytics_multiband_support.git", rev = "ef61cf9870755ae8b21b03253237d15f5856e1a6" }
+ultralytics_MB = { git = "https://github.com/itisacloud/ultralytics_multiband_support.git", rev = "a6df57294953200de5f09e245809c3a371adac2c" }
 sam-2 = { git = "https://github.com/facebookresearch/segment-anything-2.git" }
 
 [[tool.uv.index]]

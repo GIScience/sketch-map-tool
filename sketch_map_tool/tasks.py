@@ -10,7 +10,7 @@ from numpy.typing import NDArray
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 from ultralytics import YOLO
-from ultralytics_4bands import YOLO as YOLO_4
+from ultralytics_MB import YOLO as YOLO_MB
 
 from sketch_map_tool import celery_app as celery
 from sketch_map_tool import get_config_value, map_generation
@@ -66,9 +66,11 @@ def init_worker_ml_models(**_):
     )
     sam_predictor = SAM2ImagePredictor(sam2_model)
 
-    yolo_obj_osm = YOLO_4(init_model(get_config_value("neptune_model_id_yolo_osm_obj")))
+    yolo_obj_osm = YOLO_MB(
+        init_model(get_config_value("neptune_model_id_yolo_osm_obj"))
+    )
     yolo_cls_osm = YOLO(init_model(get_config_value("neptune_model_id_yolo_osm_cls")))
-    yolo_obj_esri = YOLO_4(
+    yolo_obj_esri = YOLO_MB(
         init_model(get_config_value("neptune_model_id_yolo_esri_obj"))
     )
     yolo_cls_esri = YOLO(init_model(get_config_value("neptune_model_id_yolo_esri_cls")))
