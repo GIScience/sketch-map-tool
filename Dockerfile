@@ -27,9 +27,11 @@ RUN apt update \
 ENV POETRY_NO_INTERACTION=1 \
     POETRY_REQUESTS_TIMEOUT=600
 
-RUN python3 -m pip install --break-system-packages poetry setuptools
-
 COPY pyproject.toml poetry.lock .
+
+RUN python3 -m pip install --break-system-packages poetry setuptools \
+    && python3 -m poetry install --only main --no-root --no-directory
+
 COPY sketch_map_tool sketch_map_tool
 COPY data data
 COPY config config
