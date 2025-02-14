@@ -4,6 +4,8 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+    volumes:
+      - ./weights:/weights
     restart: unless-stopped
     # deploy:
     #   resources:
