@@ -6,7 +6,7 @@ authors = ["HeiGIT <info@heigit.org>"]
 license = "GNU Affero General Public License v3.0"
 
 [tool.poetry.dependencies]
-python=">= 3.11, < 3.13"
+python=">= 3.11, < 3.14"
 Flask = "^3.1.0"
 waitress = "^3.0"
 requests = "^2.32"
