@@ -8,6 +8,7 @@ from sketch_map_tool.helpers import get_project_root
 
 DEFAULT_CONFIG = {
     "data-dir": str(get_project_root() / "data"),
+    "weights-dir": str(get_project_root() / "weights"),
     "user-agent": "sketch-map-tool",
     "broker-url": "redis://localhost:6379",
     "result-backend": "db+postgresql://smt:smt@localhost:5432",
