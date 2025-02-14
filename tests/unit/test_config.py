@@ -20,6 +20,7 @@ def mock_env_missing(monkeypatch):
 def config_keys():
     return (
         "data-dir",
+        "weights-dir",
         "user-agent",
         "broker-url",
         "result-backend",
