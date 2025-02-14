@@ -19,8 +19,6 @@ services:
       - "127.0.0.1:8081:8080"
     entrypoint:
       [
-        "poetry",
-        "run",
         "waitress-serve",
         "sketch_map_tool.routes:app",
       ]
@@ -30,7 +28,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - ./weights:/weights
+      - ./weights:/app/weights
     restart: unless-stopped
     depends_on:
       - redis
@@ -41,8 +39,6 @@ services:
           memory: 16G
     entrypoint:
       [
-        "poetry",
-        "run",
         "celery",
         "--app",
         "sketch_map_tool.tasks",
@@ -70,8 +66,6 @@ services:
       - celery
     entrypoint:
       [
-        "poetry",
-        "run",
         "celery",
         "--app",
         "sketch_map_tool.tasks",
