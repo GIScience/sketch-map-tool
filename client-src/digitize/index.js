@@ -11,8 +11,6 @@ filebokz();
 // disable submit...
 setDisabled("submitBtn", true);
 
-const consentCheckbox = document.getElementById("consent");
-
 // ...until files are added
 const fileElement = document.querySelector(".filebokz");
 fileElement.addEventListener("file-added", () => {
@@ -44,4 +42,28 @@ window.addEventListener("pageshow", () => {
     for (let i = removeButtons.length - 1; i >= 0; i--) {
         removeButtons[i].click();
     }
+});
+
+// show dialog if user did not check consent box but submitted form
+const consentCheckbox = document.getElementById("consentCheckbox");
+const consentDialog = document.getElementById("consentDialog");
+
+const form = document.getElementById("uploadForm");
+form.addEventListener("submit", (event) => {
+    if (!consentCheckbox.checked) {
+        consentDialog.showModal();
+        event.preventDefault();
+    }
+});
+
+const consentButton = document.getElementById("consentButton");
+consentButton.addEventListener("click", () => {
+    consentCheckbox.checked = true;
+    form.submit();
+});
+
+const nonConsentButton = document.getElementById("nonConsentButton");
+nonConsentButton.addEventListener("click", () => {
+    consentCheckbox.checked = false;
+    form.submit();
 });
