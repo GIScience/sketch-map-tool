@@ -41,10 +41,6 @@ package "HeiGIT ohsome Framework" #line.dotted {
     cloud ohsome as "ohsome API" #line.dotted
 }
 
-package "ML-Model Registry" #line.dotted {
-    cloud neptune as "neptune.ai API" #line.dotted
-}
-
 package "ESRI World Imagery (Satellite Imagery)" #line.dotted {
     cloud arcgis as "ArcGIS REST API" #line.dotted
 }
@@ -57,6 +53,4 @@ wms --> arcgis
 
 oqt_analyses --> oqt : Quality Report
 oqt --> ohsome
-
-upload_processing --> neptune : ML-Model
 @enduml
