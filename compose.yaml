@@ -5,7 +5,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - ./weights:/weights
+      - ./weights:/app/weights
     restart: unless-stopped
     # deploy:
     #   resources:
