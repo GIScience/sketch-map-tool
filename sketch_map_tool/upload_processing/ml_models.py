@@ -13,7 +13,7 @@ def init_model(id: str) -> Path:
     raw = Path(get_config_value("weights-dir")) / id
     path = raw.with_suffix(".pt")
     if not path.is_file():
-        assert False, f"Model {id} not found at {path}."
+        raise FileNotFoundError("Model not found at " + str(path))
     return path
 
 
