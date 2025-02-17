@@ -63,6 +63,7 @@ geopandas = "^1.0.1"
 testcontainers = {extras = ["postgres", "redis"], version = "^4.9"}
 opencv-python = "<4.8.0.76"
 psycopg2-binary = "^2.9.9" # dev only. In prod psycopg2 (non-binary) depending on system libraries (libpg) is used.
+pytest-memray = "^1.7.0"
 
 
 [[tool.poetry.source]]

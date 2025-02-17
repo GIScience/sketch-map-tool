@@ -1,8 +1,6 @@
-import random
-
 import numpy as np
 import pytest
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 from ultralytics import YOLO
@@ -20,7 +18,7 @@ from sketch_map_tool.upload_processing.ml_models import (
 
 
 # Initialize ml-models.
-# This usually happens inside the celery task: `digitize_sketches`
+# NOTE: Usually, this happens for each Celery worker (`init_worker_ml_models`).
 @pytest.fixture
 def sam_predictor():
     """Zero shot segment anything model"""
@@ -55,7 +53,7 @@ def yolo_cls() -> YOLO:
     return YOLO(path)
 
 
-@pytest.mark.skip("For manuel testing")
+@pytest.mark.limit_memory("1.7 GB")
 def test_detect_markings(
     layer,
     map_frame_marked,
@@ -65,11 +63,17 @@ def test_detect_markings(
     yolo_cls,
     sam_predictor,
 ):
+    """Test ML-pipeline with memory limit.
+
+    If this test fails because the memory limit has been exceeded,
+    than changes to ML-models lead to an increased memory Consumption.
+    In this case resource availability in production need to be validated.
+    """
     if layer.value == "osm":
         yolo_obj = yolo_osm_obj
     else:
         yolo_obj = yolo_esri_obj
-    markings = detect_markings(
+    markings = detect_markings(  # noqa
         map_frame_marked,
         np.asarray(Image.open(map_frame)),
         yolo_obj,
@@ -77,23 +81,37 @@ def test_detect_markings(
         sam_predictor,
     )
 
-    img = Image.fromarray(map_frame_marked)
-    for m in markings:
-        colors = ["red", "green", "blue", "yellow", "purple", "orange", "pink", "brown"]
-        m[m == m.max()] = 255
-        colored_marking = ImageOps.colorize(
-            Image.fromarray(m).convert("L"), black="black", white=random.choice(colors)
-        )
-        img.paste(colored_marking, (0, 0), Image.fromarray(m))
-        # draw bbox around each marking, derived from the mask m
-        bbox = (
-            np.min(np.where(m)[1]),
-            np.min(np.where(m)[0]),
-            np.max(np.where(m)[1]),
-            np.max(np.where(m)[0]),
-        )
-
-        draw = ImageDraw.Draw(img)
-        draw.rectangle(bbox, outline="red", width=2)
-
-    img.show()
+    # NOTE: uncomment for manual/visual assessment of detected markings
+    # TODO: use approval test
+    # import random
+    # from PIL import ImageDraw, ImageOps
+    # img = Image.fromarray(map_frame_marked)
+    # for m in markings:
+    #     colors = [
+    #         "red",
+    #         "green",
+    #         "blue",
+    #         "yellow",
+    #         "purple",
+    #         "orange",
+    #         "pink",
+    #         "brown",
+    #     ]
+    #     m[m == m.max()] = 255
+    #     colored_marking = ImageOps.colorize(
+    #         Image.fromarray(m).convert("L"),
+    #         black="black",
+    #         white=random.choice(colors),
+    #     )
+    #     img.paste(colored_marking, (0, 0), Image.fromarray(m))
+    #     # draw bbox around each marking, derived from the mask m
+    #     bbox = (
+    #         np.min(np.where(m)[1]),
+    #         np.min(np.where(m)[0]),
+    #         np.max(np.where(m)[1]),
+    #         np.max(np.where(m)[0]),
+    #     )
+    #
+    #     draw = ImageDraw.Draw(img)
+    #     draw.rectangle(bbox, outline="red", width=2)
+    # img.show()
