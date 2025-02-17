@@ -7,7 +7,7 @@ For contributing to this project please also read the [Contribution Guideline](/
 
 ## Prerequisites (Requirements)
 
-- Python: `>=3.11`
+- Python: `>= 3.11, < 3.13`
 - Poetry
 - Node: `>=14`
 - NPM
