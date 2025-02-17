@@ -1,11 +1,13 @@
-from osgeo import gdal, osr  # noqa
-
 import logging
 from datetime import timedelta
 
 from celery import Celery
 from flask import Flask, request
 from flask_babel import Babel
+
+# import of gdal/osr is because of following issues:
+# https://github.com/GIScience/sketch-map-tool/issues/503
+from osgeo import gdal, osr  # noqa: F401
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.database import client_flask as db_client
