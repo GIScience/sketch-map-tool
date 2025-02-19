@@ -78,7 +78,10 @@ def insert_files(
         file_name VARCHAR,
         file BYTEA,
         consent BOOLEAN,
-        ts TIMESTAMP WITH TIME ZONE DEFAULT now()
+        ts TIMESTAMP WITH TIME ZONE DEFAULT now(),
+        digitize_uuid UUID,
+        downloaded_vector TIMESTAMP WITH TIME ZONE,
+        downloaded_raster TIMESTAMP WITH TIME ZONE
         )
     """
     insert_query = """
@@ -190,3 +193,59 @@ def select_map_frame(uuid: UUID) -> tuple[bytes, str, str]:
                 ),
                 {"UUID": uuid},
             )
+
+
+def update_files_digitize_uuid(file_ids: list[int] | tuple[int], result_uuid: UUID):
+    update_query = """
+    UPDATE
+        blob
+    SET
+        digitize_uuid = %s
+    WHERE
+        id = ANY(%s)
+    """
+    db_conn = open_connection()
+    with db_conn.cursor() as curs:
+        curs.execute(update_query, [result_uuid, file_ids])
+
+
+def update_files_download_vector(result_uuid: UUID):
+    update_query = """
+    UPDATE
+        blob
+    SET
+        downloaded_vector = now()
+    WHERE
+        digitize_uuid = %s
+    """
+    db_conn = open_connection()
+    with db_conn.cursor() as curs:
+        curs.execute(update_query, [result_uuid])
+
+
+def update_files_download_raster(result_uuid: UUID):
+    update_query = """
+    UPDATE
+        blob
+    SET
+        downloaded_raster = now()
+    WHERE
+        digitize_uuid = %s
+    """
+    db_conn = open_connection()
+    with db_conn.cursor() as curs:
+        curs.execute(update_query, [result_uuid])
+
+
+def update_map_frame_downloaded(uuid: UUID):
+    update_query = """
+    UPDATE
+        map_frame
+    SET
+        downloaded = now()
+    WHERE
+        uuid = %s
+    """
+    db_conn = open_connection()
+    with db_conn.cursor() as curs:
+        curs.execute(update_query, [uuid])
