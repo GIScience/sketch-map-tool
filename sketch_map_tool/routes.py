@@ -1,4 +1,5 @@
 import json
+import re
 from io import BytesIO
 from pathlib import Path
 from uuid import UUID
@@ -147,6 +148,7 @@ def create_results_post(lang="en") -> Response:
     # Request parameters
     bbox_raw = json.loads(request.form["bbox"])
     bbox = Bbox(*bbox_raw)
+    bbox_wgs84 = Bbox(*json.loads(request.form["bboxWGS84"]))
     format_raw = request.form["format"]
     format_: PaperFormat = getattr(definitions, format_raw.upper())
     orientation = request.form["orientation"]
@@ -165,7 +167,11 @@ def create_results_post(lang="en") -> Response:
     task_sketch_map = tasks.generate_sketch_map.apply_async(
         args=(bbox, format_, orientation, size, scale, layer, aruco)
     )
-    return redirect(url_for("create_results_get", lang=lang, uuid=task_sketch_map.id))
+    return redirect(
+        url_for(
+            "create_results_get", lang=lang, uuid=task_sketch_map.id, bbox=bbox_wgs84
+        )
+    )
 
 
 def get_async_result_id(uuid: str, type_: REQUEST_TYPES):
@@ -188,14 +194,20 @@ def get_async_result_id(uuid: str, type_: REQUEST_TYPES):
 @app.get("/<lang>/create/results")
 @app.get("/create/results/<uuid>")
 @app.get("/<lang>/create/results/<uuid>")
-def create_results_get(lang="en", uuid: str | None = None) -> Response | str:
+@app.get("/create/results/<uuid>/<bbox>")
+@app.get("/<lang>/create/results/<uuid>/<bbox>")
+def create_results_get(
+    lang="en", uuid: str | None = None, bbox: str = ""
+) -> Response | str:
     if uuid is None:
         return redirect(url_for("create", lang=lang))
+    if not re.match(r"^[0-9,.]*$", bbox):
+        bbox = ""
     validate_uuid(uuid)
     # Check if celery tasks for UUID exists
     id_ = get_async_result_id(uuid, "sketch-map")
     _ = get_async_result(id_, "sketch-map")
-    return render_template("create-results.html", lang=lang)
+    return render_template("create-results.html", lang=lang, bbox=bbox)
 
 
 @app.get("/digitize")
