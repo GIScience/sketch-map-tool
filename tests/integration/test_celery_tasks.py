@@ -25,14 +25,6 @@ def test_generate_sketch_map(bbox, format_, size, scale, layer):
     assert isinstance(result, BytesIO)
 
 
-@pytest.mark.skip("Currently disabled due to unresolved issues.")
-@vcr_app.use_cassette
-def test_generate_quality_report(bbox_wgs84):
-    task = tasks.generate_quality_report.apply_async(args=tuple([bbox_wgs84]))
-    result = task.get(timeout=180)
-    assert isinstance(result, BytesIO)
-
-
 @patch("sketch_map_tool.tasks.db_client_celery.cleanup_map_frames")
 def test_cleanup_map_frames(mock_cleanup_map_frames):
     # `cleanup_map_frames()` is tested in `test_database_client_celery.py`

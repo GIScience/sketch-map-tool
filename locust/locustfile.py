@@ -58,7 +58,7 @@ class WorkflowCycle(HttpUser):
 
         if not os.path.exists("results"):
             os.mkdir("results")
-        for result_type in ("sketch-map", "quality-report"):
+        for result_type in ("sketch-map",):
             download_url = self.status_loop(create_uuid, result_type)
             request_name = f"/api/download/[uuid]/{result_type}"
             result = self.client.get(download_url, name=request_name)
