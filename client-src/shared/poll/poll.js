@@ -65,7 +65,7 @@ async function poll(url, prefix) {
 
     /**
      * Displays an error message and disappears the download button
-     * @param _prefix sketch-map | quality-report
+     * @param _prefix sketch-map
      * @param errorText text shown in the error message details
      */
     function handleError(_prefix, errorText) {

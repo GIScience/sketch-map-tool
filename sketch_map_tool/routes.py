@@ -285,7 +285,7 @@ def digitize_results_get(lang="en", uuid: str | None = None) -> Response | str:
 
 def get_async_result(uuid: str, type_: REQUEST_TYPES) -> AsyncResult | GroupResult:
     """Get Celery `AsyncResult` or restore `GroupResult` for given Celery UUID."""
-    if type_ in ("sketch-map", "quality-report"):
+    if type_ in ("sketch-map",):
         async_result = celery_app.AsyncResult(uuid)
     elif type_ in ("vector-results", "raster-results"):
         async_result = celery_app.GroupResult.restore(uuid)
@@ -379,10 +379,6 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             abort(500)
 
     match type_:
-        case "quality-report":
-            mimetype = "application/pdf"
-            download_name = type_ + ".pdf"
-            file: BytesIO = async_result.get()
         case "sketch-map":
             db_client_flask.update_map_frame_downloaded(uuid)
             mimetype = "application/pdf"
