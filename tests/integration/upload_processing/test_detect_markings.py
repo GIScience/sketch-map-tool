@@ -42,13 +42,6 @@ def yolo_osm_obj() -> YOLO_MB:
 
 
 @pytest.fixture
-def yolo_osm_cls() -> YOLO:
-    """YOLO Classification"""
-    path = init_model(get_config_value("yolo_osm_cls"))
-    return YOLO(path)
-
-
-@pytest.fixture
 def yolo_esri_obj() -> YOLO_MB:
     """YOLO Object Detection"""
     path = init_model(get_config_value("yolo_osm_obj"))
@@ -56,9 +49,9 @@ def yolo_esri_obj() -> YOLO_MB:
 
 
 @pytest.fixture
-def yolo_esri_cls() -> YOLO:
+def yolo_cls() -> YOLO:
     """YOLO Classification"""
-    path = init_model(get_config_value("yolo_osm_cls"))
+    path = init_model(get_config_value("yolo_cls"))
     return YOLO(path)
 
 
@@ -68,17 +61,14 @@ def test_detect_markings(
     map_frame_marked,
     map_frame,
     yolo_osm_obj,
-    yolo_osm_cls,
     yolo_esri_obj,
-    yolo_esri_cls,
+    yolo_cls,
     sam_predictor,
 ):
     if layer.value == "osm":
         yolo_obj = yolo_osm_obj
-        yolo_cls = yolo_osm_cls
     else:
         yolo_obj = yolo_esri_obj
-        yolo_cls = yolo_esri_cls
     markings = detect_markings(
         map_frame_marked,
         np.asarray(Image.open(map_frame)),
