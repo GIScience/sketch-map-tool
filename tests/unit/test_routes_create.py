@@ -60,6 +60,11 @@ def test_create_results_uuid(client, uuid):
     assert resp.status_code == 200
 
 
+def test_create_results_uuid_bbox(client, uuid, bbox_wgs84):
+    resp = client.get("/create/results/{0}/{1}".format(uuid, bbox_wgs84))
+    assert resp.status_code == 200
+
+
 def test_create_results_uuid_not_found(monkeypatch, client):
     def raise_(exception):
         raise exception
@@ -76,4 +81,10 @@ def test_create_results_uuid_not_found(monkeypatch, client):
 def test_create_results_invalid_uuid(client):
     uuid = "foo"
     resp = client.get("/create/results/{0}".format(uuid))
+    assert resp.status_code == 500
+
+
+def test_create_results_invalid_bbox(client, uuid):
+    bbox = "foo"
+    resp = client.get("/create/results/{0}/{1}".format(uuid, bbox))
     assert resp.status_code == 500

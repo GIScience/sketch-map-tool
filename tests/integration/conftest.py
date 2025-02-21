@@ -119,6 +119,11 @@ def flask_app():
         methods=["GET"],
     )
     app.add_url_rule(
+        "/create/results/<uuid>/<bbox>",
+        view_func=routes.create_results_get,
+        methods=["GET"],
+    )
+    app.add_url_rule(
         "/digitize/results",
         view_func=routes.digitize_results_post,
         methods=["POST"],
