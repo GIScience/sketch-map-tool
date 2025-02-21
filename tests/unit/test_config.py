@@ -34,7 +34,7 @@ def config_keys():
         "wms-read-timeout",
         "max-nr-simultaneous-uploads",
         "max_pixel_per_image",
-        "yolo_ls",
+        "yolo_cls",
         "yolo_osm_obj",
         "yolo_esri_obj",
         "model_type_sam",
