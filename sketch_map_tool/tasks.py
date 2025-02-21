@@ -1,7 +1,6 @@
 import logging
 from io import BytesIO
 
-import celery.states
 from celery.result import AsyncResult
 from celery.signals import setup_logging, worker_process_init, worker_process_shutdown
 from geojson import FeatureCollection
@@ -127,15 +126,6 @@ def generate_sketch_map(
         aruco,
     )
     return map_pdf
-
-
-@celery.task()
-def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
-    """Generate a quality report as PDF.
-
-    Fetch quality indicators from the OQT API
-    """
-    return BytesIO(b"")
 
 
 # 2. DIGITIZE RESULTS

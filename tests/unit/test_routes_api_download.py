@@ -6,7 +6,7 @@ from celery.result import GroupResult
 
 
 @pytest.mark.usefixtures("mock_request_task_mapping", "mock_async_result_success")
-@pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
+@pytest.mark.parametrize("type_", ("sketch-map",))
 def test_download_success(client, uuid, type_):
     resp = client.get("/api/download/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 200
@@ -14,14 +14,14 @@ def test_download_success(client, uuid, type_):
 
 
 @pytest.mark.usefixtures("mock_request_task_mapping", "mock_async_result_started")
-@pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
+@pytest.mark.parametrize("type_", ("sketch-map",))
 def test_download_started(client, uuid, type_):
     resp = client.get("/api/download/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 500
 
 
 @pytest.mark.usefixtures("mock_request_task_mapping", "mock_async_result_failure")
-@pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
+@pytest.mark.parametrize("type_", ("sketch-map",))
 def test_download_failure(client, uuid, type_):
     resp = client.get("/api/download/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 500
