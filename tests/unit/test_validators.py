@@ -8,7 +8,7 @@ from sketch_map_tool.validators import (
 
 @pytest.mark.parametrize(
     "type_",
-    ["quality-report", "sketch-map", "raster-results", "vector-results"],
+    ["sketch-map", "raster-results", "vector-results"],
 )
 def test_validate_type(type_):
     validate_type(type_)

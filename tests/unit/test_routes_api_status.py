@@ -1,7 +1,7 @@
 import pytest
 
 
-@pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
+@pytest.mark.parametrize("type_", ("sketch-map",))
 def test_status_success(
     client,
     uuid,
@@ -19,7 +19,7 @@ def test_status_success(
     assert "errors" not in resp.json.keys()
 
 
-@pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
+@pytest.mark.parametrize("type_", ("sketch-map",))
 def test_status_started(
     client,
     uuid,
@@ -37,7 +37,7 @@ def test_status_started(
     assert "errors" not in resp.json.keys()
 
 
-@pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
+@pytest.mark.parametrize("type_", ("sketch-map",))
 def test_status_failure(
     client,
     uuid,
@@ -54,7 +54,7 @@ def test_status_failure(
     assert "href" not in resp.json.keys()
 
 
-@pytest.mark.parametrize("type_", ("sketch-map", "quality-report"))
+@pytest.mark.parametrize("type_", ("sketch-map",))
 def test_status_failure_hard(
     client,
     uuid,

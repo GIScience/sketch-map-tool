@@ -30,9 +30,3 @@ def test_generate_sketch_map(
         aruco,
     )
     assert isinstance(map_pdf, BytesIO)
-
-
-@vcr.use_cassette
-def test_generate_quality_report(bbox_wgs84):
-    result = tasks.generate_quality_report(bbox_wgs84)
-    assert isinstance(result, BytesIO)

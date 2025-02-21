@@ -23,10 +23,6 @@ def mock_tasks(monkeypatch):
 
     mock_task = MockTask()
     monkeypatch.setattr(
-        "sketch_map_tool.routes.tasks.generate_quality_report.apply_async",
-        lambda args: mock_task,
-    )
-    monkeypatch.setattr(
         "sketch_map_tool.routes.tasks.generate_sketch_map.apply_async",
         lambda args: mock_task,
     )
@@ -61,6 +57,11 @@ def test_create_result_post(client, mock_tasks, bbox, bbox_wgs84, layer):
 
 def test_create_results_uuid(client, uuid):
     resp = client.get("/create/results/{0}".format(uuid))
+    assert resp.status_code == 200
+
+
+def test_create_results_uuid_bbox(client, uuid, bbox_wgs84):
+    resp = client.get("/create/results/{0}/{1}".format(uuid, bbox_wgs84))
     assert resp.status_code == 200
 
 

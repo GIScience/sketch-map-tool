@@ -10,10 +10,8 @@ package "Sketch Map Tool" {
 
     node celery as "Task Queue" <<Celery>>{
         component tasks.py
-        component oqt_analyses
         component map_generation
         component upload_processing
-        tasks.py --> oqt_analyses
         tasks.py --> map_generation
         tasks.py --> upload_processing
     }
@@ -37,7 +35,8 @@ package "HeiGIT Maps" #line.dotted {
 }
 
 package "HeiGIT ohsome Framework" #line.dotted {
-    cloud oqt as "ohsome quality API" #line.dotted
+    cloud dashboard as "ohsome dashboard" #line.dotted
+    cloud oqapi as "ohsome quality API" #line.dotted
     cloud ohsome as "ohsome API" #line.dotted
 }
 
@@ -51,6 +50,7 @@ map_generation --> wms : Map Image
 wms --> osmdb
 wms --> arcgis
 
-oqt_analyses --> oqt : Quality Report
-oqt --> ohsome
+routes.py --> dashboard
+dashboard --> oqapi
+oqapi --> ohsome
 @enduml
