@@ -46,16 +46,40 @@
                 <span class="info">{{ _('Files:') }} <span class="file-count"></span> (<span
                         class="size"></span>)&nbsp;&nbsp;&nbsp; {{ _('Max total size: 500 MB') }}</span>
             </div>
-            <div>
-                <p>
-                    {{ _(' Files are stored for processing until the results are generated.') }}
+            <div id="data-protection-section">
+                <div class="sketchy h1 center-text">{{ _('Help us to improve the Sketch Map Tool for everyone') }}</div>
+                <p id="motif">
+                    {{ _('To train and improve the sketch detection algorithms,
+                            we do need your real use-case data and would like to ask for your permission
+                            to keep the uploaded files after processing.') }}
                 </p>
-                <p>
-                    <input type="checkbox" id="consent" name="consent" value="True">
-                    <label for="consent">{{ _('Enable us to keep the uploaded files beyond processing to further improve this service.') }}</label>
-                </p>
+                <input type="checkbox" id="consent" name="consent">
+                <div id="main-grid" class="grid">
+
+                    {# row 1#}
+                    <button id="agreeSubmitBtn" type="submit">{{ _('Agree & Upload') }}</button>
+                    <div id="or">{{ _('OR') }}</div>
+                    <button id="rejectSubmitBtn" type="submit">{{ _('Reject & Upload') }}</button>
+
+                    {# row 2#}
+                    <div class="text-content">
+                        {{ _('If you agree, we would keep your data internally to use it as training and
+                                test data to improve the Sketch Map Tool.') }}
+                    </div>
+                    <div></div>
+                    <div class="text-content">
+                        {{ _("If you don't agree, your files are ONLY stored for processing for a short time
+                        until your results are generated.") }}
+                    </div>
+                </div>
+                <div>
+                    {{ _('Read more info on') }}
+                    <a target="_blank" href="{{ url_for('help', lang=lang) }}#data-sharing-for-improvement">
+                    {{ _('Share your data for the Improvement of the Sketch Map Tool') }}</a>
+                </div>
+
             </div>
-            <button id="submitBtn" type="submit" class="">{{ _('Upload') }}</button>
+{#            <button id="submitBtn" type="submit" class="">{{ _('Upload') }}</button>#}
         </form>
     <script>
 
