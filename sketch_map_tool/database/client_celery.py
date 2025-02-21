@@ -58,7 +58,8 @@ def insert_map_frame(
             layer VARCHAR,
             version VARCHAR,
             aruco BOOLEAN DEFAULT FALSE,
-            ts TIMESTAMP WITH TIME ZONE DEFAULT now()
+            ts TIMESTAMP WITH TIME ZONE DEFAULT now(),
+            downloaded TIMESTAMP WITH TIME ZONE
             )
     """
     insert_query = """

@@ -262,6 +262,7 @@ def digitize_results_post(lang="en") -> Response:
 
     # group results have to be saved for them to be able to be restored later
     async_group_result.save()
+    db_client_flask.update_files_digitize_uuid(file_ids, async_group_result.id)
     return redirect(
         url_for(
             "digitize_results_get",
@@ -383,10 +384,12 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             download_name = type_ + ".pdf"
             file: BytesIO = async_result.get()
         case "sketch-map":
+            db_client_flask.update_map_frame_downloaded(uuid)
             mimetype = "application/pdf"
             download_name = type_ + ".pdf"
             file: BytesIO = async_result.get()
         case "raster-results":
+            db_client_flask.update_files_download_raster(uuid)
             mimetype = "application/zip"
             download_name = type_ + ".zip"
             if isinstance(async_result, GroupResult):
@@ -397,6 +400,7 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
                 # support legacy results
                 file: BytesIO = async_result.get()
         case "vector-results":
+            db_client_flask.update_files_download_vector(uuid)
             mimetype = "application/geo+json"
             download_name = type_ + ".geojson"
             if isinstance(async_result, GroupResult):

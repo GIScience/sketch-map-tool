@@ -182,6 +182,30 @@ def mock_request_task_mapping(monkeypatch):
     )
 
 
+@pytest.fixture(autouse=True)
+def mock_request_download_update_map_frame_downloaded(monkeypatch):
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.db_client_flask.update_map_frame_downloaded",
+        lambda *_: None,
+    )
+
+
+@pytest.fixture(autouse=True)
+def mock_request_download_update_files_download_raster(monkeypatch):
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.db_client_flask.update_files_download_raster",
+        lambda *_: None,
+    )
+
+
+@pytest.fixture(autouse=True)
+def mock_request_download_update_files_download_vector(monkeypatch):
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.db_client_flask.update_files_download_vector",
+        lambda *_: None,
+    )
+
+
 @pytest.fixture()
 def mock_async_result_success(monkeypatch):
     mock = Mock(spec=AsyncResult)
