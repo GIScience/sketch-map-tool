@@ -98,14 +98,6 @@ def weights_smt_osm(lang="en") -> Response:  # pyright: ignore
     return send_from_directory(dir, name, as_attachment=True)
 
 
-@app.get("/weights/SMT-OSM-CLS.pt")
-@app.get("/<lang>/weights/SMT-OSM-CLS.pt")
-def weights_smt_osm_cls(lang="en") -> Response:  # pyright: ignore
-    dir = Path(config.get_config_value("weights-dir"))
-    name = "SMT-OSM-CLS.pt"
-    return send_from_directory(dir, name, as_attachment=True)
-
-
 @app.get("/weights/SMT-ESRI.pt")
 @app.get("/<lang>/weights/SMT-ESRI.pt")
 def weights_smt_esri(lang="en") -> Response:  # pyright: ignore
@@ -114,11 +106,11 @@ def weights_smt_esri(lang="en") -> Response:  # pyright: ignore
     return send_from_directory(dir, name, as_attachment=True)
 
 
-@app.get("/weights/SMT-ESRI-CLS.pt")
-@app.get("/<lang>/weights/SMT-ESRI-CLS.pt")
-def weights_smt_esri_cls(lang="en") -> Response:  # pyright: ignore
+@app.get("/weights/SMT-CLS.pt")
+@app.get("/<lang>/weights/SMT-CLS.pt")
+def weights_smt_cls(lang="en") -> Response:  # pyright: ignore
     dir = Path(config.get_config_value("weights-dir"))
-    name = "SMT-ESRI-CLS.pt"
+    name = "SMT-CLS.pt"
     return send_from_directory(dir, name, as_attachment=True)
 
 
