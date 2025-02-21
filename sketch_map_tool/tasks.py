@@ -135,8 +135,6 @@ def generate_quality_report(bbox: Bbox) -> BytesIO | AsyncResult:
 
     Fetch quality indicators from the OQT API
     """
-    # report = get_report(bbox)
-    # return generate_report_pdf(report)
     return BytesIO(b"")
 
 
