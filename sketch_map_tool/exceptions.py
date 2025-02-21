@@ -53,10 +53,6 @@ class QRCodeError(TranslatableError):
     pass
 
 
-class OQTReportError(TranslatableError):
-    pass
-
-
 class UploadLimitsExceededError(TranslatableError):
     pass
 
