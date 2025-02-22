@@ -1,5 +1,3 @@
-# required configuration variables
-neptune_api_token = "h0dHBzOi8aHR06E0Z...jMifQ"
 # required configuration variables for docker compose setup
 # broker-url = "redis://redis:6379"
 # result-backend = "db+postgresql://smt:smt@postgres:5432"
