@@ -9,8 +9,8 @@ import { setDisabled, setIsBusy } from "../shared";
 filebokz();
 
 // initialize consent to be on reject
-const consentCheckbox = document.getElementById("consent");
-consentCheckbox.checked = false;
+const consentField = document.getElementById("consent");
+consentField.value = "False";
 
 // disable submit...
 setDisabled("agreeSubmitBtn", true);
@@ -31,29 +31,30 @@ fileElement.addEventListener("file-removed", (e) => {
     }
 });
 
-// disable the submit button after submit to prevent multiple submissions
 document.forms.namedItem("upload").onsubmit = (event) => {
+    // disable the submit button after submit to prevent multiple submissions
+    setDisabled("agreeSubmitBtn", true);
+    setDisabled("rejectSubmitBtn", true);
 
     // get the button which triggered the form submit
     const buttonId = event.submitter.id;
 
+    // set the button that was pushed to be busy
+    setIsBusy(buttonId, true);
+
     const consentDescisionMap = {
-        agreeSubmitBtn: true,
-        rejectSubmitBtn: false,
+        agreeSubmitBtn: "True",
+        rejectSubmitBtn: "False",
     };
 
-    // set the consent
-    consentCheckbox.checked = consentDescisionMap[buttonId];
-
-    setDisabled("agreeSubmitBtn", true);
-    setDisabled("rejectSubmitBtn", true);
-    setIsBusy(buttonId, true);
+    // set the consent value to the form field
+    consentField.value = consentDescisionMap[buttonId];
 };
 
 // In case the page is newly loaded, reset the upload button, the spinner, and the upload field.
 // This prevents unexpected behaviour when clicking the back button after an upload.
 window.addEventListener("pageshow", () => {
-    consentCheckbox.checked = false;
+    consentField.checked = false;
     setDisabled("agreeSubmitBtn", true);
     setDisabled("rejectSubmitBtn", true);
     setIsBusy("agreeSubmitBtn", false);
