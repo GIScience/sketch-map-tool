@@ -209,8 +209,10 @@ def digitize(lang="en") -> str:
 @app.post("/<lang>/digitize/results")
 def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
-    # "consent" is a checkbox and value is only send if it is checked
-    consent: bool = "consent" in request.form.keys()
+    # user consent to use uploaded files for service improvement
+    consent: bool = False
+    if request.form["consent"] is "True":
+        consent = True
     # No files uploaded
     if "file" not in request.files:
         return redirect(url_for("digitize", lang=lang))
