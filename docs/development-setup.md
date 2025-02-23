@@ -153,6 +153,11 @@ In the case of the Sketch Map Tool the report takes the form of two images
 side-by-side, the uploaded sketch map with markings (input) and the resulting
 GeoJSON with the detected markings.
 
+### Stress Tests
+
+[See](/tests/stress/README.md) documentation on how Hurl is used to do stress testing.
+
+
 ### Implementing Exceptions
 
 The use of custom exceptions is highly encouraged.
