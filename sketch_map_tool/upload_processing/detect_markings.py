@@ -5,7 +5,7 @@ from numpy.typing import NDArray
 from PIL import Image, ImageEnhance
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 from ultralytics import YOLO
-from ultralytics_4bands import YOLO as YOLO_4
+from ultralytics_MB import YOLO as YOLO_4
 
 
 def detect_markings(

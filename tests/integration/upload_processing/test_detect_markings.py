@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw, ImageOps
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 from ultralytics import YOLO
-from ultralytics_4bands import YOLO as YOLO_4
+from ultralytics_MB import YOLO as YOLO_4
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.upload_processing.detect_markings import (
