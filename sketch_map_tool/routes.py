@@ -300,7 +300,7 @@ def digitize_results_get(lang="en", uuid: str | None = None) -> Response | str:
 
 def get_async_result(uuid: str, type_: REQUEST_TYPES) -> AsyncResult | GroupResult:
     """Get Celery `AsyncResult` or restore `GroupResult` for given Celery UUID."""
-    if type_ in ("sketch-map",):
+    if type_ == "sketch-map":
         async_result = celery_app.AsyncResult(uuid)
     elif type_ in ("vector-results", "raster-results"):
         async_result = celery_app.GroupResult.restore(uuid)
