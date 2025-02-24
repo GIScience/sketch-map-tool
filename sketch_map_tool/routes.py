@@ -146,14 +146,11 @@ def create(lang="en") -> str:
 def create_results_post(lang="en") -> Response:
     """Create the sketch map"""
     # Request parameters
-    bbox_raw = json.loads(request.form["bbox"])
-    bbox = Bbox(*bbox_raw)
+    bbox = Bbox(*json.loads(request.form["bbox"]))
     bbox_wgs84 = Bbox(*json.loads(request.form["bboxWGS84"]))
-    format_raw = request.form["format"]
-    format_: PaperFormat = getattr(definitions, format_raw.upper())
+    format_: PaperFormat = getattr(definitions, request.form["format"].upper())
     orientation = request.form["orientation"]
-    size_raw = json.loads(request.form["size"])
-    size = Size(**size_raw)
+    size = Size(**(json.loads(request.form["size"])))
     scale = float(request.form["scale"])
     layer = Layer(request.form["layer"].replace(":", "-").replace("_", "-").lower())
 
