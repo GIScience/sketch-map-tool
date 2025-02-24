@@ -211,7 +211,7 @@ def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
     # user consent to use uploaded files for service improvement
     consent: bool = False
-    if request.form["consent"] is "True":
+    if request.form["consent"] == "True":
         consent = True
     # No files uploaded
     if "file" not in request.files:
