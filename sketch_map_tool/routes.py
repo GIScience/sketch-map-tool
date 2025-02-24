@@ -169,7 +169,10 @@ def create_results_post(lang="en") -> Response:
     )
     return redirect(
         url_for(
-            "create_results_get", lang=lang, uuid=task_sketch_map.id, bbox=bbox_wgs84
+            "create_results_get",
+            lang=lang,
+            uuid=task_sketch_map.id,
+            bbox=bbox_wgs84,
         )
     )
 
