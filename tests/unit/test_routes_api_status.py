@@ -4,7 +4,6 @@ import pytest
 def test_status_success(
     client,
     uuid,
-    mock_request_task_mapping,
     mock_async_result_success,
 ):
     resp = client.get("/api/status/{0}/sketch-map".format(uuid))
@@ -20,7 +19,6 @@ def test_status_success(
 def test_status_started(
     client,
     uuid,
-    mock_request_task_mapping,
     mock_async_result_started,
 ):
     resp = client.get("/api/status/{0}/sketch-map".format(uuid))
@@ -36,7 +34,6 @@ def test_status_started(
 def test_status_failure(
     client,
     uuid,
-    mock_request_task_mapping,
     mock_async_result_failure,
 ):
     resp = client.get("/api/status/{0}/sketch-map".format(uuid))
@@ -51,7 +48,6 @@ def test_status_failure(
 def test_status_failure_hard(
     client,
     uuid,
-    mock_request_task_mapping,
     mock_async_result_failure_hard,
 ):
     resp = client.get("/api/status/{0}/sketch-map".format(uuid))
@@ -63,7 +59,6 @@ def test_group_status_success(
     client,
     uuid,
     type_,
-    mock_request_task_mapping,
     mock_group_result_success,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
@@ -80,7 +75,6 @@ def test_group_status_started(
     client,
     uuid,
     type_,
-    mock_request_task_mapping,
     mock_group_result_started,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
@@ -97,7 +91,6 @@ def test_group_status_failure(
     client,
     uuid,
     type_,
-    mock_request_task_mapping,
     mock_group_result_failure,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
@@ -114,7 +107,6 @@ def test_group_status_failure_hard(
     client,
     uuid,
     type_,
-    mock_request_task_mapping,
     mock_group_result_failure_hard,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
@@ -126,7 +118,6 @@ def test_group_status_started_success_failure(
     client,
     uuid,
     type_,
-    mock_request_task_mapping,
     mock_group_result_started_success_failure,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
@@ -144,7 +135,6 @@ def test_group_status_success_failure(
     client,
     uuid,
     type_,
-    mock_request_task_mapping,
     mock_group_result_success_failure,
 ):
     resp = client.get("/api/status/{0}/{1}".format(uuid, type_))

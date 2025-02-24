@@ -15,7 +15,6 @@ from flask import (
     send_from_directory,
     url_for,
 )
-from psycopg2.errors import UndefinedTable
 from werkzeug import Response
 
 from sketch_map_tool import celery_app, config, definitions, tasks
@@ -166,22 +165,6 @@ def create_results_post(lang="en") -> Response:
     )
 
 
-def get_async_result_id(uuid: str, type_: REQUEST_TYPES):
-    """Get Celery Async or Group Result UUID for given request UUID.
-
-    Try to get Celery UUID for given request from datastore.
-    If no Celery UUID has been found the request UUID is the same as the Celery UUID.
-
-    This function exists only for legacy support.
-    """
-    # TODO: Legacy support: Delete this function after PR 515 has been deployed
-    # for 1 day
-    try:
-        return db_client_flask.get_async_result_id(uuid, type_)
-    except (UUIDNotFoundError, UndefinedTable):
-        return uuid
-
-
 @app.get("/create/results")
 @app.get("/<lang>/create/results")
 @app.get("/create/results/<uuid>")
@@ -197,8 +180,7 @@ def create_results_get(
         validate_bbox(bbox)
     validate_uuid(uuid)
     # Check if celery tasks for UUID exists
-    id_ = get_async_result_id(uuid, "sketch-map")
-    _ = get_async_result(id_, "sketch-map")
+    _ = get_async_result(uuid, "sketch-map")
     return render_template("create-results.html", lang=lang, bbox=bbox)
 
 
@@ -311,8 +293,7 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    id_ = get_async_result_id(uuid, type_)
-    async_result = get_async_result(id_, type_)
+    async_result = get_async_result(uuid, type_)
 
     href = ""
     info = ""
@@ -370,8 +351,7 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     validate_uuid(uuid)
     validate_type(type_)
 
-    id_ = get_async_result_id(uuid, type_)
-    async_result = get_async_result(id_, type_)
+    async_result = get_async_result(uuid, type_)
 
     # Abort if result not ready or failed.
     # No nice error message here because user should first check /api/status.
