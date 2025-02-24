@@ -107,6 +107,11 @@ def bbox_wgs84():
 
 
 @pytest.fixture
+def bbox_wgs84_str():
+    return "8.625,49.3711,8.7334,49.4397"
+
+
+@pytest.fixture
 def size_as_dict():
     return {"width": 1867, "height": 1587}
 

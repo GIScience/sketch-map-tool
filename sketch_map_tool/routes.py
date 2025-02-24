@@ -1,5 +1,4 @@
 import json
-import re
 from io import BytesIO
 from pathlib import Path
 from uuid import UUID
@@ -37,6 +36,7 @@ from sketch_map_tool.tasks import (
     upload_processing,
 )
 from sketch_map_tool.validators import (
+    validate_bbox,
     validate_type,
     validate_uploaded_sketchmaps,
     validate_uuid,
@@ -201,8 +201,8 @@ def create_results_get(
 ) -> Response | str:
     if uuid is None:
         return redirect(url_for("create", lang=lang))
-    if not re.match(r"^[0-9,.]*$", bbox):
-        bbox = ""
+    if bbox != "":
+        validate_bbox(bbox)
     validate_uuid(uuid)
     # Check if celery tasks for UUID exists
     id_ = get_async_result_id(uuid, "sketch-map")
