@@ -8,7 +8,7 @@ from sketch_map_tool import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import UploadLimitsExceededError, ValueError
 from sketch_map_tool.helpers import N_
-from sketch_map_tool.models import LiteratureReference
+from sketch_map_tool.models import Bbox, LiteratureReference
 
 
 def validate_type(type_: REQUEST_TYPES):
@@ -59,6 +59,18 @@ def validate_uuid(uuid: str):
     except ValueError as error:
         raise ValueError(
             N_("The provided URL does not contain a valid UUID")
+        ) from error
+
+
+def validate_bbox(bbox: str):
+    """validation function for endpoint parameter <bbox>"""
+    try:
+        if not isinstance(bbox, str):
+            raise ValueError
+        _ = Bbox(*[float(coordinate) for coordinate in bbox.split(",")])
+    except (ValueError, TypeError) as error:
+        raise ValueError(
+            N_("The provided URL does not contain a valid bounding box")
         ) from error
 
 

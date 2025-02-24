@@ -60,8 +60,8 @@ def test_create_results_uuid(client, uuid):
     assert resp.status_code == 200
 
 
-def test_create_results_uuid_bbox(client, uuid, bbox_wgs84):
-    resp = client.get("/create/results/{0}/{1}".format(uuid, bbox_wgs84))
+def test_create_results_uuid_bbox(client, uuid, bbox_wgs84_str):
+    resp = client.get("/create/results/{0}/{1}".format(uuid, bbox_wgs84_str))
     assert resp.status_code == 200
 
 
