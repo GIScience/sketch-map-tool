@@ -20,6 +20,7 @@ function fillSelectOptions(selectElementId, optionsMap) {
         .forEach((paperformatValue) => {
             const option = document.createElement("option");
             option.text = paperformatValue;
+            option.value = paperformatValue;
             selectElement.appendChild(option);
         });
 }
