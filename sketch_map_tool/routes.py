@@ -210,9 +210,10 @@ def digitize(lang="en") -> str:
 def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
     # user consent to use uploaded files for service improvement
-    consent: bool = False
     if request.form["consent"] == "True":
         consent = True
+    else:
+        consent = False
     # No files uploaded
     if "file" not in request.files:
         return redirect(url_for("digitize", lang=lang))
