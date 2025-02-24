@@ -1,68 +1,60 @@
 import pytest
 
 
-@pytest.mark.parametrize("type_", ("sketch-map",))
 def test_status_success(
     client,
     uuid,
-    type_,
     mock_request_task_mapping,
     mock_async_result_success,
 ):
-    resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
+    resp = client.get("/api/status/{0}/sketch-map".format(uuid))
     assert resp.status_code == 200
     assert resp.mimetype == "application/json"
     assert resp.json["id"] == uuid
     assert resp.json["status"] == "SUCCESS"
-    assert resp.json["href"] == "/api/download/{0}/{1}".format(uuid, type_)
+    assert resp.json["href"] == "/api/download/{0}/sketch-map".format(uuid)
     assert "info" not in resp.json.keys()
     assert "errors" not in resp.json.keys()
 
 
-@pytest.mark.parametrize("type_", ("sketch-map",))
 def test_status_started(
     client,
     uuid,
-    type_,
     mock_request_task_mapping,
     mock_async_result_started,
 ):
-    resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
+    resp = client.get("/api/status/{0}/sketch-map".format(uuid))
     assert resp.status_code == 202
     assert resp.json["id"] == uuid
-    assert resp.json["type"] == type_
+    assert resp.json["type"] == "sketch-map"
     assert resp.json["status"] == "STARTED"
     assert resp.json["info"] == {"current": 0, "total": 1}
     assert "href" not in resp.json.keys()
     assert "errors" not in resp.json.keys()
 
 
-@pytest.mark.parametrize("type_", ("sketch-map",))
 def test_status_failure(
     client,
     uuid,
-    type_,
     mock_request_task_mapping,
     mock_async_result_failure,
 ):
-    resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
+    resp = client.get("/api/status/{0}/sketch-map".format(uuid))
     assert resp.status_code == 422
     assert resp.json["id"] == uuid
-    assert resp.json["type"] == type_
+    assert resp.json["type"] == "sketch-map"
     assert resp.json["status"] == "FAILURE"
     assert resp.json["errors"] == ["QRCodeError: Mock error"]
     assert "href" not in resp.json.keys()
 
 
-@pytest.mark.parametrize("type_", ("sketch-map",))
 def test_status_failure_hard(
     client,
     uuid,
-    type_,
     mock_request_task_mapping,
     mock_async_result_failure_hard,
 ):
-    resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
+    resp = client.get("/api/status/{0}/sketch-map".format(uuid))
     assert resp.status_code == 500
 
 

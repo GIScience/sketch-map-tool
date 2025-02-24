@@ -58,19 +58,19 @@ class WorkflowCycle(HttpUser):
 
         if not os.path.exists("results"):
             os.mkdir("results")
-        for result_type in ("sketch-map",):
-            download_url = self.status_loop(create_uuid, result_type)
-            request_name = f"/api/download/[uuid]/{result_type}"
-            result = self.client.get(download_url, name=request_name)
+        result_type = "sketch-map"
+        download_url = self.status_loop(create_uuid, result_type)
+        request_name = f"/api/download/[uuid]/{result_type}"
+        result = self.client.get(download_url, name=request_name)
 
-            if result.status_code == 200:
-                if not os.path.exists(f"results/{result_type}"):
-                    os.mkdir(f"results/{result_type}")
-                with open(f"results/{result_type}/file_{result_index}.pdf", "wb") as f:
-                    f.write(result.content)
-            else:
-                raise ValueError(f"Unexpected status code: '{result.status_code}'")
-            result_index += 1
+        if result.status_code == 200:
+            if not os.path.exists(f"results/{result_type}"):
+                os.mkdir(f"results/{result_type}")
+            with open(f"results/{result_type}/file_{result_index}.pdf", "wb") as f:
+                f.write(result.content)
+        else:
+            raise ValueError(f"Unexpected status code: '{result.status_code}'")
+        result_index += 1
 
     @task
     def digitize(self):
