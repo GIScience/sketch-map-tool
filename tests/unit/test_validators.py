@@ -20,7 +20,7 @@ def test_validate_type_invalid(type_):
         validate_type(type_)
 
 
-def test_validate_uui(uuid):
+def test_validate_uuid(uuid):
     validate_uuid(uuid)
 
 
