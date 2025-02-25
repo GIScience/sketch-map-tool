@@ -68,8 +68,8 @@ ENV VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH"
 
 COPY --from=python-builder --chown=smt:smt $VIRTUAL_ENV $VIRTUAL_ENV
-COPY --chown=smt:smt /app/sketch_map_tool sketch_map_tool
-COPY --chown=smt:smt /app/data data
-COPY --chown=smt:smt /app/config config
+COPY --from=python-builder --chown=smt:smt /app/sketch_map_tool sketch_map_tool
+COPY --from=python-builder --chown=smt:smt /app/data data
+COPY --from=python-builder --chown=smt:smt /app/config config
 COPY --from=node-builder --chown=smt:smt /sketch_map_tool/static/bundles sketch_map_tool/static/bundles
 # use entry-points defined in docker-compose file
