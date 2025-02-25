@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-11-08 10:44+0000\n"
-"PO-Revision-Date: 2024-11-08 11:22\n"
+"POT-Creation-Date: 2025-02-24 13:03+0000\n"
+"PO-Revision-Date: 2025-02-24 13:32\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.16.0\n"
+"Generated-By: Babel 2.17.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: sketch-map-tool\n"
 "X-Crowdin-Project-ID: 651528\n"
@@ -18,19 +18,23 @@ msgstr ""
 "X-Crowdin-File-ID: 12\n"
 "Language: pt_BR\n"
 
-#: sketch_map_tool/tasks.py:227
-msgid "No markings have been detected."
+#: sketch_map_tool/routes.py:309
+#, python-brace-format
+msgid "There are no tasks for UUID {UUID}"
 msgstr ""
 
-#: sketch_map_tool/validators.py:18
+#: sketch_map_tool/validators.py:19
+#, python-brace-format
 msgid "{TYPE} is not a valid value for the request parameter 'type'. Allowed values are: {REQUEST_TYPES}"
 msgstr ""
 
-#: sketch_map_tool/validators.py:34
+#: sketch_map_tool/validators.py:35
+#, python-brace-format
 msgid "You can only upload up to {MAX_NR_SIMULTANEOUS_UPLOADS} files at once."
 msgstr ""
 
-#: sketch_map_tool/validators.py:45
+#: sketch_map_tool/validators.py:46
+#, python-brace-format
 msgid "You can only upload pictures up to a total pixel count of {MAX_PIXEL_PER_IMAGE}."
 msgstr ""
 
@@ -38,47 +42,49 @@ msgstr ""
 msgid "The provided URL does not contain a valid UUID"
 msgstr ""
 
-#: sketch_map_tool/validators.py:69 sketch_map_tool/validators.py:76
-#: sketch_map_tool/validators.py:83
+#: sketch_map_tool/validators.py:73
+msgid "The provided URL does not contain a valid bounding box"
+msgstr ""
+
+#: sketch_map_tool/validators.py:82 sketch_map_tool/validators.py:89
+#: sketch_map_tool/validators.py:96
 msgid "Literature reference JSON fields should not contain empty strings as values."
 msgstr ""
 
-#: sketch_map_tool/database/client_celery.py:165
+#: sketch_map_tool/database/client_celery.py:171
+#, python-brace-format
 msgid "The file with the id: {ID} does not exist anymore"
 msgstr ""
 
-#: sketch_map_tool/database/client_celery.py:170
-#: sketch_map_tool/database/client_flask.py:167
-#: sketch_map_tool/database/client_flask.py:182
+#: sketch_map_tool/database/client_celery.py:176
+#: sketch_map_tool/database/client_flask.py:145
+#: sketch_map_tool/database/client_flask.py:160
+#, python-brace-format
 msgid "There is no file in the database with the id: {ID}"
 msgstr ""
 
-#: sketch_map_tool/database/client_flask.py:68
+#: sketch_map_tool/database/client_flask.py:47
+#, python-brace-format
 msgid "There are no tasks in the broker for UUID: {UUID}"
 msgstr ""
 
-#: sketch_map_tool/database/client_flask.py:79
+#: sketch_map_tool/database/client_flask.py:60
+#, python-brace-format
 msgid "There are no tasks in the broker for UUID and request type: {REQUEST_UUID}, {REQUEST_TYPE}"
 msgstr ""
 
-#: sketch_map_tool/database/client_flask.py:195
+#: sketch_map_tool/database/client_flask.py:174
 msgid "In this Sketch Map Tool instance no sketch map has been generated yet. You can only upload sketch maps to the instance on which they have been created."
 msgstr ""
 
-#: sketch_map_tool/database/client_flask.py:205
+#: sketch_map_tool/database/client_flask.py:183
+#, python-brace-format
 msgid "The file with the id: {UUID} does not exist anymore"
 msgstr ""
 
-#: sketch_map_tool/database/client_flask.py:211
+#: sketch_map_tool/database/client_flask.py:190
+#, python-brace-format
 msgid "There is no map frame in the database with the uuid: {UUID}. You can only upload sketch maps to the instance on which they have been created."
-msgstr ""
-
-#: sketch_map_tool/oqt_analyses/oqt_client.py:46
-msgid "Selected Area-of-Interest is too large for a Map Quality Check Report."
-msgstr ""
-
-#: sketch_map_tool/oqt_analyses/oqt_client.py:57
-msgid "There seems to be a problem with OQT. Please try again later."
 msgstr ""
 
 #: sketch_map_tool/templates/about.html:8
@@ -702,42 +708,24 @@ msgstr ""
 msgid "Map Quality Check Report"
 msgstr ""
 
-#: sketch_map_tool/templates/create-results.html:42
-msgid "We are analyzing the <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap -->\n"
-"                    <!--     (OSM)</a> data of the selected Area-of-Interest.<br>The Map Quality Check -->\n"
-"                    <!--     Report gives insights about the <strong>fitness for field data -->\n"
-"                    <!--     collection</strong>. It is -->\n"
-"                    <!--     created with the help of the <a href=\"https://oqt.ohsome.org/\" -->\n"
-"                    <!--                                     target=\"_blank\">ohsome quality analyst</a>."
+#: sketch_map_tool/templates/create-results.html:39
+msgid "You can analyze the <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap\n"
+"                        (OSM)</a> data of the selected Area of Interest through the <a\n"
+"                        href=\"https://dashboard.ohsome.org\" target=\"_blank\">ohsome dashboard</a>. The ohsome\n"
+"                        dashboard gives insights about the <strong>fitness for field data collection</strong>.\n"
+"                        It will be created through the <a href=\"https://api.quality.ohsome.org/\"\n"
+"                        target=\"_blank\">ohsome quality API</a>."
 msgstr ""
 
-#: sketch_map_tool/templates/create-results.html:50
-msgid "We have analyzed the <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap -->\n"
-"                    <!--     (OSM)</a> data of the selected Area of Interest.<br>The Map Quality Check -->\n"
-"                    <!--     Report gives insights about the <strong>fitness for field data -->\n"
-"                    <!--     collection</strong>. It has been -->\n"
-"                    <!--     created with the help of the <a href=\"https://oqt.ohsome.org/\" -->\n"
-"                    <!--                                     target=\"_blank\">ohsome quality analyst</a>."
+#: sketch_map_tool/templates/create-results.html:46
+msgid "Get Quality Report"
 msgstr ""
 
-#: sketch_map_tool/templates/create-results.html:58
-#: sketch_map_tool/templates/create-results.html:90
-#: sketch_map_tool/templates/digitize-results.html:51
-#: sketch_map_tool/templates/digitize-results.html:79
-msgid "Sorry! <br>Something went wrong while trying to generate the Result."
-msgstr ""
-
-#: sketch_map_tool/templates/create-results.html:61
-#: sketch_map_tool/templates/create-results.html:63
-#: sketch_map_tool/templates/create-results.html:94
-msgid "Download PDF"
-msgstr ""
-
-#: sketch_map_tool/templates/create-results.html:73
+#: sketch_map_tool/templates/create-results.html:55
 msgid "Sketch Map Template"
 msgstr ""
 
-#: sketch_map_tool/templates/create-results.html:75
+#: sketch_map_tool/templates/create-results.html:57
 msgid "We are creating the Sketch Map template that you can use for offline\n"
 "                        participatory mapping.<br>\n"
 "                        <strong>Please be patient, this can take 2-10 minutes.</strong> We use up-to-date\n"
@@ -745,13 +733,23 @@ msgid "We are creating the Sketch Map template that you can use for offline\n"
 "                        or satellite imagery powered by ESRI to create a high resolution printable map for you."
 msgstr ""
 
-#: sketch_map_tool/templates/create-results.html:82
+#: sketch_map_tool/templates/create-results.html:64
 msgid "We have created the Sketch Map template that you can use for offline\n"
 "                        participatory mapping.<br>\n"
 "                        We used up-to-date\n"
 "                        <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> data\n"
 "                        or satellite imagery powered by ESRI to create a high resolution printable map for you.<br>\n"
 "                        <strong>You can now start collecting data in the field!</strong>"
+msgstr ""
+
+#: sketch_map_tool/templates/create-results.html:72
+#: sketch_map_tool/templates/digitize-results.html:51
+#: sketch_map_tool/templates/digitize-results.html:79
+msgid "Sorry! <br>Something went wrong while trying to generate the Result."
+msgstr ""
+
+#: sketch_map_tool/templates/create-results.html:76
+msgid "Download PDF"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:25
@@ -774,15 +772,15 @@ msgid "You are currently trying to\n"
 "                        the antimeridian."
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:43
+#: sketch_map_tool/templates/create.html:47
 msgid "Paper Format"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:46
+#: sketch_map_tool/templates/create.html:50
 msgid "Paper Orientation"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:55
+#: sketch_map_tool/templates/create.html:59
 msgid "NEXT"
 msgstr ""
 
@@ -895,16 +893,45 @@ msgstr ""
 msgid "Max total size: 500 MB"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize.html:51
-msgid " Files are stored for processing until the results are generated."
+#: sketch_map_tool/templates/digitize.html:50
+msgid "Help us to improve the Sketch Map Tool for everyone"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize.html:55
-msgid "Enable us to keep the uploaded files beyond processing to further improve this service."
+#: sketch_map_tool/templates/digitize.html:52
+msgid "To train and improve the sketch detection algorithms,\n"
+"                            we do need your real use-case data and would like to ask for your permission\n"
+"                            to keep the uploaded files after processing."
 msgstr ""
 
-#: sketch_map_tool/templates/digitize.html:58
-msgid "Upload"
+#: sketch_map_tool/templates/digitize.html:60
+msgid "Agree & Upload"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize.html:61
+msgid "OR"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize.html:62
+msgid "Reject & Upload"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize.html:66
+msgid "If you agree, we would keep your data internally to use it as training and\n"
+"                                test data to improve the Sketch Map Tool."
+msgstr ""
+
+#: sketch_map_tool/templates/digitize.html:71
+msgid "If you don't agree, your files are ONLY stored for processing for a short time\n"
+"                        until your results are generated."
+msgstr ""
+
+#: sketch_map_tool/templates/digitize.html:76
+msgid "Read more info on"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize.html:78
+#: sketch_map_tool/templates/help.html:827
+msgid "Share your data for the Improvement of the Sketch Map Tool"
 msgstr ""
 
 #: sketch_map_tool/templates/error.html:8
@@ -1723,10 +1750,6 @@ msgstr ""
 msgid "The results are stored and available for download for a period of 24 hours, after which they are deleted."
 msgstr ""
 
-#: sketch_map_tool/templates/help.html:827
-msgid "Share your data for the Improvement of the Sketch Map Tool"
-msgstr ""
-
 #: sketch_map_tool/templates/help.html:830
 msgid "On a voluntary basis, you can enable us to keep your uploaded Sketch Maps beyond processing to further improve the Sketch Map Tool."
 msgstr ""
@@ -2033,11 +2056,12 @@ msgstr ""
 msgid "QR-Code does not have expected content."
 msgstr ""
 
-#: sketch_map_tool/wms/client.py:73
+#: sketch_map_tool/wms/client.py:74
 msgid "Map area couldn't be processed with the current resources. Please try again once."
 msgstr ""
 
-#: sketch_map_tool/wms/client.py:93
+#: sketch_map_tool/wms/client.py:94
+#, python-brace-format
 msgid "The Web Map Service returned an error. Please try again later. Response from the WMS:\n"
 "{ERROR_MSG}"
 msgstr ""

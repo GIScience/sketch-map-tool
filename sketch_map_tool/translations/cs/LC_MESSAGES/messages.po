@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-11-08 10:44+0000\n"
-"PO-Revision-Date: 2024-11-08 20:26\n"
+"POT-Creation-Date: 2025-02-24 13:03+0000\n"
+"PO-Revision-Date: 2025-02-25 15:29\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.16.0\n"
+"Generated-By: Babel 2.17.0\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "X-Crowdin-Project: sketch-map-tool\n"
 "X-Crowdin-Project-ID: 651528\n"
@@ -18,19 +18,23 @@ msgstr ""
 "X-Crowdin-File-ID: 12\n"
 "Language: cs_CZ\n"
 
-#: sketch_map_tool/tasks.py:227
-msgid "No markings have been detected."
-msgstr "Nebyla nalezena žádná označení."
+#: sketch_map_tool/routes.py:309
+#, python-brace-format
+msgid "There are no tasks for UUID {UUID}"
+msgstr "Pro UUID {UUID} nejsou žádné úlohy"
 
-#: sketch_map_tool/validators.py:18
+#: sketch_map_tool/validators.py:19
+#, python-brace-format
 msgid "{TYPE} is not a valid value for the request parameter 'type'. Allowed values are: {REQUEST_TYPES}"
 msgstr "{TYPE} není platná hodnota parametru požadavku 'typ'. Povolené hodnoty jsou: {REQUEST_TYPES}"
 
-#: sketch_map_tool/validators.py:34
+#: sketch_map_tool/validators.py:35
+#, python-brace-format
 msgid "You can only upload up to {MAX_NR_SIMULTANEOUS_UPLOADS} files at once."
 msgstr "Můžete nahrát až {MAX_NR_SIMULTANEOUS_UPLOADS} souborů najednou."
 
-#: sketch_map_tool/validators.py:45
+#: sketch_map_tool/validators.py:46
+#, python-brace-format
 msgid "You can only upload pictures up to a total pixel count of {MAX_PIXEL_PER_IMAGE}."
 msgstr "Můžete nahrát obrázky pouze do celkového počtu pixelů {MAX_PIXEL_PER_IMAGE}."
 
@@ -38,48 +42,50 @@ msgstr "Můžete nahrát obrázky pouze do celkového počtu pixelů {MAX_PIXEL_
 msgid "The provided URL does not contain a valid UUID"
 msgstr "Zadaná URL neobsahuje platné UUID"
 
-#: sketch_map_tool/validators.py:69 sketch_map_tool/validators.py:76
-#: sketch_map_tool/validators.py:83
+#: sketch_map_tool/validators.py:73
+msgid "The provided URL does not contain a valid bounding box"
+msgstr "Zadaná URL adresa neobsahuje platné ohraničení"
+
+#: sketch_map_tool/validators.py:82 sketch_map_tool/validators.py:89
+#: sketch_map_tool/validators.py:96
 msgid "Literature reference JSON fields should not contain empty strings as values."
 msgstr "Pole JSON s odkazem na literaturu by neměla obsahovat prázdné řetězce jako hodnoty."
 
-#: sketch_map_tool/database/client_celery.py:165
+#: sketch_map_tool/database/client_celery.py:171
+#, python-brace-format
 msgid "The file with the id: {ID} does not exist anymore"
 msgstr "Soubor s id: {ID} již neexistuje"
 
-#: sketch_map_tool/database/client_celery.py:170
-#: sketch_map_tool/database/client_flask.py:167
-#: sketch_map_tool/database/client_flask.py:182
+#: sketch_map_tool/database/client_celery.py:176
+#: sketch_map_tool/database/client_flask.py:145
+#: sketch_map_tool/database/client_flask.py:160
+#, python-brace-format
 msgid "There is no file in the database with the id: {ID}"
 msgstr "V databázi není žádný soubor s id: {ID}"
 
-#: sketch_map_tool/database/client_flask.py:68
+#: sketch_map_tool/database/client_flask.py:47
+#, python-brace-format
 msgid "There are no tasks in the broker for UUID: {UUID}"
 msgstr "Nebyly nalezeny žádné úkoly v brokeru pro UUID: {UUID}"
 
-#: sketch_map_tool/database/client_flask.py:79
+#: sketch_map_tool/database/client_flask.py:60
+#, python-brace-format
 msgid "There are no tasks in the broker for UUID and request type: {REQUEST_UUID}, {REQUEST_TYPE}"
 msgstr "V brokeru nejsou žádné úkoly pro UUID a typ požadavku: {REQUEST_UUID}, {REQUEST_TYPE}"
 
-#: sketch_map_tool/database/client_flask.py:195
+#: sketch_map_tool/database/client_flask.py:174
 msgid "In this Sketch Map Tool instance no sketch map has been generated yet. You can only upload sketch maps to the instance on which they have been created."
 msgstr "V této instanci Sketch Map Tool zatím nebyla vygenerována žádná mapa. Můžete nahrát pouze náčrty mapy do instance, na které byly vytvořeny."
 
-#: sketch_map_tool/database/client_flask.py:205
+#: sketch_map_tool/database/client_flask.py:183
+#, python-brace-format
 msgid "The file with the id: {UUID} does not exist anymore"
 msgstr "Soubor s id: {UUID} již neexistuje"
 
-#: sketch_map_tool/database/client_flask.py:211
+#: sketch_map_tool/database/client_flask.py:190
+#, python-brace-format
 msgid "There is no map frame in the database with the uuid: {UUID}. You can only upload sketch maps to the instance on which they have been created."
 msgstr "V databázi není žádný mapový rámec s uuid: {UUID}. Můžete nahrát pouze náčrty mapy do instance, na které byly vytvořeny."
-
-#: sketch_map_tool/oqt_analyses/oqt_client.py:46
-msgid "Selected Area-of-Interest is too large for a Map Quality Check Report."
-msgstr "Vybraná oblast zájmu je příliš velká pro zprávu o kontrole kvality mapy."
-
-#: sketch_map_tool/oqt_analyses/oqt_client.py:57
-msgid "There seems to be a problem with OQT. Please try again later."
-msgstr "Zdá se, že došlo k potížím s OQT. Opakujte akci později."
 
 #: sketch_map_tool/templates/about.html:8
 msgid "What is this all about?"
@@ -87,7 +93,7 @@ msgstr "O co tu vlastně jde?"
 
 #: sketch_map_tool/templates/about.html:13
 msgid "The Tool"
-msgstr "Nástroj"
+msgstr "Nástroj Tool"
 
 #: sketch_map_tool/templates/about.html:15
 msgid "The Sketch Map Tool is an easy-to-use tool for participatory mapping through offline collection,\n"
@@ -603,7 +609,7 @@ msgid " The mappings on the Sketch Maps were combined with other collected\n"
 "    (in this case, ArcPro was used). The community mapping results were also\n"
 "    used to improve OSM data by adding local names to rivers, villages, and\n"
 "    including nature conservation areas directly via the OSM editor. "
-msgstr " Mapy na náčrtkových mapách byly zkombinovány s dalšími shromážděnými místními údaji a vizualizovány v mapě obce pomocí geoinformačního softwaru (v tomto případě byl použit ArcPro). Výsledky komunitního mapování byly také použity ke zlepšení dat OSM přidáním místních názvů k řekám, obcím a zahrnutím oblastí ochrany přírody přímo prostřednictvím editoru OSM. "
+msgstr " Náčrtkové mapy byly zkombinovány s dalšími shromážděnými místními údaji a vizualizovány v mapě obce pomocí geoinformačního softwaru (v tomto případě byl použit ArcPro). Výsledky komunitního mapování byly také použity ke zlepšení dat OSM přidáním místních názvů k řekám, obcím a zahrnutím oblastí ochrany přírody přímo prostřednictvím editoru OSM. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:109
 msgid " The gathered information and created maps were used to support local\n"
@@ -720,52 +726,28 @@ msgstr "logo analytika kvality"
 msgid "Map Quality Check Report"
 msgstr "Zpráva o kontrole kvality mapy"
 
-#: sketch_map_tool/templates/create-results.html:42
-msgid "We are analyzing the <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap -->\n"
-"                    <!--     (OSM)</a> data of the selected Area-of-Interest.<br>The Map Quality Check -->\n"
-"                    <!--     Report gives insights about the <strong>fitness for field data -->\n"
-"                    <!--     collection</strong>. It is -->\n"
-"                    <!--     created with the help of the <a href=\"https://oqt.ohsome.org/\" -->\n"
-"                    <!--                                     target=\"_blank\">ohsome quality analyst</a>."
-msgstr "Analyzujeme <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap -->\n"
-" <!-- (OSM)</a> data vybrané oblasti zájmu.<br>Kontrola kvality mapy -->\n"
-" <!-- Report poskytuje přehled o <strong>vhodnosti pro terénní data -->\n"
-" <!-- kolekce</strong>. Je -->\n"
-" <!-- vytvořen pomocí <a href=\"https://oqt.ohsome.org/\" -->\n"
-" <!-- target=\"_blank\">ohsome quality analyst</a>."
+#: sketch_map_tool/templates/create-results.html:39
+msgid "You can analyze the <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap\n"
+"                        (OSM)</a> data of the selected Area of Interest through the <a\n"
+"                        href=\"https://dashboard.ohsome.org\" target=\"_blank\">ohsome dashboard</a>. The ohsome\n"
+"                        dashboard gives insights about the <strong>fitness for field data collection</strong>.\n"
+"                        It will be created through the <a href=\"https://api.quality.ohsome.org/\"\n"
+"                        target=\"_blank\">ohsome quality API</a>."
+msgstr "Můžete analyzovat <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap\n"
+"                        (OSM)</a> data vybrané oblasti zájmu přes <a\n"
+"                        href=\"https://dashboard.ohsome.org\" target=\"_blank\">ohsome dashboard</a>. Ten poskytuje informace o způsobilosti <strong>pro sběr dat v terénu</strong>\n"
+"                        Bude vytvořeno prostřednictvím <a href=\"https://api.quality.ohsome.org/\"\n"
+"                        target=\"_blank\">ohsome kvality API</a>."
 
-#: sketch_map_tool/templates/create-results.html:50
-msgid "We have analyzed the <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap -->\n"
-"                    <!--     (OSM)</a> data of the selected Area of Interest.<br>The Map Quality Check -->\n"
-"                    <!--     Report gives insights about the <strong>fitness for field data -->\n"
-"                    <!--     collection</strong>. It has been -->\n"
-"                    <!--     created with the help of the <a href=\"https://oqt.ohsome.org/\" -->\n"
-"                    <!--                                     target=\"_blank\">ohsome quality analyst</a>."
-msgstr "Analyzovali jsme <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap -->\n"
-" <!-- (OSM)</a> data vybrané oblasti zájmu.<br>Kontrola kvality mapy -->\n"
-" <!-- Report poskytuje přehled o <strong>vhodnosti pro terénní data -->\n"
-" <!-- kolekce</strong>. Bylo to -->\n"
-" <!-- vytvořeno pomocí <a href=\"https://oqt.ohsome.org/\" -->\n"
-" <!-- target=\"_blank\">ohsome quality analyst</a>."
+#: sketch_map_tool/templates/create-results.html:46
+msgid "Get Quality Report"
+msgstr "Získat zprávu o kvalitě"
 
-#: sketch_map_tool/templates/create-results.html:58
-#: sketch_map_tool/templates/create-results.html:90
-#: sketch_map_tool/templates/digitize-results.html:51
-#: sketch_map_tool/templates/digitize-results.html:79
-msgid "Sorry! <br>Something went wrong while trying to generate the Result."
-msgstr "Omlouváme se! <br>Při pokusu o generování výsledku se něco pokazilo."
-
-#: sketch_map_tool/templates/create-results.html:61
-#: sketch_map_tool/templates/create-results.html:63
-#: sketch_map_tool/templates/create-results.html:94
-msgid "Download PDF"
-msgstr "Stáhnout PDF"
-
-#: sketch_map_tool/templates/create-results.html:73
+#: sketch_map_tool/templates/create-results.html:55
 msgid "Sketch Map Template"
 msgstr "Sketch Map šablona"
 
-#: sketch_map_tool/templates/create-results.html:75
+#: sketch_map_tool/templates/create-results.html:57
 msgid "We are creating the Sketch Map template that you can use for offline\n"
 "                        participatory mapping.<br>\n"
 "                        <strong>Please be patient, this can take 2-10 minutes.</strong> We use up-to-date\n"
@@ -773,7 +755,7 @@ msgid "We are creating the Sketch Map template that you can use for offline\n"
 "                        or satellite imagery powered by ESRI to create a high resolution printable map for you."
 msgstr "Vytváříme šablonu Sketch Map, kterou můžete použít pro offline participativní mapování.<br> <strong>Prosíme o trpělivost, může to trvat 2–10 minut.</strong> Používáme aktuální <a href=\" https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> data nebo satelitní snímky od ESRI pro vytvoření mapy ve vysokém rozlišení pro tisk."
 
-#: sketch_map_tool/templates/create-results.html:82
+#: sketch_map_tool/templates/create-results.html:64
 msgid "We have created the Sketch Map template that you can use for offline\n"
 "                        participatory mapping.<br>\n"
 "                        We used up-to-date\n"
@@ -781,6 +763,16 @@ msgid "We have created the Sketch Map template that you can use for offline\n"
 "                        or satellite imagery powered by ESRI to create a high resolution printable map for you.<br>\n"
 "                        <strong>You can now start collecting data in the field!</strong>"
 msgstr "Vytvořili jsme šablonu Sketch Map, kterou můžete použít pro offline participativní mapování.<br>Použili jsme aktuální <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> data nebo satelitní snímky využívající technologii ESRI k vytvoření mapy s vysokým rozlišením pro tisk.<br><strong>Nyní můžete začít shromažďovat data v terénu!</strong>"
+
+#: sketch_map_tool/templates/create-results.html:72
+#: sketch_map_tool/templates/digitize-results.html:51
+#: sketch_map_tool/templates/digitize-results.html:79
+msgid "Sorry! <br>Something went wrong while trying to generate the Result."
+msgstr "Omlouváme se! <br>Při pokusu o generování výsledku se něco pokazilo."
+
+#: sketch_map_tool/templates/create-results.html:76
+msgid "Download PDF"
+msgstr "Stáhnout PDF"
 
 #: sketch_map_tool/templates/create.html:25
 msgid "Area of Interest"
@@ -803,15 +795,15 @@ msgid "You are currently trying to\n"
 "                        the antimeridian."
 msgstr "Momentálně se pokoušíte požádat o mapu, která překračuje +/-180° <a href=\"https://en.wikipedia.org/wiki/180th_meridian\" target=\"_blank\">antimeridian</a>. To v současné době není podporováno, posuňte mapu tak, aby byla vaše oblast vlevo nebo vpravo od antimeridiánu."
 
-#: sketch_map_tool/templates/create.html:43
+#: sketch_map_tool/templates/create.html:47
 msgid "Paper Format"
 msgstr "Formát papíru"
 
-#: sketch_map_tool/templates/create.html:46
+#: sketch_map_tool/templates/create.html:50
 msgid "Paper Orientation"
 msgstr "Orientace papíru"
 
-#: sketch_map_tool/templates/create.html:55
+#: sketch_map_tool/templates/create.html:59
 msgid "NEXT"
 msgstr "DALŠÍ"
 
@@ -926,17 +918,50 @@ msgstr "Soubory:"
 msgid "Max total size: 500 MB"
 msgstr "Maximální celková velikost: 500 MB"
 
-#: sketch_map_tool/templates/digitize.html:51
-msgid " Files are stored for processing until the results are generated."
-msgstr " Soubory jsou uloženy ke zpracování, dokud nejsou vygenerovány výsledky."
+#: sketch_map_tool/templates/digitize.html:50
+msgid "Help us to improve the Sketch Map Tool for everyone"
+msgstr "Pomozte nám zlepšit Sketch Map Tool pro všechny"
 
-#: sketch_map_tool/templates/digitize.html:55
-msgid "Enable us to keep the uploaded files beyond processing to further improve this service."
-msgstr "Povolte nám ponechat nahrané soubory mimo zpracování pro další zlepšení této služby."
+#: sketch_map_tool/templates/digitize.html:52
+msgid "To train and improve the sketch detection algorithms,\n"
+"                            we do need your real use-case data and would like to ask for your permission\n"
+"                            to keep the uploaded files after processing."
+msgstr "Pro trenink a zlepšení algoritmu detekce náčrtu,\n"
+"                            potřebujeme vaše skutečná uživatelská data a rádi bychom vás požádali o svolení\n"
+"                            pro zachování nahraných souborů po zpracování."
 
-#: sketch_map_tool/templates/digitize.html:58
-msgid "Upload"
-msgstr "Nahrát"
+#: sketch_map_tool/templates/digitize.html:60
+msgid "Agree & Upload"
+msgstr "Souhlasím a nahrát"
+
+#: sketch_map_tool/templates/digitize.html:61
+msgid "OR"
+msgstr "NEBO"
+
+#: sketch_map_tool/templates/digitize.html:62
+msgid "Reject & Upload"
+msgstr "Nesouhlasím a nahrát"
+
+#: sketch_map_tool/templates/digitize.html:66
+msgid "If you agree, we would keep your data internally to use it as training and\n"
+"                                test data to improve the Sketch Map Tool."
+msgstr "Pokud souhlasíte, uchováváme vaše data interně, abychom je použili jako trénink a\n"
+"                                testovací data pro zlepšení Sketch Map Tool."
+
+#: sketch_map_tool/templates/digitize.html:71
+msgid "If you don't agree, your files are ONLY stored for processing for a short time\n"
+"                        until your results are generated."
+msgstr "Pokud s tím nesouhlasíte, vaše soubory jsou POUZE uloženy pro zpracování po krátkou dobu\n"
+"                        dokud nebudou Vaše výsledky vytvořeny."
+
+#: sketch_map_tool/templates/digitize.html:76
+msgid "Read more info on"
+msgstr "Více informací na"
+
+#: sketch_map_tool/templates/digitize.html:78
+#: sketch_map_tool/templates/help.html:827
+msgid "Share your data for the Improvement of the Sketch Map Tool"
+msgstr "Sdílejte data pro zlepšení Sketch Map Tool"
 
 #: sketch_map_tool/templates/error.html:8
 msgid "Error"
@@ -1783,10 +1808,6 @@ msgstr "<strong>Funkční úložiště dat:</strong> Nahrané snímky Sketch Map
 msgid "The results are stored and available for download for a period of 24 hours, after which they are deleted."
 msgstr "Výsledky jsou uloženy a dostupné ke stažení po dobu 24 hodin, po jejímž uplynutí budou odstraněny."
 
-#: sketch_map_tool/templates/help.html:827
-msgid "Share your data for the Improvement of the Sketch Map Tool"
-msgstr "Sdílejte data pro zlepšení Sketch Map Tool"
-
 #: sketch_map_tool/templates/help.html:830
 msgid "On a voluntary basis, you can enable us to keep your uploaded Sketch Maps beyond processing to further improve the Sketch Map Tool."
 msgstr "Na dobrovolném základě nám můžete umožnit ponechat nahrané Sketch Maps mimo zpracování pro další zlepšení Sketch Map Tool."
@@ -2095,11 +2116,12 @@ msgstr "Neočekávaná délka obsahu QR kódu."
 msgid "QR-Code does not have expected content."
 msgstr "QR kód nemá očekávaný obsah."
 
-#: sketch_map_tool/wms/client.py:73
+#: sketch_map_tool/wms/client.py:74
 msgid "Map area couldn't be processed with the current resources. Please try again once."
 msgstr "Oblast mapy nemohla být zpracována s aktuálními zdroji. Zkuste to prosím ještě jednou."
 
-#: sketch_map_tool/wms/client.py:93
+#: sketch_map_tool/wms/client.py:94
+#, python-brace-format
 msgid "The Web Map Service returned an error. Please try again later. Response from the WMS:\n"
 "{ERROR_MSG}"
 msgstr "Webová mapová služba vrátila chybu. Opakujte akci později. Odpověď od WMS:\n"
