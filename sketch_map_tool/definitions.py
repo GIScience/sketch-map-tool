@@ -224,4 +224,10 @@ LETTER = PaperFormat(
 
 ALL_PAPER_FORMATS = [A0, A1, A2, A3, A4, TABLOID, LETTER]
 
-LANGUAGES = {"en": "English", "de": "Deutsch", "es": "Español", "fr": "Français"}
+LANGUAGES = {
+    "en": "English",
+    "de": "Deutsch",
+    "es": "Español",
+    "fr": "Français",
+    "cs": "Český",
+}
