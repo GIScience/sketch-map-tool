@@ -41,7 +41,7 @@
             {{ _('Our new <a
                 href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html"
                 target="_blank">training platform</a>
-            provides five distinct training exercises to further explore the Sketch Map Tool and sketch mapping in general.
+            provides distinct training exercises to further explore the Sketch Map Tool and sketch mapping in general.
             These exercises are primarily designed for workshop settings, allowing for collaborative discussion of your
             experiences.') }}
         
@@ -161,13 +161,7 @@
                             </ul>
                         </li>
                     </ul>
-                    <p>
-                        {{ _('If you like to learn more about the challenges of map orientation and how to choose a good base map,
-                        take a look at <a
-                            href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex2_.html"
-                            target="_blank">Training Exercise 2</a>.') }}
-                    </p>
-                
+                                    
                 </article>
 
             </details>
@@ -175,47 +169,80 @@
                 <summary id="map-quality-check">1.2 {{ _('Map Quality Check') }}</summary>
                 <article>
                     <p>
-                        {{ _('When you choose <a href="https://osm.org/" target="_blank">OpenStreetMap (OSM)</a> as base map layer, you will be 
-                        provided with a report on the map quality in your Area of Interest (AOI). The Map Quality Check gives an evaluation of 
-                        the suitability of the local OSM data of your AOI for participatory mapping. The report is computed by the 
-                        <a href="https://api.quality.ohsome.org/">ohsome quality API</a> of <a href="https://heigit.org/">HeiGIT</a>.
-                        The Map Quality Check can be downloaded as a PDF file by clicking on the blue button.') }}
+                        {{ _('When you choose <a href="https://osm.org/" target="_blank">OpenStreetMap (OSM)</a> as base map layer, you can 
+						analyze the base map data of your selected area of interest directly in the ohsome Dashboard <a href="https://dashboard.ohsome.org">. 
+						Making use of the <a href="https://api.quality.ohsome.org/">ohsome quality API</a> quality checks are performed and displayed in the 
+						dashboard and the report, as shown in the figure below. 
+						This provides important insights into the suitability of the base map data for field data collection.' ) }}
                     </p>
                 
-                    <figure> <!-- figure needs to be changed. link to the figure-->
-                        <img src="{{ url_for("static", filename="assets/images/help/1_2_map_quality_report.webp" ) }}"
-                            alt="{{ _('Map Quality Report.') }}">
+                    <figure> <!-- Figure ohsome dashboard-->
+                        <img src="{{ url_for("static", filename="assets/images/help/ohsome_dashboard_overview.webp" ) }}"
+                            alt="{{ _('ohsome dashboard overview.') }}">
                         <figcaption></figcaption>
                     </figure>
+                    <p>
+						{{ _('By clicking the <b>Get Quality Report</b> button, the dashboard is directly opened in a new tab. 
+						The area of interest selected in the Sketch Map Tool is automatically transferred to the dashboard, 
+						and an analysis of the <b>completeness</b> and <b>currency</b> of the <b>road data</b> in that area in the OSM data set is conducted.
+						A marker in the top left corner of the report visually indicates how good the quality of the data is, using the familiar traffic light system. 
+						In the case of a <b>green marker</b> (in the figure <b>high currentness</b> and <b>high completeness</b>), 
+						the data foundation is sensibly usable given the examined quality aspect. In the case of a <b>red</b> output, this criterion should be examined more closely.') }}
+                    </p>
                 
-                    <h5>{{ _('Recommendations') }}</h5>
+                    <figure> <!-- Figure ohsome dashboard report-->
+                        <img src="{{ url_for("static", filename="assets/images/help/ohsome_dashboard_report.webp" ) }}"
+                            alt="{{ _('ohsome dashboard overview.') }}">
+                        <figcaption></figcaption>
+                    </figure>
+					
+					<p>
+						{{ _('Example: If the report shows a <b>red</b> output for completeness, it may be difficult to orient oneself due to the lack 
+						of data in the selected area in OSM. If the report shows such output for currentness, it means the existing data has not
+						been updated or expanded for a long time, which indicates that the data in the selected area could be outdated.
+						In both cases, it could be useful to improve the OSM data foundation through personal mapping in OpenStreetMap or 
+						with the help of the <a href="https://www.missingmaps.org/" target="_blank">Missing Maps project</a> and/or
+						<a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> Communities. Please feel free to get in touch if
+						you would like to learn more, we are happy to support.') }}
+                    </p>
+												
+                
+                    <h5>{{ _('What is the benefit of this new ohsome dashboard integration? + Recommendations') }}</h5>
                     <ul>
                         <li>
                             {{ _('Before you use these OSM-based Sketch Maps for participatory mapping in your area of interest,
-                            review the analysis provided by the Map Quality Check to ensure that participants can orient themselves
+                            you can review the analysis provided by the Map Quality Check to ensure that participants can orient themselves
                             properly on the paper maps.') }}
                         </li>
                         <li>
-                            {{ _('The analyses focus on Point of Interest (POI) density, the last edit of amenities and streets, used
-                            sources, as well as the saturation of amenity and road network mapping.
-                            Detailed information about each indicator and the analysis is available in the generated PDF report.') }}
-                        </li>
-                        <li>
-                            {{ _('The report includes useful recommendations to ensure that the generated maps are suitable for
-                            participatory mapping.') }}
-                        </li>
-                        <li>
-                            {{ _('In case the OSM data in your area of interest is not sufficient for participatory mapping, consider
-                            the opportunity to improve the OSM data before printing the Sketch Maps, by organizing an OSM Mapathon. 
-                            For more information and help on how to conduct a Mapathon please take a look at the 
-                            <a href="https://www.missingmaps.org/" target="_blank">Missing Maps project</a>') }}.
-                        </li>
+                            {{ _('You are automatically provided with analyses in the ohsome dashboard directly. In contrast to having as before a static PDF report, 
+							this setup to enables you to also adapt and complement the automatically conducted analyses according to your needs. 
+							While road data is automatically checked for you can choose from a wide selection of topics in regard to OSM data:') }}
+					
+							<figure> <!-- Figure Topic selection-->
+								<img src="{{ url_for('static', filename='assets/images/help/topic_selection.webp' ) }}"
+								alt="{{ _('Figure Topic selection.') }}">
+								<figcaption>{{ _('Topic selection example') }}</figcaption>
+							</figure>
+									
+						</li>
+						
+						<li>
+                            {{ _('Further, you can not only analyse the <b>completeness</b> and <b>currency</b> of the OSM data, but further conduct a <b>Road Comparison</b> 
+							with reference data and also check the <b>attribute completeness</b> in your OSM base data.:') }}
+					
+							<figure> <!-- Figure Quality Indicators-->
+								<img src="{{ url_for("static", filename="assets/images/help/quality_indicators.webp" ) }}"
+								alt="{{ _('Figure Quality Indicators.') }}">
+								<figcaption>{{ _('Quality indicators overview') }}</figcaption>
+							</figure>
+						</li>
+									
                         <li>
                             {{ _('Take a look at the map:') }}
                             <ul>
                                 <li>{{ _('How well can you orient yourself on the map?') }}</li>
-                                <li>{{ _('Are important points of reference, such as hospitals, schools, landmarks, etc. visible on the
-                                    map?') }}</li>
+                                <li>{{ _('Are important points of reference, such as hospitals, schools, landmarks, etc. visible on the map?') }}</li>
                 
                             </ul>
                         </li>
@@ -226,8 +253,7 @@
                 <summary id="export-sketch-map-as-pdf">1.3 {{ _('Export Sketch Map as PDF') }}</summary>
                 <article>
                     <p>
-                        {{ _('The generated Sketch Map for your selected area of interest can be downloaded as a PDF file by clicking on
-                        the blue button.') }}
+                        {{ _('The generated Sketch Map for your selected area of interest can be downloaded as a PDF file by clicking on the blue button.') }}
                     </p>
                     <figure> 
                         <img src="{{ url_for("static", filename="assets/images/help/1_3_empty_sketch_map_osm.webp" ) }}"
@@ -897,29 +923,19 @@
             <article>
                 {{ _('Based on the 
                     <a href="https://api.quality.ohsome.org/" 
-                    target="_blank">HeiGIT ohsome quality API</a>, the OSM data used in the base map is classified with a traffic light system.
-                Green stands for good suitability of the data, yellow for possible problems when carrying out a
-                Sketch Map study with OSM-based Sketch Maps, and red for probable problems.
-                Recommendations are also given on what to consider based on the results.') }}
+                    target="_blank">HeiGIT ohsome quality API</a>, the <b>roads</b> in the OSM base map data are analyzed automatically in regard to 
+					their <b>Mapping Saturation</b> and <b>Currentness</b>. Please check the chapter <b>1.2 Map Quality Check</b> for a detailed overview.') }}
             </article>
         </details>
-        <details>
-            <summary id="which-analyses-are-performed">{{ _('Which analyses are performed and why?') }}</summary>
-            <article>
-                {{ _('You can read more about the analyses included in the Sketch Map Tool <a
-                    href="https://www.mdpi.com/2220-9964/10/3/130" target="_blank">this
-                    paper</a>.') }}
-            </article>
-        </details>
+        
         <details>
             <summary id="for-which-reseach-questions-can-smt-be-used">{{ _('For which research questions can the Sketch Map Tool
                 be used?') }}</summary>
             <article>
-                {{ _('The Sketch Map Tool has been primarily developed for research questions related to flooding.
+                {{ _('The Sketch Map Tool has been primarily developed for research questions related to flooding and disaster risk reduction.  .
                 Since then, it has been used world wide for a variety of topics like vulnerability and capacity mapping or risk
-                mapping in general.
-                You can use the Sketch Maps and the Map Quality Check to investigate all kinds of research questions, as long as
-                you check that it fits your purpose.') }}
+                mapping in general, city planning, mapping of cultural sites and many more.
+                Check out our <b>Case Studies</b> to learn more.') }}
             </article>
         </details>
         <details>
