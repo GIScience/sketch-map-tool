@@ -13,6 +13,7 @@ RUN npm run build
 
 # build python app
 FROM python:3.12-bookworm AS python-builder
+COPY --from=ghcr.io/astral-sh/uv:0.6.2 /uv /uvx /bin/
 
 WORKDIR /app
 
@@ -28,26 +29,26 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         libzbar0 \
         python3-gdal
 
-ENV POETRY_NO_INTERACTION=1 \
-    POETRY_VIRTUALENVS_IN_PROJECT=1 \
-    POETRY_VIRTUALENVS_CREATE=1 \
-    POETRY_CACHE_DIR=/tmp/poetry_cache \
-    POETRY_REQUESTS_TIMEOUT=600
+ENV UV_LINK_MODE=copy \
+    UV_HTTP_TIMEOUT=300s
 
-COPY pyproject.toml poetry.lock ./
-
-RUN --mount=type=cache,target=$POETRY_CACHE_DIR python3 -m pip install --break-system-packages poetry setuptools \
-    && python3 -m poetry install --only main --no-root --no-directory
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --frozen --no-install-project \
+    && uv pip install \
+        gdal[numpy]=="$(gdal-config --version).*" \
+        psycopg2
 
 COPY sketch_map_tool sketch_map_tool
 COPY data data
 COPY config config
 
-RUN --mount=type=cache,target=$POETRY_CACHE_DIR python3 -m poetry install --only main --no-root --no-directory \
-    && python3 -m poetry run python -m pip install \
-        gdal[numpy]=="$(gdal-config --version).*" \
-        psycopg2 \
-    && python3 -m poetry run pybabel compile -d sketch_map_tool/translations
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --frozen --no-editable \
+    && uv run pybabel compile -d sketch_map_tool/translations
 
 
 # final image
