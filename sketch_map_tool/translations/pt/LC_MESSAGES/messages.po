@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-24 13:03+0000\n"
-"PO-Revision-Date: 2025-02-24 13:32\n"
+"POT-Creation-Date: 2025-02-25 16:46+0000\n"
+"PO-Revision-Date: 2025-02-25 17:31\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -318,24 +318,24 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: sketch_map_tool/templates/base.html:72
+#: sketch_map_tool/templates/base.html:73
 msgid "Newsletter"
 msgstr ""
 
-#: sketch_map_tool/templates/base.html:74
+#: sketch_map_tool/templates/base.html:75
 msgid "Further Legal Information"
 msgstr ""
 
-#: sketch_map_tool/templates/base.html:76
+#: sketch_map_tool/templates/base.html:77
 msgid "Privacy\n"
 "            Policy"
 msgstr ""
 
-#: sketch_map_tool/templates/base.html:79
+#: sketch_map_tool/templates/base.html:80
 msgid "Imprint"
 msgstr ""
 
-#: sketch_map_tool/templates/base.html:82
+#: sketch_map_tool/templates/base.html:83
 msgid "HeiGIT Logo"
 msgstr ""
 

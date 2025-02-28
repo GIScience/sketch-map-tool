@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-24 13:03+0000\n"
-"PO-Revision-Date: 2025-02-25 09:28\n"
+"POT-Creation-Date: 2025-02-25 16:46+0000\n"
+"PO-Revision-Date: 2025-02-26 13:32\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: sketch_map_tool/routes.py:309
 #, python-brace-format
 msgid "There are no tasks for UUID {UUID}"
-msgstr ""
+msgstr "Es gibt keine Aufgaben für UUID {UUID}"
 
 #: sketch_map_tool/validators.py:19
 #, python-brace-format
@@ -44,7 +44,7 @@ msgstr "Die angegebene URL enthält keine gültige UUID"
 
 #: sketch_map_tool/validators.py:73
 msgid "The provided URL does not contain a valid bounding box"
-msgstr ""
+msgstr "Die angegebene URL enthält keine gültige Begrenzungsbox"
 
 #: sketch_map_tool/validators.py:82 sketch_map_tool/validators.py:89
 #: sketch_map_tool/validators.py:96
@@ -332,35 +332,35 @@ msgstr "Über"
 msgid "Help"
 msgstr "Hilfe"
 
-#: sketch_map_tool/templates/base.html:72
+#: sketch_map_tool/templates/base.html:73
 msgid "Newsletter"
 msgstr "Newsletter"
 
-#: sketch_map_tool/templates/base.html:74
+#: sketch_map_tool/templates/base.html:75
 msgid "Further Legal Information"
 msgstr "Weitere rechtliche Informationen"
 
-#: sketch_map_tool/templates/base.html:76
+#: sketch_map_tool/templates/base.html:77
 msgid "Privacy\n"
 "            Policy"
 msgstr "Datenschutzerklärung"
 
-#: sketch_map_tool/templates/base.html:79
+#: sketch_map_tool/templates/base.html:80
 msgid "Imprint"
 msgstr "Impressum"
 
-#: sketch_map_tool/templates/base.html:82
+#: sketch_map_tool/templates/base.html:83
 msgid "HeiGIT Logo"
 msgstr "HeiGIT Logo"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:6
 #: sketch_map_tool/templates/case-study-timor-leste.html:8
 msgid "Case Study"
-msgstr ""
+msgstr "Case Study"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:12
 msgid "Participatory Mapping for Cultural Landmarks"
-msgstr ""
+msgstr "Partizipative Kartierung von kulturellen Sehenswürdigkeiten"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:36
 msgid "Claudio Sossio De Simone is a PhD candidate at the University of Rome\n"
@@ -368,7 +368,7 @@ msgid "Claudio Sossio De Simone is a PhD candidate at the University of Rome\n"
 "    research interests include GIS science and geoinformation applied to\n"
 "    cultural heritage, as well as the geo-historical study of rural\n"
 "    landscapes."
-msgstr ""
+msgstr "Claudio Sossio De Simone ist Doktorand an der Tor Vergata Universität Rom im Bereich kulturelles Erbe, Bildung und Territorium. Seine Forschungsinteressen umfassen GIS und Geoinformationswissenschaften, die auf das kulturelle Erbe sowie geohistorische Studien über ländliche Landschaften angewandt werden."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:43
 msgid "The Sketch Map Tool was used as part of his PhD research on the\n"
@@ -376,23 +376,23 @@ msgid "The Sketch Map Tool was used as part of his PhD research on the\n"
 "    Italy. The research aimed to identify signiﬁcant landmarks and provide\n"
 "    decision-makers with geographical data to develop cultural, environmental,\n"
 "and touristic initiatives <a href=\"#1\">[1]</a>."
-msgstr ""
+msgstr "Er verwendete das Sketch Map Tool als Teil seiner Forschung über die Veränderung des Geländes um einen künstlichen Staudamm in einem ländlichen Gebiet in Süditalien. Ziel dieser Forschung war es, bedeutende Landmarken zu identifizieren und Entscheidungstragenden geographische Daten für die Entwicklung von Kultur-, Umwelt- und Tourismusinitiativen zur Verfügung zu stellen  <a href=\"#1\">[1]</a>."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:50
 msgid "Why was the Sketch Map Tool used?"
-msgstr ""
+msgstr "Warum wurde das Sketch Map Tool verwendet?"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:52
 msgid "The Sketch Map Tool was used as a means to capture the local\n"
 "    perception of the area around the Occhito dam by identifying\n"
 "    environmentally, culturally or socially signiﬁcant landmarks as perceived by\n"
 "    the local community."
-msgstr ""
+msgstr "Das Sketch Map Tool wurde eingesetzt, um die lokale Wahrnehmung des Gebiets rund um den Occhito-Staudamm zu erfassen, indem ökologisch, kulturell oder sozial bedeutsame Wahrzeichen aus Sicht der lokalen Bevölkerung hervorgehoben wurden."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:60
 msgid "The study area is a rural region between Molise and Apulia in Southern\n"
 "    Italy that is mostly mountainous and only sparsely populated."
-msgstr ""
+msgstr "Das Untersuchungsgebiet ist eine ländliche Region zwischen Molise und Apulien im Süden Italiens, die überwiegend gebirgig und nur dünn besiedelt ist."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:65
 msgid "In the late 1950s, an artiﬁcial dam was built in this area to form the\n"
@@ -403,19 +403,19 @@ msgid "In the late 1950s, an artiﬁcial dam was built in this area to form the\
 "    ﬂooding. In addition, the agricultural system has been profoundly changed\n"
 "    and the local traditional pastoral activities have almost completely\n"
 "    disappeared."
-msgstr ""
+msgstr "In den späten 1950er Jahren wurde ein künstlicher Staudamm gebaut, durch den der Occhito-See entstand. Das Gebiet zählt zu den sogenannten Natura 2000 Schutzgebieten  <a href=\"#2\">[2]</a> und bietet durch die Vegetation, die den See umgibt, einen Lebensraum für mehrere geschützte Arten. Jedoch hat der Damm die lokale Umwelt verändert. Die Instabilität der neuen Wasserlandschaft hat zu häufigen Überschwemmungen geführt. Darüber hinaus hat sich das landwirtschaftliche System tiefgreifend verändert und die traditionelle Weidewirtschaft ist fast vollständig verschwunden."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:75
 msgid " This changing scenario, along the ongoing efforts by stakeholders and\n"
 "    communities to develop a new governance plan, underscores the need for\n"
 "    enhanced spatial knowledge of the area by combining institutional data with\n"
 "    the local community expertise. "
-msgstr ""
+msgstr " Dieses sich ändernde Szenario sowie die laufenden Bemühungen der Interessensgruppen und lokalen Gemeinschaften, einen neuen Governance-Plan zu entwickeln, unterstreicht die Notwendigkeit einer Verbesserung der räumlichen Kenntnisse über das Gebiet, indem institutionelle Daten mit dem Fachwissen der lokalen Bevölkerung vereint werden. "
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:81
 #: sketch_map_tool/templates/case-study-timor-leste.html:73
 msgid "How was the Sketch Mapping organized?"
-msgstr ""
+msgstr "Wie wurde das Sketch Mapping organisiert?"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:84
 msgid "Community mapping was conducted with both local adults and school\n"
@@ -428,16 +428,16 @@ msgid "Community mapping was conducted with both local adults and school\n"
 "    and “special places” with a strong subjective value (e.g. a place for\n"
 "    picnicking with family, the spot where the mapper kissed for the ﬁrst time)\n"
 "    <a href=\"#3\">[3]</a>."
-msgstr ""
+msgstr "Gemeinschaftliche Kartierung wurde sowohl mit Erwachsenen als auch mit Schulkindern zwischen 11 und 14 Jahren durchgeführt, die angewiesen wurden, in Kleingruppen gemeinsam an den Sketch Maps zu arbeiten. Die Mapping Session mit A3 (große Skalierung) und A0 (kleine Skalierung) Sketch Maps fand nicht nur im Feld sondern auch im Klassenraum statt. Die Teilnehmenden konnten bedeutsame Wahrzeichen in der Landschaft einzeichnen und diese als \"kulturell-natürliche Orte\" (z.B. Denkmäler, archäologische Stätten, Vogelbeobachtungsplätze), \"problematische Orte\" (z.B. mit Müll übersäte Gebiete, überschwemmungsgefährdete Gebiete) und \"besondere Orte\" mit einem stark ausgeprägten subjektiven Wert (z.B. ein Ort für ein Familien-Picknick, der Ort an dem der Kartierende zum ersten Mal geküsst hat), markieren <a href=\"#3\">[3]</a>."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:98
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:100
 msgid "A Sketch Map of the area around the Occito lake in QGIS software."
-msgstr ""
+msgstr "Eine Sketch Map für das Gebiet rund um den Occhito-See in der QGIS Software."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:105
 msgid "How were the Sketch Maps analysed?"
-msgstr ""
+msgstr "Wie wurden die Sketch Maps analysiert?"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:107
 msgid "As a ﬁrst step, the geodata from the digitalized Sketch Maps was\n"
@@ -445,7 +445,7 @@ msgid "As a ﬁrst step, the geodata from the digitalized Sketch Maps was\n"
 "    landmarks were uploaded to the Google My Maps platform for a quicker and\n"
 "    better visualization of the collected data during the mapping session in the\n"
 "    classroom."
-msgstr ""
+msgstr "Im ersten Schritt wurden die Geodaten der digitalisierten Sketch Maps manuell gereinigt, korrigiert und verbessert. Danach wurden die gesammelten Markierungen der Wahrzeichen auf die Google My Maps Plattform hochgeladen, um eine schnellere und bessere Visualisierung der erfassten Daten während der Mapping Session in den Klassenzimmern zu ermöglichen."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:114
 msgid " As a further step, the Heatmap Plugin in QGIS was used to perform a\n"
@@ -454,12 +454,12 @@ msgid " As a further step, the Heatmap Plugin in QGIS was used to perform a\n"
 "    Multiple heatmaps were created to map the density areas of the selected\n"
 "    landmarks, which can later be used to analyze the cultural and social\n"
 "    aspects of the area <a href=\"#4\">[4]</a>."
-msgstr ""
+msgstr " Im nächsten Schritt wurde das Heatmap-Plugin in QGIS verwendet, um eine Dichte-Analyse der Punktlayer durchzuführen. Daraus entstanden Heatmaps, die die Intensität eines Merkmals in einem Gebiet auf Basis der Punktdichte visualisieren. Es wurden mehrere Heatmaps erstellt, um die Dichtebereiche der ausgewählten Wahrzeichen zu kartieren, die später zur Analyse der kulturellen und sozialen Aspekte des Gebiets genutzt werden können <a href=\"#4\">[4]</a>."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:122
 #: sketch_map_tool/templates/case-study-timor-leste.html:107
 msgid "Results and Impact"
-msgstr ""
+msgstr "Ergebnisse und Wirkung"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:124
 msgid "The VGI data collected with the Sketch Map Tool sessions is to be\n"
@@ -467,11 +467,11 @@ msgid "The VGI data collected with the Sketch Map Tool sessions is to be\n"
 "    cultural sites) into a GIS platform, creating a web map that can be used to\n"
 "    develop new cultural and touristic initiatives as well as a better\n"
 "    governance of the problematic areas."
-msgstr ""
+msgstr "Die VGI-Daten, die mit den Sketch Map Tool Sitzungen gesammelt werden konnten, sollen mit den institutionellen Daten (z.B. Landnutzungskarten, Zensus-Daten, Karten von kulturellen Stätten) zu einer GIS-Plattform zusammengeführt werden. Dabei wird eine Web-Karte erstellt, die der Entwicklung neuer kulturellen und touristischen Initiativen sowie zur besseren Verwaltung problematischer Gebiete dient."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:130
 msgid "Lesson learnt"
-msgstr ""
+msgstr "Gewonnene Erkenntnisse"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:133
 msgid "Adult mappers demonstrated greater skills in orienting themselves on\n"
@@ -479,14 +479,14 @@ msgid "Adult mappers demonstrated greater skills in orienting themselves on\n"
 "      difficulties in orienting themselves in space, but identiﬁed more\n"
 "      unconventional, subjectively relevant landmarks, showing interest in\n"
 "      different areas and characteristics of the landscape."
-msgstr ""
+msgstr "Die Kartierenden im Erwachsenenalter wiesen mehr Fähigkeiten bei der Orientierung auf der Karte und bei der Verortung von Landschaftsmerkmalen auf, während die jüngeren Teilnehmenden eher Schwierigkeiten hatten, sich im Raum zu orientieren. Jedoch markierten sie mehr unkonventionelle und subjektiv relevante Landschaftsmerkmale und zeigten Interesse an verschiedenen Gebieten und Eigenschaften der Landschaft."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:141
 msgid "Community mapping clearly showed its potential to highlight some\n"
 "      aspects of the local resources and landmarks that are not present in the\n"
 "      official cartography, particularly in regard to places with a cultural or\n"
 "      subjective value."
-msgstr ""
+msgstr "Das gemeinschaftliche Kartieren zeigte deutlich ihr Potenzial, bestimmte Aspekte lokaler Ressourcen und Wahrzeichen hervorzuheben, die in der offiziellen Kartographie nicht erfasst sind - insbesondere in Bezug auf Orte von kulturellem oder subjektivem Wert."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:147
 msgid "Many community mappers can orientate themselves more easily on a\n"
@@ -494,7 +494,7 @@ msgid "Many community mappers can orientate themselves more easily on a\n"
 "      used, which only supported OSM as base map, satellite maps were used along\n"
 "      OSM-based Sketch Maps to help with the orientation. Sketch Map Tool 2.0.\n"
 "      now allows to integrate satellite imagery directly in the base maps."
-msgstr ""
+msgstr "Viele Kartierende finden es einfacher, auf einer Satellitenkarte zu navigieren, statt auf OSM-Basiskarten. Da das Sketch Map Tool 1.0 verwendet wurde, welches nur OSM als Basiskarte unterstützt hat, wurden die Satellitenkarten zusammen mit den OSM-basierten Sketch Maps verwendet, um die Orientierung zu erleichtern. Mit dem Sketch Map Tool 2.0 können nun Satellitenbilder direkt in die Basiskarten integriert werden."
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:154
 msgid " "
@@ -503,47 +503,47 @@ msgstr ""
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:156
 #: sketch_map_tool/templates/case-study-timor-leste.html:158
 msgid "Sources"
-msgstr ""
+msgstr "Quellen"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:159
 msgid "La media valle del ﬁume Fortore (Campobasso), un caso di\n"
 "      destrutturazione e ristrutturazione di un paesaggio d’acqua: variazioni\n"
 "      nell’uso del suolo come indicatore di cambiamento, 2021"
-msgstr ""
+msgstr "Das mittlere Tal des Fortore (Campobasso), ein Fall von Zerstörung und Umstrukturierung der Wasserlandschaft: Landnutzungsänderungen als Indikator für Veränderungen, 2021"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:163
 msgid "Biodiversity – Enviromental Inforamtion Systems"
-msgstr ""
+msgstr "Biodiversität – Umweltinformationssysteme"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:164
 msgid "Millenium Ecosystem Assessment"
-msgstr ""
+msgstr "Millenium Ecosystem Assessment"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:165
 msgid "Data Analysis with QGIS – GIS Resource Training Center"
-msgstr ""
+msgstr "Datenanalyse mit QGIS – GIS Ressourcen Training"
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:13
 msgid "Participatory Mapping in Timor Leste"
-msgstr ""
+msgstr "Partizipative Kartierung in Osttimor"
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:34
 msgid " The mission of the Climate Centre‘s team is to support the Red Cross\n"
 "    and Red Crescent Movement and its partners in reducing the impacts of\n"
 "    climate change and extreme-weather events on vulnerable people. "
-msgstr ""
+msgstr " Das Team des Climate Centers hat die Aufgabe, die Internationale Rotkreuz und Rothalbmond-Bewegung und ihre Partner bei der Verringerung der Auswirkungen des Klimawandels und extremer Wetterereignisse auf gefährdete Menschen zu unterstützen. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:39
 msgid " The Anticipatory Action team conducted a pilot project in Timor Leste\n"
 "    to implement anticipatory mapping using OpenStreetMap (OSM). This project\n"
 "    aimed to address the lack of baseline data necessary for planning effective\n"
 "    anticipatory actions in the region. "
-msgstr ""
+msgstr " Das Anticipatory Action Team führte ein Pilot-Projekt in Osttimor durch, um vorausschauendes Kartieren mit OpenStreetMap (OSM) zu implementieren. Dieses Projekt hat das Ziel, den Mangel an Basisdaten zu beheben, welche für die Planung wirksamer Präventionsmaßnahmen in der Region erforderlich sind. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:47
 msgid " This project aimed to enhance anticipatory mapping in hazard-prone\n"
 "    communities in Timor-Leste by creating and using OSM data. "
-msgstr ""
+msgstr " Dieses Projekt zielte darauf ab, das vorausschauende Kartieren in gefährdeten Gemeinschaften in Osttimor zu verbessern, indem OSM-Daten erstellt und genutzt wurden. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:51
 msgid " By providing accurate information, the project promoted the\n"
@@ -552,7 +552,7 @@ msgid " By providing accurate information, the project promoted the\n"
 "    to explore innovative methods for capturing community knowledge of historic\n"
 "    flood events, their impact on the community, and existing early warning\n"
 "    systems. "
-msgstr ""
+msgstr " Durch die Bereitstellung präziser Informationen unterstützte das Projekt die Entwicklung proaktiver Strategien und die Einführung von Frühwarnsystemen zur Minderung der von Naturgefahren ausgehenden Risiken. Ein wichtiges Ziel war die Erforschung innovativer Methoden zur Erfassung des Wissens der Gemeinschaft über historische Überschwemmungen, deren Auswirkungen auf die Gemeinschaft und über bereits bestehende Frühwarnsysteme. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:59
 msgid " A thorough nationwide multi-hazard analysis identified high-exposure\n"
@@ -561,16 +561,16 @@ msgid " A thorough nationwide multi-hazard analysis identified high-exposure\n"
 "    broader activity, which began with remote mapping and local mapping to\n"
 "    improve building information of residential buildings and critical buildings\n"
 "    in OSM via KOBO questionnaires. "
-msgstr ""
+msgstr " Im Rahmen einer ausführlichen landesweiten Multi-Gefahren-Analyse wurden Gebiete mit hohem Risiko identifiziert, was zur Priorisierung der Kartierung dieser Gebiete mit OSM führte. Die gemeinschaftliche Kartierung mit dem Sketch Map Tool war Teil einer umfassenderen Bemühung, die mit der Fernerkundung und lokaler Kartierung begann, um Gebäudedaten von Wohngebäuden und kritischen Infrastrukturen in OSM mit Hilfe von KOBO-Erhebungen zu verbessern. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:67
 msgid "Why the Sketch Map Tool was used?"
-msgstr ""
+msgstr "Warum wurde das Sketch Map Tool verwendet?"
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:69
 msgid " The Sketch Map Tool was used to capture the community knowledge of\n"
 "    historic flood extents and their impacts as well as capacities. "
-msgstr ""
+msgstr " Das Sketch Map Tool wurde verwendet, um das Wissen der Gemeinschaft über die historischen Überschwemmungsausmaße, ihre Auswirkungen und vorhandene Kapazitäten zu erfassen. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:75
 msgid " Prior to the mapping activities, the team organized community\n"
@@ -581,23 +581,23 @@ msgid " Prior to the mapping activities, the team organized community\n"
 "    community members who had been affected by recent floods. The selection\n"
 "    process had no age restrictions and emphasized maintaining an equal ratio of\n"
 "    men and women at the meetings. "
-msgstr ""
+msgstr " Vor Beginn der Kartierungsaktivität organisierte das Team Gemeindetreffen, um die Beteiligung der Bewohnenden während des gesamten Prozesses sicherzustellen. Die Einwohnenden der hochwassergefährdeten Dörfer wurden über das bereits bekannte Netzwerk des Roten Kreuzes von Osttimor und dessen lokale Zweigstellen kontaktiert. Gemeindevertretende aus jedem Dorf wurden zu diesen Treffen eingeladen und gebeten, Gemeindemitglieder mitzubringen, die von jüngsten Überschwemmungen betroffen waren. Bei der Auswahl dieser Mitglieder gab es keine Altersbeschränkungen und es wurde auf ein ausgewogenes Geschlechterverhältnis wert gelegt. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:85
 msgid " The participants mapped the extent and location of historic flood\n"
 "    events on one map, and on a second map, they identified capacities such as\n"
 "    evacuation sites and natural protection areas. "
-msgstr ""
+msgstr " Diese Teilnehmenden kartierten das Ausmaß und die Lage historischer Hochwasserereignisse auf der einen Karte, während sie auf einer zweiten Karte die Kapazitäten wie Evakuierungsorte und natürliche Schutzgebiete identifizierten. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:93
 msgid "This Sketch Map shows the result of community mappers marking\n"
 "      historic flood areas in orange. © Red Cross Red Crescent Climate Centre\n"
 "      team for Anticipatory Action."
-msgstr ""
+msgstr "Die Sketch Map zeigt das Ergebnis der Kartierenden, die die historischen Hochwassergebiete in orange kartierten. © Red Cross Red Crescent Climate Centre team for Anticipatory Action."
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:99
 msgid "How were the Sketch Maps analyzed?"
-msgstr ""
+msgstr "Wie wurden die Sketch Maps analysiert?"
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:101
 msgid " The mappings on the Sketch Maps were combined with other collected\n"
@@ -605,63 +605,63 @@ msgid " The mappings on the Sketch Maps were combined with other collected\n"
 "    (in this case, ArcPro was used). The community mapping results were also\n"
 "    used to improve OSM data by adding local names to rivers, villages, and\n"
 "    including nature conservation areas directly via the OSM editor. "
-msgstr ""
+msgstr " Die Kartierungen auf den Sketch Maps wurden mit anderen lokal erfassten Daten kombiniert und mithilfe von Geoinformationssoftware (in diesem Fall wurde ArcPro genutzt) in einer Gemeinschaftskarte visualisiert. Die Ergebnisse des gemeinschaftlichen Kartierens wurden auch zur Verbesserung von OSM-Daten verwendet, indem lokale Namen zu Flüssen und Dörfern hinzugefügt und Naturschutzgebiete direkt über den OSM-Editor eingezeichnet wurden. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:109
 msgid " The gathered information and created maps were used to support local\n"
 "    communities and decision- makers in making informed decisions and\n"
 "    facilitating anticipatory action planning. "
-msgstr ""
+msgstr " Die gesammelten Informationen und erstellten Karten wurden genutzt, um lokale Gemeinschaften und Entscheidungstragenden bei der fundierten Entscheidungsfindung zu unterstützen und die Planung von vorausschauenden Maßnahmen (Anticipatory Action) zu erleichtern. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:117
 msgid " This Community map shows the results of the different mapping\n"
 "      activities conducted in the area including the historical flood areas\n"
 "      mapped in the Sketch Map. © Red Cross Red Crescent Cli- mate Centre team\n"
 "      for Anticipatory Action."
-msgstr ""
+msgstr " Die Gemeinschafts-Karte zeigt die Ergebnisse der verschiedenen Kartierungen in diesem Gebiet, einschließlich der historischen Überschwemmungsgebiete, die in der Sketch Map kartiert wurden. © Red Cross Red Crescent Climate Centre team for Anticipatory Action."
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:124
 msgid "Lessons learnt"
-msgstr ""
+msgstr "Gewonnene Erkenntnisse"
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:127
 msgid "One large format map (A3) proved to be handier than multiple smaller\n"
 "      maps with detailed depiction of specific areas."
-msgstr ""
+msgstr "Eine Karte in großem Format (A3) ist handlicher zu nutzen als mehrere kleinere Karten mit detaillierter Darstellung bestimmter Gebiete."
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:132
 msgid "Best results were achieved in smaller groups of 4-6 people."
-msgstr ""
+msgstr "Die besten Ergebnisse wurden in kleineren Gruppen von 4 bis 6 Personen erzielt."
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:135
 msgid "An additional satellite imagery can help the orientation on the OSM\n"
 "      base maps."
-msgstr ""
+msgstr "Zusätzliche Satellitenbilder können die Orientierung auf den OSM-Basiskarten erleichtern."
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:139
 msgid " The digitization process is sensitive to the map‘s condition and\n"
 "      the quality of the photos taken. Using document folders helps keep fragile\n"
 "      paper maps clean and smooth, protecting them during fieldwork. "
-msgstr ""
+msgstr " Der Digitalisierungsprozess hängt vom Zustand der Karte und der Qualität der aufgenommenen Fotos ab. Die Verwendung von Dokumentenmappen hilft dabei, die empfindlichen Papierkarten sauber und glatt zu halten und schützt sie während der Arbeit im Feld. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:144
 msgid " A pretest of the mapping with the markers/pens you use is very\n"
 "      helpful to ensure everything works as planned. "
-msgstr ""
+msgstr " Ein vorläufiges Kartieren mit denselben Markern/Stiften, die später verwendet werden, ist nützlich, um sicherstellen, dass alles wie geplant funktioniert. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:152
 msgid " Community meeting in the Laclo valley to capture community\n"
 "      knowledge of floods, impacts, and capacities. © Red Cross Red Crescent\n"
 "      Climate Centre team for Anticipatory Action. "
-msgstr ""
+msgstr " Gemeindeversammlung im Laclo-Tal, um das Wissen der Gemeinde über Überschwemmungen, ihre Auswirkungen und Kapazitäten zu erweitern. © Red Cross Red Crescent Climate Centre team for Anticipatory Action. "
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:163
 msgid "Final Report"
-msgstr ""
+msgstr "Abschlussbericht"
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:169
 msgid "Blogpost"
-msgstr ""
+msgstr "Blogpost"
 
 #: sketch_map_tool/templates/create-results.html:9
 #: sketch_map_tool/templates/create.html:12
@@ -729,7 +729,7 @@ msgid "You can analyze the <a href=\"https://wiki.osm.org\" target=\"_blank\">Op
 "                        dashboard gives insights about the <strong>fitness for field data collection</strong>.\n"
 "                        It will be created through the <a href=\"https://api.quality.ohsome.org/\"\n"
 "                        target=\"_blank\">ohsome quality API</a>."
-msgstr ""
+msgstr "Du kannst die <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a>-Daten des ausgewählten Interessensgebiets über das <a href=\"https://dashboard.ohsome.org\" target=\"_blank\">ohsome Dashboard</a> analysieren. Das ohsome Dashboard bietet Einblicke in die <strong>Eignung für die Datenerhebung im Feld</strong>. Es wird über die <a href=\"https://api.quality.ohsome.org/\" target=\"_blank\">ohsome quality API</a> erstellt."
 
 #: sketch_map_tool/templates/create-results.html:46
 msgid "Get Quality Report"
@@ -1837,7 +1837,7 @@ msgstr "Für detailliertere und technischere Informationen, sieh Dir unser <a hr
 
 #: sketch_map_tool/templates/help.html:854
 msgid "Data storage and security workflow."
-msgstr ""
+msgstr "Datenspeicherung und Sicherheits-Workflow."
 
 #: sketch_map_tool/templates/help.html:859
 msgid "If you <strong>opt-out</strong> by leaving the checkbox unchecked (default) ..."

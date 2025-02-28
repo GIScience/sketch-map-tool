@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-24 13:03+0000\n"
-"PO-Revision-Date: 2025-02-25 15:29\n"
+"POT-Creation-Date: 2025-02-25 16:46+0000\n"
+"PO-Revision-Date: 2025-02-25 17:31\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -335,24 +335,24 @@ msgstr "O nás"
 msgid "Help"
 msgstr "Nápověda"
 
-#: sketch_map_tool/templates/base.html:72
+#: sketch_map_tool/templates/base.html:73
 msgid "Newsletter"
 msgstr "Zpravodaj"
 
-#: sketch_map_tool/templates/base.html:74
+#: sketch_map_tool/templates/base.html:75
 msgid "Further Legal Information"
 msgstr "Další právní informace"
 
-#: sketch_map_tool/templates/base.html:76
+#: sketch_map_tool/templates/base.html:77
 msgid "Privacy\n"
 "            Policy"
 msgstr "Zásady ochrany osobních údajů"
 
-#: sketch_map_tool/templates/base.html:79
+#: sketch_map_tool/templates/base.html:80
 msgid "Imprint"
 msgstr "Tiráž"
 
-#: sketch_map_tool/templates/base.html:82
+#: sketch_map_tool/templates/base.html:83
 msgid "HeiGIT Logo"
 msgstr "HeiGIT Logo"
 
