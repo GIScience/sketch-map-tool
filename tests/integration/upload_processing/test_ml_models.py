@@ -9,10 +9,9 @@ from sketch_map_tool.upload_processing import ml_models
 @pytest.mark.parametrize(
     "id",
     (
-        get_config_value("yolo_osm_cls"),
-        get_config_value("yolo_esri_cls"),
         get_config_value("yolo_osm_obj"),
         get_config_value("yolo_esri_obj"),
+        get_config_value("yolo_cls"),
     ),
 )
 def test_init_model(id):
