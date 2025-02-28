@@ -179,11 +179,11 @@
                     </p>
                 
                     <figure> <!-- Figure ohsome dashboard-->
-                        <img src="{{ url_for("static", filename="ohsome_dashboard_overview.webp" ) }}"
+                        <img src="{{ url_for("static", filename="assets/images/help/ohsome_dashboard_overview.webp" ) }}"
                             alt="{{ _('ohsome dashboard overview.') }}">
                         <figcaption></figcaption>
                     </figure>
-					<p>
+                    <p>
 						{{ _('By clicking the <b>Get Quality Report</b> button, the dashboard is directly opened in a new tab. 
 						The area of interest selected in the Sketch Map Tool is automatically transferred to the dashboard, 
 						and an analysis of the <b>completeness</b> and <b>currency</b> of the <b>road data</b> in that area in the OSM data set is conducted.
@@ -194,7 +194,7 @@
                     </p>
                 
                     <figure> <!-- Figure ohsome dashboard report-->
-                        <img src="{{ url_for("static", filename="ohsome_dashboard_report.webp" ) }}"
+                        <img src="{{ url_for("static", filename="assets/images/help/ohsome_dashboard_report.webp" ) }}"
                             alt="{{ _('ohsome dashboard overview.') }}">
                         <figcaption></figcaption>
                     </figure>
@@ -204,8 +204,8 @@
 						of data in the selected area in OSM. If the report shows such output for currentness, it means the existing data has not
 						been updated or expanded for a long time, which indicates that the data in the selected area could be outdated.
 						In both cases, it could be useful to improve the OSM data foundation through personal mapping in OpenStreetMap or 
-						with the help of the <a href="https://www.missingmaps.org/" target="_blank">Missing Maps project</a>') and/or 
-						<a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a>') Communities. Please feel free to get in touch if 
+						with the help of the <a href="https://www.missingmaps.org/" target="_blank">Missing Maps project</a> and/or
+						<a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> Communities. Please feel free to get in touch if
 						you would like to learn more, we are happy to support.
 						') }}
                     </p>
@@ -221,10 +221,10 @@
                         <li>
                             {{ _('You are automatically provided with analyses in the ohsome dashboard directly. In contrast to having as before a static PDF report, 
 							this setup to enables you to also adapt and complement the automatically conducted analyses according to your needs. 
-							While road data is automatically checked for you can choose from a wide selection of topics in regard to OSM data:') 
+							While road data is automatically checked for you can choose from a wide selection of topics in regard to OSM data:') }}
 					
 							<figure> <!-- Figure Topic selection-->
-								<img src="{{ url_for('static', filename='topic_selection.webp' ) }}"
+								<img src="{{ url_for('static', filename='assets/images/help/topic_selection.webp' ) }}"
 								alt="{{ _('Figure Topic selection.') }}">
 								<figcaption>{{ _('Topic selection example') }}</figcaption>
 							</figure>
@@ -233,14 +233,13 @@
 						
 						<li>
                             {{ _('Further, you can not only analyse the <b>completeness</b> and <b>currency</b> of the OSM data, but further conduct a <b>Road Comparison</b> 
-							with reference data and also check the <b>attribute completeness</b> in your OSM base data.:') 
+							with reference data and also check the <b>attribute completeness</b> in your OSM base data.:') }}
 					
 							<figure> <!-- Figure Quality Indicators-->
-								<img src="{{ url_for("static", filename="quality_indicators.webp" ) }}"
+								<img src="{{ url_for("static", filename="assets/images/help/quality_indicators.webp" ) }}"
 								alt="{{ _('Figure Quality Indicators.') }}">
 								<figcaption>{{ _('Quality indicators overview') }}</figcaption>
 							</figure>
-							}}
 						</li>
 									
                         <li>
