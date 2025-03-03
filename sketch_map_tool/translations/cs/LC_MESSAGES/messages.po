@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-25 16:46+0000\n"
-"PO-Revision-Date: 2025-02-25 17:31\n"
+"POT-Creation-Date: 2025-03-03 13:22+0000\n"
+"PO-Revision-Date: 2025-03-03 13:33\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -114,17 +114,13 @@ msgstr "Sketch Map Tool podporuje uživatele ve všech důležitých krocích of
 "            vytváření papírových map až po jejich digitalizaci."
 
 #: sketch_map_tool/templates/about.html:30
-msgid "The first step is the creation of the paper-based maps. Users can choose between two basemap containing\n"
+msgid "The first step is the creation of the paper-based maps. Users can choose between two basemaps containing\n"
 "            <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> data and base maps containing satellite\n"
 "            images.\n"
 "            In addition, the tool can evaluate how well-suited an area of the OSM base map is for participatory mapping based on\n"
 "            a quality analysis of the OSM base map data through the\n"
 "            <a href=\"https://api.quality.ohsome.org/\" target=\"_blank\">HeiGIT ohsome quality API</a>."
-msgstr "Prvním krokem je vytvoření map založených na dokumentech. Uživatelé si mohou vybrat mezi dvěma základními mapami obsahujícími\n"
-"            <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> datovými a základními mapami obsahujícími satelitní snímky.\n"
-"            kromě toho nástroj může vyhodnotit, jak dobře je oblast základní mapy OSM pro participativní mapování vhodná na základě\n"
-"            analýzy kvality dat základní mapy OSM prostřednictvím\n"
-"            <a href=\"https://api.quality.ohsome.org/\" target=\"_blank\">HeiGIT ohsome quality API</a>."
+msgstr ""
 
 #: sketch_map_tool/templates/about.html:38
 msgid "For the data collection through offline participatory mapping you only need your participants, the printed\n"
@@ -515,8 +511,8 @@ msgid "La media valle del ﬁume Fortore (Campobasso), un caso di\n"
 msgstr "Střední údolí řeky Fortore (Campobasso), případ destrukce a restrukturalizace vodní krajiny: změny ve využití půdy jako ukazatel změn, 2021"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:163
-msgid "Biodiversity – Enviromental Inforamtion Systems"
-msgstr "Biodiverzita - Enviromentální informační systémy"
+msgid "Biodiversity – Enviromental Information Systems"
+msgstr ""
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:164
 msgid "Millenium Ecosystem Assessment"
@@ -681,7 +677,7 @@ msgstr "Definujte svou zájmovou oblast"
 
 #: sketch_map_tool/templates/create-results.html:15
 #: sketch_map_tool/templates/create.html:18
-#: sketch_map_tool/templates/help.html:175
+#: sketch_map_tool/templates/help.html:169
 #: sketch_map_tool/templates/index.html:53
 #: sketch_map_tool/templates/index.html:68
 msgid "Map Quality Check"
@@ -765,7 +761,6 @@ msgid "We have created the Sketch Map template that you can use for offline\n"
 msgstr "Vytvořili jsme šablonu Sketch Map, kterou můžete použít pro offline participativní mapování.<br>Použili jsme aktuální <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> data nebo satelitní snímky využívající technologii ESRI k vytvoření mapy s vysokým rozlišením pro tisk.<br><strong>Nyní můžete začít shromažďovat data v terénu!</strong>"
 
 #: sketch_map_tool/templates/create-results.html:72
-#: sketch_map_tool/templates/digitize-results.html:51
 #: sketch_map_tool/templates/digitize-results.html:79
 msgid "Sorry! <br>Something went wrong while trying to generate the Result."
 msgstr "Omlouváme se! <br>Při pokusu o generování výsledku se něco pokazilo."
@@ -832,11 +827,8 @@ msgid "Upload your Sketch&nbsp;Maps"
 msgstr "Nahrajte svůj náčrt&nbsp;mapy"
 
 #: sketch_map_tool/templates/digitize-results.html:16
-#: sketch_map_tool/templates/digitize.html:18
-#: sketch_map_tool/templates/index.html:60
-#: sketch_map_tool/templates/index.html:75
-msgid "Download collected Markings as Geodata"
-msgstr "Stáhněte si shromážděná značení jako geodata"
+msgid "Download collected markings as geodata"
+msgstr ""
 
 #: sketch_map_tool/templates/digitize-results.html:35
 msgid "raster data icon"
@@ -866,6 +858,10 @@ msgid "We have extracted and geo-referenced the color markings of your Sketch\n"
 "                        analysis in your favorite GIS Software."
 msgstr "Extrahovali jsme a georeferencovali barevné značení vašich Sketch Maps.<br>Můžete si je stáhnout jako rastrované GeoTIFFy a použít je pro další analýzu ve vašem oblíbeném GIS softwaru."
 
+#: sketch_map_tool/templates/digitize-results.html:51
+msgid "Sorry! <br>Something went wrong while trying to generate the result."
+msgstr ""
+
 #: sketch_map_tool/templates/digitize-results.html:54
 msgid "Download ZIP"
 msgstr "Stáhnout Zip"
@@ -892,6 +888,12 @@ msgstr "Extrahovali jsme a georeferencovali barevné značky vašich Sketch Maps
 #: sketch_map_tool/templates/digitize-results.html:83
 msgid "Download GeoJSON"
 msgstr "Stáhnout GeoJSON"
+
+#: sketch_map_tool/templates/digitize.html:18
+#: sketch_map_tool/templates/index.html:60
+#: sketch_map_tool/templates/index.html:75
+msgid "Download collected Markings as Geodata"
+msgstr "Stáhněte si shromážděná značení jako geodata"
 
 #: sketch_map_tool/templates/digitize.html:22
 msgid "Scan or photograph your marked Sketch Maps after data collection.<br>Then, upload one or\n"
@@ -959,7 +961,7 @@ msgid "Read more info on"
 msgstr "Více informací na"
 
 #: sketch_map_tool/templates/digitize.html:78
-#: sketch_map_tool/templates/help.html:827
+#: sketch_map_tool/templates/help.html:853
 msgid "Share your data for the Improvement of the Sketch Map Tool"
 msgstr "Sdílejte data pro zlepšení Sketch Map Tool"
 
@@ -1005,10 +1007,10 @@ msgstr "Pokud máte zájem o podrobného průvodce používáním nástroje Sket
 msgid "Our new <a\n"
 "                href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html\"\n"
 "                target=\"_blank\">training platform</a>\n"
-"            provides five distinct training exercises to further explore the Sketch Map Tool and sketch mapping in general.\n"
+"            provides distinct training exercises to further explore the Sketch Map Tool and sketch mapping in general.\n"
 "            These exercises are primarily designed for workshop settings, allowing for collaborative discussion of your\n"
 "            experiences."
-msgstr "Naše nová <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html\" target=\"_blank\">školicí platforma</a> nabízí pět různých tréninkových cvičení k dalšímu prozkoumání nástroje Sketch Map Tool a mapování skic obecně. Tato cvičení jsou primárně navržena pro prostředí workshopů a umožňují společnou diskusi o vašich zkušenostech."
+msgstr "Naše nová <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html\" target=\"_blank\">školicí platforma</a> nabízí různá tréninková cvičení k dalšímu prozkoumání nástroje Sketch Map Tool a mapování skic obecně. Tato cvičení jsou primárně navržena pro prostředí workshopů a umožňují společnou diskusi o vašich zkušenostech."
 
 #: sketch_map_tool/templates/help.html:50
 msgid "<i>Since the latest version of the Sketch Map Tool was only recently released, you may encounter issues at\n"
@@ -1095,23 +1097,21 @@ msgstr "Pokud potřebujete nejprve transformovat dostupné souřadnice na souřa
 " target=\"_blank\">Online převodník do všech souřadnicových systémů</a>"
 
 #: sketch_map_tool/templates/help.html:116
-msgid "The marker of your searched point that appears during the map selection, will not be visible on the printed map. \n"
+msgid "The marker of your searched point that appears during the map selection will not be visible on the printed map. \n"
 "                        If you need this point as a point of reference on your paper Sketch Maps please mark it after you downloaded the PDF."
-msgstr "Značka vašeho hledaného bodu, která se objeví při výběru mapy, nebude na vytištěné mapě vidět.\n"
-" Pokud potřebujete tento bod jako referenční bod na svých papírových Sketch Maps, označte jej po stažení PDF."
+msgstr ""
 
 #: sketch_map_tool/templates/help.html:122
 msgid "Screenshot of the searched point marked in pdf."
 msgstr "Screenshot z vyhledávaného bodu označeného v pdf."
 
 #: sketch_map_tool/templates/help.html:126
-#: sketch_map_tool/templates/help.html:191
-#: sketch_map_tool/templates/help.html:244
-#: sketch_map_tool/templates/help.html:362
-#: sketch_map_tool/templates/help.html:586
-#: sketch_map_tool/templates/help.html:659
-#: sketch_map_tool/templates/help.html:680
-#: sketch_map_tool/templates/help.html:752
+#: sketch_map_tool/templates/help.html:270
+#: sketch_map_tool/templates/help.html:388
+#: sketch_map_tool/templates/help.html:612
+#: sketch_map_tool/templates/help.html:685
+#: sketch_map_tool/templates/help.html:706
+#: sketch_map_tool/templates/help.html:778
 msgid "Recommendations"
 msgstr "Doporučení"
 
@@ -1148,10 +1148,10 @@ msgid "Cover all relevant areas for your use case: for example, if studying floo
 msgstr "Pokryjte všechny relevantní oblasti pro váš případ použití: například pokud studujete povodně, zaměřte se na oblasti poblíž řek, potoků, ponorů a kritické infrastruktury, které by mohly být povodněmi ovlivněny."
 
 #: sketch_map_tool/templates/help.html:144
-msgid "Choose a suitable zoom level: For example in case urban flooding it is recommended to generate \n"
-"                                    a map on the neighborhood level with streets and buildings. \n"
-"                                    For river flooding, it is recommended to generate a map for a larger extent."
-msgstr "Vyberte vhodnou úroveň přiblížení: Například v případě záplav ve městech se doporučuje vygenerovat mapu na úrovni sousedství s ulicemi a budovami. Pro rozvodnění řek se doporučuje vygenerovat mapu ve větším rozsahu."
+msgid "Choose a suitable zoom level. Example: If you want to examine urban floodings, we recommend using \n"
+"\t\t\t\t\t\t\t\ta neighborhood level map with streets and buildings. If you want to examine riverine floodings, \n"
+"\t\t\t\t\t\t\t\twe recommend using a map that shows a wider scope."
+msgstr ""
 
 #: sketch_map_tool/templates/help.html:151
 msgid "Choose a suitable base map for your mapping needs. The decision between the OSM or satellite image base map\n"
@@ -1174,139 +1174,178 @@ msgid "For data collection in the field, A4 or A3 are easier to handle. If the a
 "                                    consider creating multiple Sketch Maps."
 msgstr "Při sběru dat v terénu se snáze manipuluje s formáty A4 nebo A3. Pokud je oblast příliš velká, zvažte vytvoření více náčrtkových map."
 
-#: sketch_map_tool/templates/help.html:165
-msgid "If you like to learn more about the challenges of map orientation and how to choose a good base map,\n"
-"                        take a look at <a\n"
-"                            href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex2_.html\"\n"
-"                            target=\"_blank\">Training Exercise 2</a>."
-msgstr "Pokud se chcete dozvědět více o výzvách orientace na mapě a o tom, jak vybrat dobrou podkladovou mapu,\n"
-" podívejte se na <a\n"
-" href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex2_.html\"\n"
-" target=\"_blank\">Tréninkové cvičení 2</a>."
+#: sketch_map_tool/templates/help.html:172
+msgid "When you choose <a href=\"https://osm.org/\" target=\"_blank\">OpenStreetMap (OSM)</a> as base map layer, you can \n"
+"\t\t\t\t\t\tanalyze the base map data of your selected area of interest directly in the ohsome Dashboard <a href=\"https://dashboard.ohsome.org\">. \n"
+"\t\t\t\t\t\tMaking use of the <a href=\"https://api.quality.ohsome.org/\">ohsome quality API</a> quality checks are performed and displayed in the \n"
+"\t\t\t\t\t\tdashboard and the report, as shown in the figure below. \n"
+"\t\t\t\t\t\tThis provides important insights into the suitability of the base map data for field data collection."
+msgstr "Když jako vrstvu základní mapy vyberete <a href=\"https://osm.org/\" target=\"_blank\">OpenStreetMap (OSM)</a>, můžete analyzovat data podkladové mapy vybrané oblasti zájmu přímo v ohsome Dashboard <a href=\"https://dashboard.ohsome.org\">. \n"
+"S využitím <a href=\"https://api.quality.ohsome.org/\">rozhraní API kvality ohsome</a> se provádějí kontroly kvality a zobrazují se na ovládacím panelu a ve zprávě, jak je znázorněno na obrázku níže.\n"
+" To poskytuje důležité poznatky o vhodnosti podkladových mapových dat pro sběr dat v terénu."
 
-#: sketch_map_tool/templates/help.html:178
-msgid "When you choose <a href=\"https://osm.org/\" target=\"_blank\">OpenStreetMap (OSM)</a> as base map layer, you will be \n"
-"                        provided with a report on the map quality in your Area of Interest (AOI). The Map Quality Check gives an evaluation of \n"
-"                        the suitability of the local OSM data of your AOI for participatory mapping. The report is computed by the \n"
-"                        <a href=\"https://api.quality.ohsome.org/\">ohsome quality API</a> of <a href=\"https://heigit.org/\">HeiGIT</a>.\n"
-"                        The Map Quality Check can be downloaded as a PDF file by clicking on the blue button."
-msgstr "Když jako základní mapovou vrstvu zvolíte <a href=\"https://osm.org/\" target=\"_blank\">OpenStreetMap (OSM)</a>, dostanete zprávu o kvalitě mapy ve vaší oblasti zájmu (AOI). Kontrola kvality mapy poskytuje hodnocení vhodnosti místních dat OSM vaší AOI pro participativní mapování. Zpráva je vypočítána pomocí <a href=\"https://api.quality.ohsome.org/\">ohsome quality API</a> <a href=\"https://heigit.org/\">HeiGIT</a>. Kontrolu kvality mapy lze stáhnout jako soubor PDF kliknutím na modré tlačítko."
+#: sketch_map_tool/templates/help.html:181
+#: sketch_map_tool/templates/help.html:195
+msgid "ohsome dashboard overview."
+msgstr "ohsome přehled ovládacího panelu."
 
-#: sketch_map_tool/templates/help.html:187
-msgid "Map Quality Report."
-msgstr "Zpráva o kvalitě mapy."
+#: sketch_map_tool/templates/help.html:185
+msgid "By clicking the <b>Get Quality Report</b> button, the dashboard is directly opened in a new tab. \n"
+"\t\t\t\t\t\tThe area of interest selected in the Sketch Map Tool is automatically transferred to the dashboard, \n"
+"\t\t\t\t\t\tand an analysis of the <b>completeness</b> and <b>currency</b> of the <b>road data</b> in that area in the OSM data set is conducted.\n"
+"\t\t\t\t\t\tA marker in the top left corner of the report visually indicates how good the quality of the data is, using the familiar traffic light system. \n"
+"\t\t\t\t\t\tIn the case of a <b>green marker</b> (in the figure <b>high currentness</b> and <b>high completeness</b>), \n"
+"\t\t\t\t\t\tthe data foundation is sensibly usable given the examined quality aspect. In the case of a <b>red</b> output, this criterion should be examined more closely."
+msgstr "Kliknutím na tlačítko <b>Získat zprávu o kvalitě</b> se ovládací panel otevře přímo na nové kartě.\n"
+" Oblast zájmu vybraná v nástroji Sketch Map Tool se automaticky přenese na řídicí panel,\n"
+" a je provedena analýza <b>úplnosti</b> a <b>aktuálnosti</b> <b>silničních dat</b> v této oblasti v souboru dat OSM.\n"
+" Značka v levém horním rohu zprávy pomocí známého systému semaforů vizuálně ukazuje, jak dobrá je kvalita dat.\n"
+" V případě <b>zelené značky</b> (na obrázku <b>vysoká aktuálnost</b> a <b>vysoká úplnost</b>)\n"
+" datový základ je s ohledem na zkoumané kvalitativní hledisko rozumně použitelný. V případě <b>červeného</b> výstupu by mělo být toto kritérium prozkoumáno podrobněji."
 
-#: sketch_map_tool/templates/help.html:194
+#: sketch_map_tool/templates/help.html:200
+msgid "Example: If the report shows a <b>red</b> output for completeness, it may be difficult to orient oneself due to the lack \n"
+"\t\t\t\t\t\tof data in the selected area in OSM. If the report shows such output for currentness, it means the existing data has not\n"
+"\t\t\t\t\t\tbeen updated or expanded for a long time, which indicates that the data in the selected area could be outdated.\n"
+"\t\t\t\t\t\tIn both cases, it could be useful to improve the OSM data foundation through personal mapping in OpenStreetMap or \n"
+"\t\t\t\t\t\twith the help of the <a href=\"https://www.missingmaps.org/\" target=\"_blank\">Missing Maps project</a> and/or\n"
+"\t\t\t\t\t\t<a href=\"https://www.hotosm.org/\" target=\"_blank\">Humanitarian OpenStreetMap Team</a> Communities. Please feel free to get in touch if\n"
+"\t\t\t\t\t\tyou would like to learn more, we are happy to support."
+msgstr "Příklad: Pokud zpráva zobrazuje <b>červenou</b> barvu pro úplnost, může být obtížné orientovat se kvůli nedostatku \n"
+"\t\t\t\t\t\tdat ve vybrané oblasti v OSM. Pokud zpráva takový výstup zobrazuje pro aktuálnost, znamená to, že stávající data nejsou\n"
+"\t\t\t\t\t\taktualizována nebo vylepšena po dlouhou dobu, což naznačuje, že data ve vybrané oblasti by mohla být zastaralá.\n"
+"\t\t\t\t\t\tV obou případech mohlo by být užitečné zlepšit kvalitu dat OSM prostřednictvím osobního mapování v OpenStreetMap, nebo \n"
+"\t\t\t\t\t\ts pomocí projektu <a href=\"https://www.missingmaps.org/\" target=\"_blank\">Missing Maps</a> a/nebo komunity \n"
+"\t\t\t\t\t\t<a href=\"https://www.hotosm.org/\" target=\"_blank\">Humanitarian OpenStreetMap Team</a>. Prosíme neváhejte se zeptat, pokud\n"
+"\t\t\t\t\t\tse chcete dozvědět více, rádi vám pomůžeme."
+
+#: sketch_map_tool/templates/help.html:210
+msgid "What is the benefit of this new ohsome dashboard integration? + Recommendations"
+msgstr "Jaký je přínos této nové ohsome integrace ovládacího panelu? + Doporučení"
+
+#: sketch_map_tool/templates/help.html:213
 msgid "Before you use these OSM-based Sketch Maps for participatory mapping in your area of interest,\n"
-"                            review the analysis provided by the Map Quality Check to ensure that participants can orient themselves\n"
+"                            you can review the analysis provided by the Map Quality Check to ensure that participants can orient themselves\n"
 "                            properly on the paper maps."
-msgstr "Před použitím těchto náčrtkových map založených na OSM pro participativní mapování ve vaší zájmové oblasti si prohlédněte analýzu provedenou v rámci kontroly kvality map, abyste se ujistili, že se účastníci mohou na papírových mapách správně orientovat."
+msgstr "Než použijete tyto mapy Sketch Maps založené na OSM pro participativní mapování ve vaší oblasti zájmu,\n"
+"                            můžete zkontrolovat analýzu poskytnutou Map Quality Check, aby se účastníci mohli dobře orientovat \n"
+"                           na tištěných mapách."
 
-#: sketch_map_tool/templates/help.html:199
-msgid "The analyses focus on Point of Interest (POI) density, the last edit of amenities and streets, used\n"
-"                            sources, as well as the saturation of amenity and road network mapping.\n"
-"                            Detailed information about each indicator and the analysis is available in the generated PDF report."
-msgstr "Analýzy se zaměřují na hustotu bodů zájmu (POI), poslední úpravy objektů občanské vybavenosti a ulic, použité zdroje a také na nasycenost map občanské vybavenosti a silniční sítě. Podrobné informace o jednotlivých ukazatelích a analýzách jsou k dispozici ve vygenerované zprávě ve formátu PDF."
+#: sketch_map_tool/templates/help.html:218
+msgid "You are automatically provided with analyses in the ohsome dashboard directly. In contrast to having as before a static PDF report, \n"
+"\t\t\t\t\t\t\tthis setup to enables you to also adapt and complement the automatically conducted analyses according to your needs. \n"
+"\t\t\t\t\t\t\tWhile road data is automatically checked for you can choose from a wide selection of topics in regard to OSM data:"
+msgstr "Máte automaticky analýzy přímo na ohsome ovládacím panelu. Na rozdíl od statického PDF vyhodnocení,\n"
+"\t\t\t\t\t\t\ttoto nastavení vám umožní přizpůsobit a doplnit automaticky provedené analýzy podle vašich potřeb. \n"
+"\t\t\t\t\t\t\tZatímco data o silnicích jsou automaticky kontrolovány, můžete si vybrat ze široké nabídky témat týkajících se dat OSM:"
 
-#: sketch_map_tool/templates/help.html:204
-msgid "The report includes useful recommendations to ensure that the generated maps are suitable for\n"
-"                            participatory mapping."
-msgstr "Zpráva obsahuje užitečná doporučení, aby bylo zajištěno, že vytvořené mapy jsou vhodné pro participativní mapování."
+#: sketch_map_tool/templates/help.html:224
+msgid "Figure Topic selection."
+msgstr "Výběr tématu obrázku."
 
-#: sketch_map_tool/templates/help.html:208
-msgid "In case the OSM data in your area of interest is not sufficient for participatory mapping, consider\n"
-"                            the opportunity to improve the OSM data before printing the Sketch Maps, by organizing an OSM Mapathon. \n"
-"                            For more information and help on how to conduct a Mapathon please take a look at the \n"
-"                            <a href=\"https://www.missingmaps.org/\" target=\"_blank\">Missing Maps project</a>"
-msgstr "V případě, že data OSM ve vaší oblasti zájmu nestačí pro participativní mapování, zvažte možnost vylepšit data OSM před tiskem Sketch Map uspořádáním OSM Mapathonu. Další informace a nápovědu k tomu, jak vést Mapathon, naleznete v <a href=\"https://www.missingmaps.org/\" target=\"_blank\">projektu Missing Maps</a>"
+#: sketch_map_tool/templates/help.html:225
+msgid "Topic selection example"
+msgstr "Příklad výběru tématu"
 
-#: sketch_map_tool/templates/help.html:214
+#: sketch_map_tool/templates/help.html:231
+msgid "Further, you can not only analyse the <b>completeness</b> and <b>currency</b> of the OSM data, but further conduct a <b>Road Comparison</b> \n"
+"\t\t\t\t\t\t\twith reference data and also check the <b>attribute completeness</b> in your OSM base data:"
+msgstr "Dále můžete nejen analyzovat <b>úplnost</b> a <b>přesnost</b> dat OSM, ale dále provádět <b>Porovnání silnic</b>\n"
+" s referenčními daty a také zkontrolujte <b>úplnost atributu</b> ve vašich základních datech OSM:"
+
+#: sketch_map_tool/templates/help.html:236
+msgid "Figure Quality Indicators."
+msgstr "Ukazatele kvality obrázků."
+
+#: sketch_map_tool/templates/help.html:237
+msgid "Quality indicators overview"
+msgstr "Přehled ukazatelů kvality"
+
+#: sketch_map_tool/templates/help.html:242
 msgid "Take a look at the map:"
 msgstr "Podívejte se na mapu:"
 
-#: sketch_map_tool/templates/help.html:216
+#: sketch_map_tool/templates/help.html:244
 msgid "How well can you orient yourself on the map?"
 msgstr "Jak dobře se můžete orientovat v mapě?"
 
-#: sketch_map_tool/templates/help.html:217
-msgid "Are important points of reference, such as hospitals, schools, landmarks, etc. visible on the\n"
-"                                    map?"
-msgstr "Jsou na mapě viditelné důležité orientační body, jako jsou nemocnice, školy, pamětihodnosti atd?"
+#: sketch_map_tool/templates/help.html:245
+msgid "Are important points of reference, such as hospitals, schools, landmarks, etc. visible on the map?"
+msgstr "Jsou na mapě viditelné důležité referenční body, jako jsou nemocnice, školy, památky atd.?"
 
-#: sketch_map_tool/templates/help.html:226
+#: sketch_map_tool/templates/help.html:253
 msgid "Export Sketch Map as PDF"
 msgstr "Exportovat Sketch Map jako PDF"
 
-#: sketch_map_tool/templates/help.html:229
-msgid "The generated Sketch Map for your selected area of interest can be downloaded as a PDF file by clicking on\n"
-"                        the blue button."
-msgstr "Vygenerovanou mapu Sketch Map pro vybranou zájmovou oblast si můžete stáhnout ve formátu PDF kliknutím na modré tlačítko."
+#: sketch_map_tool/templates/help.html:256
+msgid "The generated Sketch Map for your selected area of interest can be downloaded as a PDF file by clicking on the blue button."
+msgstr "Vygenerovaná mapa Sketch Map pro vybranou oblast zájmu může být stažena jako soubor PDF kliknutím na modré tlačítko."
 
-#: sketch_map_tool/templates/help.html:234
+#: sketch_map_tool/templates/help.html:260
 msgid "Empty Sketch Map, OSM"
 msgstr "Prázdná mapa Sketch Map, OSM"
 
-#: sketch_map_tool/templates/help.html:240
+#: sketch_map_tool/templates/help.html:266
 msgid "Empty Sketch Map, Satellite"
 msgstr "Prázdná mapa Sketch Map, satelit"
 
-#: sketch_map_tool/templates/help.html:247
+#: sketch_map_tool/templates/help.html:273
 msgid "Prepare separate maps for each topic or per person/group because it is difficult to read and analyze\n"
 "                            too many markings from one map.\n"
 "                            You can print out one map layout as often as you want. "
 msgstr "Připravte si samostatné mapy pro každé téma nebo pro každou osobu/skupinu, protože je obtížné číst a analyzovat příliš mnoho značek z jedné mapy. Jedno rozložení mapy můžete vytisknout libovolně často. "
 
-#: sketch_map_tool/templates/help.html:252
+#: sketch_map_tool/templates/help.html:278
 msgid "We recommend printing the maps on matte, non-reflective paper. "
 msgstr "Doporučujeme vytisknout mapy na matném, nereflexním papíru. "
 
-#: sketch_map_tool/templates/help.html:255
-msgid "Name your maps appropriately, a name on the downloaded and maybe as well on the printed Sketch Map can help\n"
+#: sketch_map_tool/templates/help.html:281
+msgid "Name your maps appropriately; Putting names on the downloaded Sketch Maps (can help\n"
 "                            you in organizing your maps. \n"
 "                            If you relate Sketch Maps back to questionnaires, use the same number for the map as you did in the questionnaire."
-msgstr "Mapy si vhodně pojmenujte, název na stažené a možná i na vytištěné mapě vám pomůže při organizaci map. Pokud Skicové mapy vztahujete zpět k dotazníkům, použijte pro mapu stejné číslo jako v dotazníku."
+msgstr ""
 
-#: sketch_map_tool/templates/help.html:260
+#: sketch_map_tool/templates/help.html:286
 msgid "If you plan on printing out your map in black and white, check the visibility of the background map\n"
 "                            and reduce saturation in the printing settings if the background becomes too dark."
 msgstr "Pokud plánujete vytisknout mapu černobíle, zkontrolujte viditelnost pozadí mapy a v nastavení tisku snižte sytost, pokud je pozadí příliš tmavé."
 
-#: sketch_map_tool/templates/help.html:264
+#: sketch_map_tool/templates/help.html:290
 msgid "In case you use a satellite imagery background, please review the color saturation of your image. If the \n"
 "                            background is too dark, you might consider to choose OSM as base map or reduce saturation in the printing settings."
 msgstr "V případě, že používáte pozadí satelitních snímků, zkontrolujte sytost barev obrázku. Pokud je pozadí příliš tmavé, můžete zvážit výběr OSM jako podkladové mapy nebo snížení sytosti v nastavení tisku."
 
-#: sketch_map_tool/templates/help.html:273
+#: sketch_map_tool/templates/help.html:299
 msgid "THEN:"
 msgstr "POTOM:"
 
-#: sketch_map_tool/templates/help.html:274
+#: sketch_map_tool/templates/help.html:300
 msgid "Data collection in the field"
 msgstr "Shromažďování údajů v terénu"
 
-#: sketch_map_tool/templates/help.html:278
-msgid "Mapping through sketches using a pen on a printed Sketch Maps is a core activity of the Sketch Map Tool process. How you mark the Sketch Maps influences your end results: the detected markings."
-msgstr "Mapování pomocí náčrtů perem na tištěné mapě Sketch Maps je hlavní činností procesu Sketch Map Tool. To, jakým způsobem budete Sketch Maps označovat, ovlivňuje konečný výsledek: zjištěné značky."
+#: sketch_map_tool/templates/help.html:304
+msgid "Mapping through sketches using a pen on a printed Sketch Map is a core activity of the Sketch Map Tool process. How you mark the Sketch Maps influences your end results: the detected markings."
+msgstr ""
 
-#: sketch_map_tool/templates/help.html:281
+#: sketch_map_tool/templates/help.html:307
 msgid "This section as well as <a href=\"https://nexus.heigit.org/repository/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/Important_mapping_tips.pdf\"\n"
 "                        target=\"_blank\">this PDF</a> discusses what you should keep in mind before and during mapping."
 msgstr "Tato sekce a také <a href=\"https://nexus.heigit.org/repository/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/Important_mapping_tips.pdf\"\n"
 " target=\"_blank\">toto PDF</a> pojednává o tom, co byste měli mít na paměti před a během mapování."
 
-#: sketch_map_tool/templates/help.html:285
+#: sketch_map_tool/templates/help.html:311
 msgid "Example of marked Sketch Map:"
 msgstr "Příklad vyznačené náčrtkové mapy Sketch Map:"
 
-#: sketch_map_tool/templates/help.html:290
+#: sketch_map_tool/templates/help.html:316
 msgid "Marked Sketch Map, OSM"
 msgstr "Označená Sketch Map, OSM"
 
-#: sketch_map_tool/templates/help.html:292
+#: sketch_map_tool/templates/help.html:318
 msgid "Tips to improve marking detection"
 msgstr "Tipy pro lepší detekci značení"
 
-#: sketch_map_tool/templates/help.html:294
+#: sketch_map_tool/templates/help.html:320
 msgid "The latest version of the Sketch Map Tool leverages advanced Deep Learning models trained to analyze images of\n"
 "                        Sketch Maps and identify marked objects within them.\n"
 "                        Through supervised learning on extensive datasets of labeled images, these models acquire the ability to distinguish\n"
@@ -1318,15 +1357,15 @@ msgid "The latest version of the Sketch Map Tool leverages advanced Deep Learnin
 "                        Georeferencing images entails detecting and matching specific points, such as the globes one the Sketch Maps,\n"
 "                        between the reference and current input image,\n"
 "                        enabling precise spatial alignment. Our current algorithm detects all markings, whether they are intended as a line,\n"
-"                        a point or a polygon as a polygon. "
-msgstr "Nejnovější verze nástroje Sketch Map Tool využívá pokročilé modely Deep Learning vyškolené k analýze obrázků Sketch Maps a identifikaci označených objektů v nich. Prostřednictvím učení pod dohledem na rozsáhlých souborech dat označených obrázků získávají tyto modely schopnost rozlišovat označení od pozadí map Sketch Maps analýzou vzorů a rysů. To jim umožňuje přesně detekovat a rozlišovat značky. Tato prediktivní schopnost umožňuje modelům zobecnit jejich chápání a přesně identifikovat značky v nových a dosud neviděných mapách Sketch Maps. Nástroj Sketch Map Tool také využívá konvenční techniky počítačového vidění, které umožňují přesně umístit mapu Sketch Map do souřadnic reálného světa. Georeferencování obrázků zahrnuje detekci a porovnání specifických bodů, jako jsou glóby na mapě Sketch Maps, mezi referenčním a aktuálním vstupním obrázkem, což umožňuje přesné prostorové vyrovnání. Náš současný algoritmus detekuje všechny značky, ať už jsou zamýšleny jako linie, bod nebo polygon jako mnohoúhelník. "
+"                        a point or as a polygon. "
+msgstr ""
 
-#: sketch_map_tool/templates/help.html:308
+#: sketch_map_tool/templates/help.html:334
 msgid "Please make sure to not accidentally mark the globes on the edge as they are used for georeferencing purposes\n"
 "                        in order to ensure the automatic map detection."
 msgstr "Dbejte na to, abyste omylem neoznačili glóby na okraji, protože se používají pro účely georeferencování, aby byla zajištěna automatická detekce mapy."
 
-#: sketch_map_tool/templates/help.html:312
+#: sketch_map_tool/templates/help.html:338
 msgid "At the moment the Sketch Map Tool detects red, blue, green and black markings best, orange and yellow also\n"
 "                        work quite well.\n"
 "                        If different colors are used for specific topics, participants can include a legend for the meaning of each color\n"
@@ -1337,98 +1376,98 @@ msgid "At the moment the Sketch Map Tool detects red, blue, green and black mark
 "                        The GeoTiff can be used to manually match the geodata layer files to the legend information."
 msgstr "V současné době nástroj Sketch Map Tool nejlépe rozpoznává červené, modré, zelené a černé značky, poměrně dobře funguje i oranžová a žlutá. Pokud se pro určitá témata používají různé barvy, mohou účastníci mimo rozsah mapy připojit legendu k významu jednotlivých barev. Nástroj však nepodporuje identifikaci psaných informací ani přiřazování významů ke konkrétním barvám. To je třeba provést ručně v následném procesu analýzy v softwaru geografického informačního systému. K ručnímu přiřazení souborů geodatových vrstev k informacím v legendě lze použít program GeoTiff."
 
-#: sketch_map_tool/templates/help.html:326
-#: sketch_map_tool/templates/help.html:345
-#: sketch_map_tool/templates/help.html:373
-#: sketch_map_tool/templates/help.html:385
-#: sketch_map_tool/templates/help.html:403
-#: sketch_map_tool/templates/help.html:414
-#: sketch_map_tool/templates/help.html:422
-#: sketch_map_tool/templates/help.html:432
-#: sketch_map_tool/templates/help.html:469
-#: sketch_map_tool/templates/help.html:547
+#: sketch_map_tool/templates/help.html:352
+#: sketch_map_tool/templates/help.html:371
+#: sketch_map_tool/templates/help.html:399
+#: sketch_map_tool/templates/help.html:411
+#: sketch_map_tool/templates/help.html:429
+#: sketch_map_tool/templates/help.html:440
+#: sketch_map_tool/templates/help.html:448
+#: sketch_map_tool/templates/help.html:458
+#: sketch_map_tool/templates/help.html:495
+#: sketch_map_tool/templates/help.html:573
 msgid "Picture of a Sketch Map."
 msgstr "Obrázek Sketch Map."
 
-#: sketch_map_tool/templates/help.html:327
+#: sketch_map_tool/templates/help.html:353
 msgid "<strong>Original Image:</strong> marked with red/blue polygons."
 msgstr "<strong>Původní obrázek:</strong> označeno červenými / modrými polygony."
 
-#: sketch_map_tool/templates/help.html:333
-#: sketch_map_tool/templates/help.html:352
+#: sketch_map_tool/templates/help.html:359
+#: sketch_map_tool/templates/help.html:378
 msgid "Result of Marking Detection."
 msgstr "Výsledek detekce značení."
 
-#: sketch_map_tool/templates/help.html:335
+#: sketch_map_tool/templates/help.html:361
 msgid "<strong>Result:</strong> Closed circles are detected as one polygon\n"
 "                                        and the whole area will be detected/filled by the software."
 msgstr "<strong>Výsledek:</strong> Uzavřené kruhy jsou detekovány jako jeden polygon a software detekuje/vyplní celou oblast."
 
-#: sketch_map_tool/templates/help.html:346
+#: sketch_map_tool/templates/help.html:372
 msgid "<strong>Original Image:</strong> marked with different shapes."
 msgstr "<strong>Původní obrázek:</strong> označený různými tvary."
 
-#: sketch_map_tool/templates/help.html:354
+#: sketch_map_tool/templates/help.html:380
 msgid "<strong>Result:</strong> The shape of everything you write or draw on the map with a color that the\n"
 "                                        tool recognizes can be detected as a marked area (polygon).\n"
 "                                        However, in some cases, they may not be detected at all."
 msgstr "<strong>Výsledek:</strong> Tvar všeho, co napíšete nebo nakreslíte na mapu barvou, kterou nástroj rozpozná, lze rozpoznat jako označenou oblast (polygon). V některých případech však nemusí být rozpoznány vůbec."
 
-#: sketch_map_tool/templates/help.html:364
+#: sketch_map_tool/templates/help.html:390
 msgid "Line Thickness"
 msgstr "Šířka linky"
 
-#: sketch_map_tool/templates/help.html:367
-#: sketch_map_tool/templates/help.html:395
-#: sketch_map_tool/templates/help.html:453
+#: sketch_map_tool/templates/help.html:393
+#: sketch_map_tool/templates/help.html:421
+#: sketch_map_tool/templates/help.html:479
 msgid "Recommended"
 msgstr "Doporučeno"
 
-#: sketch_map_tool/templates/help.html:369
+#: sketch_map_tool/templates/help.html:395
 msgid "Use thick felt-tip pens with intense colors."
 msgstr "Použijte silné plstěné pera s intenzivní barvou."
 
-#: sketch_map_tool/templates/help.html:378
-#: sketch_map_tool/templates/help.html:408
-#: sketch_map_tool/templates/help.html:465
+#: sketch_map_tool/templates/help.html:404
+#: sketch_map_tool/templates/help.html:434
+#: sketch_map_tool/templates/help.html:491
 msgid "Not recommended"
 msgstr "Nedoporučeno"
 
-#: sketch_map_tool/templates/help.html:380
+#: sketch_map_tool/templates/help.html:406
 msgid "Thin lines in light colors might not be detected. We generally recommend to test your pens and the \n"
 "                                    detectability of your markings with the Sketch Map Tool before your mapping activity."
 msgstr "Tenké čáry ve světlých barvách nemusí být rozpoznány. Obecně doporučujeme před mapovací činností otestovat pera a zjistitelnost značek pomocí nástroje Sketch Map Tool."
 
-#: sketch_map_tool/templates/help.html:392
+#: sketch_map_tool/templates/help.html:418
 msgid "Polygon Outlines"
 msgstr "Obrysy polygonu"
 
-#: sketch_map_tool/templates/help.html:397
+#: sketch_map_tool/templates/help.html:423
 msgid "For polygons, draw their outline as a closed, strong, and continues shape.\n"
 "                                    You do not need to fill the polygons, and the pattern you draw in the middle will not be detected.\n"
 "                                    In general, smaller polygons are detected better than large polygons."
 msgstr "U mnohoúhelníků nakreslete jejich obrys jako uzavřený, silný a pokračující tvar. Polygony nemusíte vyplňovat a vzor, který nakreslíte uprostřed, nebude detekován. Obecně platí, že menší polygony jsou detekovány lépe než velké polygony."
 
-#: sketch_map_tool/templates/help.html:410
+#: sketch_map_tool/templates/help.html:436
 msgid "Gaps in the outline could lead to mistakes in the detection."
 msgstr "Mezery v obrysu by mohly vést k chybám v detekci."
 
-#: sketch_map_tool/templates/help.html:418
+#: sketch_map_tool/templates/help.html:444
 msgid "Large polygons might not be detected properly."
 msgstr "Velké polygony nemusí být správně rozpoznány."
 
-#: sketch_map_tool/templates/help.html:426
+#: sketch_map_tool/templates/help.html:452
 msgid "If you just draw a line, the marked area of the line will be detected.\n"
 "                                    Nevertheless, we do not recommend to use lines, since the model has not been trained to detect lines \n"
 "                                    and doing so could lead to mistakes in detection of marking."
 msgstr "Pokud pouze nakreslíte čáru, bude detekována označená oblast čáry. Přesto nedoporučujeme používat čáry, protože model nebyl na detekci čar vycvičen a mohlo by to vést k chybám v detekci značení."
 
-#: sketch_map_tool/templates/help.html:436
+#: sketch_map_tool/templates/help.html:462
 msgid "If you want to draw a point, draw a larger circle to improve the detection.\n"
 "                                    If you want to draw lines, draw strong, non-dashed lines with intense colors."
 msgstr "Pokud chcete nakreslit bod, nakreslete větší kruh, abyste zlepšili detekci. Pokud chcete kreslit čáry, kreslete výrazné, nepřerušované čáry intenzivními barvami."
 
-#: sketch_map_tool/templates/help.html:440
+#: sketch_map_tool/templates/help.html:466
 msgid "Hint: If you need the marking as a line or a point shape,\n"
 "                                    you can easily transfer it manually or digitalize it yourself,\n"
 "                                    for example, in QGIS (see <a\n"
@@ -1440,46 +1479,46 @@ msgstr "Tip: Pokud potřebujete označení jako čára nebo bodový tvar,\n"
 " href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex4_.html#exercise-a-exploration-basic-visualization-of-sketch-map-tool-outputs-in -qgis\"\n"
 " target=\"_blank\">Tréninkové cvičení 4</a>)"
 
-#: sketch_map_tool/templates/help.html:450
+#: sketch_map_tool/templates/help.html:476
 msgid "Satellite Base maps"
 msgstr "Satelitní základní mapy"
 
-#: sketch_map_tool/templates/help.html:455
+#: sketch_map_tool/templates/help.html:481
 msgid "Check the darkness of the Satellite base map, especially before printing it in black-and-white."
 msgstr "Zkontrolujte tmavost podkladové satelitní mapy, zejména před jejím černobílým tiskem."
 
-#: sketch_map_tool/templates/help.html:459
+#: sketch_map_tool/templates/help.html:485
 msgid "Make sure you use bright colors and mark the maps especially clearly. Sometimes\n"
 "                                    it might be helpful to use both Sketch Maps with satellite imagery\n"
 "                                    and OSM base maps for the mapping."
 msgstr "Dbejte na to, abyste používali jasné barvy a mapy označovali obzvlášť zřetelně. Někdy může být užitečné použít pro mapování Sketch Maps jak satelitní snímky, tak podkladové mapy OSM."
 
-#: sketch_map_tool/templates/help.html:466
+#: sketch_map_tool/templates/help.html:492
 msgid "Small polygons can be especially difficult to detected."
 msgstr "Malé polygony mohou být obzvláště obtížně odhaleny."
 
-#: sketch_map_tool/templates/help.html:476
+#: sketch_map_tool/templates/help.html:502
 msgid "Tips for better comparability and interpretation of the maps"
 msgstr "Tipy pro lepší porovnatelnost a interpretaci map"
 
-#: sketch_map_tool/templates/help.html:477
+#: sketch_map_tool/templates/help.html:503
 msgid "Map Orientation"
 msgstr "Orientace mapy"
 
-#: sketch_map_tool/templates/help.html:479
+#: sketch_map_tool/templates/help.html:505
 msgid "Orientating on a map can be challenging, depending on the base map, the background of the participants, and their map literacy. \n"
 "                        Mapping in groups can make orientation much easier, as participants can assist each other in reading the map. Before you start with the mapping, we recommend:"
 msgstr "Pokud nemůžete získat informace o konkrétním produktu, můžete nechat uživatele odeslat fotografie a údaje, které pak zpracuje umělá inteligence Open Products Facts a přispěvatelé, abyste získali vypočtený výsledek, který jim chcete ukázat:"
 
-#: sketch_map_tool/templates/help.html:484
+#: sketch_map_tool/templates/help.html:510
 msgid "Start by identifying a common place or points of reference."
 msgstr "Začněte určením společného místa nebo referenčních bodů."
 
-#: sketch_map_tool/templates/help.html:487
+#: sketch_map_tool/templates/help.html:513
 msgid "Try to locate the current position or the  place of residence of the participant on the map."
 msgstr "Pokuste se na mapě najít aktuální polohu nebo místo bydliště účastníka."
 
-#: sketch_map_tool/templates/help.html:491
+#: sketch_map_tool/templates/help.html:517
 msgid "If you like to learn more about the challenges of map orientation and how to choose a good base map, take a look at \n"
 "                        <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex1_.html\" target=\"_blank\">Training Exercise 2</a>. In \n"
 "                        <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex3_.html\" target=\"_blank\">Training Exercise 3</a>,you can try mapping in groups in a role play."
@@ -1487,25 +1526,25 @@ msgstr "Pokud se chcete dozvědět více o výzvách orientace na mapě a o tom,
 " <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex1_.html\" target=\"_blank\">Tréninkové cvičení 2</a>. V\n"
 " <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex3_.html\" target=\"_blank\">Tréninkové cvičení 3</a>, můžete vyzkoušet mapování ve skupině s nějakou rolí."
 
-#: sketch_map_tool/templates/help.html:495
+#: sketch_map_tool/templates/help.html:521
 msgid "Develop a mapping strategy"
 msgstr "Vytvoření mapovací strategie"
 
-#: sketch_map_tool/templates/help.html:497
+#: sketch_map_tool/templates/help.html:523
 msgid "Prepare a clear data collection and analysis strategy beforehand. A consistent drawing or marking approach across different \n"
 "                        groups or individuals simplifies the comparison and analysis process, as the data is collected uniformly and its meaning is clear. \n"
 "                        For this, you should discuss and agree beforehand on:"
 msgstr "Předem si připravte jasnou strategii sběru a analýzy dat. Konzistentní přístup ke kreslení nebo značení v různých skupinách nebo u různých osob zjednodušuje proces porovnávání a analýzy, protože data jsou shromažďována jednotně a jejich význam je jasný. Za tímto účelem byste se měli předem domluvit a dohodnout:"
 
-#: sketch_map_tool/templates/help.html:503
+#: sketch_map_tool/templates/help.html:529
 msgid "What do you want to map?"
 msgstr "Co chcete mapovat?"
 
-#: sketch_map_tool/templates/help.html:506
+#: sketch_map_tool/templates/help.html:532
 msgid "Which colors should be used? For example, with blue, we map the area with the highest flood risk, and with red, we map safe places."
 msgstr "Které barvy by se měly používat? Například modrou mapujeme oblast s nejvyšším rizikem povodně a s červenou mapujeme bezpečná místa."
 
-#: sketch_map_tool/templates/help.html:510
+#: sketch_map_tool/templates/help.html:536
 msgid "You should test your mapping strategy beforehand: Print out a map, draw some test objects with the pens you are planning to use. \n"
 "                        Upload the map and check if the result is satisfactory.You can practice the development of a mapping strategy in \n"
 "                        <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex3_.html\" target=\"_blank\">Training Exercise 3</a>."
@@ -1513,100 +1552,100 @@ msgstr "Měli byste si předem otestovat svou mapovací strategii: Vytiskněte s
 " Nahrajte mapu a zkontrolujte, zda je výsledek uspokojivý. Vývoj mapovací strategie si můžete procvičit ve\n"
 " <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex3_.html\" target=\"_blank\">Tréninkovém cvičení 3</a>."
 
-#: sketch_map_tool/templates/help.html:514
+#: sketch_map_tool/templates/help.html:540
 msgid "Organize your maps"
 msgstr "Uspořádat mapy"
 
-#: sketch_map_tool/templates/help.html:517
+#: sketch_map_tool/templates/help.html:543
 msgid "Put a title on your map and add information about the participants, place and time to analyze the maps afterwards. \n"
 "                            Be careful; everything you write/draw on the map could be detected as a marked area (polygon), so use the white space outside the map extent."
 msgstr "Pojmenujte svou mapu a přidejte informace o účastnících, místě a čase, abyste mapy následně analyzovali.\n"
 " Buďte opatrní; vše, co napíšete/nakreslíte na mapu, může být detekováno jako označená oblast (polygon), proto použijte bílé místo mimo rozsah mapy."
 
-#: sketch_map_tool/templates/help.html:521
+#: sketch_map_tool/templates/help.html:547
 msgid "If you collect additional information from the participants with other data collection methods such as <a href=\"https://www.kobotoolbox.org/\" target=\"_blank\">Kobo Collect</a> or \n"
 "                            <a href=\"https://getodk.org/\" target=\"_blank\">ODK</a>, add a number on the Sketch Map and save this number in the data collection questionnaire."
 msgstr "Pokud od účastníků shromažďujete další informace pomocí jiných metod sběru dat, jako je <a href=\"https://www.kobotoolbox.org/\" target=\"_blank\">Kobo Collect</a> nebo\n"
 " <a href=\"https://getodk.org/\" target=\"_blank\">ODK</a>, přidejte číslo do mapy náčrtu Sketch Map a uložte toto číslo do dotazníku pro sběr dat."
 
-#: sketch_map_tool/templates/help.html:525
+#: sketch_map_tool/templates/help.html:551
 msgid "If you have many participants or you want participants to provide a lot of different information, it is recommended to use individual Sketch Maps for each purpose/topic or per participant."
 msgstr "Pokud máte mnoho účastníků nebo chcete, aby účastníci poskytli mnoho různých informací, doporučujeme použít jednotlivé Sketch Maps pro každý účel/téma nebo pro každého účastníka."
 
-#: sketch_map_tool/templates/help.html:533
+#: sketch_map_tool/templates/help.html:559
 msgid "<strong>Paper to GIS: Automatically digitize collected data</strong>"
 msgstr "<strong>Z papíru do GIS: Automatická digitalizace shromážděných dat</strong>"
 
-#: sketch_map_tool/templates/help.html:536
+#: sketch_map_tool/templates/help.html:562
 msgid "Scan or photograph your marked\n"
 "                    Sketch Maps"
 msgstr "Naskenujte nebo vyfotografujte své označené mapy Sketch Maps"
 
-#: sketch_map_tool/templates/help.html:541
+#: sketch_map_tool/templates/help.html:567
 msgid "After the field data collection, scan or photograph the marked Sketch Maps."
 msgstr "Po sběru dat v terénu naskenujte nebo vyfotografujte označené náčrtky map Sketch Maps."
 
-#: sketch_map_tool/templates/help.html:543
+#: sketch_map_tool/templates/help.html:569
 msgid "Examples"
 msgstr "Příklady"
 
-#: sketch_map_tool/templates/help.html:544
+#: sketch_map_tool/templates/help.html:570
 msgid "<strong>No Problem:</strong> Can be digitized properly"
 msgstr "<strong>Žádný problém:</strong> Může být správně digitalizována"
 
-#: sketch_map_tool/templates/help.html:552
+#: sketch_map_tool/templates/help.html:578
 msgid "<strong>Problem:</strong> Missing or cut QR-Code <br>\n"
 "                        Without the whole QR-code the map cannot be recognized by the Sketch Map Tool."
 msgstr "<strong>Problém:</strong> Chybějící nebo uříznutý QR kód <br>\n"
 " Bez celého QR kódu nelze mapu rozpoznat pomocí nástroje Sketch Map Tool."
 
-#: sketch_map_tool/templates/help.html:557
+#: sketch_map_tool/templates/help.html:583
 msgid "Sketch Map, No QR Code"
 msgstr "Sketch Map, bez QR kódu"
 
-#: sketch_map_tool/templates/help.html:562
+#: sketch_map_tool/templates/help.html:588
 msgid "Sketch Map, Cutted QR Code."
 msgstr "Sketch Map, uříznutý QR kód."
 
-#: sketch_map_tool/templates/help.html:567
+#: sketch_map_tool/templates/help.html:593
 msgid "<strong>Problem:</strong> Missing Globs and missing part of the map <br>\n"
 "                        This could lead to mistakes in the georeferencing and missing information on your map.."
 msgstr "<strong>Problém:</strong> Chybějící glóby a chybějící část mapy <br>\n"
 " To by mohlo vést k chybám v georeferencování a chybějícím informacím na vaší mapě.."
 
-#: sketch_map_tool/templates/help.html:572
+#: sketch_map_tool/templates/help.html:598
 msgid "Sketch Map, Missing Globes."
 msgstr "Sketch Map, chybějící Glóby."
 
-#: sketch_map_tool/templates/help.html:577
+#: sketch_map_tool/templates/help.html:603
 msgid "<strong>Problem:</strong> Tilted photos of the map <br>\n"
 "                        Can lead to mistakes in the georeferencing."
 msgstr "<strong>Problém:</strong> Nakloněné fotografie mapy <br>\n"
 " Mohou vést k chybám v georeferencování."
 
-#: sketch_map_tool/templates/help.html:582
+#: sketch_map_tool/templates/help.html:608
 msgid "Sketch Map, Tiled Picture."
 msgstr "Sketch Map, nakloněný obraz."
 
-#: sketch_map_tool/templates/help.html:589
+#: sketch_map_tool/templates/help.html:615
 msgid "The photos must be taken from directly above, at a 180-degree angle\n"
 "                            (parallel to the Sketch Map), for optimal image quality."
 msgstr "Fotografie musí být pořízeny přímo shora, v úhlu 180 stupňů\n"
 "                            (rovnoběžně s mapou Sketch Map) pro optimální kvalitu obrazu."
 
-#: sketch_map_tool/templates/help.html:595
-#: sketch_map_tool/templates/help.html:601
-#: sketch_map_tool/templates/help.html:613
+#: sketch_map_tool/templates/help.html:621
+#: sketch_map_tool/templates/help.html:627
+#: sketch_map_tool/templates/help.html:639
 msgid "How to take a photo of a Sketch Map."
 msgstr "Jak vyfotit mapu Sketch Map."
 
-#: sketch_map_tool/templates/help.html:606
+#: sketch_map_tool/templates/help.html:632
 msgid "For larger paper formats of a Sketch Map (E.g. A2) it can be more challenging to keep the map smooth and to take a proper photo. \n"
 "                            Easier than photographing from above by laying the map on a table or ground might be to pin \n"
 "                            or glue your map to a flip-board or a wall first and then take a photo."
 msgstr "U větších formátů papírových map (např. A2) může být náročnější udržet mapu hladkou a pořídit správnou fotografii. Jednodušší než fotografování shora položením mapy na stůl nebo na zem může být nejprve mapu připnout nebo přilepit na flip-board nebo na zeď a pak ji vyfotografovat."
 
-#: sketch_map_tool/templates/help.html:618
+#: sketch_map_tool/templates/help.html:644
 msgid "Pay attention to the lighting conditions when taking a picture. \n"
 "                            If you experience problems with the results, for example the georeferencing failed or the markings where not \n"
 "                            detected probably, please take additional photos of your Sketch Map and upload them again. \n"
@@ -1614,34 +1653,34 @@ msgid "Pay attention to the lighting conditions when taking a picture. \n"
 "                            compressing or resizing the original image to a minimum of 1024x1024 pixels before you upload your image."
 msgstr "Při fotografování věnujte pozornost světelným podmínkám.  Pokud se vyskytnou problémy s výsledky, například se nezdařilo georeferencování nebo pravděpodobně nebyly rozpoznány značky, pořiďte další fotografie mapy Sketch a nahrajte je znovu. Drobné změny světelných podmínek a úhlů mohou mít vliv na výsledek! Kromě toho můžete před odesláním snímku zvážit komprimaci nebo změnu velikosti původního snímku na minimální velikost 1024x1024 pixelů."
 
-#: sketch_map_tool/templates/help.html:625
+#: sketch_map_tool/templates/help.html:651
 msgid "The image of the Sketch Map needs to be uploaded as JPG or PNG (max. file size is 50 MB).\n"
 "                            The georeferencing and color-detection work even better if you scan the marked Sketch Map\n"
 "                            with a resolution of 300 dpi. Attention! The file size will be too large when scanning with a\n"
 "                            600 dpi resolution."
 msgstr "Obrázek náčrtku mapy Sketch Map je třeba nahrát ve formátu JPG nebo PNG (maximální velikost souboru je 50 MB). Georeferencování a určování barev funguje ještě lépe, pokud označenou mapu Sketch Map naskenujete v rozlišení 300 dpi. Pozor! Při skenování s rozlišením 600 dpi bude velikost souboru příliš velká."
 
-#: sketch_map_tool/templates/help.html:631
+#: sketch_map_tool/templates/help.html:657
 msgid "If the marking detection does not work satisfactorily, you can improve the color contrast\n"
 "                            of the markings (with a pen, a new photo, or with photo editing software such as Paint, GIMP,\n"
 "                            or Windows Cut & Resize)."
 msgstr "Pokud detekce značek nefunguje uspokojivě, můžete zlepšit barevný kontrast značek (perem, novou fotografií nebo pomocí softwaru pro úpravu fotografií, například Malování, GIMP nebo Windows Cut & Resize)."
 
-#: sketch_map_tool/templates/help.html:636
+#: sketch_map_tool/templates/help.html:662
 msgid "Name your scans/photos appropriately when saving, and before uploading them to the Sketch Map Tool. \n"
 "                            This helps you recognize and allocate your Sketch Maps in the subsequent uploading and analyzing process. \n"
 "                            If you relate Sketch Maps back to questionnaires, use the same number for the map as you did in the questionnaire."
 msgstr "Při ukládání a před nahráním do nástroje Sketch Map Tool skeny/fotografie vhodně pojmenujte.  To vám pomůže rozpoznat a přiřadit vaše skicové mapy v následném procesu nahrávání a analýzy.  Pokud skicové mapy vztahujete zpětně k dotazníkům, použijte pro mapu stejné číslo jako v dotazníku."
 
-#: sketch_map_tool/templates/help.html:644
+#: sketch_map_tool/templates/help.html:670
 msgid "Upload your Sketch Maps"
 msgstr "Nahrajte své skicové mapy"
 
-#: sketch_map_tool/templates/help.html:648
+#: sketch_map_tool/templates/help.html:674
 msgid "Screenshot: Upload of a Sketch Map."
 msgstr "Snímek obrazovky: Nahrání skicové mapy."
 
-#: sketch_map_tool/templates/help.html:652
+#: sketch_map_tool/templates/help.html:678
 msgid "To upload files, you can click on the upload field or drag and drop your files directly into\n"
 "                        the upload field and then click on the Upload button. You can upload one or more marked Sketch Maps\n"
 "                        at once. However, they all must be the same base map (same QR-Code), and the markings of all maps will be\n"
@@ -1649,38 +1688,38 @@ msgid "To upload files, you can click on the upload field or drag and drop your 
 "                        For one Sketch Map, it can take up to 100 seconds to produce a result, and for a package of 10 Sketch Maps, it can take up to 16 minutes."
 msgstr "Chcete-li nahrát soubory, můžete kliknout na pole pro nahrávání nebo přetáhnout soubory přímo do pole pro nahrávání a poté kliknout na tlačítko Nahrát. Můžete nahrát jednu nebo více označených map Skica najednou. Všechny však musí mít stejný podklad (stejný kód QR) a označení všech map se automaticky spojí do jednoho souboru GeoJSON. Nahrávání funguje pro soubory JPG nebo PNG. U jedné mapy Sketch Map může výsledek trvat až 100 sekund, u balíčku 10 map Sketch Map až 16 minut."
 
-#: sketch_map_tool/templates/help.html:662
+#: sketch_map_tool/templates/help.html:688
 msgid "If you experience problems during the upload process, please check out \"2.1 Scan or photograph your marked Sketch Maps\" above and\n"
 "                            the FAQ section below or contact your Sketch Map Tool focal point in your\n"
 "                            organization or the <a href=\"mailto:sketch-map-tool@heigit.org\"\n"
 "                            target=\"_blank\">Sketch Map Tool user support</a>"
 msgstr "Pokud se během procesu nahrávání setkáte s problémy, prostudujte si prosím výše „2.1 Naskenujte nebo vyfotografujte své označené mapy Sketch Maps“ a sekci Časté dotazy níže nebo kontaktujte kontaktní místo nástroje Sketch Map Tool ve vaší organizaci nebo na <a href=\"mailto:sketch- map-tool@heigit.org\" target=\"_blank\">Uživatelské podpoře nástroje Sketch Map Tool</a>"
 
-#: sketch_map_tool/templates/help.html:671
+#: sketch_map_tool/templates/help.html:697
 msgid "Download detected Markings as Geodata"
 msgstr "Stáhnout rozpoznané značky jako Geodata"
 
-#: sketch_map_tool/templates/help.html:675
+#: sketch_map_tool/templates/help.html:701
 msgid "Download the markings of the Sketch Maps in different geodata formats (raster data as\n"
 "                        GeoTIFF, vector data as a GeoJSON file). You can download the georeferenced Sketch Maps as a\n"
 "                        GeoTIFF (a georeferenced \"picture\" for each of your uploaded Sketch Maps) and the color-detected markings as vector data in a GeoJSON file."
 msgstr "Stáhněte si značky ze skicových map v různých formátech geodat (rastrová data jako GeoTIFF, vektorová data jako soubor GeoJSON). Georeferencované skicy map můžete stáhnout jako soubor GeoTIFF (georeferencovaný \"obrázek\" pro každou z nahraných skic map) a barevně zjištěné značky jako vektorová data v souboru GeoJSON."
 
-#: sketch_map_tool/templates/help.html:683
+#: sketch_map_tool/templates/help.html:709
 msgid "If you experience problems during the download process, please check out the FAQ section\n"
 "                            below or contact your Sketch Map Tool focal point in your organization or the <a href=\"mailto:sketch-map-tool@heigit.org\"\n"
 "                            target=\"_blank\">Sketch Map Tool user support</a> if you cannot find your answers there."
 msgstr "Pokud se během procesu stahování setkáte s problémy, podívejte se prosím do sekce FAQ níže nebo se obraťte na kontaktní místo Sketch Map Tool ve vaší organizaci nebo na <a href=\"mailto:sketch-map-tool@heigit.org\" target=\"_blank \">Uživatelskou podporu nástroje Sketch Map Tool</a>, pokud zde nenajdete své odpovědi."
 
-#: sketch_map_tool/templates/help.html:694
+#: sketch_map_tool/templates/help.html:720
 msgid "FINALLY:"
 msgstr "NAKONEC:"
 
-#: sketch_map_tool/templates/help.html:695
+#: sketch_map_tool/templates/help.html:721
 msgid "Import Geodata in a Geographic Information System (GIS), e.g. QGIS"
 msgstr "Importovat geodata do geografického informačního systému (GIS), např. QGIS"
 
-#: sketch_map_tool/templates/help.html:699
+#: sketch_map_tool/templates/help.html:725
 msgid "The gained geodata can be even more valuable for the communities and humanitarian\n"
 "                   organizations if you create result maps or analyze it further. There are many different\n"
 "                   analyses possible based on your gained map data."
@@ -1688,7 +1727,7 @@ msgstr "Získaná geodata moohou být ještě cennější pro komunity a humanit
 "                   organizace, pokud vytvoříte vvýsledné mapy, nebo je dále  analyzujete. Existuje mnoho různých\n"
 "                   analýz možných na základě vašich získaných mapových dat."
 
-#: sketch_map_tool/templates/help.html:704
+#: sketch_map_tool/templates/help.html:730
 msgid "To open, visualize and work with the downloaded geodata you need some type of GIS. \n"
 "                    We recommend using QGIS because it is open-source and provides the most flexibility for analyzing and visualizing your data.\n"
 "                    Alternatively you could also use browser based GIS-Applications like <a href=\"https://umap.openstreetmap.fr/en/\" target=\"_blank\">uMap</a>. \n"
@@ -1696,83 +1735,83 @@ msgid "To open, visualize and work with the downloaded geodata you need some typ
 "                    Please also keep in mind data security questions when using Online GIS-Applications for visualizing your data!"
 msgstr "K otevření, vizualizaci a práci se staženými geodaty potřebujete nějaký typ GIS. Doporučujeme používat QGIS, protože je open source a poskytuje největší flexibilitu pro analýzu a vizualizaci vašich dat. Alternativně můžete také použít GIS aplikace založené na prohlížeči, jako je <a href=\"https://umap.openstreetmap.fr/en/\" target=\"_blank\">uMap</a>. Tyto aplikace založené na prohlížeči jsou snadněji použitelné pro začátečníky, ale mají omezenou funkčnost. Při používání online GIS aplikací pro vizualizaci vašich dat mějte také na paměti otázky týkající se bezpečnosti dat!"
 
-#: sketch_map_tool/templates/help.html:711
+#: sketch_map_tool/templates/help.html:737
 msgid "For more tips on how to open and analyze the downloaded geodata and how to create a result map in QGIS as well as in uMap,\n"
 "                    take a look at the following\n"
 "                    <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html\"\n"
 "                    target=\"_blank\">QGIS Training Lectures</a>."
 msgstr "Další tipy, jak otevřít a analyzovat stažená geodata a jak vytvořit výsledkovou mapu v QGIS i v uMap, najdete na následujícím odkazu <a href=\"https://giscience.github.io/gis- training-resource-center/content/Mobile_Data_collection/en_SMT_training.html\" target=\"_blank\">Tréninkové přednášky QGIS</a>."
 
-#: sketch_map_tool/templates/help.html:717
+#: sketch_map_tool/templates/help.html:743
 msgid "Here you can see an overview on the characteristics of GeoTIFF and GeoJSON and how the results could look like:"
 msgstr "Zde se můžete podívat na přehled vlastností GeoTIFF a GeoJSON a jak by mohly vypadat výsledky:"
 
-#: sketch_map_tool/templates/help.html:723
+#: sketch_map_tool/templates/help.html:749
 msgid "GeoTIFF"
 msgstr "GeoTIFF"
 
-#: sketch_map_tool/templates/help.html:724
+#: sketch_map_tool/templates/help.html:750
 msgid "The GeoTIFF output file consists of a georeferenced \"picture\" for each of your uploaded Sketch\n"
 "                                Maps. When you open the GeoTIFF files in a GIS, it should look similar to this example and show all \n"
 "                                your sketch map(s) as separate layers. You can view only one of your maps at a time."
 msgstr "Výstupní soubor GeoTIFF se skládá z georeferencovaného „obrázku“ pro každou z vašich nahraných skicových map. Když otevřete soubory GeoTIFF v GIS, měl by vypadat podobně jako v tomto příkladu a zobrazit všechny vaše skicové mapy jako samostatné vrstvy. Najednou můžete zobrazit pouze jednu ze svých map."
 
-#: sketch_map_tool/templates/help.html:729
+#: sketch_map_tool/templates/help.html:755
 msgid "GeoTiff in QGIS."
 msgstr "GeoTiff v QGIS."
 
-#: sketch_map_tool/templates/help.html:734
+#: sketch_map_tool/templates/help.html:760
 msgid "GeoJSON"
 msgstr "GeoJSON"
 
-#: sketch_map_tool/templates/help.html:735
+#: sketch_map_tool/templates/help.html:761
 msgid "If you open the GeoJSON, you can see the detected markings from all uploaded maps as polygons.\n"
 "                                When you check the attribute table, you can see that for each marking, the name of the map and the detected color\n"
 "                                are specified. With the help of these attributes, you can style your map or conduct analyses."
 msgstr "Pokud otevřete GeoJSON, můžete vidět detekované značky ze všech nahraných map jako polygony. Když zkontrolujete tabulku atributů, uvidíte, že pro každé označení je určen název mapy a zjištěná barva. Pomocí těchto atributů můžete stylizovat svou mapu nebo provádět analýzy."
 
-#: sketch_map_tool/templates/help.html:740
+#: sketch_map_tool/templates/help.html:766
 msgid "GeoJSON in QGIS."
 msgstr "GeoJSON v QGIS."
 
-#: sketch_map_tool/templates/help.html:745
+#: sketch_map_tool/templates/help.html:771
 msgid "GEOJSON in QGIS."
 msgstr "GEOJSON v QGIS."
 
-#: sketch_map_tool/templates/help.html:755
+#: sketch_map_tool/templates/help.html:781
 msgid "The GeoTIFF file (raster file) can be opened in a GIS software like QGIS but can not be opened in many browser-based GIS-Applications like uMap:"
 msgstr "GeoTIFF soubor (raster soubor) lze otevřít v GIS softwaru, jako je QGIS, ale nelze jej otevřít v mnoha prohlížečích GIS aplikací, jako je uMap:"
 
-#: sketch_map_tool/templates/help.html:758
+#: sketch_map_tool/templates/help.html:784
 msgid "It can be used, for example, as a background to combine\n"
 "                                it with other data or to manually digitize your results yourself in\n"
 "                                case some markings are not detected correctly."
 msgstr "Lze jej použít například jako pozadí pro spojení s jinými daty nebo pro vlastní ruční digitalizaci výsledků v případě, že některé značky nebudou správně detekovány."
 
-#: sketch_map_tool/templates/help.html:765
+#: sketch_map_tool/templates/help.html:791
 msgid "The GeoJSON file (vector file) can be opened as well in QGIS as in many browser-based GIS-Applications like uMap:"
 msgstr "Soubor GeoJSON (vektorový soubor) lze otevřít v QGIS i v mnoha aplikacích GIS založených na webovém prohlížeči, jako je uMap:"
 
-#: sketch_map_tool/templates/help.html:768
+#: sketch_map_tool/templates/help.html:794
 msgid "It can be visualized in a clear and concise map in order to use it for\n"
 "                                reporting (see <a\n"
 "                                    href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex4_.html\"\n"
 "                                    target=\"_blank\">Training Exercise 4</a>)"
 msgstr "Lze jej vizualizovat na jasné a stručné mapě, aby bylo možné jej použít pro hlášení (viz <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex4_.html\" target=\"_blank\">Tréninkové cvičení 4</a>)"
 
-#: sketch_map_tool/templates/help.html:774
+#: sketch_map_tool/templates/help.html:800
 msgid "Based on the vector outputs you can analyze your data and combine it with additional\n"
 "                                data (e.g. prepare heatmaps, see <a\n"
 "                                    href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex5_.html\"\n"
 "                                    target=\"_blank\">Training Exercise 5 </a>)"
 msgstr "Na základě vektorových výstupů můžete analyzovat svá data a kombinovat je s dalšími daty (např. připravit heatmapy, viz <a href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex5_.html\" target=\"_blank\">Tréninkové cvičení 5</a>)"
 
-#: sketch_map_tool/templates/help.html:780
+#: sketch_map_tool/templates/help.html:806
 msgid "In QGIS: You can compare the vector output with the raster file to verify the marking detection. \n"
 "                                In case features are not detected or are incorrectly detected, you can manipulate your vector file based on the GeoTIFF."
 msgstr "V QGIS: Můžete porovnat vektorový výstup s rastrovým souborem a ověřit detekci značení. V případě, že prvky nejsou detekovány nebo jsou detekovány nesprávně, můžete manipulovat s vektorovým souborem na základě GeoTIFF."
 
-#: sketch_map_tool/templates/help.html:786
+#: sketch_map_tool/templates/help.html:812
 msgid "If the imported data looks strange and does not represent the actual markings of\n"
 "                        the Sketch Maps, please check your uploaded sketch map files and, if necessary, scan them again\n"
 "                        or take new pictures. Please review the recommendations in the sections about the data collection,\n"
@@ -1782,151 +1821,141 @@ msgid "If the imported data looks strange and does not represent the actual mark
 "                        target=\"_blank\">Sketch Map Tool user support</a>."
 msgstr "Pokud importovaná data vypadají podivně a neodpovídají skutečnému značení skicových map, zkontrolujte prosím své nahrané soubory skicových map a v případě potřeby je znovu naskenujte nebo pořiďte nové snímky. Přečtěte si prosím doporučení v sekcích o shromažďování dat, poté naskenujte, vyfotografujte nebo nahrajte výše a podívejte se do sekce FAQ o problémech s detekcí barev. Pokud zde nenajdete své odpovědi, kontaktujte prosím své kontaktní místo Sketch Map Tool ve vaší organizaci nebo Sketch Map Tool nebo <a href=\"mailto:sketch-map-tool@heigit.org\" target=\"_blank\">Uživatelskou podporu Sketch Map Tool</a>."
 
-#: sketch_map_tool/templates/help.html:798
+#: sketch_map_tool/templates/help.html:824
 msgid "Data storage and security"
 msgstr "Datové úložiště a zabezpečení"
 
-#: sketch_map_tool/templates/help.html:800
+#: sketch_map_tool/templates/help.html:826
 msgid "Map creation"
 msgstr "Vytvoření mapy"
 
-#: sketch_map_tool/templates/help.html:804
+#: sketch_map_tool/templates/help.html:830
 msgid "<strong>Functionally necessary data storage:</strong> We need the original map frame to digitize your Sketch Map.\n"
 "                        The map frames of the created maps are stored for 12 months, giving you the opportunity to digitize your Sketch Map in those 12 months."
 msgstr "<strong>Funkční úložiště dat:</strong> Potřebujeme originální mapový rám k digitalizaci vaší Sketch Map. Mapové rámy vytvořených map jsou uloženy po dobu 12 měsíců, což vám dává možnost digitalizovat Sketch Map během těchto 12 měsíců."
 
-#: sketch_map_tool/templates/help.html:812
+#: sketch_map_tool/templates/help.html:838
 msgid "Paper to GIS"
 msgstr "Od papíru do GIS"
 
-#: sketch_map_tool/templates/help.html:816
+#: sketch_map_tool/templates/help.html:842
 msgid "<strong>Functionally necessary data storage:</strong> Uploaded images of Sketch Maps are stored for processing\n"
 "                        (georeferencing and marking detection) until the results are generated."
 msgstr "<strong>Funkční úložiště dat:</strong> Nahrané snímky Sketch Maps se ukládají za účelem zpracování (georeferencování a detekce značení), dokud nebudou vygenerovány výsledky."
 
-#: sketch_map_tool/templates/help.html:820
+#: sketch_map_tool/templates/help.html:846
 msgid "The results are stored and available for download for a period of 24 hours, after which they are deleted."
 msgstr "Výsledky jsou uloženy a dostupné ke stažení po dobu 24 hodin, po jejímž uplynutí budou odstraněny."
 
-#: sketch_map_tool/templates/help.html:830
+#: sketch_map_tool/templates/help.html:856
 msgid "On a voluntary basis, you can enable us to keep your uploaded Sketch Maps beyond processing to further improve the Sketch Map Tool."
 msgstr "Na dobrovolném základě nám můžete umožnit ponechat nahrané Sketch Maps mimo zpracování pro další zlepšení Sketch Map Tool."
 
-#: sketch_map_tool/templates/help.html:834
+#: sketch_map_tool/templates/help.html:860
 msgid "If you <strong>opt-in</strong> by checking the check box you enable us to ..."
 msgstr "Pokud <strong>se přihlásíte</strong> zaškrtnutím políčka, povolíte nám ..."
 
-#: sketch_map_tool/templates/help.html:836
+#: sketch_map_tool/templates/help.html:862
 msgid "... keep your uploaded Sketch Maps for future improvements of the Sketch Map Tool such as training\n"
 "                            our machine learning models which detect your markings on the uploaded images."
 msgstr "... zachovat vaše nahrané mapy Sketch pro budoucí vylepšení nástroje Sketch Map Tool, například pro trénování našich modelů strojového učení, které detekují vaše značky na nahraných obrázcích."
 
-#: sketch_map_tool/templates/help.html:840
+#: sketch_map_tool/templates/help.html:866
 msgid "The Sketch Map Tool uses a sequence of machine learning models (SAM and YOLO) to detect the markings on the maps.\n"
 "                            These models need to be trained with a lot of real-world examples so they are able to identity the markings correctly."
 msgstr "Nástroj Sketch Map Tool používá k detekci značek na mapách sekvenci modelů strojového učení (SAM a YOLO). Tyto modely je třeba trénovat na mnoha příkladech z reálného světa, aby byly schopny správně identifikovat označení."
 
-#: sketch_map_tool/templates/help.html:844
+#: sketch_map_tool/templates/help.html:870
 msgid "Further accuracy improvements can be achieved by incorporating additional real-world cases of marked maps into the models.\n"
 "                            You can help us here by giving your consent!"
 msgstr "Dalšího vylepšení přesnosti lze dosáhnout začleněním dalších reálných případů označených map do modelů.\n"
 " Zde nám můžete pomoci udělením vašeho souhlasu!"
 
-#: sketch_map_tool/templates/help.html:848
+#: sketch_map_tool/templates/help.html:874
 msgid "For more detailed and technical information take a look at our\n"
 "                                <a href=\"https://github.com/GIScience/sketch-map-tool/blob/main/docs/action-diagram.png\" target=\"_blank\">GitHub</a>\n"
 "                            and the following figure."
 msgstr "Pro podrobnější a technické informace se podívejte na náš <a href=\"https://github.com/GIScience/sketch-map-tool/blob/main/docs/action-diagram.png\" target=\"_blank\"> GitHub</a>a následující obrázek."
 
-#: sketch_map_tool/templates/help.html:854
+#: sketch_map_tool/templates/help.html:880
 msgid "Data storage and security workflow."
 msgstr "Úložiště dat a bezpečnostní workflow."
 
-#: sketch_map_tool/templates/help.html:859
+#: sketch_map_tool/templates/help.html:885
 msgid "If you <strong>opt-out</strong> by leaving the checkbox unchecked (default) ..."
 msgstr "Pokud se <strong>odhlásíte</strong> tím, že necháte zaškrtávací políčko nezaškrtnuté (výchozí)..."
 
-#: sketch_map_tool/templates/help.html:861
+#: sketch_map_tool/templates/help.html:887
 msgid "... your uploaded Sketch Maps will be deleted after the results are generated. The results are stored and available for download\n"
 "                            for a period of 24 hours, after which they are deleted too."
 msgstr "... vaše nahrané skicové mapy budou po vygenerování výsledků smazány. Výsledky jsou uloženy a jsou k dispozici ke stažení po dobu 24 hodin, poté jsou také smazány."
 
-#: sketch_map_tool/templates/help.html:870
+#: sketch_map_tool/templates/help.html:896
 msgid "Basic statistics"
 msgstr "Základní statistiky"
 
-#: sketch_map_tool/templates/help.html:872
+#: sketch_map_tool/templates/help.html:898
 msgid "To get a better insight into the general usage of the Sketch Map Tool we store anonymous data about the map generation \n"
 "                (date, centroid, layer, version, page format and orientation)."
 msgstr "Chcete-li získat lepší přehled o obecném používání Sketch Map Tool, ukládáme anonymní data o generování mapy   (datum, geometrický střed, vrstva, verze, formát a orientace stránky)."
 
-#: sketch_map_tool/templates/help.html:878
+#: sketch_map_tool/templates/help.html:904
 msgid "Questions and concerns"
 msgstr "Otázky a obavy"
 
-#: sketch_map_tool/templates/help.html:880
+#: sketch_map_tool/templates/help.html:906
 msgid "If you have further questions or any concerns please reach us via <a href=\"mailto:sketch-map-tool@heigit.org\" target=\"_blank\">E-Mail</a>."
 msgstr "Pokud máte další dotazy nebo jakékoliv obavy, prosím kontaktujte nás prostřednictvím <a href=\"mailto:sketch-map-tool@heigit.org\" target=\"_blank\">E-Mailu</a>."
 
-#: sketch_map_tool/templates/help.html:882
+#: sketch_map_tool/templates/help.html:908
 msgid "It is also possible to set-up the Sketch Map Tool on your own server. In this case, please get in touch with the <a href=\"mailto:sketch-map-tool@heigit.org\" target=\"_blank\">Sketch Map Tool team</a>."
 msgstr "Je také možné nastavit Sketch Map Tool na vašem vlastním serveru. V tomto případě se prosím spojte s <a href=\"mailto:sketch-map-tool@heigit.org\" target=\"_blank\">Týmem Sketch Map Tool</a>."
 
-#: sketch_map_tool/templates/help.html:886
+#: sketch_map_tool/templates/help.html:912
 msgid "FAQs"
 msgstr "Časté dotazy"
 
-#: sketch_map_tool/templates/help.html:888
+#: sketch_map_tool/templates/help.html:914
 msgid "What are OSM data?"
 msgstr "Co jsou to data OSM?"
 
-#: sketch_map_tool/templates/help.html:890
+#: sketch_map_tool/templates/help.html:916
 msgid "OpenStreetMap data is freely accessible geodata. You can find out more about it <a\n"
 "                    href=\"https://www.openstreetmap.org/\" target=\"_blank\">here</a>."
 msgstr "OpenStreetMap data jsou volně přístupná geodata. Více informací o nich najdete <a\n"
 "                    href=\"https://www.openstreetmap.org/\" target=\"_blank\">zde</a>."
 
-#: sketch_map_tool/templates/help.html:895
+#: sketch_map_tool/templates/help.html:921
 msgid "What are the quality levels for OSM data used in the Map Quality Check?"
 msgstr "Jaké jsou úrovně kvality údajů OSM použité při kontrole kvality mapy?"
 
-#: sketch_map_tool/templates/help.html:898
+#: sketch_map_tool/templates/help.html:924
 msgid "Based on the \n"
 "                    <a href=\"https://api.quality.ohsome.org/\" \n"
-"                    target=\"_blank\">HeiGIT ohsome quality API</a>, the OSM data used in the base map is classified with a traffic light system.\n"
-"                Green stands for good suitability of the data, yellow for possible problems when carrying out a\n"
-"                Sketch Map study with OSM-based Sketch Maps, and red for probable problems.\n"
-"                Recommendations are also given on what to consider based on the results."
-msgstr "Na základě <a href=\"https://api.quality.ohsome.org/\" target=\"_blank\">HeiGIT ohsome quality API</a> jsou data OSM použitá v základní mapě klasifikována systémem semaforu. Zelená znamená dobrou vhodnost dat, žlutá pro možné problémy při provádění studie Sketch Map pomocí Sketch Maps založených na OSM a červená pro pravděpodobné problémy. Jsou také uvedena doporučení, co je třeba na základě výsledků zvážit."
+"                    target=\"_blank\">HeiGIT ohsome quality API</a>, the <b>roads</b> in the OSM base map data are analyzed automatically in regard to \n"
+"\t\t\t\t\ttheir <b>Mapping Saturation</b> and <b>Currentness</b>. Please check the chapter <b>1.2 Map Quality Check</b> for a detailed overview."
+msgstr "Na základě \n"
+"                    <a href=\"https://api.quality.ohsome.org/\" \n"
+"                    target=\"_blank\">HeiGIT ohsome quality API</a>,  jsou <b>cesty</b> v základní mapě OSM analyzovány automaticky s ohledem na \n"
+"\t\t\t\t\tjejich <b>mapování</b> a <b>aktuálnost</b>. Zkontrolujte prosím kapitolu <b>1.2 Kontrola kvality mapy</b> pro podrobný přehled."
 
-#: sketch_map_tool/templates/help.html:907
-msgid "Which analyses are performed and why?"
-msgstr "Které analýzy se provádějí a proč?"
-
-#: sketch_map_tool/templates/help.html:909
-msgid "You can read more about the analyses included in the Sketch Map Tool <a\n"
-"                    href=\"https://www.mdpi.com/2220-9964/10/3/130\" target=\"_blank\">this\n"
-"                    paper</a>."
-msgstr "Další informace o analýzách obsažených v nástroji Sketch Map Tool si můžete přečíst v <a href=\"https://www.mdpi.com/2220-9964/10/3/130\" target=\"_blank\">tomto dokumentu</a>."
-
-#: sketch_map_tool/templates/help.html:915
+#: sketch_map_tool/templates/help.html:932
 msgid "For which research questions can the Sketch Map Tool\n"
 "                be used?"
 msgstr "Pro jaké výzkumné otázky lze nástroj Sketch Map Tool použít?"
 
-#: sketch_map_tool/templates/help.html:918
-msgid "The Sketch Map Tool has been primarily developed for research questions related to flooding.\n"
+#: sketch_map_tool/templates/help.html:935
+msgid "The Sketch Map Tool has been primarily developed for research questions related to flooding and disaster risk reduction.\n"
 "                Since then, it has been used world wide for a variety of topics like vulnerability and capacity mapping or risk\n"
-"                mapping in general.\n"
-"                You can use the Sketch Maps and the Map Quality Check to investigate all kinds of research questions, as long as\n"
-"                you check that it fits your purpose."
-msgstr "Nástroj Sketch Map Tool byl primárně vyvinut pro výzkumné otázky související se záplavami. Od té doby se používá po celém světě pro řadu témat, jako je zranitelnost a mapování kapacit nebo obecně mapování rizik. Můžete použít Sketch Maps a Map Quality Check ke zkoumání všech druhů výzkumných otázek, pokud si ověříte, že to vyhovuje vašemu účelu."
+"                mapping in general, city planning, mapping of cultural sites and many more.\n"
+"                Check out our <b>Case Studies</b> to learn more."
+msgstr ""
 
-#: sketch_map_tool/templates/help.html:926
+#: sketch_map_tool/templates/help.html:942
 msgid "How does mapping work with the Sketch Map Tool?"
 msgstr "Jak funguje mapování se Sketch Map Tool?"
 
-#: sketch_map_tool/templates/help.html:928
+#: sketch_map_tool/templates/help.html:944
 msgid "The local population can, for example, draw flooded areas such as streets, parks, etc., on the printed\n"
 "                Sketch Map.\n"
 "                The larger paper formats also allow to hold group discussions about flooded areas. The maps with the markings\n"
@@ -1934,114 +1963,113 @@ msgid "The local population can, for example, draw flooded areas such as streets
 "                The georeferenced GeoTIFF and GeoJSON can then be further analyzed or used."
 msgstr "Místní obyvatelstvo může například zakreslit zaplavené oblasti, jako jsou ulice, parky atd., na tištěnou skicovou mapu. Větší formáty papíru také umožňují vést skupinové diskuse o zaplavených oblastech. Mapy se značkami lze vyfotografovat a nahrát do nástroje. Georeferencované GeoTIFF a GeoJSON pak mohou být dále analyzovány nebo použity."
 
-#: sketch_map_tool/templates/help.html:936
+#: sketch_map_tool/templates/help.html:952
 msgid "How large can my study area be?"
 msgstr "Jak velká může být moje studijní oblast?"
 
-#: sketch_map_tool/templates/help.html:938
+#: sketch_map_tool/templates/help.html:954
 msgid "So far the Sketch Map Tool has only been tested on neighborhood or city level. The tool works best for\n"
 "                study areas which are smaller than 50km²."
 msgstr "Nástroj Sketch Map Tool byl zatím testován pouze na úrovni sousedství nebo města. Nástroj funguje nejlépe pro studijní oblasti, které jsou menší než 50 km²."
 
-#: sketch_map_tool/templates/help.html:943
+#: sketch_map_tool/templates/help.html:959
 msgid "Why is there a QR code and globes on the Sketch Maps?"
 msgstr "Proč je na Sketch Maps QR kód a glóby?"
 
-#: sketch_map_tool/templates/help.html:945
+#: sketch_map_tool/templates/help.html:961
 msgid "These are required for georeferencing. The QR Code contains the ID of the reference map frame and the bounding box coordinates.\n"
 "                The tool employs computer vision algorithms to match uploaded and reference map frames (mainly based on the globes)\n"
 "                before it transforms and georeferences the uploaded Sketch Maps."
 msgstr "Ty jsou nutné pro georeferencování. QR kód obsahuje ID rámce referenční mapy a souřadnice ohraničujícího rámečku. Tento nástroj využívá algoritmy počítačového vidění k porovnání nahraných a referenčních mapových snímků (hlavně založených na glóbech) před transformací a georeferencí nahraných skicových map."
 
-#: sketch_map_tool/templates/help.html:951
+#: sketch_map_tool/templates/help.html:967
 msgid "Can I access my results at a later point in time?"
 msgstr "Mohu získat přístup ke svým výsledkům později?"
 
-#: sketch_map_tool/templates/help.html:953
+#: sketch_map_tool/templates/help.html:969
 msgid "No, the results should always be downloaded directly after using the tool. If you forgot to download the\n"
 "                files, you can simply upload and process the files again."
 msgstr "Ne, výsledky by měly být vždy staženy přímo po použití nástroje. Pokud jste zapomněli stáhnout soubory, můžete je jednoduše nahrát a zpracovat znovu."
 
-#: sketch_map_tool/templates/help.html:958
-msgid "What do I need keep in mind for the participatory mapping?"
-msgstr "Co musím mít na paměti při participativním mapování?"
+#: sketch_map_tool/templates/help.html:974
+msgid "What do I need to keep in mind for the participatory mapping?"
+msgstr ""
 
-#: sketch_map_tool/templates/help.html:960
+#: sketch_map_tool/templates/help.html:976
 msgid "Please make sure not to accidentally mark the globes at the edge as they are needed for automatic map detection.\n"
 "                Use thicker felt-tip pens with intense colors; red, blue, and black work best. Prepare the same set of pens for\n"
 "                all interviewers.\n"
-"                    <a href=\"https://nexus.heigit.org/service/rest/repository/browse/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/\" target=\"_blank\">Here </a>\n"
+"                    <a href=\"https://nexus.heigit.org/service/rest/repository/browse/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/\" target=\"_blank\">Here</a>\n"
 "                you can download the most important tips and questions for the mapping (summarized in a one-pager)."
-msgstr "Ujistěte se, že jste omylem neoznačili glóby na okraji, protože jsou potřebné pro automatickou detekci mapy. Používejte silnější fixy s intenzivními barvami; červená, modrá a černá fungují nejlépe. Připravte stejnou sadu per pro všechny tazatele. <a href=\"https://nexus.heigit.org/service/rest/repository/browse/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/\" target=\"_blank\">Zde</a> si můžete stáhnout nejdůležitější tipy a otázky pro mapování (shrnuté na jedné stránce)."
+msgstr ""
 
-#: sketch_map_tool/templates/help.html:969
+#: sketch_map_tool/templates/help.html:985
 msgid "How does the georeferencing work?"
 msgstr "Jak funguje georeferencování?"
 
-#: sketch_map_tool/templates/help.html:972
+#: sketch_map_tool/templates/help.html:988
 msgid "Our georeferencing process employs the Binary Robust Invariant Scalable Keypoints (BRISK)\n"
 "                    method from the OpenCV library for feature matching. It begins by extracting bounding box\n"
 "                    coordinates and an identification number from a QR code on the uploaded Sketch Map to identify\n"
 "                    the corresponding unmarked reference map. Using the BRISK algorithm, the marked Sketch Map is\n"
 "                    aligned with the unmarked map. Later, we use the coordinates of the bounding box to transform the\n"
-"                    marked map into the world coordinate system (WGS 84), resulting in a georeferenced GeoTIFF file\n"
+"                    marked map into the world geodetic system (WGS 84), resulting in a georeferenced GeoTIFF file\n"
 "                    suitable for geospatial analysis."
-msgstr "Náš proces georeferencování využívá metodu Binary Robust Invariant Scalable Keypoints (BRISK) z knihovny OpenCV pro párování prvků. Začíná extrahováním souřadnic ohraničujícího rámečku a identifikačního čísla z QR kódu na nahrané skicové mapě, aby se identifikovala odpovídající neoznačená referenční mapa. Pomocí algoritmu BRISK je označená skicová mapa zarovnána s neoznačenou mapou. Později použijeme souřadnice ohraničujícího rámečku k transformaci označené mapy do světového souřadnicového systému (WGS 84), výsledkem je georeferencovaný soubor GeoTIFF vhodný pro geoprostorovou analýzu."
+msgstr ""
 
-#: sketch_map_tool/templates/help.html:981
+#: sketch_map_tool/templates/help.html:997
 msgid "You can find more details in the <a href=\"https://www.mdpi.com/2220-9964/10/3/130\" target=\"_blank\">paper\n"
 "                        about the Sketch Map Tool</a> in the paragraph about Image Processing."
 msgstr "Další podrobnosti naleznete v <a href=\"https://www.mdpi.com/2220-9964/10/3/130\" target=\"_blank\">článku o nástroji Sketch Map Tool</a> v odstavci o zpracování obrazu."
 
-#: sketch_map_tool/templates/help.html:987
+#: sketch_map_tool/templates/help.html:1003
 msgid "How can I ensure optimal results when photographing the Sketch\n"
 "                Maps?"
 msgstr "Jak mohu zajistit optimální výsledky při fotografování skicové mapy?"
 
-#: sketch_map_tool/templates/help.html:991
+#: sketch_map_tool/templates/help.html:1007
 msgid "The images need to be in JPG or PNG format. The file may not be larger than 500&nbsp; MB. Georeferencing\n"
 "                works best if you scan the marked Sketch Map with a resolution of 300 dpi.\n"
 "                The photos must be taken from above at a 180 degree angle (parallel above the Sketch Map) to produce the best result."
 msgstr "Obrázky musí být ve formátu JPG nebo PNG. Soubor nesmí být větší než 500&nbsp; MB. Georeferencování funguje nejlépe, pokud naskenujete označenou skicovou mapu s rozlišením 300 dpi. Fotografie musí být pořízeny shora pod úhlem 180 stupňů (rovnoběžně nad skicovou mapou), aby bylo dosaženo nejlepšího výsledku."
 
-#: sketch_map_tool/templates/help.html:998
+#: sketch_map_tool/templates/help.html:1014
 msgid "How do I check if georeferencing is correct?"
 msgstr "Jak mohu zkontrolovat, zda je georeferencování správné?"
 
-#: sketch_map_tool/templates/help.html:1000
+#: sketch_map_tool/templates/help.html:1016
 msgid "You can open the TIFF file in a geographic information system (GIS), such as ArcGIS or QGIS, to check\n"
 "                this.\n"
-"                If you upload the file there and insert a basemap (for example the OSM basemap), you can see if georeferencing\n"
+"                If you upload the file there and insert a basemap (for example the OSM basemap), you can see if the georeferencing\n"
 "                has worked. The Sketch Map should match the base map."
-msgstr "Chcete-li to zkontrolovat, můžete soubor TIFF otevřít v geografickém informačním systému (GIS), jako je ArcGIS nebo QGIS. Pokud tam nahrajete soubor a vložíte podkladovou mapu (například podkladovou mapu OSM), můžete zjistit, zda georeferencování fungovalo. Skicová mapa by měla odpovídat základní mapě."
+msgstr ""
 
-#: sketch_map_tool/templates/help.html:1008
+#: sketch_map_tool/templates/help.html:1024
 msgid "Why does my generated GeoTIFF file look strange?"
 msgstr "Proč vygenerovaný GeoTIFF soubor vypadá zvláštně?"
 
-#: sketch_map_tool/templates/help.html:1010
+#: sketch_map_tool/templates/help.html:1026
 msgid "Please first try to open the file in a geographic information system (GIS) such as ArcGIS or QGIS.\n"
 "                The georeferencing may have worked even if the GeoTIFF file does not look right. If it still appears incorrect in\n"
 "                the GIS,\n"
-"                the map might not have been properly detected by the tool in the photo, and there could be various possible\n"
-"                reasons.\n"
+"                the map might not have been properly detected by the tool in the photo, which could have several possible causes.\n"
 "                For example, the photo may have been taken from the wrong angle or the globes may have been painted over."
-msgstr "Nejprve zkuste soubor otevřít v geografickém informačním systému (GIS), jako je ArcGIS nebo QGIS. Georeferencování mohlo fungovat, i když soubor GeoTIFF nevypadá správně. Pokud se v GIS stále jeví jako nesprávná, nemusela být mapa správně detekována nástrojem na fotografii a může to mít různé možné důvody. Fotka mohla být například pořízena ze špatného úhlu nebo mohly být globy přemalovány."
+msgstr ""
 
-#: sketch_map_tool/templates/help.html:1020
+#: sketch_map_tool/templates/help.html:1035
 msgid "What can I do if the satellite map I printed is too dark?"
 msgstr "Co mohu dělat, když satelitní mapa, kterou jsem vytiskl, je příliš tmavá?"
 
-#: sketch_map_tool/templates/help.html:1023
+#: sketch_map_tool/templates/help.html:1038
 msgid "In case you use a satellite imagery background, please review the color saturation of your image.\n"
 "                If the background is too dark, you might consider to choose OSM as base map or adjust the color saturation in the printer settings before printing."
 msgstr "V případě, že používáte satelitní snímky na pozadí, zkontrolujte sytost barev snímku. Pokud je pozadí příliš tmavé, můžete zvážit volbu OSM jako základní mapu nebo upravit sytost barev v nastavení tiskárny před tiskem."
 
-#: sketch_map_tool/templates/help.html:1029
+#: sketch_map_tool/templates/help.html:1044
 msgid "How long are uploaded Sketch Maps stored?"
 msgstr "Jak dlouho jsou uloženy nahrané skicové mapy?"
 
-#: sketch_map_tool/templates/help.html:1032
+#: sketch_map_tool/templates/help.html:1047
 msgid "The uploaded image(s) of your Sketch Map(s) will be stored on our server for processing (georeferencing and marking detection) \n"
 "                until the results are generated. If you consent, the image(s) will be stored long term for future improvements of the Sketch Map Tool such as \n"
 "                training our machine learning models which detect your markings on the uploaded images. \n"
@@ -2049,11 +2077,11 @@ msgid "The uploaded image(s) of your Sketch Map(s) will be stored on our server 
 "                The results are stored and available for download for a period of 24 hours, after which they are deleted too."
 msgstr "Nahraný obrázek(y) vaší skicové mapy (map) budou uloženy na našem serveru pro zpracování (detekce georeferencí a značení), dokud nebudou vygenerovány výsledky. Pokud souhlasíte, budou obrázky (obrázek) dlouhodobě uloženy pro budoucí vylepšení nástroje Sketch Map Tool, jako je například trénování našich modelů strojového učení, které detekují vaše označení na nahraných obrázcích. Pokud souhlas neudělíte, nahrané obrázky budou po vygenerování výsledků smazány. Výsledky jsou uloženy a jsou k dispozici ke stažení po dobu 24 hodin, poté jsou také smazány."
 
-#: sketch_map_tool/templates/help.html:1041
+#: sketch_map_tool/templates/help.html:1056
 msgid "How much time do I have to upload the Sketch Maps for the digitization?"
 msgstr "Kolik času mám na nahrání skucové mapy pro digitalizaci?"
 
-#: sketch_map_tool/templates/help.html:1044
+#: sketch_map_tool/templates/help.html:1059
 msgid "This is possible for up to 12 months after your maps have been created, after which the digitization will no longer work."
 msgstr "To je možné po dobu až 12 měsíců od vytvoření vašich map, poté již nebude digitalizace fungovat."
 
