@@ -51,9 +51,8 @@ def init_worker_ml_models(**_):
     logging.info("Initialize ml-models.")
     global sam_predictor
     global yolo_obj_osm
-    global yolo_cls_osm
     global yolo_obj_esri
-    global yolo_cls_esri
+    global yolo_cls
 
     path = init_sam2()
     device = select_computation_device()
@@ -65,9 +64,8 @@ def init_worker_ml_models(**_):
     sam_predictor = SAM2ImagePredictor(sam2_model)
 
     yolo_obj_osm = YOLO_MB(init_model(get_config_value("yolo_osm_obj")))
-    yolo_cls_osm = YOLO(init_model(get_config_value("yolo_osm_cls")))
     yolo_obj_esri = YOLO_MB(init_model(get_config_value("yolo_esri_obj")))
-    yolo_cls_esri = YOLO(init_model(get_config_value("yolo_esri_cls")))
+    yolo_cls = YOLO(init_model(get_config_value("yolo_cls")))
 
 
 @worker_process_shutdown.connect
@@ -140,10 +138,8 @@ def digitize_sketches(
 ) -> FeatureCollection:
     if layer == "osm":
         yolo_obj = yolo_obj_osm
-        yolo_cls = yolo_cls_osm
     elif layer == "esri-world-imagery":
         yolo_obj = yolo_obj_esri
-        yolo_cls = yolo_cls_esri
     else:
         raise ValueError("Unexpected layer: " + layer)
 
