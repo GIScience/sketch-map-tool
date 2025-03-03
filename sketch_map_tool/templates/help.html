@@ -113,7 +113,7 @@
                             target="_blank">Online converter to all coordinate systems</a>') }}
                     </p>
                     <p>
-                        {{ _('The marker of your searched point that appears during the map selection, will not be visible on the printed map. 
+                        {{ _('The marker of your searched point that appears during the map selection will not be visible on the printed map. 
                         If you need this point as a point of reference on your paper Sketch Maps please mark it after you downloaded the PDF.') }}
                     </p>
 
@@ -141,9 +141,9 @@
                                 <li>{{ _('Cover all relevant areas for your use case: for example, if studying flooding, focus on areas
                                     near rivers, creeks, sinkholes, and critical infrastructure that might be affected by the flood
                                     event.') }}</li>
-                                <li>{{ _('Choose a suitable zoom level: For example in case urban flooding it is recommended to generate 
-                                    a map on the neighborhood level with streets and buildings. 
-                                    For river flooding, it is recommended to generate a map for a larger extent.') }}
+                                <li>{{ _('Choose a suitable zoom level. Example: If you want to examine urban floodings, we recommend using 
+								a neighborhood level map with streets and buildings. If you want to examine riverine floodings, 
+								we recommend using a map that shows a wider scope.') }}
                                 </li>
                             </ul>
                         </li>
@@ -229,7 +229,7 @@
 						
 						<li>
                             {{ _('Further, you can not only analyse the <b>completeness</b> and <b>currency</b> of the OSM data, but further conduct a <b>Road Comparison</b> 
-							with reference data and also check the <b>attribute completeness</b> in your OSM base data.:') }}
+							with reference data and also check the <b>attribute completeness</b> in your OSM base data:') }}
 					
 							<figure> <!-- Figure Quality Indicators-->
 								<img src="{{ url_for("static", filename="assets/images/help/quality_indicators.webp" ) }}"
@@ -278,7 +278,7 @@
                             {{ _('We recommend printing the maps on matte, non-reflective paper. ') }}
                         </li>
                         <li>
-                            {{ _('Name your maps appropriately, a name on the downloaded and maybe as well on the printed Sketch Map can help
+                            {{ _('Name your maps appropriately; Putting names on the downloaded Sketch Maps (can help
                             you in organizing your maps. 
                             If you relate Sketch Maps back to questionnaires, use the same number for the map as you did in the questionnaire.') }}
                         </li>
@@ -301,7 +301,7 @@
             </summary>
             <article>
                 <p>
-                    {{ _('Mapping through sketches using a pen on a printed Sketch Maps is a core activity of the Sketch Map Tool process. How you mark the Sketch Maps influences your end results: the detected markings.') }}
+                    {{ _('Mapping through sketches using a pen on a printed Sketch Map is a core activity of the Sketch Map Tool process. How you mark the Sketch Maps influences your end results: the detected markings.') }}
                 </p>
                 <p>
                     {{ _('This section as well as <a href="https://nexus.heigit.org/repository/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/Important_mapping_tips.pdf"
@@ -328,7 +328,7 @@
                         Georeferencing images entails detecting and matching specific points, such as the globes one the Sketch Maps,
                         between the reference and current input image,
                         enabling precise spatial alignment. Our current algorithm detects all markings, whether they are intended as a line,
-                        a point or a polygon as a polygon. ') }}
+                        a point or as a polygon. ') }}
                     </p>
                     <p>
                         {{ _('Please make sure to not accidentally mark the globes on the edge as they are used for georeferencing purposes
@@ -932,7 +932,7 @@
             <summary id="for-which-reseach-questions-can-smt-be-used">{{ _('For which research questions can the Sketch Map Tool
                 be used?') }}</summary>
             <article>
-                {{ _('The Sketch Map Tool has been primarily developed for research questions related to flooding and disaster risk reduction.  .
+                {{ _('The Sketch Map Tool has been primarily developed for research questions related to flooding and disaster risk reduction.
                 Since then, it has been used world wide for a variety of topics like vulnerability and capacity mapping or risk
                 mapping in general, city planning, mapping of cultural sites and many more.
                 Check out our <b>Case Studies</b> to learn more.') }}
@@ -971,12 +971,12 @@
             </article>
         </details>
         <details>
-            <summary id="why-do-i-have-to-pay-attention">{{ _('What do I need keep in mind for the participatory mapping?') }}</summary>
+            <summary id="why-do-i-have-to-pay-attention">{{ _('What do I need to keep in mind for the participatory mapping?') }}</summary>
             <article>
                 {{ _('Please make sure not to accidentally mark the globes at the edge as they are needed for automatic map detection.
                 Use thicker felt-tip pens with intense colors; red, blue, and black work best. Prepare the same set of pens for
                 all interviewers.
-                    <a href="https://nexus.heigit.org/service/rest/repository/browse/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/" target="_blank">Here </a>
+                    <a href="https://nexus.heigit.org/service/rest/repository/browse/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/" target="_blank">Here</a>
                 you can download the most important tips and questions for the mapping (summarized in a one-pager).') }}
 
             </article>
@@ -990,7 +990,7 @@
                     coordinates and an identification number from a QR code on the uploaded Sketch Map to identify
                     the corresponding unmarked reference map. Using the BRISK algorithm, the marked Sketch Map is
                     aligned with the unmarked map. Later, we use the coordinates of the bounding box to transform the
-                    marked map into the world coordinate system (WGS 84), resulting in a georeferenced GeoTIFF file
+                    marked map into the world geodetic system (WGS 84), resulting in a georeferenced GeoTIFF file
                     suitable for geospatial analysis.') }}
                 </p>
                 <p>
@@ -1015,7 +1015,7 @@
             <article>
                 {{ _('You can open the TIFF file in a geographic information system (GIS), such as ArcGIS or QGIS, to check
                 this.
-                If you upload the file there and insert a basemap (for example the OSM basemap), you can see if georeferencing
+                If you upload the file there and insert a basemap (for example the OSM basemap), you can see if the georeferencing
                 has worked. The Sketch Map should match the base map.') }}
             </article>
         </details>
@@ -1026,8 +1026,7 @@
                 {{ _('Please first try to open the file in a geographic information system (GIS) such as ArcGIS or QGIS.
                 The georeferencing may have worked even if the GeoTIFF file does not look right. If it still appears incorrect in
                 the GIS,
-                the map might not have been properly detected by the tool in the photo, and there could be various possible
-                reasons.
+                the map might not have been properly detected by the tool in the photo, which could have several possible causes.
                 For example, the photo may have been taken from the wrong angle or the globes may have been painted over.') }}
             </article>
         </details>
