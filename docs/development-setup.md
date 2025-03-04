@@ -46,21 +46,23 @@ pipx install poetry
 
 ### Python Package
 
-> Then execute steps below. Please see also the section on [Setup in an IDE](#Setup-in-an-IDE).
-
 ```bash
 # clone repository
 git clone https://github.com/GIScience/sketch-map-tool.git
 cd sketch-map-tool
 
+# install Python project
 poetry install
 poetry shell
+# install GDAL with version found on your system
 pip install gdal=="$(gdal-config --version).*"
+
 pre-commit install
 
 # compile languages:
 pybabel compile -d sketch_map_tool/translations
 
+# build front-end
 npm install
 npm run build
 ```
@@ -71,6 +73,17 @@ npm run build
 # fetch and run backend (postgres) and broker (redis) using docker
 docker run --name smt-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres:15
 docker run --name smt-redis -d -p 6379:6379 redis:7
+```
+
+### Machine Model Weights
+
+See the [documentation](https://github.com/GIScience/sketch-map-tool/blob/main/docs/model_registry.md) on our Model Registry about the details of the machine-learning models in use. The weights need to be downloaded from our server:
+
+```bash
+# download ml-model weights
+curl https://sketch-map-tool.heigit.org/weights/SMT-OSM.pt --output weights/SMT-OSM.pt
+curl https://sketch-map-tool.heigit.org/weights/SMT-ESRI.pt --output weights/SMT-ESRI.pt
+curl https://sketch-map-tool.heigit.org/weights/SMT-CLS.pt --output weights/SMT-CLS.pt
 ```
 
 ## Configuration
