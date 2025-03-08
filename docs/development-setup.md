@@ -18,14 +18,14 @@ For contributing to this project please also read the [Contribution Guideline](/
 This project uses [Poetry](https://python-poetry.org/docs/) and [NPM](https://docs.npmjs.com/) for environment and dependencies management.
 
 ```bash
-# Mac OS X:
+# macOS:
 # Make sure to have Python (and pip) and Node (and npm) installed
 brew install \
     pipx \
     gdal \
     freetype \
-    zbar
-pipx install poetry
+    zbar \
+    poetry
 
 # Debian/Ubuntu
 sudo apt install \
@@ -54,7 +54,7 @@ git clone https://github.com/GIScience/sketch-map-tool.git
 cd sketch-map-tool
 
 poetry install
-poetry shell
+eval $(poetry env activate)
 pip install gdal=="$(gdal-config --version).*"
 pre-commit install
 
@@ -86,17 +86,15 @@ Please refer to the [configuration documentation](/docs/configuration.md).
 ### 1. Start Celery (Task Queue)
 
 ```bash
-mamba activate smt
 docker start smt-postgres smt-redis
-celery --app sketch_map_tool.tasks worker --beat --pool solo --loglevel=INFO
+poetry run celery --app sketch_map_tool.tasks worker --beat --pool solo --loglevel=INFO
 ```
 
 ### 2. Start Flask (Web App)
 
 ```bash
-mamba activate smt
-pybabel compile -d sketch_map_tool/translations
-flask --app sketch_map_tool/routes.py --debug run
+poetry run pybabel compile -d sketch_map_tool/translations
+poetry run flask --app sketch_map_tool/routes.py --debug run
 # Go to http://127.0.0.1:5000
 ```
 
@@ -107,8 +105,8 @@ flask --app sketch_map_tool/routes.py --debug run
 This tool uses [ruff](https://docs.astral.sh/ruff/) as linter and code formatter. To execute both run:
 
 ```bash
-ruff check --fix
-ruff format
+poetry run ruff check --fix
+poetry run ruff format
 ```
 
 ### Tests
@@ -117,12 +115,12 @@ Provide required [configuration variables](/docs/configuration.md#required-confi
 
 To execute all tests run:
 ```bash
-pytest
+poetry run pytest
 ```
 
 To get live logs, INFO log level and ignore verbose logging messages of VCR run:
 ```bash
-pytest --capture=no --log-level="INFO" --log-disable="vcr"
+poetry run pytest --capture=no --log-level="INFO" --log-disable="vcr"
 ```
 
 The integration test suite utilizes the [Testcontainers framework](https://testcontainers.com/) 
