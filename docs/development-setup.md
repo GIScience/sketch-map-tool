@@ -81,6 +81,16 @@ Please refer to the [configuration documentation](/docs/configuration.md).
 > configuration values come with defaults for development purposes. Please make
 > sure to configure the API tokens for your environment.
 
+### Download Detection Models
+
+To download all necessary weights execute the following command.
+
+```bash
+wget -P weights https://sketch-map-tool.heigit.org/weights/SMT-{OSM,ESRI,CLS}.pt
+```
+
+More information about the models can be found in the [model registry documentation](/docs/model_registry.md).
+
 ## Usage
 
 ### 1. Start Celery (Task Queue)
