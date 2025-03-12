@@ -7,11 +7,9 @@ from psycopg2.extensions import connection
 from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
-from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
     CustomFileDoesNotExistAnymoreError,
     CustomFileNotFoundError,
-    UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import N_, to_array
 from sketch_map_tool.models import Bbox, Layer
@@ -31,37 +29,6 @@ def close_connection(e=None):
     db_conn = g.pop("db_conn", None)
     if isinstance(db_conn, connection) and db_conn.closed == 0:  # 0 if the conn is open
         db_conn.close()
-
-
-# TODO: Legacy support: Delete this function after PR 515 has been deployed for 1 day
-def _select_id_map(uuid) -> dict:
-    query = "SELECT map FROM uuid_map WHERE uuid = %s"
-    db_conn = open_connection()
-    with db_conn.cursor() as curs:
-        curs.execute(query, [uuid])
-        raw = curs.fetchall()
-    if raw:
-        return raw[0][0]
-    else:
-        raise UUIDNotFoundError(
-            N_("There are no tasks in the broker for UUID: {UUID}"), {"UUID": uuid}
-        )
-
-
-# TODO: Legacy support: Delete this function after PR 515 has been deployed for 1 day
-def get_async_result_id(request_uuid: str, request_type: REQUEST_TYPES) -> str:
-    """Get the Celery Async Result IDs for a request."""
-    map_ = _select_id_map(request_uuid)
-    try:
-        return map_[request_type]  # AsyncResult ID
-    except KeyError as error:
-        raise UUIDNotFoundError(
-            N_(
-                "There are no tasks in the broker for UUID and request type:"
-                " {REQUEST_UUID}, {REQUEST_TYPE}"
-            ),
-            {"REQUEST_UUID": request_uuid, "REQUEST_TYPE": request_type},
-        ) from error
 
 
 def insert_files(
