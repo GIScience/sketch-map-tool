@@ -216,7 +216,7 @@ msgstr "Obrázek situace skupinového mapování."
 
 #: sketch_map_tool/templates/about.html:115
 msgid "Former and current Sponsors and Partner Organisations"
-msgstr "Bývalí a současníí sponzořři a partnerské organizace"
+msgstr "Bývalí a současní sponzoři a partnerské organizace"
 
 #: sketch_map_tool/templates/about.html:117
 msgid "Logo German Red Cross"
@@ -1325,7 +1325,7 @@ msgstr "Shromažďování údajů v terénu"
 
 #: sketch_map_tool/templates/help.html:304
 msgid "Mapping through sketches using a pen on a printed Sketch Map is a core activity of the Sketch Map Tool process. How you mark the Sketch Maps influences your end results: the detected markings."
-msgstr ""
+msgstr "Mapování pomocí kreslení perem na Sketch mapu je hlavní činnost v procesu Sketch Map Tool. Co do Sketch map zakreslíte ovlivní váš konečný výsledek: detekované značky."
 
 #: sketch_map_tool/templates/help.html:307
 msgid "This section as well as <a href=\"https://nexus.heigit.org/repository/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/Important_mapping_tips.pdf\"\n"
@@ -1358,7 +1358,18 @@ msgid "The latest version of the Sketch Map Tool leverages advanced Deep Learnin
 "                        between the reference and current input image,\n"
 "                        enabling precise spatial alignment. Our current algorithm detects all markings, whether they are intended as a line,\n"
 "                        a point or as a polygon. "
-msgstr ""
+msgstr "Nejnovější verze nástroje Sketch Map Tool využívá pokročilé modely hlubokého učení, které jsou trénovány k analýze obrázků \n"
+"                       skicových map a identifikaci označených objektů. \n"
+"                       Prostřednictvím učení s dohledem na rozsáhlých datových sadách označených obrázků si tyto modely osvojují schopnost poznat rozdíl \n"
+"                       mezi značením a pozadím skicových map analýzou vzorů a charakteristik. \n"
+"                       Díky tomu dokáží přesně detekovat a rozlišovat značení. Tato prediktivní schopnost umožňuje modelům \n"
+"                       zobecnit své porozumění a přesně identifikovat značení i v nových a dosud neviděných skicových mapách.\n"
+"                       Nástroj Sketch Map Tool také zahrnuje konvenční techniky počítačového vidění k přesnému umístění skicové mapy \n"
+"                       do reálných souřadnic. \n"
+"                       Georeferencování obrázků zahrnuje detekci a přiřazení specifických bodů, například globusů na skicových mapách, \n"
+"                       mezi referenčním a aktuálním vstupním obrázkem, \n"
+"                       což umožňuje přesné prostorové zarovnání. Náš současný algoritmus detekuje všechna značení, ať už jsou určena jako čáry, \n"
+"                       body nebo polygony."
 
 #: sketch_map_tool/templates/help.html:334
 msgid "Please make sure to not accidentally mark the globes on the edge as they are used for georeferencing purposes\n"
@@ -1949,7 +1960,10 @@ msgid "The Sketch Map Tool has been primarily developed for research questions r
 "                Since then, it has been used world wide for a variety of topics like vulnerability and capacity mapping or risk\n"
 "                mapping in general, city planning, mapping of cultural sites and many more.\n"
 "                Check out our <b>Case Studies</b> to learn more."
-msgstr ""
+msgstr "Nástroj Sketch Map Tool byl primárně vyvinut pro výzkumné otázky související se záplavami a snižováním rizik katastrof.\n"
+"                Od té doby byl využíván po celém světě pro širokou škálu témat, jako je mapování zranitelnosti a kapacit, nebo obecných rizik, \n"
+"                městské plánování, mapování kulturních památek a mnoho dalšího. \n"
+"                Podívejte se na naše <b>případové studie</b> a zjistěte více."
 
 #: sketch_map_tool/templates/help.html:942
 msgid "How does mapping work with the Sketch Map Tool?"
