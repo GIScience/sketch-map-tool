@@ -36,7 +36,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 16G
+          memory: 24G
     entrypoint:
       [
         "celery",
