@@ -5,6 +5,17 @@ For contributing to this project please also read the [Contribution Guideline](/
 > Note: To just run the Sketch Map Tool locally, provide the required [configuration](/docs/configuration.md)
 > and use Docker Compose: `docker compose up -d`.
 
+## New Prerequisites (Requirements)
+
+- uv 
+
+This project uses [uv](https://docs.astral.sh/uv) for environment and dependency management.
+
+## Installation
+
+
+
+
 ## Prerequisites (Requirements)
 
 - Python: `>= 3.11, < 3.13`
