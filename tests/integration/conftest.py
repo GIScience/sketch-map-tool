@@ -271,7 +271,8 @@ def uuid_create(
     response = flask_client.post("/create/results", data=params, follow_redirects=True)
 
     url_parts = response.request.path.rsplit("/")
-    uuid = url_parts[-1]
+    uuid = url_parts[-2]
+    UUID(uuid)  # validate uuid
 
     task = celery_app.AsyncResult(uuid)
     result = task.get(timeout=180)
@@ -360,6 +361,7 @@ def uuid_digitize(
     # Extract UUID from response
     url_parts = response.request.path.rsplit("/")
     uuid = url_parts[-1]
+    UUID(uuid)  # validate uuid
 
     # Wait for tasks to be finished and retrieve results (vector and raster)
     result = celery_app.GroupResult.restore(uuid).get(timeout=180)
