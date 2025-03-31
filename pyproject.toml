@@ -11,6 +11,7 @@ dependencies = [
     "flask>=3.1.0",
     "flask-babel>=4.0.0",
     "flower>=2.0.1",
+    "gdal>=3.10.2",
     "geojson>=3.2.0",
     "kaleido==0.2.1", # Not working with '^', see https://github.com/plotly/Kaleido/issues/125
     "matplotlib>=3.10.1",
