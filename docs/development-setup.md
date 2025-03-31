@@ -5,73 +5,60 @@ For contributing to this project please also read the [Contribution Guideline](/
 > Note: To just run the Sketch Map Tool locally, provide the required [configuration](/docs/configuration.md)
 > and use Docker Compose: `docker compose up -d`.
 
+## Installation
+
 ## Prerequisites (Requirements)
 
-- Python: `>= 3.11, < 3.13`
-- Poetry
+- [uv](https://docs.astral.sh/uv/getting-started/installation/)
 - Node: `>=14`
 - NPM
-- GDAL
+- [GDAL](https://gdal.org/en/stable/index.html)
 - freetype *(dependency of reportlab for creating PDFs)*
 - zbar *(dependency of pyzbar for reading QR-codes)*
 
-This project uses [Poetry](https://python-poetry.org/docs/) and [NPM](https://docs.npmjs.com/) for environment and dependencies management.
-
 ```bash
+# Make sure to have uv well as Node (and npm) installed.
+
 # macOS:
-# Make sure to have Python (and pip) and Node (and npm) installed
 brew install \
-    pipx \
     gdal \
     freetype \
     zbar \
-    poetry
 
 # Debian/Ubuntu
 sudo apt install \
-    python3 \
-    python3-pip \
-    python3-gdal \
-    python3-dev \
-    pipx \
-    nodejs \
-    npm \
     libgdal-dev \
     libfreetype6-dev \
     libzbar0
-pipx install poetry
 ```
 
 ## Installation
 
 ### Python Package
 
-> Then execute steps below. Please see also the section on [Setup in an IDE](#Setup-in-an-IDE).
-
 ```bash
-# clone repository
 git clone https://github.com/GIScience/sketch-map-tool.git
 cd sketch-map-tool
 
-poetry install
-eval $(poetry env activate)
-pip install gdal=="$(gdal-config --version).*"
-pre-commit install
-
-# compile languages:
-pybabel compile -d sketch_map_tool/translations
+uv sync --only-group gdal-build-dependencies  # Install GDAL build dependencies
+uv sync  # Install everything
+uv run pre-commit install
+uv run pybabel compile -d sketch_map_tool/translations
 
 npm install
 npm run build
-```
 
-### Postgres (Database and Result Store) and Redis (Message Broker)
+# Download ml-model weights
+wget -P weights https://sketch-map-tool.heigit.org/weights/SMT-{OSM,ESRI,CLS}.pt
 
-```bash
-# fetch and run backend (postgres) and broker (redis) using docker
+# Fetch and run database & result store (postgres)
 docker run --name smt-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres:15
+# Fetch and run message broker (redis)
 docker run --name smt-redis -d -p 6379:6379 redis:7
 ```
+
+More information about the models can be found in the [model registry documentation](/docs/model_registry.md).
+
 
 ## Configuration
 
@@ -81,31 +68,20 @@ Please refer to the [configuration documentation](/docs/configuration.md).
 > configuration values come with defaults for development purposes. Please make
 > sure to configure the API tokens for your environment.
 
-### Download Detection Models
-
-To download all necessary weights execute the following command.
-
-```bash
-wget -P weights https://sketch-map-tool.heigit.org/weights/SMT-{OSM,ESRI,CLS}.pt
-```
-
-More information about the models can be found in the [model registry documentation](/docs/model_registry.md).
 
 ## Usage
 
-### 1. Start Celery (Task Queue)
+### 1. Start Datastore, Message Broker and Celery (Task Queue)
 
 ```bash
 docker start smt-postgres smt-redis
-poetry run celery --app sketch_map_tool.tasks worker --beat --pool solo --loglevel=INFO
+uv run celery --app sketch_map_tool.tasks worker --beat --pool solo --loglevel=INFO
 ```
 
 ### 2. Start Flask (Web App)
 
 ```bash
-poetry run pybabel compile -d sketch_map_tool/translations
-poetry run flask --app sketch_map_tool/routes.py --debug run
-# Go to http://127.0.0.1:5000
+uv run flask --app sketch_map_tool/routes.py --debug run
 ```
 
 ## Back-End
@@ -115,8 +91,8 @@ poetry run flask --app sketch_map_tool/routes.py --debug run
 This tool uses [ruff](https://docs.astral.sh/ruff/) as linter and code formatter. To execute both run:
 
 ```bash
-poetry run ruff check --fix
-poetry run ruff format
+uv run ruff format
+uv run ruff check --fix
 ```
 
 ### Tests
@@ -125,12 +101,12 @@ Provide required [configuration variables](/docs/configuration.md#required-confi
 
 To execute all tests run:
 ```bash
-poetry run pytest
+uv run pytest
 ```
 
 To get live logs, INFO log level and ignore verbose logging messages of VCR run:
 ```bash
-poetry run pytest --capture=no --log-level="INFO" --log-disable="vcr"
+uv run pytest --capture=no --log-level="INFO" --log-disable="vcr"
 ```
 
 The integration test suite utilizes the [Testcontainers framework](https://testcontainers.com/) 
