@@ -7,8 +7,31 @@ license = "GNU Affero General Public License v3.0"
 readme = "README.md"
 requires-python = ">=3.11, <3.13"
 dependencies = [
+    "celery[redis,sqlalchemy]>=5.4.0",
+    "flask>=3.1.0",
+    "flask-babel>=4.0.0",
+    "geojson>=3.2.0",
+    "kaleido==0.2.1", # Not working with '^', see https://github.com/plotly/Kaleido/issues/125
+    "matplotlib>=3.10.1",
+    "matplotlib-scalebar>=0.9.0",
+    "opencv-python-headless<4.8.0.76", # https://github.com/ultralytics/ultralytics/issues/893
+    "pymupdf[pillow]>=1.25.4",
+    "pyproj>=3.7.1",
+    "pyzbar>=0.1.9",
+    "qrcode>=8.0",
+    "rasterio>=1.4.3",
+    "redis>=5.2.1",
+    "reportlab>=4.3.1",
+    "requests>=2.32.3",
     "sam-2",
+    "shapelysmooth>=0.2.1",
+    "svglib>=1.5.1",
+    "tifffile>=2025.3.30",
+    "toml>=0.10.2",
+    "ultralytics==8.1.14",
     "ultralytics-mb",
+    "waitress>=3.0.2",
+    "wtforms>=3.2.1",
 ]
 
 [tool.uv.sources]
