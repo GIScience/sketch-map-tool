@@ -8,10 +8,16 @@ For contributing to this project please also read the [Contribution Guideline](/
 ## New Prerequisites (Requirements)
 
 - uv 
+- GDAL
+
+```bash
+ sudo apt install libgdal-dev
+```
 
 This project uses [uv](https://docs.astral.sh/uv) for environment and dependency management.
 
 ## Installation
+
 
 
 
