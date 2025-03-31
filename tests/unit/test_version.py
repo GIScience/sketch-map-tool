@@ -11,5 +11,5 @@ def test_version():
     )
     with open(infile, "r") as fo:
         project_file = toml.load(fo)
-        pyproject_version = project_file["tool"]["poetry"]["version"]
+        pyproject_version = project_file["project"]["version"]
     assert pyproject_version == version
