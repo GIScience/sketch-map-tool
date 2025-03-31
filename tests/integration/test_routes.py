@@ -80,8 +80,8 @@ def test_create_results_post(
 
     # Extract UUID from response
     url_parts = response.request.path.rsplit("/")
-    uuid = url_parts[-1]
-    url_rest = "/".join(url_parts[:-1])
+    uuid = url_parts[-2]
+    url_rest = "/".join(url_parts[:-2])
     assert UUID(uuid).version == 4
     assert url_rest == "/create/results"
 
