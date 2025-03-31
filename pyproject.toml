@@ -6,7 +6,12 @@ authors = ["HeiGIT <info@heigit.org>"]
 license = "GNU Affero General Public License v3.0"
 readme = "README.md"
 requires-python = ">=3.11, <3.13"
-dependencies = []
+dependencies = [
+    "ultralytics-mb",
+]
+
+[tool.uv.sources]
+ultralytics-mb = { git = "https://github.com/itisacloud/ultralytics_multiband_support.git", rev = "caf0b57b265d3c6761272ecf18a44b1605e9b25f" }
 
 #[tool.poetry.dependencies]
 #python=">= 3.11, < 3.13"
