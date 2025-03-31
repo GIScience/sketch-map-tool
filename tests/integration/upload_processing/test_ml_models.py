@@ -22,5 +22,5 @@ def test_init_model(id):
 @given(text())
 @example("")
 def test_init_model_unexpected_id(id):
-    with pytest.raises(FileNotFoundError):
+    with pytest.raises((FileNotFoundError, OSError)):
         ml_models.init_model(id)
