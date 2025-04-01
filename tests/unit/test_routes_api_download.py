@@ -5,26 +5,26 @@ import pytest
 from celery.result import GroupResult
 
 
-@pytest.mark.usefixtures("mock_request_task_mapping", "mock_async_result_success")
+@pytest.mark.usefixtures("mock_async_result_success")
 def test_download_success(client, uuid):
     resp = client.get("/api/download/{0}/sketch-map".format(uuid))
     assert resp.status_code == 200
     assert resp.mimetype == "application/pdf"
 
 
-@pytest.mark.usefixtures("mock_request_task_mapping", "mock_async_result_started")
+@pytest.mark.usefixtures("mock_async_result_started")
 def test_download_started(client, uuid):
     resp = client.get("/api/download/{0}/sketch-map".format(uuid))
     assert resp.status_code == 500
 
 
-@pytest.mark.usefixtures("mock_request_task_mapping", "mock_async_result_failure")
+@pytest.mark.usefixtures("mock_async_result_failure")
 def test_download_failure(client, uuid):
     resp = client.get("/api/download/{0}/sketch-map".format(uuid))
     assert resp.status_code == 500
 
 
-@pytest.mark.usefixtures("mock_request_task_mapping", "mock_group_result_success")
+@pytest.mark.usefixtures("mock_group_result_success")
 @pytest.mark.parametrize("type_", ["raster-results", "vector-results"])
 def test_group_download_success(client, uuid, type_, monkeypatch):
     monkeypatch.setattr(
@@ -40,31 +40,27 @@ def test_group_download_success(client, uuid, type_, monkeypatch):
     assert resp.mimetype in ["application/zip", "application/geo+json"]
 
 
-@pytest.mark.usefixtures("mock_request_task_mapping", "mock_group_result_started")
+@pytest.mark.usefixtures("mock_group_result_started")
 @pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
 def test_group_started(client, uuid, type_):
     resp = client.get("/api/download/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 500
 
 
-@pytest.mark.usefixtures("mock_request_task_mapping", "mock_group_result_failure")
+@pytest.mark.usefixtures("mock_group_result_failure")
 @pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
 def test_group_failure(client, uuid, type_):
     resp = client.get("/api/download/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 500
 
 
-@pytest.mark.usefixtures(
-    "mock_request_task_mapping",
-    "mock_group_result_started_success_failure",
-)
+@pytest.mark.usefixtures("mock_group_result_started_success_failure")
 @pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
 def test_group_started_success_failure(client, uuid, type_):
     resp = client.get("/api/download/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 500
 
 
-@pytest.mark.usefixtures("mock_request_task_mapping")
 @pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
 def test_group_success_failure(
     client,
