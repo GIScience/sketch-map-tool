@@ -20,6 +20,13 @@ resolution-markers = [
     "(python_full_version < '3.12' and platform_machine != 'aarch64' and platform_python_implementation != 'PyPy' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_python_implementation != 'PyPy' and sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'win32')",
 ]
 
+[manifest]
+
+[[manifest.dependency-metadata]]
+name = "gdal"
+version = "3.8.4"
+requires-dist = ["setuptools", "wheel", "numpy"]
+
 [[package]]
 name = "affine"
 version = "2.4.0"
@@ -575,9 +582,14 @@ wheels = [
 
 [[package]]
 name = "gdal"
-version = "3.10.2"
+version = "3.8.4"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/30/db/6417c83f6e9c4169ebe57cd26e02ad01d1e0dafb9476736481f536c10517/gdal-3.10.2.tar.gz", hash = "sha256:c0cffa8ce9f9c0fa287fcc20b8271c519ca054958420e5880be8bedb432753f4", size = 838054 }
+dependencies = [
+    { name = "numpy" },
+    { name = "setuptools" },
+    { name = "wheel" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/21/6f/7f76d6ff3673fa18e9edd8d76679968d682f937cded93311f82fa172697f/GDAL-3.8.4.tar.gz", hash = "sha256:7c51e0ae7a7ccf43ad9e4bf435176baa9276653dfa16fd167c3632f6e7275207", size = 802459 }
 
 [[package]]
 name = "geojson"
@@ -1994,7 +2006,6 @@ dependencies = [
     { name = "flask" },
     { name = "flask-babel" },
     { name = "flower" },
-    { name = "gdal" },
     { name = "geojson" },
     { name = "kaleido" },
     { name = "matplotlib" },
@@ -2020,6 +2031,16 @@ dependencies = [
     { name = "ultralytics-mb" },
     { name = "waitress" },
     { name = "wtforms" },
+]
+
+[package.optional-dependencies]
+build = [
+    { name = "numpy" },
+    { name = "setuptools" },
+    { name = "wheel" },
+]
+compile = [
+    { name = "gdal" },
 ]
 
 [package.dev-dependencies]
@@ -2048,12 +2069,13 @@ requires-dist = [
     { name = "flask", specifier = ">=3.1.0" },
     { name = "flask-babel", specifier = ">=4.0.0" },
     { name = "flower", specifier = ">=2.0.1" },
-    { name = "gdal", specifier = ">=3.10.2" },
+    { name = "gdal", marker = "extra == 'compile'" },
     { name = "geojson", specifier = ">=3.2.0" },
     { name = "kaleido", specifier = "==0.2.1" },
     { name = "matplotlib", specifier = ">=3.10.1" },
     { name = "matplotlib-scalebar", specifier = ">=0.9.0" },
     { name = "numpy", specifier = "<2" },
+    { name = "numpy", marker = "extra == 'build'" },
     { name = "opencv-python-headless", specifier = "<4.8.0.76" },
     { name = "pymupdf", extras = ["pillow"], specifier = ">=1.25.4" },
     { name = "pyproj", specifier = ">=3.7.1" },
@@ -2064,6 +2086,7 @@ requires-dist = [
     { name = "reportlab", specifier = ">=4.3.1" },
     { name = "requests", specifier = ">=2.32.3" },
     { name = "sam-2", git = "https://github.com/facebookresearch/segment-anything-2.git" },
+    { name = "setuptools", marker = "extra == 'build'" },
     { name = "shapelysmooth", specifier = ">=0.2.1" },
     { name = "svglib", specifier = ">=1.5.1" },
     { name = "tifffile", specifier = ">=2025.3.30" },
@@ -2073,8 +2096,10 @@ requires-dist = [
     { name = "ultralytics", specifier = "==8.1.14" },
     { name = "ultralytics-mb", git = "https://github.com/itisacloud/ultralytics_multiband_support.git?rev=caf0b57b265d3c6761272ecf18a44b1605e9b25f" },
     { name = "waitress", specifier = ">=3.0.2" },
+    { name = "wheel", marker = "extra == 'build'" },
     { name = "wtforms", specifier = ">=3.2.1" },
 ]
+provides-extras = ["build", "compile"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -2089,7 +2114,7 @@ dev = [
     { name = "pytest-celery", specifier = ">=1.2.0" },
     { name = "pytest-memray", specifier = ">=1.7.0" },
     { name = "pytest-rerunfailures", specifier = ">=15.0" },
-    { name = "ruff", specifier = ">=0.11.2" },
+    { name = "ruff", specifier = "==0.11.2" },
     { name = "testcontainers", extras = ["postgres", "redis"], specifier = ">=4.9.2" },
     { name = "types-redis", specifier = ">=4.6.0.20241004" },
     { name = "types-toml", specifier = ">=0.10.8.20240310" },
@@ -2615,6 +2640,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/9f/69/83029f1f6300c5fb2471d621ab06f6ec6b3324685a2ce0f9777fd4a8b71e/werkzeug-3.1.3.tar.gz", hash = "sha256:60723ce945c19328679790e3282cc758aa4a6040e4bb330f53d30fa546d44746", size = 806925 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/52/24/ab44c871b0f07f491e5d2ad12c9bd7358e527510618cb1b803a88e986db1/werkzeug-3.1.3-py3-none-any.whl", hash = "sha256:54b78bf3716d19a65be4fceccc0d1d7b89e608834989dfae50ea87564639213e", size = 224498 },
+]
+
+[[package]]
+name = "wheel"
+version = "0.45.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/8a/98/2d9906746cdc6a6ef809ae6338005b3f21bb568bea3165cfc6a243fdc25c/wheel-0.45.1.tar.gz", hash = "sha256:661e1abd9198507b1409a20c02106d9670b2576e916d58f520316666abca6729", size = 107545 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0b/2c/87f3254fd8ffd29e4c02732eee68a83a1d3c346ae39bc6822dcbcb697f2b/wheel-0.45.1-py3-none-any.whl", hash = "sha256:708e7481cc80179af0e556bbf0cc00b8444c7321e2700b8d8580231d13017248", size = 72494 },
 ]
 
 [[package]]
