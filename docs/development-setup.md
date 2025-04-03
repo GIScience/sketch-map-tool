@@ -5,41 +5,37 @@ For contributing to this project please also read the [Contribution Guideline](/
 > Note: To just run the Sketch Map Tool locally, provide the required [configuration](/docs/configuration.md)
 > and use Docker Compose: `docker compose up -d`.
 
+## Installation
+
 ## Prerequisites (Requirements)
 
 - Python: `>= 3.11, < 3.13`
-- Poetry
+- [uv](https://docs.astral.sh/uv/getting-started/installation/)
 - Node: `>=14`
 - NPM
-- GDAL
+- [GDAL](https://gdal.org/en/stable/index.html)
 - freetype *(dependency of reportlab for creating PDFs)*
 - zbar *(dependency of pyzbar for reading QR-codes)*
 
 This project uses [Poetry](https://python-poetry.org/docs/) and [NPM](https://docs.npmjs.com/) for environment and dependencies management.
 
+This project uses [uv](https://docs.astral.sh/uv) for environment and dependency management.
+
 ```bash
+# Make sure to have uv (uv will handle Python installation) as well as Node
+# (and npm) installed.
+
 # macOS:
-# Make sure to have Python (and pip) and Node (and npm) installed
 brew install \
-    pipx \
     gdal \
     freetype \
     zbar \
-    poetry
 
 # Debian/Ubuntu
 sudo apt install \
-    python3 \
-    python3-pip \
-    python3-gdal \
-    python3-dev \
-    pipx \
-    nodejs \
-    npm \
     libgdal-dev \
     libfreetype6-dev \
     libzbar0
-pipx install poetry
 ```
 
 ## Installation
@@ -49,29 +45,28 @@ pipx install poetry
 > Then execute steps below. Please see also the section on [Setup in an IDE](#Setup-in-an-IDE).
 
 ```bash
-# clone repository
 git clone https://github.com/GIScience/sketch-map-tool.git
 cd sketch-map-tool
 
-poetry install
-eval $(poetry env activate)
-pip install gdal=="$(gdal-config --version).*"
-pre-commit install
-
-# compile languages:
-pybabel compile -d sketch_map_tool/translations
+uv sync --extra build  # Install project dependencies and gdal build dependencies
+uv sync --extra build --extra compile  # Install gdal
+uv run pre-commit install
+uv run pybabel compile -d sketch_map_tool/translations
 
 npm install
 npm run build
-```
 
-### Postgres (Database and Result Store) and Redis (Message Broker)
+# Download ml-model weights
+wget -P weights https://sketch-map-tool.heigit.org/weights/SMT-{OSM,ESRI,CLS}.pt
 
-```bash
-# fetch and run backend (postgres) and broker (redis) using docker
+# Fetch and run database & result store (postgres)
 docker run --name smt-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres:15
+# Fetch and run message broker (redis)
 docker run --name smt-redis -d -p 6379:6379 redis:7
 ```
+
+More information about the models can be found in the [model registry documentation](/docs/model_registry.md).
+
 
 ## Configuration
 
@@ -81,15 +76,6 @@ Please refer to the [configuration documentation](/docs/configuration.md).
 > configuration values come with defaults for development purposes. Please make
 > sure to configure the API tokens for your environment.
 
-### Download Detection Models
-
-To download all necessary weights execute the following command.
-
-```bash
-wget -P weights https://sketch-map-tool.heigit.org/weights/SMT-{OSM,ESRI,CLS}.pt
-```
-
-More information about the models can be found in the [model registry documentation](/docs/model_registry.md).
 
 ## Usage
 
