@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-03-03 13:22+0000\n"
-"PO-Revision-Date: 2025-03-03 14:30\n"
+"POT-Creation-Date: 2025-03-03 16:17+0000\n"
+"PO-Revision-Date: 2025-03-18 11:23\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Crowdin-File-ID: 12\n"
 "Language: de_DE\n"
 
-#: sketch_map_tool/routes.py:309
+#: sketch_map_tool/routes.py:301
 #, python-brace-format
 msgid "There are no tasks for UUID {UUID}"
 msgstr "Es gibt keine Aufgaben für UUID {UUID}"
@@ -119,7 +119,7 @@ msgid "The first step is the creation of the paper-based maps. Users can choose 
 "            In addition, the tool can evaluate how well-suited an area of the OSM base map is for participatory mapping based on\n"
 "            a quality analysis of the OSM base map data through the\n"
 "            <a href=\"https://api.quality.ohsome.org/\" target=\"_blank\">HeiGIT ohsome quality API</a>."
-msgstr ""
+msgstr "Der erste Schritt ist das Erstellen von Papierkarten. Die Nutzenden können zwischen zwei verschiedenen Basiskarten wählen, die entweder auf <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> Daten oder Satellitenbilder basieren. Zusätzlich kann das Tool auswerten, wie gut ein Gebiet auf der OSM-Karte zum partizipativen Kartieren geeignet ist. Diese Funktion beruht auf Qualitätsanalysen von den OSM-Basiskarten-Daten mittels des <a href=\"https://api.quality.ohsome.org/\" target=\"_blank\">HeiGIT ohsome quality API</a>."
 
 #: sketch_map_tool/templates/about.html:38
 msgid "For the data collection through offline participatory mapping you only need your participants, the printed\n"
@@ -513,7 +513,7 @@ msgstr "Das mittlere Tal des Fortore (Campobasso), ein Fall von Zerstörung und 
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:163
 msgid "Biodiversity – Enviromental Information Systems"
-msgstr ""
+msgstr "Biodiversität – Umweltinformationssysteme"
 
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:164
 msgid "Millenium Ecosystem Assessment"
@@ -829,7 +829,7 @@ msgstr "Sketch-Maps hochladen"
 
 #: sketch_map_tool/templates/digitize-results.html:16
 msgid "Download collected markings as geodata"
-msgstr ""
+msgstr "Erfasste Markierungen als Geodaten herunterladen"
 
 #: sketch_map_tool/templates/digitize-results.html:35
 msgid "raster data icon"
@@ -860,7 +860,7 @@ msgstr "Wir haben die farbigen Markierungen Deiner Sketch Map extrahiert und geo
 
 #: sketch_map_tool/templates/digitize-results.html:51
 msgid "Sorry! <br>Something went wrong while trying to generate the result."
-msgstr ""
+msgstr "Entschuldigung! <br>Etwas ist schiefgelaufen beim Verarbeiten der Anfrage."
 
 #: sketch_map_tool/templates/digitize-results.html:54
 msgid "Download ZIP"
@@ -1098,7 +1098,7 @@ msgstr "Falls Du Deine verfügbaren Koordinaten noch in Längen- und Breitengrad
 #: sketch_map_tool/templates/help.html:116
 msgid "The marker of your searched point that appears during the map selection will not be visible on the printed map. \n"
 "                        If you need this point as a point of reference on your paper Sketch Maps please mark it after you downloaded the PDF."
-msgstr ""
+msgstr "Die Wegpunktmarkierung, die beim Auswählen der Karte erscheint, ist auf der gedruckten Karte nicht sichtbar. Wenn Du diesen Punkt als Referenzpunkt auf Deiner Papier Sketch Map benötigst, markiere ihn erst nach dem Herunterladen der PDF-Datei. "
 
 #: sketch_map_tool/templates/help.html:122
 msgid "Screenshot of the searched point marked in pdf."
@@ -1150,7 +1150,7 @@ msgstr "Erfasse alle Gebiete, die für Deinen Anwendungsfall relevant sind. Ein 
 msgid "Choose a suitable zoom level. Example: If you want to examine urban floodings, we recommend using \n"
 "\t\t\t\t\t\t\t\ta neighborhood level map with streets and buildings. If you want to examine riverine floodings, \n"
 "\t\t\t\t\t\t\t\twe recommend using a map that shows a wider scope."
-msgstr ""
+msgstr "Wähle eine passende Vergrößerungsstufe. Als Beispiel: Wenn Du Überschwemmungen in Städten untersuchen willst, empfehlen wir die Verwendung einer Karte auf Stadtteilebene, die Straßen und Gebäude zeigt. Wenn Du Überschwemmungen von Flüssen untersuchen möchtest, nutze eine Karte, die einen größeren Bereich abbildet. "
 
 #: sketch_map_tool/templates/help.html:151
 msgid "Choose a suitable base map for your mapping needs. The decision between the OSM or satellite image base map\n"
@@ -1245,7 +1245,7 @@ msgstr "Beispiel für Themenauswahl"
 #: sketch_map_tool/templates/help.html:231
 msgid "Further, you can not only analyse the <b>completeness</b> and <b>currency</b> of the OSM data, but further conduct a <b>Road Comparison</b> \n"
 "\t\t\t\t\t\t\twith reference data and also check the <b>attribute completeness</b> in your OSM base data:"
-msgstr ""
+msgstr "Außerdem kannst Du nicht nur die  <b>Vollständigkeit</b> und <b>Aktualität</b> der OSM-Daten analysieren, sondern auch einen <b>Vergleich des Straßennetzwerks</b> mit Referenzdaten durchführen sowie die the <b>Attributvollständigkeit</b> Ihrer OSM-Basisdaten überprüfen."
 
 #: sketch_map_tool/templates/help.html:236
 msgid "Figure Quality Indicators."
@@ -1297,7 +1297,7 @@ msgstr "Wir empfehlen, die Karten auf mattem, nicht-reflektierendem Papier zu dr
 msgid "Name your maps appropriately; Putting names on the downloaded Sketch Maps (can help\n"
 "                            you in organizing your maps. \n"
 "                            If you relate Sketch Maps back to questionnaires, use the same number for the map as you did in the questionnaire."
-msgstr ""
+msgstr "Gib Deinen Karten passende Namen; Das Benennen deiner heruntergeladenen Sketch Maps kann hilft Dir bei der Organisation deiner Karten. Wenn Deine Sketch Maps mit Fragebögen verbunden sind, ist es wichtig, dass die Karten und Fragebögen dieselbe Nummer haben."
 
 #: sketch_map_tool/templates/help.html:286
 msgid "If you plan on printing out your map in black and white, check the visibility of the background map\n"
@@ -1319,7 +1319,7 @@ msgstr "Datenerhebung im Feld"
 
 #: sketch_map_tool/templates/help.html:304
 msgid "Mapping through sketches using a pen on a printed Sketch Map is a core activity of the Sketch Map Tool process. How you mark the Sketch Maps influences your end results: the detected markings."
-msgstr ""
+msgstr "Kartieren, indem man mit einem Stift auf einer ausgedruckten Sketch Map zeichnet, ist eine zentrale Tätigkeit im Sketch-Map-Tool-Prozess. Wie du die Sketch Map markierst, beeinflusst deine Ergebnisse, d.h. welche Markierungen erkannt werden."
 
 #: sketch_map_tool/templates/help.html:307
 msgid "This section as well as <a href=\"https://nexus.heigit.org/repository/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/Important_mapping_tips.pdf\"\n"
@@ -1352,7 +1352,11 @@ msgid "The latest version of the Sketch Map Tool leverages advanced Deep Learnin
 "                        between the reference and current input image,\n"
 "                        enabling precise spatial alignment. Our current algorithm detects all markings, whether they are intended as a line,\n"
 "                        a point or as a polygon. "
-msgstr ""
+msgstr "Die neueste Version des Sketch Map Tools nutzt fortgeschrittene Deep-Learning-Modelle, die darauf trainiert wurden, Bilder von Sketch Maps zu analysieren und darauf markierte Objekte zu erkennen.\n"
+"Durch überwachtes Lernen anhand umfangreicher Datensätze mit gekennzeichneten Bildern erwerben diese Modelle die Fähigkeit, Muster und Eigenschaften zu analysieren, um Markierungen und Hintergrund der Sketch Maps auseinanderzuhalten zu können. Dadurch können sie Markierungen genau erkennen und voneinander unterscheiden.\n"
+"Diese Vorhersagefähigkeit ermöglicht den Modellen ein allgemeines Verständnis, durch das sie Markierungen in neuen und ungesehenen Sketch Maps genau identifizieren können.\n"
+"In das Sketch Map Tool sind außerdem konventionelle Computer-Vision-Techniken integriert, um die Sketch Maps präzise in realen Koordinaten zu verorten.\n"
+"Bei der Georeferenzierung von Bildern werden bestimmte Punkte, z. B. die Globen auf den Sketch Maps, zwischen dem Referenzbild und dem aktuellen Eingabebild erkannt und abgeglichen, was eine präzise räumliche Ausrichtung ermöglicht. Unser aktueller Algorithmus erkennt alle Markierungen, unabhängig davon, ob es sich um eine Linie, einen Punkt oder ein Polygon handelt."
 
 #: sketch_map_tool/templates/help.html:334
 msgid "Please make sure to not accidentally mark the globes on the edge as they are used for georeferencing purposes\n"
@@ -1942,7 +1946,7 @@ msgid "The Sketch Map Tool has been primarily developed for research questions r
 "                Since then, it has been used world wide for a variety of topics like vulnerability and capacity mapping or risk\n"
 "                mapping in general, city planning, mapping of cultural sites and many more.\n"
 "                Check out our <b>Case Studies</b> to learn more."
-msgstr ""
+msgstr "Das Sketch Map Tool wurde in erster Linie für Forschungsfragen im Zusammenhang mit Hochwasser- und Katastrophenrisikominderung entwickelt. Seitdem wurde es weltweit für eine Vielzahl von Themen wie Verwundbarkeit und Kapazitätskartierung oder auch Risikokartierung im Allgemeinen, Stadtplanung, Kartierung von kulturellen Stätten und für vieles mehr verwendet. Schaue Dir unsere <b>Fallstudie</b> an, um mehr dazu zu lernen."
 
 #: sketch_map_tool/templates/help.html:942
 msgid "How does mapping work with the Sketch Map Tool?"
@@ -1986,7 +1990,7 @@ msgstr "Nein, die Ergebnisse müssen immer direkt nach Verwenden des Tools herun
 
 #: sketch_map_tool/templates/help.html:974
 msgid "What do I need to keep in mind for the participatory mapping?"
-msgstr ""
+msgstr "Was muss ich beim partizipativen Kartieren beachten?"
 
 #: sketch_map_tool/templates/help.html:976
 msgid "Please make sure not to accidentally mark the globes at the edge as they are needed for automatic map detection.\n"
@@ -1994,7 +1998,7 @@ msgid "Please make sure not to accidentally mark the globes at the edge as they 
 "                all interviewers.\n"
 "                    <a href=\"https://nexus.heigit.org/service/rest/repository/browse/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/\" target=\"_blank\">Here</a>\n"
 "                you can download the most important tips and questions for the mapping (summarized in a one-pager)."
-msgstr ""
+msgstr "Vergewissere Dich, dass die Globen am Rand nicht versehentlich markiert werden, da diese für die automatische Kartenerkennung notwendig sind. Verwende dicke Filzstifte in kräftigen Farben; Rot, Blau und Schwarz funktionieren am besten. Statte alle Befragenden mit dem gleichen Satz Stiften aus .<a href=\"https://nexus.heigit.org/service/rest/repository/browse/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/\" target=\"_blank\">Hier</a> kannst du die wichtigsten Tipps und Fragen zum Kartieren auf einer Seite zusammengefasst herunterladen."
 
 #: sketch_map_tool/templates/help.html:985
 msgid "How does the georeferencing work?"
@@ -2008,7 +2012,7 @@ msgid "Our georeferencing process employs the Binary Robust Invariant Scalable K
 "                    aligned with the unmarked map. Later, we use the coordinates of the bounding box to transform the\n"
 "                    marked map into the world geodetic system (WGS 84), resulting in a georeferenced GeoTIFF file\n"
 "                    suitable for geospatial analysis."
-msgstr ""
+msgstr "Zum Abgleich der Eigenschaften wird in unserem Georeferenzierungs-Prozess die \"Binary Robust Invariant Scalable Keypoints (BRISK)\"-Methode aus der OpenCV Bibliothek angewendet. Dabei werden zunächst die Koordinaten des Begrenzungsrahmens und eine Identifikationsnummer aus dem QR-Code auf der hochgeladenen Sketch Map extrahiert, um die dazugehörige unmarkierte Referenzkarte zu identifizieren. Unter Verwendung des BRISK-Algorithmus werden die markierte Sketch Map und die unmarkierte Karte aufeinander ausgerichtet. Später werden die Koordinaten des Begrenzungsrahmens verwendet, um die markierte Karte in das Weltkoordinatensystem WGS 84 umzuformatieren. Das Ergebnis ist eine für räumliche Analysen geeignete, georeferenzierte GeoTIFF-Datei."
 
 #: sketch_map_tool/templates/help.html:997
 msgid "You can find more details in the <a href=\"https://www.mdpi.com/2220-9964/10/3/130\" target=\"_blank\">paper\n"
@@ -2036,7 +2040,7 @@ msgid "You can open the TIFF file in a geographic information system (GIS), such
 "                this.\n"
 "                If you upload the file there and insert a basemap (for example the OSM basemap), you can see if the georeferencing\n"
 "                has worked. The Sketch Map should match the base map."
-msgstr ""
+msgstr "Um dies zu überprüfen, kannst Du die TIFF-Datei in einem Geoinformationssystem (GIS) wie zum Beispiel ArcGIS oder QGIS öffnen. Wenn Du die Datei dort hochlädst und eine Basiskarte (z.B. die OSM Basiskarte) einfügst, siehst Du, ob die Georeferenzierung funktioniert hat. Die Sketch-Map sollte mit der Basiskarte übereinstimmen."
 
 #: sketch_map_tool/templates/help.html:1024
 msgid "Why does my generated GeoTIFF file look strange?"
@@ -2048,7 +2052,7 @@ msgid "Please first try to open the file in a geographic information system (GIS
 "                the GIS,\n"
 "                the map might not have been properly detected by the tool in the photo, which could have several possible causes.\n"
 "                For example, the photo may have been taken from the wrong angle or the globes may have been painted over."
-msgstr ""
+msgstr "Bitte versuche zuerst, die Datei in einem geographischen Informationssystem (GIS) wie z.B. ArcGIS oder QGIS zu öffnen. Die Georeferenzierung könnte funktioniert haben, auch wenn die GeoTIFF-Datei fehlerhaft aussieht. Wenn sie im GIS immer noch fehlerhaft erscheint, hat das Tool die Karte auf dem Foto möglicherweise nicht richtig erkannt. Dafür kann es verschiedene Gründe geben, zum Beispiel, dass das Foto aus dem falschen Winkel gemacht wurde oder dass die Globen übermalt wurden."
 
 #: sketch_map_tool/templates/help.html:1035
 msgid "What can I do if the satellite map I printed is too dark?"

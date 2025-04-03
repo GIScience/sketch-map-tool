@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-03-03 13:22+0000\n"
-"PO-Revision-Date: 2025-03-03 13:33\n"
+"POT-Creation-Date: 2025-03-03 16:17+0000\n"
+"PO-Revision-Date: 2025-03-05 12:51\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Crowdin-File-ID: 12\n"
 "Language: fr_FR\n"
 
-#: sketch_map_tool/routes.py:309
+#: sketch_map_tool/routes.py:301
 #, python-brace-format
 msgid "There are no tasks for UUID {UUID}"
 msgstr "Il n'y a aucune tâche pour l'UUID {UUID}"
@@ -124,7 +124,11 @@ msgid "The first step is the creation of the paper-based maps. Users can choose 
 "            In addition, the tool can evaluate how well-suited an area of the OSM base map is for participatory mapping based on\n"
 "            a quality analysis of the OSM base map data through the\n"
 "            <a href=\"https://api.quality.ohsome.org/\" target=\"_blank\">HeiGIT ohsome quality API</a>."
-msgstr ""
+msgstr "La première étape est la création des cartes sur papier. Les utilisateurs peuvent choisir entre deux cartes de base contenant des données de\n"
+"            <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap (OSM)</a> et des cartes de base contenant des images\n"
+"            satellite.\n"
+"            De plus, l'outil peut évaluer dans quelle mesure une zone de la carte de base OSM est adaptée à la cartographie participative.  \n"
+"            Le<a href=\"https://api.quality.ohsome.org/\" target=\"_blank\">ohsome quality API</a> analyse la qualité des données de la carte de base OSM."
 
 #: sketch_map_tool/templates/about.html:38
 msgid "For the data collection through offline participatory mapping you only need your participants, the printed\n"
@@ -710,7 +714,7 @@ msgstr "Final Report"
 
 #: sketch_map_tool/templates/case-study-timor-leste.html:169
 msgid "Blogpost"
-msgstr ""
+msgstr "Blogpost"
 
 #: sketch_map_tool/templates/create-results.html:9
 #: sketch_map_tool/templates/create.html:12
@@ -891,7 +895,7 @@ msgstr "Téléchargez vos croquis"
 
 #: sketch_map_tool/templates/digitize-results.html:16
 msgid "Download collected markings as geodata"
-msgstr ""
+msgstr "Téléchargez les marquages collectés en tant que données géographiques"
 
 #: sketch_map_tool/templates/digitize-results.html:35
 msgid "raster data icon"
@@ -1235,7 +1239,9 @@ msgstr "Couvrez toutes les zones pertinentes pour votre cas d'utilisation: par e
 msgid "Choose a suitable zoom level. Example: If you want to examine urban floodings, we recommend using \n"
 "\t\t\t\t\t\t\t\ta neighborhood level map with streets and buildings. If you want to examine riverine floodings, \n"
 "\t\t\t\t\t\t\t\twe recommend using a map that shows a wider scope."
-msgstr ""
+msgstr "Choisissez un niveau de zoom approprié. Exemple: Si vous voulez examiner les inondations urbaines, nous vous recommandons d'utiliser \n"
+"\t\t\t\t\t\t\t\tune carte du niveau de voisinage avec les rues et les bâtiments. Si vous voulez examiner les inondations fluviales, \n"
+"\t\t\t\t\t\t\t\tnous vous recommandons d’utiliser une carte qui montre une portée plus large."
 
 #: sketch_map_tool/templates/help.html:151
 msgid "Choose a suitable base map for your mapping needs. The decision between the OSM or satellite image base map\n"
@@ -1274,7 +1280,7 @@ msgstr ""
 #: sketch_map_tool/templates/help.html:181
 #: sketch_map_tool/templates/help.html:195
 msgid "ohsome dashboard overview."
-msgstr ""
+msgstr "Vue générale de \"ohsome dashboard\"."
 
 #: sketch_map_tool/templates/help.html:185
 msgid "By clicking the <b>Get Quality Report</b> button, the dashboard is directly opened in a new tab. \n"
@@ -1317,7 +1323,7 @@ msgstr ""
 
 #: sketch_map_tool/templates/help.html:225
 msgid "Topic selection example"
-msgstr ""
+msgstr "Exemple de sélection du sujet"
 
 #: sketch_map_tool/templates/help.html:231
 msgid "Further, you can not only analyse the <b>completeness</b> and <b>currency</b> of the OSM data, but further conduct a <b>Road Comparison</b> \n"
@@ -1330,7 +1336,7 @@ msgstr ""
 
 #: sketch_map_tool/templates/help.html:237
 msgid "Quality indicators overview"
-msgstr ""
+msgstr "Aperçu des indicateurs de qualité"
 
 #: sketch_map_tool/templates/help.html:242
 msgid "Take a look at the map:"
@@ -1342,7 +1348,7 @@ msgstr "Pouvez-vous vous orienter sur la carte ?"
 
 #: sketch_map_tool/templates/help.html:245
 msgid "Are important points of reference, such as hospitals, schools, landmarks, etc. visible on the map?"
-msgstr ""
+msgstr "Les points de référence importants, tels que les hôpitaux, les écoles, les points de repère, etc. sont-ils visibles sur la carte ?"
 
 #: sketch_map_tool/templates/help.html:253
 msgid "Export Sketch Map as PDF"
@@ -1376,7 +1382,9 @@ msgstr "Nous vous recommandons d’imprimer les cartes sur du papier mat et non 
 msgid "Name your maps appropriately; Putting names on the downloaded Sketch Maps (can help\n"
 "                            you in organizing your maps. \n"
 "                            If you relate Sketch Maps back to questionnaires, use the same number for the map as you did in the questionnaire."
-msgstr ""
+msgstr "Nommez vos cartes de manière appropriée, en mettant des noms sur les Sketch Maps téléchargées. Cela peut vous aider à organiser vos cartes.\n"
+"                            Si vous associez des Sketch Maps à des questionnaires, utilisez le même numéro pour la carte que pour le\n"
+"                            questionnaire."
 
 #: sketch_map_tool/templates/help.html:286
 msgid "If you plan on printing out your map in black and white, check the visibility of the background map\n"
