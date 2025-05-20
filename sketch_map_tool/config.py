@@ -21,7 +21,6 @@ DEFAULT_CONFIG = {
     "wms-layers-esri-world-imagery-fallback": "world_imagery_fallback",
     "wms-read-timeout": 600,
     "max-nr-simultaneous-uploads": 100,
-    "max_pixel_per_image": 10e8,  # 10.000*10.000
     "yolo_cls": "SMT-CLS",
     "yolo_osm_obj": "SMT-OSM",
     "yolo_esri_obj": "SMT-ESRI",

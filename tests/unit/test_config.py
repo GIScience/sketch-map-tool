@@ -33,7 +33,6 @@ def config_keys():
         "wms-layers-esri-world-imagery-fallback",
         "wms-read-timeout",
         "max-nr-simultaneous-uploads",
-        "max_pixel_per_image",
         "yolo_cls",
         "yolo_osm_obj",
         "yolo_esri_obj",

@@ -2,6 +2,7 @@ from typing import get_args
 from uuid import UUID
 
 import PIL.Image as Image
+from PIL.Image import MAX_IMAGE_PIXELS, DecompressionBombError
 from werkzeug.datastructures import FileStorage
 
 from sketch_map_tool import get_config_value
@@ -27,7 +28,6 @@ def validate_uploaded_sketchmaps(files: list[FileStorage]):
     """Validation function for uploaded files."""
 
     max_nr_simultaneous_uploads = int(get_config_value("max-nr-simultaneous-uploads"))
-    max_pixel_per_image = int(get_config_value("max_pixel_per_image"))
 
     if len(files) > max_nr_simultaneous_uploads:
         raise UploadLimitsExceededError(
@@ -38,16 +38,15 @@ def validate_uploaded_sketchmaps(files: list[FileStorage]):
         )
 
     for file in files:
-        img = Image.open(file)
-        total_pxl_cnt = img.size[0] * img.size[1]
-        if total_pxl_cnt > max_pixel_per_image:
+        try:
+            img = Image.open(file)
+        except DecompressionBombError as error:
             raise UploadLimitsExceededError(
                 N_(
-                    "You can only upload pictures up to "
-                    "a total pixel count of {MAX_PIXEL_PER_IMAGE}."
+                    "You can only upload pictures up to a total pixel count of "
+                    "{0} pixels.".format(MAX_IMAGE_PIXELS)
                 ),
-                {"MAX_PIXEL_PER_IMAGE": max_pixel_per_image},
-            )
+            ) from error
         del img
         file.seek(0)
 
