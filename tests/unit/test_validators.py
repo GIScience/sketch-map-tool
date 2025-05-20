@@ -1,8 +1,11 @@
+import PIL
 import pytest
 
+from sketch_map_tool.exceptions import UploadLimitsExceededError
 from sketch_map_tool.validators import (
     validate_bbox,
     validate_type,
+    validate_uploaded_sketchmaps,
     validate_uuid,
 )
 
@@ -40,3 +43,13 @@ def test_validate_bbox(bbox_wgs84_str):
 def test_validate_bbox_invalid(bbox_str_):
     with pytest.raises(ValueError):
         validate_bbox(bbox_str_)
+
+
+def test_validate_uploaded_sketchmaps(file):
+    before = PIL.Image.MAX_IMAGE_PIXELS
+    try:
+        PIL.Image.MAX_IMAGE_PIXELS = 1
+        with pytest.raises(UploadLimitsExceededError):
+            validate_uploaded_sketchmaps([file])
+    finally:
+        PIL.Image.MAX_IMAGE_PIXELS = before
