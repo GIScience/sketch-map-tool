@@ -45,6 +45,7 @@ CELERY_CONFIG = {
     # Reserve at most one extra task for every worker process.
     "worker_prefetch_multiplier": 1,
     "worker_send_task_events": True,  # send task-related events to be monitored
+    "worker_proc_alive_timeout": 120,
     # Avoid errors due to cached db connections going stale through inactivity
     "database_short_lived_sessions": True,
     # Cleanup map frames and uploaded files stored in the database
