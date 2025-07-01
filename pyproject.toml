@@ -75,7 +75,7 @@ requires-dist = ["setuptools", "wheel", "numpy"]
 no-build-isolation-package = ["gdal"]
 
 [tool.uv.sources]
-ultralytics-mb = { git = "https://github.com/itisacloud/ultralytics_multiband_support.git", rev = "caf0b57b265d3c6761272ecf18a44b1605e9b25f" }
+ultralytics-mb = { git = "https://github.com/GIScience/ultralytics_siamese_smt.git", rev = "4cf4acc9c92df2b37937e52660675af9e75de8cb" }
 sam-2 = { git = "https://github.com/facebookresearch/segment-anything-2.git" }
 
 [tool.ruff.lint]
