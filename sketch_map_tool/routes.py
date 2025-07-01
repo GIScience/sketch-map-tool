@@ -62,6 +62,12 @@ def about(lang="en") -> str:
     )
 
 
+@app.get("/case-studies")
+@app.get("/<lang>/case-studies")
+def case_studies(lang="en") -> str:
+    return render_template("case-studies.html", lang=lang)
+
+
 @app.get("/case-studies/cultural-landmarks")
 @app.get("/<lang>/case-studies/cultural-landmarks")
 def case_study_cultural_landmarks(lang="en") -> str:
