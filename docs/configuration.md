@@ -19,12 +19,7 @@ cp config/sample.config.toml config/config.toml
 
 For a list of all configuration variables and their default values please take a look at [config.py](sketch_map_tool/config.py).
 
-## Required Configuration
-
-All lot of configuration values come with defaults. Required configuration values are:
-- TODO download weights from smt
-
-## Configuration for Docker Compose
+All lot of configuration values come with defaults.
 
 For running the services using Docker Compose set broker URL and result backend to:
 
