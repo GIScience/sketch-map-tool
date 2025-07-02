@@ -34,7 +34,6 @@ dependencies = [
     "ultralytics==8.1.14",
     "ultralytics-mb",
     "waitress>=3.0.2",
-    "wtforms>=3.2.1",
 ]
 
 [dependency-groups]

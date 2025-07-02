@@ -2037,25 +2037,23 @@ dependencies = [
     { name = "matplotlib-scalebar" },
     { name = "numpy" },
     { name = "opencv-python-headless" },
+    { name = "pillow" },
     { name = "pymupdf" },
     { name = "pyproj" },
     { name = "pyzbar" },
     { name = "qrcode" },
-    { name = "rasterio" },
     { name = "redis" },
     { name = "reportlab" },
     { name = "requests" },
     { name = "sam-2" },
     { name = "shapelysmooth" },
     { name = "svglib" },
-    { name = "tifffile" },
     { name = "toml" },
     { name = "torch" },
     { name = "torchvision" },
     { name = "ultralytics" },
     { name = "ultralytics-mb" },
     { name = "waitress" },
-    { name = "wtforms" },
 ]
 
 [package.dev-dependencies]
@@ -2096,25 +2094,23 @@ requires-dist = [
     { name = "matplotlib-scalebar", specifier = ">=0.9.0" },
     { name = "numpy", specifier = "<2" },
     { name = "opencv-python-headless", specifier = "<4.8.0.76" },
-    { name = "pymupdf", extras = ["pillow"], specifier = ">=1.25.4" },
+    { name = "pillow", specifier = ">=11.3.0" },
+    { name = "pymupdf", specifier = ">=1.25.4" },
     { name = "pyproj", specifier = ">=3.7.1" },
     { name = "pyzbar", specifier = ">=0.1.9" },
     { name = "qrcode", specifier = ">=8.0" },
-    { name = "rasterio", specifier = ">=1.4.3" },
     { name = "redis", specifier = ">=5.2.1" },
     { name = "reportlab", specifier = ">=4.3.1" },
     { name = "requests", specifier = ">=2.32.3" },
     { name = "sam-2", git = "https://github.com/facebookresearch/segment-anything-2.git" },
     { name = "shapelysmooth", specifier = ">=0.2.1" },
     { name = "svglib", specifier = ">=1.5.1" },
-    { name = "tifffile", specifier = ">=2025.3.30" },
     { name = "toml", specifier = ">=0.10.2" },
     { name = "torch", specifier = ">=2.6.0" },
     { name = "torchvision", specifier = ">=0.21.0" },
     { name = "ultralytics", specifier = "==8.1.14" },
     { name = "ultralytics-mb", git = "https://github.com/GIScience/ultralytics_siamese_smt.git?rev=4cf4acc9c92df2b37937e52660675af9e75de8cb" },
     { name = "waitress", specifier = ">=3.0.2" },
-    { name = "wtforms", specifier = ">=3.2.1" },
 ]
 
 [package.metadata.requires-dev]
@@ -2670,18 +2666,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/17/27/4fe749a54e7fae6e7146f1c7d914d28ef599dacd4416566c055564080fe2/wrapt-1.17.2-cp312-cp312-win32.whl", hash = "sha256:468090021f391fe0056ad3e807e3d9034e0fd01adcd3bdfba977b6fdf4213ea9", size = 36672, upload-time = "2025-01-14T10:34:17.727Z" },
     { url = "https://files.pythonhosted.org/packages/15/06/1dbf478ea45c03e78a6a8c4be4fdc3c3bddea5c8de8a93bc971415e47f0f/wrapt-1.17.2-cp312-cp312-win_amd64.whl", hash = "sha256:ec89ed91f2fa8e3f52ae53cd3cf640d6feff92ba90d62236a81e4e563ac0e991", size = 38865, upload-time = "2025-01-14T10:34:19.577Z" },
     { url = "https://files.pythonhosted.org/packages/2d/82/f56956041adef78f849db6b289b282e72b55ab8045a75abad81898c28d19/wrapt-1.17.2-py3-none-any.whl", hash = "sha256:b18f2d1533a71f069c7f82d524a52599053d4c7166e9dd374ae2136b7f40f7c8", size = 23594, upload-time = "2025-01-14T10:35:44.018Z" },
-]
-
-[[package]]
-name = "wtforms"
-version = "3.2.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "markupsafe" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/01/e4/633d080897e769ed5712dcfad626e55dbd6cf45db0ff4d9884315c6a82da/wtforms-3.2.1.tar.gz", hash = "sha256:df3e6b70f3192e92623128123ec8dca3067df9cfadd43d59681e210cfb8d4682", size = 137801, upload-time = "2024-10-21T11:34:00.108Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/08/c9/2088fb5645cd289c99ebe0d4cdcc723922a1d8e1beaefb0f6f76dff9b21c/wtforms-3.2.1-py3-none-any.whl", hash = "sha256:583bad77ba1dd7286463f21e11aa3043ca4869d03575921d1a1698d0715e0fd4", size = 152454, upload-time = "2024-10-21T11:33:58.44Z" },
 ]
 
 [[package]]
