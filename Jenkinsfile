@@ -18,7 +18,7 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Build Backend') {
             steps {
                 script {
                     echo REPO_NAME
@@ -39,6 +39,18 @@ pipeline {
                     sh 'uv sync --locked --only-group gdal-build-dependencies'
                     sh 'uv sync --locked'
                     sh 'uv run pybabel compile -d sketch_map_tool/translations'
+                }
+            }
+            post {
+                failure {
+                  rocket_buildfail()
+                }
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                nodejs(nodeJSInstallationName: 'NodeJS 18') {
                     sh 'npm install'
                     sh 'npm run build'
                 }
