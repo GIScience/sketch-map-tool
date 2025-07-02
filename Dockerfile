@@ -13,9 +13,11 @@ RUN npm run build
 
 # build python app
 FROM python:3.12-bookworm AS python-builder
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 WORKDIR /app
 
+# install system libraries
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -26,34 +28,43 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         libgdal-dev \
         libpq-dev \
         libzbar0 \
+        libgl1 \
+        libglib2.0-dev \
         python3-gdal
 
-ENV POETRY_NO_INTERACTION=1 \
-    POETRY_VIRTUALENVS_IN_PROJECT=1 \
-    POETRY_VIRTUALENVS_CREATE=1 \
-    POETRY_CACHE_DIR=/tmp/poetry_cache \
-    POETRY_REQUESTS_TIMEOUT=600
+ENV UV_LINK_MODE=copy \
+    UV_HTTP_TIMEOUT=300
 
-COPY pyproject.toml poetry.lock ./
+# install only gdal build dependencies
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --locked --no-install-project --no-editable --no-dev --only-group gdal-build-dependencies
 
-RUN --mount=type=cache,target=$POETRY_CACHE_DIR python3 -m pip install --break-system-packages poetry setuptools \
-    && python3 -m poetry install --only main --no-root --no-directory
+# install dependencies
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --locked --no-install-project --no-editable --no-dev
 
 COPY sketch_map_tool sketch_map_tool
 COPY data data
 COPY config config
 
-RUN --mount=type=cache,target=$POETRY_CACHE_DIR python3 -m poetry install --only main --no-root --no-directory \
-    && python3 -m poetry run python -m pip install \
-        gdal[numpy]=="$(gdal-config --version).*" \
-        psycopg2 \
-    && python3 -m poetry run pybabel compile -d sketch_map_tool/translations
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --locked --no-editable --no-dev && \
+    uv run pybabel compile -d sketch_map_tool/translations
 
 
 # final image
 FROM python:3.12-slim-bookworm AS runtime
 
 WORKDIR /app
+
+ENV VIRTUAL_ENV=/app/.venv \
+    PATH="/app/.venv/bin:$PATH"
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
@@ -62,10 +73,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt update \
     && apt install -y --no-upgrade --no-install-recommends \
         libgdal32 \
-        libzbar0
-
-ENV VIRTUAL_ENV=/app/.venv \
-    PATH="/app/.venv/bin:$PATH"
+        libzbar0 \
+        libgl1 \
+        libglib2.0-0
 
 COPY --from=python-builder --chown=smt:smt $VIRTUAL_ENV $VIRTUAL_ENV
 COPY --from=python-builder --chown=smt:smt /app/sketch_map_tool sketch_map_tool
