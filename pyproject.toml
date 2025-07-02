@@ -10,7 +10,7 @@ dependencies = [
     "flask>=3.1.0",
     "flask-babel>=4.0.0",
     "flower>=2.0.1",
-    "gdal==3.8.4",
+    "gdal==3.6.2",
     "geojson>=3.2.0",
     "kaleido==0.2.1", # Not working with '^', see https://github.com/plotly/Kaleido/issues/125
     "matplotlib>=3.10.1",
@@ -63,7 +63,7 @@ gdal-build-dependencies = [
 
 [[tool.uv.dependency-metadata]]
 name = "gdal"
-version = "3.8.4"
+version = "3.6.2"
 requires-dist = ["setuptools", "wheel", "numpy"]
 
 [tool.uv]
