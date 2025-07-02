@@ -60,6 +60,15 @@ gdal-build-dependencies = [
     "setuptools>=80.9.0",
     "wheel>=0.45.1",
 ]
+cpu = [
+    "torch>=2.7.0",
+    "torchvision>=0.22.0",
+]
+cu126 = [
+    "torch>=2.7.0",
+    "torchvision>=0.22.0",
+]
+
 
 [[tool.uv.dependency-metadata]]
 name = "gdal"
@@ -71,10 +80,25 @@ requires-dist = ["setuptools", "wheel", "numpy"]
 # dependencies are installed in the project environment prior to installing the
 # package itself.
 no-build-isolation-package = ["gdal"]
+default-groups = ["dev","cpu"]
+conflicts = [
+    [
+        { group = "cpu" },
+        { group = "cu126" },
+    ]
+]
 
 [tool.uv.sources]
 ultralytics-mb = { git = "https://github.com/GIScience/ultralytics_siamese_smt.git", rev = "4cf4acc9c92df2b37937e52660675af9e75de8cb" }
 sam-2 = { git = "https://github.com/facebookresearch/segment-anything-2.git" }
+torch = [
+    { index = "pytorch-cpu", group = "cpu" },
+    { index = "pytorch-cu126", group = "cu126" },
+]
+torchvision = [
+    { index = "pytorch-cpu", group = "cpu" },
+    { index = "pytorch-cu126", group = "cu126" },
+]
 
 [tool.ruff.lint]
 select = [
@@ -90,3 +114,13 @@ select = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 filterwarnings = ["ignore::DeprecationWarning"]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
