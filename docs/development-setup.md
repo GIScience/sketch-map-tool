@@ -59,6 +59,13 @@ docker run --name smt-redis -d -p 6379:6379 redis:7
 
 More information about the models can be found in the [model registry documentation](/docs/model_registry.md).
 
+### Setup with CUDA support
+
+If you need CUDA support, you can install `torch` with cuda support through:
+```bash
+uv sync --group cuda --no-group cpu
+```
+
 
 ## Configuration
 
