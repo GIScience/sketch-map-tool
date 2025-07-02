@@ -39,6 +39,9 @@ pipeline {
                     sh 'uv sync --locked --only-group gdal-build-dependencies'
                     sh 'uv sync --locked'
                     sh 'uv run pybabel compile -d sketch_map_tool/translations'
+                    sh 'wget --quiet -P weights https://sketch-map-tool.heigit.org/weights/SMT-OSM.pt'
+                    sh 'wget --quiet -P weights https://sketch-map-tool.heigit.org/weights/SMT-ESRI.pt'
+                    sh 'wget --quiet -P weights https://sketch-map-tool.heigit.org/weights/SMT-CLS.pt'
                 }
             }
             post {
