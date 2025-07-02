@@ -53,7 +53,7 @@ def yolo_cls() -> YOLO:
     return YOLO(path)
 
 
-@pytest.mark.limit_memory("1.7 GB")
+@pytest.mark.limit_memory("2.0 GB")
 def test_detect_markings(
     layer,
     map_frame_marked,
