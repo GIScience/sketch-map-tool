@@ -70,7 +70,7 @@ pipeline {
             steps {
                 script {
                     // run pytest
-                    sh 'VCR_RECORD_MODE=none pytest --cov=sketch_map_tool --cov-report=xml --numprocesses=4 tests'
+                    sh 'VCR_RECORD_MODE=none pytest --cov=sketch_map_tool --cov-report=xml tests'
                     // run static analysis with sonar-scanner
                     def scannerHome = tool 'SonarScanner 4'
                     withSonarQubeEnv('sonarcloud GIScience/ohsome') {
