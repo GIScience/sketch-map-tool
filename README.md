@@ -2,10 +2,11 @@
 
 # Sketch Map Tool
 
+[![Build Status](https://jenkins.heigit.org/buildStatus/icon?job=sketch-map-tool/main)](https://jenkins.heigit.org/job/sketch-map-tool/job/main/)
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=sketch-map-tool&metric=alert_status)](https://sonarcloud.io/dashboard?id=sketch-map-tool)
 [![LICENSE](https://img.shields.io/badge/license-AGPL--v3-orange)](LICENSE)
 [![Website](https://img.shields.io/website?url=https://sketch-map-tool.heigit.org/)](https://sketch-map-tool.heigit.org/)
 [![status: active](https://github.com/GIScience/badges/raw/master/status/active.svg)](https://github.com/GIScience/badges#active)
-[![Python Tests](https://github.com/GIScience/sketch-map-tool/actions/workflows/python.yml/badge.svg)](https://github.com/GIScience/sketch-map-tool/actions/workflows/python.yml)
 
 The Sketch Map Tool is an easy-to-use tool for participatory sketch mapping through offline collection, digitization and georeferencing of local spatial knowledge.
 
