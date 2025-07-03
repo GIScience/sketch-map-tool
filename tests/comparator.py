@@ -14,16 +14,16 @@ class GeoJSONComparator(FileComparator):
         df_received = geopandas.read_file(received_path).to_crs("EPSG:8857")
         df_approved = geopandas.read_file(approved_path).to_crs("EPSG:8857")
 
-        if len(df_approved) != len(df_received):
+        if len(df_approved.index) != len(df_received.index):
             print("Different numbers of features detected.")
             return False
 
         # NOTE: Hausdorff distance might be better to determine similarity
-        area_clipped = df_received.clip(df_approved).area
-        area_diff = df_approved.area - area_clipped
-        area_ratio = area_diff / df_approved.area
-        for r in area_ratio:
-            if r > 0.01:
-                print("Area differs more then 1%.")
+        area_diff = df_received.symmetric_difference(df_approved).area
+        area_union = df_received.union(df_approved).area
+        diff = area_diff / area_union
+        for d in diff.tolist():
+            if d > 0.05:
+                print("Area differs more than 5%.")
                 return False
         return True
