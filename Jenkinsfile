@@ -91,9 +91,8 @@ pipeline {
                         }
                         sh "${scannerHome}/bin/sonar-scanner " + SONAR_CLI_PARAMETER
                     }
-                    // run other static code analysis
-                    sh 'ruff format --check --diff .'
-                    sh 'ruff check .'
+                    // run other static code analysis and checks
+                    sh 'pre-commit run --all-files'
                 }
             }
             post {
