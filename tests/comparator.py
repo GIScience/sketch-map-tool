@@ -10,16 +10,20 @@ class GeoJSONComparator(FileComparator):
             return False
 
         # EPSG:8857 - small scale equal-area mapping
+        # TODO: Maybe EPSG 3857 is better/enough?
         df_received = geopandas.read_file(received_path).to_crs("EPSG:8857")
         df_approved = geopandas.read_file(approved_path).to_crs("EPSG:8857")
 
         if len(df_approved) != len(df_received):
+            print("Different numbers of features detected.")
             return False
 
+        # NOTE: Hausdorff distance might be better to determine similarity
         area_clipped = df_received.clip(df_approved).area
         area_diff = df_approved.area - area_clipped
         area_ratio = area_diff / df_approved.area
         for r in area_ratio:
             if r > 0.01:
+                print("Area differs more then 1%.")
                 return False
         return True
