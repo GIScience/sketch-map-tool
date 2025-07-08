@@ -6,7 +6,14 @@
 
 {% block body %}
 <main class="container">
-    <p>{{ _('Case studies.') }}</p>
+    <h2>{{ _('Case Studies') }}</h2>
+
+    <p>{{ _('The Sketch Map Tool is used worldwide and in lots of different settings. Each of the following case studies
+     explores one project in details from the initial motivation to use the Sketch Map Tool to specific results and
+     possible impacts.
+
+    So, get inspired by other projects and their ideas for using and analysing Sketch Maps, as well as the lessons they
+     have learnt.') }}</p>
 
     <div class="grid">
         <a class="card" href="/case-studies/cultural-landmarks">
@@ -15,7 +22,8 @@
             <p class="preview">{{ _('The Sketch Map Tool was used as part of his PhD research on the changing territory around
                 an artiﬁcial dam in a rural area in southern Italy. The research aimed to identify signiﬁcant landmarks
                 and provide decision-makers with geographical data to develop cultural, environmental, and touristic
-                initiatives') }}</p>
+                initiatives.') }}</p>
+            <footer># anticipatory action, # flood events</footer>
         </a>
 
         <a class="card" href="/case-studies/timor-leste">
@@ -24,19 +32,20 @@
             <p class="preview">{{ _('The Anticipatory Action team conducted a pilot project in Timor Leste to implement
                 anticipatory mapping using OpenStreetMap (OSM). This project aimed to address the lack of baseline data
                 necessary for planning effective anticipatory actions in the region.') }} </p>
+            <footer> # cultural landmarks # social perception</footer>
         </a>
-    </div>
-    <div class="grid">
+
         <a class="card" href="https://preparecenter.org/resource/digitalizing-paper-based-community-mapping-in-the-evca/">
             <img src="https://preparecenter.org/wp-content/uploads/2024/03/IMG_2178.jpg" alt="Study C">
             <h3>{{ _('Digitalizing Paper-Based Community mapping in the EVCA') }}</h3>
             <p class="preview">{{ _('Community mapping in paper-based formats is low-cost, technology-independent, that is
                 easily facilitated, and adopted at the community level. However, the output can be less sustainable
                 compared to digital map products.') }}</p>
-        </a>
-
-        <a class="card">
+            <footer># transect walks, # flood events</footer>
         </a>
     </div>
+<p>{{ _('We are working on adding more use case studies.
+What is your use case? Please get in touch if you are interested in sharing your use case with us: ')  }}
+<a href="mailto:sketch-map-tool@heigit.org">sketch-map-tool@heigit.org</a></p>
 </main>
 {% endblock body %}
