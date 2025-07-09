@@ -1,7 +1,9 @@
 from pathlib import Path
 
 import geopandas
+import numpy as np
 from approvaltests.core import FileComparator
+from PIL import Image
 
 
 class GeoJSONComparator(FileComparator):
@@ -27,3 +29,12 @@ class GeoJSONComparator(FileComparator):
                 print("Area differs more than 5%.")
                 return False
         return True
+
+
+class ImageComparator(FileComparator):
+    def compare(self, received_path: str, approved_path: str) -> bool:
+        if not Path(approved_path).exists() or Path(approved_path).stat().st_size == 0:
+            return False
+        image_received = Image.open(received_path)
+        image_approved = Image.open(approved_path)
+        return np.all(np.array(image_received), np.array(image_approved))

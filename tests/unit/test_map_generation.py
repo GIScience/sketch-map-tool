@@ -19,6 +19,7 @@ from sketch_map_tool.map_generation.generate_pdf import (
 )
 from sketch_map_tool.models import Layer, PaperFormat
 from tests import FIXTURE_DIR
+from tests.comparator import ImageComparator
 from tests.namer import PytestNamer, PytestNamerFactory
 from tests.reporter import ImageReporter, NDArrayReporter
 from tests.unit.helper import serialize_ndarray
@@ -105,6 +106,7 @@ def test_generate_pdf_sketch_map_approval(
         Options()
             .with_reporter(ImageReporter())
             .with_namer(PytestNamer())
+            .with_comparator(ImageComparator())
     )
     # fmt: off
     verify_binary(
@@ -133,6 +135,7 @@ def test_generate_pdf_sketch_map_template_approval(
         Options()
             .with_reporter(ImageReporter())
             .with_namer(PytestNamer())
+            .with_comparator(ImageComparator())
     )
     # fmt: off
     verify_binary(
