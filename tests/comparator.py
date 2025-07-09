@@ -37,4 +37,4 @@ class ImageComparator(FileComparator):
             return False
         image_received = Image.open(received_path)
         image_approved = Image.open(approved_path)
-        return np.all(np.array(image_received), np.array(image_approved))
+        return (np.array(image_received) == np.array(image_approved)).all()
