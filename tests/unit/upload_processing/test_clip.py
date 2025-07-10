@@ -1,5 +1,3 @@
-import logging
-
 import cv2
 import pytest
 
@@ -42,6 +40,16 @@ def template_upload_few_features():
 @pytest.fixture
 def photo_of_sketch_map():
     return cv2.imread(str(FIXTURE_DIR / "clip" / "1-photo-of-sketch-map.jpg"))
+
+
+@pytest.fixture
+def sketch_map_failing_to_clip():
+    return cv2.imread(str(FIXTURE_DIR / "clip" / "sketch-map-failing-to-clip.jpg"))
+
+
+@pytest.fixture
+def map_frame_failing_to_clip():
+    return cv2.imread(str(FIXTURE_DIR / "clip" / "map-frame-failing-to-clip.png"))
 
 
 @pytest.fixture
@@ -105,11 +113,19 @@ def test_clip_failure(
     map_frame_2,
     caplog,
 ):
-    """Clip produces a distorted image."""
-    with caplog.at_level(logging.WARNING):
-        clip(photo_of_sketch_map, map_frame_2)
-        # TODO: detect failure of clip and log a warning
-        assert "" in caplog.text
+    """Clipping fails and it should do so."""
+    result = clip(photo_of_sketch_map, map_frame_2)  # noqa
+    # cv2.imshow("image", result)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+
+def test_clip_failure_2(
+    sketch_map_failing_to_clip,
+    map_frame_failing_to_clip,
+):
+    """Clipping fails but it should not."""
+    result = clip(sketch_map_failing_to_clip, map_frame_failing_to_clip)  # noqa
     # cv2.imshow("image", result)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
