@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-03-03 13:22+0000\n"
-"PO-Revision-Date: 2025-03-03 13:33\n"
+"POT-Creation-Date: 2025-07-02 06:59+0000\n"
+"PO-Revision-Date: 2025-07-02 07:30\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -18,12 +18,12 @@ msgstr ""
 "X-Crowdin-File-ID: 12\n"
 "Language: pt_BR\n"
 
-#: sketch_map_tool/routes.py:309
+#: sketch_map_tool/routes.py:283
 #, python-brace-format
 msgid "There are no tasks for UUID {UUID}"
 msgstr ""
 
-#: sketch_map_tool/validators.py:19
+#: sketch_map_tool/validators.py:20
 #, python-brace-format
 msgid "{TYPE} is not a valid value for the request parameter 'type'. Allowed values are: {REQUEST_TYPES}"
 msgstr ""
@@ -35,19 +35,19 @@ msgstr ""
 
 #: sketch_map_tool/validators.py:46
 #, python-brace-format
-msgid "You can only upload pictures up to a total pixel count of {MAX_PIXEL_PER_IMAGE}."
+msgid "You can only upload pictures up to a total pixel count of {0} pixels."
 msgstr ""
 
-#: sketch_map_tool/validators.py:61
+#: sketch_map_tool/validators.py:60
 msgid "The provided URL does not contain a valid UUID"
 msgstr ""
 
-#: sketch_map_tool/validators.py:73
+#: sketch_map_tool/validators.py:72
 msgid "The provided URL does not contain a valid bounding box"
 msgstr ""
 
-#: sketch_map_tool/validators.py:82 sketch_map_tool/validators.py:89
-#: sketch_map_tool/validators.py:96
+#: sketch_map_tool/validators.py:81 sketch_map_tool/validators.py:88
+#: sketch_map_tool/validators.py:95
 msgid "Literature reference JSON fields should not contain empty strings as values."
 msgstr ""
 
@@ -57,32 +57,22 @@ msgid "The file with the id: {ID} does not exist anymore"
 msgstr ""
 
 #: sketch_map_tool/database/client_celery.py:176
-#: sketch_map_tool/database/client_flask.py:145
-#: sketch_map_tool/database/client_flask.py:160
+#: sketch_map_tool/database/client_flask.py:112
+#: sketch_map_tool/database/client_flask.py:127
 #, python-brace-format
 msgid "There is no file in the database with the id: {ID}"
 msgstr ""
 
-#: sketch_map_tool/database/client_flask.py:47
-#, python-brace-format
-msgid "There are no tasks in the broker for UUID: {UUID}"
-msgstr ""
-
-#: sketch_map_tool/database/client_flask.py:60
-#, python-brace-format
-msgid "There are no tasks in the broker for UUID and request type: {REQUEST_UUID}, {REQUEST_TYPE}"
-msgstr ""
-
-#: sketch_map_tool/database/client_flask.py:174
+#: sketch_map_tool/database/client_flask.py:141
 msgid "In this Sketch Map Tool instance no sketch map has been generated yet. You can only upload sketch maps to the instance on which they have been created."
 msgstr ""
 
-#: sketch_map_tool/database/client_flask.py:183
+#: sketch_map_tool/database/client_flask.py:150
 #, python-brace-format
 msgid "The file with the id: {UUID} does not exist anymore"
 msgstr ""
 
-#: sketch_map_tool/database/client_flask.py:190
+#: sketch_map_tool/database/client_flask.py:157
 #, python-brace-format
 msgid "There is no map frame in the database with the uuid: {UUID}. You can only upload sketch maps to the instance on which they have been created."
 msgstr ""
