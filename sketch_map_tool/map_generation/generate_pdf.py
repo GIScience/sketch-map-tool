@@ -106,7 +106,7 @@ def generate_pdf(
         height=frame_height * cm,
     )
 
-    # TODO move to create_map_frame
+    # TODO: move to create_map_frame
     # Add a border around the map
     canvas.rect(
         map_margin * cm,
@@ -273,9 +273,7 @@ def create_map_frame(
             draw_markers(canvas, globe_size, height=width, width=height)
         else:
             draw_globes(canvas, globe_size, height=width, width=height)
-        add_scalebar(
-            canvas, width=height, height=width, m_per_px=m_per_px, paper_format=format_
-        )
+        add_scalebar(canvas, height, width, m_per_px, format_, globe_size)
     else:
         canvas.drawImage(
             map_image,
@@ -289,7 +287,7 @@ def create_map_frame(
             draw_markers(canvas, globe_size, height, width)
         else:
             draw_globes(canvas, globe_size, height, width)
-        add_scalebar(canvas, width, height, m_per_px, format_)
+        add_scalebar(canvas, width, height, m_per_px, format_, globe_size)
 
     canvas.save()
     map_frame.seek(0)
@@ -347,24 +345,22 @@ def get_globes(expected_size) -> Tuple[Drawing, ...]:
 def draw_markers(canvas: Canvas, size: float, height: float, width: float):
     markers = get_aruco_markers(int(size))
 
-    h = height - size
-    w = width - size
-
+    # 5 is to account for map frame border
     positions = [
         # corner globes
         # bottom left
-        (0, 0),
+        (5, 5),
         # top left
-        (0, h),
+        (5, height - size - 5),
         # top right
-        (w, h),
+        (width - size - 5, height - size - 5),
         # bottom right
-        (w, 0),
+        (width - size - 5, 5),
         # middle globes
-        (0, h / 2),
-        (w / 2, h),
-        (w, h / 2),
-        (w / 2, 0),
+        (0, ((height - 5) / 2 - size / 2)),
+        ((width - 5) / 2 - size / 2, (height - size - 5)),
+        (width - size - 5, (height - 5) / 2 - size),
+        ((width - 5) / 2 - size / 2, 5),
     ]
     for m, (x, y) in zip(markers, positions):
         canvas.drawImage(ImageReader(Image.fromarray(m)), x, y)
@@ -385,6 +381,7 @@ def add_scalebar(
     height: int,
     m_per_px: float,
     paper_format: PaperFormat,
+    marker_size: float,
 ):
     scale_bar_length = round(width * 0.075)
     corresponding_meters = round(m_per_px * scale_bar_length)
@@ -409,10 +406,11 @@ def add_scalebar(
             corresponding_meters - corresponding_meters % 10 + 10
         )  # Round up to the next 10m
     scale_bar_length = round(corresponding_meters / m_per_px)
-    scale_bar_x, scale_bar_y = (
-        width + paper_format.scale_relative_xy[0] - scale_bar_length,
-        height + paper_format.scale_relative_xy[1],
+    # move to the left so that aruco markers or globes are not overlayed
+    scale_bar_x = (
+        width + paper_format.scale_relative_xy[0] - scale_bar_length - (2 * marker_size)
     )
+    scale_bar_y = height + paper_format.scale_relative_xy[1]
     canvas.setFillColorRGB(255, 255, 255)
     background_params = paper_format.scale_background_params
     canvas.rect(

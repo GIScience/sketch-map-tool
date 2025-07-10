@@ -78,17 +78,19 @@ def test_generate_pdf(
 
 # NOTE: To reduce number of approvals, parameter numbers are kept low.
 @pytest.mark.parametrize("orientation", ["landscape"])
+@pytest.mark.parametrize("paper_format", [A4])
 @pytest.mark.skipif(os.getenv("CI") == "true", reason="detected CI environment")
 def test_generate_pdf_sketch_map_approval(
     map_image,
     qr_code_approval,
+    paper_format,
     orientation,  # pyright: ignore reportUnusedVariable
     aruco,
 ) -> None:
     sketch_map, _ = generate_pdf(
         map_image,
         qr_code_approval,
-        A4,
+        paper_format,
         1283.129,
         Layer("osm"),
         aruco,
