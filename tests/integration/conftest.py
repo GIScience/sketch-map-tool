@@ -154,6 +154,7 @@ def flask_app():
     app.add_url_rule("/", view_func=routes.index, methods=["GET"])
     app.add_url_rule("/about", view_func=routes.about, methods=["GET"])
     app.add_url_rule("/help", view_func=routes.help, methods=["GET"])
+    app.add_url_rule("/case-studies", view_func=routes.case_studies, methods=["GET"])
     app.add_url_rule(
         "/case-studies/cultural-landmarks",
         view_func=routes.case_study_cultural_landmarks,
