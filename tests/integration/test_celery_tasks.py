@@ -18,7 +18,6 @@ def test_generate_sketch_map(bbox, format_, size, scale, layer):
             size,
             scale,
             layer,
-            False,
         )
     )
     result = task.get(timeout=180)
