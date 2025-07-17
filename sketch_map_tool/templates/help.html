@@ -325,13 +325,13 @@
                         generalize their understanding and accurately identify markings in new and unseen Sketch Maps.
                         The Sketch Map Tool also incorporates conventional Computer Vision techniques to precisely position the Sketch Map
                         within real-world coordinates.
-                        Georeferencing images entails detecting and matching specific points, such as the globes one the Sketch Maps,
+                        Georeferencing images entails detecting and matching specific points, such as the markers in the corners of the Sketch Maps,
                         between the reference and current input image,
                         enabling precise spatial alignment. Our current algorithm detects all markings, whether they are intended as a line,
                         a point or as a polygon. ') }}
                     </p>
                     <p>
-                        {{ _('Please make sure to not accidentally mark the globes on the edge as they are used for georeferencing purposes
+                        {{ _('Please make sure to not accidentally draw over the markers on the edge as they are used for georeferencing purposes
                         in order to ensure the automatic map detection.') }}
                     </p>
                     <p>
@@ -595,7 +595,7 @@
                     </p>
                     <figure>
                         <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_missing_globes.webp" ) }}"
-                             alt="{{ _('Sketch Map, Missing Globes.') }}">
+                             alt="{{ _('Sketch Map, Missing markers.') }}">
                         <figcaption></figcaption>
                     </figure>
                     <hr>
@@ -956,10 +956,10 @@
             </article>
         </details>
         <details>
-            <summary id="why-qr-code-and-globes">{{ _('Why is there a QR code and globes on the Sketch Maps?') }}</summary>
+            <summary id="why-qr-code-and-globes">{{ _('Why is there a QR code and markers the Sketch Maps?') }}</summary>
             <article>
                 {{ _('These are required for georeferencing. The QR Code contains the ID of the reference map frame and the bounding box coordinates.
-                The tool employs computer vision algorithms to match uploaded and reference map frames (mainly based on the globes)
+                The tool employs computer vision algorithms to match uploaded and reference map frames (mainly based on the markers.)
                 before it transforms and georeferences the uploaded Sketch Maps.') }}
             </article>
         </details>
@@ -973,7 +973,7 @@
         <details>
             <summary id="why-do-i-have-to-pay-attention">{{ _('What do I need to keep in mind for the participatory mapping?') }}</summary>
             <article>
-                {{ _('Please make sure not to accidentally mark the globes at the edge as they are needed for automatic map detection.
+                {{ _('Please make sure not to accidentally draw over markers at the edge as they are needed for automatic map detection.
                 Use thicker felt-tip pens with intense colors; red, blue, and black work best. Prepare the same set of pens for
                 all interviewers.
                     <a href="https://nexus.heigit.org/service/rest/repository/browse/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/" target="_blank">Here</a>
@@ -1027,7 +1027,7 @@
                 The georeferencing may have worked even if the GeoTIFF file does not look right. If it still appears incorrect in
                 the GIS,
                 the map might not have been properly detected by the tool in the photo, which could have several possible causes.
-                For example, the photo may have been taken from the wrong angle or the globes may have been painted over.') }}
+                For example, the photo may have been taken from the wrong angle or the markers may have been painted over.') }}
             </article>
         </details>
         

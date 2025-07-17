@@ -59,7 +59,7 @@ class PaperFormat:
         font_size: Font size [pt]
         qr_scale: Scale factor of the QR-code
         compass_scale: Scale factor of the compass
-        globe_scale: Scale factor of the globes
+        marker_scale: Scale factor of the aruco markers
         scale_height: Height of the scale [px].
         scale_relative_xy: Position of the scale relative to the map frame width or
             height respectively
@@ -86,7 +86,7 @@ class PaperFormat:
     font_size: int
     qr_scale: float
     compass_scale: float
-    globe_scale: float
+    marker_scale: float
     scale_height: int
     scale_relative_xy: tuple[int, int]
     scale_background_params: tuple[int, int, int, int]
