@@ -62,7 +62,6 @@ def test_generate_pdf(
     paper_format: PaperFormat,
     orientation,  # pyright: ignore reportUnusedVariable
     layer,
-    aruco,
 ) -> None:
     sketch_map, sketch_map_template = generate_pdf(
         map_image,
@@ -70,7 +69,6 @@ def test_generate_pdf(
         paper_format,
         1283.129,
         layer,
-        aruco,
     )
     assert isinstance(sketch_map, BytesIO)
     assert isinstance(sketch_map_template, BytesIO)
@@ -85,7 +83,6 @@ def test_generate_pdf_sketch_map_approval(
     qr_code_approval,
     paper_format,
     orientation,  # pyright: ignore reportUnusedVariable
-    aruco,
 ) -> None:
     sketch_map, _ = generate_pdf(
         map_image,
@@ -93,7 +90,6 @@ def test_generate_pdf_sketch_map_approval(
         paper_format,
         1283.129,
         Layer("osm"),
-        aruco,
     )
     # NOTE: The resulting PDFs across multiple test runs have slight non-visual
     # differences leading to a failure when using `verify_binary` on the PDFs.
@@ -127,10 +123,9 @@ def test_generate_pdf_sketch_map_template_approval(
     qr_code_approval,
     paper_format: PaperFormat,
     orientation,  # pyright: ignore reportUnusedVariable
-    aruco,
 ) -> None:
     _, sketch_map_template = generate_pdf(
-        map_image, qr_code_approval, paper_format, 1283.129, Layer("osm"), aruco
+        map_image, qr_code_approval, paper_format, 1283.129, Layer("osm")
     )
     # fmt: off
     options = (

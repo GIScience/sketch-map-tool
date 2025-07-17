@@ -195,7 +195,7 @@ def format_() -> PaperFormat:
         font_size=8,
         qr_scale=0.6,
         compass_scale=0.25,
-        globe_scale=0.125,
+        marker_scale=0.125,
         scale_height=1,
         scale_relative_xy=(-15, -30),
         scale_background_params=(-15, -30, 30, 60),

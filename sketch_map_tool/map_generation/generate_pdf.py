@@ -7,7 +7,6 @@ from typing import Tuple
 import cv2
 import fitz
 from PIL import Image
-from reportlab.graphics import renderPDF
 from reportlab.graphics.shapes import Drawing
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
@@ -31,7 +30,6 @@ def generate_pdf(
     format_: PaperFormat,
     scale: float,
     layer: Layer,
-    aruco: bool = False,
 ) -> Tuple[BytesIO, BytesIO]:
     """
     Generate a sketch map pdf, i.e. a PDF containing the given map image
@@ -80,7 +78,6 @@ def generate_pdf(
     # calculate m per px in map frame
     cm_per_px = frame_width * scale / map_width_px
     m_per_px = cm_per_px / 100
-    # create map_image by adding globes
     map_img = create_map_frame(
         map_image_reportlab,
         format_,
@@ -89,7 +86,6 @@ def generate_pdf(
         portrait,
         m_per_px,
         img_format,
-        aruco,
     )
 
     map_pdf = BytesIO()
@@ -251,13 +247,12 @@ def create_map_frame(
     portrait: bool,
     m_per_px: float,
     img_format: str,
-    aruco: bool = False,
 ) -> BytesIO:
     map_frame = BytesIO()
     canvas = Canvas(map_frame)
     canvas.setPageSize(landscape((height, width)))
 
-    globe_size = width / 37
+    marker_size = width / 37
     if portrait:
         canvas.rotate(90)
         canvas.drawImage(
@@ -269,11 +264,8 @@ def create_map_frame(
             height=height,
         )
         canvas.rotate(-90)
-        if aruco:
-            draw_markers(canvas, globe_size, height=width, width=height)
-        else:
-            draw_globes(canvas, globe_size, height=width, width=height)
-        add_scalebar(canvas, height, width, m_per_px, format_, globe_size)
+        draw_markers(canvas, marker_size, height=width, width=height)
+        add_scalebar(canvas, height, width, m_per_px, format_, marker_size)
     else:
         canvas.drawImage(
             map_image,
@@ -283,63 +275,12 @@ def create_map_frame(
             width=width,
             height=height,
         )
-        if aruco:
-            draw_markers(canvas, globe_size, height, width)
-        else:
-            draw_globes(canvas, globe_size, height, width)
-        add_scalebar(canvas, width, height, m_per_px, format_, globe_size)
+        draw_markers(canvas, marker_size, height, width)
+        add_scalebar(canvas, width, height, m_per_px, format_, marker_size)
 
     canvas.save()
     map_frame.seek(0)
     return pdf_page_to_img(map_frame, img_format=img_format)
-
-
-def draw_globes(canvas: Canvas, size: float, height: float, width: float):
-    globe_1, globe_2, globe_3, globe_4 = get_globes(size)
-
-    h = height - size
-    w = width - size
-
-    globes = [
-        # corner
-        globe_1,
-        globe_3,
-        globe_4,
-        globe_2,
-        # middle
-        globe_2,
-        globe_1,
-        globe_3,
-        globe_4,
-    ]
-    positions = [
-        # corner globes
-        # bottom left
-        (0, 0),
-        # top left
-        (0, h),
-        # top right
-        (w, h),
-        # bottom right
-        (w, 0),
-        # middle globes
-        (0, h / 2),
-        (w / 2, h),
-        (w, h / 2),
-        (w / 2, 0),
-    ]
-    for globe, (x, y) in zip(globes, positions):
-        renderPDF.draw(globe, canvas, x, y)
-
-
-def get_globes(expected_size) -> Tuple[Drawing, ...]:
-    """Read globe as SVG from disk, convert to RLG and scale it."""
-    globes = []
-    for i in range(1, 5):
-        globe = svg2rlg(PDF_RESOURCES_PATH / "globe_{0}.svg".format(i))
-        globe = resize_rlg_by_width(globe, expected_size)
-        globes.append(globe)
-    return tuple(globes)
 
 
 def draw_markers(canvas: Canvas, size: float, height: float, width: float):
@@ -347,7 +288,7 @@ def draw_markers(canvas: Canvas, size: float, height: float, width: float):
 
     # 5 is to account for map frame border
     positions = [
-        # corner globes
+        # corner markers
         # bottom left
         (5, 5),
         # top left
@@ -356,7 +297,7 @@ def draw_markers(canvas: Canvas, size: float, height: float, width: float):
         (width - size - 5, height - size - 5),
         # bottom right
         (width - size - 5, 5),
-        # middle globes
+        # middle markers
         (0, ((height - 5) / 2 - size / 2)),
         ((width - 5) / 2 - size / 2, (height - size - 5)),
         (width - size - 5, (height - 5) / 2 - size),
@@ -406,7 +347,7 @@ def add_scalebar(
             corresponding_meters - corresponding_meters % 10 + 10
         )  # Round up to the next 10m
     scale_bar_length = round(corresponding_meters / m_per_px)
-    # move to the left so that aruco markers or globes are not overlayed
+    # move to the left so that aruco markers are not overlayed
     scale_bar_x = (
         width + paper_format.scale_relative_xy[0] - scale_bar_length - (2 * marker_size)
     )
