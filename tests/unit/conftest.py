@@ -202,6 +202,19 @@ def mock_async_result_success(monkeypatch):
     mock.ready.return_value = True
     mock.failed.return_value = False
     mock.successful.return_value = True
+    mock.get.side_effect = lambda propagate=True: ["", "", BytesIO(), BytesIO(), []]
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    return mock
+
+
+@pytest.fixture()
+def mock_async_result_success_sketch_map(monkeypatch):
+    mock = Mock(spec=AsyncResult)
+    mock.status = "SUCCESS"
+    mock.ready.return_value = True
+    mock.failed.return_value = False
+    mock.successful.return_value = True
+    mock.get.side_effect = lambda *_: BytesIO()
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
     return mock
 
@@ -213,6 +226,8 @@ def mock_async_result_started(monkeypatch):
     mock.ready.return_value = False
     mock.failed.return_value = False
     mock.successful.return_value = False
+    mock.results = ["", "", BytesIO(), BytesIO(), []]
+    mock.get.side_effect = lambda propagate=True: ["", "", BytesIO(), BytesIO(), []]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
     return mock
 
@@ -220,12 +235,19 @@ def mock_async_result_started(monkeypatch):
 @pytest.fixture
 def mock_async_result_failure(monkeypatch):
     """Mock task result wich failed w/ expected error"""
+
+    def get(propagate=True):
+        if propagate:
+            raise QRCodeError("Mock error")
+        else:
+            return ["", "", BytesIO(), BytesIO(), []]
+
     mock = Mock(spec=AsyncResult)
     mock.status = "FAILURE"
     mock.ready.return_value = True
     mock.failed.return_value = True
     mock.successful.return_value = False
-    mock.get.side_effect = QRCodeError("Mock error")
+    mock.get.side_effect = get
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
     return mock
 
@@ -249,7 +271,7 @@ def mock_group_result_success(mock_async_result_success, monkeypatch):
     mock.ready.return_value = True
     mock.failed.return_value = False
     mock.successful.return_value = True
-    mock.get.return_value = [[Mock()]]
+    mock.get.return_value = [["", "", BytesIO(), BytesIO(), []]]
     mock.results = [mock_async_result_success]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
     return mock
@@ -273,7 +295,7 @@ def mock_group_result_failure(mock_async_result_failure, monkeypatch):
     mock.failed.return_value = True
     mock.successful.return_value = False
     mock.results = [mock_async_result_failure]
-    mock.get.side_effect = mock_async_result_failure.get
+    mock.get.side_effect = lambda propagate: [mock_async_result_failure.get(propagate)]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
 
 
@@ -285,6 +307,9 @@ def mock_group_result_failure_hard(mock_async_result_failure_hard, monkeypatch):
     mock.successful.return_value = False
     mock.results = [mock_async_result_failure_hard]
     mock.get.side_effect = mock_async_result_failure_hard.get
+    mock.get.side_effect = lambda propagate: [
+        mock_async_result_failure_hard.get(propagate)
+    ]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
 
 
@@ -304,7 +329,7 @@ def mock_group_result_started_success_failure(
         mock_async_result_success,
         mock_async_result_failure,
     ]
-    mock.get.side_effect = mock_async_result_failure.get
+    mock.get.side_effect = lambda propagate: [mock_async_result_failure.get(propagate)]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
 
 
@@ -322,5 +347,5 @@ def mock_group_result_success_failure(
         mock_async_result_success,
         mock_async_result_failure,
     ]
-    mock.get.side_effect = mock_async_result_failure.get
+    mock.get.side_effect = lambda propagate: [mock_async_result_failure.get(propagate)]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
