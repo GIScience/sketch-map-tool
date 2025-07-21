@@ -275,7 +275,7 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
 
     href = ""
     info = ""
-    errors: list = extract_errors(async_result)
+    errors: list = extract_errors(async_result, type_)
     if async_result.ready():
         if async_result.successful():  # SUCCESS
             status = "SUCCESS"
@@ -352,7 +352,7 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             download_name = type_ + ".zip"
             if isinstance(async_result, GroupResult):
                 results = async_result.get(propagate=False)
-                raster_results = [r[:-1] for r in results]
+                raster_results = [r[:-2] for r in results]
                 file: BytesIO = zip_(raster_results)
             else:
                 # support legacy results
@@ -363,7 +363,7 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             download_name = type_ + ".geojson"
             if isinstance(async_result, GroupResult):
                 results = async_result.get(propagate=False)
-                vector_results = [r[-1] for r in results]
+                vector_results = [r[-2] for r in results]
                 raw = geojson.dumps(merge(vector_results))
                 file: BytesIO = BytesIO(raw.encode("utf-8"))
             else:

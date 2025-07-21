@@ -1,5 +1,6 @@
 from io import BytesIO
 from pathlib import Path
+from typing import assert_never
 from zipfile import ZipFile
 
 import cv2
@@ -70,24 +71,31 @@ def zip_(results: list[tuple[str, str, BytesIO]]) -> BytesIO:
     return buffer
 
 
-def extract_errors(async_result: AsyncResult | GroupResult) -> list[str]:
+def extract_errors(
+    async_result: AsyncResult | GroupResult,
+    type_,
+) -> list[str]:
     """Extract known/custom exceptions propagated by a Celery task or group.
 
-    raises: Exception if error is not a custom exception.
+    raises: Re-raises exception if error is not a custom exception.
     """
     if isinstance(async_result, AsyncResult):
         results = [async_result]
     elif isinstance(async_result, GroupResult):
         results = async_result.results
     else:
-        raise TypeError()
+        assert_never()
     errors = []
     for r in results:  # type: ignore
-        try:
-            if r.ready():
+        if r.ready():
+            try:
                 r.get(propagate=True)
-        except TranslatableError as error:
-            errors.append(error.translate())
-        except Exception as error:
-            raise error
+            except TranslatableError as error:
+                errors.append(error.translate())
+            except Exception as error:
+                raise error
+            if type_ in ("vector-results"):
+                _, _, _, _, errors_ = r.get(propagate=False)
+                if len(errors_) > 0:
+                    errors = errors + [e.translate() for e in errors_]
     return errors

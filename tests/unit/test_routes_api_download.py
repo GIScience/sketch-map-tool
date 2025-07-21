@@ -1,11 +1,9 @@
 from io import BytesIO
-from unittest.mock import Mock
 
 import pytest
-from celery.result import GroupResult
 
 
-@pytest.mark.usefixtures("mock_async_result_success")
+@pytest.mark.usefixtures("mock_async_result_success_sketch_map")
 def test_download_success(client, uuid):
     resp = client.get("/api/download/{0}/sketch-map".format(uuid))
     assert resp.status_code == 200
@@ -66,8 +64,7 @@ def test_group_success_failure(
     client,
     uuid,
     type_,
-    mock_async_result_success,
-    mock_async_result_failure,
+    mock_group_result_success_failure,
     monkeypatch,
 ):
     monkeypatch.setattr(
@@ -78,17 +75,6 @@ def test_group_success_failure(
         "sketch_map_tool.routes.zip_",
         lambda *_: BytesIO(),
     )
-
-    mock = Mock(spec=GroupResult)
-    mock.ready.return_value = True
-    mock.failed.return_value = True
-    mock.successful.return_value = False
-    mock.results = [
-        mock_async_result_success,
-        mock_async_result_failure,
-    ]
-    mock.get.return_value = [[mock_async_result_success.get]]
-    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
 
     resp = client.get("/api/download/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 200

@@ -171,21 +171,42 @@ def upload_processing(
     map_frame: NDArray,
     layer: Layer,
     bbox: Bbox,
-) -> AsyncResult | tuple[str, str, BytesIO, FeatureCollection]:
+) -> (
+    AsyncResult
+    | tuple[
+        str,
+        str,
+        BytesIO,
+        FeatureCollection,
+        list,
+    ]
+):
     """Georeference and digitize given sketch map."""
+    errors = []
     sketch_map_uploaded = db_client_celery.select_file(file_id)
     sketch_map_frame = clip(to_array(sketch_map_uploaded), map_frame)
     sketch_map_frame_georeferenced = georeference(sketch_map_frame, bbox)
-    sketches = digitize_sketches(
-        file_id,
-        file_name,
-        map_frame,
-        sketch_map_frame,
-        layer,
-        bbox,
-    )
+    try:
+        sketches = digitize_sketches(
+            file_id,
+            file_name,
+            map_frame,
+            sketch_map_frame,
+            layer,
+            bbox,
+        )
+    except MarkingDetectionError as error:
+        sketches = FeatureCollection(features=[])
+        errors.append(error)
+
     attribution = get_attribution(layer)
-    return file_name, attribution, sketch_map_frame_georeferenced, sketches
+    return (
+        file_name,
+        attribution,
+        sketch_map_frame_georeferenced,
+        sketches,
+        errors,
+    )
 
 
 @celery.task(ignore_result=True)

@@ -362,9 +362,9 @@ def uuid_digitize(
     path_raster = dir / "raster.zip"
     path_vector = dir / "vector.geojson"
     with open(path_vector, "w") as file:
-        file.write(json.dumps(merge(r[-1] for r in result)))
+        file.write(json.dumps(merge(r[-2] for r in result)))
     with open(path_raster, "wb") as file:
-        r = zip_([r[:-1] for r in result])
+        r = zip_([r[:-2] for r in result])
         file.write(r.getbuffer())
     return uuid
 
