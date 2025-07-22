@@ -10,58 +10,46 @@
 
 {% block body %}
 <main class="container">
-    <h2>{{ _('Case Studies') }}</h2>
+    <h1>{{ _('Case Studies') }}</h1>
 
-    <p>{{ _('The Sketch Map Tool is used worldwide and in lots of different settings. Each of the following case studies
-     explores one project in details from the initial motivation to use the Sketch Map Tool to specific results and
-     possible impacts. So, get inspired by other projects and their ideas for using and analysing Sketch Maps, as well as the lessons they have learnt.') }}</p>
+    <p>{{ _('The Sketch Map Tool is used all around the world in many different situations. Each of the case studies explores one project in detail.') }}</p>
 
     <div class="grid">
         <div class="card">
-            <img src="/static/assets/images/case-study-cultural-landmarks/banner.png" alt="Banner image for the case study">
-            <h3>{{ _('Participatory Mapping for Cultural Landmarks') }}</h3>
-            <p>{{ _('The Sketch Map Tool was used as part of his PhD research on the changing territory around
-                an artiﬁcial dam in a rural area in southern Italy. The research aimed to identify signiﬁcant landmarks
-                and provide decision-makers with geographical data to develop cultural, environmental, and touristic
-                initiatives.') }} </p>
-            <p>
-                {{ _('Learn more') }}
-                (<a href="../en/case-studies/cultural-landmarks">{{ _('english') }}</a>)
-            </p>
-            <footer># anticipatory action, flood events</footer>
+            <img src="/static/assets/images/case-studies/cultural-landmarks.png" alt="Banner image for the case study">
+            <h2>{{ _('Participatory Mapping for Cultural Landmarks') }}</h2>
+            <p>{{ _('The Sketch Map Tool was used as part of a PhD research to study the local community´s perception of the changing territory around an artificial dam in a rural area in southern Italy.') }} </p>
+            <p><a href="/static/case-studies/participatory-mapping-for-cultural-landmarks.pdf">{{ _('Learn more (en).') }}</a></p>
+            <footer># cultural landmarks, social perception</footer>
         </div>
 
         <div class="card">
-            <img src="/static/assets/images/case-study-timor-leste/banner.jpg" alt="Banner image for the case study">
-            <h3>{{ _('Participatory Mapping in Timor Leste') }}</h3>
-            <p>{{ _('The Anticipatory Action team conducted a pilot project in Timor Leste to implement
-                anticipatory mapping using OpenStreetMap (OSM). This project aimed to address the lack of baseline data
-                necessary for planning effective anticipatory actions in the region.') }}
-                </p>
-            <p>
-                {{ _('Learn more') }}
-                (<a href="../en/case-studies/timor-leste">{{ _('english') }}</a>)
-            </p>
-            <footer> # cultural landmarks, social perception</footer>
+            <img src="/static/assets/images/case-studies/timor-leste.jpg" alt="Banner image for the case study">
+            <h2>{{ _('Participatory Mapping in Timor Leste') }}</h2>
+            <p>{{ _('The Anticipatory Action team of RCCC (Red Cross and Red Crescent Movement) conducted a pilot project in Timor Leste to implement anticipatory mapping using OpenStreetMap.') }}</p>
+            <p><a href="/static/case-studies/participatory-mapping-in-timor-leste.pdf">{{ _('Learn more (en).') }}</a></p>
+            <footer> # anticipatory action, flood events</footer>
         </div>
 
         <div class="card">
             <img src="https://preparecenter.org/wp-content/uploads/2024/03/IMG_2178.jpg" alt="Banner image for the case study">
-            <h3>{{ _('Digitalizing Paper-Based Community mapping in the EVCA') }}</h3>
-            <p>{{ _('Community mapping in paper-based formats is low-cost, technology-independent, that is
-                easily facilitated, and adopted at the community level. However, the output can be less sustainable
-                compared to digital map products. Learn more in') }}
-                </p>
-            <p>
-                {{ _('Learn more') }}
-                (<a href="https://preparecenter.org/resource/digitalizing-paper-based-community-mapping-in-the-evca/">{{ _('english') }}</a>)
-            </p>
+            <h2>{{ _('Digitalizing Paper-Based Community mapping in the EVCA') }}</h2>
+            <p>{{ _('Together with the Colombian Red Cross the usage of the Sketch Map Tool in EVCA (Enhanced Vulnerability and Capacity Assessments) and the benefits of digitization of paper-based community mapping was explored.') }}</p>
+            <p><a href="https://preparecenter.org/resource/digitalizing-paper-based-community-mapping-in-the-evca/">{{ _('Learn more (en).') }}</a></p>
             <footer># transect walks, flood events</footer>
+        </div>
+
+        <div class="card">
+            <img src="/static/assets/images/case-studies/heat-perception.jpg" alt="Banner image for the case study">
+            <h2>{{ _('Heat Perception of Heidelberg Residents') }}</h2>
+            <p>{{ _('In a seminar on GIS for Disaster Risk Reduction at Heidelberg University, Geography students explored local perceptions of urban heat using the Sketch Map Tool and KoboToolbox for participatory mapping') }}</p>
+            <p><a href="/static/case-studies/heat-perception-of-heidelberg-residents.pdf">{{ _('Learn more (en).') }}</a></p>
+            <footer># heat perception, kobo-toolbox</footer>
         </div>
     </div>
 <br>
 <p>
-{{ _('We are working on adding more use case studies. What is your use case? Please get in touch if you are interested in sharing your use case with us: ') }}
+{{ _("We're looking to add more real-life use cases. Do you use the Sketch Map Tool? We'd love to hear your story! Please get in touch with us:") }}
 <a href="mailto:sketch-map-tool@heigit.org">sketch-map-tool@heigit.org</a>
 </p>
 </main>

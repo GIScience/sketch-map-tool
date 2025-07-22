@@ -22,16 +22,13 @@
   display: block;
 }
 
-.card h3 {
+.card h2 {
   margin: 0.5rem;
   margin-bottom: 1rem;
 }
 
 .card p {
   margin-inline: 0.5rem;
-}
-.card p:last-of-type {
-  margin-bottom: 0.5rem;
 }
 
 .card footer {

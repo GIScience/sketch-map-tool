@@ -68,34 +68,6 @@ def case_studies(lang="en") -> str:
     return render_template("case-studies.html", lang=lang)
 
 
-@app.get("/case-studies/cultural-landmarks")
-@app.get("/<lang>/case-studies/cultural-landmarks")
-def case_study_cultural_landmarks(lang="en") -> str:
-    return render_template("case-study-cultural-landmarks.html", lang=lang)
-
-
-@app.get("/case-studies/cultural-landmarks-pdf")
-@app.get("/<lang>/case-studies/cultural-landmarks-pdf")
-def case_study_cultural_landmarks_pdf(lang="en") -> Response:  # pyright: ignore
-    dir = Path(config.get_config_value("data-dir")) / "case-studies"
-    name = "participatory-mapping-for-cultural-landmarks.pdf"
-    return send_from_directory(dir, name, as_attachment=True)
-
-
-@app.get("/case-studies/timor-leste")
-@app.get("/<lang>/case-studies/timor-leste")
-def case_study_timor_leste(lang="en") -> str:
-    return render_template("case-study-timor-leste.html", lang=lang)
-
-
-@app.get("/case-studies/timor-leste-pdf")
-@app.get("/<lang>/case-studies/timor-leste-pdf")
-def case_study_timor_leste_pdf(lang="en") -> Response:  # pyright: ignore
-    dir = Path(config.get_config_value("data-dir")) / "case-studies"
-    name = "participatory-mapping-in-timor-leste.pdf"
-    return send_from_directory(dir, name, as_attachment=True)
-
-
 @app.get("/weights/SMT-OSM.pt")
 @app.get("/<lang>/weights/SMT-OSM.pt")
 def weights_smt_osm(lang="en") -> Response:  # pyright: ignore
