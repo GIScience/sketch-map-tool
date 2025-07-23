@@ -1,6 +1,18 @@
 .grid {
+  display: grid;
+  grid-template-columns: repeat(
+    var(--grid-placement, auto-fill),
+    minmax(var(--grid-min-item-size, 16rem), 1fr)
+  );
+  /* gap: 1rem */
   row-gap: 1rem;
 }
+
+.grid[data-layout='thirds'] {
+  --grid-placement: auto-fit;
+  --grid-min-item-size: clamp(16rem, 33%, 20rem);
+}
+
 
 .card {
   display: flex;
