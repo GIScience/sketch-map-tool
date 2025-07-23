@@ -1,9 +1,51 @@
-@counter-style decimal-square-bracket {
-  system: extends decimal;
-  suffix: "] ";
-  prefix: "[";
+.grid {
+  /* Grid inspired by  */
+  /* https://piccalil.li/blog/a-handy-use-of-subgrid-to-enhance-a-simple-layout/ */
+  display: grid;
+  grid-template-columns: repeat(
+    var(--grid-placement, auto-fill),
+    minmax(var(--grid-min-item-size, 16rem), 1fr)
+  );
+  row-gap: 1rem;
 }
 
-.list-sources {
-  list-style: decimal-square-bracket;
+.grid[data-layout="thirds"] {
+  --grid-placement: auto-fit;
+  --grid-min-item-size: clamp(16rem, 33%, 20rem);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: box-shadow 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+}
+
+.card img {
+  width: 100%;
+  height: 25vh;
+  object-fit: cover;
+  display: block;
+}
+
+.card h2 {
+  margin: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.card p {
+  margin-inline: 0.5rem;
+}
+
+.card footer {
+  font-style: italic;
+  margin-top: auto;
+  bottom: 0;
+  padding-bottom: 0.5rem;
 }
