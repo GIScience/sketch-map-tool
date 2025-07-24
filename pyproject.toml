@@ -1,6 +1,6 @@
 [project]
 name = "sketch_map_tool"
-version = "2025.7.24.2"
+version = "2025.7.24.3"
 description = ""
 authors = [{email = "HeiGIT <info@heigit.org>"}]
 readme = "README.md"
