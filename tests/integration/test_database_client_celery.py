@@ -90,9 +90,7 @@ def test_write_map_frame(
     layer,
 ):
     uuid = uuid4()
-    client_celery.insert_map_frame(
-        map_frame, uuid, bbox, format_, orientation, layer, aruco=False
-    )
+    client_celery.insert_map_frame(map_frame, uuid, bbox, format_, orientation, layer)
     with flask_app.app_context():
         file = client_flask.select_map_frame(uuid)
         assert isinstance(file, bytes)

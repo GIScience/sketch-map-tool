@@ -39,7 +39,6 @@ def insert_map_frame(
     format_: PaperFormat,
     orientation: str,
     layer: Layer,
-    aruco: bool,
 ):
     """Insert map frame alongside map generation parameters into the database.
 
@@ -84,7 +83,7 @@ def insert_map_frame(
             %s,
             %s,
             %s,
-            %s,
+            True,
             %s)
     """
     with db_conn.cursor() as curs:
@@ -100,7 +99,6 @@ def insert_map_frame(
                 str(format_),
                 orientation,
                 layer,
-                aruco,
                 __version__,
             ),
         )

@@ -14,7 +14,6 @@ def test_generate_sketch_map(
     size,
     scale,
     layer,
-    aruco,
 ):
     monkeypatch.setattr(
         "sketch_map_tool.tasks.db_client_celery.insert_map_frame",
@@ -27,6 +26,5 @@ def test_generate_sketch_map(
         size,
         scale,
         layer,
-        aruco,
     )
     assert isinstance(map_pdf, BytesIO)

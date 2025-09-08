@@ -96,16 +96,9 @@ def weights_smt_cls(lang="en") -> Response:  # pyright: ignore
 @app.get("/<lang>/create")
 def create(lang="en") -> str:
     """Serve forms for creating a sketch map"""
-    # feature flag for enabling aruco markers
-    if request.args.get("aruco") is None:
-        aruco = False
-    else:
-        aruco = True
-
     return render_template(
         "create.html",
         lang=lang,
-        aruco=aruco,
         esri_api_key=config.get_config_value("esri-api-key"),
     )
 
@@ -122,16 +115,9 @@ def create_results_post(lang="en") -> Response:
     size = Size(**(json.loads(request.form["size"])))
     scale = float(request.form["scale"])
     layer = Layer(request.form["layer"].replace(":", "-").replace("_", "-").lower())
-
-    # Feature flag for enabling aruco markers
-    if request.args.get("aruco") is None:
-        aruco = False
-    else:
-        aruco = True
-
     # Tasks
     task_sketch_map = tasks.generate_sketch_map.apply_async(
-        args=(bbox, format_, orientation, size, scale, layer, aruco)
+        args=(bbox, format_, orientation, size, scale, layer)
     )
     return redirect(
         url_for(
