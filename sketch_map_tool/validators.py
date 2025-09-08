@@ -7,7 +7,7 @@ from werkzeug.datastructures import FileStorage
 
 from sketch_map_tool import get_config_value
 from sketch_map_tool.definitions import REQUEST_TYPES
-from sketch_map_tool.exceptions import UploadLimitsExceededError, ValueError
+from sketch_map_tool.exceptions import UploadLimitsExceededError, ValidationError
 from sketch_map_tool.helpers import N_
 from sketch_map_tool.models import Bbox, LiteratureReference
 
@@ -15,7 +15,7 @@ from sketch_map_tool.models import Bbox, LiteratureReference
 def validate_type(type_: REQUEST_TYPES):
     """Validate result type values for API parameter `type_`"""
     if type_ not in list(get_args(REQUEST_TYPES)):
-        raise ValueError(
+        raise ValidationError(
             N_(
                 "{TYPE} is not a valid value for the request parameter 'type'. "
                 "Allowed values are: {REQUEST_TYPES}"
@@ -55,8 +55,8 @@ def validate_uuid(uuid: str):
     """validation function for endpoint parameter <uuid>"""
     try:
         _ = UUID(uuid, version=4)
-    except ValueError as error:
-        raise ValueError(
+    except ValidationError as error:
+        raise ValidationError(
             N_("The provided URL does not contain a valid UUID")
         ) from error
 
@@ -65,10 +65,10 @@ def validate_bbox(bbox: str):
     """validation function for endpoint parameter <bbox>"""
     try:
         if not isinstance(bbox, str):
-            raise ValueError
+            raise ValidationError
         _ = Bbox(*[float(coordinate) for coordinate in bbox.split(",")])
-    except (ValueError, TypeError) as error:
-        raise ValueError(
+    except (ValidationError, TypeError) as error:
+        raise ValidationError(
             N_("The provided URL does not contain a valid bounding box")
         ) from error
 
@@ -76,21 +76,21 @@ def validate_bbox(bbox: str):
 def validate_literature_reference(literature_reference: LiteratureReference):
     """Validate literature reference to not include empty strings."""
     if literature_reference.citation == "":
-        raise ValueError(
+        raise ValidationError(
             N_(
                 "Literature reference JSON fields should "
                 "not contain empty strings as values."
             )
         )
     if literature_reference.img_src == "":
-        raise ValueError(
+        raise ValidationError(
             N_(
                 "Literature reference JSON fields should "
                 "not contain empty strings as values."
             )
         )
     if literature_reference.url == "":
-        raise ValueError(
+        raise ValidationError(
             N_(
                 "Literature reference JSON fields should "
                 "not contain empty strings as values."

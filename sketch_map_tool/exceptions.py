@@ -41,7 +41,7 @@ class TranslatableError(Exception):
         return self._repr(translate=True)
 
 
-class ValueError(ValueError, TranslatableError):
+class ValidationError(ValueError, TranslatableError):
     pass
 
 
