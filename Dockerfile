@@ -1,13 +1,15 @@
 # build node app
 FROM node:16-slim AS node-builder
 
+WORKDIR app
 # install JS dependencies
 COPY package.json package.json
+COPY package-lock.json package-lock.json
 COPY esbuild.js esbuild.js
 COPY client-src/ client-src/
 
 RUN npm install
-RUN mkdir -p /sketch_map_tool/static/bundles
+RUN mkdir -p sketch_map_tool/static/bundles
 RUN npm run build
 
 
@@ -81,5 +83,5 @@ COPY --from=python-builder --chown=smt:smt $VIRTUAL_ENV $VIRTUAL_ENV
 COPY --from=python-builder --chown=smt:smt /app/sketch_map_tool sketch_map_tool
 COPY --from=python-builder --chown=smt:smt /app/data data
 COPY --from=python-builder --chown=smt:smt /app/config config
-COPY --from=node-builder --chown=smt:smt /sketch_map_tool/static/bundles sketch_map_tool/static/bundles
+COPY --from=node-builder --chown=smt:smt /app/sketch_map_tool/static/bundles sketch_map_tool/static/bundles
 # use entry-points defined in docker-compose file
