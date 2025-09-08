@@ -28,7 +28,14 @@ from sketch_map_tool.exceptions import (
     UploadLimitsExceededError,
     UUIDNotFoundError,
 )
-from sketch_map_tool.helpers import N_, extract_errors, merge, to_array, zip_
+from sketch_map_tool.helpers import (
+    N_,
+    extract_centroids,
+    extract_errors,
+    merge,
+    to_array,
+    zip_,
+)
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
 from sketch_map_tool.tasks import (
     cleanup_blobs,
@@ -237,7 +244,7 @@ def get_async_result(uuid: str, type_: REQUEST_TYPES) -> AsyncResult | GroupResu
     """Get Celery `AsyncResult` or restore `GroupResult` for given Celery UUID."""
     if type_ == "sketch-map":
         async_result = celery_app.AsyncResult(uuid)
-    elif type_ in ("vector-results", "raster-results"):
+    elif type_ in ("vector-results", "centroid-results", "raster-results"):
         async_result = celery_app.GroupResult.restore(uuid)
     else:
         raise TypeError()
@@ -343,13 +350,15 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             else:
                 # support legacy results
                 file: BytesIO = async_result.get()
-        case "vector-results":
+        case "vector-results" | "centroid-results":
             db_client_flask.update_files_download_vector(uuid)
             mimetype = "application/geo+json"
             download_name = type_ + ".geojson"
             if isinstance(async_result, GroupResult):
                 results = async_result.get(propagate=False)
                 vector_results = [r[-2] for r in results]
+                if type_ == "centroid-results":
+                    vector_results = [extract_centroids(fc) for fc in vector_results]
                 raw = geojson.dumps(merge(vector_results))
                 file: BytesIO = BytesIO(raw.encode("utf-8"))
             else:
