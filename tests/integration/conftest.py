@@ -11,8 +11,9 @@ from PIL import Image, ImageOps
 from testcontainers.postgres import PostgresContainer
 from testcontainers.redis import RedisContainer
 
-from sketch_map_tool import CELERY_CONFIG, get_locale, make_flask, routes
+from sketch_map_tool import CELERY_CONFIG, get_locale
 from sketch_map_tool import celery_app as smt_celery_app
+from sketch_map_tool import flask_app as smt_flask_app
 from sketch_map_tool.config import DEFAULT_CONFIG
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.helpers import merge, to_array, zip_
@@ -96,69 +97,9 @@ def celery_worker(celery_session_worker):
 
 @pytest.fixture(scope="session")
 def flask_app():
-    app = make_flask()
-    app.config.update(
-        {
-            "TESTING": True,
-        }
-    )
-    # Register routes to be tested:
-    app.add_url_rule(
-        "/create/results",
-        view_func=routes.create_results_post,
-        methods=["POST"],
-    )
-    app.add_url_rule(
-        "/create/results",
-        view_func=routes.create_results_get,
-        methods=["GET"],
-    )
-    app.add_url_rule(
-        "/create/results/<uuid>",
-        view_func=routes.create_results_get,
-        methods=["GET"],
-    )
-    app.add_url_rule(
-        "/create/results/<uuid>/<bbox>",
-        view_func=routes.create_results_get,
-        methods=["GET"],
-    )
-    app.add_url_rule(
-        "/digitize/results",
-        view_func=routes.digitize_results_post,
-        methods=["POST"],
-    )
-    app.add_url_rule(
-        "/digitize/results",
-        view_func=routes.digitize_results_get,
-        methods=["get"],
-    )
-    app.add_url_rule(
-        "/digitize/results/<uuid>",
-        view_func=routes.digitize_results_get,
-        methods=["get"],
-    )
-    app.add_url_rule(
-        "/api/status/<uuid>/<type_>",
-        view_func=routes.status,
-        methods=["get"],
-    )
-    app.add_url_rule(
-        "/api/download/<uuid>/<type_>",
-        view_func=routes.download,
-        methods=["get"],
-    )
-    app.add_url_rule("/api/health", view_func=routes.health, methods=["GET"])
-    app.add_url_rule("/create", view_func=routes.create, methods=["GET"])
-    app.add_url_rule("/digitize", view_func=routes.digitize, methods=["GET"])
-    app.add_url_rule("/", view_func=routes.index, methods=["GET"])
-    app.add_url_rule("/about", view_func=routes.about, methods=["GET"])
-    app.add_url_rule("/help", view_func=routes.help, methods=["GET"])
-    app.add_url_rule("/case-studies", view_func=routes.case_studies, methods=["GET"])
-
-    Babel(app, locale_selector=get_locale)  # for translations
-
-    yield app
+    smt_flask_app.config.update({"TESTING": True})
+    Babel(smt_flask_app, locale_selector=get_locale)  # for translations
+    yield smt_flask_app
 
 
 @pytest.fixture(scope="session")
