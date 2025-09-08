@@ -31,17 +31,26 @@ def test_status_started(
     assert "errors" not in resp.json.keys()
 
 
+@pytest.mark.parametrize(
+    "lang",
+    [
+        ("", "QRCodeError: QR-Code could not be detected."),
+        ("/de", "QRCodeError: QR-Code konnte nicht erkannt werden."),
+        ("/en", "QRCodeError: QR-Code could not be detected."),
+    ],
+)
 def test_status_failure(
     client,
     uuid,
     mock_async_result_failure,
+    lang,
 ):
-    resp = client.get("/api/status/{0}/sketch-map".format(uuid))
+    resp = client.get("{0}/api/status/{1}/sketch-map".format(lang[0], uuid))
     assert resp.status_code == 422
     assert resp.json["id"] == uuid
     assert resp.json["type"] == "sketch-map"
     assert resp.json["status"] == "FAILURE"
-    assert resp.json["errors"] == ["QRCodeError: Mock error"]
+    assert resp.json["errors"] == [lang[1]]
     assert "href" not in resp.json.keys()
 
 
@@ -86,20 +95,23 @@ def test_group_status_started(
     assert resp.json["info"] == {"current": 0, "total": 1}
 
 
+@pytest.mark.parametrize(
+    "lang",
+    [
+        ("", "QRCodeError: QR-Code could not be detected."),
+        ("/de", "QRCodeError: QR-Code konnte nicht erkannt werden."),
+        ("/en", "QRCodeError: QR-Code could not be detected."),
+    ],
+)
 @pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
-def test_group_status_failure(
-    client,
-    uuid,
-    type_,
-    mock_group_result_failure,
-):
-    resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
+def test_group_status_failure(client, uuid, type_, mock_group_result_failure, lang):
+    resp = client.get("{0}/api/status/{1}/{2}".format(lang[0], uuid, type_))
     assert resp.status_code == 422
     assert resp.mimetype == "application/json"
     assert resp.json["id"] == uuid
     assert resp.json["type"] == type_
     assert resp.json["status"] == "FAILURE"
-    assert resp.json["errors"] == ["QRCodeError: Mock error"]
+    assert resp.json["errors"] == [lang[1]]
 
 
 @pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
@@ -113,36 +125,50 @@ def test_group_status_failure_hard(
     assert resp.status_code == 500
 
 
+@pytest.mark.parametrize(
+    "lang",
+    [
+        ("", "QRCodeError: QR-Code could not be detected."),
+        ("/de", "QRCodeError: QR-Code konnte nicht erkannt werden."),
+        ("/en", "QRCodeError: QR-Code could not be detected."),
+    ],
+)
 @pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
 def test_group_status_started_success_failure(
     client,
     uuid,
     type_,
     mock_group_result_started_success_failure,
+    lang,
 ):
-    resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
+    resp = client.get("{0}/api/status/{1}/{2}".format(lang[0], uuid, type_))
     assert resp.status_code == 202
     assert resp.mimetype == "application/json"
     assert resp.json["id"] == uuid
     assert resp.json["type"] == type_
     assert resp.json["status"] == "STARTED"
-    assert resp.json["errors"] == ["QRCodeError: Mock error"]
+    assert resp.json["errors"] == [lang[1]]
     assert resp.json["info"] == {"current": 2, "total": 3}
 
 
+@pytest.mark.parametrize(
+    "lang",
+    [
+        ("", "QRCodeError: QR-Code could not be detected."),
+        ("/de", "QRCodeError: QR-Code konnte nicht erkannt werden."),
+        ("/en", "QRCodeError: QR-Code could not be detected."),
+    ],
+)
 @pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
 def test_group_status_success_failure(
-    client,
-    uuid,
-    type_,
-    mock_group_result_success_failure,
+    client, uuid, type_, mock_group_result_success_failure, lang
 ):
-    resp = client.get("/api/status/{0}/{1}".format(uuid, type_))
+    resp = client.get("{0}/api/status/{1}/{2}".format(lang[0], uuid, type_))
     assert resp.status_code == 200
     assert resp.mimetype == "application/json"
     assert resp.json["id"] == uuid
     assert resp.json["type"] == type_
     assert resp.json["status"] == "SUCCESS"
-    assert resp.json["errors"] == ["QRCodeError: Mock error"]
+    assert resp.json["errors"] == [lang[1]]
     assert resp.json["href"] == "/api/download/{0}/{1}".format(uuid, type_)
     assert "info" not in resp.json.keys()

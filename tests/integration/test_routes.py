@@ -6,6 +6,7 @@ from uuid import UUID, uuid4
 
 import pytest
 from celery.result import AsyncResult, GroupResult
+from PIL import Image
 
 from sketch_map_tool import flask_app
 from sketch_map_tool.database import client_flask
@@ -66,16 +67,29 @@ def get_consent_flag_from_db(file_name: str) -> bool:
         return curs.fetchone()[0]
 
 
+@pytest.mark.parametrize(
+    "lang",
+    [
+        ("", "/en"),  # if not specified redirect to default (English)
+        ("/de", "/de"),
+        ("/en", "/en"),
+    ],
+)
 @patch("sketch_map_tool.routes.tasks.generate_sketch_map")
 @vcr_app.use_cassette
 def test_create_results_post(
     mock_generate_sketch_map,
     params,
     flask_client,
+    lang,
 ):
     mock_generate_sketch_map.apply_async().id = uuid4()
 
-    response = flask_client.post("/create/results", data=params, follow_redirects=True)
+    response = flask_client.post(
+        f"{lang[0]}/create/results",
+        data=params,
+        follow_redirects=True,
+    )
     assert response.status_code == 200
 
     # Extract UUID from response
@@ -83,17 +97,32 @@ def test_create_results_post(
     uuid = url_parts[-2]
     url_rest = "/".join(url_parts[:-2])
     assert UUID(uuid).version == 4
-    assert url_rest == "/create/results"
+    assert url_rest == f"{lang[1]}/create/results"
 
 
+@pytest.mark.parametrize(
+    "lang",
+    [
+        ("", "/en"),  # if not specified redirect to default (English)
+        ("/de", "/de"),
+        ("/en", "/en"),
+    ],
+)
 @patch("sketch_map_tool.routes.chord")
 @vcr_app.use_cassette
-def test_digitize_results_post(mock_chord, sketch_map_marked, flask_client):
+def test_digitize_results_post(mock_chord, sketch_map_marked, flask_client, lang):
     # mock chord/task execution in Celery
     mock_chord.return_value.apply_async.return_value.parent.id = uuid4()
     unique_file_name = str(uuid4())
-    data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
-    response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
+    data = {
+        "file": [(BytesIO(sketch_map_marked), unique_file_name)],
+        "consent": "True",
+    }
+    response = flask_client.post(
+        f"{lang[0]}/digitize/results",
+        data=data,
+        follow_redirects=True,
+    )
     assert response.status_code == 200
 
     # Extract UUID from response
@@ -101,9 +130,45 @@ def test_digitize_results_post(mock_chord, sketch_map_marked, flask_client):
     uuid = url_parts[-1]
     url_rest = "/".join(url_parts[:-1])
     assert UUID(uuid).version == 4
-    assert url_rest == "/digitize/results"
+    assert url_rest == f"{lang[1]}/digitize/results"
     with flask_app.app_context():
         assert get_consent_flag_from_db(unique_file_name) is True
+
+
+@pytest.mark.parametrize(
+    "lang",
+    [
+        ("", "QRCodeError: QR-Code could not be detected."),
+        ("/de", "QRCodeError: QR-Code konnte nicht erkannt werden."),
+        ("/en", "QRCodeError: QR-Code could not be detected."),
+    ],
+)
+@patch("sketch_map_tool.routes.chord")
+@vcr_app.use_cassette
+def test_digitize_results_post_qr_code_not_detected(
+    mock_chord,
+    flask_client,
+    tmp_path,
+    lang,
+):
+    # mock chord/task execution in Celery
+    mock_chord.return_value.apply_async.return_value.parent.id = uuid4()
+
+    white_image = Image.new("RGB", (200, 50), color=(255, 255, 255))
+    white_image.save(tmp_path / "white-image.png")
+    with open(tmp_path / "white-image.png", "rb") as f:
+        bytes_io = BytesIO(f.read())
+
+    data = {"file": [(bytes_io, "white-image.png")]}
+    response = flask_client.post(
+        f"{lang[0]}/digitize/results",
+        data=data,
+        follow_redirects=True,
+    )
+
+    assert response.status_code == 422
+    assert response.request.path.startswith(lang[0])  # redirected URL
+    assert lang[1] in response.text
 
 
 @patch("sketch_map_tool.routes.chord")
@@ -123,7 +188,7 @@ def test_digitize_results_post_no_consent(mock_chord, sketch_map_marked, flask_c
     uuid = url_parts[-1]
     url_rest = "/".join(url_parts[:-1])
     assert UUID(uuid).version == 4
-    assert url_rest == "/digitize/results"
+    assert url_rest == "/en/digitize/results"
     with flask_app.app_context():
         assert get_consent_flag_from_db(unique_file_name) is False
 
@@ -149,7 +214,7 @@ def test_digitize_results_legacy_2024_04_15(
     uuid = url_parts[-1]
     url_rest = "/".join(url_parts[:-1])
     assert UUID(uuid).version == 4
-    assert url_rest == "/digitize/results"
+    assert url_rest == "/en/digitize/results"
     with flask_app.app_context():
         assert get_consent_flag_from_db(unique_file_name) is True
 

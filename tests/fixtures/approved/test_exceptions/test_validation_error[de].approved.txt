@@ -1,0 +1,1 @@
+ValidationError: foo ist kein gültiger Wert für den Anfrageparameter 'type'. Erlaubte Werte sind: bar

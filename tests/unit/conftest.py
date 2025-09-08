@@ -233,7 +233,7 @@ def mock_async_result_failure(monkeypatch):
 
     def get(propagate=True):
         if propagate:
-            raise QRCodeError("Mock error")
+            raise QRCodeError("QR-Code could not be detected.")
         else:
             return ["", "", BytesIO(), BytesIO(), []]
 

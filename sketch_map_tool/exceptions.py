@@ -1,4 +1,4 @@
-from gettext import gettext
+from flask_babel import gettext
 
 
 class TranslatableError(Exception):
@@ -15,23 +15,24 @@ class TranslatableError(Exception):
         else:
             super().__init__(message, *args)
 
-    def __repr__(self):
-        return self._repr(translate=False)
-
     def _repr(self, translate: bool):
         if not self.args:
             return str(self.__class__.__name__)
-
-        if len(self.args) > 2:
-            raise ValueError("Unexpected arguments to " + str(self.__class__.__name__))
 
         if translate:
             message = gettext(self.args[0])
         else:
             message = self.args[0]
 
-        if len(self.args) == 2:
-            message = message.format(**self.args[1])
+        match len(self.args):
+            case 1:
+                pass
+            case 2:
+                message = message.format(**self.args[1])
+            case _:
+                raise ValueError(
+                    "Unexpected arguments to " + str(self.__class__.__name__)
+                )
 
         return "{class_}: {message}".format(
             class_=self.__class__.__name__, message=message
