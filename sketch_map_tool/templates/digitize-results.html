@@ -82,7 +82,11 @@
                        role="button"
                        disabled="disabled">{{ _('Download GeoJSON') }}</a>
                     <div id="vector-data-status" class="task-status"></div>
-
+                    <p>
+                      {{ _('Or download only the centroids') }}
+                      <a id="centroid-data-download-button" href="#" aria-busy="true" download class="disabled">{{ _('here') }}</a>
+                    </p>
+                    <span id="centroid-data-status" style="display: none;"></span>
                 </article>
             </div>
         </div>
