@@ -378,3 +378,13 @@ def handle_exception(error: TranslatableError):
 @app.errorhandler(UUIDNotFoundError)
 def handle_not_found_exception(error: TranslatableError):
     return render_template("error.html", error_msg=error.translate()), 404
+
+
+@app.errorhandler(Exception)
+def internal_server_error(_):
+    heading = "Internal Server Error"
+    message = N_("Oops... we seem to have made a mistake, sorry!")
+    return render_template(
+        "error.html",
+        error_msg=f"{heading}: {message}",
+    ), 500

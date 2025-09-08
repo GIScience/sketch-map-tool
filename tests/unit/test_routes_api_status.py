@@ -61,6 +61,8 @@ def test_status_failure_hard(
 ):
     resp = client.get("/api/status/{0}/sketch-map".format(uuid))
     assert resp.status_code == 500
+    assert "Internal Server Error" in resp.text
+    assert "Oops... we seem to have made a mistake, sorry!" in resp.text
 
 
 @pytest.mark.parametrize("type_", ("raster-results", "vector-results"))

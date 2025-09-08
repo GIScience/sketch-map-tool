@@ -5,11 +5,13 @@ import cv2
 import geojson
 import pytest
 from celery.result import AsyncResult, GroupResult
+from flask_babel import Babel
 from werkzeug.datastructures import FileStorage
 
+from sketch_map_tool import flask_app as smt_flask_app
+from sketch_map_tool import get_locale
 from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
-from sketch_map_tool.routes import app
 from tests import FIXTURE_DIR
 
 
@@ -29,8 +31,15 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture()
-def client():
-    return app.test_client()
+def flask_app():
+    smt_flask_app.config.update({"TESTING": True})
+    Babel(smt_flask_app, locale_selector=get_locale)  # for translations
+    yield smt_flask_app
+
+
+@pytest.fixture()
+def client(flask_app):
+    return flask_app.test_client()
 
 
 @pytest.fixture
@@ -250,12 +259,17 @@ def mock_async_result_failure(monkeypatch):
 @pytest.fixture
 def mock_async_result_failure_hard(monkeypatch):
     """Mock task result wich failed w/ unexpected error"""
+
+    def get(propagate: bool):
+        if propagate:
+            raise ValueError("Foo")
+
     mock = Mock(spec=AsyncResult)
     mock.status = "FAILURE"
     mock.ready.return_value = True
     mock.failed.return_value = True
     mock.successful.return_value = False
-    mock.get.side_effect = ValueError()
+    mock.get.side_effect = get
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
     return mock
 
