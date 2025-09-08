@@ -44,8 +44,9 @@ def validate_uploaded_sketchmaps(files: list[FileStorage]):
             raise UploadLimitsExceededError(
                 N_(
                     "You can only upload pictures up to a total pixel count of "
-                    "{0} pixels.".format(MAX_IMAGE_PIXELS)
+                    "{max_image_pixels} pixels."
                 ),
+                {"max_image_pixels": MAX_IMAGE_PIXELS},
             ) from error
         del img
         file.seek(0)
