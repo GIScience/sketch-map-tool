@@ -1,3 +1,4 @@
+from billiard.exceptions import TimeLimitExceeded
 from flask_babel import gettext
 
 
@@ -71,4 +72,8 @@ class CustomFileDoesNotExistAnymoreError(TranslatableError):
 
 
 class MarkingDetectionError(TranslatableError):
+    pass
+
+
+class TimeLimitExceededError(TranslatableError, TimeLimitExceeded):
     pass

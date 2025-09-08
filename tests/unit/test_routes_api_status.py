@@ -54,6 +54,27 @@ def test_status_failure(
     assert "href" not in resp.json.keys()
 
 
+def test_status_failure_time_limit_exceeded(
+    client,
+    uuid,
+    mock_async_result_failure_time_limit_exceeded,
+):
+    """Billiard/Celery exception should be wrapped for the user"""
+    resp = client.get("/api/status/{0}/sketch-map".format(uuid))
+    assert resp.status_code == 422
+    assert resp.json["id"] == uuid
+    assert resp.json["type"] == "sketch-map"
+    assert resp.json["status"] == "FAILURE"
+    assert resp.json["errors"] == [
+        (
+            "TimeLimitExceededError: We couldn’t process your submission because it "
+            "took too long. Please try again later. If the problem persists, reach out "
+            "to us: sketch-map-tool@heigit.org"
+        )
+    ]
+    assert "href" not in resp.json.keys()
+
+
 def test_status_failure_hard(
     client,
     uuid,

@@ -4,6 +4,7 @@ from unittest.mock import Mock
 import cv2
 import geojson
 import pytest
+from billiard.exceptions import TimeLimitExceeded
 from celery.result import AsyncResult, GroupResult
 from flask_babel import Babel
 from werkzeug.datastructures import FileStorage
@@ -243,6 +244,26 @@ def mock_async_result_failure(monkeypatch):
     def get(propagate=True):
         if propagate:
             raise QRCodeError("QR-Code could not be detected.")
+        else:
+            return ["", "", BytesIO(), BytesIO(), []]
+
+    mock = Mock(spec=AsyncResult)
+    mock.status = "FAILURE"
+    mock.ready.return_value = True
+    mock.failed.return_value = True
+    mock.successful.return_value = False
+    mock.get.side_effect = get
+    monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    return mock
+
+
+@pytest.fixture
+def mock_async_result_failure_time_limit_exceeded(monkeypatch):
+    """Mock task result wich failed w/ expected error"""
+
+    def get(propagate=True):
+        if propagate:
+            raise TimeLimitExceeded()
         else:
             return ["", "", BytesIO(), BytesIO(), []]
 

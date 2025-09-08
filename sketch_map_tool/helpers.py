@@ -5,12 +5,13 @@ from zipfile import ZipFile
 
 import cv2
 import numpy as np
+from billiard.exceptions import TimeLimitExceeded
 from celery.result import AsyncResult, GroupResult
 from geojson import Feature, FeatureCollection
 from numpy.typing import NDArray
 from reportlab.graphics.shapes import Drawing
 
-from sketch_map_tool.exceptions import TranslatableError
+from sketch_map_tool.exceptions import TimeLimitExceededError, TranslatableError
 
 
 def get_project_root() -> Path:
@@ -92,8 +93,17 @@ def extract_errors(
                 r.get(propagate=True)
             except TranslatableError as error:
                 errors.append(error.translate())
-            except Exception as error:
-                raise error
+            except TimeLimitExceeded as error:
+                try:
+                    raise TimeLimitExceededError(
+                        N_(
+                            "We couldn’t process your submission because it took too "
+                            "long. Please try again later. If the problem persists, "
+                            "reach out to us: sketch-map-tool@heigit.org"
+                        )
+                    ) from error
+                except TimeLimitExceededError as error_:
+                    errors.append(error_.translate())
             if type_ in ("vector-results"):
                 _, _, _, _, errors_ = r.get(propagate=False)
                 if len(errors_) > 0:
