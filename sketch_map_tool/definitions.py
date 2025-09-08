@@ -12,7 +12,10 @@ from sketch_map_tool.models import Layer, LiteratureReference, PaperFormat
 
 # Types of requests
 REQUEST_TYPES = Literal[
-    "sketch-map", "raster-results", "vector-results", "centroid-results"
+    "sketch-map",
+    "raster-results",
+    "vector-results",
+    "centroid-results",
 ]
 # Colors to be detected
 COLORS = {

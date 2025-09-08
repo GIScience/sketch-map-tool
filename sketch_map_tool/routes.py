@@ -356,9 +356,10 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             download_name = type_ + ".geojson"
             if isinstance(async_result, GroupResult):
                 results = async_result.get(propagate=False)
-                vector_results = [r[-2] for r in results]
                 if type_ == "centroid-results":
-                    vector_results = [extract_centroids(fc) for fc in vector_results]
+                    vector_results = [extract_centroids(r[-2]) for r in results]
+                else:
+                    vector_results = [r[-2] for r in results]
                 raw = geojson.dumps(merge(vector_results))
                 file: BytesIO = BytesIO(raw.encode("utf-8"))
             else:
