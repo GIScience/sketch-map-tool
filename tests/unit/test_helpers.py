@@ -49,3 +49,16 @@ def test_zip_(sketch_map_frame_markings_detected):
     assert zip_info[1].file_size == 5407584
     assert zip_info[2].filename == "attributions.txt"
     assert zip_info[2].file_size == 11
+
+
+def test_extract_centroids(detected_markings_cleaned):
+    result_centroids = helpers.extract_centroids(detected_markings_cleaned)
+    assert isinstance(result_centroids, FeatureCollection)
+    assert len(result_centroids.features)
+    assert len(result_centroids) == len(detected_markings_cleaned.features)
+    for i, feature in enumerate(result_centroids.features):
+        assert feature.geometry.type == "Point"
+        assert (
+            result_centroids.features[i].properties
+            == detected_markings_cleaned.features[i].properties
+        )
