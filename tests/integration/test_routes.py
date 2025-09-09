@@ -230,7 +230,11 @@ def test_api_status_uuid_sketch_map(uuid_create, flask_client):
 
 @pytest.mark.parametrize(
     "type_",
-    ["vector-results", "raster-results"],
+    (
+        "raster-results",
+        "vector-results",
+        "centroid-results",
+    ),
 )
 def test_api_status_uuid_digitize(uuid_digitize, type_, flask_client):
     resp = flask_client.get(f"/api/status/{uuid_digitize}/{type_}")
@@ -300,7 +304,11 @@ def test_api_download_uuid_sketch_map(uuid_create, flask_client):
 
 @pytest.mark.parametrize(
     "type_",
-    ["vector-results", "centroid-results", "raster-results"],
+    [
+        "vector-results",
+        "centroid-results",
+        "raster-results",
+    ],
 )
 def test_api_download_uuid_digitize(uuid_digitize, type_, flask_client):
     resp = flask_client.get(f"/api/download/{uuid_digitize}/{type_}")
