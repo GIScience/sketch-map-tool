@@ -86,7 +86,14 @@ def test_status_failure_hard(
     assert "Oops... we seem to have made a mistake, sorry!" in resp.text
 
 
-@pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
+@pytest.mark.parametrize(
+    "type_",
+    (
+        "raster-results",
+        "vector-results",
+        "centroid-results",
+    ),
+)
 def test_group_status_success(
     client,
     uuid,
@@ -102,7 +109,14 @@ def test_group_status_success(
     assert resp.json["href"] == "/api/download/{0}/{1}".format(uuid, type_)
 
 
-@pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
+@pytest.mark.parametrize(
+    "type_",
+    (
+        "raster-results",
+        "vector-results",
+        "centroid-results",
+    ),
+)
 def test_group_status_started(
     client,
     uuid,
@@ -119,6 +133,14 @@ def test_group_status_started(
 
 
 @pytest.mark.parametrize(
+    "type_",
+    (
+        "raster-results",
+        "vector-results",
+        "centroid-results",
+    ),
+)
+@pytest.mark.parametrize(
     "lang",
     [
         ("", "QRCodeError: QR-Code could not be detected."),
@@ -126,7 +148,6 @@ def test_group_status_started(
         ("/en", "QRCodeError: QR-Code could not be detected."),
     ],
 )
-@pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
 def test_group_status_failure(client, uuid, type_, mock_group_result_failure, lang):
     resp = client.get("{0}/api/status/{1}/{2}".format(lang[0], uuid, type_))
     assert resp.status_code == 422
@@ -137,7 +158,14 @@ def test_group_status_failure(client, uuid, type_, mock_group_result_failure, la
     assert resp.json["errors"] == [lang[1]]
 
 
-@pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
+@pytest.mark.parametrize(
+    "type_",
+    (
+        "raster-results",
+        "vector-results",
+        "centroid-results",
+    ),
+)
 def test_group_status_failure_hard(
     client,
     uuid,
@@ -156,7 +184,14 @@ def test_group_status_failure_hard(
         ("/en", "QRCodeError: QR-Code could not be detected."),
     ],
 )
-@pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
+@pytest.mark.parametrize(
+    "type_",
+    (
+        "raster-results",
+        "vector-results",
+        "centroid-results",
+    ),
+)
 def test_group_status_started_success_failure(
     client,
     uuid,
@@ -182,7 +217,14 @@ def test_group_status_started_success_failure(
         ("/en", "QRCodeError: QR-Code could not be detected."),
     ],
 )
-@pytest.mark.parametrize("type_", ("raster-results", "vector-results"))
+@pytest.mark.parametrize(
+    "type_",
+    (
+        "raster-results",
+        "vector-results",
+        "centroid-results",
+    ),
+)
 def test_group_status_success_failure(
     client, uuid, type_, mock_group_result_success_failure, lang
 ):
