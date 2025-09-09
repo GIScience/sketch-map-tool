@@ -6,8 +6,8 @@ form {
 }
 
 .filebokz {
-    --color: var(--primary);
-
+    /* TODO: is color used? */
+    --color: var(--pico-primary);
     padding: 2rem 2rem 1rem;
 }
 
@@ -16,7 +16,7 @@ form {
 }
 
 .filebokz label:hover {
-    background-color: var(--drag-bg-color);
+    background-color: var(--pico-color-grey-300, #ABABAB);
 }
 
 .filebokz.is-draggable label::after {
