@@ -43,5 +43,5 @@ footer :first-child {
 }
 
 footer :not(:last-child) {
-    padding-bottom: var(--nav-link-spacing-vertical);
+    padding-bottom: var(--pico-block-spacing-vertical);
 }

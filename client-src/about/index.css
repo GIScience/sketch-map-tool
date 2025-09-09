@@ -34,6 +34,6 @@ article > span {
 }
 
 .no.preview {
-    background-color: var(--secondary);
+    background-color: var(--pico-secondary-background);
     aspect-ratio: 1;
 }

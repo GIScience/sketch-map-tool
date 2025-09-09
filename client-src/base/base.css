@@ -17,9 +17,11 @@
     --logo-text-size: 2rem;
 
     /* TODO: important should not be necessary */
-    --primary: #2344ca !important;  /* blue */
-    --primary-hover: #162b83 !important;  /* dark blue */
-    --card-sectionning-background-color: #e6e6e6 !important;
+    --pico-primary: #2344ca !important;
+    /* blue */
+    --pico-primary-hover: #162b83 !important;
+    /* dark blue */
+    --pico-card-sectioning-background-color: #e6e6e6 !important;
 }
 
 @media (width >= 576px) {
@@ -167,6 +169,10 @@ nav {
 
 .nav-link {
     position: relative;
+}
+
+a.nav-link:hover {
+    text-decoration: none !important;
 }
 
 .nav-link::before {
