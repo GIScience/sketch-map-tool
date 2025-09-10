@@ -78,17 +78,18 @@
                     <p class="error hidden">
                         {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}
                     </p>
+                    <p>
                     <a id="vector-data-download-button" href="#" download aria-busy="true"
                        role="button"
                        disabled="disabled">{{ _('Download Polygon GeoJSON') }}</a>
-                    <div id="vector-data-status" class="task-status"></div>
-                    <br>
+                    </p>
                     <a id="centroid-data-download-button" class="outline" href="#" download aria-busy="true"
                        role="button"
                        disabled="disabled">{{ _('Download Point GeoJSON') }}</a>
                     <div id="vector-data-status" class="task-status"></div>
+                    <br>
                     <!-- JS polling function expects a status span for every request type. -->
-                    <span id="centroid-data-status" style="display: none;"></span>
+                    <div id="centroid-data-status" style="display: none;"></div>
                 </article>
             </div>
         </div>
