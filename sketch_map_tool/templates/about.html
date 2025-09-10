@@ -10,7 +10,7 @@
 
 {% block body %}
     <main class="container">
-        <h1>{{ _('The Tool') }}</h1>
+        <h2>{{ _('The Tool') }}</h2>
         <p>
             {{ _('The Sketch Map Tool is an easy-to-use tool for participatory mapping through offline collection,
             digitisation and georeferencing of local data. The low-tech solution is designed to simplify the collection
@@ -50,8 +50,7 @@
             used for further analysis in Geographic Information System software.') }}
         </p>
 
-
-        <h1 id="the-project">{{ _('The Project') }}</h1>
+        <h2 id="the-project">{{ _('The Project') }}</h2>
         <p>
             {{ _('The Sketch Map Tool project has been developed in close cooperation between the <a
                 href="https://heigit.org" target="_blank">HeiGIT</a> and the <a
@@ -95,7 +94,8 @@
             was further ensured, and customized training materials designed to make the tool more accessible to end-users with
             different knowledge levels.') }}
         </p>
-        <h1 id="the-vision">{{ _('The Vision') }}</h1>
+
+        <h2 id="the-vision">{{ _('The Vision') }}</h2>
         <p>
             {{ _('We envision a world in which communities worldwide are empowered to collect, communicate, and utilize local
             spatial information and knowledge
@@ -114,7 +114,7 @@
                 alt="{{ _('Picture of a group mapping situation.') }}">
         </figure>
 
-        <h1 id="sponsors-and-partners">{{ _('Former and current Sponsors and Partner Organisations') }}</h1>
+        <h2 id="sponsors-and-partners">{{ _('Former and current Sponsors and Partner Organisations') }}</h2>
         <div class="logos">
             <img src="/static/assets/logos/DRK/DRKLogokompaktEng_4c.jpg" alt="{{ _('Logo German Red Cross') }}">
             <img src="/static/assets/logos/Logo_GIScience_HD_cropped.svg"
@@ -126,16 +126,12 @@
             <img src="/static/assets/logos/logo_norface.png" alt="{{ _('Logo Norface') }}">
         </div>
 
-        <h1 id="learning-material">{{ _('Learning Material') }}</h1>
+        <h2 id="learning-material">{{ _('Learning Material') }}</h2>
         <p>
             {{ _('Detailed step-by-step instructions about how to use the tool and FAQs can be found on the <a id="link-to-help-page">Help page</a>.') }}
         </p>
         <p>
-            {{ _('The code of the Sketch Map Tool is released on GitHub (
-            <a href="https://github.com/GIScience/sketch-map-tool">
-                https://github.com/GIScience/sketch-map-tool
-            </a>
-            ).') }}
+    {{ _('The code of the Sketch Map Tool is released on <a href="https://github.com/GIScience/sketch-map-tool">GitHub</a>.') }}
         </p>
         <p>
             {{ _('On the IFRC Network <a
@@ -144,10 +140,7 @@
             available to learn how to use the Sketch Map Tool and handle the results.') }}
         </p>
         <p>
-            {{ _('If you are interested in learning more about the concept and development of the
-            the Sketch Map Tool, consider watching the video of the lightning talk <a
-                href="https://www.youtube.com/watch?v=Dmj41KRH-SA"> “OpenStreetMap Sketch Map Tool - The Future of OpenStreetMap
-                Field Papers” </a> at GeOnG 2020.') }}
+            {{ _('If you are interested in learning more about the concept and development of the the Sketch Map Tool, consider watching the video of the lightning talk <a href="https://www.youtube.com/watch?v=Dmj41KRH-SA"> “OpenStreetMap Sketch Map Tool - The Future of OpenStreetMap Field Papers”</a> at GeOnG 2020.') }}
         </p>
         <p>
             <a href="https://www.youtube-nocookie.com/embed/Dmj41KRH-SA" target="_blank"><img
@@ -155,18 +148,11 @@
                     alt="{{ _('Video preview image for Lightning Talk about Sketch Maps at GeOnG 2020') }}"></a>
         </p>
         <p>
-            {{ _('Additionally, Episode 7 <a href="https://www.chaberlin.org/news/chatroom-7-mapping-in-der-humanitaeren-hilfe/">
-                "Mapping in der Humanitären
-                Hilfe”</a> of the Podcast CHAtroom (in German) offers further insights. In this episode from the Center for
-            Humanitarian Action (CHA), Dr. Natascha Bing (GRC) and Dr. Carolin Klonner (GIScience Heidelberg) discuss the
-            importance of maps in disaster management and explore how the Sketch Map Tool can be utilized by humanitarian
-            organizations.') }}
+            {{ _('Additionally, Episode 7 <a href="https://www.chaberlin.org/news/chatroom-7-mapping-in-der-humanitaeren-hilfe/">"Mapping in der Humanitären Hilfe”</a> of the Podcast CHAtroom (in German) offers further insights. In this episode from the Center for Humanitarian Action (CHA), Dr. Natascha Bing (GRC) and Dr. Carolin Klonner (GIScience Heidelberg) discuss the importance of maps in disaster management and explore how the Sketch Map Tool can be utilized by humanitarian organizations.') }}
         </p>
 
-        <h1>{{ _('Related Publications') }}</h1>
+        <h2>{{ _('Related Publications') }}</h1>
         <p>{{ _('The following scientific articles have been published about the Sketch Map Tool:') }}</p>
-
-
         {% for reference in literature %}
             <article>
                 {% if reference.img_src %}
@@ -185,11 +171,9 @@
                 </span>
             </article>
         {% endfor %}
-
-        <hr>
-        <br><br>
+        <br>
         <div class="center-text">
-            <h4 id="contact" class="widget-title">{{ _('Contact') }}</h4>
+            <h2 id="contact" class="widget-title">{{ _('Contact') }}</h2>
             <p>
                 {{ _('HeiGIT gGmbH<br>
                 Heidelberg, Germany<br>
