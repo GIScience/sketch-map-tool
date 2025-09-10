@@ -8,6 +8,7 @@ form {
 .filebokz {
     /* TODO: is color used? */
     --color: var(--pico-primary);
+
     padding: 2rem 2rem 1rem;
 }
 
