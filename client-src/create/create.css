@@ -30,3 +30,9 @@ body > main {
     margin: 0 auto;
     width: unset;
 }
+
+#message-container {
+    height: 11rem;
+    overflow-y: scroll;
+    padding: 1rem;
+}
