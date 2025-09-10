@@ -1,5 +1,6 @@
 .grid {
   /* Grid inspired by  */
+
   /* https://piccalil.li/blog/a-handy-use-of-subgrid-to-enhance-a-simple-layout/ */
   display: grid;
   grid-template-columns: repeat(

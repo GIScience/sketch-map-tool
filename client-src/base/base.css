@@ -18,8 +18,10 @@
 
     /* TODO: important should not be necessary */
     --pico-primary: #2344ca !important;
+
     /* blue */
     --pico-primary-hover: #162b83 !important;
+
     /* dark blue */
     --pico-card-sectioning-background-color: #e6e6e6 !important;
 }
