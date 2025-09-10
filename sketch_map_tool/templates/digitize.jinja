@@ -1,86 +1,78 @@
 {% extends "base.jinja" %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for("static", filename="bundles/digitize.css") }}">
-    <script type="module" src="{{ url_for("static", filename="bundles/digitize.js") }}"></script>
+<link rel="stylesheet" href="{{ url_for("static", filename="bundles/digitize.css") }}">
+<script type="module" src="{{ url_for("static", filename="bundles/digitize.js") }}"></script>
 
 {% endblock head %}
 
 {% block header_message %}
-    <div class="circle" style="display: inline-block" ;>2</div>{{ _('Paper to GIS:') }}
-    <span style="font-size: smaller">{{ _('Automatically Digitize Your Sketch&nbsp;Maps') }}</span>
+<div class="circle" style="display: inline-block" ;>2</div>{{ _('Paper to GIS:') }}
+<span style="font-size: smaller">{{ _('Automatically Digitize Your Sketch&nbsp;Maps') }}</span>
 {% endblock %}
 
 {% block body %}
-    <div class="container-fluid horizontal step-arrows">
-        <div class="active">{{ _('Scan or photograph your marked Sketch&nbsp;Maps') }}</div>
-        <div class="active">{{ _('Upload your Sketch&nbsp;Maps') }}</div>
-        <div>{{ _('Download collected Markings as Geodata') }}</div>
-    </div>
-    <main class="container-fluid">
-        <div id="main-message" class="sketchy h1 center-text">
-            {{ _('Scan or photograph your marked Sketch Maps after data collection.<br>Then, upload one or
+<div class="container-fluid horizontal step-arrows">
+    <div class="active">{{ _('Scan or photograph your marked Sketch&nbsp;Maps') }}</div>
+    <div class="active">{{ _('Upload your Sketch&nbsp;Maps') }}</div>
+    <div>{{ _('Download collected Markings as Geodata') }}</div>
+</div>
+<main class="container-fluid">
+    <div id="main-message" class="sketchy h1 center-text">
+        {{ _('Scan or photograph your marked Sketch Maps after data collection.<br>Then, upload one or
             more marked Sketch Maps at once as .jpg or .png file.') }}
+    </div>
+
+    <form name="upload" action="/digitize/results" method="post" enctype=multipart/form-data>
+
+        <div class="filebokz" data-max-size="524288000" data-allowed-extensions="jpeg,jpg,png">
+            <input type="file" id="file" name="file" multiple />
+            <label for="file">
+                <img id="cloud" class="no-files" src="/static/assets/upload_cloud.svg" alt="{{ _('red cloud icon') }}">
+                <strong class="no-files">{{ _('Choose file(s)') }}</strong>
+                <span class="no-files is-draggable">{{ _('or drag them here<br>(.png or .jpg)') }}</span>
+                <div class="files file-previews" data-content='<span>{name}</span> <span>({size})</span> <span class="fa fa-trash remove" aria-hidden="true">✗</span>' data-content-before='<i class="fa fa-file-o" aria-hidden="true"></i>' data-content-before-audio='<i class="fa fa-file-audio-o" aria-hidden="true"></i>' data-content-before-image='<img src="{url}">' data-content-before-text='<i class="fa fa-file-text-o" aria-hidden="true"></i>' data-content-before-video='<i class="fa fa-file-video-o" aria-hidden="true"></i>'>
+
+                </div>
+                <span class="error-msg"></span>
+            </label>
+            <span class="info">{{ _('Files:') }} <span class="file-count"></span> (<span class="size"></span>)&nbsp;&nbsp;&nbsp; {{ _('Max total size: 500 MB') }}</span>
         </div>
-
-        <form name="upload" action="/digitize/results" method="post" enctype=multipart/form-data>
-
-            <div class="filebokz" data-max-size="524288000" data-allowed-extensions="jpeg,jpg,png">
-                <input type="file" id="file" name="file" multiple/>
-                <label for="file">
-                    <img id="cloud" class="no-files" src="/static/assets/upload_cloud.svg" alt="{{ _('red cloud icon') }}">
-                    <strong class="no-files">{{ _('Choose file(s)') }}</strong>
-                    <span class="no-files is-draggable">{{ _('or drag them here<br>(.png or .jpg)') }}</span>
-                    <div
-                            class="files file-previews"
-                            data-content='<span>{name}</span> <span>({size})</span> <span class="fa fa-trash remove" aria-hidden="true">✗</span>'
-                            data-content-before='<i class="fa fa-file-o" aria-hidden="true"></i>'
-                            data-content-before-audio='<i class="fa fa-file-audio-o" aria-hidden="true"></i>'
-                            data-content-before-image='<img src="{url}">'
-                            data-content-before-text='<i class="fa fa-file-text-o" aria-hidden="true"></i>'
-                            data-content-before-video='<i class="fa fa-file-video-o" aria-hidden="true"></i>'>
-
-                    </div>
-                    <span class="error-msg"></span>
-                </label>
-                <span class="info">{{ _('Files:') }} <span class="file-count"></span> (<span
-                        class="size"></span>)&nbsp;&nbsp;&nbsp; {{ _('Max total size: 500 MB') }}</span>
-            </div>
-            <div id="data-protection-section">
-                <div class="sketchy h1 center-text">{{ _('Help us to improve the Sketch Map Tool for everyone') }}</div>
-                <p id="motif">
-                    {{ _('To train and improve the sketch detection algorithms,
+        <div id="data-protection-section">
+            <div class="sketchy h1 center-text">{{ _('Help us to improve the Sketch Map Tool for everyone') }}</div>
+            <p id="motif">
+                {{ _('To train and improve the sketch detection algorithms,
                             we do need your real use-case data and would like to ask for your permission
                             to keep the uploaded files after processing.') }}
-                </p>
-                <input type="hidden" id="consent" name="consent" value="False">
-                <div id="main-grid" class="grid">
+            </p>
+            <input type="hidden" id="consent" name="consent" value="False">
+            <div id="main-grid" class="grid">
 
-                    {# row 1#}
-                    <button id="agreeSubmitBtn" type="submit">{{ _('Agree & Upload') }}</button>
-                    <div id="or">{{ _('OR') }}</div>
-                    <button id="rejectSubmitBtn" type="submit">{{ _('Reject & Upload') }}</button>
+                {# row 1#}
+                <button id="agreeSubmitBtn" type="submit">{{ _('Agree & Upload') }}</button>
+                <div id="or">{{ _('OR') }}</div>
+                <button id="rejectSubmitBtn" type="submit">{{ _('Reject & Upload') }}</button>
 
-                    {# row 2#}
-                    <div class="text-content">
-                        {{ _('If you agree, we would keep your data internally to use it as training and
+                {# row 2#}
+                <div class="text-content">
+                    {{ _('If you agree, we would keep your data internally to use it as training and
                                 test data to improve the Sketch Map Tool.') }}
-                    </div>
-                    <div></div>
-                    <div class="text-content">
-                        {{ _("If you don't agree, your files are ONLY stored for processing for a short time
-                        until your results are generated.") }}
-                    </div>
                 </div>
-                <p>
-                    {{ _('Read more info on') }}
-                    <a target="_blank" href="{{ url_for('help', lang=lang) }}#data-sharing-for-improvement">
-                    {{ _('Share your data for the Improvement of the Sketch Map Tool.') }}</a>
-                </p>
+                <div></div>
+                <div class="text-content">
+                    {{ _("If you don't agree, your files are ONLY stored for processing for a short time
+                        until your results are generated.") }}
+                </div>
             </div>
-        </form>
+            <p>
+                {{ _('Read more info on') }}
+                <a target="_blank" href="{{ url_for('help', lang=lang) }}#data-sharing-for-improvement">
+                    {{ _('Share your data for the Improvement of the Sketch Map Tool.') }}</a>
+            </p>
+        </div>
+    </form>
     <script>
 
     </script>
-    </main>
+</main>
 {% endblock body %}

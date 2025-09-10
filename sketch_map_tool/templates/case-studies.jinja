@@ -1,11 +1,11 @@
 {% extends "base.jinja" %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for("static", filename="bundles/case-studies.css") }}">
+<link rel="stylesheet" href="{{ url_for("static", filename="bundles/case-studies.css") }}">
 {% endblock head %}
 
 {% block header_message %}
-    {{ _('What has been done?') }}
+{{ _('What has been done?') }}
 {% endblock header_message %}
 
 {% block body %}
@@ -55,10 +55,10 @@
             <footer># heat perception, kobo-toolbox</footer>
         </article>
     </div>
-<br>
-<p>
-{{ _("We're looking to add more real-life use cases. Do you use the Sketch Map Tool? We'd love to hear your story! Please get in touch with us:") }}
-<a href="mailto:sketch-map-tool@heigit.org">sketch-map-tool@heigit.org</a>
-</p>
+    <br>
+    <p>
+        {{ _("We're looking to add more real-life use cases. Do you use the Sketch Map Tool? We'd love to hear your story! Please get in touch with us:") }}
+        <a href="mailto:sketch-map-tool@heigit.org">sketch-map-tool@heigit.org</a>
+    </p>
 </main>
 {% endblock body %}

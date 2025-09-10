@@ -1,19 +1,19 @@
 {% extends "base.jinja" %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for("static", filename="bundles/index.css") }}">
+<link rel="stylesheet" href="{{ url_for("static", filename="bundles/index.css") }}">
 {% endblock head %}
 
 {% block header_message %}
-    {{ _('Error') }}
+{{ _('Error') }}
 {% endblock header_message %}
 
 {% block body %}
-    <main>
-        <article class="center-text">
-            <div class="container">
-                {{ error_msg }}
-            </div>
-        </article>
-    </main>
+<main>
+    <article class="center-text">
+        <div class="container">
+            {{ error_msg }}
+        </div>
+    </article>
+</main>
 {% endblock body %}

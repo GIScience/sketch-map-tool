@@ -1,300 +1,290 @@
 {% extends "base.jinja" %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for("static", filename="bundles/help.css") }}">
-    <script type="module" src="{{ url_for("static", filename="bundles/help.js") }}"></script>
+<link rel="stylesheet" href="{{ url_for("static", filename="bundles/help.css") }}">
+<script type="module" src="{{ url_for("static", filename="bundles/help.js") }}"></script>
 {% endblock head %}
 
 {% block header_message %}
-    {{ _('Need some help?') }}
+{{ _('Need some help?') }}
 {% endblock header_message %}
 
 {% block body %}
-    <main class="container">
-        <a onclick="window.printPage()">
-            <div id="print-page-icon">
-                &#128424;<br>{{ _('Print') }}
-            </div>
-        </a>
-        <p>
-            {{ _('The <strong>Step-by-Step Instructions</strong> will guide you through the Sketch Map Tool and provide useful recommendations.<br> You can also download and print the manual.') }}
-        </p>
-        <p>
-            {{ _('Answers to the <strong>Frequently Asked Questions</strong> can be found in the <a href="#faq">FAQ</a> section below.') }}
-        </p>
-        <p>
-            {{ _('<a href="https://nexus.heigit.org/service/rest/repository/browse/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/" target="_blank">Here</a> you can download the most important tips and questions for the mapping on one page.') }}
-        </p>
-        <p>
-            {{ _('Our new <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html" target="_blank">training platform</a> provides distinct training exercises to further explore the Sketch Map Tool and sketch mapping in general. These exercises are primarily designed for workshop settings, allowing for collaborative discussion of your experiences.') }}
-        </p>
-        <p>
-            {{ _('<i>Since the latest version of the Sketch Map Tool was only recently released, you may encounter issues at various stages of the process. We apologize for any inconvenience this may cause. We are committed to continually enhancing the tool, so please report any technical problems to the <a href="mailto:sketch-map-tool@heigit.org" target="_blank">Sketch Map Tool user support</a></i>.') }}
-        </p>
+<main class="container">
+    <a onclick="window.printPage()">
+        <div id="print-page-icon">
+            &#128424;<br>{{ _('Print') }}
+        </div>
+    </a>
+    <p>
+        {{ _('The <strong>Step-by-Step Instructions</strong> will guide you through the Sketch Map Tool and provide useful recommendations.<br> You can also download and print the manual.') }}
+    </p>
+    <p>
+        {{ _('Answers to the <strong>Frequently Asked Questions</strong> can be found in the <a href="#faq">FAQ</a> section below.') }}
+    </p>
+    <p>
+        {{ _('<a href="https://nexus.heigit.org/service/rest/repository/browse/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/" target="_blank">Here</a> you can download the most important tips and questions for the mapping on one page.') }}
+    </p>
+    <p>
+        {{ _('Our new <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html" target="_blank">training platform</a> provides distinct training exercises to further explore the Sketch Map Tool and sketch mapping in general. These exercises are primarily designed for workshop settings, allowing for collaborative discussion of your experiences.') }}
+    </p>
+    <p>
+        {{ _('<i>Since the latest version of the Sketch Map Tool was only recently released, you may encounter issues at various stages of the process. We apologize for any inconvenience this may cause. We are committed to continually enhancing the tool, so please report any technical problems to the <a href="mailto:sketch-map-tool@heigit.org" target="_blank">Sketch Map Tool user support</a></i>.') }}
+    </p>
 
-        <h2 id="step-by-step">{{ _('Step-by-Step Instructions') }}</h2>
+    <h2 id="step-by-step">{{ _('Step-by-Step Instructions') }}</h2>
+    <details>
+        <summary id="create-paper-maps">
+            <div class="sketchy circle">1</div>
+            {{ _('<strong>Create paper maps to collect data</strong>') }}
+        </summary>
         <details>
-            <summary id="create-paper-maps">
-                <div class="sketchy circle">1</div>
-                {{ _('<strong>Create paper maps to collect data</strong>') }}
+            <summary id="define-your-area-of-interest">1.1 {{ _('Define your area of interest and choose a base map layer') }}
             </summary>
-            <details>
-                <summary id="define-your-area-of-interest">1.1 {{ _('Define your area of interest and choose a base map layer') }}
-                </summary>
-                <article>
-                    <p>
-                        {{ _('The first step in using the Sketch Map Tool involves creating a printable Sketch Map.') }}
-                    </p>
-                    <ol>
-                        <li>{{ _('Begin by selecting your area of interest, either by zooming into the map preview or using the search
+            <article>
+                <p>
+                    {{ _('The first step in using the Sketch Map Tool involves creating a printable Sketch Map.') }}
+                </p>
+                <ol>
+                    <li>{{ _('Begin by selecting your area of interest, either by zooming into the map preview or using the search
                             function in the sidebar. You can search for place names and coordinates. If you search for a location with 
                             coordinates please be aware of the correct structure, which is explained below.') }}</li>
-                        <li>{{ _('Choose between the two different base map layers: one based on <a href="https://osm.org/"
+                    <li>{{ _('Choose between the two different base map layers: one based on <a href="https://osm.org/"
                                 target="_blank">OpenStreetMap (OSM)</a> and the other containing
                             satellite imagery (<a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9"
                                 target="_blank">ESRI world imagery</a>)') }}</li>
-                        <li>{{ _('Select from different paper formats and the appropriate page orientation. The dashed red line
+                    <li>{{ _('Select from different paper formats and the appropriate page orientation. The dashed red line
                             represents the
                             boundaries of your area of interest, which will be printed on the Sketch Map.') }}</li>
-                        <li>{{ _('Initiate the map creation by clicking the blue "next" button.') }}</li>
-                    </ol>
-                
-                    <figure> <!-- figure needs to be changed. link to the figure-->
-                        <img src="{{ url_for("static", filename="assets/images/help/1_1_AOI.webp" ) }}"
-                            alt="{{ _('Screenshot of the Sketch Map Tool.') }}">
-                        <figcaption></figcaption>
-                    </figure>
+                    <li>{{ _('Initiate the map creation by clicking the blue "next" button.') }}</li>
+                </ol>
 
-                    <h5>{{ _('Searching by coordinates') }}</h5>
-                    <p>
-                        {{ _('Using coordinates to search for an accurate location is particularly useful in rural areas. 
+                <figure> <!-- figure needs to be changed. link to the figure-->
+                    <img src="{{ url_for("static", filename="assets/images/help/1_1_AOI.webp" ) }}" alt="{{ _('Screenshot of the Sketch Map Tool.') }}">
+                    <figcaption></figcaption>
+                </figure>
+
+                <h5>{{ _('Searching by coordinates') }}</h5>
+                <p>
+                    {{ _('Using coordinates to search for an accurate location is particularly useful in rural areas. 
                         Ensure that the coordinates are in the coordinate reference system WGS 84, expressed as latitude and longitude (LAT and LON).') }}
-                    </p>
-                    <p>
-                        {{ _('Example: We have the following coordinates of Nairobi in WGS 84:  1.2921° S (latitude) and 36.8219° E (longitude). 
+                </p>
+                <p>
+                    {{ _('Example: We have the following coordinates of Nairobi in WGS 84:  1.2921° S (latitude) and 36.8219° E (longitude). 
                         In the search field just type LAT, LON like shown below:') }}
-                    </p>
+                </p>
 
-                    <figure>
-                        <img src="{{ url_for("static", filename="assets/images/help/1_1_searching_by_coordinates.webp" ) }}"
-                            alt="{{ _('Screenshot of the coordinates.') }}">
-                        <figcaption></figcaption>
-                    </figure>
-                    
-                    <p>
-                        {{ _('Be sure to include the hemisphere information (South/North, West/East) to avoid errors.') }}
-                    </p>
-                    <p>
-                        {{ _('If you need to transform your available coordinates into Lat-Lon coordinates first, we recommend using this tool:
+                <figure>
+                    <img src="{{ url_for("static", filename="assets/images/help/1_1_searching_by_coordinates.webp" ) }}" alt="{{ _('Screenshot of the coordinates.') }}">
+                    <figcaption></figcaption>
+                </figure>
+
+                <p>
+                    {{ _('Be sure to include the hemisphere information (South/North, West/East) to avoid errors.') }}
+                </p>
+                <p>
+                    {{ _('If you need to transform your available coordinates into Lat-Lon coordinates first, we recommend using this tool:
                             <a href="https://coordinates-converter.com/en/decimal/51.000000,10.000000?karte=OpenStreetMap&zoom=8"
                             target="_blank">Online converter to all coordinate systems</a>') }}
-                    </p>
-                    <p>
-                        {{ _('The marker of your searched point that appears during the map selection will not be visible on the printed map. 
+                </p>
+                <p>
+                    {{ _('The marker of your searched point that appears during the map selection will not be visible on the printed map. 
                         If you need this point as a point of reference on your paper Sketch Maps please mark it after you downloaded the PDF.') }}
-                    </p>
+                </p>
 
-                    <figure>
-                        <img src="{{ url_for("static", filename="assets/images/help/1_1_searched_point_marked_pdf.webp" ) }}"
-                            alt="{{ _('Screenshot of the searched point marked in pdf.') }}">
-                        <figcaption></figcaption>
-                    </figure>
+                <figure>
+                    <img src="{{ url_for("static", filename="assets/images/help/1_1_searched_point_marked_pdf.webp" ) }}" alt="{{ _('Screenshot of the searched point marked in pdf.') }}">
+                    <figcaption></figcaption>
+                </figure>
 
-                    <h5>{{ _('Recommendations') }}</h5>
-                    <ul>
-                        <li>{{ _('Tailor the extent of your selected area to suit your use case, keeping the following questions in
+                <h5>{{ _('Recommendations') }}</h5>
+                <ul>
+                    <li>{{ _('Tailor the extent of your selected area to suit your use case, keeping the following questions in
                             mind:') }}
-                            <ul>
-                                <li>{{ _('What do the participants need to map?') }}</li>
-                                <li>{{ _('What details need to be visible on the map, and at what level of detail?') }}</li>
-                                <li>{{ _('Which areas should the map encompass?') }}</li>
-                            </ul>
-                        </li>
-                
-                        <li>{{ _('Aspects to consider when selecting the area of interest:') }}
-                            <ul>
-                                <li>{{ _('Ensure orientation on the map: streets (and their names) and some points of interest (POIs)
+                        <ul>
+                            <li>{{ _('What do the participants need to map?') }}</li>
+                            <li>{{ _('What details need to be visible on the map, and at what level of detail?') }}</li>
+                            <li>{{ _('Which areas should the map encompass?') }}</li>
+                        </ul>
+                    </li>
+
+                    <li>{{ _('Aspects to consider when selecting the area of interest:') }}
+                        <ul>
+                            <li>{{ _('Ensure orientation on the map: streets (and their names) and some points of interest (POIs)
                                     should be visible.') }}</li>
-                                <li>{{ _('Cover all relevant areas for your use case: for example, if studying flooding, focus on areas
+                            <li>{{ _('Cover all relevant areas for your use case: for example, if studying flooding, focus on areas
                                     near rivers, creeks, sinkholes, and critical infrastructure that might be affected by the flood
                                     event.') }}</li>
-                                <li>{{ _('Choose a suitable zoom level. Example: If you want to examine urban floodings, we recommend using 
+                            <li>{{ _('Choose a suitable zoom level. Example: If you want to examine urban floodings, we recommend using 
 								a neighborhood level map with streets and buildings. If you want to examine riverine floodings, 
 								we recommend using a map that shows a wider scope.') }}
-                                </li>
-                            </ul>
-                        </li>
-                
-                        <li>{{ _('Choose a suitable base map for your mapping needs. The decision between the OSM or satellite image base map
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>{{ _('Choose a suitable base map for your mapping needs. The decision between the OSM or satellite image base map
                             depends on factors like your selected area, the quality of OSM data, your participants, and what you would
                             like to map.
                             Sometimes, especially if the satellite image is very dark (e.g., due to large forest areas on the map), it
                             can be helpful to create two Sketch Maps with both base map layers: Satellite and OSM.') }}</li>
-                        <li>{{ _('Customize the map format to fit your purpose:') }}
-                            <ul>
-                                <li>{{ _('Group mapping is easier on larger maps (A2 or A1, depending on your group size).') }}</li>
-                                <li>{{ _('For data collection in the field, A4 or A3 are easier to handle. If the area is too big,
+                    <li>{{ _('Customize the map format to fit your purpose:') }}
+                        <ul>
+                            <li>{{ _('Group mapping is easier on larger maps (A2 or A1, depending on your group size).') }}</li>
+                            <li>{{ _('For data collection in the field, A4 or A3 are easier to handle. If the area is too big,
                                     consider creating multiple Sketch Maps.') }}</li>
-                            </ul>
-                        </li>
-                    </ul>
-                                    
-                </article>
+                        </ul>
+                    </li>
+                </ul>
 
-            </details>
-            <details>
-                <summary id="map-quality-check">1.2 {{ _('Map Quality Check') }}</summary>
-                <article>
-                    <p>
-                        {{ _('When you choose <a href="https://osm.org/" target="_blank">OpenStreetMap (OSM)</a> as base map layer, you can 
+            </article>
+
+        </details>
+        <details>
+            <summary id="map-quality-check">1.2 {{ _('Map Quality Check') }}</summary>
+            <article>
+                <p>
+                    {{ _('When you choose <a href="https://osm.org/" target="_blank">OpenStreetMap (OSM)</a> as base map layer, you can 
 						analyze the base map data of your selected area of interest directly in the ohsome Dashboard <a href="https://dashboard.ohsome.org">. 
 						Making use of the <a href="https://api.quality.ohsome.org/">ohsome quality API</a> quality checks are performed and displayed in the 
 						dashboard and the report, as shown in the figure below. 
 						This provides important insights into the suitability of the base map data for field data collection.' ) }}
-                    </p>
-                
-                    <figure> <!-- Figure ohsome dashboard-->
-                        <img src="{{ url_for("static", filename="assets/images/help/ohsome_dashboard_overview.webp" ) }}"
-                            alt="{{ _('ohsome dashboard overview.') }}">
-                        <figcaption></figcaption>
-                    </figure>
-                    <p>
-						{{ _('By clicking the <b>Get Quality Report</b> button, the dashboard is directly opened in a new tab. 
+                </p>
+
+                <figure> <!-- Figure ohsome dashboard-->
+                    <img src="{{ url_for("static", filename="assets/images/help/ohsome_dashboard_overview.webp" ) }}" alt="{{ _('ohsome dashboard overview.') }}">
+                    <figcaption></figcaption>
+                </figure>
+                <p>
+                    {{ _('By clicking the <b>Get Quality Report</b> button, the dashboard is directly opened in a new tab. 
 						The area of interest selected in the Sketch Map Tool is automatically transferred to the dashboard, 
 						and an analysis of the <b>completeness</b> and <b>currency</b> of the <b>road data</b> in that area in the OSM data set is conducted.
 						A marker in the top left corner of the report visually indicates how good the quality of the data is, using the familiar traffic light system. 
 						In the case of a <b>green marker</b> (in the figure <b>high currentness</b> and <b>high completeness</b>), 
 						the data foundation is sensibly usable given the examined quality aspect. In the case of a <b>red</b> output, this criterion should be examined more closely.') }}
-                    </p>
-                
-                    <figure> <!-- Figure ohsome dashboard report-->
-                        <img src="{{ url_for("static", filename="assets/images/help/ohsome_dashboard_report.webp" ) }}"
-                            alt="{{ _('ohsome dashboard overview.') }}">
-                        <figcaption></figcaption>
-                    </figure>
-					
-					<p>
-						{{ _('Example: If the report shows a <b>red</b> output for completeness, it may be difficult to orient oneself due to the lack 
+                </p>
+
+                <figure> <!-- Figure ohsome dashboard report-->
+                    <img src="{{ url_for("static", filename="assets/images/help/ohsome_dashboard_report.webp" ) }}" alt="{{ _('ohsome dashboard overview.') }}">
+                    <figcaption></figcaption>
+                </figure>
+
+                <p>
+                    {{ _('Example: If the report shows a <b>red</b> output for completeness, it may be difficult to orient oneself due to the lack 
 						of data in the selected area in OSM. If the report shows such output for currentness, it means the existing data has not
 						been updated or expanded for a long time, which indicates that the data in the selected area could be outdated.
 						In both cases, it could be useful to improve the OSM data foundation through personal mapping in OpenStreetMap or 
 						with the help of the <a href="https://www.missingmaps.org/" target="_blank">Missing Maps project</a> and/or
 						<a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> Communities. Please feel free to get in touch if
 						you would like to learn more, we are happy to support.') }}
-                    </p>
-												
-                
-                    <h5>{{ _('What is the benefit of this new ohsome dashboard integration? + Recommendations') }}</h5>
-                    <ul>
-                        <li>
-                            {{ _('Before you use these OSM-based Sketch Maps for participatory mapping in your area of interest,
+                </p>
+
+
+                <h5>{{ _('What is the benefit of this new ohsome dashboard integration? + Recommendations') }}</h5>
+                <ul>
+                    <li>
+                        {{ _('Before you use these OSM-based Sketch Maps for participatory mapping in your area of interest,
                             you can review the analysis provided by the Map Quality Check to ensure that participants can orient themselves
                             properly on the paper maps.') }}
-                        </li>
-                        <li>
-                            {{ _('You are automatically provided with analyses in the ohsome dashboard directly. In contrast to having as before a static PDF report, 
+                    </li>
+                    <li>
+                        {{ _('You are automatically provided with analyses in the ohsome dashboard directly. In contrast to having as before a static PDF report, 
 							this setup to enables you to also adapt and complement the automatically conducted analyses according to your needs. 
 							While road data is automatically checked for you can choose from a wide selection of topics in regard to OSM data:') }}
-					
-							<figure> <!-- Figure Topic selection-->
-								<img src="{{ url_for('static', filename='assets/images/help/topic_selection.webp' ) }}"
-								alt="{{ _('Figure Topic selection.') }}">
-								<figcaption>{{ _('Topic selection example') }}</figcaption>
-							</figure>
-									
-						</li>
-						
-						<li>
-                            {{ _('Further, you can not only analyse the <b>completeness</b> and <b>currency</b> of the OSM data, but further conduct a <b>Road Comparison</b> 
+
+                        <figure> <!-- Figure Topic selection-->
+                            <img src="{{ url_for('static', filename='assets/images/help/topic_selection.webp' ) }}" alt="{{ _('Figure Topic selection.') }}">
+                            <figcaption>{{ _('Topic selection example') }}</figcaption>
+                        </figure>
+
+                    </li>
+
+                    <li>
+                        {{ _('Further, you can not only analyse the <b>completeness</b> and <b>currency</b> of the OSM data, but further conduct a <b>Road Comparison</b> 
 							with reference data and also check the <b>attribute completeness</b> in your OSM base data:') }}
-					
-							<figure> <!-- Figure Quality Indicators-->
-								<img src="{{ url_for("static", filename="assets/images/help/quality_indicators.webp" ) }}"
-								alt="{{ _('Figure Quality Indicators.') }}">
-								<figcaption>{{ _('Quality indicators overview') }}</figcaption>
-							</figure>
-						</li>
-									
-                        <li>
-                            {{ _('Take a look at the map:') }}
-                            <ul>
-                                <li>{{ _('How well can you orient yourself on the map?') }}</li>
-                                <li>{{ _('Are important points of reference, such as hospitals, schools, landmarks, etc. visible on the map?') }}</li>
-                
-                            </ul>
-                        </li>
-                    </ul>
-                </article>
-            </details>
-            <details>
-                <summary id="export-sketch-map-as-pdf">1.3 {{ _('Export Sketch Map as PDF') }}</summary>
-                <article>
-                    <p>
-                        {{ _('The generated Sketch Map for your selected area of interest can be downloaded as a PDF file by clicking on the blue button.') }}
-                    </p>
-                    <figure> 
-                        <img src="{{ url_for("static", filename="assets/images/help/1_3_empty_sketch_map_osm.webp" ) }}"
-                            alt="{{ _('Empty Sketch Map, OSM') }}">
-                        <figcaption></figcaption>
-                    </figure>
 
-                    <figure> 
-                        <img src="{{ url_for("static", filename="assets/images/help/1_3_empty_sketch_map_satellite.webp" ) }}"
-                            alt="{{ _('Empty Sketch Map, Satellite') }}">
-                        <figcaption></figcaption>
-                    </figure>
+                        <figure> <!-- Figure Quality Indicators-->
+                            <img src="{{ url_for("static", filename="assets/images/help/quality_indicators.webp" ) }}" alt="{{ _('Figure Quality Indicators.') }}">
+                            <figcaption>{{ _('Quality indicators overview') }}</figcaption>
+                        </figure>
+                    </li>
 
-                    <h5>{{ _('Recommendations') }}</h5>
-                    <ul>
-                        <li>
-                            {{ _('Prepare separate maps for each topic or per person/group because it is difficult to read and analyze
-                            too many markings from one map.
-                            You can print out one map layout as often as you want. ') }}
-                        </li>
-                        <li>
-                            {{ _('We recommend printing the maps on matte, non-reflective paper. ') }}
-                        </li>
-                        <li>
-                            {{ _('Name your maps appropriately; Putting names on the downloaded Sketch Maps (can help
-                            you in organizing your maps. 
-                            If you relate Sketch Maps back to questionnaires, use the same number for the map as you did in the questionnaire.') }}
-                        </li>
-                        <li>
-                            {{ _('If you plan on printing out your map in black and white, check the visibility of the background map
-                            and reduce saturation in the printing settings if the background becomes too dark.') }}
-                        </li>
-                        <li>
-                            {{ _('In case you use a satellite imagery background, please review the color saturation of your image. If the 
-                            background is too dark, you might consider to choose OSM as base map or reduce saturation in the printing settings.') }}
-                        </li>
-                
-                    </ul>
-                </article>
-            </details>
+                    <li>
+                        {{ _('Take a look at the map:') }}
+                        <ul>
+                            <li>{{ _('How well can you orient yourself on the map?') }}</li>
+                            <li>{{ _('Are important points of reference, such as hospitals, schools, landmarks, etc. visible on the map?') }}</li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </article>
         </details>
         <details>
-            <summary id="data-collection"><strong class="sketchy" style="color: var(--heigit-red)">{{ _('THEN:') }} </strong>
-                &nbsp;{{ _('Data collection in the field') }}
-            </summary>
+            <summary id="export-sketch-map-as-pdf">1.3 {{ _('Export Sketch Map as PDF') }}</summary>
             <article>
                 <p>
-                    {{ _('Mapping through sketches using a pen on a printed Sketch Map is a core activity of the Sketch Map Tool process. How you mark the Sketch Maps influences your end results: the detected markings.') }}
+                    {{ _('The generated Sketch Map for your selected area of interest can be downloaded as a PDF file by clicking on the blue button.') }}
                 </p>
-                <p>
-                    {{ _('This section as well as <a href="https://nexus.heigit.org/repository/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/Important_mapping_tips.pdf"
-                        target="_blank">this PDF</a> discusses what you should keep in mind before and during mapping.') }}
-                </p>
-                <p>
-                    {{ _('Example of marked Sketch Map:') }}
-                </p>
-
-                <figure> 
-                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}"
-                        alt="{{ _('Marked Sketch Map, OSM') }}">
+                <figure>
+                    <img src="{{ url_for("static", filename="assets/images/help/1_3_empty_sketch_map_osm.webp" ) }}" alt="{{ _('Empty Sketch Map, OSM') }}">
+                    <figcaption></figcaption>
                 </figure>
-                    <h4>{{ _('Tips to improve marking detection') }}</h4>
-                    <p>
-                        {{ _('The latest version of the Sketch Map Tool leverages advanced Deep Learning models trained to analyze images of
+
+                <figure>
+                    <img src="{{ url_for("static", filename="assets/images/help/1_3_empty_sketch_map_satellite.webp" ) }}" alt="{{ _('Empty Sketch Map, Satellite') }}">
+                    <figcaption></figcaption>
+                </figure>
+
+                <h5>{{ _('Recommendations') }}</h5>
+                <ul>
+                    <li>
+                        {{ _('Prepare separate maps for each topic or per person/group because it is difficult to read and analyze
+                            too many markings from one map.
+                            You can print out one map layout as often as you want. ') }}
+                    </li>
+                    <li>
+                        {{ _('We recommend printing the maps on matte, non-reflective paper. ') }}
+                    </li>
+                    <li>
+                        {{ _('Name your maps appropriately; Putting names on the downloaded Sketch Maps (can help
+                            you in organizing your maps. 
+                            If you relate Sketch Maps back to questionnaires, use the same number for the map as you did in the questionnaire.') }}
+                    </li>
+                    <li>
+                        {{ _('If you plan on printing out your map in black and white, check the visibility of the background map
+                            and reduce saturation in the printing settings if the background becomes too dark.') }}
+                    </li>
+                    <li>
+                        {{ _('In case you use a satellite imagery background, please review the color saturation of your image. If the 
+                            background is too dark, you might consider to choose OSM as base map or reduce saturation in the printing settings.') }}
+                    </li>
+
+                </ul>
+            </article>
+        </details>
+    </details>
+    <details>
+        <summary id="data-collection"><strong class="sketchy" style="color: var(--heigit-red)">{{ _('THEN:') }} </strong>
+            &nbsp;{{ _('Data collection in the field') }}
+        </summary>
+        <article>
+            <p>
+                {{ _('Mapping through sketches using a pen on a printed Sketch Map is a core activity of the Sketch Map Tool process. How you mark the Sketch Maps influences your end results: the detected markings.') }}
+            </p>
+            <p>
+                {{ _('This section as well as <a href="https://nexus.heigit.org/repository/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/Important_mapping_tips.pdf"
+                        target="_blank">this PDF</a> discusses what you should keep in mind before and during mapping.') }}
+            </p>
+            <p>
+                {{ _('Example of marked Sketch Map:') }}
+            </p>
+
+            <figure>
+                <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}" alt="{{ _('Marked Sketch Map, OSM') }}">
+            </figure>
+            <h4>{{ _('Tips to improve marking detection') }}</h4>
+            <p>
+                {{ _('The latest version of the Sketch Map Tool leverages advanced Deep Learning models trained to analyze images of
                         Sketch Maps and identify marked objects within them.
                         Through supervised learning on extensive datasets of labeled images, these models acquire the ability to distinguish
                         markings from the background of Sketch Maps by analyzing patterns and features.
@@ -306,13 +296,13 @@
                         between the reference and current input image,
                         enabling precise spatial alignment. Our current algorithm detects all markings, whether they are intended as a line,
                         a point or as a polygon. ') }}
-                    </p>
-                    <p>
-                        {{ _('Please make sure to not accidentally draw over the markers on the edge as they are used for georeferencing purposes
+            </p>
+            <p>
+                {{ _('Please make sure to not accidentally draw over the markers on the edge as they are used for georeferencing purposes
                         in order to ensure the automatic map detection.') }}
-                    </p>
-                    <p>
-                        {{ _('At the moment the Sketch Map Tool detects red, blue, green and black markings best, orange and yellow also
+            </p>
+            <p>
+                {{ _('At the moment the Sketch Map Tool detects red, blue, green and black markings best, orange and yellow also
                         work quite well.
                         If different colors are used for specific topics, participants can include a legend for the meaning of each color
                         outside the map extent.
@@ -320,722 +310,697 @@
                         specific colors.
                         This needs to be done manually in the subsequent analysis process in your Geographic Information System software.
                         The GeoTiff can be used to manually match the geodata layer files to the legend information.') }}
-                    </p>
-                    <article>
-                        <div class="grid">
-                            <div>
-                                <figure>
-                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}"
-                                        alt="{{ _('Picture of a Sketch Map.') }}">
-                                    <figcaption>{{ _('<strong>Original Image:</strong> marked with red/blue polygons.') }}</figcaption>
-                                </figure>
-                            </div>
-                            <div>
-                                <figure>
-                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red_result.webp" ) }}"
-                                        alt="{{ _('Result of Marking Detection.') }}">
-                                    <figcaption>
-                                        {{ _('<strong>Result:</strong> Closed circles are detected as one polygon
+            </p>
+            <article>
+                <div class="grid">
+                    <div>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                            <figcaption>{{ _('<strong>Original Image:</strong> marked with red/blue polygons.') }}</figcaption>
+                        </figure>
+                    </div>
+                    <div>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red_result.webp" ) }}" alt="{{ _('Result of Marking Detection.') }}">
+                            <figcaption>
+                                {{ _('<strong>Result:</strong> Closed circles are detected as one polygon
                                         and the whole area will be detected/filled by the software.') }}
-                                    </figcaption>
-                                </figure>
-                            </div>
-                        </div>
-                        <div class="grid">
-                            <div>
-                                <figure>
-                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_different_shapes.webp" ) }}"
-                                         alt="{{ _('Picture of a Sketch Map.') }}">
-                                    <figcaption>{{ _('<strong>Original Image:</strong> marked with different shapes.') }}</figcaption>
-                                </figure>
-                            </div>
-                            <div>
-                                <figure>
-                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_different_shapes_result.webp" ) }}"
-                                         alt="{{ _('Result of Marking Detection.') }}">
-                                    <figcaption>
-                                        {{ _('<strong>Result:</strong> The shape of everything you write or draw on the map with a color that the
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+                <div class="grid">
+                    <div>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_different_shapes.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                            <figcaption>{{ _('<strong>Original Image:</strong> marked with different shapes.') }}</figcaption>
+                        </figure>
+                    </div>
+                    <div>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_different_shapes_result.webp" ) }}" alt="{{ _('Result of Marking Detection.') }}">
+                            <figcaption>
+                                {{ _('<strong>Result:</strong> The shape of everything you write or draw on the map with a color that the
                                         tool recognizes can be detected as a marked area (polygon).
                                         However, in some cases, they may not be detected at all.') }}
-                                    </figcaption>
-                                </figure>
-                            </div>
-                        </div>
-                    </article>
-                    <h4>{{ _('Recommendations') }}</h4>
-                    <article>
-                        <h5>{{ _('Line Thickness') }}</h5>
-                        <div class="grid">
-                            <div>
-                                <h6>{{ _('Recommended') }}</h6>
-                                <p>
-                                    {{ _('Use thick felt-tip pens with intense colors.') }}
-                                </p>
-                                    <figure>
-                                        <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}"
-                                            alt="{{ _('Picture of a Sketch Map.') }}">
-                                        <figcaption></figcaption>
-                                    </figure>
-                            </div>
-                            <div>
-                                <h6>{{ _('Not recommended') }}</h6>
-                                <p>
-                                    {{ _('Thin lines in light colors might not be detected. We generally recommend to test your pens and the 
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </article>
+            <h4>{{ _('Recommendations') }}</h4>
+            <article>
+                <h5>{{ _('Line Thickness') }}</h5>
+                <div class="grid">
+                    <div>
+                        <h6>{{ _('Recommended') }}</h6>
+                        <p>
+                            {{ _('Use thick felt-tip pens with intense colors.') }}
+                        </p>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                            <figcaption></figcaption>
+                        </figure>
+                    </div>
+                    <div>
+                        <h6>{{ _('Not recommended') }}</h6>
+                        <p>
+                            {{ _('Thin lines in light colors might not be detected. We generally recommend to test your pens and the 
                                     detectability of your markings with the Sketch Map Tool before your mapping activity.') }}
-                                </p>
-                                <figure>
-                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_thin_lines.webp" ) }}"
-                                        alt="{{ _('Picture of a Sketch Map.') }}">
-                                    <figcaption></figcaption>
-                                </figure>
-                            </div>
-                        </div>
-                    </article>
-                    <article>
-                        <h5>{{ _('Polygon Outlines') }}</h5>
-                        <div class="grid">
-                            <div>
-                                <h6>{{ _('Recommended') }}</h6>
-                                <p>
-                                    {{ _('For polygons, draw their outline as a closed, strong, and continues shape.
+                        </p>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_thin_lines.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                            <figcaption></figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </article>
+            <article>
+                <h5>{{ _('Polygon Outlines') }}</h5>
+                <div class="grid">
+                    <div>
+                        <h6>{{ _('Recommended') }}</h6>
+                        <p>
+                            {{ _('For polygons, draw their outline as a closed, strong, and continues shape.
                                     You do not need to fill the polygons, and the pattern you draw in the middle will not be detected.
                                     In general, smaller polygons are detected better than large polygons.') }}
-                                </p>
-                                <figure>
-                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}"
-                                        alt="{{ _('Picture of a Sketch Map.') }}">
-                                    <figcaption></figcaption>
-                                </figure>
-                            </div>
-                            <div>
-                                <h6>{{ _('Not recommended') }}</h6>
-                                <p>
-                                    {{ _('Gaps in the outline could lead to mistakes in the detection.') }}
-                                </p>
-                                <figure>
-                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_dotted_lines.webp" ) }}"
-                                        alt="{{ _('Picture of a Sketch Map.') }}">
-                                    <figcaption></figcaption>
-                                </figure>
-                                <p>
-                                    {{ _('Large polygons might not be detected properly.') }}
-                                </p>
-                                <figure>
-                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_large_polys.webp" ) }}"
-                                        alt="{{ _('Picture of a Sketch Map.') }}">
-                                    <figcaption></figcaption>
-                                </figure>
-                                <p>
-                                    {{ _('If you just draw a line, the marked area of the line will be detected.
+                        </p>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                            <figcaption></figcaption>
+                        </figure>
+                    </div>
+                    <div>
+                        <h6>{{ _('Not recommended') }}</h6>
+                        <p>
+                            {{ _('Gaps in the outline could lead to mistakes in the detection.') }}
+                        </p>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_dotted_lines.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                            <figcaption></figcaption>
+                        </figure>
+                        <p>
+                            {{ _('Large polygons might not be detected properly.') }}
+                        </p>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_large_polys.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                            <figcaption></figcaption>
+                        </figure>
+                        <p>
+                            {{ _('If you just draw a line, the marked area of the line will be detected.
                                     Nevertheless, we do not recommend to use lines, since the model has not been trained to detect lines 
                                     and doing so could lead to mistakes in detection of marking.') }}
-                                </p>
-                                <figure>
-                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_lines.webp" ) }}"
-                                        alt="{{ _('Picture of a Sketch Map.') }}">
-                                    <figcaption></figcaption>
-                                </figure>
-                                <p>
-                                    {{ _('If you want to draw a point, draw a larger circle to improve the detection.
+                        </p>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_lines.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                            <figcaption></figcaption>
+                        </figure>
+                        <p>
+                            {{ _('If you want to draw a point, draw a larger circle to improve the detection.
                                     If you want to draw lines, draw strong, non-dashed lines with intense colors.') }}
-                                </p>
-                                <p>
-                                    {{ _('Hint: If you need the marking as a line or a point shape,
+                        </p>
+                        <p>
+                            {{ _('Hint: If you need the marking as a line or a point shape,
                                     you can easily transfer it manually or digitalize it yourself,
                                     for example, in QGIS (see <a
                                         href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex4_.html#exercise-a-exploration-basic-visualization-of-sketch-map-tool-outputs-in-qgis"
                                         target="_blank">Training Exercise 4</a>)') }}
-                                </p>
-                            </div>
-                        </div>
-                    </article>
-                    <article>
-                        <h6>{{ _('Satellite Base maps') }}</h6>
-                        <div class="grid">
-                            <div>
-                                <h6>{{ _('Recommended') }}</h6>
-                                <p>
-                                    {{ _('Check the darkness of the Satellite base map, especially before printing it in black-and-white.')
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article>
+                <h6>{{ _('Satellite Base maps') }}</h6>
+                <div class="grid">
+                    <div>
+                        <h6>{{ _('Recommended') }}</h6>
+                        <p>
+                            {{ _('Check the darkness of the Satellite base map, especially before printing it in black-and-white.')
                                     }}
-                                </p>
-                                <p>
-                                    {{ _('Make sure you use bright colors and mark the maps especially clearly. Sometimes
+                        </p>
+                        <p>
+                            {{ _('Make sure you use bright colors and mark the maps especially clearly. Sometimes
                                     it might be helpful to use both Sketch Maps with satellite imagery
                                     and OSM base maps for the mapping.') }}
-                                </p>
-                            </div>
-                            <div>
-                                <h6>{{ _('Not recommended') }}</h6>
-                                <p>{{ _('Small polygons can be especially difficult to detected.') }}</p>
-                                <figure>
-                                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_small_polys_result.webp" ) }}"
-                                        alt="{{ _('Picture of a Sketch Map.') }}">
-                                    <figcaption></figcaption>
-                                </figure>
-                            </div>
-                        </div>
-                    </article>
+                        </p>
+                    </div>
+                    <div>
+                        <h6>{{ _('Not recommended') }}</h6>
+                        <p>{{ _('Small polygons can be especially difficult to detected.') }}</p>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_small_polys_result.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                            <figcaption></figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </article>
 
-                    <h4>{{ _('Tips for better comparability and interpretation of the maps') }}</h4>
-                    <h5>{{ _('Map Orientation') }}</h5>
-                    <p>
-                        {{ _('Orientating on a map can be challenging, depending on the base map, the background of the participants, and their map literacy. 
+            <h4>{{ _('Tips for better comparability and interpretation of the maps') }}</h4>
+            <h5>{{ _('Map Orientation') }}</h5>
+            <p>
+                {{ _('Orientating on a map can be challenging, depending on the base map, the background of the participants, and their map literacy. 
                         Mapping in groups can make orientation much easier, as participants can assist each other in reading the map. Before you start with the mapping, we recommend:') }}
-                    </p>
-                    <ul>
-                        <li>
-                            {{ _('Start by identifying a common place or points of reference.') }}
-                        </li>
-                        <li>
-                            {{ _('Try to locate the current position or the  place of residence of the participant on the map.') }}
-                        </li>
-                    </ul>
-                    <p>
-                        {{ _('If you like to learn more about the challenges of map orientation and how to choose a good base map, take a look at 
+            </p>
+            <ul>
+                <li>
+                    {{ _('Start by identifying a common place or points of reference.') }}
+                </li>
+                <li>
+                    {{ _('Try to locate the current position or the  place of residence of the participant on the map.') }}
+                </li>
+            </ul>
+            <p>
+                {{ _('If you like to learn more about the challenges of map orientation and how to choose a good base map, take a look at 
                         <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex1_.html" target="_blank">Training Exercise 2</a>. In 
                         <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex3_.html" target="_blank">Training Exercise 3</a>,you can try mapping in groups in a role play.') }}
-                    </p>
-                    <h5>{{ _('Develop a mapping strategy') }}</h5>
-                    <p>
-                        {{ _('Prepare a clear data collection and analysis strategy beforehand. A consistent drawing or marking approach across different 
+            </p>
+            <h5>{{ _('Develop a mapping strategy') }}</h5>
+            <p>
+                {{ _('Prepare a clear data collection and analysis strategy beforehand. A consistent drawing or marking approach across different 
                         groups or individuals simplifies the comparison and analysis process, as the data is collected uniformly and its meaning is clear. 
                         For this, you should discuss and agree beforehand on:') }}
-                    </p>
-                    <ul>
-                        <li>
-                            {{ _('What do you want to map?') }}
-                        </li>
-                        <li>
-                            {{ _('Which colors should be used? For example, with blue, we map the area with the highest flood risk, and with red, we map safe places.') }}
-                        </li>
-                    </ul>
-                    <p>
-                        {{ _('You should test your mapping strategy beforehand: Print out a map, draw some test objects with the pens you are planning to use. 
+            </p>
+            <ul>
+                <li>
+                    {{ _('What do you want to map?') }}
+                </li>
+                <li>
+                    {{ _('Which colors should be used? For example, with blue, we map the area with the highest flood risk, and with red, we map safe places.') }}
+                </li>
+            </ul>
+            <p>
+                {{ _('You should test your mapping strategy beforehand: Print out a map, draw some test objects with the pens you are planning to use. 
                         Upload the map and check if the result is satisfactory.You can practice the development of a mapping strategy in 
                         <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex3_.html" target="_blank">Training Exercise 3</a>.') }}
-                    </p>
-                    <h5>{{ _('Organize your maps') }}</h5>
-                    <ul>
-                        <li>
-                            {{ _('Put a title on your map and add information about the participants, place and time to analyze the maps afterwards. 
+            </p>
+            <h5>{{ _('Organize your maps') }}</h5>
+            <ul>
+                <li>
+                    {{ _('Put a title on your map and add information about the participants, place and time to analyze the maps afterwards. 
                             Be careful; everything you write/draw on the map could be detected as a marked area (polygon), so use the white space outside the map extent.') }}
-                        </li>
-                        <li>
-                            {{ _('If you collect additional information from the participants with other data collection methods such as <a href="https://www.kobotoolbox.org/" target="_blank">Kobo Collect</a> or 
+                </li>
+                <li>
+                    {{ _('If you collect additional information from the participants with other data collection methods such as <a href="https://www.kobotoolbox.org/" target="_blank">Kobo Collect</a> or 
                             <a href="https://getodk.org/" target="_blank">ODK</a>, add a number on the Sketch Map and save this number in the data collection questionnaire.') }}
-                        </li>
-                        <li>
-                            {{ _('If you have many participants or you want participants to provide a lot of different information, it is recommended to use individual Sketch Maps for each purpose/topic or per participant.') }}
-                        </li>
-                    </ul>    
-            </article>
-        </details>
+                </li>
+                <li>
+                    {{ _('If you have many participants or you want participants to provide a lot of different information, it is recommended to use individual Sketch Maps for each purpose/topic or per participant.') }}
+                </li>
+            </ul>
+        </article>
+    </details>
+    <details>
+        <summary id="paper-to-geodata">
+            <div class="sketchy circle">2</div>
+            {{ _('<strong>Paper to GIS: Automatically digitize collected data</strong>') }}
+        </summary>
         <details>
-            <summary id="paper-to-geodata">
-                <div class="sketchy circle">2</div>
-                {{ _('<strong>Paper to GIS: Automatically digitize collected data</strong>') }}
-            </summary>
-            <details>
-                <summary id="scan-or-photo-marked-sketch-maps">2.1 {{ _('Scan or photograph your marked
+            <summary id="scan-or-photo-marked-sketch-maps">2.1 {{ _('Scan or photograph your marked
                     Sketch Maps') }}
-                </summary>
-                <article>
-                    <p>
-                        {{ _('After the field data collection, scan or photograph the marked Sketch Maps.') }}
-                    </p>
-                    <h4>{{ _('Examples') }}</h4>
-                    <p>{{ _('<strong>No Problem:</strong> Can be digitized properly') }}</p>
-                    <figure>
-                        <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}"
-                            alt="{{ _('Picture of a Sketch Map.') }}">
-                        <figcaption></figcaption>
-                    </figure>
-                    <hr>
-                    <p>
-                        {{ _('<strong>Problem:</strong> Missing or cut QR-Code <br>
+            </summary>
+            <article>
+                <p>
+                    {{ _('After the field data collection, scan or photograph the marked Sketch Maps.') }}
+                </p>
+                <h4>{{ _('Examples') }}</h4>
+                <p>{{ _('<strong>No Problem:</strong> Can be digitized properly') }}</p>
+                <figure>
+                    <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                    <figcaption></figcaption>
+                </figure>
+                <hr>
+                <p>
+                    {{ _('<strong>Problem:</strong> Missing or cut QR-Code <br>
                         Without the whole QR-code the map cannot be recognized by the Sketch Map Tool.') }}
-                    </p>
-                    <figure>
-                        <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_no_qr.webp" ) }}"
-                            alt="{{ _('Sketch Map, No QR Code') }}">
-                        <figcaption></figcaption>
-                    </figure>
-                    <figure>
-                        <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_cut_qr.webp" ) }}"
-                            alt="{{ _('Sketch Map, Cutted QR Code.') }}">
-                        <figcaption></figcaption>
-                    </figure>
-                    <hr>
-                    <p>
-                        {{ _('<strong>Problem:</strong> Missing Globs and missing part of the map <br>
+                </p>
+                <figure>
+                    <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_no_qr.webp" ) }}" alt="{{ _('Sketch Map, No QR Code') }}">
+                    <figcaption></figcaption>
+                </figure>
+                <figure>
+                    <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_cut_qr.webp" ) }}" alt="{{ _('Sketch Map, Cutted QR Code.') }}">
+                    <figcaption></figcaption>
+                </figure>
+                <hr>
+                <p>
+                    {{ _('<strong>Problem:</strong> Missing Globs and missing part of the map <br>
                         This could lead to mistakes in the georeferencing and missing information on your map..') }}
-                    </p>
-                    <figure>
-                        <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_missing_globes.webp" ) }}"
-                             alt="{{ _('Sketch Map, Missing markers.') }}">
-                        <figcaption></figcaption>
-                    </figure>
-                    <hr>
-                    <p>
-                        {{ _('<strong>Problem:</strong> Tilted photos of the map <br>
+                </p>
+                <figure>
+                    <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_missing_globes.webp" ) }}" alt="{{ _('Sketch Map, Missing markers.') }}">
+                    <figcaption></figcaption>
+                </figure>
+                <hr>
+                <p>
+                    {{ _('<strong>Problem:</strong> Tilted photos of the map <br>
                         Can lead to mistakes in the georeferencing.') }}
-                    </p>
-                    <figure>
-                        <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_tiled.webp" ) }}"
-                             alt="{{ _('Sketch Map, Tiled Picture.') }}">
-                        <figcaption></figcaption>
-                    </figure>
-                    </article>
-                    <h5>{{ _('Recommendations') }}</h5>
-                    <ul>
-                        <li>
-                            {{ _('The photos must be taken from directly above, at a 180-degree angle
+                </p>
+                <figure>
+                    <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_tiled.webp" ) }}" alt="{{ _('Sketch Map, Tiled Picture.') }}">
+                    <figcaption></figcaption>
+                </figure>
+            </article>
+            <h5>{{ _('Recommendations') }}</h5>
+            <ul>
+                <li>
+                    {{ _('The photos must be taken from directly above, at a 180-degree angle
                             (parallel to the Sketch Map), for optimal image quality.') }}
-                        </li>
+                </li>
 
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_how_to_photo.webp" ) }}"
-                                alt="{{ _('How to take a photo of a Sketch Map.') }}">
-                            <figcaption></figcaption>
-                        </figure>
+                <figure>
+                    <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_how_to_photo.webp" ) }}" alt="{{ _('How to take a photo of a Sketch Map.') }}">
+                    <figcaption></figcaption>
+                </figure>
 
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_photo.webp" ) }}"
-                                alt="{{ _('How to take a photo of a Sketch Map.') }}">
-                            <figcaption></figcaption>
-                        </figure>
+                <figure>
+                    <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_photo.webp" ) }}" alt="{{ _('How to take a photo of a Sketch Map.') }}">
+                    <figcaption></figcaption>
+                </figure>
 
-                        <li>
-                            {{ _('For larger paper formats of a Sketch Map (E.g. A2) it can be more challenging to keep the map smooth and to take a proper photo. 
+                <li>
+                    {{ _('For larger paper formats of a Sketch Map (E.g. A2) it can be more challenging to keep the map smooth and to take a proper photo. 
                             Easier than photographing from above by laying the map on a table or ground might be to pin 
                             or glue your map to a flip-board or a wall first and then take a photo.') }}
-                        </li>
+                </li>
 
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_a2_photograph.webp" ) }}"
-                                alt="{{ _('How to take a photo of a Sketch Map.') }}">
-                            <figcaption></figcaption>
-                        </figure>
+                <figure>
+                    <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_a2_photograph.webp" ) }}" alt="{{ _('How to take a photo of a Sketch Map.') }}">
+                    <figcaption></figcaption>
+                </figure>
 
-                        <li>
-                            {{ _('Pay attention to the lighting conditions when taking a picture. 
+                <li>
+                    {{ _('Pay attention to the lighting conditions when taking a picture. 
                             If you experience problems with the results, for example the georeferencing failed or the markings where not 
                             detected probably, please take additional photos of your Sketch Map and upload them again. 
                             Small changes in lighting conditions and angels can make a difference! Additionally, you can consider 
                             compressing or resizing the original image to a minimum of 1024x1024 pixels before you upload your image.') }}
-                        </li>
-                        <li>
-                            {{ _('The image of the Sketch Map needs to be uploaded as JPG or PNG (max. file size is 50 MB).
+                </li>
+                <li>
+                    {{ _('The image of the Sketch Map needs to be uploaded as JPG or PNG (max. file size is 50 MB).
                             The georeferencing and color-detection work even better if you scan the marked Sketch Map
                             with a resolution of 300 dpi. Attention! The file size will be too large when scanning with a
                             600 dpi resolution.') }}
-                        </li>
-                        <li>
-                            {{ _('If the marking detection does not work satisfactorily, you can improve the color contrast
+                </li>
+                <li>
+                    {{ _('If the marking detection does not work satisfactorily, you can improve the color contrast
                             of the markings (with a pen, a new photo, or with photo editing software such as Paint, GIMP,
                             or Windows Cut & Resize).') }}
-                        </li>
-                        <li>
-                            {{ _('Name your scans/photos appropriately when saving, and before uploading them to the Sketch Map Tool. 
+                </li>
+                <li>
+                    {{ _('Name your scans/photos appropriately when saving, and before uploading them to the Sketch Map Tool. 
                             This helps you recognize and allocate your Sketch Maps in the subsequent uploading and analyzing process. 
                             If you relate Sketch Maps back to questionnaires, use the same number for the map as you did in the questionnaire.') }}
-                        </li>
-                    </ul>
-                </article>
-            </details>
-            <details>
-                <summary id="upload-sketch-maps">2.2 {{ _('Upload your Sketch Maps') }}</summary>
-                <article>
-                    <figure>
-                        <img src="{{ url_for("static", filename="assets/images/help/2_2_sketch_map_upload.webp" ) }}"
-                            alt="{{ _('Screenshot: Upload of a Sketch Map.') }}">
-                        <figcaption></figcaption>
-                    </figure>
-                    <p>
-                        {{ _('To upload files, you can click on the upload field or drag and drop your files directly into
+                </li>
+            </ul>
+            </article>
+        </details>
+        <details>
+            <summary id="upload-sketch-maps">2.2 {{ _('Upload your Sketch Maps') }}</summary>
+            <article>
+                <figure>
+                    <img src="{{ url_for("static", filename="assets/images/help/2_2_sketch_map_upload.webp" ) }}" alt="{{ _('Screenshot: Upload of a Sketch Map.') }}">
+                    <figcaption></figcaption>
+                </figure>
+                <p>
+                    {{ _('To upload files, you can click on the upload field or drag and drop your files directly into
                         the upload field and then click on the Upload button. You can upload one or more marked Sketch Maps
                         at once. However, they all must be the same base map (same QR-Code), and the markings of all maps will be
                         automatically combined in one GeoJSON. The upload works for JPG or PNG files. 
                         For one Sketch Map, it can take up to 100 seconds to produce a result, and for a package of 10 Sketch Maps, it can take up to 16 minutes.') }}
-                    </p>
-
-                    <h5>{{ _('Recommendations') }}</h5>
-                    <ul>
-                        <li>
-                            {{ _('If you experience problems during the upload process, please check out "2.1 Scan or photograph your marked Sketch Maps" above and
-                            the FAQ section below or contact your Sketch Map Tool focal point in your
-                            organization or the <a href="mailto:sketch-map-tool@heigit.org"
-                            target="_blank">Sketch Map Tool user support</a>') }}
-                        </li>
-                    </ul>
-                </article>
-            </details>
-            <details>
-                <summary id="download-results-as-geodata">2.3 {{ _('Download detected Markings as Geodata') }}
-                </summary>
-                <article>
-                    <p>
-                        {{ _('Download the markings of the Sketch Maps in different geodata formats (raster data as
-                        GeoTIFF, vector data as a GeoJSON file). You can download the georeferenced Sketch Maps as a
-                        GeoTIFF (a georeferenced "picture" for each of your uploaded Sketch Maps) and the color-detected markings as vector data in a GeoJSON file.') }}
-                    </p>
-
-                    <h5>{{ _('Recommendations') }}</h5>
-                    <ul>
-                        <li>
-                            {{ _('If you experience problems during the download process, please check out the FAQ section
-                            below or contact your Sketch Map Tool focal point in your organization or the <a href="mailto:sketch-map-tool@heigit.org"
-                            target="_blank">Sketch Map Tool user support</a> if you cannot find your answers there.') }}
-                        </li>
-                    </ul>
-                </article>
-            </details>
-        </details>
-
-        <details>
-            <summary id="import-geodata-in-qgis"><strong class="sketchy"
-                                                        style="color: var(--heigit-red)">{{ _('FINALLY:') }} </strong>
-                {{ _('Import Geodata in a Geographic Information System (GIS), e.g. QGIS') }}
-            </summary>
-            <article>
-                <p>
-                   {{ _('The gained geodata can be even more valuable for the communities and humanitarian
-                   organizations if you create result maps or analyze it further. There are many different
-                   analyses possible based on your gained map data.') }} 
                 </p>
-                <p>
-                    {{ _('To open, visualize and work with the downloaded geodata you need some type of GIS. 
-                    We recommend using QGIS because it is open-source and provides the most flexibility for analyzing and visualizing your data.
-                    Alternatively you could also use browser based GIS-Applications like <a href="https://umap.openstreetmap.fr/en/" target="_blank">uMap</a>. 
-                    These browser-based applications are easier to use for beginners, but limited in their functionality. 
-                    Please also keep in mind data security questions when using Online GIS-Applications for visualizing your data!') }} 
-                </p>
-                <p>
-                    {{ _('For more tips on how to open and analyze the downloaded geodata and how to create a result map in QGIS as well as in uMap,
-                    take a look at the following
-                    <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html"
-                    target="_blank">QGIS Training Lectures</a>.') }}
-                </p>
-                <p>
-                    {{ _('Here you can see an overview on the characteristics of GeoTIFF and GeoJSON and how the results could look like:') }}
-                </p>
-
-                <article>
-                    <div class="grid">
-                        <div>
-                            <h5>{{ _('GeoTIFF') }}</h5>
-                            <p>{{ _('The GeoTIFF output file consists of a georeferenced "picture" for each of your uploaded Sketch
-                                Maps. When you open the GeoTIFF files in a GIS, it should look similar to this example and show all 
-                                your sketch map(s) as separate layers. You can view only one of your maps at a time.') }}</p>
-                            <figure>
-                                <img src="{{ url_for("static", filename="assets/images/help/finally_qgis_geotiff.webp" ) }}"
-                                    alt="{{ _('GeoTiff in QGIS.') }}">
-                                <figcaption></figcaption>
-                            </figure>
-                        </div>
-                        <div>
-                            <h5>{{ _('GeoJSON') }}</h5>
-                            <p>{{ _('If you open the GeoJSON, you can see the detected markings from all uploaded maps as polygons.
-                                When you check the attribute table, you can see that for each marking, the name of the map and the detected color
-                                are specified. With the help of these attributes, you can style your map or conduct analyses.') }}</p>
-                            <figure>
-                                <img src="{{ url_for("static", filename="assets/images/help/finally_qgis_geojson_1.webp" ) }}"
-                                    alt="{{ _('GeoJSON in QGIS.') }}">
-                                <figcaption></figcaption>
-                            </figure>
-                            <figure>
-                                <img src="{{ url_for("static", filename="assets/images/help/finally_qgis_geojson_2.webp" ) }}"
-                                    alt="{{ _('GEOJSON in QGIS.') }}">
-                                <figcaption></figcaption>
-                            </figure>
-                        </div>
-                    </div>
-                </article>
 
                 <h5>{{ _('Recommendations') }}</h5>
                 <ul>
                     <li>
-                        {{ _('The GeoTIFF file (raster file) can be opened in a GIS software like QGIS but can not be opened in many browser-based GIS-Applications like uMap:') }}
-                        <ul>
-                            <li>
-                                {{ _('It can be used, for example, as a background to combine
+                        {{ _('If you experience problems during the upload process, please check out "2.1 Scan or photograph your marked Sketch Maps" above and
+                            the FAQ section below or contact your Sketch Map Tool focal point in your
+                            organization or the <a href="mailto:sketch-map-tool@heigit.org"
+                            target="_blank">Sketch Map Tool user support</a>') }}
+                    </li>
+                </ul>
+            </article>
+        </details>
+        <details>
+            <summary id="download-results-as-geodata">2.3 {{ _('Download detected Markings as Geodata') }}
+            </summary>
+            <article>
+                <p>
+                    {{ _('Download the markings of the Sketch Maps in different geodata formats (raster data as
+                        GeoTIFF, vector data as a GeoJSON file). You can download the georeferenced Sketch Maps as a
+                        GeoTIFF (a georeferenced "picture" for each of your uploaded Sketch Maps) and the color-detected markings as vector data in a GeoJSON file.') }}
+                </p>
+
+                <h5>{{ _('Recommendations') }}</h5>
+                <ul>
+                    <li>
+                        {{ _('If you experience problems during the download process, please check out the FAQ section
+                            below or contact your Sketch Map Tool focal point in your organization or the <a href="mailto:sketch-map-tool@heigit.org"
+                            target="_blank">Sketch Map Tool user support</a> if you cannot find your answers there.') }}
+                    </li>
+                </ul>
+            </article>
+        </details>
+    </details>
+
+    <details>
+        <summary id="import-geodata-in-qgis"><strong class="sketchy" style="color: var(--heigit-red)">{{ _('FINALLY:') }} </strong>
+            {{ _('Import Geodata in a Geographic Information System (GIS), e.g. QGIS') }}
+        </summary>
+        <article>
+            <p>
+                {{ _('The gained geodata can be even more valuable for the communities and humanitarian
+                   organizations if you create result maps or analyze it further. There are many different
+                   analyses possible based on your gained map data.') }}
+            </p>
+            <p>
+                {{ _('To open, visualize and work with the downloaded geodata you need some type of GIS. 
+                    We recommend using QGIS because it is open-source and provides the most flexibility for analyzing and visualizing your data.
+                    Alternatively you could also use browser based GIS-Applications like <a href="https://umap.openstreetmap.fr/en/" target="_blank">uMap</a>. 
+                    These browser-based applications are easier to use for beginners, but limited in their functionality. 
+                    Please also keep in mind data security questions when using Online GIS-Applications for visualizing your data!') }}
+            </p>
+            <p>
+                {{ _('For more tips on how to open and analyze the downloaded geodata and how to create a result map in QGIS as well as in uMap,
+                    take a look at the following
+                    <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html"
+                    target="_blank">QGIS Training Lectures</a>.') }}
+            </p>
+            <p>
+                {{ _('Here you can see an overview on the characteristics of GeoTIFF and GeoJSON and how the results could look like:') }}
+            </p>
+
+            <article>
+                <div class="grid">
+                    <div>
+                        <h5>{{ _('GeoTIFF') }}</h5>
+                        <p>{{ _('The GeoTIFF output file consists of a georeferenced "picture" for each of your uploaded Sketch
+                                Maps. When you open the GeoTIFF files in a GIS, it should look similar to this example and show all 
+                                your sketch map(s) as separate layers. You can view only one of your maps at a time.') }}</p>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/finally_qgis_geotiff.webp" ) }}" alt="{{ _('GeoTiff in QGIS.') }}">
+                            <figcaption></figcaption>
+                        </figure>
+                    </div>
+                    <div>
+                        <h5>{{ _('GeoJSON') }}</h5>
+                        <p>{{ _('If you open the GeoJSON, you can see the detected markings from all uploaded maps as polygons.
+                                When you check the attribute table, you can see that for each marking, the name of the map and the detected color
+                                are specified. With the help of these attributes, you can style your map or conduct analyses.') }}</p>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/finally_qgis_geojson_1.webp" ) }}" alt="{{ _('GeoJSON in QGIS.') }}">
+                            <figcaption></figcaption>
+                        </figure>
+                        <figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/finally_qgis_geojson_2.webp" ) }}" alt="{{ _('GEOJSON in QGIS.') }}">
+                            <figcaption></figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </article>
+
+            <h5>{{ _('Recommendations') }}</h5>
+            <ul>
+                <li>
+                    {{ _('The GeoTIFF file (raster file) can be opened in a GIS software like QGIS but can not be opened in many browser-based GIS-Applications like uMap:') }}
+                    <ul>
+                        <li>
+                            {{ _('It can be used, for example, as a background to combine
                                 it with other data or to manually digitize your results yourself in
                                 case some markings are not detected correctly.') }}
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        {{ _('The GeoJSON file (vector file) can be opened as well in QGIS as in many browser-based GIS-Applications like uMap:') }}
-                        <ul>
-                            <li>
-                                {{ _('It can be visualized in a clear and concise map in order to use it for
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    {{ _('The GeoJSON file (vector file) can be opened as well in QGIS as in many browser-based GIS-Applications like uMap:') }}
+                    <ul>
+                        <li>
+                            {{ _('It can be visualized in a clear and concise map in order to use it for
                                 reporting (see <a
                                     href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex4_.html"
                                     target="_blank">Training Exercise 4</a>)') }}
-                            </li>
-                            <li>
-                                {{ _('Based on the vector outputs you can analyze your data and combine it with additional
+                        </li>
+                        <li>
+                            {{ _('Based on the vector outputs you can analyze your data and combine it with additional
                                 data (e.g. prepare heatmaps, see <a
                                     href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex5_.html"
                                     target="_blank">Training Exercise 5 </a>)') }}
-                            </li>
-                            <li>
-                                {{ _('In QGIS: You can compare the vector output with the raster file to verify the marking detection. 
+                        </li>
+                        <li>
+                            {{ _('In QGIS: You can compare the vector output with the raster file to verify the marking detection. 
                                 In case features are not detected or are incorrectly detected, you can manipulate your vector file based on the GeoTIFF.') }}
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        {{ _('If the imported data looks strange and does not represent the actual markings of
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    {{ _('If the imported data looks strange and does not represent the actual markings of
                         the Sketch Maps, please check your uploaded sketch map files and, if necessary, scan them again
                         or take new pictures. Please review the recommendations in the sections about the data collection,
                         then scan, photograph or the upload above and consult our FAQ section about the problems in the colour
                         detection. If you cannot find your answers there, please contact your Sketch Map Tool focal point in your
                         organization or the Sketch Map Tool or the <a href="mailto:sketch-map-tool@heigit.org"
                         target="_blank">Sketch Map Tool user support</a>.') }}
-                    </li>
-                </ul>
-            </article>
-        </details>
+                </li>
+            </ul>
+        </article>
+    </details>
 
-        <h2 id="data-storage-and-security">{{ _('Data storage and security') }}</h2>
-        <details>
-            <summary id="map-creation">{{ _('Map creation') }}</summary>
-            <article>
-                <ul>
-                    <li>
-                        {{ _('<strong>Functionally necessary data storage:</strong> We need the original map frame to digitize your Sketch Map.
+    <h2 id="data-storage-and-security">{{ _('Data storage and security') }}</h2>
+    <details>
+        <summary id="map-creation">{{ _('Map creation') }}</summary>
+        <article>
+            <ul>
+                <li>
+                    {{ _('<strong>Functionally necessary data storage:</strong> We need the original map frame to digitize your Sketch Map.
                         The map frames of the created maps are stored for 12 months, giving you the opportunity to digitize your Sketch Map in those 12 months.') }}
-                    </li>
-                </ul>
-            </article>
-        </details>
+                </li>
+            </ul>
+        </article>
+    </details>
 
-        <details>
-            <summary id="paper-to-gis">{{ _('Paper to GIS') }}</summary>
-            <article>
-                <ul>
-                    <li>
-                        {{ _('<strong>Functionally necessary data storage:</strong> Uploaded images of Sketch Maps are stored for processing
+    <details>
+        <summary id="paper-to-gis">{{ _('Paper to GIS') }}</summary>
+        <article>
+            <ul>
+                <li>
+                    {{ _('<strong>Functionally necessary data storage:</strong> Uploaded images of Sketch Maps are stored for processing
                         (georeferencing and marking detection) until the results are generated.') }}
-                    </li>
-                    <li>
-                        {{ _('The results are stored and available for download for a period of 24 hours, after which they are deleted.') }}
-                    </li>
-                </ul>
-            </article>
-        </details>
+                </li>
+                <li>
+                    {{ _('The results are stored and available for download for a period of 24 hours, after which they are deleted.') }}
+                </li>
+            </ul>
+        </article>
+    </details>
 
-        <details>
-            <summary id="data-sharing-for-improvement">{{ _('Share your data for the Improvement of the Sketch Map Tool') }}</summary>
-            <article>
-                <p>
-                    {{ _('On a voluntary basis, you can enable us to keep your uploaded Sketch Maps beyond processing to further improve the Sketch Map Tool.') }}
-                </p>
-                <div class="grid">
-                    <article>
-                        <p>{{ _('If you <strong>opt-in</strong> by checking the check box you enable us to ...') }}</p>
-                        <p>
-                            {{ _('... keep your uploaded Sketch Maps for future improvements of the Sketch Map Tool such as training
+    <details>
+        <summary id="data-sharing-for-improvement">{{ _('Share your data for the Improvement of the Sketch Map Tool') }}</summary>
+        <article>
+            <p>
+                {{ _('On a voluntary basis, you can enable us to keep your uploaded Sketch Maps beyond processing to further improve the Sketch Map Tool.') }}
+            </p>
+            <div class="grid">
+                <article>
+                    <p>{{ _('If you <strong>opt-in</strong> by checking the check box you enable us to ...') }}</p>
+                    <p>
+                        {{ _('... keep your uploaded Sketch Maps for future improvements of the Sketch Map Tool such as training
                             our machine learning models which detect your markings on the uploaded images.') }}
-                        </p>
-                        <p>
-                            {{ _('The Sketch Map Tool uses a sequence of machine learning models (SAM and YOLO) to detect the markings on the maps.
+                    </p>
+                    <p>
+                        {{ _('The Sketch Map Tool uses a sequence of machine learning models (SAM and YOLO) to detect the markings on the maps.
                             These models need to be trained with a lot of real-world examples so they are able to identity the markings correctly.') }}
-                        </p>
-                        <p>
-                            {{ _('Further accuracy improvements can be achieved by incorporating additional real-world cases of marked maps into the models.
+                    </p>
+                    <p>
+                        {{ _('Further accuracy improvements can be achieved by incorporating additional real-world cases of marked maps into the models.
                             You can help us here by giving your consent!') }}
-                        </p>
-                        <p>
-                            {{ _('For more detailed and technical information take a look at our
+                    </p>
+                    <p>
+                        {{ _('For more detailed and technical information take a look at our
                                 <a href="https://github.com/GIScience/sketch-map-tool/blob/main/docs/action-diagram.png" target="_blank">GitHub</a>
                             and the following figure.') }}
-                        </p>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/data_storage_and_security_workflow.webp" ) }}"
-                                alt="{{ _('Data storage and security workflow.') }}">
-                            <figcaption></figcaption>
-                        </figure>
-                    </article>
-                    <article>
-                        <p>{{ _('If you <strong>opt-out</strong> by leaving the checkbox unchecked (default) ...') }}</p>
-                        <p>
-                            {{ _('... your uploaded Sketch Maps will be deleted after the results are generated. The results are stored and available for download
+                    </p>
+                    <figure>
+                        <img src="{{ url_for("static", filename="assets/images/help/data_storage_and_security_workflow.webp" ) }}" alt="{{ _('Data storage and security workflow.') }}">
+                        <figcaption></figcaption>
+                    </figure>
+                </article>
+                <article>
+                    <p>{{ _('If you <strong>opt-out</strong> by leaving the checkbox unchecked (default) ...') }}</p>
+                    <p>
+                        {{ _('... your uploaded Sketch Maps will be deleted after the results are generated. The results are stored and available for download
                             for a period of 24 hours, after which they are deleted too.') }}
-                        </p>
-                    </article>
-                </div>
-            </article>
-        </details>
+                    </p>
+                </article>
+            </div>
+        </article>
+    </details>
 
-        <details>
-            <summary id="basic-statistics">{{ _('Basic statistics') }}</summary>
-            <article>
-                {{ _('To get a better insight into the general usage of the Sketch Map Tool we store anonymous data about the map generation 
+    <details>
+        <summary id="basic-statistics">{{ _('Basic statistics') }}</summary>
+        <article>
+            {{ _('To get a better insight into the general usage of the Sketch Map Tool we store anonymous data about the map generation 
                 (date, centroid, layer, version, page format and orientation).') }}
-            </article>
-        </details>
+        </article>
+    </details>
 
-        <details>
-            <summary id="questions-concerns">{{ _('Questions and concerns') }}</summary>
-            <article>
-                <p>{{ _('If you have further questions or any concerns please reach us via <a href="mailto:sketch-map-tool@heigit.org" target="_blank">E-Mail</a>.') }}</p>
+    <details>
+        <summary id="questions-concerns">{{ _('Questions and concerns') }}</summary>
+        <article>
+            <p>{{ _('If you have further questions or any concerns please reach us via <a href="mailto:sketch-map-tool@heigit.org" target="_blank">E-Mail</a>.') }}</p>
 
-                <p>{{ _('It is also possible to set-up the Sketch Map Tool on your own server. In this case, please get in touch with the <a href="mailto:sketch-map-tool@heigit.org" target="_blank">Sketch Map Tool team</a>.') }}</p>
-            </article>
-        </details>
+            <p>{{ _('It is also possible to set-up the Sketch Map Tool on your own server. In this case, please get in touch with the <a href="mailto:sketch-map-tool@heigit.org" target="_blank">Sketch Map Tool team</a>.') }}</p>
+        </article>
+    </details>
 
-        <h2 id="faq">{{ _('FAQs') }}</h2>
-        <details>
-            <summary id="what-are-osm-data">{{ _('What are OSM data?') }}</summary>
-            <article>
-                {{ _('OpenStreetMap data is freely accessible geodata. You can find out more about it <a
+    <h2 id="faq">{{ _('FAQs') }}</h2>
+    <details>
+        <summary id="what-are-osm-data">{{ _('What are OSM data?') }}</summary>
+        <article>
+            {{ _('OpenStreetMap data is freely accessible geodata. You can find out more about it <a
                     href="https://www.openstreetmap.org/" target="_blank">here</a>.') }}
-            </article>
-        </details>
-        <details>
-            <summary id="what-are-the-quality-levels-for-OSM">{{ _('What are the quality levels for OSM data used in the Map Quality Check?')
+        </article>
+    </details>
+    <details>
+        <summary id="what-are-the-quality-levels-for-OSM">{{ _('What are the quality levels for OSM data used in the Map Quality Check?')
                 }}</summary>
-            <article>
-                {{ _('Based on the 
+        <article>
+            {{ _('Based on the 
                     <a href="https://api.quality.ohsome.org/" 
                     target="_blank">HeiGIT ohsome quality API</a>, the <b>roads</b> in the OSM base map data are analyzed automatically in regard to 
 					their <b>Mapping Saturation</b> and <b>Currentness</b>. Please check the chapter <b>1.2 Map Quality Check</b> for a detailed overview.') }}
-            </article>
-        </details>
-        
-        <details>
-            <summary id="for-which-reseach-questions-can-smt-be-used">{{ _('For which research questions can the Sketch Map Tool
+        </article>
+    </details>
+
+    <details>
+        <summary id="for-which-reseach-questions-can-smt-be-used">{{ _('For which research questions can the Sketch Map Tool
                 be used?') }}</summary>
-            <article>
-                {{ _('The Sketch Map Tool has been primarily developed for research questions related to flooding and disaster risk reduction.
+        <article>
+            {{ _('The Sketch Map Tool has been primarily developed for research questions related to flooding and disaster risk reduction.
                 Since then, it has been used world wide for a variety of topics like vulnerability and capacity mapping or risk
                 mapping in general, city planning, mapping of cultural sites and many more.
                 Check out our <b>Case Studies</b> to learn more.') }}
-            </article>
-        </details>
-        <details>
-            <summary id="how-does-mapping-work">{{ _('How does mapping work with the Sketch Map Tool?') }}</summary>
-            <article>
-                {{ _('The local population can, for example, draw flooded areas such as streets, parks, etc., on the printed
+        </article>
+    </details>
+    <details>
+        <summary id="how-does-mapping-work">{{ _('How does mapping work with the Sketch Map Tool?') }}</summary>
+        <article>
+            {{ _('The local population can, for example, draw flooded areas such as streets, parks, etc., on the printed
                 Sketch Map.
                 The larger paper formats also allow to hold group discussions about flooded areas. The maps with the markings
                 can be photographed and uploaded to the tool.
                 The georeferenced GeoTIFF and GeoJSON can then be further analyzed or used.') }}
-            </article>
-        </details>
-        <details>
-            <summary id="how-large-can-stuy-area-be">{{ _('How large can my study area be?') }}</summary>
-            <article>
-                {{ _('So far the Sketch Map Tool has only been tested on neighborhood or city level. The tool works best for
+        </article>
+    </details>
+    <details>
+        <summary id="how-large-can-stuy-area-be">{{ _('How large can my study area be?') }}</summary>
+        <article>
+            {{ _('So far the Sketch Map Tool has only been tested on neighborhood or city level. The tool works best for
                 study areas which are smaller than 50km².') }}
-            </article>
-        </details>
-        <details>
-            <summary id="why-qr-code-and-markers">{{ _('Why is there a QR code and markers the Sketch Maps?') }}</summary>
-            <article>
-                {{ _('These are required for georeferencing. The QR Code contains the ID of the reference map frame and the bounding box coordinates.
+        </article>
+    </details>
+    <details>
+        <summary id="why-qr-code-and-markers">{{ _('Why is there a QR code and markers the Sketch Maps?') }}</summary>
+        <article>
+            {{ _('These are required for georeferencing. The QR Code contains the ID of the reference map frame and the bounding box coordinates.
                 The tool employs computer vision algorithms to match uploaded and reference map frames (mainly based on the markers.)
                 before it transforms and georeferences the uploaded Sketch Maps.') }}
-            </article>
-        </details>
-        <details>
-            <summary id="can-i-access-results-later">{{ _('Can I access my results at a later point in time?') }}</summary>
-            <article>
-                {{ _('No, the results should always be downloaded directly after using the tool. If you forgot to download the
+        </article>
+    </details>
+    <details>
+        <summary id="can-i-access-results-later">{{ _('Can I access my results at a later point in time?') }}</summary>
+        <article>
+            {{ _('No, the results should always be downloaded directly after using the tool. If you forgot to download the
                 files, you can simply upload and process the files again.') }}
-            </article>
-        </details>
-        <details>
-            <summary id="why-do-i-have-to-pay-attention">{{ _('What do I need to keep in mind for the participatory mapping?') }}</summary>
-            <article>
-                {{ _('Please make sure not to accidentally draw over markers at the edge as they are needed for automatic map detection.
+        </article>
+    </details>
+    <details>
+        <summary id="why-do-i-have-to-pay-attention">{{ _('What do I need to keep in mind for the participatory mapping?') }}</summary>
+        <article>
+            {{ _('Please make sure not to accidentally draw over markers at the edge as they are needed for automatic map detection.
                 Use thicker felt-tip pens with intense colors; red, blue, and black work best. Prepare the same set of pens for
                 all interviewers.
                     <a href="https://nexus.heigit.org/service/rest/repository/browse/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/" target="_blank">Here</a>
                 you can download the most important tips and questions for the mapping (summarized in a one-pager).') }}
 
-            </article>
-        </details>
-        <details>
-            <summary id="how-does-georeferencing-work">{{ _('How does the georeferencing work?') }}</summary>
-            <article>
-                <p>
-                    {{ _('Our georeferencing process employs the Binary Robust Invariant Scalable Keypoints (BRISK)
+        </article>
+    </details>
+    <details>
+        <summary id="how-does-georeferencing-work">{{ _('How does the georeferencing work?') }}</summary>
+        <article>
+            <p>
+                {{ _('Our georeferencing process employs the Binary Robust Invariant Scalable Keypoints (BRISK)
                     method from the OpenCV library for feature matching. It begins by extracting bounding box
                     coordinates and an identification number from a QR code on the uploaded Sketch Map to identify
                     the corresponding unmarked reference map. Using the BRISK algorithm, the marked Sketch Map is
                     aligned with the unmarked map. Later, we use the coordinates of the bounding box to transform the
                     marked map into the world geodetic system (WGS 84), resulting in a georeferenced GeoTIFF file
                     suitable for geospatial analysis.') }}
-                </p>
-                <p>
-                    {{ _('You can find more details in the <a href="https://www.mdpi.com/2220-9964/10/3/130" target="_blank">paper
+            </p>
+            <p>
+                {{ _('You can find more details in the <a href="https://www.mdpi.com/2220-9964/10/3/130" target="_blank">paper
                         about the Sketch Map Tool</a> in the paragraph about Image Processing.') }}
-                </p>
-            </article>
-        </details>
-        <details>
-            <summary id="how-to-ensure-optimal-results">{{ _('How can I ensure optimal results when photographing the Sketch
+            </p>
+        </article>
+    </details>
+    <details>
+        <summary id="how-to-ensure-optimal-results">{{ _('How can I ensure optimal results when photographing the Sketch
                 Maps?') }}
-            </summary>
-            <article>
-                {{ _('The images need to be in JPG or PNG format. The file may not be larger than 500&nbsp; MB. Georeferencing
+        </summary>
+        <article>
+            {{ _('The images need to be in JPG or PNG format. The file may not be larger than 500&nbsp; MB. Georeferencing
                 works best if you scan the marked Sketch Map with a resolution of 300 dpi.
                 The photos must be taken from above at a 180 degree angle (parallel above the Sketch Map) to produce the best result.') }}
-            </article>
-        
-        </details>
-        <details>
-            <summary id="how-to-check-georeferencing">{{ _('How do I check if georeferencing is correct?') }}</summary>
-            <article>
-                {{ _('You can open the TIFF file in a geographic information system (GIS), such as ArcGIS or QGIS, to check
+        </article>
+
+    </details>
+    <details>
+        <summary id="how-to-check-georeferencing">{{ _('How do I check if georeferencing is correct?') }}</summary>
+        <article>
+            {{ _('You can open the TIFF file in a geographic information system (GIS), such as ArcGIS or QGIS, to check
                 this.
                 If you upload the file there and insert a basemap (for example the OSM basemap), you can see if the georeferencing
                 has worked. The Sketch Map should match the base map.') }}
-            </article>
-        </details>
-        
-        <details>
-            <summary id="why-does-tiff-look-strange">{{ _('Why does my generated GeoTIFF file look strange?') }}</summary>
-            <article>
-                {{ _('Please first try to open the file in a geographic information system (GIS) such as ArcGIS or QGIS.
+        </article>
+    </details>
+
+    <details>
+        <summary id="why-does-tiff-look-strange">{{ _('Why does my generated GeoTIFF file look strange?') }}</summary>
+        <article>
+            {{ _('Please first try to open the file in a geographic information system (GIS) such as ArcGIS or QGIS.
                 The georeferencing may have worked even if the GeoTIFF file does not look right. If it still appears incorrect in
                 the GIS,
                 the map might not have been properly detected by the tool in the photo, which could have several possible causes.
                 For example, the photo may have been taken from the wrong angle or the markers may have been painted over.') }}
-            </article>
-        </details>
-        
-        <details>
-            <summary id="why-is-satellite-too-dark">{{ _('What can I do if the satellite map I printed is too dark?') }}
-            </summary>
-            <article>
-                {{ _('In case you use a satellite imagery background, please review the color saturation of your image.
-                If the background is too dark, you might consider to choose OSM as base map or adjust the color saturation in the printer settings before printing.') }}
-            </article>
-        </details>
+        </article>
+    </details>
 
-        <details>
-            <summary id="how-long-upload-stored">{{ _('How long are uploaded Sketch Maps stored?') }}
-            </summary>
-            <article>
-                {{ _('The uploaded image(s) of your Sketch Map(s) will be stored on our server for processing (georeferencing and marking detection) 
+    <details>
+        <summary id="why-is-satellite-too-dark">{{ _('What can I do if the satellite map I printed is too dark?') }}
+        </summary>
+        <article>
+            {{ _('In case you use a satellite imagery background, please review the color saturation of your image.
+                If the background is too dark, you might consider to choose OSM as base map or adjust the color saturation in the printer settings before printing.') }}
+        </article>
+    </details>
+
+    <details>
+        <summary id="how-long-upload-stored">{{ _('How long are uploaded Sketch Maps stored?') }}
+        </summary>
+        <article>
+            {{ _('The uploaded image(s) of your Sketch Map(s) will be stored on our server for processing (georeferencing and marking detection) 
                 until the results are generated. If you consent, the image(s) will be stored long term for future improvements of the Sketch Map Tool such as 
                 training our machine learning models which detect your markings on the uploaded images. 
                 If you do not give consent, the uploaded images will be deleted after the results are generated. 
                 The results are stored and available for download for a period of 24 hours, after which they are deleted too.') }}
-            </article>
-        </details>
+        </article>
+    </details>
 
-        <details>
-            <summary id="how-much-time-to-upload">{{ _('How much time do I have to upload the Sketch Maps for the digitization?') }}
-            </summary>
-            <article>
-                {{ _('This is possible for up to 12 months after your maps have been created, after which the digitization will no longer work.') }}
-            </article>
-        </details>
+    <details>
+        <summary id="how-much-time-to-upload">{{ _('How much time do I have to upload the Sketch Maps for the digitization?') }}
+        </summary>
+        <article>
+            {{ _('This is possible for up to 12 months after your maps have been created, after which the digitization will no longer work.') }}
+        </article>
+    </details>
 
-    </main>
+</main>
 {% endblock body %}

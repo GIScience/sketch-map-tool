@@ -1,82 +1,79 @@
 {% extends "base.jinja" %}
 
 {% block head %}
-    <script type="module"
-            src="{{ url_for("static", filename="bundles/create-results.js") }}"></script>
+<script type="module" src="{{ url_for("static", filename="bundles/create-results.js") }}"></script>
 {% endblock head %}
 
 {% block header_message %}
-    <div class="circle" style="display: inline-block;">1</div>{{ _('Create paper maps to collect data') }}
+<div class="circle" style="display: inline-block;">1</div>{{ _('Create paper maps to collect data') }}
 {% endblock %}
 
 {% block body %}
-    <div class="container-fluid horizontal step-arrows">
-        <div>{{ _('Define your Area of Interest') }}</div>
-        <div class="active">{{ _('Map Quality Check') }}</div>
-        <div class="active">{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
-    </div>
-    <main class="container">
-        <div id="main-message">
-            <div class="sketchy h1 center-text pending">{{ _('Your results are being processed ...') }}
-            </div>
-            <div class="sketchy h1 center-text success hidden">{{ _('Your results are ready for download!') }}
-            </div>
-            <div class="sketchy h1 center-text partial-success hidden">{{ _('Sorry. Only some of your results could be generated for download.') }}
-            </div>
-            <div class="sketchy h1 center-text error hidden">{{ _('Your results should have been downloadable from here, but we are having troubles on our servers!') }}
-            </div>
+<div class="container-fluid horizontal step-arrows">
+    <div>{{ _('Define your Area of Interest') }}</div>
+    <div class="active">{{ _('Map Quality Check') }}</div>
+    <div class="active">{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
+</div>
+<main class="container">
+    <div id="main-message">
+        <div class="sketchy h1 center-text pending">{{ _('Your results are being processed ...') }}
         </div>
-        <br>
-        <div class="grid">
-            <div>
-                <article id="quality-report" class="result">
-                    <header>
-                        <img src="{{ url_for("static", filename="assets/images/create-results/quality-report-icon.svg") }}" alt="{{ _('quality report icon') }}"><br>
-                        <img class="sub-icon" src="{{ url_for("static", filename="assets/logos/HeiGIT/ohsome-quality-analyst.svg") }}" alt="{{ _('ohsome quality analyst logo') }}">
-                    </header>
-                    <h6>{{ _('Map Quality Check Report') }}</h6>
-                    <p>
-                        {{ _('You can analyze the <a href="https://wiki.osm.org" target="_blank">OpenStreetMap
+        <div class="sketchy h1 center-text success hidden">{{ _('Your results are ready for download!') }}
+        </div>
+        <div class="sketchy h1 center-text partial-success hidden">{{ _('Sorry. Only some of your results could be generated for download.') }}
+        </div>
+        <div class="sketchy h1 center-text error hidden">{{ _('Your results should have been downloadable from here, but we are having troubles on our servers!') }}
+        </div>
+    </div>
+    <br>
+    <div class="grid">
+        <div>
+            <article id="quality-report" class="result">
+                <header>
+                    <img src="{{ url_for("static", filename="assets/images/create-results/quality-report-icon.svg") }}" alt="{{ _('quality report icon') }}"><br>
+                    <img class="sub-icon" src="{{ url_for("static", filename="assets/logos/HeiGIT/ohsome-quality-analyst.svg") }}" alt="{{ _('ohsome quality analyst logo') }}">
+                </header>
+                <h6>{{ _('Map Quality Check Report') }}</h6>
+                <p>
+                    {{ _('You can analyze the <a href="https://wiki.osm.org" target="_blank">OpenStreetMap
                         (OSM)</a> data of the selected Area of Interest through the <a
                         href="https://dashboard.ohsome.org" target="_blank">ohsome dashboard</a>. The ohsome
                         dashboard gives insights about the <strong>fitness for field data collection</strong>.
                         It will be created through the <a href="https://api.quality.ohsome.org/"
                         target="_blank">ohsome quality API</a>.') }}
-                    </p>
-                    <a id="quality-report-button" href="https://dashboard.ohsome.org/#backend=oqtApi&topic=roads&bboxes=sketch-map-tool-input:{{ bbox }}&indicators=currentness%2Cmapping-saturation" target="_blank" role="button">{{ _('Get Quality Report') }}</a>
-                </article>
-            </div>
-            <div>
-                <article id="sketch-map" class="result">
-                    <header>
-                        <img src="{{ url_for("static", filename="assets/images/create-results/sketch-map-icon.svg") }}" alt="sketch map icon"><br>
-                        <span class="brand-font heigit-red sub-icon">Sketch Map</span>
-                    </header>
-                    <h6>{{ _('Sketch Map Template') }}</h6>
-                    <p class="pending">
-                        {{ _('We are creating the Sketch Map template that you can use for offline
+                </p>
+                <a id="quality-report-button" href="https://dashboard.ohsome.org/#backend=oqtApi&topic=roads&bboxes=sketch-map-tool-input:{{ bbox }}&indicators=currentness%2Cmapping-saturation" target="_blank" role="button">{{ _('Get Quality Report') }}</a>
+            </article>
+        </div>
+        <div>
+            <article id="sketch-map" class="result">
+                <header>
+                    <img src="{{ url_for("static", filename="assets/images/create-results/sketch-map-icon.svg") }}" alt="sketch map icon"><br>
+                    <span class="brand-font heigit-red sub-icon">Sketch Map</span>
+                </header>
+                <h6>{{ _('Sketch Map Template') }}</h6>
+                <p class="pending">
+                    {{ _('We are creating the Sketch Map template that you can use for offline
                         participatory mapping.<br>
                         <strong>Please be patient, this can take 2-10 minutes.</strong> We use up-to-date
                         <a href="https://wiki.osm.org" target="_blank">OpenStreetMap (OSM)</a> data
                         or satellite imagery powered by ESRI to create a high resolution printable map for you.') }}
-                    </p>
-                    <p class="success hidden">
-                        {{ _('We have created the Sketch Map template that you can use for offline
+                </p>
+                <p class="success hidden">
+                    {{ _('We have created the Sketch Map template that you can use for offline
                         participatory mapping.<br>
                         We used up-to-date
                         <a href="https://wiki.osm.org" target="_blank">OpenStreetMap (OSM)</a> data
                         or satellite imagery powered by ESRI to create a high resolution printable map for you.<br>
                         <strong>You can now start collecting data in the field!</strong>') }}
-                    </p>
-                    <p class="error hidden">
-                        {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}
-                    </p>
-                    <a id="sketch-map-download-button" href="#" download aria-busy="true"
-                       role="button"
-                       disabled="disabled">{{ _('Download PDF') }}</a>
-                    <div id="sketch-map-status" class="task-status"></div>
-                </article>
-            </div>
+                </p>
+                <p class="error hidden">
+                    {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}
+                </p>
+                <a id="sketch-map-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download PDF') }}</a>
+                <div id="sketch-map-status" class="task-status"></div>
+            </article>
         </div>
-    </main>
+    </div>
+</main>
 {% endblock body %}
