@@ -25,14 +25,13 @@
                 <div class="sketchy h1 center-text">{{ _('Area of Interest') }}</div>
                 <div id="map"></div>
             </div>
-
             <div id="right">
                 <div class="sketchy h1 center-text">{{ _('Page Setup') }}</div>
-                <div id="message-container" class="" style="height: 11rem; overflow-y: scroll; padding: 1rem; ">
-                    <article id="zoom-info" class="infobox hidden">{{ _('Your Area of Interest is too large!
+                <div id="message-container" hidden>
+                    <article id="zoom-info" hidden class="infobox">{{ _('Your Area of Interest is too large!
                         <br>Zoom further in to be able to create a Sketch Map.') }}
                     </article>
-                    <article id="antimeridian-info" class="infobox">{{ _('You are currently trying to
+                    <article id="antimeridian-info" hidden class="infobox">{{ _('You are currently trying to
                         request a map that crosses the +/-180° <a href="https://en.wikipedia.org/wiki/180th_meridian" target="_blank">antimeridian</a>. This is currently not
                         supported, please move the map such that your extent is either left or right of
                         the antimeridian.') }}
