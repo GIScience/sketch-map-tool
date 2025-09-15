@@ -108,13 +108,16 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
 /**
  * Add the print-layout-control to an OpenLayers Map
  * @param map - An instance of an OpenLayers Map
+ * @param format - An instance of FORMAT
+ * @param orientation - An instance of ORIENTATION
  * @returns {PrintLayout}
  */
-function addPrintLayoutControl(map) {
+function addPrintLayoutControl(map, format = PAPER_FORMAT.A4, orientation = ORIENTATION.LANDSCAPE) {
+    const margin = SKETCH_MAP_MARGINS[format][orientation];
     const printLayoutControl = new PrintLayout({
-        format: PAPER_FORMAT.A4,
-        orientation: ORIENTATION.LANDSCAPE,
-        margin: SKETCH_MAP_MARGINS.A4.landscape,
+        format,
+        orientation,
+        margin,
     });
     map.addControl(printLayoutControl);
 

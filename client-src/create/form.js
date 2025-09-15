@@ -1,7 +1,7 @@
 import { Margin, ORIENTATION, PAPER_FORMAT } from "@giscience/ol-print-layout-control";
 import { get as getProjection, toLonLat, transformExtent } from "ol/proj";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins";
-import { fillSelectOptions } from "../shared";
+import { fillSelectOptions, updateQueryParamWithConditionalDebounce } from "../shared";
 
 function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
     const paperFormats = { ...PAPER_FORMAT };
@@ -25,6 +25,7 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
             printLayoutControl.setMargin(
                 new Margin(SKETCH_MAP_MARGINS[format][orientation]),
             );
+            updateQueryParamWithConditionalDebounce("format", format);
         });
 
     // property: orientation
@@ -42,6 +43,7 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
             printLayoutControl.setMargin(
                 new Margin(SKETCH_MAP_MARGINS[format][orientation]),
             );
+            updateQueryParamWithConditionalDebounce("orientation", orientation);
         });
 
     // property: bbox (in webmercator)
@@ -78,6 +80,9 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
 
     // disable form submit and display info if zoom is lower than 9
     function handleZoomChange(zoom) {
+        document.getElementById("zoom").value = zoom;
+        updateQueryParamWithConditionalDebounce("zoom", zoom);
+
         if (zoom < 9) {
             messageController.addWarning("zoom-info");
         } else {
@@ -131,20 +136,21 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
 
     printLayoutControl.on("change:bbox", (event) => {
         // update the URL when the selection is changed  (e.g. to bookmark the current selection)
-        const newCenter = printLayoutControl.getMap().getView().getCenter();
-        window.history.replaceState({}, "", `?center=${newCenter}`);
+        const center = printLayoutControl.getMap().getView().getCenter();
+        document.getElementById("center").value = center;
+        updateQueryParamWithConditionalDebounce("center", center);
         // show warning and disable form if bbox crosses the antimeridian
         handleAntimeridian(event.target.getBboxAsLonLat());
     });
 }
 
 function bindFormToLayerSwitcherControl(layerSwitcherControl) {
-// set initial form value from ol-control
+    // set initial form value from ol-control
     document.getElementById("layer").value = layerSwitcherControl.get("activeLayer").name;
-
     function handleLayerSwitch(event) {
         const activeLayerName = event.target.get("activeLayer").name;
         document.getElementById("layer").value = activeLayerName;
+        updateQueryParamWithConditionalDebounce("layer", activeLayerName);
     }
     layerSwitcherControl.on("change:activeLayer", handleLayerSwitch);
 }
