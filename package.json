@@ -36,7 +36,7 @@
     },
     "homepage": "https://github.com/GIScience/sketch-map-tool#readme",
     "devDependencies": {
-        "esbuild": "^0.19.4",
+        "esbuild": "^0.25.10",
         "eslint": "8.51.0",
         "eslint-plugin-import": "2.28.1",
         "js-beautify": "^1.15.4",
