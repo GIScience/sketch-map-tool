@@ -47,10 +47,10 @@
         "stylelint-config-standard": "34.0.0"
     },
     "dependencies": {
-        "@giscience/ol-print-layout-control": "^1.0.2",
+        "@giscience/ol-print-layout-control": "^1.1.2",
         "@picocss/pico": "^2.1.1",
         "filebokz": "^0.1.3",
-        "ol": "^8.1.0",
+        "ol": "^10.6.1",
         "ol-geocoder": "^4.3.1"
     }
 }
