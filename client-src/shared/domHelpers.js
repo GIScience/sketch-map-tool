@@ -1,14 +1,4 @@
 /**
- * This function will return the first UUID v4 string that can be found in the current location URL
- * @returns {string}
- */
-function getUUIDFromURL() {
-    const UUID_V4_PATTERN = /[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}/i;
-    // eslint-disable-next-line no-restricted-globals
-    return location.pathname.match(UUID_V4_PATTERN)[0];
-}
-
-/**
  * Fills the options of an HTMLSelectElement with the values of a simple key-value Object
  * @param {string} selectElementId - the id of an HTMLSelectElement
  * @param { {[key:string] : string|number}} optionsMap - a key-value Object, values will be used as
@@ -102,7 +92,6 @@ function openAllDetailsElements() {
 }
 
 export {
-    getUUIDFromURL,
     fillSelectOptions,
     setTaskStatus,
     setDisabled,
