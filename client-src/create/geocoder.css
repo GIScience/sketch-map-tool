@@ -9,3 +9,15 @@
 .gcd-gl-control {
     background-color: unset;
 }
+
+/* Try to fix style set by pico.css */
+#gcd-input-query {
+    height: unset;
+    margin: unset;
+}
+
+#gcd-input-search {
+    text-decoration: none;
+    right: 5px;
+    top: 2px;
+}
