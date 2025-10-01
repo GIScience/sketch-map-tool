@@ -95,8 +95,9 @@ function getSanitizedUrlSearchParams() {
 
     let format = PAPER_FORMAT.A4;
     if (formatArg != null) {
+        // TODO: enable A0. Blocker is backend support of A0
+        delete PAPER_FORMAT.A0
         format = PAPER_FORMAT[formatArg.toUpperCase()] || format;
-        // TODO handle A0
     }
     return {
         center, zoom, layer, orientation, format,
