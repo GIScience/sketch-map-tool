@@ -18,6 +18,9 @@ import { setAllQueryParam } from "../shared";
 function getSanitizedUrlSearchParams() {
     // Retrieve potentially given map and print layout parameter from URL
     // (e.g. from a bookmarked selection)
+    //
+    // TODO: Move default values to own module or configuration file
+    //
     const searchParams = new URLSearchParams(window.location.search);
 
     const centerArg = searchParams.get("center");
@@ -40,14 +43,14 @@ function getSanitizedUrlSearchParams() {
     }
 
     // type BaselayerType = "OSM" | "ESRI:World_Imagery"
-    let activeBaselayer = "OSM";
+    let layer = "OSM";
     if (baselayerArg != null) {
         switch (baselayerArg) {
             case "ESRI:World_Imagery":
-                activeBaselayer = baselayerArg;
+                layer = baselayerArg;
                 break;
             default:
-                activeBaselayer = "OSM";
+                layer = "OSM";
         }
     }
 
@@ -62,19 +65,19 @@ function getSanitizedUrlSearchParams() {
         // TODO handle A0
     }
     return {
-        center, zoom, activeBaselayer, orientation, format,
+        center, zoom, layer, orientation, format,
     };
 }
 
 const {
-    center, zoom, activeBaselayer, orientation, format,
+    center, zoom, layer, orientation, format,
 } = getSanitizedUrlSearchParams();
 
 setAllQueryParam({
-    center, zoom, orientation, format,
+    center, zoom, layer, orientation, format,
 });
 
-const map = createMap("map", center, zoom, activeBaselayer);
+const map = createMap("map", center, zoom, layer);
 const printLayoutControl = addPrintLayoutControl(map, format, orientation);
 const messageController = new MessageController();
 
