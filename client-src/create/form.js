@@ -80,7 +80,6 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
 
     // disable form submit and display info if zoom is lower than 9
     function handleZoomChange(zoom) {
-        document.getElementById("zoom").value = zoom;
         updateQueryParamWithConditionalDebounce("zoom", zoom);
 
         if (zoom < 9) {
@@ -137,7 +136,6 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
     printLayoutControl.on("change:bbox", (event) => {
         // update the URL when the selection is changed  (e.g. to bookmark the current selection)
         const center = printLayoutControl.getMap().getView().getCenter();
-        document.getElementById("center").value = center;
         updateQueryParamWithConditionalDebounce("center", center);
         // show warning and disable form if bbox crosses the antimeridian
         handleAntimeridian(event.target.getBboxAsLonLat());
