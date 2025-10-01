@@ -5,7 +5,7 @@ WORKDIR app
 # install JS dependencies
 COPY package.json package.json
 COPY package-lock.json package-lock.json
-COPY esbuild.js esbuild.js
+COPY esbuild.mjs esbuild.mjs
 COPY client-src/ client-src/
 
 RUN npm install

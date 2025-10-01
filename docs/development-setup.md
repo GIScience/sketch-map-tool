@@ -168,7 +168,7 @@ To use the code in the HTML Templates it must be build (bundled). The bundler
 such that it will be provided by Flask to the web and can be referenced from the HTML Templates.
 
 If you want to add new code for additional HTML pages add entry-points in the build script 
-[esbuild.js](../esbuild.js)
+[esbuild.mjs](../esbuild.mjs)
 
 Bundle the code with:
 ```bash
