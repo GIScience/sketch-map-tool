@@ -6,7 +6,7 @@
         "watch": [
             "client-src",
             "sketch_map_tool/templates",
-            "esbuild.js"
+            "esbuild.mjs"
         ],
         "ext": "js,css,html,jinja",
         "exec": "npm run build"
@@ -22,7 +22,7 @@
         "format": "npm run format-html",
         "format-html": "js-beautify --type html '**/*.jinja' && js-beautify --type html '**/*.html'",
         "clean": "rimraf ./sketch_map_tool/static/bundles",
-        "build": "npm run clean && node esbuild.js",
+        "build": "npm run clean && node esbuild.mjs",
         "watch": "nodemon"
     },
     "repository": {
