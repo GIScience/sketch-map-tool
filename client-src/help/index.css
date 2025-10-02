@@ -9,3 +9,13 @@ details > details {
     padding: 1rem;
     text-align: center;
 }
+
+details summary:after {
+  /* put the arrow on the left */
+  float:left;
+}
+
+details summary.centered::after {
+    /* vertically center the arrow */
+    height: var(--logo-text-size);
+}
