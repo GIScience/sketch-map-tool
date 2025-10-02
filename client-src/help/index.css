@@ -10,7 +10,7 @@ details > details {
     text-align: center;
 }
 
-details summary:after {
+details summary::after {
   /* put the arrow on the left */
   float:left;
 }
