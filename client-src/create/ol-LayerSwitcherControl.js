@@ -49,18 +49,26 @@ import "./ol-LayerSwitcherControl.css";
  *      their "name" property to the LayerSwitcher
  */
 export class LayerSwitcher extends Control {
-    constructor(options = {}) {
+
+    baseCssClassName;
+    button; //: HTMLButtonElement;
+    layerConfigs; //: {}[];
+    layers; //: {}[]; //layerConfigs linked to ol.Layers
+    layersList; //: string[];
+    activeLayerIdx; //: number;
+
+    constructor(options) {
         const {
-            layers,
+            layerConfigs,
             target,
         } = options;
 
         const element = document.createElement("div");
-        const className = "layerswitcher";
-        element.className = `${className} ${CLASS_CONTROL} ${CLASS_UNSELECTABLE}`;
+        const baseCssClassName = "layerswitcher";
+        element.className = `${baseCssClassName} ${CLASS_CONTROL} ${CLASS_UNSELECTABLE}`;
 
         const button = document.createElement("button");
-        button.className = `${className}-btn`;
+        button.className = `${baseCssClassName}-btn`;
 
         button.setAttribute("type", "button");
         element.appendChild(button);
@@ -69,39 +77,56 @@ export class LayerSwitcher extends Control {
             target,
         });
 
+        this.baseCssClassName = baseCssClassName;
         this.button = button;
-        this.layers = layers.reduce((previousValue, currentValue) => ({
-            ...previousValue,
-            [currentValue.name]: currentValue,
-        }), {});
-        this.layersList = Object.keys(this.layers);
+        this.layerConfigs = structuredClone(layerConfigs);
+        this.layers = [];
+        this.layersList = [];
 
-        // observable properties
-        // start with setting the first layer in the list and update in the initialize() method
-        this.set("activeLayer", layers[0]);
     }
 
     initialize() {
-        this.getMap()
-            .getLayers()
-            .forEach((layer) => {
-                const name = layer.get("name");
-                if (this.layersList.includes(name)) {
-                    this.layers[name].layerRef = layer;
-                    if (layer.getVisible()) {
-                        // store current layer
-                        this.activeLayerIdx = this.layersList.indexOf(name);
-                        // set class
-                        const nextLayersButtonClass = this.getNextLayersButtonClass();
-                        this.button.classList.add(nextLayersButtonClass);
-                        // set label
-                        this.button.innerText = this.getNextLayersButtonLabel();
-                    }
-                }
-                // update observable property
-                this.set("activeLayer", this.layers[this.layersList[this.activeLayerIdx]]);
-            });
+        this.layerConfigs.forEach(this.addLayer.bind(this));
         this.button.addEventListener("click", this.activateNextLayer.bind(this));
+    }
+
+    addLayer(layerSwitcherLayer) {
+        console.log("this.getMap()", this.getMap());
+
+        const layerName = layerSwitcherLayer.name;
+        const currentMapLayers = this.getMap().getAllLayers();
+        //check if the layer exists on ol.Map
+        if (!currentMapLayers.map((layer) => layer.get("name")).includes(layerName)) {
+            console.error(`Layer ${layerName} is not defined on ol.Map.`);
+            return;
+        }
+
+        this.layers[layerName] = structuredClone(layerSwitcherLayer);
+        // add ol-layer ref
+        const mapLayer = currentMapLayers[currentMapLayers.findIndex((layer) => layer.get("name") === layerName)];
+        this.layers[layerName].layerRef = mapLayer;
+        const currentLayerIsLast = this.activeLayerIdx === this.layersList.length - 1;
+        this.layersList.push(layerName);
+        console.log(this.layersList);
+
+        if (mapLayer.getVisible()) {
+            // store current layer
+            this.activeLayerIdx = this.layersList.indexOf(layerName);
+
+            // set class
+            this.setNextLayersButtonClass(this.getNextLayersButtonClass())
+
+            // set label
+            this.button.innerText = this.getNextLayersButtonLabel();
+            // update observable property
+            this.set("activeLayer", this.layers[layerName]);
+        } else if (currentLayerIsLast) {
+            // set class
+            this.setNextLayersButtonClass(layerSwitcherLayer.class ?? "default");
+            // set label
+            this.button.innerText = layerSwitcherLayer.label;
+        }
+
     }
 
     activateNextLayer() {
@@ -109,22 +134,14 @@ export class LayerSwitcher extends Control {
         Object.values(this.layers)
             .forEach((layer) => layer.layerRef.setVisible(false));
 
-        // get old Class before updating active layer
-        const oldClass = this.getNextLayersButtonClass();
-
         // next layer to activate
         this.activeLayerIdx = ++this.activeLayerIdx % this.layersList.length;
 
         this.layers[this.layersList[this.activeLayerIdx]].layerRef.setVisible(true);
         this.set("activeLayer", this.layers[this.layersList[this.activeLayerIdx]]);
 
-        // update css class
-        // remove old class
-        this.button.classList.remove(oldClass);
-
-        // add new class
-        const newClass = this.getNextLayersButtonClass();
-        this.button.classList.add(newClass);
+        //set class
+        this.setNextLayersButtonClass(this.getNextLayersButtonClass());
 
         // set label
         this.button.innerText = this.getNextLayersButtonLabel();
@@ -142,4 +159,9 @@ export class LayerSwitcher extends Control {
         const nextLayersIndex = (this.activeLayerIdx + 1) % this.layersList.length;
         return this.layers[this.layersList[nextLayersIndex]][property];
     }
+
+    setNextLayersButtonClass(className) {
+        this.button.className = `${this.baseCssClassName}-btn ${className}`;
+    }
+
 }

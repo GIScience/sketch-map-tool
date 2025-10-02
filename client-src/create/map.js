@@ -145,7 +145,7 @@ function addGeocoderControl(map) {
 /**
  * Add a layerSwitcher to an Openlayers Map
  * @param map
- * @param layers an array of objects of type {name: string; label: string; class: string}.
+ * @param layerConfigs an array of objects of type {name: string; label: string; class: string}.
  *
  *              "name" is used to identify switchable layers from th ol-Map so this should
  *              correspond to a name property set to the ol-layers.
@@ -156,9 +156,9 @@ function addGeocoderControl(map) {
  *              next layer when a user clicks on the button, e.g. to specify a background image etc
  * @returns {LayerSwitcher}
  */
-function addLayerswitcherControl(map, layers) {
+function addLayerswitcherControl(map, layerConfigs) {
     const layerSwitcher = new LayerSwitcher({
-        layers,
+        layerConfigs,
     });
     map.addControl(layerSwitcher);
     layerSwitcher.initialize();
