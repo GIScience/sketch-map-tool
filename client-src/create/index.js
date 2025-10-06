@@ -13,6 +13,8 @@ import {
 import { bindFormToLayerSwitcherControl, bindFormToPrintLayoutControl } from "./form.js";
 import { MessageController } from "./messageController";
 import { setAllQueryParam, getSanitizedUrlSearchParams } from "../shared";
+import {Tile} from "ol/layer";
+import {XYZ} from "ol/source";
 
 
 const {
@@ -43,3 +45,32 @@ const layerSwitcher = addLayerswitcherControl(map, [
     },
 ]);
 bindFormToLayerSwitcherControl(layerSwitcher);
+
+document.getElementById("oam-add-button").addEventListener("click", addOAMLayer);
+
+function addOAMLayer(){
+    // read text field
+    const oamURL = document.getElementById("oam-tms-url").value;
+
+    // add layer to map
+    const oamBaselayer = new Tile({
+        name: oamURL,
+        visible: true,
+        source: new XYZ({
+            url: oamURL,
+            attributions: "OAM"
+        }),
+        background: "slategrey"
+    });
+
+    map.addLayer(oamBaselayer);
+
+    // add layer to layerswitcher
+    const layerSwitcherLayer = {
+        name: oamURL,
+        label: "OpenAerialMap",
+        class: "esri-world-imagery",
+    };
+
+    layerSwitcher.addLayer(layerSwitcherLayer);
+}
