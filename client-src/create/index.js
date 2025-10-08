@@ -12,16 +12,19 @@ import {
 } from "./map.js";
 import { bindFormToLayerSwitcherControl, bindFormToPrintLayoutControl } from "./form.js";
 import { MessageController } from "./messageController";
-import { setAllQueryParam, getSanitizedUrlSearchParams } from "../shared";
-import {Tile} from "ol/layer";
-import {XYZ} from "ol/source";
+import { setAllQueryParams, getSanitizedUrlSearchParams } from "../shared";
+import { Tile } from "ol/layer";
+import { XYZ } from "ol/source";
+import { OpenAerialMapService } from "./openaerialmapService";
+import { transformExtent } from "ol/proj";
+import { intersects } from "ol/extent";
 
 
 const {
     center, zoom, layer, orientation, format,
 } = getSanitizedUrlSearchParams();
 
-setAllQueryParam({
+setAllQueryParams({
     center, zoom, layer, orientation, format,
 });
 
@@ -31,8 +34,9 @@ const messageController = new MessageController();
 
 bindFormToPrintLayoutControl(printLayoutControl, messageController);
 addGeocoderControl(map);
-const layerSwitcher = addLayerswitcherControl(map, [
-    // Info: names must correspont to name properties of the layers added to the Map in createMap()
+
+const layerSwitcherConfigs = [
+    // Info: names must correspond to name properties of the layers added to the Map in createMap()
     {
         name: "OSM",
         label: "OSM",
@@ -43,34 +47,62 @@ const layerSwitcher = addLayerswitcherControl(map, [
         label: "Satellite",
         class: "esri-world-imagery",
     },
-]);
+];
+const layerSwitcher = addLayerswitcherControl(map, layerSwitcherConfigs);
+
+// add additional layers
+if (layer.startsWith("oam:")) {
+    const oamItemId = layer.replace("oam:", "");
+    addOAMLayer(oamItemId).then(() => {
+        layerSwitcher.addLayer(
+            {
+                name: layer,
+                label: "OpenAerialMap",
+                class: "esri-world-imagery",
+            }
+        )
+    }
+    );
+}
+
+
 bindFormToLayerSwitcherControl(layerSwitcher);
 
-document.getElementById("oam-add-button").addEventListener("click", addOAMLayer);
+document.getElementById("oam-add-button").addEventListener("click", handleAddOAMLayer);
 
-function addOAMLayer(){
+function handleAddOAMLayer() {
     // read text field
-    const oamURL = document.getElementById("oam-tms-url").value;
+    const oamItemId = document.getElementById("oam-itemId").value;
+    addOAMLayer(oamItemId);
+}
 
-    // add layer to map
-    const oamBaselayer = new Tile({
-        name: oamURL,
-        visible: true,
-        source: new XYZ({
-            url: oamURL,
-            attributions: "OAM"
-        }),
-        background: "slategrey"
-    });
+export async function addOAMLayer(oamItemId) {
 
-    map.addLayer(oamBaselayer);
+    const oamLayerName = `oam:${oamItemId}`;
+    try {
+        const metadata = await OpenAerialMapService.getMetadata(oamItemId);
+        console.log(metadata);
 
-    // add layer to layerswitcher
-    const layerSwitcherLayer = {
-        name: oamURL,
-        label: "OpenAerialMap",
-        class: "esri-world-imagery",
-    };
+        // add layer to map
+        const oamBaselayer = new Tile({
+            name: oamLayerName,
+            visible: true,
+            source: new XYZ({
+                url: OpenAerialMapService.getTileUrl(oamItemId),
+                attributions: "OAM"
+            }),
+            background: "slategrey"
+        });
 
-    layerSwitcher.addLayer(layerSwitcherLayer);
+        map.addLayer(oamBaselayer);
+
+        const projectedBbox = transformExtent(metadata.bbox, "EPSG:4326", map.getView().getProjection());
+        if (!intersects(projectedBbox, map.getView().calculateExtent())) {
+            map.getView().fit(projectedBbox);
+        }
+    } catch (error) {
+        alert(`The OpenAerialMap Item ${oamItemId} could not be loaded.`);
+        layerSwitcher.activateNextLayer();
+    }
+
 }
