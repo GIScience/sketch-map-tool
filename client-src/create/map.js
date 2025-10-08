@@ -7,9 +7,7 @@ import { fromLonLat } from "ol/proj";
 import { LineString } from "ol/geom";
 import VectorSource from "ol/source/Vector";
 import VectorLayer from "ol/layer/Vector";
-import {
-    Fill, Stroke, Style, Text,
-} from "ol/style";
+import { Fill, Stroke, Style, Text } from "ol/style";
 import { ScaleLine } from "ol/control";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins.js";
 import { LayerSwitcher } from "./ol-LayerSwitcherControl";
@@ -64,7 +62,7 @@ function createAntiMeridianLayer() {
 function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965], zoom = 15, activeBaselayer = "OSM") {
     const osmBaselayer = new Tile({
         name: "OSM",
-        visible: activeBaselayer !== "ESRI:World_Imagery",
+        visible: activeBaselayer === "OSM",
         source: new OSM(),
     });
 
