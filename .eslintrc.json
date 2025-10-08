@@ -18,6 +18,12 @@
         "no-restricted-syntax": "warn",
         "no-restricted-globals": "warn",
         "import/prefer-default-export": "off",
-        "import/extensions": "off"
+        "import/extensions": "off",
+        "object-curly-spacing": ["warn", "always",
+          {
+            "objectsInObjects": false,
+            "arraysInObjects": false
+          }
+        ]
     }
 }
