@@ -87,12 +87,19 @@ export class LayerSwitcher extends Control {
 
     initialize() {
         this.layerConfigs.forEach(this.addLayer.bind(this));
+        //activate first layer if none was set to visible
+        const mapHasNoVisibleLayers = this.getMap().getAllLayers()
+            .map((layer) => layer.getVisible())
+            .every((isVisible) => isVisible === false)
+
+        if (mapHasNoVisibleLayers) {
+            this.activateLayerAtIndex(0);
+        }
+
         this.button.addEventListener("click", this.activateNextLayer.bind(this));
     }
 
     addLayer(layerSwitcherLayer) {
-        console.log("this.getMap()", this.getMap());
-
         const layerName = layerSwitcherLayer.name;
         const currentMapLayers = this.getMap().getAllLayers();
         //check if the layer exists on ol.Map
@@ -107,7 +114,6 @@ export class LayerSwitcher extends Control {
         this.layers[layerName].layerRef = mapLayer;
         const currentLayerIsLast = this.activeLayerIdx === this.layersList.length - 1;
         this.layersList.push(layerName);
-        console.log(this.layersList);
 
         if (mapLayer.getVisible()) {
             // store current layer
@@ -129,13 +135,9 @@ export class LayerSwitcher extends Control {
 
     }
 
-    activateNextLayer() {
-        // deactivate all layers and activate next
-        Object.values(this.layers)
-            .forEach((layer) => layer.layerRef.setVisible(false));
-
+    activateLayerAtIndex(index) {
         // next layer to activate
-        this.activeLayerIdx = ++this.activeLayerIdx % this.layersList.length;
+        this.activeLayerIdx = index % this.layersList.length;
 
         this.layers[this.layersList[this.activeLayerIdx]].layerRef.setVisible(true);
         this.set("activeLayer", this.layers[this.layersList[this.activeLayerIdx]]);
@@ -145,6 +147,14 @@ export class LayerSwitcher extends Control {
 
         // set label
         this.button.innerText = this.getNextLayersButtonLabel();
+    }
+
+    activateNextLayer() {
+        // deactivate all layers and activate next
+        Object.values(this.layers)
+            .forEach((layer) => layer.layerRef.setVisible(false));
+
+        this.activateLayerAtIndex(this.activeLayerIdx + 1);
     }
 
     getNextLayersButtonClass() {
