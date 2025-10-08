@@ -12,7 +12,7 @@ function getUUIDFromURL() {
     return location.pathname.match(UUID_V4_PATTERN)[0];
 }
 
-const setAllQueryParams = (params) => {
+const setUrlSearchParams = (params) => {
     const url = new URL(window.location);
     Object.keys(params).forEach((key) => {
         url.searchParams.set(key, params[key]);
@@ -110,7 +110,7 @@ function getSanitizedUrlSearchParams() {
 export {
     getSanitizedUrlSearchParams,
     getUUIDFromURL,
-    setAllQueryParams,
+    setUrlSearchParams,
     updateQueryParam,
     updateQueryParamWithConditionalDebounce,
 };

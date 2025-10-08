@@ -146,7 +146,7 @@ function bindFormToLayerSwitcherControl(layerSwitcherControl) {
     // set initial form value from ol-control
     document.getElementById("layer").value = layerSwitcherControl.get("activeLayer").name;
     function handleLayerSwitch(event) {
-        const activeLayerName = event.target.get("activeLayer").name;
+        const activeLayerName = event.target.get("activeLayer").get("name");
         document.getElementById("layer").value = activeLayerName;
         updateQueryParamWithConditionalDebounce("layer", activeLayerName);
     }

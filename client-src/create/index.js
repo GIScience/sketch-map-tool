@@ -6,25 +6,30 @@ import "./create.css";
 
 import {
     addGeocoderControl,
-    addLayerswitcherControl,
+    addLayerSwitcherControl,
     addPrintLayoutControl,
     createMap,
 } from "./map.js";
 import { bindFormToLayerSwitcherControl, bindFormToPrintLayoutControl } from "./form.js";
 import { MessageController } from "./messageController";
-import { setAllQueryParams, getSanitizedUrlSearchParams } from "../shared";
+import { getSanitizedUrlSearchParams, setUrlSearchParams } from "../shared";
 import { Tile } from "ol/layer";
 import { XYZ } from "ol/source";
 import { OpenAerialMapService } from "./openaerialmapService";
 import { transformExtent } from "ol/proj";
 import { intersects } from "ol/extent";
 
+/**
+ * This is the main script which is invoked after DOM Content of create.html is loaded.
+ */
 
+// get all relevant params in case a permalink has been used to set the application state
 const {
     center, zoom, layer, orientation, format,
 } = getSanitizedUrlSearchParams();
 
-setAllQueryParams({
+// invalid params will be replaced by sanitized ones
+setUrlSearchParams({
     center, zoom, layer, orientation, format,
 });
 
@@ -35,36 +40,13 @@ const messageController = new MessageController();
 bindFormToPrintLayoutControl(printLayoutControl, messageController);
 addGeocoderControl(map);
 
-const layerSwitcherConfigs = [
-    // Info: names must correspond to name properties of the layers added to the Map in createMap()
-    {
-        name: "OSM",
-        label: "OSM",
-        class: "osm",
-    },
-    {
-        name: "ESRI:World_Imagery",
-        label: "Satellite",
-        class: "esri-world-imagery",
-    },
-];
-const layerSwitcher = addLayerswitcherControl(map, layerSwitcherConfigs);
+const layerSwitcher = addLayerSwitcherControl(map);
 
 // add additional layers
 if (layer.startsWith("oam:")) {
     const oamItemId = layer.replace("oam:", "");
-    addOAMLayer(oamItemId).then(() => {
-        layerSwitcher.addLayer(
-            {
-                name: layer,
-                label: "OpenAerialMap",
-                class: "esri-world-imagery",
-            }
-        )
-    }
-    );
+    await addOAMLayer(oamItemId);
 }
-
 
 bindFormToLayerSwitcherControl(layerSwitcher);
 
@@ -73,8 +55,12 @@ document.getElementById("oam-add-button").addEventListener("click", handleAddOAM
 function handleAddOAMLayer() {
     // read text field
     const oamItemId = document.getElementById("oam-itemId").value;
+
     addOAMLayer(oamItemId);
 }
+
+//TODO
+//function addOrReplaceOAMLayer()
 
 export async function addOAMLayer(oamItemId) {
 
@@ -84,6 +70,9 @@ export async function addOAMLayer(oamItemId) {
         console.log(metadata);
 
         // add layer to map
+        const tileJSON = await OpenAerialMapService.getTileJson(oamItemId);
+        console.log(tileJSON);
+
         const oamBaselayer = new Tile({
             name: oamLayerName,
             visible: true,
@@ -91,7 +80,10 @@ export async function addOAMLayer(oamItemId) {
                 url: OpenAerialMapService.getTileUrl(oamItemId),
                 attributions: "OAM"
             }),
-            background: "slategrey"
+            background: "slategrey",
+            ls_visible: true,
+            ls_label: "OpenAerialMap",
+            ls_class: "esri-world-imagery",
         });
 
         map.addLayer(oamBaselayer);
@@ -102,6 +94,7 @@ export async function addOAMLayer(oamItemId) {
         }
     } catch (error) {
         alert(`The OpenAerialMap Item ${oamItemId} could not be loaded.`);
+        console.log(error);
         layerSwitcher.activateNextLayer();
     }
 

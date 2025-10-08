@@ -25,9 +25,34 @@ export class OpenAerialMapService {
     // templateURL = `${this.apiUrl}/collections/${this.collectionId}/items/${this.itemId}/tiles/${this.tileMatrixSet}/{z}/{x}/{y}.png?assets=visual&nodata=0`
     // exampleURL = "https://api.imagery.hotosm.org/raster/collections/openaerialmap/items/59e62beb3d6412ef7220c58e/tiles/WebMercatorQuad/16/39910/34015.png?assets=visual&nodata=0"
 
+
+    static getMetadataUrl(itemId: string) {
+        return `${this.stacApiUrl}/collections/${this.collectionId}/items/${itemId}`;
+    }
+
+    static getTileUrl(itemId: string) {
+        return `${this.rasterApiUrl}/collections/${this.collectionId}/items/${itemId}/tiles/${this.tileMatrixSetId}/{z}/{x}/{y}.png?assets=visual&nodata=0`;
+    }
+
+    static getTileJsonUrl(itemId: string) {
+        return `${this.rasterApiUrl}/collections/${this.collectionId}/items/${itemId}/${this.tileMatrixSetId}/tilejson.json?assets=visual&nodata=0`;
+    }
+
     static async getMetadata(itemId: string) {
+        return await this.getJSON(this.getMetadataUrl(itemId));
+    }
+
+    static async getTileJson(itemId: string) {
+        return await this.getJSON(this.getTileJsonUrl(itemId));
+    }
+
+    /**
+     * Generic fetch function to get JSON documents
+     * @param url
+     */
+    static async getJSON(url: string) {
         try {
-            const response = await fetch(this.getMetadataUrl(itemId), {mode: "cors"});
+            const response = await fetch(url, {mode: "cors"});
 
             // Handle non-OK responses (e.g., 404, 500)
             if (!response.ok) {
@@ -43,20 +68,8 @@ export class OpenAerialMapService {
 
         } catch (err) {
             // Handle network or parsing errors
-            console.error("Failed to fetch metadata:", err);
+            console.error(`Failed to fetch ${url}:`, err);
             throw err; // rethrow for caller to handle if needed
         }
-    }
-
-    static getMetadataUrl(itemId: string) {
-        return `${this.stacApiUrl}/collections/${this.collectionId}/items/${itemId}`;
-    }
-
-    static getTileUrl(itemId: string) {
-        return `${this.rasterApiUrl}/collections/${this.collectionId}/items/${itemId}/tiles/${this.tileMatrixSetId}/{z}/{x}/{y}.png?assets=visual&nodata=0`;
-    }
-
-    static getTileJson(itemId: string) {
-        return `${this.rasterApiUrl}/collections/${this.collectionId}/items/${itemId}/${this.tileMatrixSetId}/tilejson.json`
     }
 }

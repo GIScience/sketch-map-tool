@@ -64,6 +64,9 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
         name: "OSM",
         visible: activeBaselayer === "OSM",
         source: new OSM(),
+        ls_visible: true,
+        ls_class: "osm",
+        ls_label: "OSM"
     });
 
     const esriWorldImageryLayer = new Tile({
@@ -81,6 +84,9 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
             // https://static.arcgis.com/attribution/World_Imagery?f=json
             attributions: new EsriAttributionService().createAttributionFunction(),
         }),
+        ls_visible: true,
+        ls_class: "esri-world-imagery",
+        ls_label: "Satellite"
     });
 
     const map = new Map({
@@ -154,7 +160,7 @@ function addGeocoderControl(map) {
  *              next layer when a user clicks on the button, e.g. to specify a background image etc
  * @returns {LayerSwitcher}
  */
-function addLayerswitcherControl(map, layerConfigs) {
+function addLayerSwitcherControl(map, layerConfigs) {
     const layerSwitcher = new LayerSwitcher({
         layerConfigs,
     });
@@ -167,5 +173,5 @@ export {
     createMap,
     addPrintLayoutControl,
     addGeocoderControl,
-    addLayerswitcherControl,
+    addLayerSwitcherControl,
 };
