@@ -12,7 +12,7 @@ function getUUIDFromURL() {
     return location.pathname.match(UUID_V4_PATTERN)[0];
 }
 
-const setAllQueryParam = (params) => {
+const setAllQueryParams = (params) => {
     const url = new URL(window.location);
     Object.keys(params).forEach((key) => {
         url.searchParams.set(key, params[key]);
@@ -76,11 +76,14 @@ function getSanitizedUrlSearchParams() {
         zoom = Number(zoomArg) || zoom;
     }
 
-    // type BaselayerType = "OSM" | "ESRI:World_Imagery"
+    // type BaselayerType = "OSM" | "ESRI:World_Imagery" | `oam:${string}`
     let layer = "OSM";
     if (baselayerArg != null) {
-        switch (baselayerArg) {
-            case "ESRI:World_Imagery":
+        switch (true) {
+            case baselayerArg === "ESRI:World_Imagery":
+                layer = baselayerArg;
+                break;
+            case baselayerArg.startsWith("oam:"):
                 layer = baselayerArg;
                 break;
             default:
@@ -107,7 +110,7 @@ function getSanitizedUrlSearchParams() {
 export {
     getSanitizedUrlSearchParams,
     getUUIDFromURL,
-    setAllQueryParam,
+    setAllQueryParams,
     updateQueryParam,
     updateQueryParamWithConditionalDebounce,
 };
