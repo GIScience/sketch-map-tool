@@ -76,6 +76,11 @@ export class LayerSwitcher extends Control {
 
         button.setAttribute("type", "button");
         element.appendChild(button);
+
+        const slot = document.createElement("div");
+        slot.setAttribute("id", `slot`);
+        element.appendChild(slot);
+
         super({
             element,
             target,
@@ -130,8 +135,8 @@ export class LayerSwitcher extends Control {
         }
 
         //update active layerIndex
-        if (layerIndexToRemove < this.activeLayerIdx){
-          this.activeLayerIdx--;
+        if (layerIndexToRemove < this.activeLayerIdx) {
+            this.activeLayerIdx--;
         }
 
         // remove from layerswitcher layers
