@@ -18,6 +18,8 @@ import { XYZ } from "ol/source";
 import { OpenAerialMapService } from "./openaerialmapService";
 import { transformExtent } from "ol/proj";
 import { intersects } from "ol/extent";
+import { UserLayerControl } from "./userLayerControl/userLayerControl";
+
 
 /**
  * This is the main script which is invoked after DOM Content of create.html is loaded.
@@ -41,26 +43,26 @@ bindFormToPrintLayoutControl(printLayoutControl, messageController);
 addGeocoderControl(map);
 
 const layerSwitcher = addLayerSwitcherControl(map);
-
 // add additional layers
 if (layer.startsWith("oam:")) {
     const oamItemId = layer.replace("oam:", "");
     await addOAMLayer(oamItemId);
 }
-
 bindFormToLayerSwitcherControl(layerSwitcher);
 
-document.getElementById("oam-add-button").addEventListener("click", handleAddOAMLayer);
+const layerswitcherSlot = document.querySelector(".layerswitcher #slot");
 
-function handleAddOAMLayer() {
-    // read text field
-    const oamItemId = document.getElementById("oam-itemId").value;
+const userLayerControl = new UserLayerControl({ target: layerswitcherSlot });
+map.addControl(userLayerControl);
 
-    addOAMLayer(oamItemId);
-}
-
-//TODO
-//function addOrReplaceOAMLayer()
+// document.getElementById("oam-add-button").addEventListener("click", handleAddOAMLayer);
+//
+// function handleAddOAMLayer() {
+//     // read text field
+//     const oamItemId = document.getElementById("oam-itemId").value;
+//
+//     addOAMLayer(oamItemId);
+// }
 
 export async function addOAMLayer(oamItemId) {
 
@@ -81,9 +83,10 @@ export async function addOAMLayer(oamItemId) {
                 attributions: "OAM"
             }),
             background: "slategrey",
-            ls_visible: true,
-            ls_label: "OpenAerialMap",
-            ls_class: "esri-world-imagery",
+            userlayer:true
+            // ls_visible: true,
+            // ls_label: "OpenAerialMap",
+            // ls_class: "esri-world-imagery",
         });
 
         map.addLayer(oamBaselayer);
