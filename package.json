@@ -23,7 +23,7 @@
         "format-html": "js-beautify --type html '**/*.jinja' && js-beautify --type html '**/*.html'",
         "clean": "rimraf ./sketch_map_tool/static/bundles",
         "build": "npm run clean && node esbuild.mjs",
-        "watch": "nodemon"
+        "watch": "nodemon -e js,ts,css"
     },
     "repository": {
         "type": "git",
