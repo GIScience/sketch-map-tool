@@ -56,6 +56,21 @@
                 <button id="next-button" type="button">{{ _('NEXT') }} &rarr;</button>
             </form>
         </div>
+
+        <dialog id="oam-dialog" open>
+          <article>
+            <header>
+              <button aria-label="Close" rel="prev" onclick="document.getElementById('oam-dialog').close()"></button>
+              <div class="sketchy h1">Add OpenAerialMap Layer</div>
+            </header>
+<a href="https://map.openaerialmap.org">Browse</a> the OpenAerialMap collection to find aerial images. Once you’ve selected an image, simply copy its ID and paste it here.</p>
+            <input id="oam-itemId" type="text" placeholder="Enter OpenAerialMap Image ID">
+            <button id="oam-add-button" type="button">Add to Map</button>
+            <button id="oam-add-button" type="button" class="secondary" onclick="document.getElementById('oam-dialog').close()">Cancel</button>
+          </article>
+        </dialog>
+
     </div>
+
 </main>
 {% endblock body %}
