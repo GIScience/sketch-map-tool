@@ -54,6 +54,7 @@ const layerswitcherSlot = document.querySelector(".layerswitcher #slot");
 
 const userLayerControl = new UserLayerControl({ target: layerswitcherSlot });
 map.addControl(userLayerControl);
+userLayerControl.on("new-layer", openOamDialog)
 
 // document.getElementById("oam-add-button").addEventListener("click", handleAddOAMLayer);
 //
@@ -83,7 +84,7 @@ export async function addOAMLayer(oamItemId) {
                 attributions: "OAM"
             }),
             background: "slategrey",
-            userlayer:true
+            userlayer: true
             // ls_visible: true,
             // ls_label: "OpenAerialMap",
             // ls_class: "esri-world-imagery",
@@ -101,4 +102,8 @@ export async function addOAMLayer(oamItemId) {
         layerSwitcher.activateNextLayer();
     }
 
+}
+
+function openOamDialog() {
+    document.getElementById("oam-dialog").show()
 }
