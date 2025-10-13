@@ -2,6 +2,7 @@ import { Control } from "ol/control";
 import { CLASS_CONTROL, CLASS_UNSELECTABLE } from "ol/css";
 import "./userLayerControl.css";
 import BaseLayer from "ol/layer/Base";
+import BaseEvent from "ol/events/Event";
 import { UserLayerButton } from "./userLayerButton";
 
 export class UserLayerControl extends Control {
@@ -120,15 +121,7 @@ button.add-layer-btn {
         const addButton = shadowRoot.querySelector<HTMLButtonElement>(".add-layer-btn");
         const userLayerButton = shadowRoot.querySelector<HTMLButtonElement>("user-layer-button");
 
-        addButton.addEventListener("click", toggleInput);
-
-        function toggleInput() {
-            const inputField = shadowRoot.querySelector<HTMLInputElement>("#add-layer-container input");
-            inputField.className = inputField.className.includes("expanded") ? "" : "expanded";
-            if (inputField.className === "expanded") {
-                window.setTimeout(() => inputField.focus(), 100);
-            }
-        }
+        addButton.addEventListener("click", () => {this.dispatchEvent("new-layer");});
 
         inputField.addEventListener("keydown", handleInput);
 
