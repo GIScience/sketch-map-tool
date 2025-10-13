@@ -2,13 +2,14 @@ import { Control } from "ol/control";
 import { CLASS_CONTROL, CLASS_UNSELECTABLE } from "ol/css";
 import "./userLayerControl.css";
 import BaseLayer from "ol/layer/Base";
-import BaseEvent from "ol/events/Event";
 import { UserLayerButton } from "./userLayerButton";
 
 export class UserLayerControl extends Control {
 
-    userLayer: BaseLayer;
-    isLoading: boolean;
+    private userLayer: BaseLayer;
+    private isLoading: boolean;
+    private readonly addLayerContainer: HTMLDivElement;
+    private readonly userLayerButton: HTMLButtonElement;
 
 
     constructor(options) {
@@ -105,7 +106,6 @@ button.add-layer-btn {
 
 </style>
 <div id="add-layer-container">
-    <input type="text" placeholder="Enter OpenAerialMap ItemId">
     <button class="add-layer-btn">+</button>
 </div>
 <user-layer-button class="hidden">OpenAerialMap</user-layer-button>
@@ -116,39 +116,61 @@ button.add-layer-btn {
             target,
         });
 
-        const addLayerContainer = shadowRoot.querySelector<HTMLInputElement>("#add-layer-container");
-        const inputField = shadowRoot.querySelector<HTMLInputElement>("#add-layer-container input");
+        this.addLayerContainer = shadowRoot.querySelector<HTMLDivElement>("#add-layer-container");
         const addButton = shadowRoot.querySelector<HTMLButtonElement>(".add-layer-btn");
-        const userLayerButton = shadowRoot.querySelector<HTMLButtonElement>("user-layer-button");
+        this.userLayerButton = shadowRoot.querySelector<HTMLButtonElement>("user-layer-button");
 
-        addButton.addEventListener("click", () => { this.dispatchEvent("new-layer"); });
+        addButton.addEventListener("click", () => {
+            this.dispatchEvent("new-layer");
+        });
 
-        inputField.addEventListener("keydown", handleInput);
+        const handleClose = (event: CustomEvent) => {
+            this.showAddLayerButton();
+            this.getMap().removeLayer(this.userLayer);
+            this.dispatchEvent("close");
+        };
+        this.userLayerButton.addEventListener("close", handleClose);
 
-        function handleInput(e) {
-            if (e.key === "Enter") {
-                alert(e.target.value);
-                inputField.className = inputField.className.includes("expanded") ? "" : "expanded";
-                addLayerContainer.className = "hidden";
-                userLayerButton.className = "";
-            }
-        }
-
-        userLayerButton.addEventListener("close", handleClose);
-
-        function handleClose(event: CustomEvent) {
-            addLayerContainer.className = "";
-            userLayerButton.className = "hidden";
-            //TODO removelayer, switch to baselayer etc
-        }
-
-        userLayerButton.addEventListener("info", handleInfo);
-
-        function handleInfo(event: CustomEvent) {
+        const handleInfo = (event: CustomEvent) => {
             alert("Some layer info");
+
             //TODO show info about the current layer
+        };
+        this.userLayerButton.addEventListener("info", handleInfo);
+
+        const handleClick = (event: CustomEvent) => {
+            this.getMap().getAllLayers().forEach((layer) => layer.setVisible(false));
+            this.dispatchEvent("beforeactivate");
+            this.userLayer.setVisible(true);
         }
+        this.userLayerButton.addEventListener("click", handleClick);
+
 
     }
 
+    initialize() {
+        // register map event to check whether a future layer should be added to layerswitcher or not
+        this.getMap().getLayers().on('add', (event) => {
+            this.addLayer(event.element);
+        });
+    }
+
+    addLayer(layer: BaseLayer) {
+        //check whether this layer should be managed by the layerswitcher
+        if (!layer.get("ulc_visible")) {
+            return;
+        }
+        this.userLayer = layer;
+        this.showUserLayerButton();
+    }
+
+    showUserLayerButton() {
+        this.addLayerContainer.className = "hidden";
+        this.userLayerButton.className = "";
+    }
+
+    showAddLayerButton() {
+        this.addLayerContainer.className = "";
+        this.userLayerButton.className = "hidden";
+    }
 }
