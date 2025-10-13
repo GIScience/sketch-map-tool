@@ -2,6 +2,7 @@ import { Margin, ORIENTATION, PAPER_FORMAT } from "@giscience/ol-print-layout-co
 import { get as getProjection, toLonLat, transformExtent } from "ol/proj";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins";
 import { fillSelectOptions, updateQueryParamWithConditionalDebounce } from "../shared";
+import { createAntiMeridianLayer } from "./map";
 
 function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
     const paperFormats = { ...PAPER_FORMAT };
@@ -89,14 +90,13 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
         }
     }
 
+    const antimeridianLayer = createAntiMeridianLayer();
+    antimeridianLayer.setMap(printLayoutControl.getMap());
+
     function handleAntimeridian(bboxWgs84) {
         // normalizeLon uses mathematic modulo like in R, not % symetric modulo like in Java
         // or Javascript
         const normalizeLon = (x) => ((((x + 180) % 360) + 360) % 360) - 180;
-
-        const antimeridianLayer = printLayoutControl.getMap()
-            .getLayers().getArray()
-            .find((l) => l.get("name") === "Antimeridian");
 
         if (!bboxWgs84) return;
         // check if antimeridian is within extent -> when left (x1) is bigger than right (x2)
