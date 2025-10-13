@@ -54,16 +54,18 @@ const layerswitcherSlot = document.querySelector(".layerswitcher #slot");
 
 const userLayerControl = new UserLayerControl({ target: layerswitcherSlot });
 map.addControl(userLayerControl);
+userLayerControl.initialize();
+
 userLayerControl.on("new-layer", openOamDialog);
 
-// document.getElementById("oam-add-button").addEventListener("click", handleAddOAMLayer);
-//
-// function handleAddOAMLayer() {
-//     // read text field
-//     const oamItemId = document.getElementById("oam-itemId").value;
-//
-//     addOAMLayer(oamItemId);
-// }
+// keep the current layer in layerswitcher to toggle back from OAM Layer
+userLayerControl.on("beforeactivate", () => {
+    layerSwitcher.activateNextLayer();
+});
+// switch back to the layer you came from when removing OAM Layer
+userLayerControl.on("close", () => {
+    layerSwitcher.activateNextLayer();
+})
 
 export async function addOAMLayer(oamItemId) {
 
@@ -71,6 +73,9 @@ export async function addOAMLayer(oamItemId) {
     try {
         const metadata = await OpenAerialMapService.getMetadata(oamItemId);
         console.log(metadata);
+
+        layerSwitcher.activateNextLayer();
+        layerSwitcher.suspend();
 
         const oamBaselayer = new Tile({
             name: oamLayerName,
@@ -80,10 +85,10 @@ export async function addOAMLayer(oamItemId) {
                 attributions: "OAM"
             }),
             background: "slategrey",
-            userlayer: true,
-            ls_visible: true,
-            ls_label: "OpenAerialMap",
-            ls_class: "esri-world-imagery",
+            ulc_visible: true,
+            // ls_visible: true,
+            // ls_label: "OpenAerialMap",
+            // ls_class: "esri-world-imagery",
         });
 
         map.addLayer(oamBaselayer);

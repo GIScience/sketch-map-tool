@@ -13,7 +13,7 @@ import { SKETCH_MAP_MARGINS } from "./sketchMapMargins.js";
 import { LayerSwitcher } from "./ol-LayerSwitcherControl";
 import { EsriAttributionService } from "./esriAttributionService";
 
-function createAntiMeridianLayer() {
+export function createAntiMeridianLayer() {
     // Create a LineString feature
     const lineString = new LineString([
         fromLonLat([180, -90]), // Start point just to the east of the antimeridian
@@ -100,7 +100,6 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
         layers: [
             osmBaselayer,
             esriWorldImageryLayer,
-            createAntiMeridianLayer(),
         ],
     });
 
