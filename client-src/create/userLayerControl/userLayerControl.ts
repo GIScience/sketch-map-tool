@@ -121,7 +121,7 @@ button.add-layer-btn {
         const addButton = shadowRoot.querySelector<HTMLButtonElement>(".add-layer-btn");
         const userLayerButton = shadowRoot.querySelector<HTMLButtonElement>("user-layer-button");
 
-        addButton.addEventListener("click", () => {this.dispatchEvent("new-layer");});
+        addButton.addEventListener("click", () => { this.dispatchEvent("new-layer"); });
 
         inputField.addEventListener("keydown", handleInput);
 
