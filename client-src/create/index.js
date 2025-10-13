@@ -54,7 +54,7 @@ const layerswitcherSlot = document.querySelector(".layerswitcher #slot");
 
 const userLayerControl = new UserLayerControl({ target: layerswitcherSlot });
 map.addControl(userLayerControl);
-userLayerControl.on("new-layer", openOamDialog)
+userLayerControl.on("new-layer", openOamDialog);
 
 // document.getElementById("oam-add-button").addEventListener("click", handleAddOAMLayer);
 //
@@ -105,5 +105,6 @@ export async function addOAMLayer(oamItemId) {
 }
 
 function openOamDialog() {
-    document.getElementById("oam-dialog").show()
+    document.getElementById("oam-dialog").show();
+    document.getElementById("oam-itemId").focus();
 }
