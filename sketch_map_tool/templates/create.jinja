@@ -65,12 +65,12 @@
             </header>
                 <p>{{ _('<a href="https://map.openaerialmap.org">Browse</a> the OpenAerialMap collection to find aerial images. Once you’ve selected an image, simply copy its ID and paste it here.') }}</p>
             <input id="oam-item-id-input" type="text" placeholder="Enter OpenAerialMap Image ID" aria-describedby="oam-invalid-id-message">
-            <small hidden id="oam-invalid-id-message">
-                No image for given ID could be found on OpenAerialMap. Please check given ID and try again.
+            <small class="hidden" id="oam-invalid-id-message">
+                {{ _('No image for given ID could be found on OpenAerialMap. Please check given ID and try again.') }}
             </small>
-            <button id="oam-add-button" type="button">Add to Map</button>
-            <button id="oam-cancel-button" type="button" class="secondary">Cancel</button>
-            <progress hidden id="oam-progress-bar"/>
+            <button id="oam-add-button" type="button">{{ _('Add to Map') }}</button>
+            <button id="oam-cancel-button" type="button" class="secondary">{{ _('Cancel') }}</button>
+            <progress class="hidden" id="oam-progress-bar"/>
           </article>
         </dialog>
 

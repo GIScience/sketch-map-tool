@@ -100,28 +100,28 @@ export async function addOAMLayer(oamItemId) {
 }
 
 document.getElementById("oam-add-button").addEventListener("click", async () => {
-    const oamItemIdInput = document.getElementById("oam-item-id-input")
-    const oamInvalidIdMessage = document.getElementById("oam-invalid-id-message")
-    const oamPrgressBar = document.getElementById("oam-progress-bar")
+    const oamItemIdInput = document.getElementById("oam-item-id-input");
+    const oamInvalidIdMessage = document.getElementById("oam-invalid-id-message");
+    const oamPrgressBar = document.getElementById("oam-progress-bar");
     try {
-        oamPrgressBar.removeAttribute("hidden");
+        oamPrgressBar.classList.remove("hidden");
         await addOAMLayer(oamItemIdInput.value);
-        closeOamDialog()
+        closeOamDialog();
     } catch (error) {
         console.error(error);
-        oamInvalidIdMessage.removeAttribute("hidden");
+        oamInvalidIdMessage.classList.remove("hidden");
         oamItemIdInput.setAttribute("aria-invalid", "true");
     } finally {
-        oamPrgressBar.hidden = true;
+        oamPrgressBar.classList.add("hidden");
     }
 });
 
 document.getElementById("oam-close-button").addEventListener("click", () => {
-    document.getElementById("oam-dialog").close();
+    closeOamDialog()
 });
 
 document.getElementById("oam-cancel-button").addEventListener("click", () => {
-    document.getElementById("oam-dialog").close();
+    closeOamDialog()
 });
 
 function openOamDialog() {
@@ -131,8 +131,8 @@ function openOamDialog() {
 
 function closeOamDialog() {
     // reset state
-    document.getElementById("oam-invalid-id-message").hidden = true;
-    document.getElementById("oam-item-id-input").setAttribute("aria-invalid", "false");
+    document.getElementById("oam-invalid-id-message").classList.add("hidden");
+    document.getElementById("oam-item-id-input").removeAttribute("aria-invalid")
     document.getElementById("oam-dialog").close();
 
 }
