@@ -72,10 +72,6 @@ export async function addOAMLayer(oamItemId) {
         const metadata = await OpenAerialMapService.getMetadata(oamItemId);
         console.log(metadata);
 
-        // add layer to map
-        const tileJSON = await OpenAerialMapService.getTileJson(oamItemId);
-        console.log(tileJSON);
-
         const oamBaselayer = new Tile({
             name: oamLayerName,
             visible: true,
@@ -84,10 +80,10 @@ export async function addOAMLayer(oamItemId) {
                 attributions: "OAM"
             }),
             background: "slategrey",
-            userlayer: true
-            // ls_visible: true,
-            // ls_label: "OpenAerialMap",
-            // ls_class: "esri-world-imagery",
+            userlayer: true,
+            ls_visible: true,
+            ls_label: "OpenAerialMap",
+            ls_class: "esri-world-imagery",
         });
 
         map.addLayer(oamBaselayer);
@@ -97,12 +93,24 @@ export async function addOAMLayer(oamItemId) {
             map.getView().fit(projectedBbox);
         }
     } catch (error) {
-        alert(`The OpenAerialMap Item ${oamItemId} could not be loaded.`);
-        console.log(error);
-        layerSwitcher.activateNextLayer();
+        console.log(`The OpenAerialMap Item ${oamItemId} could not be loaded.`, error);
+        throw error;
     }
 
 }
+
+document.getElementById("oam-add-button").addEventListener("click", async () => {
+    const oamItemId = document.getElementById("oam-itemId").value;
+
+    try {
+        await addOAMLayer(oamItemId);
+        document.getElementById("oam-dialog").close();
+    } catch (e) {
+        console.log("ERROR");
+    }
+
+
+});
 
 function openOamDialog() {
     document.getElementById("oam-dialog").show();
