@@ -100,19 +100,29 @@ export async function addOAMLayer(oamItemId) {
 }
 
 document.getElementById("oam-add-button").addEventListener("click", async () => {
-    const oamItemId = document.getElementById("oam-itemId").value;
-
+    const oamItemIdInput= document.getElementById("oam-item-id-input")
+    const oamInvalidIdMessage= document.getElementById("oam-invalid-id-message")
     try {
-        await addOAMLayer(oamItemId);
+        await addOAMLayer(oamItemIdInput.value);
+        oamInvalidIdMessage.hidden = true
+        oamItemIdInput.setAttribute("aria-invalid", "false");
         document.getElementById("oam-dialog").close();
-    } catch (e) {
-        console.log("ERROR");
+    } catch (error) {
+        console.error(error);
+        oamInvalidIdMessage.removeAttribute("hidden")
+        oamItemIdInput.setAttribute("aria-invalid", "true");
     }
+});
 
+document.getElementById("oam-close-button").addEventListener("click", () => {
+    document.getElementById("oam-dialog").close();
+});
 
+document.getElementById("oam-cancel-button").addEventListener("click", () => {
+    document.getElementById("oam-dialog").close();
 });
 
 function openOamDialog() {
     document.getElementById("oam-dialog").show();
-    document.getElementById("oam-itemId").focus();
+    document.getElementById("oam-item-id-input").focus();
 }
