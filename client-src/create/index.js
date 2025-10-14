@@ -91,6 +91,7 @@ export async function addOAMLayer(oamItemId) {
             }),
             background: "slategrey",
             ulc_visible: true,
+            ulc_buttonImageUrl: OpenAerialMapService.getThumbnailUrl(oamItemId, 256),
             // ls_visible: true,
             // ls_label: "OpenAerialMap",
             // ls_class: "esri-world-imagery",

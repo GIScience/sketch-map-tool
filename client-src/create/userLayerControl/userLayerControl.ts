@@ -109,7 +109,7 @@ button.add-layer-btn {
 <div id="add-layer-container">
     <button class="add-layer-btn">+</button>
 </div>
-<user-layer-button class="hidden">OpenAerialMap</user-layer-button>
+<user-layer-button class="hidden" bgimageurl="">OpenAerialMap</user-layer-button>
 `;
 
         super({
@@ -166,6 +166,7 @@ button.add-layer-btn {
         }
         this.activeLayer = layer;
         this.set("activeLayer", this.activeLayer);
+        this.userLayerButton.setAttribute( "bgimageurl", layer.get("ulc_buttonImageUrl"));
         this.showUserLayerButton();
     }
 
