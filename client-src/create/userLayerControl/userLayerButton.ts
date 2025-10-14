@@ -23,6 +23,7 @@ export class UserLayerButton extends HTMLElement {
           position: absolute;
           inset: 0;
           border: 0;
+          border-radius: inherit;
           padding: var(--padding);
           /*// display: flex;*/
           /*align-items: center;*/
@@ -34,7 +35,6 @@ export class UserLayerButton extends HTMLElement {
           line-height: var(--line-height);
           background: var(--background);
           cursor: pointer;  
-          background-image: url("https://api.imagery.hotosm.org/raster/collections/openaerialmap/items/59e62beb3d6412ef7220c58e/preview?format=png&assets=visual&nodata=0&max_size=128");
           background-position-y: center;
           background-repeat: no-repeat;
           background-size: contain;
@@ -86,6 +86,17 @@ export class UserLayerButton extends HTMLElement {
     `;
 
         this.shadowRoot.appendChild(template.content.cloneNode(true));
+    }
+
+    static get observedAttributes() {
+        return ["bgimageurl"];
+    }
+
+    attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+        if (name === 'bgimageurl') {
+            const layerButton = this.shadowRoot.querySelector<HTMLButtonElement>('#layer-btn');
+            layerButton.style.backgroundImage = `url(${newValue})`;
+        }
     }
 
     connectedCallback() {
