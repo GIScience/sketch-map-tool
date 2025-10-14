@@ -114,6 +114,9 @@ document.getElementById("oam-add-button").addEventListener("click", async () => 
     const oamInvalidIdMessage = document.getElementById("oam-invalid-id-message");
     const oamPrgressBar = document.getElementById("oam-progress-bar");
     try {
+        if ( oamItemIdInput.value.length === 0) {
+            throw Error("Empty input not allowed.")
+        }
         oamPrgressBar.classList.remove("hidden");
         await addOAMLayer(oamItemIdInput.value);
         closeOamDialog();
