@@ -1,7 +1,11 @@
 import { Margin, ORIENTATION, PAPER_FORMAT } from "@giscience/ol-print-layout-control";
 import { get as getProjection, toLonLat, transformExtent } from "ol/proj";
 import { SKETCH_MAP_MARGINS } from "./sketchMapMargins";
-import { fillSelectOptions, updateQueryParamWithConditionalDebounce } from "../shared";
+import {
+    fillSelectOptions,
+    updateQueryParam,
+    updateQueryParamWithConditionalDebounce
+} from "../shared";
 import { createAntiMeridianLayer } from "./map";
 
 function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
@@ -142,15 +146,17 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
     });
 }
 
-function bindFormToLayerSwitcherControl(layerSwitcherControl) {
-    // set initial form value from ol-control
-    document.getElementById("layer").value = layerSwitcherControl.get("activeLayer").name;
+function bindFormToLayerSwitcherControl(layerSwitcherControl, userLayerControl) {
+
     function handleLayerSwitch(event) {
+        console.log(event.target.get("activeLayer").get("name"), event);
         const activeLayerName = event.target.get("activeLayer").get("name");
         document.getElementById("layer").value = activeLayerName;
-        updateQueryParamWithConditionalDebounce("layer", activeLayerName);
+        updateQueryParam("layer", activeLayerName);
     }
     layerSwitcherControl.on("change:activeLayer", handleLayerSwitch);
+    userLayerControl.on("change:activeLayer", handleLayerSwitch);
+
 }
 export {
     bindFormToPrintLayoutControl,
