@@ -38,6 +38,11 @@ export class OpenAerialMapService {
         return `${this.rasterApiUrl}/collections/${this.collectionId}/items/${itemId}/${this.tileMatrixSetId}/tilejson.json?assets=visual&nodata=0`;
     }
 
+    static getThumbnailUrl(itemId: string, maxSize=1024) {
+        // https://api.imagery.hotosm.org/raster/collections/openaerialmap/items/59e62beb3d6412ef7220c58e/preview?format=png&assets=visual&nodata=0&max_size=128
+        return `${this.rasterApiUrl}/collections/${this.collectionId}/items/${itemId}/preview.png?assets=visual&nodata=0&max_size=${maxSize}`;
+    }
+
     static async getMetadata(itemId: string) {
         return await this.getJSON(this.getMetadataUrl(itemId));
     }
@@ -52,7 +57,7 @@ export class OpenAerialMapService {
      */
     static async getJSON(url: string) {
         try {
-            const response = await fetch(url, {mode: "cors"});
+            const response = await fetch(url, { mode: "cors" });
 
             // Handle non-OK responses (e.g., 404, 500)
             if (!response.ok) {

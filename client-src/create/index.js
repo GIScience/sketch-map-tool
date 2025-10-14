@@ -43,12 +43,6 @@ bindFormToPrintLayoutControl(printLayoutControl, messageController);
 addGeocoderControl(map);
 
 const layerSwitcher = addLayerSwitcherControl(map);
-// add additional layers
-if (layer.startsWith("oam:")) {
-    const oamItemId = layer.replace("oam:", "");
-    await addOAMLayer(oamItemId);
-}
-bindFormToLayerSwitcherControl(layerSwitcher);
 
 const layerswitcherSlot = document.querySelector(".layerswitcher #slot");
 
@@ -66,6 +60,17 @@ userLayerControl.on("beforeactivate", () => {
 userLayerControl.on("close", () => {
     layerSwitcher.activateNextLayer();
 })
+
+bindFormToLayerSwitcherControl(layerSwitcher, userLayerControl);
+// add additional layers
+if (layer.startsWith("oam:")) {
+    const oamItemId = layer.replace("oam:", "");
+    await addOAMLayer(oamItemId);
+} else {
+    // set initial form value from ol-control
+    console.log(">>>>", layerSwitcher)
+    document.getElementById("layer").value = layerSwitcher.get("activeLayer").get("name");
+}
 
 export async function addOAMLayer(oamItemId) {
 
