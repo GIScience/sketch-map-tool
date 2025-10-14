@@ -51,6 +51,12 @@ export class OpenAerialMapService {
         return await this.getJSON(this.getTileJsonUrl(itemId));
     }
 
+    static getMapAttributionFromMetadata(metadataJson) {
+        const props = metadataJson.properties;
+        const provider = props.providers.map(provider=> provider.name).join();
+        return `© <a href="https://map.openaerialmap.org" target="_blank">OpenAerialMap</a> | ${props.title} by ${provider}`;
+    }
+
     /**
      * Generic fetch function to get JSON documents
      * @param url
