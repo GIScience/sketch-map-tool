@@ -147,6 +147,7 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
 }
 
 function bindFormToLayerSwitcherControl(layerSwitcherControl, userLayerControl) {
+    // TODO: Refactor to accept only a single control and call it twice in index.js
 
     function handleLayerSwitch(event) {
         console.log(event.target.get("activeLayer").get("name"), event);

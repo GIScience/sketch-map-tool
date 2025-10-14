@@ -143,6 +143,7 @@ button.add-layer-btn {
             this.getMap().getAllLayers().forEach((layer) => layer.setVisible(false));
             this.dispatchEvent("beforeactivate");
             this.activeLayer.setVisible(true);
+            // TODO: Ideally this would trigger event listener in bindFormToLayerSwitcherControl (form.js)
             // this.set("activeLayer", this.activeLayer);
             this.dispatchEvent("change:activeLayer");
         }
