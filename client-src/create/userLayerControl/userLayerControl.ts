@@ -6,8 +6,6 @@ import { UserLayerButton } from "./userLayerButton";
 
 export class UserLayerControl extends Control {
 
-    private activeLayer: BaseLayer;
-    private isLoading: boolean;
     private readonly addLayerContainer: HTMLDivElement;
     private readonly userLayerButton: HTMLButtonElement;
 
@@ -127,7 +125,7 @@ button.add-layer-btn {
 
         const handleClose = (event: CustomEvent) => {
             this.showAddLayerButton();
-            this.getMap().removeLayer(this.activeLayer);
+            this.getMap().removeLayer(this.get("activeLayer"));
             this.dispatchEvent("close");
         };
         this.userLayerButton.addEventListener("close", handleClose);
@@ -140,9 +138,12 @@ button.add-layer-btn {
         this.userLayerButton.addEventListener("info", handleInfo);
 
         const handleClick = (event: CustomEvent) => {
+            if (this.get("activeLayer").getVisible()){
+                return;
+            }
             this.getMap().getAllLayers().forEach((layer) => layer.setVisible(false));
             this.dispatchEvent("beforeactivate");
-            this.activeLayer.setVisible(true);
+            this.get("activeLayer").setVisible(true);
             // TODO: Ideally this would trigger event listener in bindFormToLayerSwitcherControl (form.js)
             // this.set("activeLayer", this.activeLayer);
             this.dispatchEvent("change:activeLayer");
@@ -164,8 +165,7 @@ button.add-layer-btn {
         if (!layer.get("ulc_visible")) {
             return;
         }
-        this.activeLayer = layer;
-        this.set("activeLayer", this.activeLayer);
+        this.set("activeLayer", layer);
         this.userLayerButton.setAttribute( "bgimageurl", layer.get("ulc_buttonImageUrl"));
         this.showUserLayerButton();
     }
