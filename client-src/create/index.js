@@ -87,7 +87,7 @@ export async function addOAMLayer(oamItemId) {
             visible: true,
             source: new XYZ({
                 url: OpenAerialMapService.getTileUrl(oamItemId),
-                attributions: "OAM"
+                attributions: OpenAerialMapService.getMapAttributionFromMetadata(metadata),
             }),
             background: "slategrey",
             ulc_visible: true,
