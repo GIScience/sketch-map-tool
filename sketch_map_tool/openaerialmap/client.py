@@ -4,7 +4,10 @@ Example request to retrieve an image given a bounding box and size:
 https://api.imagery.hotosm.org/raster/collections/openaerialmap/items/59e62beb3d6412ef7220c58e/bbox/39.22999959389618,-6.841535317101005,39.25606520781678,-6.819872968487459/1716x1436.png?assets=visual
 """
 
+from io import BytesIO
+
 import requests
+from PIL import Image
 
 from sketch_map_tool.models import Bbox, Size
 
@@ -22,12 +25,12 @@ def get_metadata(item_id: str) -> dict:
     return response.json()
 
 
-def get_map_image(item_id: str, size: Size, bbox_wgs84: Bbox):
+def get_map_image(item_id: str, size: Size, bbox_wgs84: Bbox) -> Image.Image:
     item_id = item_id.replace("oam:", "")
     url = f"{RAST_API_URL}/collections/{COLLECTION_ID}/items/{item_id}/bbox/{bbox_wgs84}/{size}.png?assets=visual"  # noqa
     response = requests.get(url)
     response.raise_for_status()
-    return response.content
+    return Image.open(BytesIO(response.content), formats=["png"])
 
 
 def get_attribution(item_id) -> str:

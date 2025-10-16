@@ -17,6 +17,7 @@ from sketch_map_tool.definitions import get_attribution
 from sketch_map_tool.exceptions import MarkingDetectionError
 from sketch_map_tool.helpers import N_, merge, to_array
 from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.openaerialmap import client as oam_client
 from sketch_map_tool.upload_processing import (
     clip,
     georeference,
@@ -91,6 +92,7 @@ def on_setup_logging(**_):
 def generate_sketch_map(
     self,
     bbox: Bbox,
+    bbox_wgs84: Bbox,
     format_: PaperFormat,
     orientation: str,
     size: Size,
@@ -98,7 +100,10 @@ def generate_sketch_map(
     layer: str,
 ) -> BytesIO | AsyncResult:
     """Generate and returns a sketch map as PDF and stores the map frame in DB."""
-    map_image = wms_client.get_map_image(bbox, size, layer)
+    if layer.startswith("oam"):
+        map_image = oam_client.get_map_image(layer, size, bbox_wgs84)
+    else:
+        map_image = wms_client.get_map_image(bbox, size, layer)
     qr_code_ = map_generation.qr_code(
         self.request.id,
         bbox,
