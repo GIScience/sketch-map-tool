@@ -8,7 +8,7 @@ import requests
 from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
-from sketch_map_tool.models import Layer, LiteratureReference, PaperFormat
+from sketch_map_tool.models import LiteratureReference, PaperFormat
 
 # Types of requests
 REQUEST_TYPES = Literal[
@@ -31,9 +31,9 @@ COLORS = {
 PDF_RESOURCES_PATH = Path(__file__).parent.resolve() / "resources"
 
 
-def get_attribution(layer: Layer) -> str:
+def get_attribution(layer: str) -> str:
     """Get attribution text for ESRI World Imagery layer."""
-    if layer.value in ("esri-world-imagery", "esri-world-imagery-fallback"):
+    if layer in ("esri-world-imagery", "esri-world-imagery-fallback"):
         url = (
             "https://basemaps-api.arcgis.com/arcgis/rest/services/styles/ArcGIS:Imagery"
         )

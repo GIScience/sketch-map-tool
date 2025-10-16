@@ -12,7 +12,7 @@ from werkzeug.datastructures import FileStorage
 from sketch_map_tool import flask_app as smt_flask_app
 from sketch_map_tool import get_locale
 from sketch_map_tool.exceptions import QRCodeError
-from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
+from sketch_map_tool.models import Bbox, PaperFormat, Size
 from tests import FIXTURE_DIR
 
 
@@ -88,7 +88,7 @@ def scale():
 
 @pytest.fixture(params=["osm", "esri-world-imagery"])
 def layer(request):
-    return Layer(request.param)
+    return request.param
 
 
 @pytest.fixture

@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from enum import StrEnum
 
 from numpy.typing import NDArray
 
@@ -40,10 +39,12 @@ class Size:
     height: float
 
 
-class Layer(StrEnum):
-    OSM = "osm"
-    ESRI_WORLD_IMAGERY = "esri-world-imagery"
-    ESRI_WORLD_IMAGERY_FALLBACK = "esri-world-imagery-fallback"
+def validate_layer(layer: str) -> str:
+    layer = layer.replace(":", "-").replace("_", "-").lower()
+    if layer.startswith(("osm", "esri", "oam")):
+        return layer
+    else:
+        raise ValueError("Layer name should start with osm, esri or oam.")
 
 
 @dataclass(frozen=True)

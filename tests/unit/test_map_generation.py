@@ -17,7 +17,7 @@ from sketch_map_tool.map_generation.generate_pdf import (
     get_compass,
     pdf_page_to_img,
 )
-from sketch_map_tool.models import Layer, PaperFormat
+from sketch_map_tool.models import PaperFormat
 from tests import FIXTURE_DIR
 from tests.comparator import ImageComparator
 from tests.namer import PytestNamer, PytestNamerFactory
@@ -51,7 +51,7 @@ def qr_code(uuid, bbox, format_, layer):
 @pytest.fixture
 def qr_code_approval(uuid, bbox):
     """QR code with fewer parameters for approval tests."""
-    return generate_qr_code(uuid, bbox, Layer("osm"), A4, "mock_version_number")
+    return generate_qr_code(uuid, bbox, "osm", A4, "mock_version_number")
 
 
 @pytest.mark.parametrize("paper_format", [A0, A1, A2, A3, A4, LETTER, TABLOID])
@@ -89,7 +89,7 @@ def test_generate_pdf_sketch_map_approval(
         qr_code_approval,
         paper_format,
         1283.129,
-        Layer("osm"),
+        "osm",
     )
     # NOTE: The resulting PDFs across multiple test runs have slight non-visual
     # differences leading to a failure when using `verify_binary` on the PDFs.
@@ -125,7 +125,7 @@ def test_generate_pdf_sketch_map_template_approval(
     orientation,  # pyright: ignore reportUnusedVariable
 ) -> None:
     _, sketch_map_template = generate_pdf(
-        map_image, qr_code_approval, paper_format, 1283.129, Layer("osm")
+        map_image, qr_code_approval, paper_format, 1283.129, "osm"
     )
     # fmt: off
     options = (

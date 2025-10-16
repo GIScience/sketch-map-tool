@@ -16,7 +16,7 @@ from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import get_attribution
 from sketch_map_tool.exceptions import MarkingDetectionError
 from sketch_map_tool.helpers import N_, merge, to_array
-from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
+from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.upload_processing import (
     clip,
     georeference,
@@ -95,7 +95,7 @@ def generate_sketch_map(
     orientation: str,
     size: Size,
     scale: float,
-    layer: Layer,
+    layer: str,
 ) -> BytesIO | AsyncResult:
     """Generate and returns a sketch map as PDF and stores the map frame in DB."""
     map_image = wms_client.get_map_image(bbox, size, layer)
@@ -130,7 +130,7 @@ def digitize_sketches(
     file_name: str,
     map_frame: NDArray,
     sketch_map_frame: NDArray,
-    layer: Layer,
+    layer: str,
     bbox: Bbox,
 ) -> FeatureCollection:
     if layer == "osm":
@@ -166,7 +166,7 @@ def upload_processing(
     file_id: int,
     file_name: str,
     map_frame: NDArray,
-    layer: Layer,
+    layer: str,
     bbox: Bbox,
 ) -> (
     AsyncResult

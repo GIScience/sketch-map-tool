@@ -17,7 +17,7 @@ from sketch_map_tool import flask_app as smt_flask_app
 from sketch_map_tool.config import DEFAULT_CONFIG
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.helpers import merge, to_array, zip_
-from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
+from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.upload_processing import clip
 from tests import FIXTURE_DIR
 from tests import vcr_app as vcr
@@ -160,7 +160,7 @@ def scale():
 
 @pytest.fixture(scope="session", params=["osm", "esri-world-imagery"])
 def layer(request):
-    return Layer(request.param)
+    return request.param
 
 
 @pytest.fixture

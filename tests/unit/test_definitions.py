@@ -1,5 +1,4 @@
 from sketch_map_tool import definitions
-from sketch_map_tool.models import Layer
 
 
 def test_get_literatur_references():
@@ -33,7 +32,7 @@ def test_get_attribution_no_esri_esri_api_key(monkeypatch):
         "sketch_map_tool.definitions.get_config_value",
         lambda _: "",
     )
-    result = definitions.get_attribution(Layer("esri-world-imagery"))
+    result = definitions.get_attribution("esri-world-imagery")
     assert result == (
         "Powered by Esri<br />Esri, Maxar, Earthstar Geographics, and the GIS User "
         + "Community"
