@@ -22,7 +22,7 @@ def get_metadata(item_id: str) -> dict:
     return response.json()
 
 
-def get_image(item_id: str, size: Size, bbox_wgs84: Bbox):
+def get_map_image(item_id: str, size: Size, bbox_wgs84: Bbox):
     item_id = item_id.replace("oam:", "")
     url = f"{RAST_API_URL}/collections/{COLLECTION_ID}/items/{item_id}/bbox/{bbox_wgs84}/{size}.png?assets=visual"  # noqa
     response = requests.get(url)
