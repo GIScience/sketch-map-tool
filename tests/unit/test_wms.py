@@ -1,8 +1,14 @@
+import pytest
 from PIL import Image
 
 from sketch_map_tool.models import Bbox, Size
 from sketch_map_tool.wms import client
 from tests import vcr_app as vcr
+
+
+@pytest.fixture(params=["osm", "esri-world-imagery"])
+def layer(request):
+    return request.param
 
 
 @vcr.use_cassette
