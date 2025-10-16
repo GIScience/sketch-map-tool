@@ -13,7 +13,7 @@ from sketch_map_tool.exceptions import (
     CustomFileNotFoundError,
 )
 from sketch_map_tool.helpers import N_
-from sketch_map_tool.models import Bbox, Layer, PaperFormat
+from sketch_map_tool.models import Bbox, PaperFormat
 
 db_conn: connection | None = None
 
@@ -38,7 +38,7 @@ def insert_map_frame(
     bbox: Bbox,
     format_: PaperFormat,
     orientation: str,
-    layer: Layer,
+    layer: str,
 ):
     """Insert map frame alongside map generation parameters into the database.
 

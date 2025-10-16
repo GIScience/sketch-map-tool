@@ -12,7 +12,7 @@ from sketch_map_tool.exceptions import (
     CustomFileNotFoundError,
 )
 from sketch_map_tool.helpers import N_, to_array
-from sketch_map_tool.models import Bbox, Layer
+from sketch_map_tool.models import Bbox
 from sketch_map_tool.upload_processing import read_qr_code
 
 
@@ -33,7 +33,7 @@ def close_connection(e=None):
 
 def insert_files(
     files, consent: bool
-) -> tuple[list[int], list[str], list[str], list[Bbox], list[Layer]]:
+) -> tuple[list[int], list[str], list[str], list[Bbox], list[str]]:
     """Insert uploaded files as blob into the database and return ID, UUID and name.
 
     UUID is derived from decoding the qr-code.

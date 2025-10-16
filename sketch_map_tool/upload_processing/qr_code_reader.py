@@ -11,7 +11,7 @@ from pyzbar import pyzbar
 
 from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.helpers import N_
-from sketch_map_tool.models import Bbox, Layer
+from sketch_map_tool.models import Bbox
 from sketch_map_tool.validators import validate_uuid
 
 
@@ -55,7 +55,7 @@ def _decode_data(data) -> MappingProxyType:
         contents = data.split(",")
         if len(contents) == 6:
             # Legacy support (before satellite imagery feature)
-            contents.append(Layer("osm"))
+            contents.append("osm")
         if not len(contents) == 7:  # version nr, uuid, bbox coordinates and layer
             raise ValueError(N_("Unexpected length of QR-code contents."))
         version_nr = contents[0]
@@ -64,10 +64,10 @@ def _decode_data(data) -> MappingProxyType:
             *[float(coordinate) for coordinate in contents[2:6]]
         )  # Raises ValueError for non-float values
         try:
-            layer = Layer(contents[6])
+            layer = contents[6]
         except IndexError:
             # backward compatibility
-            layer = Layer("osm")
+            layer = "osm"
     except ValueError as error:
         raise QRCodeError(N_("QR-Code does not have expected content.")) from error
     return MappingProxyType(
@@ -88,7 +88,7 @@ def _decode_data_legacy(data) -> MappingProxyType:
         bbox = Bbox(
             *[float(coordinate) for coordinate in contents["bbox"].values()]
         )  # Raises ValueError for non-float values
-        layer = Layer("osm")
+        layer = "osm"
     except ValueError as error:
         raise QRCodeError(N_("QR-Code does not have expected content.")) from error
     return MappingProxyType(

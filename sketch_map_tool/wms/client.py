@@ -10,16 +10,16 @@ from requests import ReadTimeout, Response
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.exceptions import MapGenerationError
 from sketch_map_tool.helpers import N_
-from sketch_map_tool.models import Bbox, Layer, Size
+from sketch_map_tool.models import Bbox, Size
 
 
 def get_map_image(
     bbox: Bbox,
     size: Size,
-    layer: Layer,
+    layer: str,
 ) -> Image.Image:
     """Get a map image from the WMS."""
-    if layer == Layer.ESRI_WORLD_IMAGERY:
+    if layer == "esri-world-imagery":
         format = "jpeg"
     else:
         format = "png"
@@ -29,11 +29,11 @@ def get_map_image(
     except MapGenerationError as e:
         # WMS errors if no zoom level 19 or 18 is available. In case of this error
         # fallback to zoom level 17 which is available world wide.
-        if layer == Layer.ESRI_WORLD_IMAGERY:
+        if layer == "esri-world-imagery":
             return get_map_image(
                 bbox,
                 size,
-                Layer.ESRI_WORLD_IMAGERY_FALLBACK,
+                "esri-world-imagery-fallback",
             )
         else:
             raise e
@@ -43,12 +43,12 @@ def get_map_image(
 def get_map(
     bbox: Bbox,
     size: Size,
-    layer: Layer,
+    layer: str,
     format: Literal["png", "jpeg"],
 ) -> Response:
     """Request a map from the WMS."""
-    url = get_config_value(f"wms-url-{layer.value}")
-    layers = get_config_value(f"wms-layers-{layer.value}")
+    url = get_config_value(f"wms-url-{layer}")
+    layers = get_config_value(f"wms-layers-{layer}")
     params = {
         "REQUEST": "GetMap",
         "FORMAT": "image/{0}".format(format),

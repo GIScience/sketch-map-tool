@@ -36,7 +36,7 @@ from sketch_map_tool.helpers import (
     to_array,
     zip_,
 )
-from sketch_map_tool.models import Bbox, Layer, PaperFormat, Size
+from sketch_map_tool.models import Bbox, PaperFormat, Size, validate_layer
 from sketch_map_tool.tasks import (
     cleanup_blobs,
     upload_processing,
@@ -121,7 +121,7 @@ def create_results_post(lang="en") -> Response:
     orientation = request.form["orientation"]
     size = Size(**(json.loads(request.form["size"])))
     scale = float(request.form["scale"])
-    layer = Layer(request.form["layer"].replace(":", "-").replace("_", "-").lower())
+    layer = validate_layer(request.form["layer"])
     # Tasks
     task_sketch_map = tasks.generate_sketch_map.apply_async(
         args=(bbox, format_, orientation, size, scale, layer)

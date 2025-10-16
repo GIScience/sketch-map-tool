@@ -39,7 +39,8 @@ def test_create_result_get(client):
     assert resp.status_code == 302  # Redirect
 
 
-def test_create_result_post(client, mock_tasks, bbox, bbox_wgs84, layer):
+@pytest.mark.usefixtures("mock_tasks")
+def test_create_result_post(client, bbox, bbox_wgs84, layer):
     """Redirect to /create/results/<uuid>"""
     # TODO: use params fixture from conftest
     data = {

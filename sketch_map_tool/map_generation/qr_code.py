@@ -6,13 +6,13 @@ from reportlab.graphics.shapes import Drawing
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool import __version__
-from sketch_map_tool.models import Bbox, Layer, PaperFormat
+from sketch_map_tool.models import Bbox, PaperFormat
 
 
 def qr_code(
     uuid: str,
     bbox: Bbox,
-    layer: Layer,
+    layer: str,
     format_: PaperFormat,
     version: str = __version__,
 ) -> Drawing:
@@ -26,10 +26,10 @@ def qr_code(
     return qr_code_rlg
 
 
-def _encode_data(uuid: str, bbox: Bbox, layer: Layer, version_nr: str) -> str:
+def _encode_data(uuid: str, bbox: Bbox, layer: str, version_nr: str) -> str:
     return (
         f"{version_nr},{uuid},{bbox.lon_min},"
-        f"{bbox.lat_min},{bbox.lon_max},{bbox.lat_max},{layer.value}"
+        f"{bbox.lat_min},{bbox.lon_max},{bbox.lat_max},{layer}"
     )
 
 

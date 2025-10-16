@@ -1,6 +1,6 @@
 from PIL import Image
 
-from sketch_map_tool.models import Bbox, Layer, Size
+from sketch_map_tool.models import Bbox, Size
 from sketch_map_tool.wms import client
 from tests import vcr_app as vcr
 
@@ -14,7 +14,7 @@ def test_get_map_image(bbox, size, layer):
 
 @vcr.use_cassette
 def test_get_map(bbox, size, layer):
-    if layer == Layer.ESRI_WORLD_IMAGERY:
+    if layer == "esri-world-imagery":
         format = "jpeg"
     else:
         format = "png"
@@ -24,7 +24,7 @@ def test_get_map(bbox, size, layer):
 
 @vcr.use_cassette
 def test_as_image(bbox, size, layer):
-    if layer == Layer.ESRI_WORLD_IMAGERY:
+    if layer == "esri-world-imagery":
         format = "jpeg"
     else:
         format = "png"
@@ -50,7 +50,6 @@ def test_get_map_image_could_not_get_any_sources(bbox, size):
         ]
     )
     size = Size(**{"width": 1716, "height": 1436})
-    layer = Layer("esri-world-imagery")
     map_image = client.get_map_image(bbox, size, layer)
     # map_image.show()  # for showing of the image during manual testing
     assert isinstance(map_image, Image.Image)

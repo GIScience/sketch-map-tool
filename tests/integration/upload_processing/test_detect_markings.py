@@ -69,7 +69,7 @@ def test_detect_markings(
     than changes to ML-models lead to an increased memory Consumption.
     In this case resource availability in production need to be validated.
     """
-    if layer.value == "osm":
+    if layer == "osm":
         yolo_obj = yolo_osm_obj
     else:
         yolo_obj = yolo_esri_obj

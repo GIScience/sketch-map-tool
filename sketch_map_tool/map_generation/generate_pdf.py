@@ -18,7 +18,7 @@ from svglib.svglib import svg2rlg
 
 from sketch_map_tool.definitions import PDF_RESOURCES_PATH, get_attribution
 from sketch_map_tool.helpers import resize_rlg_by_width
-from sketch_map_tool.models import Layer, PaperFormat
+from sketch_map_tool.models import PaperFormat
 
 # PIL should be able to open high resolution PNGs of large Maps:
 flowables.Image.MAX_IMAGE_PIXELS = None
@@ -29,7 +29,7 @@ def generate_pdf(
     qr_code: Drawing,
     format_: PaperFormat,
     scale: float,
-    layer: Layer,
+    layer: str,
 ) -> Tuple[BytesIO, BytesIO]:
     """
     Generate a sketch map pdf, i.e. a PDF containing the given map image
@@ -68,7 +68,7 @@ def generate_pdf(
     column_origin_y = 0
     column_margin = map_margin * cm
 
-    if layer == Layer.ESRI_WORLD_IMAGERY:
+    if layer == "esri-world-imagery":
         img_format = "jpeg"
     else:
         img_format = "png"
@@ -155,7 +155,7 @@ def draw_right_column(
     qr_code: Drawing,
     scale,  # TODO: is not accessed
     format_,
-    layer: Layer,
+    layer: str,
     portrait=False,
 ) -> None:
     normal_style = scale_style(format_, "Normal", 50)
