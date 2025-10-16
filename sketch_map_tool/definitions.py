@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import get_config_value
 from sketch_map_tool.models import LiteratureReference, PaperFormat
+from sketch_map_tool.openaerialmap import client as oam_client
 
 # Types of requests
 REQUEST_TYPES = Literal[
@@ -55,8 +56,12 @@ def get_attribution(layer: str) -> str:
                     "Attribution retrieved from ESRI API has unexpected format."
                 )
         return "Powered by Esri<br />" + sources
-    else:
+    elif layer == "osm":
         return "Powered by OpenStreetMap<br />©openstreetmap.org/copyright"
+    elif layer.startswith("oam"):
+        return oam_client.get_attribution(layer)
+    else:
+        raise ValueError("Unexpected value for layer.")
 
 
 def get_literature_references() -> list[LiteratureReference]:

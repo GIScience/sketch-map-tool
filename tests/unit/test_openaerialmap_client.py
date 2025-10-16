@@ -35,6 +35,5 @@ def test_get_image(item_id, size, bbox_wgs84):
     verify_binary(result, extension=".png")
 
 
-@pytest.mark.skip()
 def test_get_attribution(item_id):
     verify(get_attribution(item_id))

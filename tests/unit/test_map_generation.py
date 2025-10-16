@@ -60,7 +60,7 @@ def test_generate_pdf(
     map_image,
     qr_code,
     paper_format: PaperFormat,
-    orientation,  # pyright: ignore reportUnusedVariable
+    orientation,
     layer,
 ) -> None:
     sketch_map, sketch_map_template = generate_pdf(
@@ -82,7 +82,7 @@ def test_generate_pdf_sketch_map_approval(
     map_image,
     qr_code_approval,
     paper_format,
-    orientation,  # pyright: ignore reportUnusedVariable
+    orientation,
 ) -> None:
     sketch_map, _ = generate_pdf(
         map_image,
@@ -122,7 +122,7 @@ def test_generate_pdf_sketch_map_template_approval(
     map_image,
     qr_code_approval,
     paper_format: PaperFormat,
-    orientation,  # pyright: ignore reportUnusedVariable
+    orientation,
 ) -> None:
     _, sketch_map_template = generate_pdf(
         map_image, qr_code_approval, paper_format, 1283.129, "osm"

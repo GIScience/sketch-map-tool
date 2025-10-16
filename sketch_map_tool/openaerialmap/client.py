@@ -15,22 +15,22 @@ COLLECTION_ID = "openaerialmap"
 
 
 def get_metadata(item_id: str) -> dict:
+    item_id = item_id.replace("oam:", "")
     url = f"{STAC_API_URL}/collections/{COLLECTION_ID}/items/{item_id}"
     response = requests.get(url)
+    response.raise_for_status()
     return response.json()
 
 
 def get_image(item_id: str, size: Size, bbox_wgs84: Bbox):
+    item_id = item_id.replace("oam:", "")
     url = f"{RAST_API_URL}/collections/{COLLECTION_ID}/items/{item_id}/bbox/{bbox_wgs84}/{size}.png?assets=visual"  # noqa
     response = requests.get(url)
+    response.raise_for_status()
     return response.content
 
 
 def get_attribution(item_id) -> str:
-    # TODO
-    # static getMapAttributionFromMetadata(metadataJson) {
-    #     const props = metadataJson.properties;
-    #     const provider = props.providers.map(provider=> provider.name).join();
-    #     return `© <a href="https://map.openaerialmap.org" target="_blank">OpenAerialMap</a> | ${props.title} by ${provider}`;  # noqa
-    # }
-    raise NotImplementedError
+    metadata = get_metadata(item_id)
+    providers = ", ".join([p["name"] for p in metadata["properties"]["providers"]])
+    return f"Powered by OpenAerialMap<br />Providers: {providers}"
