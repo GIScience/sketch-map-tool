@@ -10,6 +10,7 @@ from tests import vcr_app as vcr
 def test_generate_sketch_map(
     monkeypatch,
     bbox,
+    bbox_wgs84,
     format_,
     size,
     scale,
@@ -21,6 +22,7 @@ def test_generate_sketch_map(
     )
     map_pdf = tasks.generate_sketch_map(
         bbox,
+        bbox_wgs84,
         format_,
         "landscape",
         size,
