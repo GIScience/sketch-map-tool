@@ -1,0 +1,1 @@
+https://api.imagery.hotosm.org/raster/collections/openaerialmap/items/59e62beb3d6412ef7220c58e/tiles/WebMercatorQuad/{z}/{x}/{y}.png?assets=visual&nodata=0

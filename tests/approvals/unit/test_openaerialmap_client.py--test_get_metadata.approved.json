@@ -1,0 +1,182 @@
+{
+ "id": "59e62beb3d6412ef7220c58e",
+ "bbox": [
+  39.22848888888889,
+  -6.8438638888888885,
+  39.26643055555556,
+  -6.817280555555556
+ ],
+ "type": "Feature",
+ "links": [
+  {
+   "rel": "collection",
+   "type": "application/json",
+   "href": "https://api.imagery.hotosm.org/stac/collections/openaerialmap"
+  },
+  {
+   "rel": "parent",
+   "type": "application/json",
+   "href": "https://api.imagery.hotosm.org/stac/collections/openaerialmap"
+  },
+  {
+   "rel": "root",
+   "type": "application/json",
+   "href": "https://api.imagery.hotosm.org/stac/"
+  },
+  {
+   "rel": "self",
+   "type": "application/geo+json",
+   "href": "https://api.imagery.hotosm.org/stac/collections/openaerialmap/items/59e62beb3d6412ef7220c58e"
+  }
+ ],
+ "assets": {
+  "visual": {
+   "href": "http://oin-hotosm-temp.s3.amazonaws.com/7/0/556f7a49ac00a903002fb01d.tif",
+   "type": "image/tiff; application=geotiff; profile=cloud-optimized",
+   "roles": [
+    "data"
+   ],
+   "title": "2015-04-17_bugurunni_merged_transparent_mosaic_group1.tif",
+   "alternate": {
+    "s3": {
+     "href": "s3://oin-hotosm-temp/7/0/556f7a49ac00a903002fb01d.tif",
+     "alternate:name": "S3"
+    }
+   },
+   "file:size": 426077885,
+   "proj:bbox": [
+    525246.5247500001,
+    9243505.399980001,
+    529437.3279900001,
+    9246442.01548
+   ],
+   "proj:code": "EPSG:32737",
+   "proj:shape": [
+    48475,
+    69178
+   ],
+   "proj:geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       525246.5247500001,
+       9243505.399980001
+      ],
+      [
+       529437.3279900001,
+       9243505.399980001
+      ],
+      [
+       529437.3279900001,
+       9246442.01548
+      ],
+      [
+       525246.5247500001,
+       9246442.01548
+      ],
+      [
+       525246.5247500001,
+       9243505.399980001
+      ]
+     ]
+    ]
+   },
+   "alternate:name": "HTTPS",
+   "proj:transform": [
+    0.06058,
+    0.0,
+    525246.5247500001,
+    0.0,
+    -0.06058,
+    9246442.01548,
+    0.0,
+    0.0,
+    1.0
+   ]
+  },
+  "metadata": {
+   "href": "http://oin-hotosm-temp.s3.amazonaws.com/7/0/556f7a49ac00a903002fb01d_meta.json",
+   "type": "application/json",
+   "roles": [
+    "metadata"
+   ],
+   "title": "metadata",
+   "alternate": {
+    "s3": {
+     "href": "s3://oin-hotosm-temp/7/0/556f7a49ac00a903002fb01d_meta.json",
+     "alternate:name": "S3"
+    }
+   },
+   "alternate:name": "HTTPS"
+  },
+  "thumbnail": {
+   "href": "http://oin-hotosm-temp.s3.amazonaws.com/7/0/556f7a49ac00a903002fb01d_thumb.png",
+   "type": "image/png",
+   "roles": [
+    "thumbnail"
+   ],
+   "title": "thumbnail",
+   "alternate": {
+    "s3": {
+     "href": "s3://oin-hotosm-temp/7/0/556f7a49ac00a903002fb01d_thumb.png",
+     "alternate:name": "S3"
+    }
+   },
+   "alternate:name": "HTTPS"
+  }
+ },
+ "geometry": {
+  "type": "Polygon",
+  "coordinates": [
+   [
+    [
+     39.22848888888889,
+     -6.8172999999999995
+    ],
+    [
+     39.266416666666665,
+     -6.817280555555556
+    ],
+    [
+     39.26643055555556,
+     -6.843844444444444
+    ],
+    [
+     39.228500000000004,
+     -6.8438638888888885
+    ],
+    [
+     39.22848888888889,
+     -6.8172999999999995
+    ]
+   ]
+  ]
+ },
+ "collection": "openaerialmap",
+ "properties": {
+  "gsd": 0.06058,
+  "title": "2015-04-17_bugurunni_merged_transparent_mosaic_group1.tif",
+  "providers": [
+   {
+    "name": "Tanzania Open Data Initiative",
+    "roles": [
+     "producer",
+     "licensor"
+    ],
+    "description": "Ramani Huria/Mark Iliffe miliffe@worldbank.org"
+   }
+  ],
+  "end_datetime": "2015-04-18T00:00:00Z",
+  "start_datetime": "2015-04-17T00:00:00Z",
+  "oam:platform_type": "uav",
+  "oam:producer_name": "Tanzania Open Data Initiative"
+ },
+ "stac_version": "1.1.0",
+ "stac_extensions": [
+  "https://stac-extensions.github.io/file/v2.1.0/schema.json",
+  "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+  "https://stac-extensions.github.io/alternate-assets/v1.2.0/schema.json",
+  "https://hotosm.github.io/stactools-hotosm/oam/v0.1.0/schema.json"
+ ]
+}
