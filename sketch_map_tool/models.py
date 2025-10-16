@@ -38,6 +38,9 @@ class Size:
     width: float
     height: float
 
+    def __str__(self):
+        return f"{self.width}x{self.height}"
+
 
 def validate_layer(layer: str) -> str:
     layer = layer.replace(":", "-").replace("_", "-").lower()
