@@ -1,7 +1,5 @@
-from io import BytesIO
-
 import pytest
-from pytest_approval import verify, verify_binary, verify_json
+from pytest_approval import verify, verify_image_pillow, verify_json
 
 from sketch_map_tool.models import Bbox, Size
 from sketch_map_tool.openaerialmap.client import (
@@ -34,10 +32,7 @@ def test_get_metadata(item_id):
 
 def test_get_image(item_id, size, bbox_wgs84):
     image = get_map_image(item_id, size, bbox_wgs84)
-    # TODO
-    buffer = BytesIO()
-    image.save(buffer, format="png")
-    verify_binary(buffer.getvalue(), extension=".png")
+    verify_image_pillow(image, extension=".png")
 
 
 def test_get_image_invlaid_item_id(size, bbox_wgs84):
