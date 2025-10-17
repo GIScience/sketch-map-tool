@@ -56,12 +56,20 @@ def test_create_result_post(client, bbox, bbox_wgs84, layer):
     assert resp.status_code == 302
 
 
-def test_create_results_uuid(client, uuid):
+def test_create_results_uuid(client, uuid, monkeypatch):
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.get_async_result",
+        lambda *_: None,
+    )
     resp = client.get("/create/results/{0}".format(uuid))
     assert resp.status_code == 200
 
 
-def test_create_results_uuid_bbox(client, uuid, bbox_wgs84_str):
+def test_create_results_uuid_bbox(client, uuid, bbox_wgs84_str, monkeypatch):
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.get_async_result",
+        lambda *_: None,
+    )
     resp = client.get("/create/results/{0}/{1}".format(uuid, bbox_wgs84_str))
     assert resp.status_code == 200
 
