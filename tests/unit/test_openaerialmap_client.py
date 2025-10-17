@@ -7,6 +7,7 @@ from sketch_map_tool.openaerialmap.client import (
     get_map_image,
     get_metadata,
 )
+from tests import vcr_app as vcr
 
 
 @pytest.fixture
@@ -26,18 +27,22 @@ def bbox_wgs84() -> Bbox:
     )
 
 
+@vcr.use_cassette
 def test_get_metadata(item_id):
     verify_json(get_metadata(item_id))
 
 
+@vcr.use_cassette
 def test_get_image(item_id, size, bbox_wgs84):
     image = get_map_image(item_id, size, bbox_wgs84)
     verify_image_pillow(image, extension=".png")
 
 
+@vcr.use_cassette
 def test_get_image_invlaid_item_id(size, bbox_wgs84):
     get_map_image("oam:foo", size, bbox_wgs84)
 
 
+@vcr.use_cassette
 def test_get_attribution(item_id):
     verify(get_attribution(item_id))
