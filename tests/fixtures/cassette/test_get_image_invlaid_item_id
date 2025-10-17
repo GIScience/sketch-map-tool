@@ -1,0 +1,44 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.5
+    method: GET
+    uri: https://api.imagery.hotosm.org/raster/collections/openaerialmap/items/foo/bbox/39.22999959389618,-6.841535317101005,39.25606520781678,-6.819872968487459/1716x1436.png?assets=visual
+  response:
+    body:
+      string: '{"detail":"No item ''foo'' found in ''openaerialmap'' collection"}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization
+      Access-Control-Allow-Methods:
+      - GET, PUT, POST, DELETE, PATCH, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '1728000'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '62'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 17 Oct 2025 05:13:47 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      cache-control:
+      - public, max-age=3600
+    status:
+      code: 404
+      message: Not Found
+version: 1

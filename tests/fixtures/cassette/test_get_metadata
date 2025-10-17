@@ -1,0 +1,64 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.5
+    method: GET
+    uri: https://api.imagery.hotosm.org/stac/collections/openaerialmap/items/59e62beb3d6412ef7220c58e
+  response:
+    body:
+      string: !!binary |
+        H4sIAIXQ8WgC/71WWW/bOBD+KwZfV6ao+1gU6MMe7cNig02e1jAEWqJlNpIokJTbJPB/36Eky3Jj
+        I+nCKGFbxsxoZr65OC+IFyhFQcJCd8M2XhH6jsu2keuSPIgZstBmI76hdOUl2HVjPz6exFqGOPa9
+        OPQmWmAZqTD0PRIMJ+ylnMiNj5QgXFtIP7UMrP7BqO6kMVLx5lGBlRckWQWcXFQVyzUXDZqkadtW
+        PKeGaH9RPWcn2RY4O61bldo2bTnmNS2ZfMI7oYWqsZClrTTN7ZNGZYuWNZRJTquatuhgHa22VLJG
+        /0yLUoib2ZupVazaXlZbMvHLDaHYXLNa2VfL5wDJpkoxDcl9QXuuOlqZfzPbYFrwZjmYXIK6FisP
+        05o+i4Z+VTgXtR3ZxIbK2UbUT2hOCE2IR4i73RCnwJrPsPYIbCBtf13McH8A3AOxlWLLK/Yhr0RX
+        LEWrec2fWQEapKiYqUFUUE2RqVKuK6PTJU6wJP7SibJNV3ayaxqe1UyWrMi0pI0a6iarhaI8z0op
+        utYZ3aKVZrKhmhnUypthV95r5O8BOmlMG1ob9+49dDhYyKBKFWBBqe+GJIpMPyKA+yUdWzhwA9cP
+        MfxEAYHjWInrewEJsJckSdxTAjfxvQh7bpQkk0zo+y6GIPjxetSYi8KY/v3u/s8UZL0IjQy1oyYP
+        Kz8GI1aYONH0DqSgZlo+mRiM2boT1VPZF2MuhCy4gWVSsHqPr2trddHb90nNMV229rbEd5bW68OF
+        9Hx6eLi7P4anL5etkDWAJJiEJIgteFqv1Rvq8ihy5k3PMl8HE2MRgkr7kr1tX2VGLx5nxfUBNXXN
+        5MascybaTRvhzLNr7XAlD8DRu67eNJTfehBlvWLcNuX342ggTZE6OTAL1Yl421jNnfrRWAHrh5r2
+        8o4At39yOgE007glOOHxBBfXhNXlbQJ2Dv90RjE37vtmOP6l3WQSfMu/vo1nC0iKzm/vvpVbJjVn
+        /a1WKtigjp16k0sD9O95weSwEY05eaDNM204XfwN3ix+g65afG645tCNezYvL3i76HIm+7UqZ40S
+        0hRawVQueTtC+gfquuGLTx2gsv+i8nHxuYL7kS1q3j8/fhWyKja0eTRbQH+Ps6bIoJkZ3JhnAOMH
+        QtL+8y+YhH1B6oty0ZmcoHXaVlSbYZiNldXR/ZEzYsjeBf7Qm82zPYRsgOdgGI5oJLNvGqJglhcT
+        nuO+Y1jLEwuXHFplg7mwzU1q712jwlb5jtXTsHn7XTPlh7oxGsj/0DA143JYnOy9g92resZN7fS6
+        UayFqNQ4ImwIp70nr8CsD/8BuSf40PsLAAA=
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization
+      Access-Control-Allow-Methods:
+      - GET, PUT, POST, DELETE, PATCH, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '1728000'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '995'
+      Content-Type:
+      - application/geo+json
+      Date:
+      - Fri, 17 Oct 2025 05:13:41 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      content-encoding:
+      - gzip
+      vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+version: 1
