@@ -1,4 +1,11 @@
+import pytest
+
 from sketch_map_tool import models
+
+
+@pytest.fixture
+def bbox_as_list() -> list:
+    return [964472.1973848869, 6343459.035638228, 967434.6098457306, 6345977.635778541]
 
 
 def test_bbox(bbox_as_list):
