@@ -43,8 +43,10 @@ class Size:
 
 
 def validate_layer(layer: str) -> str:
-    layer = layer.replace(":", "-").replace("_", "-").lower()
-    if layer.startswith(("osm", "esri", "oam")):
+    if layer.startswith(("osm", "esri")):
+        layer = layer.replace(":", "-").replace("_", "-").lower()
+        return layer
+    elif layer.startswith("oam"):
         return layer
     else:
         raise ValueError("Layer name should start with osm, esri or oam.")

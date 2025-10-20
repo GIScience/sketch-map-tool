@@ -140,7 +140,7 @@ def digitize_sketches(
 ) -> FeatureCollection:
     if layer == "osm":
         yolo_obj = yolo_obj_osm
-    elif layer == "esri-world-imagery":
+    elif layer.startswith(("esri-world-imagery", "oam")):
         yolo_obj = yolo_obj_esri
     else:
         raise ValueError("Unexpected layer: " + layer)
