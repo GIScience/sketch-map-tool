@@ -124,7 +124,7 @@ def create_results_post(lang="en") -> Response:
     layer = validate_layer(request.form["layer"])
     # Tasks
     task_sketch_map = tasks.generate_sketch_map.apply_async(
-        args=(bbox, format_, orientation, size, scale, layer)
+        args=(bbox, bbox_wgs84, format_, orientation, size, scale, layer)
     )
     return redirect(
         url_for(

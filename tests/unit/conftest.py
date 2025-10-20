@@ -54,8 +54,11 @@ def bbox():
 
 
 @pytest.fixture
-def size():
-    return Size(width=1867, height=1587)
+def size(layer: str) -> Size:
+    if layer.startswith("oam"):
+        return Size(width=1716, height=1436)
+    else:
+        return Size(width=1867, height=1587)
 
 
 @pytest.fixture
@@ -102,13 +105,18 @@ def version_nr():
 
 
 @pytest.fixture
-def bbox_as_list():
-    return [964472.1973848869, 6343459.035638228, 967434.6098457306, 6345977.635778541]
-
-
-@pytest.fixture
-def bbox_wgs84():
-    return Bbox(lon_min=8.625, lat_min=49.3711, lon_max=8.7334, lat_max=49.4397)
+def bbox_wgs84(layer: str) -> Bbox:
+    if layer.startswith("oam"):
+        return Bbox(
+            *[
+                39.22999959389618,
+                -6.841535317101005,
+                39.25606520781678,
+                -6.819872968487459,
+            ]
+        )
+    else:
+        return Bbox(lon_min=8.625, lat_min=49.3711, lon_max=8.7334, lat_max=49.4397)
 
 
 @pytest.fixture
