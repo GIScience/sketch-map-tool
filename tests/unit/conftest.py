@@ -9,10 +9,13 @@ from celery.result import AsyncResult, GroupResult
 from flask_babel import Babel
 from werkzeug.datastructures import FileStorage
 
-from sketch_map_tool import flask_app as smt_flask_app
 from sketch_map_tool import get_locale
 from sketch_map_tool.exceptions import QRCodeError
 from sketch_map_tool.models import Bbox, PaperFormat, Size
+
+# NOTE: Need to import app from routes module so that endpoints for flask test client
+#   are registered correctly.
+from sketch_map_tool.routes import app as smt_flask_app
 from tests import FIXTURE_DIR
 
 

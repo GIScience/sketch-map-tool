@@ -8,8 +8,8 @@ import pytest
 from celery.result import AsyncResult, GroupResult
 from PIL import Image
 
-from sketch_map_tool import flask_app
 from sketch_map_tool.database import client_flask
+from sketch_map_tool.routes import app as flask_app
 from tests import vcr_app
 
 
