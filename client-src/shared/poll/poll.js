@@ -86,9 +86,16 @@ async function poll(url, prefix) {
 
     async function onError(response) {
         const { status: httpStatus } = response;
-        const resonseJSON = await response.json();
-        const taskStatus = resonseJSON.status;
-        const errorText = resonseJSON.errors.join("<br>");
+        let errorText = "";
+        let taskStatus = "";
+        if (httpStatus === 500) {
+            errorText = "Internal Server Error";
+            taskStatus = "FAILURE";
+        } else {
+            const resonseJSON = await response.json();
+            taskStatus = resonseJSON.status;
+            errorText = resonseJSON.errors.join("<br>");
+        }
         // display error
         handleError(prefix, `${new Date().toISOString()} ${httpStatus} ${taskStatus} <br> ${errorText}`);
         // remove task status
