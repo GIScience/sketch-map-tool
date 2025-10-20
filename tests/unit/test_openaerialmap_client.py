@@ -39,7 +39,7 @@ def test_get_image(item_id, size, bbox_wgs84):
 
 
 @vcr.use_cassette
-def test_get_image_invlaid_item_id(size, bbox_wgs84):
+def test_get_image_invalid_item_id(size, bbox_wgs84):
     get_map_image("oam:foo", size, bbox_wgs84)
 
 

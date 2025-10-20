@@ -1,10 +1,13 @@
 import json
 from io import BytesIO
+from typing import Generator
 from uuid import UUID
 
 import fitz
 import pytest
 from celery.contrib.testing.tasks import ping  # noqa: F401
+from flask import Flask
+from flask.testing import FlaskClient
 from flask_babel import Babel
 from numpy.typing import NDArray
 from PIL import Image, ImageOps
@@ -13,11 +16,14 @@ from testcontainers.redis import RedisContainer
 
 from sketch_map_tool import CELERY_CONFIG, get_locale
 from sketch_map_tool import celery_app as smt_celery_app
-from sketch_map_tool import flask_app as smt_flask_app
 from sketch_map_tool.config import DEFAULT_CONFIG
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.helpers import merge, to_array, zip_
 from sketch_map_tool.models import Bbox, PaperFormat, Size
+
+# NOTE: Need to import app from routes module so that endpoints for flask test client
+#   are registered correctly.
+from sketch_map_tool.routes import app as smt_flask_app
 from sketch_map_tool.upload_processing import clip
 from tests import FIXTURE_DIR
 from tests import vcr_app as vcr
@@ -96,14 +102,14 @@ def celery_worker(celery_session_worker):
 
 
 @pytest.fixture(scope="session")
-def flask_app():
+def flask_app() -> Generator[Flask, None, None]:
     smt_flask_app.config.update({"TESTING": True})
     Babel(smt_flask_app, locale_selector=get_locale)  # for translations
     yield smt_flask_app
 
 
 @pytest.fixture(scope="session")
-def flask_client(flask_app):
+def flask_client(flask_app: Flask) -> FlaskClient:
     return flask_app.test_client()
 
 
@@ -121,8 +127,11 @@ def bbox() -> Bbox:
 
 
 @pytest.fixture
-def size() -> Size:
-    return Size(width=1867, height=1587)
+def size(layer: str) -> Size:
+    if layer.startswith("oam"):
+        return Size(width=1716, height=1436)
+    else:
+        return Size(width=1867, height=1587)
 
 
 @pytest.fixture(scope="session")
@@ -169,19 +178,30 @@ def uuid():
 
 
 @pytest.fixture
-def bbox_wgs84():
-    return Bbox(lon_min=8.625, lat_min=49.3711, lon_max=8.7334, lat_max=49.4397)
+def bbox_wgs84(layer):
+    if layer.startswith("oam"):
+        return Bbox(
+            *[
+                39.22999959389618,
+                -6.841535317101005,
+                39.25606520781678,
+                -6.819872968487459,
+            ]
+        )
+    else:
+        return Bbox(lon_min=8.625, lat_min=49.3711, lon_max=8.7334, lat_max=49.4397)
 
 
 # TODO: Fixture `sketch_map_marked` only works for landscape orientation.
 # TODO: Add other params
 @pytest.fixture(scope="session")
 def params(layer, bbox, format_, orientation):
+    # TODO if layer.startswith()
     return {
         "format": format_.title,
         "orientation": orientation,
         "bbox": "[" + str(bbox) + "]",
-        # NOTE: bboxWGS84 is has not the same geographical extent as above bbox
+        # NOTE: bboxWGS84 has not the same geographical extent as above bbox
         "bboxWGS84": (
             "[8.66376011761138,49.40266507327297,8.690376214631833,49.41716014123875]"
         ),
@@ -195,12 +215,17 @@ def params(layer, bbox, format_, orientation):
 @vcr.use_cassette
 def uuid_create(
     params,
-    flask_client,
+    flask_client: FlaskClient,
     celery_app,
     tmp_path_factory,
 ) -> str:
     """UUID after request to /create and successful sketch map generation."""
-    response = flask_client.post("/create/results", data=params, follow_redirects=True)
+    response = flask_client.post(
+        "/create/results",
+        data=params,
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
 
     url_parts = response.request.path.rsplit("/")
     uuid = url_parts[-2]

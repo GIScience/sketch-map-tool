@@ -9,10 +9,11 @@ from tests import vcr_app
 
 
 @vcr_app.use_cassette
-def test_generate_sketch_map(bbox, format_, size, scale, layer):
+def test_generate_sketch_map(bbox, bbox_wgs84, format_, size, scale, layer):
     task = tasks.generate_sketch_map.apply_async(
         args=(
             bbox,
+            bbox_wgs84,
             format_,
             "landscape",
             size,
