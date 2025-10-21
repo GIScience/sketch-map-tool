@@ -49,6 +49,7 @@
         "@giscience/ol-print-layout-control": "^1.1.2",
         "@picocss/pico": "^2.1.1",
         "filebokz": "^0.2.0",
+        "mathjs": "^15.0.0",
         "ol": "^10.6.1",
         "ol-geocoder": "^4.3.3"
     }

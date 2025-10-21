@@ -19,6 +19,7 @@ import { OpenAerialMapService } from "./openaerialmapService";
 import { transformExtent } from "ol/proj";
 import { intersects } from "ol/extent";
 import { UserLayerControl } from "./userLayerControl/userLayerControl";
+import { unit } from "mathjs";
 
 
 /**
@@ -110,12 +111,14 @@ export async function addOAMLayer(oamItemId) {
 
 }
 
+
+// OAM Add Dialog Handling
 document.getElementById("oam-add-button").addEventListener("click", async () => {
     const oamItemIdInput = document.getElementById("oam-item-id-input");
     const oamInvalidIdMessage = document.getElementById("oam-invalid-id-message");
     const oamPrgressBar = document.getElementById("oam-progress-bar");
     try {
-        if ( oamItemIdInput.value.length === 0) {
+        if (oamItemIdInput.value.length === 0) {
             throw Error("Empty input not allowed.")
         }
         oamPrgressBar.classList.remove("hidden");
@@ -150,3 +153,47 @@ function closeOamDialog() {
     document.getElementById("oam-dialog").close();
 
 }
+
+// OAM Metadata Dialog Handling
+userLayerControl.on("info", async (event) => {
+    const infoDialog = document.getElementById("oam-info-dialog");
+    const oamItemId = event.target.get("activeLayer").get("name").replace("oam:", "");
+
+    // open the dialog
+    infoDialog.show();
+
+    // load preview image
+    infoDialog.querySelector("img").setAttribute("src", OpenAerialMapService.getThumbnailUrl(oamItemId, 256));
+
+    // load and show the metadata properties
+    const metadata = await OpenAerialMapService.getMetadata(oamItemId);
+    const {
+        title,
+        start_datetime,
+        gsd: resolution,
+        "oam:producer_name": producer,
+        "oam:platform_type": platform,
+        license,
+    } = metadata.properties;
+
+    //set table properties
+    document.getElementById("title").textContent = title;
+    document.getElementById("date").textContent = new Date(start_datetime).toLocaleDateString();
+    document.getElementById("resolution").textContent = unit(resolution, "m").toBest(["cm", "m"]).format({
+        notation: "auto",
+        precision: 2
+    });
+    document.getElementById("provider").textContent = producer;
+    document.getElementById("platform").textContent = platform.toUpperCase();
+    document.getElementById("license").textContent = license;
+    document.getElementById("itemId").textContent = oamItemId;
+
+});
+
+document.getElementById("oam-info-ok-button").addEventListener("click", () => {
+    document.getElementById("oam-info-dialog").close();
+});
+
+document.getElementById("oam-info-close-button").addEventListener("click", () => {
+    document.getElementById("oam-info-dialog").close();
+});

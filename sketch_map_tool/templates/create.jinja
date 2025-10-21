@@ -58,22 +58,72 @@
         </div>
 
         <dialog id="oam-dialog">
-          <article>
-            <header>
-              <button id="oam-close-button" aria-label="Close" rel="prev"></button>
-              <div class="sketchy h1">{{ _('Add OpenAerialMap Layer') }}</div>
-            </header>
+            <article>
+                <header>
+                    <button id="oam-close-button" aria-label="Close" rel="prev"></button>
+                    <div class="sketchy h1">{{ _('Add OpenAerialMap Layer') }}</div>
+                </header>
                 <p>{{ _('<a href="https://map.openaerialmap.org" target="_blank">Browse</a> the OpenAerialMap collection to find aerial images. Once you’ve selected an image, simply copy its ID and paste it here.') }}</p>
-            <input id="oam-item-id-input" type="text" placeholder="Enter OpenAerialMap Image ID" aria-describedby="oam-invalid-id-message">
-            <small class="hidden" id="oam-invalid-id-message">
-                {{ _('No image for given ID could be found on OpenAerialMap. Please check given ID and try again.') }}
-            </small>
-            <button id="oam-add-button" type="button">{{ _('Add to Map') }}</button>
-            <button id="oam-cancel-button" type="button" class="secondary">{{ _('Cancel') }}</button>
-            <progress class="hidden" id="oam-progress-bar"/>
-          </article>
+                <input id="oam-item-id-input" type="text" placeholder="Enter OpenAerialMap Image ID"
+                       aria-describedby="oam-invalid-id-message">
+                <small class="hidden" id="oam-invalid-id-message">
+                    {{ _('No image for given ID could be found on OpenAerialMap. Please check given ID and try again.') }}
+                </small>
+                <footer>
+                    <button id="oam-cancel-button" type="button" class="secondary">{{ _('Cancel') }}</button>
+                    <button id="oam-add-button" type="button">{{ _('Add to Map') }}</button>
+                    <progress class="hidden" id="oam-progress-bar"></progress>
+                </footer>
+
+            </article>
         </dialog>
 
+        <dialog id="oam-info-dialog">
+            <article>
+                <header>
+                    <button id="oam-info-close-button" aria-label="Close" rel="prev"></button>
+                    <span class="sketchy h1">{{ _('OpenAerialMap Metadata') }}</span>
+                </header>
+                <main>
+                    <figure>
+                        <img src="" alt="OpenAerialMap Preview">
+                    </figure>
+                    <table>
+                        <tr>
+                            <th>{{ _('Title') }}</th>
+                            <td id="title"></td>
+                        </tr>
+                        <tr>
+                            <th>{{ _('Date') }}</th>
+                            <td id="date"></td>
+                        </tr>
+                        <tr>
+                            <th>{{ _('Resolution') }}</th>
+                            <td id="resolution"></td>
+                        </tr>
+                        <tr>
+                            <th>{{ _('Provider') }}</th>
+                            <td id="provider"></td>
+                        </tr>
+                        <tr>
+                            <th>{{ _('Platform') }}</th>
+                            <td id="platform"></td>
+                        </tr>
+                        <tr>
+                            <th>{{ _('License') }}</th>
+                            <td id="license"></td>
+                        </tr>
+                        <tr>
+                            <th>{{ _('Item Id') }}</th>
+                            <td id="itemId"></td>
+                        </tr>
+                    </table>
+                </main>
+                <footer>
+                    <button id="oam-info-ok-button" type="button" aria-label="Close">{{ _('OK') }}</button>
+                </footer>
+            </article>
+        </dialog>
     </div>
 
 </main>

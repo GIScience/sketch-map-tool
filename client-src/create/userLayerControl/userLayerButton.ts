@@ -11,23 +11,15 @@ export class UserLayerButton extends HTMLElement {
           min-width: 1rem;
           min-height: 1rem;
           position: relative;
-          /*border-radius: 10px;*/
-          /*background: var(--bg, url('https://via.placeholder.com/150')) center/cover no-repeat;*/
           overflow: hidden;
-          /*cursor: pointer;*/
-          /*font-family: sans-serif;*/
         }
 
-        /* Slot content (main label) */
         #layer-btn {
           position: absolute;
           inset: 0;
           border: 0;
           border-radius: inherit;
           padding: var(--padding);
-          /*// display: flex;*/
-          /*align-items: center;*/
-          /*justify-content: center;*/
           color: var(--color);
           font-weight: var(--font-weight);
           font-size: var(--font-size);
@@ -38,7 +30,7 @@ export class UserLayerButton extends HTMLElement {
           background-position-y: center;
           background-repeat: no-repeat;
           background-size: contain;
-          background-color: lch(45.086% 41.077 140);
+          background-color: rgb(22.62% 46.96% 23.13%);
         }
 
         /* Action buttons */
@@ -60,17 +52,18 @@ export class UserLayerButton extends HTMLElement {
           transition: border-color 0.2s, background 0.2s;
           &.close {
             top: -10px;
-            &:hover {
+            &:is(:hover, :focus) {
                 background: #ca2334;
             }
           }
           &.info {
             bottom: -10px;
-            &:hover {
+            font-size: 16px;
+            &:is(:hover, :focus) {
                 background: #0172ad;
             }
           }
-          &:hover {
+          &:is(:hover, :focus) {
             border-color: white;
           }
         }
