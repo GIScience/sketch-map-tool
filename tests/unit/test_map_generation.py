@@ -19,6 +19,7 @@ from sketch_map_tool.map_generation.generate_pdf import (
 )
 from sketch_map_tool.models import PaperFormat
 from tests import FIXTURE_DIR
+from tests import vcr_app as vcr
 from tests.comparator import ImageComparator
 from tests.namer import PytestNamer, PytestNamerFactory
 from tests.reporter import ImageReporter, NDArrayReporter
@@ -56,6 +57,7 @@ def qr_code_approval(uuid, bbox):
 
 @pytest.mark.parametrize("paper_format", [A0, A1, A2, A3, A4, LETTER, TABLOID])
 @pytest.mark.parametrize("orientation", ["landscape", "portrait"])
+@vcr.use_cassette
 def test_generate_pdf(
     map_image,
     qr_code,
