@@ -60,8 +60,8 @@ def simplify(fc: FeatureCollection) -> FeatureCollection:
     # Buffer operation
     buffer_distance_percentage = 0.1
 
-    # TODO: does this work for bbox including antimeridian?
-    # (Currently SMT does not allow bbox including antimeridian as input)
+    # NOTE: does this work for bbox including antimeridian?
+    #   (Currently SMT does not allow bbox including antimeridian as input)
     max_diag = max(
         (
             # bounds: (minx, miny, maxx, maxy)
