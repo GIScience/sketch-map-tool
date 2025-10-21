@@ -1,6 +1,7 @@
 import pytest
 
 from sketch_map_tool import models
+from sketch_map_tool.exceptions import ValidationError
 
 
 @pytest.fixture
@@ -58,3 +59,19 @@ def test_literatur_reference():
         "ISPRS International Journal of Geo-Information. 10:130."
     )
     assert literature_reference.url == "https://doi.org/10.3390/ijgi10030130"
+
+
+def test_layer(layer):
+    assert models.validate_layer(layer)
+
+
+def test_layer_invalid():
+    with pytest.raises(ValidationError):
+        models.validate_layer("foo")
+
+
+@pytest.mark.skip
+def test_layer_invalid_():
+    # TODO: Validate does not catch non-existing OAM item IDs
+    with pytest.raises(ValidationError):
+        models.validate_layer("oam:foo")

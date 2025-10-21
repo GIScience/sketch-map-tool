@@ -126,7 +126,7 @@ def bbox() -> Bbox:
     )
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def size(layer: str) -> Size:
     if layer.startswith("oam"):
         return Size(width=1716, height=1436)
@@ -162,7 +162,7 @@ def orientation() -> str:
     return "landscape"
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def scale():
     return 10231.143861780083
 
@@ -180,7 +180,7 @@ def uuid():
     return "654dd0d3-7bb0-4a05-8a68-517f0d9fc98e"
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def bbox_wgs84(layer):
     if layer.startswith("oam"):
         return Bbox(
@@ -196,19 +196,14 @@ def bbox_wgs84(layer):
 
 
 # TODO: Fixture `sketch_map_marked` only works for landscape orientation.
-# TODO: Add other params
 @pytest.fixture(scope="session")
-def params(layer, bbox, format_, orientation):
-    # TODO if layer.startswith()
+def params(layer, bbox, bbox_wgs84, size: Size, format_, orientation):
     return {
         "format": format_.title,
         "orientation": orientation,
-        "bbox": "[" + str(bbox) + "]",
-        # NOTE: bboxWGS84 has not the same geographical extent as above bbox
-        "bboxWGS84": (
-            "[8.66376011761138,49.40266507327297,8.690376214631833,49.41716014123875]"
-        ),
-        "size": '{"width": 1716,"height": 1436}',
+        "bbox": json.dumps(bbox.asdict()),
+        "bboxWGS84": json.dumps(bbox_wgs84.asdict()),
+        "size": json.dumps(size.asdict()),
         "scale": "9051.161965312804",
         "layer": layer,
     }

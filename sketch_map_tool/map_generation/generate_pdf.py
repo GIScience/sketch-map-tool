@@ -70,8 +70,10 @@ def generate_pdf(
 
     if layer == "esri-world-imagery":
         img_format = "jpeg"
-    else:
+    elif layer.startswith(("osm", "oam")):
         img_format = "png"
+    else:
+        raise ValueError("Unexpected value for layer.")
 
     map_image_reportlab = pil_image_to_image_reader(map_image_input, img_format)
 

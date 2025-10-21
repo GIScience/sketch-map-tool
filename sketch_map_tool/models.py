@@ -2,6 +2,9 @@ from dataclasses import dataclass
 
 from numpy.typing import NDArray
 
+from sketch_map_tool.exceptions import ValidationError
+from sketch_map_tool.helpers import N_
+
 
 @dataclass(frozen=True)
 class Bbox:
@@ -23,6 +26,9 @@ class Bbox:
         lat_centroid = (self.lat_min + self.lat_max) / 2
         return (lon_centroid, lat_centroid)
 
+    def asdict(self):
+        return [self.lon_min, self.lat_min, self.lon_max, self.lat_max]
+
     def __str__(self):
         # NOTE: this should probably be a WKT representation
         return f"{self.lon_min},{self.lat_min},{self.lon_max},{self.lat_max}"
@@ -41,15 +47,17 @@ class Size:
     def __str__(self):
         return f"{self.width}x{self.height}"
 
+    def asdict(self):
+        return {"width": self.width, "height": self.height}
+
 
 def validate_layer(layer: str) -> str:
     if layer.startswith(("osm", "esri")):
-        layer = layer.replace(":", "-").replace("_", "-").lower()
-        return layer
+        return layer.replace(":", "-").replace("_", "-").lower()
     elif layer.startswith("oam"):
         return layer
     else:
-        raise ValueError("Layer name should start with osm, esri or oam.")
+        raise ValidationError(N_("Layer name should start with osm, esri or oam."))
 
 
 @dataclass(frozen=True)
