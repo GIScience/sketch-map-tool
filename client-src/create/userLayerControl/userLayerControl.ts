@@ -84,7 +84,7 @@ button.add-layer-btn {
             target,
         });
 
-        this.addLayerButton = shadowRoot.querySelector<HTMLDivElement>(".add-layer-btn");
+        this.addLayerButton = shadowRoot.querySelector<HTMLButtonElement>(".add-layer-btn");
         this.userLayerButton = shadowRoot.querySelector<HTMLButtonElement>("user-layer-button");
 
         this.addLayerButton.addEventListener("click", () => {
