@@ -1,6 +1,7 @@
 import pytest
 from pytest_approval import verify, verify_image_pillow, verify_json
 
+from sketch_map_tool.exceptions import MapGenerationError
 from sketch_map_tool.models import Bbox, Size
 from sketch_map_tool.openaerialmap.client import (
     get_attribution,
@@ -34,13 +35,14 @@ def test_get_metadata(item_id):
 
 @vcr.use_cassette
 def test_get_image(item_id, size, bbox_wgs84):
-    image = get_map_image(item_id, size, bbox_wgs84)
+    image = get_map_image(bbox_wgs84, size, item_id)
     verify_image_pillow(image, extension=".png")
 
 
 @vcr.use_cassette
 def test_get_image_invalid_item_id(size, bbox_wgs84):
-    get_map_image("oam:foo", size, bbox_wgs84)
+    with pytest.raises(MapGenerationError):
+        get_map_image(bbox_wgs84, size, "oam:foo")
 
 
 @vcr.use_cassette

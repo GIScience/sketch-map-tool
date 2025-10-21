@@ -101,7 +101,7 @@ def generate_sketch_map(
 ) -> BytesIO | AsyncResult:
     """Generate and returns a sketch map as PDF and stores the map frame in DB."""
     if layer.startswith("oam"):
-        map_image = oam_client.get_map_image(layer, size, bbox_wgs84)
+        map_image = oam_client.get_map_image(bbox_wgs84, size, layer)
     else:
         map_image = wms_client.get_map_image(bbox, size, layer)
     qr_code_ = map_generation.qr_code(
