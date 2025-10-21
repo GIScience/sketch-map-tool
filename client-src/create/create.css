@@ -36,3 +36,23 @@ body > main {
     overflow-y: scroll;
     padding: 1rem;
 }
+
+#oam-info-dialog main {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    & figure {
+        flex: 0 1 128px;
+    }
+
+    & table {
+        flex: 0 1 content;
+    }
+}
+
+@media only screen and (width <= 450px) {
+  #oam-info-dialog table {
+    font-size: smaller;
+  }
+}
