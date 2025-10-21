@@ -53,7 +53,7 @@ pipeline {
 
         stage('Build Frontend') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 18') {
+                nodejs(nodeJSInstallationName: 'NodeJS 24') {
                     sh 'npm install'
                     sh 'npm run build'
                 }
