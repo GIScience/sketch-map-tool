@@ -8,7 +8,6 @@ export class EsriAttributionService {
         this.fallBackAttribution = "Satellite Layer \"World_Imagery\" powered by Esri. Source: ESRI, Maxar, Earthstar Geographics, and the GIS User Community";
         this.attributions = undefined;
         this.serviceAvailable = true;
-        this.initialize();
     }
 
     async initialize() {

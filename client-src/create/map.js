@@ -68,7 +68,8 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
         ls_class: "osm",
         ls_label: "OSM"
     });
-
+    const esriAttributionService = new EsriAttributionService();
+    esriAttributionService.initialize();
     const esriWorldImageryLayer = new Tile({
         name: "ESRI:World_Imagery",
         visible: activeBaselayer === "ESRI:World_Imagery",
@@ -82,7 +83,7 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
             url: `https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?token=${esriApiKey}`,
             // the exact zoomlevel and bbox defined attributions can be retrieved here:
             // https://static.arcgis.com/attribution/World_Imagery?f=json
-            attributions: new EsriAttributionService().createAttributionFunction(),
+            attributions: esriAttributionService.createAttributionFunction(),
         }),
         ls_visible: true,
         ls_class: "esri-world-imagery",
