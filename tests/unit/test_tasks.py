@@ -3,6 +3,8 @@
 from io import BytesIO
 
 import fitz
+from fitz import Page
+from fitz.utils import get_pixmap
 from pytest_approval import verify_image
 
 from sketch_map_tool import tasks
@@ -39,5 +41,6 @@ def test_generate_sketch_map(
     with fitz.open(stream=map_pdf, filetype="pdf") as doc:
         # NOTE: For high resolution needed to read images matrix would have to be
         #   defined and given to get_pixmap. This would result in larger file sizes.
-        image = doc.load_page(0).get_pixmap()
+        page: Page = doc.load_page(0)
+    image = get_pixmap(page)
     verify_image(image.tobytes(), extension=".png", content_only=True)
