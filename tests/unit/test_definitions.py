@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import pytest
 import pytest_approval
@@ -30,7 +31,9 @@ def test_get_attribution_esri_api_key_unset(monkeypatch):
     os.getenv("CI") == "true",
     reason="Detected CI environment. ESRI API Key not set in CI.",
 )
-def test_get_attribution_esri_api_key_set():
+def test_get_attribution_esri_api_key_set(monkeypatch):
+    path = Path(__file__).parent.parent.parent.resolve() / "config" / "config.toml"
+    monkeypatch.setenv("SMT_CONFIG", path)
     pytest_approval.verify(definitions.get_attribution("esri-world-imagery"))
 
 
