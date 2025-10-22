@@ -21,6 +21,7 @@ def test_generate_sketch_map(
     scale,
     layer,
 ):
+    monkeypatch.setattr("sketch_map_tool.definitions.get_config_value", lambda _: "")
     monkeypatch.setattr(
         "sketch_map_tool.tasks.db_client_celery.insert_map_frame",
         lambda *_: None,
