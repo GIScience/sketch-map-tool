@@ -42,5 +42,5 @@ def test_generate_sketch_map(
         # NOTE: For high resolution needed to read images matrix would have to be
         #   defined and given to get_pixmap. This would result in larger file sizes.
         page: Page = doc.load_page(0)
-    image = get_pixmap(page)
+        image = get_pixmap(page)
     verify_image(image.tobytes(), extension=".png", content_only=True)
