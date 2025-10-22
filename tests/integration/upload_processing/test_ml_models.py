@@ -19,7 +19,16 @@ def test_init_model(id):
     assert path.is_file()
 
 
-@given(text())
+@given(
+    text().filter(
+        lambda n: n
+        not in (
+            get_config_value("yolo_osm_obj"),
+            get_config_value("yolo_esri_obj"),
+            get_config_value("yolo_cls"),
+        )
+    )
+)
 @example("")
 def test_init_model_unexpected_id(id):
     # ValueError: PosixPath('/') has an empty name
