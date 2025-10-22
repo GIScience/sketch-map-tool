@@ -36,7 +36,7 @@ def test_get_metadata(item_id):
 @vcr.use_cassette
 def test_get_image(item_id, size, bbox_wgs84):
     image = get_map_image(bbox_wgs84, size, item_id)
-    verify_image_pillow(image, extension=".png")
+    verify_image_pillow(image, extension=".png", content_only=True)
 
 
 @vcr.use_cassette
