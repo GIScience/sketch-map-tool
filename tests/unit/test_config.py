@@ -7,16 +7,6 @@ from sketch_map_tool import config
 
 
 @pytest.fixture
-def mock_env_user(monkeypatch):
-    monkeypatch.setenv("USER", "TestingUser")
-
-
-@pytest.fixture
-def mock_env_missing(monkeypatch):
-    monkeypatch.delenv("USER", raising=False)
-
-
-@pytest.fixture
 def config_keys():
     return (
         "data-dir",

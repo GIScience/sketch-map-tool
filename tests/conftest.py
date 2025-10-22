@@ -22,4 +22,4 @@ def patch_vcrhttpresponse_version_string():
 def config_for_test(monkeypatch):
     # NOTE: Config file is empty. Default values will be used.
     path = Path(__file__).parent.parent.resolve() / "config" / "test.config.toml"
-    monkeypatch.setenv("SMT_CONFIG", path)
+    monkeypatch.setenv("SMT_CONFIG", str(path))
