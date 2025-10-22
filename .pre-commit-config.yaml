@@ -17,6 +17,11 @@ repos:
       # Run the formatter.
       - id: ruff-format
         args: ["--check", "--diff"]
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    rev: 0.9.5
+    hooks:
+      - id: uv-lock
   # Javascript
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: "v8.51.0"
