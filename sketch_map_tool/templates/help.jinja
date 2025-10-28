@@ -29,7 +29,7 @@
         {{ _('Our new <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html" target="_blank">training platform</a> provides distinct training exercises to further explore the Sketch Map Tool and sketch mapping in general. These exercises are primarily designed for workshop settings, allowing for collaborative discussion of your experiences.') }}
     </p>
     <p>
-        {{ _('<i>Since the latest version of the Sketch Map Tool was only recently released, you may encounter issues at various stages of the process. We apologize for any inconvenience this may cause. We are committed to continually enhancing the tool, so please report any technical problems to the <a href="mailto:sketch-map-tool@heigit.org" target="_blank">Sketch Map Tool user support</a></i>.') }}
+        {{ _('We are committed to continually enhancing the tool, so please report any technical problems to the <a href="mailto:sketch-map-tool@heigit.org" target="_blank">Sketch Map Tool user support</a>.') }}
     </p>
 
     <h2 id="step-by-step">{{ _('Step-by-Step Instructions') }}</h2>
@@ -64,38 +64,7 @@
                     <figcaption></figcaption>
                 </figure>
 
-                <h5>{{ _('Searching by coordinates') }}</h5>
-                <p>
-                    {{ _('Using coordinates to search for an accurate location is particularly useful in rural areas. 
-                        Ensure that the coordinates are in the coordinate reference system WGS 84, expressed as latitude and longitude (LAT and LON).') }}
-                </p>
-                <p>
-                    {{ _('Example: We have the following coordinates of Nairobi in WGS 84:  1.2921° S (latitude) and 36.8219° E (longitude). 
-                        In the search field just type LAT, LON like shown below:') }}
-                </p>
-
-                <figure>
-                    <img src="{{ url_for("static", filename="assets/images/help/1_1_searching_by_coordinates.webp" ) }}" alt="{{ _('Screenshot of the coordinates.') }}">
-                    <figcaption></figcaption>
-                </figure>
-
-                <p>
-                    {{ _('Be sure to include the hemisphere information (South/North, West/East) to avoid errors.') }}
-                </p>
-                <p>
-                    {{ _('If you need to transform your available coordinates into Lat-Lon coordinates first, we recommend using this tool:
-                            <a href="https://coordinates-converter.com/en/decimal/51.000000,10.000000?karte=OpenStreetMap&zoom=8"
-                            target="_blank">Online converter to all coordinate systems</a>') }}
-                </p>
-                <p>
-                    {{ _('The marker of your searched point that appears during the map selection will not be visible on the printed map. 
-                        If you need this point as a point of reference on your paper Sketch Maps please mark it after you downloaded the PDF.') }}
-                </p>
-
-                <figure>
-                    <img src="{{ url_for("static", filename="assets/images/help/1_1_searched_point_marked_pdf.webp" ) }}" alt="{{ _('Screenshot of the searched point marked in pdf.') }}">
-                    <figcaption></figcaption>
-                </figure>
+            
 
                 <h5>{{ _('Recommendations') }}</h5>
                 <ul>
@@ -888,6 +857,13 @@
                 The larger paper formats also allow to hold group discussions about flooded areas. The maps with the markings
                 can be photographed and uploaded to the tool.
                 The georeferenced GeoTIFF and GeoJSON can then be further analyzed or used.') }}
+        </article>
+    </details>
+	    <details>
+        <summary id="how-search-by-coordinates">{{ _('Is it possible to find a certain location by coordinates?') }}</summary>
+        <article>
+            {{ _('In the search field, instead of a place name, you can simply enter your LAT, LON coordinates including 
+			the hemisphere information (e.g. 1.2921° S and 36.8219° E ).') }}
         </article>
     </details>
     <details>
