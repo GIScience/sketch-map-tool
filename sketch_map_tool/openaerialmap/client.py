@@ -30,7 +30,7 @@ def get_metadata(item_id: str) -> dict:
 
 def get_map_image(bbox_wgs84: Bbox, size: Size, item_id: str) -> Image.Image:
     item_id = item_id.replace("oam:", "")
-    url = f"{RAST_API_URL}/collections/{COLLECTION_ID}/items/{item_id}/bbox/{bbox_wgs84}/{size}.png?assets=visual"  # noqa
+    url = f"{RAST_API_URL}/collections/{COLLECTION_ID}/items/{item_id}/bbox/{bbox_wgs84}/{size}.png?assets=visual&nodata=0"  # noqa
     response = requests.get(url)
     if response.status_code == 404:
         logging.error("Could not find OpenAerialMap item for url: " + url)

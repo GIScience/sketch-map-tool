@@ -13,7 +13,7 @@ from tests import vcr_app as vcr
 
 @pytest.fixture
 def item_id():
-    return "59e62beb3d6412ef7220c58e"
+    return "oam:59e62beb3d6412ef7220c58e"
 
 
 @pytest.fixture
@@ -35,6 +35,21 @@ def test_get_metadata(item_id):
 
 @vcr.use_cassette
 def test_get_image(item_id, size, bbox_wgs84):
+    image = get_map_image(bbox_wgs84, size, item_id)
+    verify_image_pillow(image, extension=".png", content_only=True)
+
+
+@vcr.use_cassette
+def test_get_image_no_data_transparence(item_id, size, bbox_wgs84):
+    bbox_wgs84 = Bbox(
+        *[
+            -81.44652656090001,
+            13.303031987113627,
+            -81.31057166966966,
+            13.413748859316868,
+        ]
+    )
+    item_id = "oam:66843b801b35ab0001a537cc"
     image = get_map_image(bbox_wgs84, size, item_id)
     verify_image_pillow(image, extension=".png", content_only=True)
 
