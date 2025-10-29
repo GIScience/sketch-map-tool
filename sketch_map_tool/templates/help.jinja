@@ -98,44 +98,56 @@
                 </figure>
 
                 <h5>{{ _('Recommendations') }}</h5>
+				<p>
+                    {{ _('Optimize your map by making three key decisions based on your study’s goal.') }}
+                </p>
+				<p>
+					<b>
+                    	{{ _('Define your Area & Scope') }}
+					</b>
+                </p>
                 <ul>
-                    <li>{{ _('Tailor the extent of your selected area to suit your use case, keeping the following questions in
-                            mind:') }}
+                    <li>{{ _('Ensure your map covers the full required extent and provides context.') }}
                         <ul>
-                            <li>{{ _('What do the participants need to map?') }}</li>
-                            <li>{{ _('What details need to be visible on the map, and at what level of detail?') }}</li>
-                            <li>{{ _('Which areas should the map encompass?') }}</li>
+                            <li>{{ _('Cover all relevant areas') }}</li>
+                            <li>{{ _('Ensure orientation (make sure the map show familiar elements like Points of Interest)') }}</li>
                         </ul>
                     </li>
-
-                    <li>{{ _('Aspects to consider when selecting the area of interest:') }}
+				</ul>
+				
+				<p><b>{{ _('Choose base layer and zoom level matching your study's scale') }}</b></p>
+				<ul>
+                    <li>{{ _('Match the zoom level to the details you need to capture.') }}
                         <ul>
-                            <li>{{ _('Ensure orientation on the map: streets (and their names) and some points of interest (POIs)
-                                    should be visible.') }}</li>
-                            <li>{{ _('Cover all relevant areas for your use case: for example, if studying flooding, focus on areas
-                                    near rivers, creeks, sinkholes, and critical infrastructure that might be affected by the flood
-                                    event.') }}</li>
-                            <li>{{ _('Choose a suitable zoom level. Example: If you want to examine urban floodings, we recommend using 
-								a neighborhood level map with streets and buildings. If you want to examine riverine floodings, 
-								we recommend using a map that shows a wider scope.') }}
-                            </li>
+                            <li>{{ _('A higher zoom (closer view) is best for showing intricate details like buildings.') }}</li>
+                            <li>{{ _('A wider zoom is necessary to show the scope of a large feature like a river system.') }}</li>
                         </ul>
                     </li>
-
-                    <li>{{ _('Choose a suitable base map for your mapping needs. The decision between the OSM or satellite image base map
-                            depends on factors like your selected area, the quality of OSM data, your participants, and what you would
-                            like to map.
-                            Sometimes, especially if the satellite image is very dark (e.g., due to large forest areas on the map), it
-                            can be helpful to create two Sketch Maps with both base map layers: Satellite and OSM.') }}</li>
-                    <li>{{ _('Customize the map format to fit your purpose:') }}
+                    <li>{{ _('Choose a base map that suits your mapping needs. The best option depends on several factors:') }}
                         <ul>
-                            <li>{{ _('Group mapping is easier on larger maps (A2 or A1, depending on your group size).') }}</li>
-                            <li>{{ _('For data collection in the field, A4 or A3 are easier to handle. If the area is too big,
-                                    consider creating multiple Sketch Maps.') }}</li>
+                            <li>{{ _('Mapping Topic and the area's features.') }}</li>
+                            <li>{{ _('Data quality and currentness.') }}</li>
+							 <li>{{ _('Your participants or target group.') }}</li>
                         </ul>
                     </li>
-                </ul>
-
+					</ul>
+				<p>
+    				<strong><em></strong>{{ _('Tip: Consider creating several Sketch Maps of the same area with different base 
+					layers if you are unsure which one will work best!') }}<strong></em></strong>
+				</p>
+				<p>
+					<b>
+                    	{{ _('Customize the map format to fit your purpose:') }}
+					</b>
+                </p>
+					<ul>
+                   		<li>{{ _('Group mapping is easier on larger maps (A2 or A1, depending on your group size).') }}
+                    	</li>
+						<li>{{ _('For data collection in the field, A4 or A3 are easier to handle.') }}</li>
+                	</ul>
+					<p>
+    					<strong><em></strong>{{ _('Tip: If the area is too big, consider creating multiple Sketch Maps.!') }}<strong></em></strong>
+					</p>
             </article>
 
         </details>
@@ -144,7 +156,7 @@
             <article>
                 <p>
                     {{ _('When you choose <a href="https://osm.org/" target="_blank">OpenStreetMap (OSM)</a> as base map layer, you can 
-						analyze the base map data of your selected area of interest directly in the ohsome Dashboard <a href="https://dashboard.ohsome.org">. 
+						analyze the base map data of your selected area of interest directly in the ohsome Dashboard <a href="https://dashboard.ohsome.org">.</a>
 						Making use of the <a href="https://api.quality.ohsome.org/">ohsome quality API</a> quality checks are performed and displayed in the 
 						dashboard and the report, as shown in the figure below. 
 						This provides important insights into the suitability of the base map data for field data collection.' ) }}
@@ -179,7 +191,7 @@
                 </p>
 
 
-                <h5>{{ _('What is the benefit of this new ohsome dashboard integration? + Recommendations') }}</h5>
+                <h5>{{ _('What is the benefit of the ohsome dashboard integration?') }}</h5>
                 <ul>
                     <li>
                         {{ _('Before you use these OSM-based Sketch Maps for participatory mapping in your area of interest,
@@ -246,19 +258,14 @@
                         {{ _('We recommend printing the maps on matte, non-reflective paper. ') }}
                     </li>
                     <li>
-                        {{ _('Name your maps appropriately; Putting names on the downloaded Sketch Maps (can help
+                        {{ _('Name your maps appropriately; Putting names on the downloaded Sketch Maps can help
                             you in organizing your maps. 
                             If you relate Sketch Maps back to questionnaires, use the same number for the map as you did in the questionnaire.') }}
                     </li>
                     <li>
-                        {{ _('If you plan on printing out your map in black and white, check the visibility of the background map
-                            and reduce saturation in the printing settings if the background becomes too dark.') }}
+                        {{ _('Check the background's visibility in case you use satellite/drone imagery or you plan to print out your map in black and white.
+						If your map or background is too dark, you might consider to choose either OSM as base map or reduce the saturation in the printing settings') }}
                     </li>
-                    <li>
-                        {{ _('In case you use a satellite imagery background, please review the color saturation of your image. If the 
-                            background is too dark, you might consider to choose OSM as base map or reduce saturation in the printing settings.') }}
-                    </li>
-
                 </ul>
             </article>
         </details>
@@ -269,7 +276,7 @@
         </summary>
         <article>
             <p>
-                {{ _('Mapping through sketches using a pen on a printed Sketch Map is a core activity of the Sketch Map Tool process. How you mark the Sketch Maps influences your end results: the detected markings.') }}
+                {{ _('The core activity of the Sketch Map Tool process is marking on the printed map with a pen. The way you mark your maps directly determines the detectability and the quality of your digitized end results') }}
             </p>
             <p>
                 {{ _('This section as well as <a href="https://nexus.heigit.org/repository/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/Important_mapping_tips.pdf"
@@ -284,33 +291,36 @@
             </figure>
             <h4>{{ _('Tips to improve marking detection') }}</h4>
             <p>
-                {{ _('The latest version of the Sketch Map Tool leverages advanced Deep Learning models trained to analyze images of
-                        Sketch Maps and identify marked objects within them.
-                        Through supervised learning on extensive datasets of labeled images, these models acquire the ability to distinguish
-                        markings from the background of Sketch Maps by analyzing patterns and features.
-                        This enables them to accurately detect and differentiate markings. This predictive capability allows the models to
-                        generalize their understanding and accurately identify markings in new and unseen Sketch Maps.
-                        The Sketch Map Tool also incorporates conventional Computer Vision techniques to precisely position the Sketch Map
-                        within real-world coordinates.
-                        Georeferencing images entails detecting and matching specific points, such as the markers in the corners of the Sketch Maps,
-                        between the reference and current input image,
-                        enabling precise spatial alignment. Our current algorithm detects all markings, whether they are intended as a line,
-                        a point or as a polygon. ') }}
+                {{ _('The Sketch Map Tool utilizes advanced Deep Learning models, trained on extensive datasets, to accurately detect and differentiate 
+				user markings by analyzing patterns and features. Simultaneously, it incorporates conventional Computer Vision techniques to use 
+				reference points for precise spatial alignment, allowing the system to accurately position the map within real-world coordinates. 
+				Therefore, to generate the highest quality and most reliably digitized results, users must apply clear,
+				logical marking techniques that maximize the model's ability to interpret the data.') }}
             </p>
-            <p>
-                {{ _('Please make sure to not accidentally draw over the markers on the edge as they are used for georeferencing purposes
+			<ul>
+				<li>
+               	 	{{ _('Please make sure to not accidentally draw over the markers on the edge as they are used for georeferencing purposes
                         in order to ensure the automatic map detection.') }}
-            </p>
-            <p>
-                {{ _('At the moment the Sketch Map Tool detects red, blue, green and black markings best, orange and yellow also
-                        work quite well.
-                        If different colors are used for specific topics, participants can include a legend for the meaning of each color
-                        outside the map extent.
-                        However, the tool does not support the identification of the written information or the matching of meanings to
-                        specific colors.
-                        This needs to be done manually in the subsequent analysis process in your Geographic Information System software.
-                        The GeoTiff can be used to manually match the geodata layer files to the legend information.') }}
-            </p>
+           	 	</li>
+				<li>
+               		 {{ _('For optimal detection, prioritize using red, blue, green, and black markers. 
+					 While orange and yellow also work, avoid other colors to ensure the highest accuracy in your digitized results.') }}
+           		 </li>
+				<li>
+               		 {{ _('Draw thick and solid lines to nsure the Deep Learning model accurately detects your drawings. It is also recommended to fill 
+					 larger polygon drwaings.') }}
+           		 </li>
+				<li>
+               		 {{ _('If you use different colours for specific topics can include a legend for the meaning of each color outside the map extent.
+					 However, be aware that the tool does not automatically match the legend to the colors') }}
+           		 </li>
+				 <li>
+               		 {{ _('GeoTiff as Ground Truth: Utilize the GeoTiff within your GIS software to manually improve or add any erroneously detected markings and 
+					 to accurately match the geodata layer files to the legend information during the subsequent analysis.') }}
+           		 </li>
+			
+			</ul>	 
+           
             <article>
                 <div class="grid">
                     <div>
