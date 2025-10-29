@@ -52,7 +52,32 @@
                                 target="_blank">OpenStreetMap (OSM)</a>, satellite imagery (<a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9"
                                 target="_blank">ESRI world imagery</a>) or <a href="https://openaerialmap.org/"
                                 target="_blank">OpenAerialMap imagery (OAM)</a>. To use an OAM image, click "Browse," select the image, and copy the Image ID from the page. 
-								Then, paste the ID into the Sketch Map tool prompt. ')}}</li> 
+								Then, paste the ID into the Sketch Map tool prompt. 
+					
+								<figure> <!-- If you chose OAM, click on "Browse" in the pop-up window.-->
+                   				  <img src="{{ url_for("static", filename="assets/images/help/1_1_ID_pop_up.png" ) }}" alt="{{ _('Screenshot of the Sketch Map Tool.') }}">
+                    			  <figcaption></figcaption>
+               					</figure>
+
+								<figure> <!-- You now have been redirected to OpenAerialMap. Zoom into your area of interest.-->
+                   				  <img src="{{ url_for("static", filename="assets/images/help/1_1_zoom_AOI.png" ) }}" alt="{{ _('Screenshot of OpenAerialMap') }}">
+                    			  <figcaption></figcaption>
+               					</figure>
+
+								<figure> <!-- Now select the imagery you would like to set as your base map.-->
+                   				  <img src="{{ url_for("static", filename="assets/images/help/1_1_select_imagery.png" ) }}" alt="{{ _('Screenshot of OpenAerialMap') }}">
+                    			  <figcaption></figcaption>
+               					</figure>
+
+								<figure> <!-- Scroll down to the left and copy the Image ID.-->
+                   				  <img src="{{ url_for("static", filename="assets/images/help/1_1_scroll_to_ID.png" ) }}" alt="{{ _('Screenshot of OpenAerialMap') }}">
+                    			  <figcaption></figcaption>
+               					</figure>
+
+								<figure> <!-- Paste the ID in the designated field of the pop-up window.-->
+                   				  <img src="{{ url_for("static", filename="assets/images/help/1_1_paste_ID.png" ) }}" alt="{{ _('Screenshot of pop-up window') }}">
+                    			  <figcaption></figcaption>
+               					</figure>')}}</li> 
                     <li>{{ _('Select from different paper formats and the appropriate page orientation. The dashed red line
                             represents the
                             boundaries of your area of interest, which will be printed on the Sketch Map.') }}</li>
@@ -91,11 +116,12 @@
                         </ul>
                     </li>
 
-                    <li>{{ _('Choose a suitable base map for your mapping needs. The decision between the OSM or satellite image base map
+                    <li>{{ _('Choose a suitable base map for your mapping needs. The decision between the OSM or satellite image base map (ESRI or OpenAerialMap)
                             depends on factors like your selected area, the quality of OSM data, your participants, and what you would
                             like to map.
                             Sometimes, especially if the satellite image is very dark (e.g., due to large forest areas on the map), it
-                            can be helpful to create two Sketch Maps with both base map layers: Satellite and OSM.') }}</li>
+                            can be helpful to create two Sketch Maps with both base map layers: Satellite and OSM. OpenAerialMap does not yet have global coverage. 
+							Therefore, it is necessary to check whether images are available for the area of interest. If so, OAM can serve as an alternative to outdated or low-resolution ESRI satellite images. ') }}</li>
                     <li>{{ _('Customize the map format to fit your purpose:') }}
                         <ul>
                             <li>{{ _('Group mapping is easier on larger maps (A2 or A1, depending on your group size).') }}</li>
