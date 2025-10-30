@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sketch-map-tool.fullname" . }}
+  labels:
+    {{- include "sketch-map-tool.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "sketch-map-tool.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "sketch-map-tool.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: celery
+          image: "{{ .Values.celery.image.repository }}:{{ .Values.celery.image.tag }}"
+          command:
+            - celery
+            - --app
+            - sketch_map_tool.tasks
+            - worker
+            - --beat
+            - --concurrency
+            - "6"
+            - --loglevel
+            - INFO
+            - -E
+          {{- with .Values.celery.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: weights
+              mountPath: /app/weights
+        - name: flask
+          image: "{{ .Values.flask.image.repository }}:{{ .Values.flask.image.tag }}"
+          command:
+            - waitress-serve
+            - sketch_map_tool.routes:app
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          {{- with .Values.flask.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: weights
+              mountPath: /app/weights
+        - name: flower
+          image: "{{ .Values.flask.image.repository }}:{{ .Values.flask.image.tag }}"
+          command:
+            - celery
+            - --app
+            - sketch_map_tool.tasks
+            - flower
+          ports:
+            - containerPort: 5555
+              protocol: TCP
+          {{- with .Values.flower.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      restartPolicy: Always
+      volumes:
+        - name: weights
+          persistentVolumeClaim:
+            claimName: {{ include "sketch-map-tool.fullname" . }}-weights

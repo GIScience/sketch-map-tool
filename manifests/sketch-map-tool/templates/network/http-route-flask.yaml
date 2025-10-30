@@ -1,0 +1,37 @@
+{{- if .Values.flask.httpRoute.enabled -}}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ include "sketch-map-tool.fullname" . }}-flask
+  labels:
+    {{- include "sketch-map-tool.labels" . | nindent 4 }}
+    app.kubernetes.io/component: flask
+  {{- with .Values.flask.httpRoute.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+    {{- with .Values.flask.httpRoute.parentRefs }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.flask.httpRoute.hostnames }}
+  hostnames:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  rules:
+    {{- range .Values.flask.httpRoute.rules }}
+    {{- with .matches }}
+    - matches:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .filters }}
+      filters:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+      backendRefs:
+        - name: {{ include "sketch-map-tool.fullname" . }}-flask
+          port: 8080
+          weight: 1
+    {{- end }}
+{{- end }}
