@@ -1,0 +1,44 @@
+{{- if .Values.flask.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "sketch-map-tool.fullname" . }}-flask
+  labels:
+    {{- include "sketch-map-tool.labels" . | nindent 4 }}
+    app.kubernetes.io/component: flask
+  {{- with .Values.flask.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.flask.ingress.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+  {{- if .Values.flask.ingress.tls }}
+  tls:
+    {{- range .Values.flask.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.flask.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- with .pathType }}
+            pathType: {{ . }}
+            {{- end }}
+            backend:
+              service:
+                name: {{ include "sketch-map-tool.fullname" $ }}-flask
+                port:
+                  number: 8080
+          {{- end }}
+    {{- end }}
+{{- end }}
