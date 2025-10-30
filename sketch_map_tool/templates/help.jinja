@@ -296,7 +296,12 @@
 				user markings by analyzing patterns and features. Simultaneously, it incorporates conventional Computer Vision techniques to use 
 				reference points for precise spatial alignment, allowing the system to accurately position the map within real-world coordinates. 
 				Therefore, to generate the highest quality and most reliably digitized results, users must apply clear,
-				logical marking techniques that maximize the model's ability to interpret the data.') }}
+				logical marking techniques that maximize the model's ability to interpret the data. 
+			</p>
+			
+			<p>	
+				The algorithm detects all markings as either 'Points' or 'Polygons'. 
+				Lines are treated as polygons, and any polygon (whether a line or a shape) below a set size threshold is ultimately classified as a 'Point'.') }}
             </p>
 			<ul>
 				<li>
@@ -305,11 +310,15 @@
            	 	</li>
 				<li>
                		 {{ _('For optimal detection, prioritize using red, blue, green, and black markers. 
-					 While orange and yellow also work, avoid other colors to ensure the highest accuracy in your digitized results.') }}
+					 While orange and yellow also work, avoid other colors to ensure the highest accuracy in your digitized results. 
+					 Make sure to use clear and bright colour especially on aerial imagery basemaps. Test your pens and the detectibility of your markings before 
+					 your mapping activity') }}
            		 </li>
 				<li>
-               		 {{ _('Draw thick and solid lines to nsure the Deep Learning model accurately detects your drawings. It is also recommended to fill 
-					 larger polygon drwaings.') }}
+               		 {{ _('Draw thick and solid lines to ensure the Deep Learning model accurately detects your drawings.') }}
+           		 </li>
+				 				<li>
+               		 {{ _('For polygons, draw their outline as a closed, strong, and continues shape. If you need to draw large polygons, please consider to zoom out.') }}
            		 </li>
 				<li>
                		 {{ _('If you use different colours for specific topics can include a legend for the meaning of each color outside the map extent.
@@ -411,7 +420,7 @@
                             <figcaption></figcaption>
                         </figure>
                         <p>
-                            {{ _('Large polygons might not be detected properly.') }}
+                            {{ _('Large polygons might not be detected properly. If you need to draw large polygons, please consider to zoom out.') }}
                         </p>
                         <figure>
                             <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_large_polys.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
@@ -595,32 +604,28 @@
                 </li>
 
                 <figure>
-                    <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_a2_photograph.webp" ) }}" alt="{{ _('How to take a photo of a Sketch Map.') }}">
+                    <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_a2_photograph.webp" ) }}" alt="{{ _('How to take a photo of a Sketch Map.') }}" style="width: 60%; height: auto;">
                     <figcaption></figcaption>
                 </figure>
 
                 <li>
                     {{ _('Pay attention to the lighting conditions when taking a picture. 
-                            If you experience problems with the results, for example the georeferencing failed or the markings where not 
-                            detected probably, please take additional photos of your Sketch Map and upload them again. 
-                            Small changes in lighting conditions and angels can make a difference! Additionally, you can consider 
-                            compressing or resizing the original image to a minimum of 1024x1024 pixels before you upload your image.') }}
+                            If you experience problems with georeferencing or marking detection, please try uploading a new photo. 
+                            Small changes in lighting  and angle can make a difference! Additionally, you can consider 
+                            compressing or resizing the original image to a minimum of 1024x1024 pixels before uploading.') }}
                 </li>
                 <li>
                     {{ _('The image of the Sketch Map needs to be uploaded as JPG or PNG (max. file size is 50 MB).
-                            The georeferencing and color-detection work even better if you scan the marked Sketch Map
-                            with a resolution of 300 dpi. Attention! The file size will be too large when scanning with a
-                            600 dpi resolution.') }}
+                          For the best results, we recommend scanning the map at 300 dpi.
+						  (Note: Scanning at 600 dpi will likely create a file that is too large)') }}
                 </li>
                 <li>
-                    {{ _('If the marking detection does not work satisfactorily, you can improve the color contrast
-                            of the markings (with a pen, a new photo, or with photo editing software such as Paint, GIMP,
-                            or Windows Cut & Resize).') }}
+                    {{ _('If the marking detection isnt't satisfactory, try improving the color contrast. You can do this by tracing the markings with a pen, 
+					taking a new photo, or using photo editing software (like GIMP or Paint)') }}
                 </li>
                 <li>
-                    {{ _('Name your scans/photos appropriately when saving, and before uploading them to the Sketch Map Tool. 
-                            This helps you recognize and allocate your Sketch Maps in the subsequent uploading and analyzing process. 
-                            If you relate Sketch Maps back to questionnaires, use the same number for the map as you did in the questionnaire.') }}
+                    {{ _(Name your files clearly before uploading to help you organize your maps. 
+					If you are linking maps to questionnaires, use the same ID number in the filename that you used on the questionnaire for easy matching.') }}
                 </li>
             </ul>
             </article>
@@ -633,22 +638,11 @@
                     <figcaption></figcaption>
                 </figure>
                 <p>
-                    {{ _('To upload files, you can click on the upload field or drag and drop your files directly into
-                        the upload field and then click on the Upload button. You can upload one or more marked Sketch Maps
+                    {{ _('To upload, drag and drop your files into the upload field, or click it to browse. Then, click the 'Upload' button. You can upload one or more marked Sketch Maps
                         at once. However, they all must be the same base map (same QR-Code), and the markings of all maps will be
                         automatically combined in one GeoJSON. The upload works for JPG or PNG files. 
                         For one Sketch Map, it can take up to 100 seconds to produce a result, and for a package of 10 Sketch Maps, it can take up to 16 minutes.') }}
                 </p>
-
-                <h5>{{ _('Recommendations') }}</h5>
-                <ul>
-                    <li>
-                        {{ _('If you experience problems during the upload process, please check out "2.1 Scan or photograph your marked Sketch Maps" above and
-                            the FAQ section below or contact your Sketch Map Tool focal point in your
-                            organization or the <a href="mailto:sketch-map-tool@heigit.org"
-                            target="_blank">Sketch Map Tool user support</a>') }}
-                    </li>
-                </ul>
             </article>
         </details>
         <details>
@@ -656,9 +650,8 @@
             </summary>
             <article>
                 <p>
-                    {{ _('Download the markings of the Sketch Maps in different geodata formats (raster data as
-                        GeoTIFF, vector data as a GeoJSON file). You can download the georeferenced Sketch Maps as a
-                        GeoTIFF (a georeferenced "picture" for each of your uploaded Sketch Maps) and the color-detected markings as vector data in a GeoJSON file.') }}
+                    {{ _('You can download the complete, georeferenced Sketch Map as a GeoTIFF (raster file) or
+					the color-detected markings as a GeoJSON (vector file)') }}
                 </p>
 
                 <h5>{{ _('Recommendations') }}</h5>
@@ -957,6 +950,23 @@
                 {{ _('You can find more details in the <a href="https://www.mdpi.com/2220-9964/10/3/130" target="_blank">paper
                         about the Sketch Map Tool</a> in the paragraph about Image Processing.') }}
             </p>
+        </article>
+    </details>
+	<details>
+        <summary id="how-does-markingdetection-work">{{ _('How does the marking detection work?') }}</summary>
+        <article>
+            <p>
+                {{ _('The latest version of the Sketch Map Tool leverages advanced Deep Learning models trained to analyze images of 
+				Sketch Maps and identify marked objects within them. Through supervised learning on extensive datasets of labeled images, 
+				these models acquire the ability to distinguish markings from the background of Sketch Maps by analyzing patterns and features. 
+				This enables them to accurately detect and differentiate markings. This predictive capability allows the models 
+				to generalize their understanding and accurately identify markings in new and unseen Sketch Maps. 
+				The Sketch Map Tool also incorporates conventional Computer Vision techniques to precisely position 
+				the Sketch Map within real-world coordinates. Georeferencing images entails detecting and matching specific points,
+				such as the markers in the corners of the Sketch Maps, between the reference and current input image, 
+				enabling precise spatial alignment. The algorithm detects all markings as either 'Points' or 'Polygons'. Lines are treated as polygons, 
+				and any polygon (whether a line or a shape) below a set size threshold is ultimately classified as a 'Point'.') }}
+            </p
         </article>
     </details>
     <details>
