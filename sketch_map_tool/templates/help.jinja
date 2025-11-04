@@ -52,7 +52,7 @@
                                 target="_blank">OpenStreetMap (OSM)</a>, satellite imagery (<a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9"
                                 target="_blank">ESRI world imagery</a>) or <a href="https://openaerialmap.org/"
                                 target="_blank">OpenAerialMap imagery (OAM)</a>. To use an OAM image, click "Browse," select the image, and copy the Image ID from the page. 
-								Then, paste the ID into the Sketch Map tool prompt. 
+								Then, paste the ID into the Sketch Map tool prompt.') }} 
 					
 								<figure> <!-- If you chose OAM, click on "Browse" in the pop-up window.-->
                    				  <img src="{{ url_for("static", filename="assets/images/help/1_1_ID_pop_up.png" ) }}" alt="{{ _('Screenshot of the Sketch Map Tool.') }}">
@@ -77,7 +77,7 @@
 								<figure> <!-- Paste the ID in the designated field of the pop-up window.-->
                    				  <img src="{{ url_for("static", filename="assets/images/help/1_1_paste_ID.png" ) }}" alt="{{ _('Screenshot of pop-up window') }}">
                     			  <figcaption></figcaption>
-               					</figure>')}}</li> 
+               					</figure></li> 
                     <li>{{ _('Select from different paper formats and the appropriate page orientation. The dashed red line
                             represents the
                             boundaries of your area of interest, which will be printed on the Sketch Map.') }}</li>
@@ -109,7 +109,7 @@
                     </li>
 				</ul>
 				
-				<p><b>{{ _('Choose base layer and zoom level matching your study's scale') }}</b></p>
+				<p><b>{{ _('Choose base layer and zoom level matching your study&apos;s scale') }}</b></p>
 				<ul>
                     <li>{{ _('Match the zoom level to the details you need to capture.') }}
                         <ul>
@@ -126,7 +126,7 @@
 							Therefore, it is necessary to check whether images are available for the area of interest. If so, OAM can serve as an alternative to outdated or low-resolution ESRI satellite images. ') }}</li>
                     <li>{{ _('Customize the map format to fit your purpose:') }}
                         <ul>
-                            <li>{{ _('Mapping Topic and the area's features.') }}</li>
+                            <li>{{ _('Mapping Topic and the area&apos;s features.') }}</li>
                             <li>{{ _('Data quality and currentness.') }}</li>
 							 <li>{{ _('Your participants or target group.') }}</li>
                         </ul>
@@ -264,7 +264,7 @@
                             If you relate Sketch Maps back to questionnaires, use the same number for the map as you did in the questionnaire.') }}
                     </li>
                     <li>
-                        {{ _('Check the background's visibility in case you use satellite/drone imagery or you plan to print out your map in black and white.
+                        {{ _('Check the background&apos;s visibility in case you use satellite/drone imagery or you plan to print out your map in black and white.
 						If your map or background is too dark, you might consider to choose either OSM as base map or reduce the saturation in the printing settings') }}
                     </li>
                 </ul>
@@ -296,11 +296,11 @@
 				user markings by analyzing patterns and features. Simultaneously, it incorporates conventional Computer Vision techniques to use 
 				reference points for precise spatial alignment, allowing the system to accurately position the map within real-world coordinates. 
 				Therefore, to generate the highest quality and most reliably digitized results, users must apply clear,
-				logical marking techniques that maximize the model's ability to interpret the data. 
+				logical marking techniques that maximize the model&apos;s ability to interpret the data. 
 			</p>
 			
 			<p>	
-				The algorithm detects all markings as either 'Points' or 'Polygons'. 
+				The algorithm detects all markings as either &apos;Points&apos; or &apos;Polygons&apos;. 
 				Lines are treated as polygons, and any polygon (whether a line or a shape) below a set size threshold is ultimately classified as a 'Point'.') }}
             </p>
 			<ul>
@@ -620,11 +620,11 @@
 						  (Note: Scanning at 600 dpi will likely create a file that is too large)') }}
                 </li>
                 <li>
-                    {{ _('If the marking detection isnt't satisfactory, try improving the color contrast. You can do this by tracing the markings with a pen, 
+                    {{ _('If the marking detection isnt&apos;t satisfactory, try improving the color contrast. You can do this by tracing the markings with a pen, 
 					taking a new photo, or using photo editing software (like GIMP or Paint)') }}
                 </li>
                 <li>
-                    {{ _(Name your files clearly before uploading to help you organize your maps. 
+                    {{ _('Name your files clearly before uploading to help you organize your maps. 
 					If you are linking maps to questionnaires, use the same ID number in the filename that you used on the questionnaire for easy matching.') }}
                 </li>
             </ul>
