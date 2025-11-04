@@ -20,34 +20,41 @@
     </p>
     <p>
     <figure>
-        <img src="{{ url_for("static", filename="assets/images/about/hands_mapping.webp") }}" alt="{{ _('Sketch Map Tool Mapping') }}">
+        <img src="{{ url_for("static", filename="assets/images/about/Sketch Map Tool_ Mapping Activity.jpg") }}" alt="{{ _('Sketch Map Tool Mapping') }}">
     </figure>
     </p>
     <p>
         {{ _('The Sketch Map Tool supports users in all the important steps of offline participatory mapping, from
             creating paper maps to digitizing them.') }}
     </p>
+   
+    <h3>{{ _('Step.1: Create paper maps to collect data (online access needed)')_}}</h3>
+
     <p>
-        {{ _('The first step is the creation of the paper-based maps. Users can choose between two basemaps containing
-            <a href="https://wiki.osm.org" target="_blank">OpenStreetMap (OSM)</a> data and base maps containing satellite
-            images.
-            In addition, the tool can evaluate how well-suited an area of the OSM base map is for participatory mapping based on
-            a quality analysis of the OSM base map data through the
-            <a href="https://api.quality.ohsome.org/" target="_blank">HeiGIT ohsome quality API</a>.') }}
+        {{ _('Define your area of interest and your base map <a href="https://wiki.osm.org" target="_blank">OpenStreetMap (OSM)</a>, satellite
+       		images by ESRI or OpenAerialMap), look at the OSM Map Quality check provided by  
+            <a href="https://api.quality.ohsome.org/" target="_blank">HeiGIT ohsome quality API<a> and export the map as PDF.') }}
     </p>
+
+
+    <h3>{{ _('Step.2: Participatory mapping')_}}</h3>
+
     <p>
-        {{ _('For the data collection through offline participatory mapping you only need your participants, the printed
+        {{ _('Offline data collection with local communities in- and outdoor. You only need your participants, the printed
             Sketch Maps and some pens.') }}
     </p>
+
+
+    <h3>{{ _('Step.3: Paper to GIS (online access needed)')_}}</h3>
+
     <p>
-        {{ _('After mapping, the Sketch Map Tool supports the digitization of the Sketch Maps. Uploading of pictures and
-            scans of the marked Sketch Maps
-            initiates an automatic georeferencing and color-detection process, and the results can be downloaded in various
-            geodata formats. The tool employs
-            a fusion of computer vision algorithms and novel AI models to extract Sketch Maps from photos and detect markings on
-            them. The results can then be
-            used for further analysis in Geographic Information System software.') }}
+        {{ _('Scan or photograph your marked Sketch Maps, upload the images to the Sketch Map Tool and download collected markings (geojson and geotiff).
+        	How does the detection work? The tool employs a fusion of computer vision algorithms and novel AI models to extract Sketch Maps from photos and detect markings on
+        	them.
+        	The results can then be used for further analysis in Geographic Information System software.') }}
     </p>
+
+
     <p>
         <a href="https://www.youtube-nocookie.com/embed/tMV--ZnRTNI" target="_blank"><img src="/static/assets/images/about/preview-SketchMapTool-Intro.webp" alt="{{ _('Video preview image for Introduction to the Sketch Map Tool') }}"></a>
     </p>
