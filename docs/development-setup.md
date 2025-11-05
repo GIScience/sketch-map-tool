@@ -23,7 +23,7 @@ For contributing to this project please also read the [Contribution Guideline](/
 brew install \
     gdal \
     freetype \
-    zbar \
+    zbar
 
 # Debian/Ubuntu
 sudo apt install \
