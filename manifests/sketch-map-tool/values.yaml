@@ -7,6 +7,13 @@ celery:
     repository: repo.example.org/smt
     tag: latest
 
+  # Configuration for the volume that holds the weights
+  persistence:
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+    # storageClassName:
+
 flask:
   image:
     repository: repo.example.org/smt
@@ -89,13 +96,6 @@ flower:
           - path:
               type: PathPrefix
               value: /
-
-# Configuration for the volume that holds the weights
-persistence:
-  accessModes:
-    - ReadWriteOnce
-  size: 1Gi
-  # storageClassName:
 
 postgres:
   # When enabled groundhog2k/postgres helm chart is deployed along side the SketchMapTool. Set to false when using your own Postgres database in- or outside of Kubernetes.
