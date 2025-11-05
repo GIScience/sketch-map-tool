@@ -7,7 +7,9 @@ metadata:
     app.kubernetes.io/component: flower
 spec:
   ports:
-    - port: 5555
-      targetPort: 5555
+    - name: http
+      port: 5555
+      protocol: TCP
+      targetPort: http
   selector:
     {{- include "sketch-map-tool.selectorLabels" . | nindent 4 }}

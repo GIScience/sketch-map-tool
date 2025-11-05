@@ -7,7 +7,10 @@ metadata:
     app.kubernetes.io/component: flask
 spec:
   ports:
-    - port: 8080
-      targetPort: 8080
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: http
   selector:
     {{- include "sketch-map-tool.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: flask

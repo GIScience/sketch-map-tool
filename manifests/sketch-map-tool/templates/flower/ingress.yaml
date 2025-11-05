@@ -38,7 +38,7 @@ spec:
               service:
                 name: {{ include "sketch-map-tool.fullname" $ }}-flower
                 port:
-                  number: 5555
+                  name: http
           {{- end }}
     {{- end }}
 {{- end }}

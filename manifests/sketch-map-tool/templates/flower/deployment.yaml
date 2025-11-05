@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sketch-map-tool.fullname" . }}
+  labels:
+    {{- include "sketch-map-tool.labels" . | nindent 4 }}
+    app.kubernetes.io/component: flower
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "sketch-map-tool.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: flower
+  template:
+    metadata:
+      labels:
+        {{- include "sketch-map-tool.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: flower
+    spec:
+      containers:
+        - name: flower
+          image: "{{ .Values.flask.image.repository }}:{{ .Values.flask.image.tag }}"
+          command:
+            - celery
+            - --app
+            - sketch_map_tool.tasks
+            - flower
+          ports:
+            - name: http
+              containerPort: 5555
+              protocol: TCP
+          {{- with .Values.flower.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      restartPolicy: Always
