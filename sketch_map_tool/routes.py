@@ -1,4 +1,5 @@
 import json
+import logging
 from io import BytesIO
 from pathlib import Path
 from uuid import UUID
@@ -391,9 +392,10 @@ def handle_not_found_exception(error: TranslatableError):
 
 
 @app.errorhandler(Exception)
-def internal_server_error(_):
+def internal_server_error(error: Exception):
     heading = "Internal Server Error"
     message = N_("Oops... we seem to have made a mistake, sorry!")
+    logging.error(error, exc_info=error)
     return render_template(
         "error.jinja",
         error_msg=f"{heading}: {message}",
