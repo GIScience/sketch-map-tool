@@ -5,12 +5,12 @@ The **Model Registry** maintains a collection of fine-tuned machine learning mod
 
 
 ## Model Usage
-| Task                 | Model Name | Modification |Purpose | URL Link                                                           |
-|----------------------|------------|--------------|---------|--------------------------------------------------------------------|
-| Object Detection     | YOLO_OSM   | 6-Channel Input |Detects sketches on OSM | [download](https://sketch-map-tool.heigit.org/weights/SMT-OSM.pt)  |
-| Object Detection     | YOLO_ESRI  | 6-Channel Input | Detects sketches on ESRI maps | [download](https://sketch-map-tool.heigit.org/weights/SMT-ESRI.pt) |
-| Image Classification | YOLO_CLS   | Standard RGB |Classifies colors in sketches | [download](https://sketch-map-tool.heigit.org/weights/SMT-CLS.pt)  |
-| Segmentation         | SAM2       | Standard RGB | Performs segmentation on sketch | [github](https://sketch-map-tool.heigit.org/weights/SMT-SAM.pt)    |                 |
+| Task                 | Model Name | Modification | Purpose                                                                      | URL Link                                                           |
+|----------------------|------------|--------------|------------------------------------------------------------------------------|--------------------------------------------------------------------|
+| Object Detection     | YOLO_OSM   | 6-Channel Input | Detects sketches on OSM                                                      | [download](https://sketch-map-tool.heigit.org/weights/SMT-OSM.pt)  |
+| Object Detection     | YOLO_ESRI  | 6-Channel Input | Detects sketches on ESRI maps                                                | [download](https://sketch-map-tool.heigit.org/weights/SMT-ESRI.pt) |
+| Image Classification | YOLO_CLS   | Standard RGB | Classifies colors in sketches                                                | [download](https://sketch-map-tool.heigit.org/weights/SMT-CLS.pt)  |
+| Segmentation         | SAM2       | Standard RGB | Performs segmentation on on sketches, finetuned from **SAM 2.1 hiera large** | [download](https://sketch-map-tool.heigit.org/weights/SMT-SAM.pt)  |               
 
 ## Models in the Registry
 ### 1. Object Detection Models
