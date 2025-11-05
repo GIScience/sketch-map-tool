@@ -30,8 +30,8 @@ dependencies = [
     "shapelysmooth>=0.2.1",
     "svglib>=1.5.1",
     "toml>=0.10.2",
-    "torch>=2.6.0",
-    "torchvision>=0.21.0",
+    "torch>=2.7.0",
+    "torchvision>=0.22.0,<0.24.0",  # https://github.com/astral-sh/uv/issues/16386
     "ultralytics==8.1.14",
     "ultralytics-mb",
     "waitress>=3.0.2",
