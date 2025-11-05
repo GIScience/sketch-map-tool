@@ -1,7 +1,7 @@
 apiVersion: v2
 name: sketch-map-tool
 description: A Helm chart for SketchMapTool
-icon: https://sketch-map-tool.heigit.org/static/assets/SketchMap_Logo_Icon.svg
+icon: https://heigit.org/wp-content/uploads/2025/11/SketchMap_Logo.svg
 type: application
 
 sources:
