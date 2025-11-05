@@ -193,3 +193,15 @@ If you encounter following error please set the environment variable
 ```bash
 NotImplementedError: The operator 'aten::upsample_bicubic2d.out' is not currently implemented for the MPS device. If you want this op to be added in priority during the prototype phase of this feature, please comment on https://github.com/pytorch/pytorch/issues/77764. As a temporary fix, you can set the environment variable `PYTORCH_ENABLE_MPS_FALLBACK=1` to use the CPU as a fallback for this op. WARNING: this will be slower than running natively on MPS.
 ```
+
+### Libraries
+If you are using **macOS** and encounter an error like this: `ImportError: Unable to find zbar shared library`
+
+Make sure that your Python interpreter is able to find the dylib files, like `libzbar.dylib`.
+
+This can be fixed by adding this line to i.e. `~/.zprofile`:
+```bash
+export DYLD_LIBRARY_PATH="$(brew --prefix)/lib:$DYLD_LIBRARY_PATH"
+```
+
+Source: [zbar GitHub Issue #3](https://github.com/npinchot/zbar/issues/3#issuecomment-1591393882)
