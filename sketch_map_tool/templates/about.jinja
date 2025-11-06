@@ -28,29 +28,28 @@
             creating paper maps to digitizing them.') }}
     </p>
    
-    <h3>{{ _('Step.1: Create paper maps to collect data (online access needed)') }}</h3>
+    <h3>{{ _('Step 1: Create paper maps to collect data (online access needed)') }}</h3>
 
     <p>
-        {{ _('Define your area of interest and your base map <a href="https://wiki.osm.org" target="_blank">OpenStreetMap (OSM)</a>, satellite
-       		images by ESRI or OpenAerialMap), look at the OSM Map Quality check provided by  
-            <a href="https://api.quality.ohsome.org/" target="_blank">HeiGIT ohsome quality API<a> and export the map as PDF.') }}
+        {{ _('Define your area of interest and your base map (<a href="https://wiki.osm.org" target="_blank">OpenStreetMap (OSM)</a>, <a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9"
+                                target="_blank">satellite imagery by ESRI </a> or <a href="https://openaerialmap.org/"
+                                target="_blank">OpenAerialMap imagery (OAM)</a>), look at the OSM Map Quality check provided by  
+            <a href="https://api.quality.ohsome.org/" target="_blank">HeiGIT ohsome quality API</a> and export the map as PDF.') }}
     </p>
 
 
-    <h3>{{ _('Step.2: Participatory mapping') }}</h3>
+    <h3>{{ _('Step 2: Participatory Mapping') }}</h3>
 
     <p>
-        {{ _('Offline data collection with local communities in- and outdoor. You only need your participants, the printed
-            Sketch Maps and some pens.') }}
+        {{ _('Offline data collection with local communities, either individually or as a group activity. Participants mark their local knowledge directly onto printed Sketch Maps with pens.') }}
     </p>
 
 
-    <h3>{{ _('Step.3: Paper to GIS (online access needed)') }}</h3>
+    <h3>{{ _('Step 3: Paper to GIS (online access needed)') }}</h3>
 
     <p>
         {{ _('Scan or photograph your marked Sketch Maps, upload the images to the Sketch Map Tool and download collected markings (geojson and geotiff).
-        	How does the detection work? The tool employs a fusion of computer vision algorithms and novel AI models to extract Sketch Maps from photos and detect markings on
-        	them.
+        	The tool georeferences the Sketch Maps and detects the markings employing a fusion of computer vision algorithms and novel AI models. 
         	The results can then be used for further analysis in Geographic Information System software.') }}
     </p>
 
@@ -74,27 +73,34 @@
         <img src="{{ url_for("static", filename="assets/images/about/sketchmaptool_timeline.webp" ) }}" alt="{{ _('Sketch Map Tool, Timeline.') }}">
         <figcaption></figcaption>
     </figure>
-
+    <h4 id="the-project">{{ _('From Prototype to Global Tool') }}</h4>
     <p>
-        {{ _('The development of the Sketch Map Tool started first as an idea and soon as a simple prototype in the <a
+        {{ _('The development of the Sketch Map Tool began in 2018 as an idea and simple prototype in the <a
                 href="https://www.geog.uni-heidelberg.de/gis/waterproofing.html" target="_blank">Waterproofing
-                Data project</a>, funded by the Federal Ministry of Education and Research. This first prototype received a
-            major update in 2021
-            when the user-interface was improved and the color detection (using computer vision methods) was implemented. Since
-            then, the tool
-            has been tested by various humanitarian organizations worldwide, including in Germany, Chile, Colombia, Brazil,
-            Mozambique, Madagascar, Honduras, Ghana, Kenia
-            and Sudan in recent years. Thanks to the support of the German Red Cross and the financial contribution of the
-            German Federal Foreign Office
-            within the framework of the <em>Globalprojekt II "Stärkung und Weiterentwicklung der Internationalen Humanitären
-                Hilfe und des Internationalen
-                Humanitären Systems"</em>, the Sketch Map Tool has been improved and extended to make it available for use by
-            the Red Cross Red Crescent Movement
-            and similar organizations. The <em>Globalprojekt II</em> contributes to reducing the negative consequences of
-            disasters and crises for affected
-            populations by extending strategic humanitarian key topics and innovative approaches. Since the Relaunch 2023, the
-            Sketch Map Tool is a part
-            of the <a href="https://heigit.org/heigit-technology/" target="_blank">HeiGIT tools</a>.') }}
+                Data project</a> (funded by the Federal Ministry of Education and Research - BMBF). In 2021, this initial prototype received a major update, 
+                including an improved user interface and the first implementation of color detection (using computer vision)') }}
+    </p>                   
+     <p>
+        {{ _('Since then, the tool has been tested by humanitarian organizations worldwide, including in Germany, Chile, Colombia, Brazil, Mozambique, Madagascar,
+            Honduras, Ghana, Kenya, and Sudan. Following its 2023 relaunch as a stable version, the Sketch Map Tool is now an official part of the <a href="https://heigit.org/heigit-technology/" target="_blank">HeiGIT tool suite</a>.')}}
+    </p>
+    <h4 id="the-project">{{ _('Milestones & Key Features') }}</h4>            
+       <p>
+        {{ _('The tool is continuously evolving to meet the needs of humanitarian actors:')}}
+    </p>        
+         <ul>
+            <li>{{ _('2024 Relaunch of the stable version: implementation of satellite imagery as a base map, a massive improvement in color detection, and the creation of customized training materials to make the tool accessible to end-users with different knowledge levels.') }}</li>
+            <li>{{ _('2025 Update: Integration of OpenAerialMap (OAM) as an additional base map source and the implementation of point detection.') }}</li>
+			<li>{{ _('Ongoing Improvement: Regular updates to the underlying Machine Learning models alongside general maintenance and stability improvements.') }}</li>
+        </ul>   
+            
+    <h4 id="the-project">{{ _('Our supporters') }}</h4>  
+    
+    <p>
+
+         {{ _('The continuous development and adaptation of the Sketch Map Tool for humanitarian use has been made possible through a strong collaboration with the German Red Cross (GRC) 
+            and significant financial support from the German Federal Foreign Office within the framework of the "Global Project II." This project contributes to reducing the negative consequences 
+            of disasters for affected populations by extending strategic humanitarian topics and innovative approaches. Core maintenance of the tool and regular updates to the machine learning models are ensured by core funding from the Klaus Tschira Foundation (KTS).') }}
     </p>
     <p>
         {{ _('The focus of the relaunch in 2024, once again funded within the framework of the <em>Globalprojekt
@@ -103,13 +109,6 @@
             Additionally, general software stability
             was further ensured, and customized training materials designed to make the tool more accessible to end-users with
             different knowledge levels.') }}
-    </p>
-
-        <p>
-        {{ _('The project phase 2025 , once again funded within the framework of the <em>Globalprojekt
-                II</em>, enabled the usage of OpenAerialMap as basemap and the detection of points. 
-                Apart from these new features, base funding from the Klaus-Tschira-Stiftung enables general maintance of the tool and regular 
-                updating and improvement of the underlying machine learning models.') }}
     </p>
 
     <h2 id="the-vision">{{ _('The Vision') }}</h2>
