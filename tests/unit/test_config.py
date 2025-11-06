@@ -26,6 +26,7 @@ def config_keys():
         "yolo_cls",
         "yolo_osm_obj",
         "yolo_esri_obj",
+        "sam_checkpoint",
         "model_type_sam",
         "esri-api-key",
         "log-level",
