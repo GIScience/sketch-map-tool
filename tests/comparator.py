@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import geopandas
@@ -26,7 +27,7 @@ class GeoJSONComparator(FileComparator):
         diff = area_diff / area_union
         for d in diff.tolist():
             if d > 0.05:
-                print("Area differs more than 5%.")
+                logging.warning(f"Area differs more by {d:.0%}")
                 return False
         return True
 
