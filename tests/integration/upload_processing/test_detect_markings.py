@@ -1,7 +1,10 @@
+import random
+
 import numpy as np
 import pytest
 import torch
-from PIL import Image
+from PIL import Image, ImageDraw, ImageOps
+from pytest_approval import verify_image_pillow
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 from ultralytics import YOLO
@@ -82,12 +85,6 @@ def test_detect_markings(
         yolo_cls,
         sam_predictor,
     )
-    # NOTE: uncomment for manual/visual assessment of detected markings
-    # TODO: use approval test
-    import random
-
-    from PIL import ImageDraw, ImageOps
-
     img = Image.fromarray(map_frame_marked)
     for m in markings:
         colors = [
@@ -117,4 +114,4 @@ def test_detect_markings(
 
         draw = ImageDraw.Draw(img)
         draw.rectangle(bbox, outline="red", width=2)
-    img.show()
+    assert verify_image_pillow(img, extension=".png")
