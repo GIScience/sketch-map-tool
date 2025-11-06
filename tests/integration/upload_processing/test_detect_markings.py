@@ -82,26 +82,15 @@ def test_detect_markings(
     )
 
     # NOTE: uncomment for manual/visual assessment of detected markings
-    # TODO: use approval test
-    # import random
+    # NOTE: this is not an approval tests since the clipping is not deterministic
+    # TODO: one marking for esri layer is not detected
     # from PIL import ImageDraw, ImageOps
+    #
     # img = Image.fromarray(map_frame_marked)
     # for m in markings:
-    #     colors = [
-    #         "red",
-    #         "green",
-    #         "blue",
-    #         "yellow",
-    #         "purple",
-    #         "orange",
-    #         "pink",
-    #         "brown",
-    #     ]
     #     m[m == m.max()] = 255
     #     colored_marking = ImageOps.colorize(
-    #         Image.fromarray(m).convert("L"),
-    #         black="black",
-    #         white=random.choice(colors),
+    #         Image.fromarray(m).convert("L"), black="black", white="green"
     #     )
     #     img.paste(colored_marking, (0, 0), Image.fromarray(m))
     #     # draw bbox around each marking, derived from the mask m
