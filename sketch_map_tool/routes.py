@@ -1,7 +1,6 @@
 import json
 import logging
 from io import BytesIO
-from pathlib import Path
 from uuid import UUID
 
 import geojson
@@ -13,7 +12,6 @@ from flask import (
     render_template,
     request,
     send_file,
-    send_from_directory,
     url_for,
 )
 from werkzeug import Response
@@ -75,30 +73,6 @@ def about(lang="en") -> str:
 @app.get("/<lang>/case-studies")
 def case_studies(lang="en") -> str:
     return render_template("case-studies.html.jinja", lang=lang)
-
-
-@app.get("/weights/SMT-OSM.pt")
-@app.get("/<lang>/weights/SMT-OSM.pt")
-def weights_smt_osm(lang="en") -> Response:  # pyright: ignore
-    dir = Path(config.get_config_value("weights-dir"))
-    name = "SMT-OSM.pt"
-    return send_from_directory(dir, name, as_attachment=True)
-
-
-@app.get("/weights/SMT-ESRI.pt")
-@app.get("/<lang>/weights/SMT-ESRI.pt")
-def weights_smt_esri(lang="en") -> Response:  # pyright: ignore
-    dir = Path(config.get_config_value("weights-dir"))
-    name = "SMT-ESRI.pt"
-    return send_from_directory(dir, name, as_attachment=True)
-
-
-@app.get("/weights/SMT-CLS.pt")
-@app.get("/<lang>/weights/SMT-CLS.pt")
-def weights_smt_cls(lang="en") -> Response:  # pyright: ignore
-    dir = Path(config.get_config_value("weights-dir"))
-    name = "SMT-CLS.pt"
-    return send_from_directory(dir, name, as_attachment=True)
 
 
 @app.get("/create")
