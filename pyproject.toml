@@ -28,7 +28,7 @@ dependencies = [
     "sam-2",
     "shapely>=2.1.1",
     "shapelysmooth>=0.2.1",
-    "svglib>=1.5.1",
+    "svglib>=1.5.1,<1.6.0",
     "toml>=0.10.2",
     "torch>=2.7.0",
     "torchvision>=0.22.0,<0.24.0",  # https://github.com/astral-sh/uv/issues/16386
