@@ -43,4 +43,4 @@ def test_generate_sketch_map(
         #   defined and given to get_pixmap. This would result in larger file sizes.
         page: Page = doc.load_page(0)
         image = page.get_pixmap()
-    verify_image(image.tobytes(), extension=".png", content_only=True)
+    assert verify_image(image.tobytes(), extension=".png", content_only=True)
