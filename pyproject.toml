@@ -47,7 +47,7 @@ dev = [
     "pre-commit>=4.2.0",
     "psycopg2-binary>=2.9.10", # dev only. In prod psycopg2 (non-binary) depending on system libraries (libpg) is used.
     "pytest>=8.3.5",
-    "pytest-approval",
+    "pytest-approval>=0.1.0",
     "pytest-celery>=1.2.0",
     "pytest-cov>=6.2.1",
     "pytest-memray>=1.7.0",
@@ -102,7 +102,6 @@ torchvision = [
     { index = "pytorch-cpu", group = "cpu" },
     { index = "pytorch-cuda", group = "cuda" },
 ]
-pytest-approval = { git = "https://github.com/GIScience/pytest-approval.git" }
 
 [tool.ruff.lint]
 select = [
