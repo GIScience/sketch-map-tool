@@ -4,7 +4,6 @@ from io import BytesIO
 
 import fitz
 from fitz import Page
-from fitz.utils import get_pixmap
 from pytest_approval import verify_image
 
 from sketch_map_tool import tasks
@@ -43,5 +42,5 @@ def test_generate_sketch_map(
         # NOTE: For high resolution needed to read images matrix would have to be
         #   defined and given to get_pixmap. This would result in larger file sizes.
         page: Page = doc.load_page(0)
-        image = get_pixmap(page)
-    verify_image(image.tobytes(), extension=".png", content_only=True)
+        image = page.get_pixmap()
+    assert verify_image(image.tobytes(), extension=".png", content_only=True)
