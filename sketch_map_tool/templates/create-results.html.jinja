@@ -35,12 +35,9 @@
                 </header>
                 <h6>{{ _('Map Quality Check Report') }}</h6>
                 <p>
-                    {{ _('You can analyze the <a href="https://wiki.osm.org" target="_blank">OpenStreetMap
-                        (OSM)</a> data of the selected Area of Interest through the <a
-                        href="https://dashboard.ohsome.org" target="_blank">ohsome dashboard</a>. The ohsome
-                        dashboard gives insights about the <strong>fitness for field data collection</strong>.
-                        It will be created through the <a href="https://api.quality.ohsome.org/"
-                        target="_blank">ohsome quality API</a>.') }}
+                    {{ _(
+                        'You can get insight into the <em>fitness for field data collection</em> of OpenStreetMap data through the <a href="https://dashboard.ohsome.org" target="_blank">ohsome dashboard</a>.'
+                    ) }}
                 </p>
                 <a id="quality-report-button" href="https://dashboard.ohsome.org/#backend=oqtApi&topic=roads&bboxes=sketch-map-tool-input:{{ bbox }}&indicators=currentness%2Cmapping-saturation" target="_blank" role="button">{{ _('Get Quality Report') }}</a>
             </article>
@@ -53,20 +50,23 @@
                 </header>
                 <h6>{{ _('Sketch Map Template') }}</h6>
                 <p class="pending">
-                    {{ _('We are creating the Sketch Map template that you can use for offline
+                    {{ _(
+                        'We are creating the Sketch Map template that you can use for offline
                         participatory mapping.<br>
-                        <strong>Please be patient, this can take 2-10 minutes.</strong> We use up-to-date
-                        <a href="https://wiki.osm.org" target="_blank">OpenStreetMap (OSM)</a> data, 
-                        satellite imagery powered by ESRI or <a href="https://openaerialmap.org/" target="_blank">OpenAerialMap<a imagery 
-                        to create a high resolution printable map for you.') }}
+                        <strong>Please be patient, this can take 2-10 minutes.</strong>
+                        We use up-to-date
+                        <a href="https://wiki.osm.org" target="_blank">OpenStreetMap</a>
+                        data, satellite imagery powered by ESRI or
+                        <a href="https://openaerialmap.org/" target="_blank">OpenAerialMap</a>
+                        imagery to create a high resolution printable map for you.'
+                    ) }}
                 </p>
                 <p class="success hidden">
-                    {{ _('We have created the Sketch Map template that you can use for offline
-                        participatory mapping.<br>
-                        We used up-to-date
-                        <a href="https://wiki.osm.org" target="_blank">OpenStreetMap (OSM)</a> data
-                        or satellite imagery powered by ESRI to create a high resolution printable map for you.<br>
-                        <strong>You can now start collecting data in the field!</strong>') }}
+                    {{ _(
+                        'We have created the Sketch Map template that you can
+                        use for offline participatory mapping.<br> 
+                        <strong>You can now start collecting data in the field!</strong>'
+                    ) }}
                 </p>
                 <p class="error hidden">
                     {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}
