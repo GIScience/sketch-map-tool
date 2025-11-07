@@ -76,11 +76,11 @@
         </div>
 
         {#row 4#}
-        <a href=" {{ url_for("create", lang=lang) }}">
+        <a href="{{ url_for("create", lang=lang) }}">
             <button type="button">{{ _('Create a Sketch&nbsp;Map') }}</button>
         </a>
         <div></div>
-        <a href=" {{ url_for("digitize", lang=lang) }}">
+        <a href="{{ url_for("digitize", lang=lang) }}">
             <button type="button">{{ _('Digitize your Sketch&nbsp;Maps') }}</button>
         </a>
 
