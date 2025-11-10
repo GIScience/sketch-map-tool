@@ -1,5 +1,3 @@
-import random
-
 import numpy as np
 import pytest
 import torch
@@ -87,21 +85,9 @@ def test_detect_markings(
     )
     img = Image.fromarray(map_frame_marked)
     for m in markings:
-        colors = [
-            "red",
-            "green",
-            "blue",
-            "yellow",
-            "purple",
-            "orange",
-            "pink",
-            "brown",
-        ]
         m[m == m.max()] = 255
         colored_marking = ImageOps.colorize(
-            Image.fromarray(m).convert("L"),
-            black="black",
-            white=random.choice(colors),
+            Image.fromarray(m).convert("L"), black="black", white="green"
         )
         img.paste(colored_marking, (0, 0), Image.fromarray(m))
         # draw bbox around each marking, derived from the mask m
