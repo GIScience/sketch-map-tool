@@ -1,4 +1,4 @@
-{% extends "base.jinja" %}
+{% extends "base.html.jinja" %}
 
 {% block head %}
 <link rel="stylesheet" href="{{ url_for("static", filename="bundles/case-studies.css") }}">
@@ -53,6 +53,22 @@
             <p>{{ _('In a seminar on GIS for Disaster Risk Reduction at Heidelberg University, Geography students explored local perceptions of urban heat using the Sketch Map Tool and KoboToolbox for participatory mapping') }}</p>
             <p><a href="/static/case-studies/heat-perception-of-heidelberg-residents.pdf">{{ _('Learn more (en).') }}</a></p>
             <footer># heat perception, kobo-toolbox</footer>
+        </article>
+        <article>
+            <header>
+                <img src="/static/assets/images/case-studies/community-flood-risk-mapping-in-honduras.avif" alt="Banner image for the case study">
+            </header>
+            <h2>{{ _(
+                'Community Flood Risk Mapping in Honduras'
+            ) }}</h2>
+            <p>{{ _(
+                'The Sketch Map Tool was used in a joint effort between the
+                Honduran Red Cross and the municipal government to update the
+                municipal response plan and develop an annex focused on
+                anticipatory actions.'
+            ) }}</p>
+            <p><a href="/static/case-studies/community-flood-risk-mapping-in-honduras.pdf">{{ _( 'Learn more (en).') }}</a></p>
+            <footer># anticipatory action, flood events</footer>
         </article>
     </div>
     <br>
