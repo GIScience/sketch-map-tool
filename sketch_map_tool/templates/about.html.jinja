@@ -53,12 +53,21 @@
         	The results can then be used for further analysis in Geographic Information System software.') }}
     </p>
 
-
     <p>
-        <a href="https://www.youtube-nocookie.com/embed/tMV--ZnRTNI" target="_blank"><img src="/static/assets/images/about/preview-SketchMapTool-Intro.webp" alt="{{ _('Video preview image for Introduction to the Sketch Map Tool') }}"></a>
+    <figure>
+        <div class="aspect-ratio-wide border-dotted grey-translucent">
+            <a href="https://www.youtube-nocookie.com/embed/tMV--ZnRTNI" target="_blank" alt="{{ _('Video preview image for Introduction to the Sketch Map Tool') }}">
+                <img
+                    src="{{ url_for("static", filename="assets/images/youtube.svg" ) }}"
+                    alt="YouTube icon"
+                >
+            </a>
+        </div>
+        <figcaption>
+            {{ _('Introduction to the Sketch Map Tool') }}
+        </figcaption>
+    </figure>
     </p>
-
-
 
     <h2 id="the-project">{{ _('The Project') }}</h2>
     <p>
@@ -156,9 +165,23 @@
     <p>
         {{ _('If you are interested in learning more about the concept and development of the Sketch Map Tool, consider watching the video of the lightning talk <a href="https://www.youtube.com/watch?v=Dmj41KRH-SA"> “OpenStreetMap Sketch Map Tool - The Future of OpenStreetMap Field Papers”</a> at GeOnG 2020.') }}
     </p>
+
     <p>
-        <a href="https://www.youtube-nocookie.com/embed/Dmj41KRH-SA" target="_blank"><img src="/static/assets/images/about/preview-GeOnG-LightningTalk_Klonner.webp" alt="{{ _('Video preview image for Lightning Talk about Sketch Maps at GeOnG 2020') }}"></a>
+    <figure>
+        <div class="aspect-ratio-wide border-dotted grey-translucent">
+            <a href="https://www.youtube-nocookie.com/embed/Dmj41KRH-SA" target="_blank" alt="{{ _('Video preview image for Lightning Talk - OpenStreetMap Sketch Map Tool - The Future of OpenStreetMap Field Papers') }}">
+                <img
+                    src="{{ url_for("static", filename="assets/images/youtube.svg" ) }}"
+                    alt="YouTube icon"
+                >
+            </a>
+        </div>
+        <figcaption>
+            {{ _('Lightning Talk - OpenStreetMap Sketch Map Tool - The Future of OpenStreetMap Field Papers') }}
+        </figcaption>
+    </figure>
     </p>
+
     <p>
         {{ _('Additionally, Episode 7 <a href="https://www.chaberlin.org/news/chatroom-7-mapping-in-der-humanitaeren-hilfe/">"Mapping in der Humanitären Hilfe”</a> of the podcast CHAtroom (in German) offers further insights. In this episode from the Center for Humanitarian Action (CHA), Dr. Natascha Bing (GRC) and Dr. Carolin Klonner (GIScience Heidelberg) discuss the importance of maps in disaster management and explore how the Sketch Map Tool can be utilized by humanitarian organisations.') }}
     </p>
