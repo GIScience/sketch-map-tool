@@ -23,6 +23,7 @@ from sketch_map_tool import flask_app as app
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
+    CustomFileDoesNotExistAnymoreError,
     CustomFileNotFoundError,
     QRCodeError,
     TranslatableError,
@@ -380,6 +381,7 @@ def health(lang="en"):
 
 
 @app.errorhandler(QRCodeError)
+@app.errorhandler(CustomFileDoesNotExistAnymoreError)
 @app.errorhandler(CustomFileNotFoundError)
 @app.errorhandler(UploadLimitsExceededError)
 def handle_exception(error: TranslatableError):
