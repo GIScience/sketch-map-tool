@@ -1,6 +1,7 @@
 import logging
 from io import BytesIO
 
+import torch
 from celery.result import AsyncResult
 from celery.signals import setup_logging, worker_process_init, worker_process_shutdown
 from geojson import FeatureCollection
@@ -27,7 +28,6 @@ from sketch_map_tool.upload_processing import (
 from sketch_map_tool.upload_processing.detect_markings import detect_markings
 from sketch_map_tool.upload_processing.ml_models import (
     init_model,
-    init_sam2,
     select_computation_device,
 )
 from sketch_map_tool.wms import client as wms_client
@@ -55,12 +55,14 @@ def init_worker_ml_models(**_):
     global yolo_obj_esri
     global yolo_cls
 
-    path = init_sam2()
     device = select_computation_device()
     sam2_model = build_sam2(
-        config_file="sam2_hiera_b+.yaml",
-        ckpt_path=path,
+        config_file=get_config_value("model_type_sam"),
+        ckpt_path=None,
         device=device,
+    )
+    sam2_model.load_state_dict(
+        torch.load(init_model(get_config_value("sam_checkpoint")), map_location=device)
     )
     sam_predictor = SAM2ImagePredictor(sam2_model)
 

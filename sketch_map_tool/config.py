@@ -24,7 +24,8 @@ DEFAULT_CONFIG = {
     "yolo_cls": "SMT-CLS",
     "yolo_osm_obj": "SMT-OSM",
     "yolo_esri_obj": "SMT-ESRI",
-    "model_type_sam": "vit_b",
+    "sam_checkpoint": "SMT-SAM",
+    "model_type_sam": "configs/sam2.1/sam2.1_hiera_l.yaml",
     "esri-api-key": "",
     "log-level": "INFO",
 }
