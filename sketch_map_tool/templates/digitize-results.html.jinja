@@ -1,4 +1,4 @@
-{% extends "base.jinja" %}
+{% extends "base.html.jinja" %}
 
 {% block head %}
 <script type="module" src="{{ url_for("static", filename="bundles/digitize-results.js") }}"></script>
@@ -34,17 +34,18 @@
                     <img src="{{ url_for("static", filename="assets/images/digitize-results/raster-marking-icon.svg") }}" alt="{{ _('raster data icon') }}"><br>
                     <span class="brand-font sub-icon">{{ _('Raster') }}</span>
                 </header>
-                <h6>{{ _('Geo-referenced markings as GeoTiffs') }}</h6>
+                <h6>{{ _('Georeferenced map frames as GeoTiffs') }}</h6>
                 <p class="pending">
-                    {{ _('We are extracting and geo-referencing the color markings of your Sketch
-                        Maps.<br>
-                        Please be patient this can take 2-10 minutes.') }}
+                    {{ _(
+                        'We are georeferencing the map frames of your Sketch Maps.<br>
+                        Please be patient this can take 2-10 minutes.'
+                    ) }}
                 </p>
                 <p class="success hidden">
-                    {{ _('We have extracted and geo-referenced the color markings of your Sketch
-                        Maps.<br>
-                        You can download them as rasterized GeoTIFFs and use them for further
-                        analysis in your favorite GIS Software.') }}
+                    {{ _(
+                        'We have georeferenced the map frames of your Sketch Maps.<br>
+                        You can download them as rasterized GeoTIFFs and use them for further analysis in your favorite GIS Software.'
+                    ) }}
                 </p>
                 <p class="error hidden">
                     {{ _('Sorry! <br>Something went wrong while trying to generate the result.') }}
@@ -60,17 +61,19 @@
                     <img src="{{ url_for("static", filename="assets/images/digitize-results/vector-marking-icon.svg") }}" alt="{{ _('vector data icon') }}"><br>
                     <span class="brand-font sub-icon">{{ _('Vector') }}</span>
                 </header>
-                <h6>{{ _('Geo-referenced markings as GeoJSON') }}</h6>
+                <h6>{{ _('Georeferenced markings as GeoJSON') }}</h6>
                 <p class="pending">
-                    {{ _('We are extracting and geo-referencing the color markings of your Sketch
-                        Maps.<br>
-                        Please be patient this can take 2-10 minutes.') }}
+                    {{ _(
+                        'We are extracting and georeferencing the color markings of your Sketch Maps.<br>
+                        Please be patient this can take 2-10 minutes.'
+                    ) }}
                 </p>
                 <p class="success hidden">
-                    {{ _('We have extracted and geo-referenced the color markings of your Sketch
-                        Maps.<br>
+                    {{ _(
+                        'We have extracted and georeferenced the color markings of your Sketch Maps.<br>
                         You can download them as vectorized polygons or points and use them for further
-                        analysis in your favorite GIS Software.') }}
+                        analysis in your favorite GIS Software.'
+                    ) }}
                 </p>
                 <p class="error hidden">
                     {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}

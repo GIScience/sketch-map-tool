@@ -2418,7 +2418,7 @@ wheels = [
 
 [[package]]
 name = "sketch-map-tool"
-version = "2025.9.10"
+version = "2025.11.12"
 source = { virtual = "." }
 dependencies = [
     { name = "celery", extra = ["redis", "sqlalchemy"] },
