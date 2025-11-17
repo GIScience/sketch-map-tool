@@ -40,8 +40,13 @@ spec:
           volumeMounts:
             - name: weights
               mountPath: /app/weights
+            - name: config
+              mountPath: /app/config
       restartPolicy: Always
       volumes:
         - name: weights
           persistentVolumeClaim:
             claimName: {{ include "sketch-map-tool.fullname" . }}-celery-weights
+        - name: config
+          secret:
+            secretName: {{ include "sketch-map-tool.fullname" . }}-config
