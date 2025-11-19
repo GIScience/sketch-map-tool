@@ -1,4 +1,5 @@
 import json
+from dataclasses import astuple
 from io import BytesIO
 from typing import Generator
 from uuid import UUID
@@ -201,8 +202,8 @@ def params(layer, bbox, bbox_wgs84, size: Size, format_, orientation):
     return {
         "format": format_.title,
         "orientation": orientation,
-        "bbox": json.dumps(bbox.asdict()),
-        "bboxWGS84": json.dumps(bbox_wgs84.asdict()),
+        "bbox": json.dumps(astuple(bbox)),
+        "bboxWGS84": json.dumps(astuple(bbox_wgs84)),
         "size": json.dumps(size.asdict()),
         "scale": "9051.161965312804",
         "layer": layer,
