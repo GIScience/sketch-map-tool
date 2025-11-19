@@ -29,6 +29,7 @@ def config_keys():
         "model_type_sam",
         "esri-api-key",
         "log-level",
+        "point-area-threshold",
     )
 
 
@@ -82,6 +83,7 @@ def test_get_config_value(config_keys):
             "wms-read-timeout",
             "max-nr-simultaneous-uploads",
             "max_pixel_per_image",
+            "point-area-threshold",
         ]:
             assert isinstance(val, int | float)
         else:
