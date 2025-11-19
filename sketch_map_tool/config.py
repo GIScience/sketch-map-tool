@@ -27,6 +27,7 @@ DEFAULT_CONFIG = {
     "model_type_sam": "vit_b",
     "esri-api-key": "",
     "log-level": "INFO",
+    "point-area-threshold": 0.00047,
 }
 
 

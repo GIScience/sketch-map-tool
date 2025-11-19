@@ -157,7 +157,7 @@ def digitize_sketches(
     for m in markings:
         m: BytesIO = georeference(m, bbox, bgr=False)  # type: ignore
         m: FeatureCollection = polygonize(m, layer_name=file_name)  # type: ignore
-        m: FeatureCollection = post_process(m, file_name)
+        m: FeatureCollection = post_process(m, file_name, bbox)
         l.append(m)
     if len(l) == 0:
         raise MarkingDetectionError(

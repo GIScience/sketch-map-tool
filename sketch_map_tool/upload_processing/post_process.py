@@ -1,18 +1,28 @@
+from dataclasses import astuple
+
 import geojson
+import pyproj
+import shapely.geometry
 from geojson import FeatureCollection
 from shapely import MultiPolygon, Polygon
-from shapely.geometry import mapping, shape
-from shapely.ops import unary_union
+from shapely.ops import transform, unary_union
 from shapelysmooth import chaikin_smooth
 
+from sketch_map_tool.config import get_config_value
 from sketch_map_tool.definitions import COLORS
+from sketch_map_tool.models import Bbox
 
 
-def post_process(fc: FeatureCollection, name: str) -> FeatureCollection:
+def post_process(
+    fc: FeatureCollection,
+    name: str,
+    bbox: Bbox,
+) -> FeatureCollection:
     fc = clean(fc)
     fc = enrich(fc, properties={"name": name})
     fc = simplify(fc)
     fc = smooth(fc)
+    fc = classify_points(fc, bbox=bbox)
     return fc
 
 
@@ -55,7 +65,7 @@ def simplify(fc: FeatureCollection) -> FeatureCollection:
     """
     features = fc["features"]
     properties = features[0]["properties"]  # properties for each features are the same
-    geometries = [shape(feature["geometry"]) for feature in features]
+    geometries = [shapely.geometry.shape(feature["geometry"]) for feature in features]
 
     # Buffer operation
     buffer_distance_percentage = 0.1
@@ -89,7 +99,10 @@ def simplify(fc: FeatureCollection) -> FeatureCollection:
 
     # Create a single GeoJSON feature
     features = [
-        geojson.Feature(geometry=mapping(geometry), properties=properties)
+        geojson.Feature(
+            geometry=shapely.geometry.mapping(geometry),
+            properties=properties,
+        )
         for geometry in simplified_geometries
     ]
 
@@ -132,8 +145,47 @@ def smooth(fc: FeatureCollection) -> FeatureCollection:
         corrected_geometry = chaikin_smooth(geometry)
 
         updated_features.append(
-            geojson.Feature(geometry=mapping(corrected_geometry), properties=properties)
+            geojson.Feature(
+                geometry=shapely.geometry.mapping(corrected_geometry),
+                properties=properties,
+            )
         )
 
     fc = geojson.FeatureCollection(updated_features)
     return fc
+
+
+def classify_points(fc: FeatureCollection, bbox: Bbox) -> FeatureCollection:
+    """Classify each feature as point or polygon based area."""
+    point_area_threshold = get_config_value("point-area-threshold")
+    fc_ = FeatureCollection(features=[])
+
+    for feature in fc["features"]:
+        geom_feature = shapely.geometry.shape(feature["geometry"])
+        geom_map_frame = transform_3857_to_4326(shapely.geometry.box(*astuple(bbox)))
+
+        area_map_frame = geom_map_frame.area
+        area_feature = geom_feature.area
+
+        ratio = area_feature / area_map_frame
+
+        if ratio < point_area_threshold:
+            geom = geom_feature.centroid
+        else:
+            geom = geom_feature
+
+        fc_.features.append(
+            geojson.Feature(
+                geometry=shapely.geometry.mapping(geom),
+                properties=feature["properties"],
+            )
+        )
+
+    return fc_
+
+
+def transform_3857_to_4326(geom: Polygon) -> Polygon:
+    wgs84 = pyproj.CRS("EPSG:4326")
+    pseudo = pyproj.CRS("EPSG:3857")
+    project = pyproj.Transformer.from_crs(pseudo, wgs84).transform
+    return transform(project, geom)
