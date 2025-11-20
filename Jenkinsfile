@@ -15,6 +15,8 @@ pipeline {
         RELEASE_REGEX = /^([0-9]+(\.[0-9]+)*)(-(RC|beta-|alpha-)[0-9]+)?$/
         RELEASE_DEPLOY = false
         SNAPSHOT_DEPLOY = false
+
+        DOCKER_CREDENTIALS_ID = 'docker-heigit-ci-service'
     }
 
     stages {
@@ -61,6 +63,45 @@ pipeline {
             post {
                 failure {
                   rocket_buildfail()
+                }
+            }
+        }
+
+        stage('Build and publish Docker image for main') {
+            agent {
+                kubernetes {
+                    inheritFrom "BASE DOCKER"
+                }
+            }
+            when {
+                branch 'main'
+            }
+            steps {
+                container('docker') {
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh 'docker login -p $PASSWORD -u $USERNAME repo.heigit.org'
+                    }
+                    sh "docker build --push --builder=kube --platform=linux/amd64 -t repo.heigit.org/heigit/sketch-map-tool:main ."
+                }
+            }
+        }
+
+        stage('Build and publish Docker image for release') {
+            agent {
+                kubernetes {
+                    inheritFrom "BASE DOCKER"
+                }
+            }
+            when {
+                buildingTag()
+            }
+            steps {
+                container('docker') {
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh 'docker login -p $PASSWORD -u $USERNAME repo.heigit.org'
+                    }
+                    sh "docker build --push --builder=kube --platform=linux/amd64 -t repo.heigit.org/heigit/sketch-map-tool:${env.TAG_NAME} ."
+                    sh "docker build --push --builder=kube --platform=linux/amd64 -t repo.heigit.org/heigit/sketch-map-tool:latest ."
                 }
             }
         }
