@@ -42,6 +42,10 @@ spec:
               mountPath: /app/weights
             - name: config
               mountPath: /app/config
+      {{- with .Values.celery.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       restartPolicy: Always
       volumes:
         - name: weights

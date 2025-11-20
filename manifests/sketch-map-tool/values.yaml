@@ -18,10 +18,14 @@ celery:
     size: 1Gi
     # storageClassName:
 
+  nodeSelector: {}
+
 flask:
   image:
     repository: repo.example.org/smt
     tag: latest
+
+  nodeSelector: {}
 
   ingress:
     enabled: false
@@ -64,6 +68,9 @@ flower:
   image:
     repository: repo.example.org/smt
     tag: latest
+
+  nodeSelector: {}
+
   ingress:
     enabled: false
     className: ""
