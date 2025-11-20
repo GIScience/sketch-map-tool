@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "sketch-map-tool.fullname" . }}
+  name: {{ include "sketch-map-tool.fullname" . }}-celery
   labels:
     {{- include "sketch-map-tool.labels" . | nindent 4 }}
     app.kubernetes.io/component: celery
