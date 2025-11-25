@@ -16,10 +16,11 @@ celery:
 
   resources:
     limits:
-      cpu: 1000m
+      cpu: 2000m
       memory: 24Gi
     requests:
-      cpu: 100m
+      # scheduling of new pod (minimal resource requirement)
+      cpu: 500m
       memory: 15Gi
 
 flask:
@@ -45,10 +46,10 @@ flask:
 
   resources:
     limits:
-      cpu: 200m
+      cpu: 400m
       memory: 2Gi
     requests:
-      cpu: 100m
+      cpu: 200m
       memory: 1Gi
 
 flower:
