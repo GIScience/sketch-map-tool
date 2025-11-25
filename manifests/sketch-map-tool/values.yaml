@@ -20,6 +20,11 @@ celery:
 
   nodeSelector: {}
 
+  weightsSourceUrl: 
+    osm: "https://downloads.ohsome.org/sketch-map-tool/weights/SMT-OSM.pt"
+    esri: "https://downloads.ohsome.org/sketch-map-tool/weights/SMT-ESRI.pt"
+    cls: "https://downloads.ohsome.org/sketch-map-tool/weights/SMT-CLS.pt"
+
 flask:
   image:
     repository: repo.example.org/smt
