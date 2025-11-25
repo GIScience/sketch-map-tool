@@ -19,6 +19,17 @@ spec:
         {{- include "sketch-map-tool.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: celery
     spec:
+      initContainers:
+        - name: download-weights
+          image: debian:stable-slim
+          command:
+            - sh
+            - -c
+          args:
+            - "apt-get update && apt-get install -y wget && wget --timestamping --directory-prefix /data/weights {{ .Values.celery.weightsSourceUrl.osm }} {{ .Values.celery.weightsSourceUrl.esri }} {{ .Values.celery.weightsSourceUrl.cls }}"
+          volumeMounts:
+            - name: weights
+              mountPath: /data/weights
       containers:
         - name: celery
           image: "{{ .Values.celery.image.repository }}:{{ .Values.celery.image.tag }}"
