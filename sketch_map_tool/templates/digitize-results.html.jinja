@@ -43,14 +43,16 @@
                 </p>
                 <p class="success hidden">
                     {{ _(
-                        'We have georeferenced the map frames of your Sketch Maps.<br>
-                        You can download them as rasterized GeoTIFFs and use them for further analysis in your favorite GIS Software.'
+                        'We have georeferenced the map frames of your Sketch Maps.'
                     ) }}
                 </p>
                 <p class="error hidden">
-                    {{ _('Sorry! <br>Something went wrong while trying to generate the result.') }}
+                    {{ _(
+                        'Sorry!<br>
+                        Something went wrong while trying to generate the result.'
+                    ) }}
                 </p>
-                <a id="raster-data-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download ZIP') }}</a>
+                <a id="raster-data-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download Map Frames') }}</a>
                 <div id="raster-data-status" class="task-status"></div>
 
             </article>
@@ -70,16 +72,14 @@
                 </p>
                 <p class="success hidden">
                     {{ _(
-                        'We have extracted and georeferenced the color markings of your Sketch Maps.<br>
-                        You can download them as vectorized polygons or points and use them for further
-                        analysis in your favorite GIS Software.'
+                        'We have extracted and georeferenced the color markings of your Sketch Maps.'
                     ) }}
                 </p>
                 <p class="error hidden">
                     {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}
                 </p>
                 <p>
-                    <a id="vector-data-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download Polygon GeoJSON') }}</a>
+                    <a id="vector-data-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download Markings') }}</a>
                 </p>
                 <a id="centroid-data-download-button" class="outline" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download Point GeoJSON') }}</a>
                 <div id="vector-data-status" class="task-status"></div>
