@@ -91,7 +91,6 @@ def test_status_failure_hard(
     (
         "raster-results",
         "vector-results",
-        "centroid-results",
     ),
 )
 def test_group_status_success(
@@ -114,7 +113,6 @@ def test_group_status_success(
     (
         "raster-results",
         "vector-results",
-        "centroid-results",
     ),
 )
 def test_group_status_started(
@@ -137,7 +135,6 @@ def test_group_status_started(
     (
         "raster-results",
         "vector-results",
-        "centroid-results",
     ),
 )
 @pytest.mark.parametrize(
@@ -163,7 +160,6 @@ def test_group_status_failure(client, uuid, type_, mock_group_result_failure, la
     (
         "raster-results",
         "vector-results",
-        "centroid-results",
     ),
 )
 def test_group_status_failure_hard(
@@ -189,7 +185,6 @@ def test_group_status_failure_hard(
     (
         "raster-results",
         "vector-results",
-        "centroid-results",
     ),
 )
 def test_group_status_started_success_failure(
@@ -222,7 +217,6 @@ def test_group_status_started_success_failure(
     (
         "raster-results",
         "vector-results",
-        "centroid-results",
     ),
 )
 def test_group_status_success_failure(

@@ -16,7 +16,6 @@ REQUEST_TYPES = Literal[
     "sketch-map",
     "raster-results",
     "vector-results",
-    "centroid-results",
 ]
 # Colors to be detected
 COLORS = {

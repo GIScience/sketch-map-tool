@@ -7,10 +7,9 @@ import cv2
 import numpy as np
 from billiard.exceptions import TimeLimitExceeded
 from celery.result import AsyncResult, GroupResult
-from geojson import Feature, FeatureCollection, Point
+from geojson import Feature, FeatureCollection
 from numpy.typing import NDArray
 from reportlab.graphics.shapes import Drawing
-from shapely.geometry import shape
 
 from sketch_map_tool.exceptions import TimeLimitExceededError, TranslatableError
 
@@ -110,16 +109,3 @@ def extract_errors(
                 if len(errors_) > 0:
                     errors = errors + [e.translate() for e in errors_]
     return errors
-
-
-def extract_centroids(feature_collection: FeatureCollection) -> FeatureCollection:
-    centroids = []
-
-    for feature in feature_collection.features:
-        geom = shape(feature.geometry)
-        centroid_point = Point((geom.centroid.x, geom.centroid.y))
-        centroids.append(
-            Feature(geometry=centroid_point, properties=feature.properties)
-        )
-
-    return FeatureCollection(centroids)
