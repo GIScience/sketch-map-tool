@@ -104,8 +104,6 @@ uv run ruff check --fix
 
 ### Tests
 
-Provide required [configuration variables](/docs/configuration.md#required-configuration) in `config/test.config.toml`. Be sure *not* to set `broker-url` and `result-backend`.
-
 To execute all tests run:
 ```bash
 uv run pytest

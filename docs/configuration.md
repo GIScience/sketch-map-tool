@@ -1,6 +1,8 @@
 # Configuration
 
-The Sketch Map Tool can be configured using a configuration file.
+The Sketch Map Tool can be configured using a configuration file or via
+environment variables. The latter takes precedence over the former.
+
 
 ## Configuration File
 
@@ -15,6 +17,7 @@ To create a new configuration file simply copy the sample configuration file and
 cp config/sample.config.toml config/config.toml
 ```
 
+
 ## Default Configuration
 
 For a list of all configuration variables and their default values please take a look at [config.py](sketch_map_tool/config.py).
@@ -24,13 +27,23 @@ All lot of configuration values come with defaults.
 For running the services using Docker Compose set broker URL and result backend to:
 
 ```toml
-broker-url = "redis://redis:6379"
-result-backend = "db+postgresql://smt:smt@postgres:5432"
+broker_url = "redis://redis:6379"
+result_backend = "db+postgresql://smt:smt@postgres:5432"
 ```
 
-## Misc
 
-### ArcGIS/ESRI API Key
+## Environment Variables
+
+All environment variables are prefixed with `SMT_`. For example above
+configuration via environment variables is done like this:
+
+```sh
+SMT_BROKER_URL="redis://redis:6379"
+SMT_RESULT_BACKEND="db+postgresql://smt:smt@postgres:5432"
+```
+
+
+## ArcGIS/ESRI API Key
 
 To retrieve up-to-date attribution an ArcGIS/ESRI API key is needed.
 For local development you do not need one.
