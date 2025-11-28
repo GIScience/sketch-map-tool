@@ -7,7 +7,7 @@ from psycopg2.errors import UndefinedTable
 from psycopg2.extensions import connection
 
 from sketch_map_tool import __version__
-from sketch_map_tool.config import get_config_value
+from sketch_map_tool.config import CONFIG
 from sketch_map_tool.exceptions import (
     CustomFileDoesNotExistAnymoreError,
     CustomFileNotFoundError,
@@ -20,7 +20,7 @@ db_conn: connection | None = None
 
 def open_connection():
     global db_conn
-    raw = get_config_value("result-backend")
+    raw = CONFIG.result_backend
     dns = raw[3:]
     db_conn = psycopg2.connect(dns)
     db_conn.autocommit = True
@@ -129,7 +129,7 @@ def cleanup_map_frames():
     """
     with db_conn.cursor() as curs:
         try:
-            curs.execute(query, [get_config_value("cleanup-map-frames-interval")])
+            curs.execute(query, [CONFIG.cleanup_map_frames_interval])
         except UndefinedTable:
             logging.info("Table `map_frame` does not exist yet. Nothing todo.")
 

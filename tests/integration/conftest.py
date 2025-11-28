@@ -17,7 +17,7 @@ from testcontainers.redis import RedisContainer
 
 from sketch_map_tool import CELERY_CONFIG, get_locale
 from sketch_map_tool import celery_app as smt_celery_app
-from sketch_map_tool.config import DEFAULT_CONFIG
+from sketch_map_tool.config import CONFIG
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.helpers import merge, to_array, zip_
 from sketch_map_tool.models import Bbox, PaperFormat, Size
@@ -46,7 +46,7 @@ def postgres_container(monkeypatch_session):
             port=postgres.get_exposed_port(5432),  # 5432 is default port of postgres
             database=postgres.dbname,
         )
-        monkeypatch_session.setitem(DEFAULT_CONFIG, "result-backend", conn)
+        monkeypatch_session.setattr(CONFIG, "result_backend", conn)
         yield {"connection_url": conn}
     # cleanup
 
@@ -60,7 +60,7 @@ def redis_container(monkeypatch_session):
     with RedisContainer("redis:7") as redis:
         port = redis.get_exposed_port(6379)  # 6379 is default port of redis
         conn = f"redis://127.0.0.1:{port}"
-        monkeypatch_session.setitem(DEFAULT_CONFIG, "broker-url", conn)
+        monkeypatch_session.setattr(CONFIG, "broker_url", conn)
         yield {"connection_url": conn}
     # cleanup
 

@@ -5,7 +5,7 @@ import PIL.Image as Image
 from PIL.Image import MAX_IMAGE_PIXELS, DecompressionBombError
 from werkzeug.datastructures import FileStorage
 
-from sketch_map_tool import get_config_value
+from sketch_map_tool import CONFIG
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import UploadLimitsExceededError, ValidationError
 from sketch_map_tool.helpers import N_
@@ -27,7 +27,7 @@ def validate_type(type_: REQUEST_TYPES):
 def validate_uploaded_sketchmaps(files: list[FileStorage]):
     """Validation function for uploaded files."""
 
-    max_nr_simultaneous_uploads = int(get_config_value("max-nr-simultaneous-uploads"))
+    max_nr_simultaneous_uploads = CONFIG.max_nr_simultaneous_uploads
 
     if len(files) > max_nr_simultaneous_uploads:
         raise UploadLimitsExceededError(

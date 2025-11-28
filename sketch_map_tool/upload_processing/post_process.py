@@ -8,7 +8,7 @@ from shapely import MultiPolygon, Polygon
 from shapely.ops import transform, unary_union
 from shapelysmooth import chaikin_smooth
 
-from sketch_map_tool.config import get_config_value
+from sketch_map_tool.config import CONFIG
 from sketch_map_tool.definitions import COLORS
 from sketch_map_tool.models import Bbox
 
@@ -157,7 +157,7 @@ def smooth(fc: FeatureCollection) -> FeatureCollection:
 
 def classify_points(fc: FeatureCollection, bbox: Bbox) -> FeatureCollection:
     """Classify each feature as point or polygon based area."""
-    point_area_threshold = get_config_value("point-area-threshold")
+    point_area_threshold = CONFIG.point_area_threshold
     fc_ = FeatureCollection(features=[])
 
     for feature in fc["features"]:

@@ -6,7 +6,7 @@ from sam2.sam2_image_predictor import SAM2ImagePredictor
 from ultralytics import YOLO
 from ultralytics_MB import YOLO as YOLO_MB
 
-from sketch_map_tool.config import get_config_value
+from sketch_map_tool.config import CONFIG
 from sketch_map_tool.upload_processing.detect_markings import (
     detect_markings,
 )
@@ -35,21 +35,21 @@ def sam_predictor():
 @pytest.fixture
 def yolo_osm_obj() -> YOLO_MB:
     """YOLO Object Detection"""
-    path = init_model(get_config_value("yolo_osm_obj"))
+    path = init_model(CONFIG.yolo_osm_obj)
     return YOLO_MB(path)
 
 
 @pytest.fixture
 def yolo_esri_obj() -> YOLO_MB:
     """YOLO Object Detection"""
-    path = init_model(get_config_value("yolo_osm_obj"))
+    path = init_model(CONFIG.yolo_osm_obj)
     return YOLO_MB(path)
 
 
 @pytest.fixture
 def yolo_cls() -> YOLO:
     """YOLO Classification"""
-    path = init_model(get_config_value("yolo_cls"))
+    path = init_model(CONFIG.yolo_cls)
     return YOLO(path)
 
 

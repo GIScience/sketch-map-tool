@@ -81,7 +81,7 @@ def create(lang="en") -> str:
     return render_template(
         "create.html.jinja",
         lang=lang,
-        esri_api_key=config.get_config_value("esri-api-key"),
+        esri_api_key=config.CONFIG.esri_api_key,
     )
 
 
