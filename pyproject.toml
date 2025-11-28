@@ -18,6 +18,7 @@ dependencies = [
     "numpy<2", # dependency of opencv and gdal
     "opencv-python-headless<4.8.0.76", # https://github.com/ultralytics/ultralytics/issues/893
     "pillow>=11.3.0",
+    "pydantic-settings>=2.12.0",
     "pymupdf>=1.25.4",
     "pyproj>=3.7.1",
     "pyzbar>=0.1.9",
@@ -31,7 +32,7 @@ dependencies = [
     "svglib>=1.5.1,<1.6.0",
     "toml>=0.10.2",
     "torch>=2.7.0",
-    "torchvision>=0.22.0,<0.24.0",  # https://github.com/astral-sh/uv/issues/16386
+    "torchvision>=0.22.0,<0.24.0", # https://github.com/astral-sh/uv/issues/16386
     "ultralytics==8.1.14",
     "ultralytics-mb",
     "waitress>=3.0.2",
@@ -50,6 +51,7 @@ dev = [
     "pytest-approval>=0.1.0",
     "pytest-celery>=1.2.0",
     "pytest-cov>=6.2.1",
+    "pytest-env>=1.2.0",
     "pytest-memray>=1.7.0",
     "pytest-rerunfailures>=15.0",
     "ruff==0.12.11", # fix version because of pre-commit
@@ -117,6 +119,10 @@ select = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.pytest_env]
+SMT_CONFIG = "config/test.config.toml"
+SMT_USER_AGENT = "sketch-map-tool-test"  # takes precedence over file
 
 [tool.pytest-approval]
 "approvals-dir"="tests/approvals"
