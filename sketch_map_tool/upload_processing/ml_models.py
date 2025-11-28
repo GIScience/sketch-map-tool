@@ -5,12 +5,12 @@ import requests
 import torch
 from torch._prims_common import DeviceLikeType
 
-from sketch_map_tool.config import get_config_value
+from sketch_map_tool.config import CONFIG
 
 
 def init_model(id: str) -> Path:
     """Initialize model. Raise error if not found."""
-    raw = Path(get_config_value("weights-dir")) / id
+    raw = Path(CONFIG.weights_dir) / id
     path = raw.with_suffix(".pt")
     if not path.is_file():
         raise FileNotFoundError("Model not found at " + str(path))
@@ -18,7 +18,7 @@ def init_model(id: str) -> Path:
 
 
 def init_sam2(id: str = "sam2_hiera_base_plus") -> Path:
-    raw = Path(get_config_value("weights-dir")) / id
+    raw = Path(CONFIG.weights_dir) / id
     path = raw.with_suffix(".pt")
     base_url = "https://dl.fbaipublicfiles.com/segment_anything_2/072824/"
     url = base_url + id + ".pt"

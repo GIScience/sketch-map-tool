@@ -9,14 +9,14 @@ from flask_babel import Babel
 # https://github.com/GIScience/sketch-map-tool/issues/503
 from osgeo import gdal, osr  # noqa: F401
 
-from sketch_map_tool.config import get_config_value
+from sketch_map_tool.config import CONFIG
 from sketch_map_tool.database import client_flask as db_client
 from sketch_map_tool.definitions import LANGUAGES
 
 __version__ = "2025.11.12"
 
 # Setup logging
-LEVEL = getattr(logging, get_config_value("log-level").upper())
+LEVEL = getattr(logging, CONFIG.log_level.upper())
 FORMAT = "%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s"
 logging.basicConfig(
     level=LEVEL,
@@ -24,8 +24,8 @@ logging.basicConfig(
 )
 
 CELERY_CONFIG = {
-    "broker_url": get_config_value("broker-url"),
-    "result_backend": get_config_value("result-backend"),
+    "broker_url": CONFIG.broker_url,
+    "result_backend": CONFIG.result_backend,
     "task_serializer": "pickle",
     "task_track_started": True,  # report ‘started’ status worker executes task
     "task_send_sent_event": True,

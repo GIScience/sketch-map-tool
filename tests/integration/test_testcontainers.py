@@ -1,12 +1,12 @@
 from celery.contrib.testing.tasks import ping  # noqa: F401
 from psycopg2.extensions import connection
 
-from sketch_map_tool.config import get_config_value
+from sketch_map_tool.config import CONFIG
 from sketch_map_tool.database import client_celery
 
 
 def test_testcontainers_postgres():
-    conn = get_config_value("result-backend")
+    conn = CONFIG.result_backend
     # test that connection string is set and not default
     assert conn != "db+postgresql://smt:smt@localhost:5432"
     assert conn != ""
@@ -20,7 +20,7 @@ def test_testcontainers_postgres():
 
 
 def test_testcontainers_redis():
-    conn = get_config_value("broker-url")
+    conn = CONFIG.broker_url
     # test that connection string is set and not default
     assert conn != "redis://localhost:6379"
     assert conn != ""
