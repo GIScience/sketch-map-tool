@@ -18,10 +18,6 @@ def sketch_map_marked_path(tmp_path_factory, uuid_create) -> bytes:
 
 
 def test_smt_approver(sketch_map_marked_path, vector_path, layer):
-    # TODO: Fails because whole oam image is detected as marking.
-    #   Enable once detection on OAM layers is improved.
-    if layer.startswith("oam"):
-        return
     options = (
         Options()
         .with_reporter(SketchMapToolReporter(sketch_map=sketch_map_marked_path))
