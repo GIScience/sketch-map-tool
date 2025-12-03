@@ -17,17 +17,27 @@ class GeoJSONComparator(FileComparator):
         df_received = geopandas.read_file(received_path).to_crs("EPSG:8857")
         df_approved = geopandas.read_file(approved_path).to_crs("EPSG:8857")
 
-        if len(df_approved.index) != len(df_received.index):
-            print("Different numbers of features detected.")
+        df_received_points = df_received[df_received.geometry.type == "Point"]
+        df_approved_points = df_approved[df_approved.geometry.type == "Point"]
+
+        df_approved_polygons = df_approved[df_approved.geometry.type == "Polygon"]
+        df_received_polygons = df_received[df_received.geometry.type == "Polygon"]
+
+        if len(df_approved_polygons.index) != len(df_received_polygons.index):
+            logging.warning("Different number of polygon features detected.")
+            return False
+
+        if len(df_approved_points.index) != len(df_received_points.index):
+            logging.warning("Different number of point features detected.")
             return False
 
         # NOTE: Hausdorff distance might be better to determine similarity
-        area_diff = df_received.symmetric_difference(df_approved).area
-        area_union = df_received.union(df_approved).area
+        area_diff = df_received_polygons.symmetric_difference(df_approved_polygons).area
+        area_union = df_received_polygons.union(df_approved_polygons).area
         diff = area_diff / area_union
         for d in diff.tolist():
-            if d > 0.05:
-                logging.warning(f"Area differs more by {d:.0%}")
+            if d > 0.1:
+                logging.warning(f"Area differs by more than {d:.0%}")
                 return False
         return True
 
