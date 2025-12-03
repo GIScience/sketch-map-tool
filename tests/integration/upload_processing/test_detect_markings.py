@@ -81,14 +81,17 @@ def test_detect_markings(
         yolo_cls,
         sam_predictor,
     )
-    if layer.startswith("esri"):
-        # TODO: one marking for esri layer is not detected
+    if layer.startswith("osm"):
+        assert len(markings) == 8
+    elif layer.startswith("esri"):
+        assert len(markings) == 9
+    elif layer.startswith("oam"):
         assert len(markings) == 5
     else:
-        assert len(markings) == 6
+        raise ValueError("Not reachable")
 
     # NOTE: uncomment for manual/visual assessment of detected markings
-    show_bbox_of_markings(map_frame_marked, markings)
+    # show_bbox_of_markings(map_frame_marked, markings)
 
 
 def show_bbox_of_markings(map_frame_marked, markings):

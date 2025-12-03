@@ -1,18 +1,17 @@
 import json
 from dataclasses import astuple
 from io import BytesIO
-from typing import Generator
+from pathlib import Path
 from types import MappingProxyType
+from typing import Generator
 from uuid import UUID
 
-import fitz
 import pytest
 from celery.contrib.testing.tasks import ping  # noqa: F401
 from flask import Flask
 from flask.testing import FlaskClient
 from flask_babel import Babel
 from numpy.typing import NDArray
-from PIL import Image, ImageOps
 from testcontainers.postgres import PostgresContainer
 from testcontainers.redis import RedisContainer
 
@@ -27,9 +26,9 @@ from sketch_map_tool.models import Bbox, PaperFormat, Size
 #   are registered correctly.
 from sketch_map_tool.routes import app as smt_flask_app
 from sketch_map_tool.upload_processing import clip
+from sketch_map_tool.upload_processing.qr_code_reader import read_qr_code
 from tests import FIXTURE_DIR
 from tests import vcr_app as vcr
-from sketch_map_tool.upload_processing.qr_code_reader import read_qr_code
 
 
 #
@@ -261,31 +260,19 @@ def map_frame(uuid_create, flask_app, tmp_path_factory) -> BytesIO:
 
 
 @pytest.fixture(scope="session")
-def sketch_map_marked(uuid_create, sketch_map, tmp_path_factory) -> bytes:
-    """Sketch map with markings as PNG."""
-    # TODO: increase resolution of PNG
-    path = tmp_path_factory.getbasetemp() / uuid_create / "sketch-map-marked.png"
+def sketch_map_marked_path(layer) -> Path:
+    """Photo of the sketch map with markings."""
+    return FIXTURE_DIR / f"sketch-map-marked-{layer}.jpg"
 
-    # Convert PDF to PNG
-    pdf = fitz.open(stream=sketch_map)  # type: ignore
-    pag = pdf.load_page(0)
-    mat = fitz.Matrix(2, 2)
-    pag.get_pixmap(matrix=mat).save(path, output="png")
 
-    # Draw shapes on PNG (Sketch Map)
-    img1 = Image.open(path)  # Sketch Map (primary image)
-    img2 = Image.open(
-        FIXTURE_DIR / "upload-processing" / "markings-transparent.png"
-    )  # Markings (overlay image)
-    img2 = ImageOps.cover(img2, img1.size)  # type: ignore
-    img1.paste(img2, (0, 0), mask=img2)  # Overlay images starting at 0, 0
-
-    # Displaying the image
-    # img1.show()
-
-    # TODO: what should be the return type of the fixture?
-    img1.save(path)
-    with open(path, "rb") as file:
+@pytest.fixture(scope="session")
+def sketch_map_marked(sketch_map_marked_path) -> bytes:
+    """Photo of the sketch map with markings."""
+    # NOTE: If you want to change the markings of this fixture:
+    #   (1) Run tests. (2) Print PDF written to tmp dir by uuid_create fixture.
+    #   (3) Put markings on printout. (4) Make a photo.
+    #   (5) put photo file in fixture dir.
+    with open(sketch_map_marked_path, "rb") as file:
         return file.read()
 
 
@@ -352,9 +339,13 @@ def uuid_digitize(
 
 
 @pytest.fixture(scope="session")
-def vector(uuid_digitize, tmp_path_factory) -> bytes:
-    path = tmp_path_factory.getbasetemp() / uuid_digitize / "vector.geojson"
-    with open(path, "rb") as file:
+def vector_path(uuid_digitize, tmp_path_factory) -> Path:
+    return tmp_path_factory.getbasetemp() / uuid_digitize / "vector.geojson"
+
+
+@pytest.fixture(scope="session")
+def vector(vector_path) -> bytes:
+    with open(vector_path, "rb") as file:
         return file.read()
 
 
