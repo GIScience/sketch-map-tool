@@ -2,6 +2,7 @@ import json
 from dataclasses import astuple
 from io import BytesIO
 from typing import Generator
+from types import MappingProxyType
 from uuid import UUID
 
 import pymupdf
@@ -29,6 +30,7 @@ from sketch_map_tool.upload_processing import clip
 from tests import FIXTURE_DIR
 from tests import vcr_app as vcr
 from tests.integration.utils import extract_uuid
+from sketch_map_tool.upload_processing.qr_code_reader import read_qr_code
 
 
 #
@@ -303,12 +305,27 @@ def map_frame_marked(
 @pytest.fixture(scope="session")
 @vcr.use_cassette
 def uuid_digitize(
+    uuid_create,
     sketch_map_marked,
     flask_client,
     celery_app,
     tmp_path_factory,
+    monkeypatch_session,
 ) -> str:
     """UUID after uploading files to /digitize and successful result generation."""
+
+    def read_qr_code_(image):
+        raw = dict(read_qr_code(image))
+        raw["uuid"] = uuid_create
+        return MappingProxyType(raw)
+
+    # NOTE: The fixture of the photo of a sketch map with markings has always the same
+    #   UUID. When reading QR code use UUID of current test run instead.
+    monkeypatch_session.setattr(
+        "sketch_map_tool.database.client_flask.read_qr_code",
+        read_qr_code_,
+    )
+
     data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")], "consent": True}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
 
