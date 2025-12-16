@@ -49,7 +49,7 @@ npm install
 npm run build
 
 # Download ml-model weights
-wget -P weights https://downloads.ohsome.org/sketch-map-tool/weights/SMT-{OSM,ESRI,CLS}.pt
+wget -P weights https://downloads.ohsome.org/sketch-map-tool/weights/SMT-{OSM,ESRI,CLS,SAM}.pt
 
 # Fetch and run database & result store (postgres)
 docker run --name smt-postgres -d -p 5432:5432 -e POSTGRES_PASSWORD=smt -e POSTGRES_USER=smt postgres:15

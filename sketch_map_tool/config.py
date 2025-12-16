@@ -29,9 +29,10 @@ class Config(BaseSettings):
     esri_api_key: str = ""
     log_level: str = "INFO"
     max_nr_simultaneous_uploads: int = 100
-    model_type_sam: str = "vit_b"
+    model_type_sam: str = "configs/sam2.1/sam2.1_hiera_l.yaml"
     point_area_threshold: float = 0.00047
     result_backend: str = "db+postgresql://smt:smt@localhost:5432"
+    sam_checkpoint: str = "SMT-SAM"
     user_agent: str = "sketch-map-tool"
     weights_dir: str = str(get_project_root() / "weights")  # TODO: make this a Path
     wms_layers_esri_world_imagery: str = "world_imagery"

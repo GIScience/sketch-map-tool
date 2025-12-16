@@ -10,7 +10,7 @@ The **Model Registry** maintains a collection of fine-tuned machine learning mod
 | Object Detection       | YOLO_OSM     | 6-Channel Input | Detects sketches on OSM                                                       | [download](https://downloads.ohsome.org/sketch-map-tool/weights/SMT-OSM.pt)    |
 | Object Detection       | YOLO_ESRI    | 6-Channel Input | Detects sketches on ESRI maps                                                 | [download](hhttps://downloads.ohsome.org/sketch-map-tool/weights/SMT-ESRI.pt)  |
 | Image Classification   | YOLO_CLS     | Standard RGB    | Classifies colors in sketches                                                 | [download](https://downloads.ohsome.org/sketch-map-tool/weights/SMT-CLS.pt)    |
-| Segmentation           | SAM2         | tandard RGB     | Performs segmentation on sketch                                               | [github](https://github.com/facebookresearch/sam2)                             |
+| Segmentation           | SAM2         | Standard RGB    | Performs segmentation on on sketches, finetuned from **SAM 2.1 hiera large**  | [download](hhttps://downloads.ohsome.org/sketch-map-tool/weights/SMT-SAM.pt)   |
 
 ## Models in the Registry
 ### 1. Object Detection Models
@@ -40,7 +40,9 @@ This model is used to determine the sketch's **color**.
 For segmentation tasks, **SAM2 (Segment Anything Model v2)** is utilized.
 
 #### **SAM2 - Segmentation Model**
+- **Base Map:** Both OSM and ESRI Satellite Imagery
 - **Task:** Performs pixel-wise segmentation to extract regions from sketches.
+- **Fine-tuned On:** On a set of manually selected segmented sketches to improve performance on sketch data.
 
 
 For questions, contact the **SketchMapTool Team**.

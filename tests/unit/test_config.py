@@ -47,7 +47,7 @@ def test_get_config_path_set_env(monkeypatch):
     assert config.get_config_path() == "/some/absolute/path"
 
 
-def test_config_user_agent_env(monkeypatch):
+def test_config_user_agent_env():
     # env takes precedence over file (see pyproject.toml)
     assert config.CONFIG.user_agent == "sketch-map-tool-test"
 
