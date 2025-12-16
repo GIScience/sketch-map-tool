@@ -27,8 +27,10 @@ All lot of configuration values come with defaults.
 For running the services using Docker Compose set broker URL and result backend to:
 
 ```toml
-broker_url = "redis://redis:6379"
-result_backend = "db+postgresql://smt:smt@postgres:5432"
+postgres_host = "postgres"
+postgres_password = "smt"
+postgres_user = "smt"
+redis_host = "redis"
 ```
 
 
@@ -38,8 +40,10 @@ All environment variables are prefixed with `SMT_`. For example above
 configuration via environment variables is done like this:
 
 ```sh
-SMT_BROKER_URL="redis://redis:6379"
-SMT_RESULT_BACKEND="db+postgresql://smt:smt@postgres:5432"
+SMT_POSTGRES_HOST = "postgres"
+SMT_POSTGRES_PASSWORD = "smt"
+SMT_POSTGRES_USER = "smt"
+SMT_REDIS_HOST = "redis"
 ```
 
 

@@ -1,7 +1,7 @@
 import logging
 import os
 
-from pydantic import field_validator
+from pydantic import computed_field, field_validator
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
@@ -23,7 +23,6 @@ def get_config_path() -> str:
 
 
 class Config(BaseSettings):
-    broker_url: str = "redis://localhost:6379"
     cleanup_map_frames_interval: str = "12 months"
     data_dir: str = str(get_project_root() / "data")  # TODO: make this a Path
     esri_api_key: str = ""
@@ -31,7 +30,15 @@ class Config(BaseSettings):
     max_nr_simultaneous_uploads: int = 100
     model_type_sam: str = "vit_b"
     point_area_threshold: float = 0.00047
-    result_backend: str = "db+postgresql://smt:smt@localhost:5432"
+    postgres_host: str = "localhost"
+    postgres_port: str = "5432"
+    postgres_dbname: str = ""
+    postgres_user: str = "smt"
+    postgres_password: str = "smt"
+    redis_host: str = "localhost"
+    redis_port: str = "6379"
+    redis_db_number: str = ""
+    redis_password: str | None = None
     user_agent: str = "sketch-map-tool"
     weights_dir: str = str(get_project_root() / "weights")  # TODO: make this a Path
     wms_layers_esri_world_imagery: str = "world_imagery"
@@ -51,6 +58,34 @@ class Config(BaseSettings):
         env_prefix="SMT_",
         toml_file=get_config_path(),
     )
+
+    @computed_field
+    @property
+    def result_backend(self) -> str:
+        return "db+postgresql://{user}:{password}@{host}:{port}/{dbname}".format(
+            user=self.postgres_user,
+            password=self.postgres_password,
+            host=self.postgres_host,
+            port=self.postgres_port,
+            dbname=self.postgres_dbname,
+        )
+
+    @computed_field
+    @property
+    def broker_url(self) -> str:
+        if self.redis_password is None:
+            return "redis://{host}:{port}/{db_number}".format(
+                host=self.redis_host,
+                port=self.redis_port,
+                db_number=self.redis_db_number,
+            )
+        else:
+            return "redis://:{password}@{host}:{port}/{db_number}".format(
+                password=self.redis_password,
+                host=self.redis_host,
+                port=self.redis_port,
+                db_number=self.redis_db_number,
+            )
 
     @classmethod
     def settings_customise_sources(
