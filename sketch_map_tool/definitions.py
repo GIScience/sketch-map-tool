@@ -7,7 +7,7 @@ from typing import Literal
 import requests
 from werkzeug.utils import secure_filename
 
-from sketch_map_tool.config import get_config_value
+from sketch_map_tool.config import CONFIG
 from sketch_map_tool.models import LiteratureReference, PaperFormat
 from sketch_map_tool.openaerialmap import client as oam_client
 
@@ -16,7 +16,6 @@ REQUEST_TYPES = Literal[
     "sketch-map",
     "raster-results",
     "vector-results",
-    "centroid-results",
 ]
 # Colors to be detected
 COLORS = {
@@ -38,7 +37,7 @@ def get_attribution(layer: str) -> str:
         url = (
             "https://basemaps-api.arcgis.com/arcgis/rest/services/styles/ArcGIS:Imagery"
         )
-        token = get_config_value("esri-api-key")
+        token = CONFIG.esri_api_key
         if token == "":
             sources = "Esri, Maxar, Earthstar Geographics, and the GIS User Community"
             logging.warning(
@@ -70,7 +69,7 @@ def get_literature_references() -> list[LiteratureReference]:
     For image source either a web URL or a filename of a file in the publications folder
     is expected.
     """
-    p = Path(get_config_value("data-dir")) / "literature.json"
+    p = Path(CONFIG.data_dir) / "literature.json"
     with open(p, "r") as f:
         raw = json.load(f)
 

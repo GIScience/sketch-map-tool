@@ -4,12 +4,12 @@ from pathlib import Path
 import torch
 from torch._prims_common import DeviceLikeType
 
-from sketch_map_tool.config import get_config_value
+from sketch_map_tool.config import CONFIG
 
 
 def init_model(id: str) -> Path:
     """Initialize model. Raise error if not found."""
-    raw = Path(get_config_value("weights-dir")) / id
+    raw = Path(CONFIG.weights_dir) / id
     path = raw.with_suffix(".pt")
     if not path.is_file():
         raise FileNotFoundError("Model not found at " + str(path))

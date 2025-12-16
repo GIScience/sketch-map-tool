@@ -6,7 +6,7 @@ from psycopg2.errors import UndefinedTable
 from psycopg2.extensions import connection
 from werkzeug.utils import secure_filename
 
-from sketch_map_tool.config import get_config_value
+from sketch_map_tool.config import CONFIG
 from sketch_map_tool.exceptions import (
     CustomFileDoesNotExistAnymoreError,
     CustomFileNotFoundError,
@@ -18,7 +18,7 @@ from sketch_map_tool.upload_processing import read_qr_code
 
 def open_connection():
     if "db_conn" not in g:
-        raw = get_config_value("result-backend")
+        raw = CONFIG.result_backend
         dns = raw[3:]
         g.db_conn = psycopg2.connect(dns)
         g.db_conn.autocommit = True

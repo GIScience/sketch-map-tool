@@ -28,16 +28,11 @@ def test_download_failure(client, uuid):
     (
         "raster-results",
         "vector-results",
-        "centroid-results",
     ),
 )
 def test_group_download_success(client, uuid, type_, monkeypatch):
     monkeypatch.setattr(
         "sketch_map_tool.routes.merge",
-        lambda *_: {"type": "FeatureCollection", "features": []},
-    )
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.extract_centroids",
         lambda *_: {"type": "FeatureCollection", "features": []},
     )
     monkeypatch.setattr(
@@ -55,7 +50,6 @@ def test_group_download_success(client, uuid, type_, monkeypatch):
     (
         "raster-results",
         "vector-results",
-        "centroid-results",
     ),
 )
 def test_group_started(client, uuid, type_):
@@ -69,7 +63,6 @@ def test_group_started(client, uuid, type_):
     (
         "raster-results",
         "vector-results",
-        "centroid-results",
     ),
 )
 def test_group_failure(client, uuid, type_):
@@ -83,14 +76,9 @@ def test_group_failure(client, uuid, type_):
     (
         "raster-results",
         "vector-results",
-        "centroid-results",
     ),
 )
 def test_group_started_success_failure(client, uuid, type_, monkeypatch):
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.extract_centroids",
-        lambda *_: {"type": "FeatureCollection", "features": []},
-    )
     resp = client.get("/api/download/{0}/{1}".format(uuid, type_))
     assert resp.status_code == 500
 
@@ -100,7 +88,6 @@ def test_group_started_success_failure(client, uuid, type_, monkeypatch):
     (
         "raster-results",
         "vector-results",
-        "centroid-results",
     ),
 )
 def test_group_success_failure(
@@ -112,10 +99,6 @@ def test_group_success_failure(
 ):
     monkeypatch.setattr(
         "sketch_map_tool.routes.merge",
-        lambda *_: {"type": "FeatureCollection", "features": []},
-    )
-    monkeypatch.setattr(
-        "sketch_map_tool.routes.extract_centroids",
         lambda *_: {"type": "FeatureCollection", "features": []},
     )
     monkeypatch.setattr(

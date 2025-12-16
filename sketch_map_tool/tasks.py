@@ -11,8 +11,8 @@ from sam2.sam2_image_predictor import SAM2ImagePredictor
 from ultralytics import YOLO
 from ultralytics_MB import YOLO as YOLO_MB
 
+from sketch_map_tool import CONFIG, map_generation
 from sketch_map_tool import celery_app as celery
-from sketch_map_tool import get_config_value, map_generation
 from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import get_attribution
 from sketch_map_tool.exceptions import MarkingDetectionError
@@ -57,18 +57,18 @@ def init_worker_ml_models(**_):
 
     device = select_computation_device()
     sam2_model = build_sam2(
-        config_file=get_config_value("model_type_sam"),
+        config_file=CONFIG.model_type_sam,
         ckpt_path=None,
         device=device,
     )
     sam2_model.load_state_dict(
-        torch.load(init_model(get_config_value("sam_checkpoint")), map_location=device)
+        torch.load(init_model(CONFIG.sam_checkpoint), map_location=device)
     )
     sam_predictor = SAM2ImagePredictor(sam2_model)
 
-    yolo_obj_osm = YOLO_MB(init_model(get_config_value("yolo_osm_obj")))
-    yolo_obj_esri = YOLO_MB(init_model(get_config_value("yolo_esri_obj")))
-    yolo_cls = YOLO(init_model(get_config_value("yolo_cls")))
+    yolo_obj_osm = YOLO_MB(init_model(CONFIG.yolo_osm_obj))
+    yolo_obj_esri = YOLO_MB(init_model(CONFIG.yolo_esri_obj))
+    yolo_cls = YOLO(init_model(CONFIG.yolo_cls))
 
 
 @worker_process_shutdown.connect
@@ -80,7 +80,7 @@ def shutdown_worker(**_):
 
 @setup_logging.connect
 def on_setup_logging(**_):
-    level = getattr(logging, get_config_value("log-level").upper())
+    level = getattr(logging, CONFIG.log_level.upper())
     format = "%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s"
     logging.basicConfig(
         level=level,
@@ -159,7 +159,7 @@ def digitize_sketches(
     for m in markings:
         m: BytesIO = georeference(m, bbox, bgr=False)  # type: ignore
         m: FeatureCollection = polygonize(m, layer_name=file_name)  # type: ignore
-        m: FeatureCollection = post_process(m, file_name)
+        m: FeatureCollection = post_process(m, file_name, bbox)
         l.append(m)
     if len(l) == 0:
         raise MarkingDetectionError(

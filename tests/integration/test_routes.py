@@ -233,7 +233,6 @@ def test_api_status_uuid_sketch_map(uuid_create, flask_client):
     (
         "raster-results",
         "vector-results",
-        "centroid-results",
     ),
 )
 def test_api_status_uuid_digitize(uuid_digitize, type_, flask_client):
@@ -306,7 +305,6 @@ def test_api_download_uuid_sketch_map(uuid_create, flask_client):
     "type_",
     [
         "vector-results",
-        "centroid-results",
         "raster-results",
     ],
 )

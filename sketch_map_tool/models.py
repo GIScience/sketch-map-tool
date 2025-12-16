@@ -26,9 +26,6 @@ class Bbox:
         lat_centroid = (self.lat_min + self.lat_max) / 2
         return (lon_centroid, lat_centroid)
 
-    def asdict(self):
-        return [self.lon_min, self.lat_min, self.lon_max, self.lat_max]
-
     def __str__(self):
         # NOTE: this should probably be a WKT representation
         return f"{self.lon_min},{self.lat_min},{self.lon_max},{self.lat_max}"

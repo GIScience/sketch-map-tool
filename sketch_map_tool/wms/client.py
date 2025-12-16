@@ -7,7 +7,7 @@ from markupsafe import escape
 from PIL import Image, UnidentifiedImageError
 from requests import ReadTimeout, Response
 
-from sketch_map_tool.config import get_config_value
+from sketch_map_tool.config import CONFIG
 from sketch_map_tool.exceptions import MapGenerationError
 from sketch_map_tool.helpers import N_
 from sketch_map_tool.models import Bbox, Size
@@ -47,8 +47,8 @@ def get_map(
     format: Literal["png", "jpeg"],
 ) -> Response:
     """Request a map from the WMS."""
-    url = get_config_value(f"wms-url-{layer}")
-    layers = get_config_value(f"wms-layers-{layer}")
+    url = getattr(CONFIG, f"wms_url_{layer.replace('-', '_')}")
+    layers = getattr(CONFIG, f"wms_layers_{layer.replace('-', '_')}")
     params = {
         "REQUEST": "GetMap",
         "FORMAT": "image/{0}".format(format),
@@ -66,7 +66,7 @@ def get_map(
             params,
             stream=True,
             # connect timeout (5 seconds), read_timeout (10 minutes)
-            timeout=(10, int(get_config_value("wms-read-timeout"))),
+            timeout=(10, int(CONFIG.wms_read_timeout)),
         )
     except ReadTimeout:
         raise MapGenerationError(
