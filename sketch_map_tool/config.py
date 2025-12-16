@@ -38,7 +38,8 @@ class Config(BaseSettings):
     redis_host: str = "localhost"
     redis_port: str = "6379"
     redis_db_number: str = ""
-    redis_password: str | None = None
+    redis_password: str = ""
+    redis_username: str = ""
     user_agent: str = "sketch-map-tool"
     weights_dir: str = str(get_project_root() / "weights")  # TODO: make this a Path
     wms_layers_esri_world_imagery: str = "world_imagery"
@@ -73,15 +74,16 @@ class Config(BaseSettings):
     @computed_field
     @property
     def broker_url(self) -> str:
-        if self.redis_password is None:
-            return "redis://{host}:{port}/{db_number}".format(
+        if self.redis_password or self.redis_username:
+            return "redis://{username}{password}@{host}:{port}/{db_number}".format(
+                username=self.redis_username,
+                password=":" + self.redis_password,
                 host=self.redis_host,
                 port=self.redis_port,
                 db_number=self.redis_db_number,
             )
         else:
-            return "redis://:{password}@{host}:{port}/{db_number}".format(
-                password=self.redis_password,
+            return "redis://{host}:{port}/{db_number}".format(
                 host=self.redis_host,
                 port=self.redis_port,
                 db_number=self.redis_db_number,
