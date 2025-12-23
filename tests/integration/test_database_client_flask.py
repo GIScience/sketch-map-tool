@@ -119,3 +119,9 @@ def test_blob_timestamp(file_ids):
         raw = curs.fetchone()
     timestamp = raw[0]
     assert isinstance(timestamp, datetime)
+
+
+@pytest.mark.usefixtures("uuid_create", "uuid_digitize")
+def test_select_usage_statistic(flask_app):
+    with flask_app.app_context():
+        client_flask.select_usage_statistic()

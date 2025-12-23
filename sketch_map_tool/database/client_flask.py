@@ -216,3 +216,83 @@ def update_map_frame_downloaded(uuid: UUID):
     db_conn = open_connection()
     with db_conn.cursor() as curs:
         curs.execute(update_query, [uuid])
+
+
+def select_usage_statistic():
+    create_query = """
+        CREATE OR REPLACE VIEW usage_statistic AS
+        SELECT
+            sm.uuid,
+            sm.bbox,
+            sm.bbox_wgs84,
+            sm.centroid,
+            sm.centroid_wgs84,
+            sm.format,
+            sm.orientation,
+            sm.layer,
+            sm.created,
+            sm.downloaded,
+            Coalesce(digitize.uploads, 0::bigint) AS uploads,
+            Coalesce(digitize.downloads, 0::bigint) AS downloads,
+            Coalesce(digitize.downloads_raster, 0::bigint) AS downloads_raster,
+            Coalesce(digitize.downloads_vector, 0::bigint) AS downloads_vector,
+            Coalesce(digitize.consenses, 0::bigint) AS consenses
+        FROM (
+            SELECT
+                mf.uuid,
+                mf.bbox,
+                mf.bbox_wgs84,
+                mf.centroid,
+                mf.centroid_wgs84,
+                mf.format,
+                mf.orientation,
+                mf.layer,
+                mf.created,
+                mf.downloaded
+            FROM
+                map_frame mf) sm
+            LEFT JOIN (
+                SELECT
+                    blob.map_frame_uuid AS uuid,
+                    Count(*) AS uploads,
+                    Sum(
+                        CASE WHEN blob.consent THEN
+                            1
+                        ELSE
+                            0
+                        END) AS consenses,
+                    Sum(
+                        CASE WHEN (
+                            blob.downloaded_raster IS NOT NULL
+                            OR blob.downloaded_vector IS NOT NULL
+                        ) THEN
+                            1
+                        ELSE
+                            0
+                        END) AS downloads,
+                    Sum(
+                        CASE WHEN blob.downloaded_raster IS NOT NULL THEN
+                            1
+                        ELSE
+                            0
+                        END) AS downloads_raster,
+                    Sum(
+                        CASE WHEN blob.downloaded_vector IS NOT NULL THEN
+                            1
+                        ELSE
+                            0
+                        END) AS downloads_vector
+                FROM
+                    blob
+                WHERE
+                    blob.map_frame_uuid IS NOT NULL
+                GROUP BY
+                    blob.map_frame_uuid) digitize ON digitize.uuid = sm.uuid;
+    """
+    db_conn = open_connection()
+    with db_conn.cursor() as curs:
+        curs.execute(create_query)
+    select_query = "SELECT * FROM usage_statistic"
+    with db_conn.cursor() as curs:
+        curs.execute(select_query)
+        return curs.fetchall()

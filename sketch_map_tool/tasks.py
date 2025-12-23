@@ -121,6 +121,7 @@ def generate_sketch_map(
         map_img,
         self.request.id,
         bbox,
+        bbox_wgs84,
         format_,
         orientation,
         layer,

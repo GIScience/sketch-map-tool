@@ -36,6 +36,7 @@ def insert_map_frame(
     file: BytesIO,
     uuid: UUID,
     bbox: Bbox,
+    bbox_wgs84: Bbox,
     format_: PaperFormat,
     orientation: str,
     layer: str,
@@ -50,14 +51,14 @@ def insert_map_frame(
             uuid UUID PRIMARY KEY,
             file BYTEA,
             bbox VARCHAR,
-            lat FLOAT,
-            lon FLOAT,
+            bbox_wgs84 VARCHAR,
+            centroid VARCHAR,
+            centroid_wgs84 VARCHAR,
             format VARCHAR,
             orientation VARCHAR,
             layer VARCHAR,
             version VARCHAR,
-            aruco BOOLEAN DEFAULT FALSE,
-            ts TIMESTAMP WITH TIME ZONE DEFAULT now(),
+            created TIMESTAMP WITH TIME ZONE DEFAULT now(),
             downloaded TIMESTAMP WITH TIME ZONE
             )
     """
@@ -66,12 +67,12 @@ def insert_map_frame(
             uuid,
             file,
             bbox,
-            lat,
-            lon,
+            bbox_wgs84,
+            centroid,
+            centroid_wgs84,
             format,
             orientation,
             layer,
-            aruco,
             version
             )
         VALUES (
@@ -83,7 +84,7 @@ def insert_map_frame(
             %s,
             %s,
             %s,
-            True,
+            %s,
             %s)
     """
     with db_conn.cursor() as curs:
@@ -94,8 +95,9 @@ def insert_map_frame(
                 str(uuid),
                 file.read(),
                 str(bbox),
-                bbox.centroid[0],
-                bbox.centroid[1],
+                str(bbox_wgs84),
+                str(bbox.centroid),
+                str(bbox_wgs84.centroid),
                 str(format_),
                 orientation,
                 layer,
@@ -107,7 +109,7 @@ def insert_map_frame(
 def cleanup_map_frames():
     """Cleanup map frames which are old and without consent.
 
-    Only set file to null. Keep metadata.
+    Only set file and bbox to null. Keep metadata.
     This function is called by a periodic celery task.
     """
     query = """
@@ -115,9 +117,10 @@ def cleanup_map_frames():
         map_frame
     SET
         file = NULL,
-        bbox = NULL
+        bbox = NULL,
+        bbox_wgs84 = NULL
     WHERE
-        ts < NOW() - INTERVAL %s
+        created < NOW() - INTERVAL %s
         AND NOT EXISTS (
             SELECT
                 *
