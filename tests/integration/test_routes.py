@@ -18,11 +18,11 @@ def map_frame_legacy_2024_04_15(flask_app, uuid_create, map_frame):
     """Legacy map frames in DB do not have bbox, lon, lat and format set."""
     with flask_app.app_context():
         select_query = """
-        SELECT bbox, centroid, format, orientation, layer, version
+        SELECT bbox, lat, lon, format, orientation, layer, version
         FROM map_frame WHERE uuid = %s
         """
         update_query = """
-        UPDATE map_frame SET bbox = NULL, centroid = NULL, format = NULL,
+        UPDATE map_frame SET bbox = NULL, lat = NULL, lon = Null, format = NULL,
             orientation = NULL, layer = NULL, version = NULL
         WHERE uuid = %s
         """
@@ -37,7 +37,7 @@ def map_frame_legacy_2024_04_15(flask_app, uuid_create, map_frame):
     with flask_app.app_context():
         update_query = """
         UPDATE map_frame
-        SET bbox = %s, centroid = %s, format = %s,
+        SET bbox = %s, lat = %s, lon = %s, format = %s,
             orientation = %s, layer = %s, version = %s
         WHERE uuid = %s
         """
