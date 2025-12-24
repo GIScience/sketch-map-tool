@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+import shapely
 from numpy.typing import NDArray
 
 from sketch_map_tool.exceptions import ValidationError
@@ -20,14 +21,26 @@ class Bbox:
     lat_max: float
 
     @property
-    def centroid(self) -> tuple:
+    def centroid(self) -> shapely.geometry.Point:
         """The coordinates of the centroid."""
-        lon_centroid = (self.lon_min + self.lon_max) / 2
-        lat_centroid = (self.lat_min + self.lat_max) / 2
-        return (lon_centroid, lat_centroid)
+        return shapely.geometry.box(
+            self.lon_min,
+            self.lat_min,
+            self.lon_max,
+            self.lat_max,
+        ).centroid
 
-    def __str__(self):
-        # NOTE: this should probably be a WKT representation
+    @property
+    def wkt(self) -> str:
+        """The coordinates of the centroid."""
+        return shapely.geometry.box(
+            self.lon_min,
+            self.lat_min,
+            self.lon_max,
+            self.lat_max,
+        ).wkt
+
+    def __str__(self) -> str:
         return f"{self.lon_min},{self.lat_min},{self.lon_max},{self.lat_max}"
 
 
