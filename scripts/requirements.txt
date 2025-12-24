@@ -1,0 +1,5 @@
+certifi==2025.11.12
+numpy==2.4.0
+psycopg2==2.9.11
+pyproj==3.7.2
+shapely==2.1.2
