@@ -11,6 +11,7 @@ dependencies = [
     "flask-babel>=4.0.0",
     "flower>=2.0.1",
     "gdal==3.6.2",
+    "geoip2>=5.2.0",
     "geojson>=3.2.0",
     "kaleido==0.2.1", # Not working with '^', see https://github.com/plotly/Kaleido/issues/125
     "matplotlib>=3.10.1",
@@ -114,6 +115,8 @@ select = [
    "Q",    # flake8-quotes
    "W",    # pycodestyle Warning
    "C90",  # mccabe
+   "FAST", # FastAPI
+   "INT",  # flake8-gettext
 ]
 
 [tool.pytest.ini_options]
