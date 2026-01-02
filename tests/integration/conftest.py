@@ -217,8 +217,13 @@ def uuid_create(
     flask_client: FlaskClient,
     celery_app,
     tmp_path_factory,
+    monkeypatch_session,
 ) -> str:
     """UUID after request to /create and successful sketch map generation."""
+    monkeypatch_session.setattr(
+        "sketch_map_tool.routes.geo_ip_lookup",
+        lambda *_: ("United Kingdom", "GB", "Boxford", "POINT (-1.25 51.75)"),
+    )
     response = flask_client.post(
         "/create/results",
         data=params,
