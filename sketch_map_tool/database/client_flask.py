@@ -1,3 +1,4 @@
+from pathlib import Path
 from uuid import UUID
 
 import psycopg2
@@ -218,7 +219,7 @@ def update_map_frame_downloaded(uuid: UUID):
         curs.execute(update_query, [uuid])
 
 
-def select_usage_statistic():
+def write_usage_statistic_to_csv() -> Path:
     create_query = """
         CREATE OR REPLACE VIEW usage_statistic AS
         SELECT
@@ -301,10 +302,13 @@ def select_usage_statistic():
                 GROUP BY
                     blob.map_frame_uuid) digitize ON digitize.uuid = sm.uuid;
     """
+    path = Path(CONFIG.data_dir) / "usage-statistic.csv"
     db_conn = open_connection()
-    with db_conn.cursor() as curs:
-        curs.execute(create_query)
-    select_query = "SELECT * FROM usage_statistic"
-    with db_conn.cursor() as curs:
-        curs.execute(select_query)
-        return curs.fetchall()
+    with db_conn.cursor() as cur:
+        cur.execute(create_query)
+        with open(path, "w") as file:
+            cur.copy_expert(
+                "COPY (SELECT * FROM usage_statistic ORDER BY created) TO STDOUT WITH CSV HEADER",
+                file,
+            )
+    return path
