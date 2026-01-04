@@ -39,6 +39,10 @@ form {
     display: inline !important;
 }
 
+.filebokz .files.file-previews .file {
+    background-color: transparent;
+    color: inherit;
+}
 
 #data-protection-section {
     display: flex;
