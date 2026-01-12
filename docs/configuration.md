@@ -28,8 +28,6 @@ For running the services using Docker Compose set broker URL and result backend 
 
 ```toml
 postgres_host = "postgres"
-postgres_password = "smt"
-postgres_user = "smt"
 redis_host = "redis"
 ```
 
@@ -41,8 +39,6 @@ configuration via environment variables is done like this:
 
 ```sh
 SMT_POSTGRES_HOST = "postgres"
-SMT_POSTGRES_PASSWORD = "smt"
-SMT_POSTGRES_USER = "smt"
 SMT_REDIS_HOST = "redis"
 ```
 

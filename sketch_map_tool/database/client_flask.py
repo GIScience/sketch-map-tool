@@ -1,3 +1,4 @@
+from pathlib import Path
 from uuid import UUID
 
 import psycopg2
@@ -218,18 +219,24 @@ def update_map_frame_downloaded(uuid: UUID):
         curs.execute(update_query, [uuid])
 
 
-def select_usage_statistic():
+def write_usage_statistic_to_csv() -> Path:
     create_query = """
         CREATE OR REPLACE VIEW usage_statistic AS
         SELECT
             sm.uuid,
             sm.bbox,
             sm.bbox_wgs84,
-            sm.lat,
-            sm.lon,
+            sm.centroid,
+            sm.centroid_wgs84,
             sm.format,
             sm.orientation,
             sm.layer,
+            sm.ip,
+            sm.user_agent,
+            sm.geo_ip_city,
+            sm.geo_ip_country,
+            sm.geo_ip_country_iso_code,
+            sm.geo_ip_centroid_wgs84,
             sm.created,
             sm.downloaded,
             Coalesce(digitize.uploads, 0::bigint) AS uploads,
@@ -242,11 +249,17 @@ def select_usage_statistic():
                 mf.uuid,
                 mf.bbox,
                 mf.bbox_wgs84,
-                mf.lat,
-                mf.lon,
+                mf.centroid,
+                mf.centroid_wgs84,
                 mf.format,
                 mf.orientation,
                 mf.layer,
+                mf.ip,
+                mf.user_agent,
+                mf.geo_ip_city,
+                mf.geo_ip_country,
+                mf.geo_ip_country_iso_code,
+                mf.geo_ip_centroid_wgs84,
                 mf.created,
                 mf.downloaded
             FROM
@@ -289,10 +302,13 @@ def select_usage_statistic():
                 GROUP BY
                     blob.map_frame_uuid) digitize ON digitize.uuid = sm.uuid;
     """
+    path = Path(CONFIG.data_dir) / "usage-statistic.csv"
     db_conn = open_connection()
-    with db_conn.cursor() as curs:
-        curs.execute(create_query)
-    select_query = "SELECT * FROM usage_statistic"
-    with db_conn.cursor() as curs:
-        curs.execute(select_query)
-        return curs.fetchall()
+    with db_conn.cursor() as cur:
+        cur.execute(create_query)
+        with open(path, "w") as file:
+            cur.copy_expert(
+                "COPY (SELECT * FROM usage_statistic ORDER BY created) TO STDOUT WITH CSV HEADER",
+                file,
+            )
+    return path
