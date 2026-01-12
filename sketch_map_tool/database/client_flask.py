@@ -33,7 +33,14 @@ def close_connection(e=None):
 
 
 def insert_files(
-    files, consent: bool
+    files,
+    consent: bool,
+    ip: str | None = None,
+    user_agent: str | None = None,
+    geo_ip_city: str | None = None,
+    geo_ip_country: str | None = None,
+    geo_ip_country_iso_code: str | None = None,
+    geo_ip_centroid_wgs84: str | None = None,
 ) -> tuple[list[int], list[str], list[str], list[Bbox], list[str]]:
     """Insert uploaded files as blob into the database and return ID, UUID and name.
 
@@ -49,7 +56,13 @@ def insert_files(
         ts TIMESTAMP WITH TIME ZONE DEFAULT now(),
         digitize_uuid UUID,
         downloaded_vector TIMESTAMP WITH TIME ZONE,
-        downloaded_raster TIMESTAMP WITH TIME ZONE
+        downloaded_raster TIMESTAMP WITH TIME ZONE,
+        ip VARCHAR DEFAULT NULL,
+        user_agent VARCHAR DEFAULT NULL,
+        geo_ip_city VARCHAR DEFAULT NULL,
+        geo_ip_country VARCHAR DEFAULT NULL,
+        geo_ip_country_iso_code VARCHAR DEFAULT NULL,
+        geo_ip_centroid_wgs84 VARCHAR DEFAULT NULL
         )
     """
     insert_query = """
@@ -57,8 +70,21 @@ def insert_files(
         map_frame_uuid,
         file_name,
         file,
-        consent)
+        consent,
+        ip,
+        user_agent,
+        geo_ip_city,
+        geo_ip_country,
+        geo_ip_country_iso_code,
+        geo_ip_centroid_wgs84
+        )
     VALUES (
+        %s,
+        %s,
+        %s,
+        %s,
+        %s,
+        %s,
         %s,
         %s,
         %s,
@@ -86,6 +112,12 @@ def insert_files(
                     secure_filename(file.filename),
                     file_content,
                     consent,
+                    ip,
+                    user_agent,
+                    geo_ip_city,
+                    geo_ip_country,
+                    geo_ip_country_iso_code,
+                    geo_ip_centroid_wgs84,
                 ),
             )
             result = curs.fetchone()
