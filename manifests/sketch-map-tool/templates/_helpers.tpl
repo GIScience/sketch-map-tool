@@ -49,3 +49,74 @@ Selector labels
 app.kubernetes.io/name: {{ include "sketch-map-tool.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{- define "sketch-map-tool.postgresVars" -}}
+- name: SMT_POSTGRES_HOST
+  value: {{ ternary (printf "%s-postgres" .Release.Name) .Values.postgres.external.host .Values.postgres.enabled }}
+{{- with .Values.postgres.external.port }}
+- name: SMT_POSTGRES_PORT
+  value: {{ quote .Values.postgres.external.port }}
+{{- end }}
+- name: SMT_POSTGRES_DBNAME
+  {{- if .Values.postgres.enabled }}
+  {{- if .Values.postgres.userDatabase.name.secretKey }}
+  valueFrom:
+    secretKeyRef:
+      key: {{ .Values.postgres.userDatabase.name.secretKey }}
+      name: {{ .Values.postgres.userDatabase.existingSecret }}
+  {{- else }}
+  value: {{ .Values.postgres.userDatabase.name.value }}
+  {{- end }}
+  {{- else }}
+  value: {{ .Values.postgres.external.database }}
+  {{- end }}
+- name: SMT_POSTGRES_USER
+  {{- if .Values.postgres.enabled }}
+  {{- if .Values.postgres.userDatabase.user.secretKey }}
+  valueFrom:
+  secretKeyRef:
+    key: {{ .Values.postgres.userDatabase.user.secretKey }}
+    name: {{ .Values.postgres.userDatabase.existingSecret }}
+  {{- else }}
+  value: {{ .Values.postgres.userDatabase.user.value }}
+  {{- end }}
+  {{- else }}
+  value: {{ .Values.postgres.external.user }}
+  {{- end }}
+- name: SMT_POSTGRES_PASSWORD
+  {{- if .Values.postgres.enabled }}
+  {{- if .Values.postgres.userDatabase.password.secretKey }}
+  valueFrom:
+  secretKeyRef:
+    key: {{ .Values.postgres.userDatabase.password.secretKey }}
+    name: {{ .Values.postgres.userDatabase.existingSecret }}
+  {{- else }}
+  value: {{ .Values.postgres.userDatabase.password.value }}
+  {{- end }}
+  {{- else }}
+  value: {{ .Values.postgres.external.password }}
+  {{- end }}
+{{- end }}
+
+{{- define "sketch-map-tool.redisVars" -}}
+- name: SMT_REDIS_HOST
+  value: {{ ternary (printf "%s-redis" .Release.Name) .Values.redis.external.host .Values.redis.enabled }}
+{{- with .Values.redis.external.port }}
+- name: SMT_REDIS_PORT
+  value: {{ quote .Values.redis.external.port }}
+{{- end }}
+{{- if not .Values.redis.enabled }}
+{{- with .Values.redis.external.dbNumber }}
+- name: SMT_REDIS_DB_NUMBER
+  value: {{ quote .Values.redis.external.dbNumber }}
+{{- end }}
+{{- with .Values.redis.external.username }}
+- name: SMT_REDIS_USERNAME
+  value: {{ quote .Values.redis.external.username }}
+{{- end }}
+{{- with .Values.redis.external.password }}
+- name: SMT_REDIS_PASSWORD
+  value: {{ quote .Values.redis.external.password }}
+{{- end }}
+{{- end }}
+{{- end }}

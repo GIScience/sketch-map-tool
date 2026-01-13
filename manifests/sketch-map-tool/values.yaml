@@ -117,9 +117,10 @@ postgres:
   # When enabled groundhog2k/postgres helm chart is deployed along side the SketchMapTool. Set to false when using your own Postgres database in- or outside of Kubernetes.
   # For full values see here https://artifacthub.io/packages/helm/groundhog2k/postgres?modal=values
   enabled: true
-  # When postgres.enabled is false set the connection credentials here
+  # When postgres.enabled is false set the connection credentials here. Ignored otherwises
   external:
-    connectionString: ""
+    host: ""
+    # port: ""
     database: ""
     user: ""
     password: ""
@@ -169,9 +170,13 @@ redis:
   # When enabled groundhog2k/redis helm chart is deployed along side the SketchMapTool. Set to false when using your own redis cache in- or outside of Kubernetes.
   # For full values see here https://artifacthub.io/packages/helm/groundhog2k/redis?modal=values
   enabled: true
-  # When redis.enabled is false set the connection credentials here
+  # When redis.enabled is false set the connection credentials here. Ignored otherwises
   external:
-    connectionString: ""
+    host: ""
+    # port: ""
+    # dbNumber: ""
+    # username: ""
+    # password: ""
 
   resources:
     limits:
