@@ -44,6 +44,9 @@ spec:
             - --loglevel
             - INFO
             - -E
+          env:
+            {{- include "sketch-map-tool.postgresVars" . | nindent 12 }}
+            {{- include "sketch-map-tool.redisVars" . | nindent 12 }}
           {{- with .Values.celery.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
@@ -64,4 +67,4 @@ spec:
             claimName: {{ include "sketch-map-tool.fullname" . }}-celery-weights
         - name: config
           secret:
-            secretName: {{ include "sketch-map-tool.fullname" . }}-config
+            secretName: {{ include "sketch-map-tool.fullname" . }}-custom-config
