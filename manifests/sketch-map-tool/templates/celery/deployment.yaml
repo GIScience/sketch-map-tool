@@ -54,8 +54,10 @@ spec:
           volumeMounts:
             - name: weights
               mountPath: /app/weights
+          {{- if .Values.customConfig }}
             - name: config
               mountPath: /app/config
+          {{- end }}
       {{- with .Values.celery.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -65,6 +67,8 @@ spec:
         - name: weights
           persistentVolumeClaim:
             claimName: {{ include "sketch-map-tool.fullname" . }}-celery-weights
+        {{- if .Values.customConfig }}
         - name: config
           secret:
             secretName: {{ include "sketch-map-tool.fullname" . }}-custom-config
+        {{- end }}
