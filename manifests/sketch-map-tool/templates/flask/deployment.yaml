@@ -34,15 +34,19 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- if .Values.customConfig }}
           volumeMounts:
             - name: config
               mountPath: /app/config
+          {{- end }}
       {{- with .Values.flask.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       restartPolicy: Always
+      {{- if .Values.customConfig }}
       volumes:
         - name: config
           secret:
             secretName: {{ include "sketch-map-tool.fullname" . }}-custom-config
+      {{- end }}
