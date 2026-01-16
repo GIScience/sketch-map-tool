@@ -5,7 +5,7 @@
 celery:
   image:
     repository: repo.heigit.org/heigit/sketch-map-tool
-    tag: latest
+    tag: main
 
   # Configuration for the volume that holds the weights
   persistence:
@@ -26,7 +26,7 @@ celery:
 flask:
   image:
     repository: repo.heigit.org/heigit/sketch-map-tool
-    tag: latest
+    tag: main
 
   ingress:
     # Tell proxy to make flask public
@@ -55,7 +55,7 @@ flask:
 flower:
   image:
     repository: repo.heigit.org/heigit/sketch-map-tool
-    tag: latest
+    tag: main
   ingress:
     enabled: false
 
