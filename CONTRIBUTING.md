@@ -82,6 +82,6 @@ npm run lint:fix
 
 ### Pre-Commit Hooks
 
-[pre-commit](https://pre-commit.com/) is set up to run above mentioned tools (linters and formatters) prior to any git commit. In contrast to above described commands running these hooks will not apply any changes to the code base. Instead, 'pre-commit' checks if there would be any changes to be made.
+[prek](https://prek.j178.dev/) is set up to run above mentioned tools (linters and formatters) prior to any git commit. In contrast to above described commands running these hooks will not apply any changes to the code base. Instead, 'prek' checks if there would be any changes to be made.
 
-Tip: To run all hooks once execute `pre-commit run --all-files`
+Tip: To run all hooks once execute `uv run prek run --all-files`
