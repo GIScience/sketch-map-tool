@@ -8,7 +8,7 @@ The **Model Registry** maintains a collection of fine-tuned machine learning mod
 | Task                   | Model Name   | Modification    | Purpose                                                                       | URL Link                                                                       |
 | ---------------------- | ------------ | --------------  | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | Object Detection       | YOLO_OSM     | 6-Channel Input | Detects sketches on OSM                                                       | [download](https://downloads.ohsome.org/sketch-map-tool/weights/SMT-OSM.pt)    |
-| Object Detection       | YOLO_ESRI    | 6-Channel Input | Detects sketches on ESRI maps                                                 | [download](hhttps://downloads.ohsome.org/sketch-map-tool/weights/SMT-ESRI.pt)  |
+| Object Detection       | YOLO_ESRI    | 6-Channel Input | Detects sketches on ESRI maps                                                 | [download](https://downloads.ohsome.org/sketch-map-tool/weights/SMT-ESRI.pt)  |
 | Image Classification   | YOLO_CLS     | Standard RGB    | Classifies colors in sketches                                                 | [download](https://downloads.ohsome.org/sketch-map-tool/weights/SMT-CLS.pt)    |
 | Segmentation           | SAM2         | tandard RGB     | Performs segmentation on sketch                                               | [github](https://github.com/facebookresearch/sam2)                             |
 
