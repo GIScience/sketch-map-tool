@@ -1,7 +1,7 @@
 # Create bbox_wgs84, centroid and centroid_wgs84 columns
 # And put WKT inside.
 # Transform bbox coordinates to WKT.
-# Do not trust lat / lon (probably wrong order.)
+# Fix wrong lat / lon order
 
 
 import psycopg2

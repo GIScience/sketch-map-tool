@@ -40,12 +40,6 @@ def insert_map_frame(
     format_: PaperFormat,
     orientation: str,
     layer: str,
-    ip: str | None = None,
-    user_agent: str | None = None,
-    geo_ip_city: str | None = None,
-    geo_ip_country: str | None = None,
-    geo_ip_country_iso_code: str | None = None,
-    geo_ip_centroid_wgs84: str | None = None,
 ):
     """Insert map frame alongside map generation parameters into the database.
 
@@ -65,13 +59,7 @@ def insert_map_frame(
             layer VARCHAR,
             version VARCHAR,
             created TIMESTAMP WITH TIME ZONE DEFAULT now(),
-            downloaded TIMESTAMP WITH TIME ZONE,
-            ip VARCHAR DEFAULT NULL,
-            user_agent VARCHAR DEFAULT NULL,
-            geo_ip_city VARCHAR DEFAULT NULL,
-            geo_ip_country VARCHAR DEFAULT NULL,
-            geo_ip_country_iso_code VARCHAR DEFAULT NULL,
-            geo_ip_centroid_wgs84 VARCHAR DEFAULT NULL
+            downloaded TIMESTAMP WITH TIME ZONE
             )
     """
     insert_query = """
@@ -85,21 +73,9 @@ def insert_map_frame(
             format,
             orientation,
             layer,
-            version,
-            ip,
-            user_agent,
-            geo_ip_city,
-            geo_ip_country,
-            geo_ip_country_iso_code,
-            geo_ip_centroid_wgs84
+            version
             )
         VALUES (
-            %s,
-            %s,
-            %s,
-            %s,
-            %s,
-            %s,
             %s,
             %s,
             %s,
@@ -126,12 +102,6 @@ def insert_map_frame(
                 orientation,
                 layer,
                 __version__,
-                ip,
-                user_agent,
-                geo_ip_city,
-                geo_ip_country,
-                geo_ip_country_iso_code,
-                geo_ip_centroid_wgs84,
             ),
         )
 
@@ -142,7 +112,6 @@ def cleanup_map_frames():
     Only set file and bbox to null. Keep metadata.
     This function is called by a periodic celery task.
     """
-    # TODO: Should request IP, user_agent and geo ip data also be removed?
     query = """
     UPDATE
         map_frame

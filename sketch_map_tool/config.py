@@ -1,6 +1,5 @@
 import logging
 import os
-from pathlib import Path
 
 from pydantic import computed_field, field_validator
 from pydantic_settings import (
@@ -27,7 +26,6 @@ class Config(BaseSettings):
     cleanup_map_frames_interval: str = "12 months"
     data_dir: str = str(get_project_root() / "data")  # TODO: make this a Path
     esri_api_key: str = ""
-    geo_ip_database: Path | None = None
     log_level: str = "INFO"
     max_nr_simultaneous_uploads: int = 100
     model_type_sam: str = "vit_b"

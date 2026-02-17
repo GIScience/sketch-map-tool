@@ -1,4 +1,3 @@
-from pathlib import Path
 from uuid import UUID
 
 import psycopg2
@@ -35,12 +34,6 @@ def close_connection(e=None):
 def insert_files(
     files,
     consent: bool,
-    ip: str | None = None,
-    user_agent: str | None = None,
-    geo_ip_city: str | None = None,
-    geo_ip_country: str | None = None,
-    geo_ip_country_iso_code: str | None = None,
-    geo_ip_centroid_wgs84: str | None = None,
 ) -> tuple[list[int], list[str], list[str], list[Bbox], list[str]]:
     """Insert uploaded files as blob into the database and return ID, UUID and name.
 
@@ -56,13 +49,7 @@ def insert_files(
         ts TIMESTAMP WITH TIME ZONE DEFAULT now(),
         digitize_uuid UUID,
         downloaded_vector TIMESTAMP WITH TIME ZONE,
-        downloaded_raster TIMESTAMP WITH TIME ZONE,
-        ip VARCHAR DEFAULT NULL,
-        user_agent VARCHAR DEFAULT NULL,
-        geo_ip_city VARCHAR DEFAULT NULL,
-        geo_ip_country VARCHAR DEFAULT NULL,
-        geo_ip_country_iso_code VARCHAR DEFAULT NULL,
-        geo_ip_centroid_wgs84 VARCHAR DEFAULT NULL
+        downloaded_raster TIMESTAMP WITH TIME ZONE
         )
     """
     insert_query = """
@@ -70,21 +57,9 @@ def insert_files(
         map_frame_uuid,
         file_name,
         file,
-        consent,
-        ip,
-        user_agent,
-        geo_ip_city,
-        geo_ip_country,
-        geo_ip_country_iso_code,
-        geo_ip_centroid_wgs84
+        consent
         )
     VALUES (
-        %s,
-        %s,
-        %s,
-        %s,
-        %s,
-        %s,
         %s,
         %s,
         %s,
@@ -112,12 +87,6 @@ def insert_files(
                     secure_filename(file.filename),
                     file_content,
                     consent,
-                    ip,
-                    user_agent,
-                    geo_ip_city,
-                    geo_ip_country,
-                    geo_ip_country_iso_code,
-                    geo_ip_centroid_wgs84,
                 ),
             )
             result = curs.fetchone()
@@ -249,98 +218,3 @@ def update_map_frame_downloaded(uuid: UUID):
     db_conn = open_connection()
     with db_conn.cursor() as curs:
         curs.execute(update_query, [uuid])
-
-
-def write_usage_statistic_to_csv() -> Path:
-    create_query = """
-        CREATE OR REPLACE VIEW usage_statistic AS
-        SELECT
-            sm.uuid,
-            sm.bbox,
-            sm.bbox_wgs84,
-            sm.centroid,
-            sm.centroid_wgs84,
-            sm.format,
-            sm.orientation,
-            sm.layer,
-            sm.ip,
-            sm.user_agent,
-            sm.geo_ip_city,
-            sm.geo_ip_country,
-            sm.geo_ip_country_iso_code,
-            sm.geo_ip_centroid_wgs84,
-            sm.created,
-            sm.downloaded,
-            Coalesce(digitize.uploads, 0::bigint) AS uploads,
-            Coalesce(digitize.downloads, 0::bigint) AS downloads,
-            Coalesce(digitize.downloads_raster, 0::bigint) AS downloads_raster,
-            Coalesce(digitize.downloads_vector, 0::bigint) AS downloads_vector,
-            Coalesce(digitize.consenses, 0::bigint) AS consenses
-        FROM (
-            SELECT
-                mf.uuid,
-                mf.bbox,
-                mf.bbox_wgs84,
-                mf.centroid,
-                mf.centroid_wgs84,
-                mf.format,
-                mf.orientation,
-                mf.layer,
-                mf.ip,
-                mf.user_agent,
-                mf.geo_ip_city,
-                mf.geo_ip_country,
-                mf.geo_ip_country_iso_code,
-                mf.geo_ip_centroid_wgs84,
-                mf.created,
-                mf.downloaded
-            FROM
-                map_frame mf) sm
-            LEFT JOIN (
-                SELECT
-                    blob.map_frame_uuid AS uuid,
-                    Count(*) AS uploads,
-                    Sum(
-                        CASE WHEN blob.consent THEN
-                            1
-                        ELSE
-                            0
-                        END) AS consenses,
-                    Sum(
-                        CASE WHEN (
-                            blob.downloaded_raster IS NOT NULL
-                            OR blob.downloaded_vector IS NOT NULL
-                        ) THEN
-                            1
-                        ELSE
-                            0
-                        END) AS downloads,
-                    Sum(
-                        CASE WHEN blob.downloaded_raster IS NOT NULL THEN
-                            1
-                        ELSE
-                            0
-                        END) AS downloads_raster,
-                    Sum(
-                        CASE WHEN blob.downloaded_vector IS NOT NULL THEN
-                            1
-                        ELSE
-                            0
-                        END) AS downloads_vector
-                FROM
-                    blob
-                WHERE
-                    blob.map_frame_uuid IS NOT NULL
-                GROUP BY
-                    blob.map_frame_uuid) digitize ON digitize.uuid = sm.uuid;
-    """
-    path = Path(CONFIG.data_dir) / "usage-statistic.csv"
-    db_conn = open_connection()
-    with db_conn.cursor() as cur:
-        cur.execute(create_query)
-        with open(path, "w") as file:
-            cur.copy_expert(
-                "COPY (SELECT * FROM usage_statistic ORDER BY created) TO STDOUT WITH CSV HEADER",
-                file,
-            )
-    return path
