@@ -57,7 +57,11 @@ def select():
         else:
             continue
         migrated.append((bbox_, bbox_wgs84, centroid, centroid_wgs84, uuid))
-    query = "UPDATE map_frame SET bbox = %s, bbox_wgs84 = %s, centroid = %s, centroid_wgs84= %s WHERE uuid = %s"
+    query = """
+        UPDATE map_frame
+        SET bbox = %s, bbox_wgs84 = %s, centroid = %s, centroid_wgs84= %s
+        WHERE uuid = %s;
+    """
     con = psycopg2.connect(host="localhost", port="5444", user="smt", password="smt")
     cur = con.cursor()
     cur.executemany(query, migrated)
