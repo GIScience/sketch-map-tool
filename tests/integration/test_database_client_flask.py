@@ -1,4 +1,3 @@
-import csv
 from datetime import datetime
 from io import BytesIO
 from uuid import uuid4
@@ -6,8 +5,6 @@ from uuid import uuid4
 import pytest
 from flask import g
 from psycopg2.extensions import connection
-from pytest_approval import get_uuid_scrubber, verify
-from pytest_approval.scrub import get_datetime_scrubber
 from werkzeug.datastructures import FileStorage
 
 from sketch_map_tool.database import client_flask
@@ -122,29 +119,3 @@ def test_blob_timestamp(file_ids):
         raw = curs.fetchone()
     timestamp = raw[0]
     assert isinstance(timestamp, datetime)
-
-
-@pytest.mark.usefixtures("uuid_digitize")
-def test_select_usage_statistic(flask_app):
-    with flask_app.app_context():
-        path = client_flask.write_usage_statistic_to_csv()
-        with open(path) as csvfile:
-            assert csvfile is not None or ""
-            for row in csv.reader(csvfile):
-                assert row is not None or ""
-
-
-@pytest.mark.usefixtures("uuid_digitize")
-@pytest.mark.skip(
-    "Depeding on test run scope (Suite or File) CSV file will look different"
-)
-def test_select_usage_statistic_verify(flask_app):
-    with flask_app.app_context():
-        stats = client_flask.write_usage_statistic_to_csv().read_text()
-        scrub_datetime = get_datetime_scrubber("2026-01-11 12:56:40.313715+00")
-        scrub_uuid = get_uuid_scrubber()
-        assert verify(
-            stats,
-            extension=".csv",
-            scrub=(scrub_uuid, scrub_datetime),
-        )

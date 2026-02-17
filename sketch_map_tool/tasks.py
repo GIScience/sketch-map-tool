@@ -98,12 +98,6 @@ def generate_sketch_map(
     size: Size,
     scale: float,
     layer: str,
-    ip: str | None = None,
-    user_agent: str | None = None,
-    geo_ip_city: str | None = None,
-    geo_ip_country: str | None = None,
-    geo_ip_country_iso_code: str | None = None,
-    geo_ip_centroid_wgs84: str | None = None,
 ) -> BytesIO | AsyncResult:
     """Generate and returns a sketch map as PDF and stores the map frame in DB."""
     if layer.startswith("oam"):
@@ -131,12 +125,6 @@ def generate_sketch_map(
         format_,
         orientation,
         layer,
-        ip,
-        user_agent,
-        geo_ip_city,
-        geo_ip_country,
-        geo_ip_country_iso_code,
-        geo_ip_centroid_wgs84,
     )
     return map_pdf
 

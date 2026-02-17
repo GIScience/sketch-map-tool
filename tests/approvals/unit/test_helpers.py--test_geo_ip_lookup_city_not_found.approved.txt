@@ -1,1 +1,0 @@
-('Germany', 'DE', None, 'POINT (10.5 51.5)')

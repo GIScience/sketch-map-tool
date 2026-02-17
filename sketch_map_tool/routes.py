@@ -32,7 +32,6 @@ from sketch_map_tool.exceptions import (
 from sketch_map_tool.helpers import (
     N_,
     extract_errors,
-    geo_ip_lookup,
     merge,
     to_array,
     zip_,
@@ -100,10 +99,6 @@ def create_results_post(lang="en") -> Response:
     scale = float(request.form["scale"])
     layer = validate_layer(request.form["layer"])
 
-    user_agent = request.headers.get("User-Agent", None)
-    ip = request.headers.get("X-Forwarded-For", request.remote_addr)
-    geo_ip_response = geo_ip_lookup(ip, CONFIG.geo_ip_database)
-
     # Tasks
     task_sketch_map = tasks.generate_sketch_map.apply_async(
         args=(
@@ -114,9 +109,6 @@ def create_results_post(lang="en") -> Response:
             size,
             scale,
             layer,
-            ip,
-            user_agent,
-            *geo_ip_response,
         )
     )
     return redirect(

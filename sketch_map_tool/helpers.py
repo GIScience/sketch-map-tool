@@ -1,15 +1,12 @@
-import logging
 from io import BytesIO
 from pathlib import Path
 from typing import assert_never
 from zipfile import ZipFile
 
 import cv2
-import geoip2.database
 import numpy as np
 from billiard.exceptions import TimeLimitExceeded
 from celery.result import AsyncResult, GroupResult
-from geoip2.errors import AddressNotFoundError
 from geojson import Feature, FeatureCollection
 from numpy.typing import NDArray
 from reportlab.graphics.shapes import Drawing
@@ -112,19 +109,3 @@ def extract_errors(
                 if len(errors_) > 0:
                     errors = errors + [e.translate() for e in errors_]
     return errors
-
-
-def geo_ip_lookup(ip: str | None, database: Path | None) -> tuple[str | None, ...]:
-    if ip is not None and database is not None:
-        try:
-            with geoip2.database.Reader(str(database)) as reader:
-                geo_ip_city = reader.city(ip)
-                country = geo_ip_city.country.name
-                country_iso_code = geo_ip_city.country.iso_code
-                city = geo_ip_city.city.name
-                location = geo_ip_city.location
-                centroid_wgs84 = f"POINT ({location.longitude} {location.latitude})"
-            return (country, country_iso_code, city, centroid_wgs84)
-        except (FileNotFoundError, AddressNotFoundError) as error:
-            logging.error(error, exc_info=error)
-    return (None, None, None, None)
