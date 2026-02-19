@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: flower
-          image: "{{ .Values.flask.image.repository }}:{{ .Values.flask.image.tag }}"
+          image: "{{ .Values.flower.image.repository }}:{{ .Values.flower.image.tag }}"
           command:
             - celery
             - --app
