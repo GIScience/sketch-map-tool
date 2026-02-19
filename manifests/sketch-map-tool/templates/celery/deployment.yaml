@@ -32,7 +32,7 @@ spec:
               mountPath: /data/weights
       containers:
         - name: celery
-          image: "{{ .Values.celery.image.repository }}:{{ .Values.celery.image.tag }}"
+          image: "{{ .Values.celery.image.repository }}:{{ .Values.celery.image.tag | default .Chart.AppVersion }}"
           command:
             - celery
             - --app

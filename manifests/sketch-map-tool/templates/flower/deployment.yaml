@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: flower
-          image: "{{ .Values.flower.image.repository }}:{{ .Values.flower.image.tag }}"
+          image: "{{ .Values.flower.image.repository }}:{{ .Values.flower.image.tag | default .Chart.AppVersion }}"
           command:
             - celery
             - --app
