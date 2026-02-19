@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "sketch-map-tool.fullname" . }}-flask
+  labels:
+    {{- include "sketch-map-tool.labels" . | nindent 4 }}
+    app.kubernetes.io/component: flask
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: http
+  selector:
+    {{- include "sketch-map-tool.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: flask
