@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: flask
-          image: "{{ .Values.flask.image.repository }}:{{ .Values.flask.image.tag }}"
+          image: "{{ .Values.flask.image.repository }}:{{ .Values.flask.image.tag | default .Chart.AppVersion }}"
           command:
             - waitress-serve
             - sketch_map_tool.routes:app

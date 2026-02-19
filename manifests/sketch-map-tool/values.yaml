@@ -9,7 +9,8 @@
 celery:
   image:
     repository: repo.example.org/smt
-    tag: latest
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
 
   # Configuration for the volume that holds the weights
   persistence:
@@ -28,7 +29,8 @@ celery:
 flask:
   image:
     repository: repo.example.org/smt
-    tag: latest
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
 
   nodeSelector: {}
 
@@ -72,7 +74,8 @@ flask:
 flower:
   image:
     repository: repo.example.org/smt
-    tag: latest
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
 
   nodeSelector: {}
 
