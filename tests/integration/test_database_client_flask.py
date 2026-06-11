@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from io import BytesIO
 from uuid import uuid4
@@ -5,6 +6,8 @@ from uuid import uuid4
 import pytest
 from flask import g
 from psycopg2.extensions import connection
+from pytest_approval import get_uuid_scrubber, verify_json
+from pytest_approval.scrub import get_datetime_scrubber
 from werkzeug.datastructures import FileStorage
 
 from sketch_map_tool.database import client_flask
@@ -119,3 +122,40 @@ def test_blob_timestamp(file_ids):
         raw = curs.fetchone()
     timestamp = raw[0]
     assert isinstance(timestamp, datetime)
+
+
+@pytest.mark.usefixtures("uuid_digitize")
+def test_select_usage_statistic(flask_app):
+    with flask_app.app_context():
+        stats = client_flask.select_usage_statistics()
+        assert len(stats) > 0
+        assert list(stats[0].keys()) == [
+            "uuid",
+            "bbox",
+            "bbox_wgs84",
+            "centroid",
+            "centroid_wgs84",
+            "format",
+            "orientation",
+            "layer",
+            "created",
+            "downloaded",
+            "uploads",
+            "downloads",
+            "downloads_raster",
+            "downloads_vector",
+            "consenses",
+        ]
+
+
+@pytest.mark.usefixtures("uuid_digitize")
+@pytest.mark.skip("Depending on test run scope (Suite or File) output is different")
+def test_select_usage_statistic_verify(flask_app):
+    with flask_app.app_context():
+        stats = client_flask.select_usage_statistics()
+        scrub_datetime = get_datetime_scrubber("2026-01-11 12:56:40.313715+00")
+        scrub_uuid = get_uuid_scrubber()
+        assert verify_json(
+            json.dumps(stats, default=str),
+            scrub=(scrub_uuid, scrub_datetime),
+        )

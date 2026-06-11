@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block header_message %}
+{{ _('How much has the Sketch Map Tool been used?') }}
+{% endblock header_message %}
+
+{% block body %}
+<main class="container">
+	<h1>{{ _('Usage Charts') }}</h1>
+	{%- for chart in charts %}
+	<div id="chart">
+		<embed type="image/svg+xml" src={{ chart|safe }}>
+	</div>
+	{% endfor %}
+
+</main>
+{% endblock body %}

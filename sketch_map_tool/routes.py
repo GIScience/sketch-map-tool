@@ -16,7 +16,7 @@ from flask import (
 )
 from werkzeug import Response
 
-from sketch_map_tool import celery_app, definitions, tasks
+from sketch_map_tool import celery_app, definitions, tasks, usage_charts
 from sketch_map_tool import flask_app as app
 from sketch_map_tool.config import CONFIG
 from sketch_map_tool.database import client_flask as db_client_flask
@@ -84,6 +84,30 @@ def create(lang="en") -> str:
         lang=lang,
         esri_api_key=CONFIG.esri_api_key,
     )
+
+
+@app.get("/usage")
+@app.get("/<lang>/usage")
+def usage(lang="en"):
+    stats = db_client_flask.select_usage_statistics()
+    charts = []
+
+    chart = usage_charts.created_and_downloaded_sketch_maps(stats)
+    charts.append(chart.render_data_uri())
+
+    chart = usage_charts.uploads_and_downloads(stats)
+    charts.append(chart.render_data_uri())
+
+    chart = usage_charts.layer_distribution(stats)
+    charts.append(chart.render_data_uri())
+
+    chart = usage_charts.format_distribution(stats)
+    charts.append(chart.render_data_uri())
+
+    chart = usage_charts.result_download_distribution(stats)
+    charts.append(chart.render_data_uri())
+
+    return render_template("usage.html", charts=charts)
 
 
 @app.post("/create/results")
