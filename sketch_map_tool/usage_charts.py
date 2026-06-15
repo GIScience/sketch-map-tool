@@ -34,7 +34,8 @@ def created_and_downloaded_sketch_maps(stats: list[dict]) -> Graph:
     created_by_month = defaultdict(int, monthly_bins)
     downloaded_by_month = defaultdict(int, monthly_bins)
 
-    for month, c, d in zip(monthly_bins.keys(), created, downloaded):
+    for ts, c, d in zip(created_timestamps, created, downloaded):
+        month = ts.strftime(FMT)
         created_by_month[month] += c
         downloaded_by_month[month] += d
 
@@ -66,7 +67,8 @@ def uploads_and_downloads(stats: list[dict]) -> Graph:
     uploads_per_month = defaultdict(int, monthly_bins)
     downloads_per_month = defaultdict(int, monthly_bins)
 
-    for month, u, d in zip(monthly_bins.keys(), uploads, downloads):
+    for ts, u, d in zip(created_timestamps, uploads, downloads):
+        month = ts.strftime(FMT)
         uploads_per_month[month] += u
         downloads_per_month[month] += d
 
