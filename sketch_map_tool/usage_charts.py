@@ -43,7 +43,10 @@ def created_and_downloaded_sketch_maps(stats: list[dict]) -> Graph:
     downloaded_accumulated = list(accumulate(downloaded_by_month.values()))
     timestamps = list(monthly_bins.keys())
 
-    line_chart = pygal.Line()
+    line_chart = pygal.Line(
+        x_label_rotation=20,
+        x_labels_major_every=3,
+    )
     line_chart.title = _("How many sketch maps have been created and downloaded?")
     line_chart.x_labels = timestamps
     line_chart.add(_("Created"), created_accumulated)
@@ -76,7 +79,10 @@ def uploads_and_downloads(stats: list[dict]) -> Graph:
     downloads_accumulated = list(accumulate(downloads_per_month.values()))
     timestamps = list(monthly_bins.keys())
 
-    line_chart = pygal.Line()
+    line_chart = pygal.Line(
+        x_label_rotation=20,
+        x_labels_major_every=3,
+    )
     line_chart.title = _(
         (
             "For how many sketch maps have markings been "
@@ -100,7 +106,10 @@ def layer_distribution(stats: list[dict]) -> Graph:
     )
     counts = dict(Counter(layers))
 
-    bar_chart = pygal.HorizontalBar()
+    bar_chart = pygal.HorizontalBar(
+        print_values=True,
+        print_zeroes=False,
+    )
     bar_chart.title = _("For which layers have sketch maps been created?")
     for key, value in counts.items():
         bar_chart.add(key, value)
@@ -112,7 +121,10 @@ def format_distribution(stats: list[dict]) -> Graph:
     formats = [row["format"] for row in stats]
     counts = dict(Counter(formats))
 
-    bar_chart = pygal.HorizontalBar()
+    bar_chart = pygal.HorizontalBar(
+        print_values=True,
+        print_zeroes=False,
+    )
     bar_chart.title = _("For which format have sketch maps been created?")
     for key, value in counts.items():
         bar_chart.add(key, value)
@@ -135,9 +147,12 @@ def result_download_distribution(stats: list[dict]) -> Graph:
         downloads_raster.append(row["downloads_raster"])
         downloads_vector.append(row["downloads_vector"])
 
-    bar_chart = pygal.HorizontalBar()
+    bar_chart = pygal.HorizontalBar(
+        print_values=True,
+        print_zeroes=False,
+    )
     bar_chart.title = _("Which result types have been downloaded?")
-    bar_chart.add("None", sum(uploads) - sum(downloads))
+    bar_chart.add("None", abs(sum(uploads) - sum(downloads)))
     bar_chart.add("Any", sum(downloads))
     bar_chart.add("Raster", sum(downloads_raster))
     bar_chart.add("Vector", sum(downloads_vector))
@@ -149,7 +164,10 @@ def consent_distribution(stats: list[dict]):
     consensus = [row["consenses"] for row in stats]
     counts = dict(Counter(consensus))
 
-    bar_chart = pygal.HorizontalBar()
+    bar_chart = pygal.HorizontalBar(
+        print_values=True,
+        print_zeroes=False,
+    )
     bar_chart.title = _(
         (
             "How many sketch maps with markings have been uploaded where the user "
