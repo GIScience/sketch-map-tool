@@ -107,6 +107,9 @@ def usage(lang="en"):
     chart = usage_charts.result_download_distribution(stats)
     charts.append(chart.render_data_uri())
 
+    chart = usage_charts.consent_distribution(stats)
+    charts.append(chart.render_data_uri())
+
     return render_template("usage.html", charts=charts)
 
 
