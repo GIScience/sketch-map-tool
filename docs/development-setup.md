@@ -30,6 +30,12 @@ sudo apt install \
     libgdal-dev \
     libfreetype6-dev \
     libzbar0
+
+# Fedora
+sudo apt install \
+    gdal-dev \
+    freetype-dev \
+    zbar-libs
 ```
 
 ## Installation
