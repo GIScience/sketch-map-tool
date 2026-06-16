@@ -6,12 +6,14 @@
 
 {% block body %}
 <main class="container">
-	<h1>{{ _('Usage Charts') }}</h1>
+	<article>
+		<header>{{ _('Number of created Sketch Maps') }}</header>
+		<code style="font-size: 2rem;">{{ number_of_sketch_maps }}</code>
+	</article>
 	{%- for chart in charts %}
 	<div id="chart">
 		<embed type="image/svg+xml" src={{ chart|safe }}>
 	</div>
 	{% endfor %}
-
 </main>
 {% endblock body %}

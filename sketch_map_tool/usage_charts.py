@@ -19,7 +19,7 @@ def create_monthly_bins(start: datetime, end: datetime) -> dict:
     return month_series.to_dict()
 
 
-def created_and_downloaded_sketch_maps(stats: list[dict]) -> Graph:
+def get_created_sketch_maps(stats: list[dict]) -> Graph:
     created_timestamps = [row["created"] for row in stats]
     monthly_bins = create_monthly_bins(min(created_timestamps), max(created_timestamps))
 
@@ -40,22 +40,22 @@ def created_and_downloaded_sketch_maps(stats: list[dict]) -> Graph:
         downloaded_by_month[month] += d
 
     created_accumulated = list(accumulate(created_by_month.values()))
-    downloaded_accumulated = list(accumulate(downloaded_by_month.values()))
+    # downloaded_accumulated = list(accumulate(downloaded_by_month.values()))
     timestamps = list(monthly_bins.keys())
 
     line_chart = pygal.Line(
         x_label_rotation=20,
         x_labels_major_every=3,
     )
-    line_chart.title = _("How many sketch maps have been created and downloaded?")
+    line_chart.title = _("How many Sketch Maps have been generated?")
     line_chart.x_labels = timestamps
     line_chart.add(_("Created"), created_accumulated)
-    line_chart.add(_("Downloaded"), downloaded_accumulated)
+    # line_chart.add(_("Downloaded"), downloaded_accumulated)
 
     return line_chart
 
 
-def uploads_and_downloads(stats: list[dict]) -> Graph:
+def get_uploaded_markings_and_downloaded_results(stats: list[dict]) -> Graph:
     created_timestamps = [row["created"] for row in stats]
     monthly_bins = create_monthly_bins(min(created_timestamps), max(created_timestamps))
 
@@ -85,8 +85,8 @@ def uploads_and_downloads(stats: list[dict]) -> Graph:
     )
     line_chart.title = _(
         (
-            "For how many sketch maps have markings been "
-            "uploaded and results been download?"
+            "How many generated maps were uploaded with drawings, "
+            "processed by us, and then downloaded as final results?"
         )
     )
     line_chart.x_labels = timestamps
@@ -110,9 +110,11 @@ def layer_distribution(stats: list[dict]) -> Graph:
         print_values=True,
         print_zeroes=False,
     )
-    bar_chart.title = _("For which layers have sketch maps been created?")
+    bar_chart.title = _(
+        "Which baselayers were chosen most frequently for map generation?"
+    )
     for key, value in counts.items():
-        bar_chart.add(key, value)
+        bar_chart.add(key.upper(), value)
 
     return bar_chart
 
@@ -125,9 +127,12 @@ def format_distribution(stats: list[dict]) -> Graph:
         print_values=True,
         print_zeroes=False,
     )
-    bar_chart.title = _("For which format have sketch maps been created?")
-    for key, value in counts.items():
-        bar_chart.add(key, value)
+    bar_chart.title = _(
+        "Which paper size was chosen most frequently for map generation?"
+    )
+    counts_sorted_by_key = dict(sorted(counts.items()))
+    for key, value in counts_sorted_by_key.items():
+        bar_chart.add(key.title(), value)
 
     return bar_chart
 
@@ -152,8 +157,8 @@ def result_download_distribution(stats: list[dict]) -> Graph:
         print_zeroes=False,
     )
     bar_chart.title = _("Which result types have been downloaded?")
-    bar_chart.add("None", abs(sum(uploads) - sum(downloads)))
     bar_chart.add("Any", sum(downloads))
+    bar_chart.add("None", abs(sum(uploads) - sum(downloads)))
     bar_chart.add("Raster", sum(downloads_raster))
     bar_chart.add("Vector", sum(downloads_vector))
 
@@ -170,8 +175,8 @@ def consent_distribution(stats: list[dict]):
     )
     bar_chart.title = _(
         (
-            "How many sketch maps with markings have been uploaded where the user "
-            "agreed to let them be used for improvement of the Sketch Map Tool?"
+            "Consent: How many users agreed to let us use their "
+            "marked sketch maps for further improvement of the Sketch Map Tool?"
         )
     )
     try:
