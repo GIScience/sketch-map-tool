@@ -25,7 +25,7 @@ def create_monthly_bins(start: datetime, end: datetime) -> dict:
 
 
 def get_created_sketch_maps_number(stats):
-    # NOTE: created for usage numbers means actually created AND downloaded
+    # Sketch maps which has been created AND downloaded
     downloaded = []
     for row in stats:
         if row["downloaded"] is not None:
@@ -36,40 +36,33 @@ def get_created_sketch_maps_number(stats):
 
 
 def get_created_sketch_maps(stats: list[dict]) -> Graph:
-    # NOTE: created for usage numbers means actually created AND downloaded
-
-    created_timestamps = [row["created"] for row in stats]
+    # Sketch maps which has been created AND downloaded
+    created_timestamps = [
+        row["created"] for row in stats if row["downloaded"] is not None
+    ]
     monthly_bins = create_monthly_bins(min(created_timestamps), max(created_timestamps))
-
-    created = [1] * len(stats)
     downloaded = []
     for row in stats:
         if row["downloaded"] is not None:
             downloaded.append(1)
         else:
             downloaded.append(0)
-
-    created_by_month = defaultdict(int, monthly_bins)
     downloaded_by_month = defaultdict(int, monthly_bins)
-
-    for ts, c, d in zip(created_timestamps, created, downloaded):
+    for ts, d in zip(created_timestamps, downloaded):
         month = ts.strftime(FMT)
-        created_by_month[month] += c
         downloaded_by_month[month] += d
-
-    # created_accumulated = list(accumulate(created_by_month.values()))
     downloaded_accumulated = list(accumulate(downloaded_by_month.values()))
     timestamps = list(monthly_bins.keys())
 
     line_chart = pygal.Line(
         style=STYLE,
+        show_legend=False,
         x_label_rotation=20,
         x_labels_major_every=3,
     )
     line_chart.title = _("How many Sketch Maps have been created?")
     line_chart.x_labels = timestamps
-    # line_chart.add(_("Created"), created_accumulated)
-    line_chart.add(_("Created Sketch Maps"), downloaded_accumulated)
+    line_chart.add(_(""), downloaded_accumulated)
 
     return line_chart
 
@@ -79,43 +72,35 @@ def get_detected_markings_number(stats: list[dict]) -> int:
 
 
 def get_detected_markings(stats: list[dict]) -> Graph:
-    created_timestamps = [row["created"] for row in stats]
+    # only look at sketch maps for which download happened
+    created_timestamps = [
+        row["created"] for row in stats if row["downloaded"] is not None
+    ]
     monthly_bins = create_monthly_bins(min(created_timestamps), max(created_timestamps))
-
     downloads = [row["downloads"] for row in stats]
-    uploads = []
-    for row in stats:
-        if row["uploads"] > 0:
-            uploads.append(1)
-        else:
-            uploads.append(0)
-
-    uploads_per_month = defaultdict(int, monthly_bins)
     downloads_per_month = defaultdict(int, monthly_bins)
-
-    for ts, u, d in zip(created_timestamps, uploads, downloads):
+    for ts, d in zip(created_timestamps, downloads):
         month = ts.strftime(FMT)
-        uploads_per_month[month] += u
         downloads_per_month[month] += d
-
-    # uploads_accumulated = list(accumulate(uploads_per_month.values()))
     downloads_accumulated = list(accumulate(downloads_per_month.values()))
     timestamps = list(monthly_bins.keys())
 
     line_chart = pygal.Line(
         style=STYLE,
+        show_legend=False,
         x_label_rotation=20,
         x_labels_major_every=3,
     )
     line_chart.title = _("For how many Sketch Maps did we detect markings?")
     line_chart.x_labels = timestamps
-    line_chart.add(_("Sketch Maps with detected markings"), downloads_accumulated)
+    line_chart.add(_(""), downloads_accumulated)
 
     return line_chart
 
 
 def layer_distribution(stats: list[dict]) -> Graph:
-    layers = [row["layer"] for row in stats]
+    # only look at sketch maps for which downloads happened
+    layers = [row["layer"] for row in stats if row["downloaded"] is not None]
     layers = list(
         map(
             lambda layer: "oam" if layer.startswith("oam") else layer,
@@ -139,7 +124,8 @@ def layer_distribution(stats: list[dict]) -> Graph:
 
 
 def format_distribution(stats: list[dict]) -> Graph:
-    formats = [row["format"] for row in stats]
+    # only look at sketch maps for which downloads happened
+    formats = [row["format"] for row in stats if row["downloaded"] is not None]
     counts = dict(Counter(formats))
 
     bar_chart = pygal.HorizontalBar(
@@ -164,10 +150,15 @@ def result_download_distribution(stats: list[dict]) -> Graph:
     downloads_vector = []
 
     for row in stats:
+        if row["downloaded"] is None:
+            # Sketch Map never got downloaded after creation
+            continue
+
         if row["uploads"] > 0:
             uploads.append(1)
         else:
             uploads.append(0)
+
         downloads.append(row["downloads"])
         downloads_raster.append(row["downloads_raster"])
         downloads_vector.append(row["downloads_vector"])
@@ -187,7 +178,8 @@ def result_download_distribution(stats: list[dict]) -> Graph:
 
 
 def consent_distribution(stats: list[dict]):
-    consensus = [row["consenses"] for row in stats]
+    # only look at sketch maps for which upload happened
+    consensus = [row["consenses"] for row in stats if row["uploads"] > 0]
     counts = dict(Counter(consensus))
 
     bar_chart = pygal.HorizontalBar(
