@@ -6,6 +6,7 @@
 
 {% block body %}
 <main class="container">
+	<p>Statistics covering the period from March 2025 to present.</p>
 	<div class="grid">
 		<article>
 			<header>{{ _('How many Sketch Maps have been created?') }}</header>
@@ -16,10 +17,12 @@
 			<code style="font-size: 2rem;">{{ number_of_detected_markings }}</code>
 		</article>
 	</div>
+	<br>
 	{%- for chart in charts %}
-	<div id="chart">
-		<embed type="image/svg+xml" src={{ chart|safe }}>
-	</div>
+	<article id="chart" style="display: grid; place-items: center;">
+		<embed style="max-width: 1280px;" type="image/svg+xml" src={{ chart|safe }}>
+	</article>
+	<br>
 	{% endfor %}
 </main>
 {% endblock body %}

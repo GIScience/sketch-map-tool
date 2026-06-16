@@ -7,8 +7,13 @@ import pygal
 from dateutil.relativedelta import relativedelta
 from flask_babel import _
 from pygal.graph.graph import Graph
+from pygal.style import Style
 
 FMT = "%Y-%m"
+STYLE = Style(
+    background="transparent",
+    plot_background="transparent",
+)
 
 
 def create_monthly_bins(start: datetime, end: datetime) -> dict:
@@ -57,6 +62,7 @@ def get_created_sketch_maps(stats: list[dict]) -> Graph:
     timestamps = list(monthly_bins.keys())
 
     line_chart = pygal.Line(
+        style=STYLE,
         x_label_rotation=20,
         x_labels_major_every=3,
     )
@@ -97,6 +103,7 @@ def get_detected_markings(stats: list[dict]) -> Graph:
     timestamps = list(monthly_bins.keys())
 
     line_chart = pygal.Line(
+        style=STYLE,
         x_label_rotation=20,
         x_labels_major_every=3,
     )
@@ -118,6 +125,7 @@ def layer_distribution(stats: list[dict]) -> Graph:
     counts = dict(Counter(layers))
 
     bar_chart = pygal.HorizontalBar(
+        style=STYLE,
         print_values=True,
         print_zeroes=False,
     )
@@ -135,6 +143,7 @@ def format_distribution(stats: list[dict]) -> Graph:
     counts = dict(Counter(formats))
 
     bar_chart = pygal.HorizontalBar(
+        style=STYLE,
         print_values=True,
         print_zeroes=False,
     )
@@ -164,6 +173,7 @@ def result_download_distribution(stats: list[dict]) -> Graph:
         downloads_vector.append(row["downloads_vector"])
 
     bar_chart = pygal.HorizontalBar(
+        style=STYLE,
         print_values=True,
         print_zeroes=False,
     )
@@ -181,6 +191,7 @@ def consent_distribution(stats: list[dict]):
     counts = dict(Counter(consensus))
 
     bar_chart = pygal.HorizontalBar(
+        style=STYLE,
         print_values=True,
         print_zeroes=False,
     )
