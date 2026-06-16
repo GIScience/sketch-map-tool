@@ -19,7 +19,20 @@ def create_monthly_bins(start: datetime, end: datetime) -> dict:
     return month_series.to_dict()
 
 
+def get_created_sketch_maps_number(stats):
+    # NOTE: created for usage numbers means actually created AND downloaded
+    downloaded = []
+    for row in stats:
+        if row["downloaded"] is not None:
+            downloaded.append(1)
+        else:
+            downloaded.append(0)
+    return sum(downloaded)
+
+
 def get_created_sketch_maps(stats: list[dict]) -> Graph:
+    # NOTE: created for usage numbers means actually created AND downloaded
+
     created_timestamps = [row["created"] for row in stats]
     monthly_bins = create_monthly_bins(min(created_timestamps), max(created_timestamps))
 
@@ -39,23 +52,27 @@ def get_created_sketch_maps(stats: list[dict]) -> Graph:
         created_by_month[month] += c
         downloaded_by_month[month] += d
 
-    created_accumulated = list(accumulate(created_by_month.values()))
-    # downloaded_accumulated = list(accumulate(downloaded_by_month.values()))
+    # created_accumulated = list(accumulate(created_by_month.values()))
+    downloaded_accumulated = list(accumulate(downloaded_by_month.values()))
     timestamps = list(monthly_bins.keys())
 
     line_chart = pygal.Line(
         x_label_rotation=20,
         x_labels_major_every=3,
     )
-    line_chart.title = _("How many Sketch Maps have been generated?")
+    line_chart.title = _("How many Sketch Maps have been created?")
     line_chart.x_labels = timestamps
-    line_chart.add(_("Created"), created_accumulated)
-    # line_chart.add(_("Downloaded"), downloaded_accumulated)
+    # line_chart.add(_("Created"), created_accumulated)
+    line_chart.add(_("Created Sketch Maps"), downloaded_accumulated)
 
     return line_chart
 
 
-def get_uploaded_markings_and_downloaded_results(stats: list[dict]) -> Graph:
+def get_detected_markings_number(stats: list[dict]) -> int:
+    return sum([row["downloads"] for row in stats])
+
+
+def get_detected_markings(stats: list[dict]) -> Graph:
     created_timestamps = [row["created"] for row in stats]
     monthly_bins = create_monthly_bins(min(created_timestamps), max(created_timestamps))
 
@@ -75,7 +92,7 @@ def get_uploaded_markings_and_downloaded_results(stats: list[dict]) -> Graph:
         uploads_per_month[month] += u
         downloads_per_month[month] += d
 
-    uploads_accumulated = list(accumulate(uploads_per_month.values()))
+    # uploads_accumulated = list(accumulate(uploads_per_month.values()))
     downloads_accumulated = list(accumulate(downloads_per_month.values()))
     timestamps = list(monthly_bins.keys())
 
@@ -83,15 +100,9 @@ def get_uploaded_markings_and_downloaded_results(stats: list[dict]) -> Graph:
         x_label_rotation=20,
         x_labels_major_every=3,
     )
-    line_chart.title = _(
-        (
-            "How many generated maps were uploaded with drawings, "
-            "processed by us, and then downloaded as final results?"
-        )
-    )
+    line_chart.title = _("For how many Sketch Maps did we detect markings?")
     line_chart.x_labels = timestamps
-    line_chart.add(_("Uploads"), uploads_accumulated)
-    line_chart.add(_("Downloads"), downloads_accumulated)
+    line_chart.add(_("Sketch Maps with detected markings"), downloads_accumulated)
 
     return line_chart
 

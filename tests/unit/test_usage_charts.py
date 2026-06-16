@@ -77,7 +77,7 @@ def test_created_and_downloaded_sketch_maps():
 
 
 def test_uploads_and_downloads():
-    chart = usage_charts.get_uploaded_markings_and_downloaded_results(data)
+    chart = usage_charts.get_detected_markings(data)
     buffer = BytesIO()
     chart.render_to_png(buffer)
     assert verify_image(buffer.getvalue(), extension=".png")

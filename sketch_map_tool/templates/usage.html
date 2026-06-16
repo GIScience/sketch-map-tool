@@ -6,10 +6,16 @@
 
 {% block body %}
 <main class="container">
-	<article>
-		<header>{{ _('Number of created Sketch Maps') }}</header>
-		<code style="font-size: 2rem;">{{ number_of_sketch_maps }}</code>
-	</article>
+	<div class="grid">
+		<article>
+			<header>{{ _('How many Sketch Maps have been created?') }}</header>
+			<code style="font-size: 2rem;">{{ number_of_sketch_maps }}</code>
+		</article>
+		<article>
+			<header>{{ _('For how many Sketch Maps did we detect markings?') }}</header>
+			<code style="font-size: 2rem;">{{ number_of_detected_markings }}</code>
+		</article>
+	</div>
 	{%- for chart in charts %}
 	<div id="chart">
 		<embed type="image/svg+xml" src={{ chart|safe }}>

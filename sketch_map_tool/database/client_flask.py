@@ -166,6 +166,7 @@ def select_map_frame(uuid: UUID) -> tuple[bytes, str, str]:
 
 
 def update_files_digitize_uuid(file_ids: list[int] | tuple[int], result_uuid: UUID):
+    # NOTE: UUID are tracked since release in Mar 3, 2025
     update_query = """
     UPDATE
         blob
@@ -180,6 +181,7 @@ def update_files_digitize_uuid(file_ids: list[int] | tuple[int], result_uuid: UU
 
 
 def update_files_download_vector(result_uuid: UUID):
+    # NOTE: downloads are tracked since release in Mar 3, 2025
     update_query = """
     UPDATE
         blob
@@ -194,6 +196,7 @@ def update_files_download_vector(result_uuid: UUID):
 
 
 def update_files_download_raster(result_uuid: UUID):
+    # NOTE: downloads are tracked since release in Mar 3, 2025
     update_query = """
     UPDATE
         blob
@@ -208,6 +211,7 @@ def update_files_download_raster(result_uuid: UUID):
 
 
 def update_map_frame_downloaded(uuid: UUID):
+    # NOTE: downloads are tracked since release in Mar 3, 2025
     update_query = """
     UPDATE
         map_frame
@@ -256,7 +260,7 @@ def select_usage_statistics() -> list[dict]:
                 map_frame mf
             WHERE
                 -- old sketch maps do not have enough information stored in DB
-                created::date > date '2025-01-01'
+                created::date > date '2025-03-04'
             ) sm
             LEFT JOIN (
                 SELECT

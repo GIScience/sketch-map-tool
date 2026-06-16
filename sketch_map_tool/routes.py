@@ -90,13 +90,12 @@ def create(lang="en") -> str:
 @app.get("/<lang>/usage")
 def usage(lang="en"):
     stats = db_client_flask.select_usage_statistics()
-    number_of_sketch_maps = len(stats)
     charts = []
 
     chart = usage_charts.get_created_sketch_maps(stats)
     charts.append(chart.render_data_uri())
 
-    chart = usage_charts.get_uploaded_markings_and_downloaded_results(stats)
+    chart = usage_charts.get_detected_markings(stats)
     charts.append(chart.render_data_uri())
 
     chart = usage_charts.layer_distribution(stats)
@@ -111,10 +110,14 @@ def usage(lang="en"):
     chart = usage_charts.consent_distribution(stats)
     charts.append(chart.render_data_uri())
 
+    number_of_sketch_maps = usage_charts.get_created_sketch_maps_number(stats)
+    number_of_detected_markings = usage_charts.get_detected_markings_number(stats)
+
     return render_template(
         "usage.html",
         charts=charts,
         number_of_sketch_maps=number_of_sketch_maps,
+        number_of_detected_markings=number_of_detected_markings,
     )
 
 
