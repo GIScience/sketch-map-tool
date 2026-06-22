@@ -37,9 +37,7 @@ def get_created_sketch_maps_number(stats):
 
 def get_created_sketch_maps(stats: list[dict]) -> Graph:
     # Sketch maps which has been created AND downloaded
-    created_timestamps = [
-        row["created"] for row in stats if row["downloaded"] is not None
-    ]
+    created_timestamps = [row["created"] for row in stats]
     monthly_bins = create_monthly_bins(min(created_timestamps), max(created_timestamps))
     downloaded = []
     for row in stats:
@@ -54,6 +52,8 @@ def get_created_sketch_maps(stats: list[dict]) -> Graph:
     downloaded_accumulated = list(accumulate(downloaded_by_month.values()))
     timestamps = list(monthly_bins.keys())
 
+    # x.size = y
+    assert len(timestamps) == len(downloaded_accumulated)
     line_chart = pygal.Line(
         style=STYLE,
         show_legend=False,
@@ -73,9 +73,7 @@ def get_detected_markings_number(stats: list[dict]) -> int:
 
 def get_detected_markings(stats: list[dict]) -> Graph:
     # only look at sketch maps for which download happened
-    created_timestamps = [
-        row["created"] for row in stats if row["downloaded"] is not None
-    ]
+    created_timestamps = [row["created"] for row in stats]
     monthly_bins = create_monthly_bins(min(created_timestamps), max(created_timestamps))
     downloads = [row["downloads"] for row in stats]
     downloads_per_month = defaultdict(int, monthly_bins)
@@ -85,6 +83,8 @@ def get_detected_markings(stats: list[dict]) -> Graph:
     downloads_accumulated = list(accumulate(downloads_per_month.values()))
     timestamps = list(monthly_bins.keys())
 
+    # x.size = y
+    assert len(timestamps) == len(downloads_accumulated)
     line_chart = pygal.Line(
         style=STYLE,
         show_legend=False,
