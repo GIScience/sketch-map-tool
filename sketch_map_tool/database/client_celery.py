@@ -59,7 +59,8 @@ def insert_map_frame(
             layer VARCHAR,
             version VARCHAR,
             created TIMESTAMP WITH TIME ZONE DEFAULT now(),
-            downloaded TIMESTAMP WITH TIME ZONE
+            downloaded TIMESTAMP WITH TIME ZONE,
+            iso_a2 CHARACTER(2) DEFAULT NULL
             )
     """
     insert_query = """
