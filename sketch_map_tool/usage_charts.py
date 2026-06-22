@@ -12,7 +12,7 @@ from pygal.style import Style
 FMT = "%Y-%m"
 STYLE = Style(
     background="transparent",
-    plot_background="transparent",
+    plot_background="#fff",
 )
 
 
