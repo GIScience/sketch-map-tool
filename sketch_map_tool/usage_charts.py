@@ -211,7 +211,7 @@ def sketch_maps_by_country_map(stats: list[dict]):
     iso_a2 = [
         row["iso_a2"]
         for row in stats
-        if row["downloaded"] is not None and row["iso_a2"] in COUNTRIES.keys()
+        if row["downloaded"] is not None and row["iso_a2"].lower() in COUNTRIES.keys()
     ]
     iso_a2_count = dict(Counter(iso_a2))
 
