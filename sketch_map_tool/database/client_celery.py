@@ -60,7 +60,7 @@ def insert_map_frame(
             version VARCHAR,
             created TIMESTAMP WITH TIME ZONE DEFAULT now(),
             downloaded TIMESTAMP WITH TIME ZONE,
-            iso_a2 CHARACTER(2) DEFAULT NULL
+            iso_a2 VARCHAR DEFAULT NULL
             )
     """
     insert_query = """
