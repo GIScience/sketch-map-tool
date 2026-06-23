@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 from flask_babel import _
 from pygal.graph.graph import Graph
 from pygal.style import Style
+from pygal_maps_world.maps import COUNTRIES, World
 
 FMT = "%Y-%m"
 STYLE = Style(
@@ -210,11 +211,11 @@ def sketch_maps_by_country_map(stats: list[dict]):
     iso_a2 = [
         row["iso_a2"]
         for row in stats
-        if row["downloaded"] is not None and row["iso_a2"] is not None
+        if row["downloaded"] is not None and row["iso_a2"] in COUNTRIES.keys()
     ]
     iso_a2_count = dict(Counter(iso_a2))
 
-    worldmap_chart = pygal.maps.world.World(legend=False)
+    worldmap_chart = World(legend=False)
     worldmap_chart.title = _("How many Sketch Maps have been created per country?")
-    worldmap_chart.add("", iso_a2_count)
+    worldmap_chart.add("Countries", iso_a2_count)
     return worldmap_chart
