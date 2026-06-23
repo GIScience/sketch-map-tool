@@ -208,10 +208,11 @@ def consent_distribution(stats: list[dict]):
 
 
 def sketch_maps_by_country_map(stats: list[dict]):
+    supported_country_codes = [c.upper() for c in COUNTRIES.keys()]
     iso_a2 = [
         row["iso_a2"]
         for row in stats
-        if row["downloaded"] is not None and row["iso_a2"].lower() in COUNTRIES.keys()
+        if row["downloaded"] is not None and row["iso_a2"] in supported_country_codes
     ]
     iso_a2_count = dict(Counter(iso_a2))
 
