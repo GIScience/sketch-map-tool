@@ -2013,6 +2013,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pygal-maps-world"
+version = "1.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pygal" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a0/6e/2471c9db8e5402f844cdab2e6270fb315ee83e308d4977e356a04ca76c36/pygal_maps_world-1.0.2.tar.gz", hash = "sha256:8987fcf7f067b56f40f2f83b4f87baf9456164bbff0995715377020fc533db0f", size = 270781, upload-time = "2015-07-23T15:38:26.645Z" }
+
+[[package]]
 name = "pygments"
 version = "2.19.2"
 source = { registry = "https://pypi.org/simple" }
@@ -2574,6 +2583,7 @@ dependencies = [
     { name = "pillow" },
     { name = "pydantic-settings" },
     { name = "pygal" },
+    { name = "pygal-maps-world" },
     { name = "pymupdf" },
     { name = "pyproj" },
     { name = "pyzbar" },
@@ -2654,6 +2664,7 @@ requires-dist = [
     { name = "pillow", specifier = ">=11.3.0" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
     { name = "pygal" },
+    { name = "pygal-maps-world", specifier = ">=1.0.2" },
     { name = "pymupdf", specifier = ">=1.25.4" },
     { name = "pyproj", specifier = ">=3.7.1" },
     { name = "pyzbar", specifier = ">=0.1.9" },

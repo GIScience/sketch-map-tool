@@ -140,6 +140,7 @@ def test_select_usage_statistic(flask_app):
             "layer",
             "created",
             "downloaded",
+            "iso_a2",
             "uploads",
             "downloads",
             "downloads_raster",

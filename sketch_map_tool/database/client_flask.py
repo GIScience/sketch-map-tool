@@ -239,6 +239,7 @@ def select_usage_statistics() -> list[dict]:
             sm.layer,
             sm.created,
             sm.downloaded,
+            sm.iso_a2,
             Coalesce(digitize.uploads, 0::bigint) AS uploads,
             Coalesce(digitize.downloads, 0::bigint) AS downloads,
             Coalesce(digitize.downloads_raster, 0::bigint) AS downloads_raster,
@@ -255,7 +256,8 @@ def select_usage_statistics() -> list[dict]:
                 mf.orientation,
                 mf.layer,
                 mf.created,
-                mf.downloaded
+                mf.downloaded,
+                mf.iso_a2
             FROM
                 map_frame mf
             WHERE

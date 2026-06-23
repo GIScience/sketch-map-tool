@@ -110,6 +110,9 @@ def usage(lang="en"):
     chart = usage_charts.consent_distribution(stats)
     charts.append(chart.render_data_uri())
 
+    chart = usage_charts.sketch_maps_by_country_map(stats)
+    charts.append(chart.render_data_uri())
+
     number_of_sketch_maps = usage_charts.get_created_sketch_maps_number(stats)
     number_of_detected_markings = usage_charts.get_detected_markings_number(stats)
 

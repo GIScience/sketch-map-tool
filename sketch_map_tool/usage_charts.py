@@ -204,3 +204,17 @@ def consent_distribution(stats: list[dict]):
         bar_chart.add("Rejected", 0)
 
     return bar_chart
+
+
+def sketch_maps_by_country_map(stats: list[dict]):
+    iso_a2 = [
+        row["iso_a2"]
+        for row in stats
+        if row["downloaded"] is not None and row["iso_a2"] is not None
+    ]
+    iso_a2_count = dict(Counter(iso_a2))
+
+    worldmap_chart = pygal.maps.world.World(legend=False)
+    worldmap_chart.title = _("How many Sketch Maps have been created per country?")
+    worldmap_chart.add("", iso_a2_count)
+    return worldmap_chart

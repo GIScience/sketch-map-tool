@@ -21,6 +21,7 @@ dependencies = [
     "pillow>=11.3.0",
     "pydantic-settings>=2.12.0",
     "pygal",
+    "pygal-maps-world>=1.0.2",
     "pymupdf>=1.25.4",
     "pyproj>=3.7.1",
     "pyzbar>=0.1.9",

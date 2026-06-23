@@ -26,6 +26,7 @@ data = [
         "layer": "osm",
         "created": datetime(2026, 6, 11),
         "downloaded": datetime(2026, 6, 11),
+        "iso_a2": "de",
         "uploads": 1,
         "downloads": 0,
         "downloads_raster": 0,
@@ -43,6 +44,7 @@ data = [
         "layer": "esri-world-imagery",
         "created": datetime(2026, 6, 11),
         "downloaded": None,
+        "iso_a2": "us",
         "uploads": 0,
         "downloads": 0,
         "downloads_raster": 0,
@@ -60,6 +62,7 @@ data = [
         "layer": "oam:59e62beb3d6412ef7220c58e",
         "created": datetime(2026, 8, 11),
         "downloaded": datetime(2026, 8, 11),
+        "iso_a2": None,
         "uploads": 5,
         "downloads": 1,
         "downloads_raster": 0,
@@ -106,6 +109,13 @@ def test_result_download_distribution():
 
 def test_consent_distribution():
     chart = usage_charts.consent_distribution(data)
+    buffer = BytesIO()
+    chart.render_to_png(buffer)
+    assert verify_image(buffer.getvalue(), extension=".png")
+
+
+def test_sketch_maps_by_country_map():
+    chart = usage_charts.sketch_maps_by_country_map(data)
     buffer = BytesIO()
     chart.render_to_png(buffer)
     assert verify_image(buffer.getvalue(), extension=".png")
