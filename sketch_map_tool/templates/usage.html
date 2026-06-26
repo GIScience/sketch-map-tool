@@ -28,6 +28,8 @@
 	<br>
 	{% endfor %}
 	<article style="display: grid; place-items: center;">
+		<header>{{ _('For how many countries have Sketch Maps been created?') }}</header>
+		<code style="font-size: 2rem;">{{ number_of_countries }}</code>
 		{{ table|safe }}
 	</article>
 </main>

@@ -257,3 +257,14 @@ def sketch_maps_by_country_table(stats: list[dict]):
     bar_chart.x_labels = [COUNTRIES[k] for k in iso_a2_count.keys()]
     bar_chart.add("Sketch Maps", list(iso_a2_count.values()))
     return bar_chart
+
+
+def sketch_maps_by_country_number(stats: list[dict]) -> int:
+    iso_a2 = [
+        row["iso_a2"].lower()
+        for row in stats
+        if row["downloaded"] is not None and row["iso_a2"] is not None
+    ]
+    iso_a2_valid = [i for i in iso_a2 if i in COUNTRIES.keys()]
+    iso_a2_count = dict(Counter(iso_a2_valid))
+    return len(iso_a2_count.keys())
