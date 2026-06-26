@@ -248,7 +248,7 @@ def sketch_maps_by_country_table(stats: list[dict]):
     ]
     iso_a2_valid = [i for i in iso_a2 if i in COUNTRIES.keys()]
     iso_a2_count_unsorted = dict(Counter(iso_a2_valid))
-    iso_a2_count = dict(sorted(iso_a2_count_unsorted.items()))
+    iso_a2_count = dict(sorted(iso_a2_count_unsorted.items(), key=lambda item: item[1]))
 
     bar_chart = Bar(legend=False, style=STYLE)
     bar_chart.title = _("How many Sketch Maps have been created per country?")
