@@ -3,7 +3,7 @@ from datetime import datetime
 from io import BytesIO
 
 import pytest
-from pytest_approval import verify_image
+from pytest_approval import verify, verify_image
 
 from sketch_map_tool import usage_charts
 
@@ -119,3 +119,9 @@ def test_sketch_maps_by_country_map():
     buffer = BytesIO()
     chart.render_to_png(buffer)
     assert verify_image(buffer.getvalue(), extension=".png")
+
+
+def test_sketch_maps_by_country_table():
+    chart = usage_charts.sketch_maps_by_country_table(data)
+    table = chart.render_table()
+    assert verify(table, extension=".html")

@@ -251,5 +251,6 @@ def sketch_maps_by_country_table(stats: list[dict]):
 
     bar_chart = Bar(legend=False, style=STYLE)
     bar_chart.title = _("How many Sketch Maps have been created per country?")
-    bar_chart.add("", iso_a2_count)
+    bar_chart.x_labels = list(iso_a2_count.keys())
+    bar_chart.add("Sketch Maps", list(iso_a2_count.values()))
     return bar_chart

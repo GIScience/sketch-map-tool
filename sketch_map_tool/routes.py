@@ -96,7 +96,7 @@ def usage(lang="en"):
     charts.append(chart.render_data_uri())
 
     chart = usage_charts.sketch_maps_by_country_table(stats)
-    charts.append(chart.rander_table())
+    charts.append(chart.render_table())
 
     chart = usage_charts.get_created_sketch_maps(stats)
     charts.append(chart.render_data_uri())
