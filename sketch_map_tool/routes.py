@@ -92,6 +92,12 @@ def usage(lang="en"):
     stats = db_client_flask.select_usage_statistics()
     charts = []
 
+    chart = usage_charts.sketch_maps_by_country_map(stats)
+    charts.append(chart.render_data_uri())
+
+    chart = usage_charts.sketch_maps_by_country_table(stats)
+    charts.append(chart.rander_table())
+
     chart = usage_charts.get_created_sketch_maps(stats)
     charts.append(chart.render_data_uri())
 
@@ -108,9 +114,6 @@ def usage(lang="en"):
     charts.append(chart.render_data_uri())
 
     chart = usage_charts.consent_distribution(stats)
-    charts.append(chart.render_data_uri())
-
-    chart = usage_charts.sketch_maps_by_country_map(stats)
     charts.append(chart.render_data_uri())
 
     number_of_sketch_maps = usage_charts.get_created_sketch_maps_number(stats)

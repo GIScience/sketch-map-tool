@@ -6,6 +6,7 @@ import pandas
 import pygal
 from dateutil.relativedelta import relativedelta
 from flask_babel import _
+from pygal.graph.bar import Bar
 from pygal.graph.graph import Graph
 from pygal.style import Style
 from pygal_maps_world.maps import COUNTRIES, World
@@ -215,8 +216,40 @@ def sketch_maps_by_country_map(stats: list[dict]):
     ]
     iso_a2_valid = [i for i in iso_a2 if i in COUNTRIES.keys()]
     iso_a2_count = dict(Counter(iso_a2_valid))
+    iso_a2_count_over_1000 = {k: v for k, v in iso_a2_count.items() if v >= 1000}
+    iso_a2_count_over_100 = {
+        k: v for k, v in iso_a2_count.items() if v >= 100 and v < 1000
+    }
+    iso_a2_count_over_0 = {k: v for k, v in iso_a2_count.items() if v > 0 and v < 100}
 
-    worldmap_chart = World(legend=False)
+    # https://colorbrewer2.org/#type=sequential&scheme=YlOrRd&n=3
+    style = Style(
+        background="transparent",
+        plot_background="#fff",
+        colors=(
+            "#f03b20",
+            "#feb24c",
+            "#ffeda0",
+        ),
+    )
+    worldmap_chart = World(legend=False, style=style)
     worldmap_chart.title = _("How many Sketch Maps have been created per country?")
-    worldmap_chart.add("Countries", iso_a2_count)
+    worldmap_chart.add(">=1000", iso_a2_count_over_1000)
+    worldmap_chart.add(">=100", iso_a2_count_over_100)
+    worldmap_chart.add(">=0", iso_a2_count_over_0)
     return worldmap_chart
+
+
+def sketch_maps_by_country_table(stats: list[dict]):
+    iso_a2 = [
+        row["iso_a2"].lower()
+        for row in stats
+        if row["downloaded"] is not None and row["iso_a2"] is not None
+    ]
+    iso_a2_valid = [i for i in iso_a2 if i in COUNTRIES.keys()]
+    iso_a2_count = dict(Counter(iso_a2_valid))
+
+    bar_chart = Bar(legend=False, style=STYLE)
+    bar_chart.title = _("How many Sketch Maps have been created per country?")
+    bar_chart.add("", iso_a2_count)
+    return bar_chart
