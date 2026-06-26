@@ -95,8 +95,7 @@ def usage(lang="en"):
     chart = usage_charts.sketch_maps_by_country_map(stats)
     charts.append(chart.render_data_uri())
 
-    chart = usage_charts.sketch_maps_by_country_table(stats)
-    charts.append(chart.render_table())
+    table = usage_charts.sketch_maps_by_country_table(stats)
 
     chart = usage_charts.get_created_sketch_maps(stats)
     charts.append(chart.render_data_uri())
@@ -121,9 +120,10 @@ def usage(lang="en"):
 
     return render_template(
         "usage.html",
-        charts=charts,
         number_of_sketch_maps=number_of_sketch_maps,
         number_of_detected_markings=number_of_detected_markings,
+        charts=charts,
+        table=table,
     )
 
 

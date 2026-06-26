@@ -22,10 +22,13 @@
 	</div>
 	<br>
 	{%- for chart in charts %}
-	<article id="chart" style="display: grid; place-items: center;">
+	<article style="display: grid; place-items: center;">
 		<embed style="max-width: 1280px;" type="image/svg+xml" src={{ chart|safe }}>
 	</article>
 	<br>
 	{% endfor %}
+	<article style="display: grid; place-items: center;">
+		{{ table|safe }}
+	</article>
 </main>
 {% endblock body %}
