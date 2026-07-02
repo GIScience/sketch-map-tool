@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata from this file."
+title: "Sketch Map Tool"
+type: software
+license: "AGPL-3.0"
+repository-code: "https://github.com/GIScience/sketch-map-tool"
+url: "https://sketch-map-tool.heigit.org/"
+abstract: "The Sketch Map Tool is an open-source tool for participatory sketch mapping, enabling offline data collection, digitization, and georeferencing of local spatial knowledge."
+keywords:
+  - participatory mapping
+  - sketch maps
+  - georeferencing
+  - digitization
+  - GIS
+  - GeoAI
+
+authors:
+  - name: "Heidelberg Institute for Geoinformation Technology (HeiGIT)"
+    affiliation: "Heidelberg, Germany"
