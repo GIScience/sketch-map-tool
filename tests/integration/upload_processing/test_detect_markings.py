@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+import torch
 from PIL import Image
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
@@ -12,7 +13,6 @@ from sketch_map_tool.upload_processing.detect_markings import (
 )
 from sketch_map_tool.upload_processing.ml_models import (
     init_model,
-    init_sam2,
     select_computation_device,
 )
 
@@ -22,12 +22,14 @@ from sketch_map_tool.upload_processing.ml_models import (
 @pytest.fixture
 def sam_predictor():
     """Zero shot segment anything model"""
-    path = init_sam2()
     device = select_computation_device()
     sam2_model = build_sam2(
-        config_file="sam2_hiera_b+.yaml",
-        ckpt_path=path,
+        config_file=CONFIG.model_type_sam,
+        ckpt_path=None,
         device=device,
+    )
+    sam2_model.load_state_dict(
+        torch.load(init_model(CONFIG.sam_checkpoint), map_location=device)
     )
     return SAM2ImagePredictor(sam2_model)
 
