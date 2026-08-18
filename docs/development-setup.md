@@ -30,6 +30,12 @@ sudo apt install \
     libgdal-dev \
     libfreetype6-dev \
     libzbar0
+
+# Fedora
+sudo apt install \
+    gdal-dev \
+    freetype-dev \
+    zbar-libs
 ```
 
 ## Installation
@@ -42,7 +48,7 @@ cd sketch-map-tool
 
 uv sync --only-group gdal-build-dependencies  # Install GDAL build dependencies
 uv sync  # Install everything
-uv run pre-commit install
+uv run prek install
 uv run pybabel compile -d sketch_map_tool/translations
 
 npm install

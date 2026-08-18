@@ -14,9 +14,7 @@ from sketch_map_tool.exceptions import (
 def map_frame_old(flask_app, uuid_create, map_frame, bbox):
     """Mock map frame which is uploaded a year ago."""
     with flask_app.app_context():
-        update_query = (
-            "UPDATE map_frame SET ts = NOW() - INTERVAL '13 months' WHERE uuid = %s"
-        )
+        update_query = "UPDATE map_frame SET created = NOW() - INTERVAL '13 months' WHERE uuid = %s"  # noqa
         with client_flask.open_connection().cursor() as curs:
             curs.execute(update_query, [uuid_create])
 
@@ -25,7 +23,7 @@ def map_frame_old(flask_app, uuid_create, map_frame, bbox):
     map_frame.seek(0)
     with flask_app.app_context():
         update_query = (
-            "UPDATE map_frame SET ts = now(), file = %s, bbox = %s WHERE uuid = %s"
+            "UPDATE map_frame SET created = now(), file = %s, bbox = %s WHERE uuid = %s"
         )
         with client_flask.open_connection().cursor() as curs:
             curs.execute(update_query, [map_frame.getbuffer(), str(bbox), uuid_create])
@@ -85,12 +83,15 @@ def test_write_map_frame(
     flask_app,
     map_frame,
     bbox,
+    bbox_wgs84,
     format_,
     orientation,
     layer,
 ):
     uuid = uuid4()
-    client_celery.insert_map_frame(map_frame, uuid, bbox, format_, orientation, layer)
+    client_celery.insert_map_frame(
+        map_frame, uuid, bbox, bbox_wgs84, format_, orientation, layer
+    )
     with flask_app.app_context():
         file = client_flask.select_map_frame(uuid)
         assert isinstance(file, bytes)

@@ -40,14 +40,15 @@ def postgres_container(monkeypatch_session):
     Connection string will be different for each test session.
     """
     with PostgresContainer("postgres:15") as postgres:
-        conn = "db+postgresql://{user}:{password}@127.0.0.1:{port}/{database}".format(
-            user=postgres.username,
-            password=postgres.password,
-            port=postgres.get_exposed_port(5432),  # 5432 is default port of postgres
-            database=postgres.dbname,
+        monkeypatch_session.setattr(
+            CONFIG,
+            "postgres_port",
+            postgres.get_exposed_port(5432),
         )
-        monkeypatch_session.setattr(CONFIG, "result_backend", conn)
-        yield {"connection_url": conn}
+        monkeypatch_session.setattr(CONFIG, "postgres_dbname", postgres.dbname)
+        monkeypatch_session.setattr(CONFIG, "postgres_user", postgres.username)
+        monkeypatch_session.setattr(CONFIG, "postgres_password", postgres.password)
+        yield
     # cleanup
 
 
@@ -59,17 +60,16 @@ def redis_container(monkeypatch_session):
     """
     with RedisContainer("redis:7") as redis:
         port = redis.get_exposed_port(6379)  # 6379 is default port of redis
-        conn = f"redis://127.0.0.1:{port}"
-        monkeypatch_session.setattr(CONFIG, "broker_url", conn)
-        yield {"connection_url": conn}
+        monkeypatch_session.setattr(CONFIG, "redis_port", port)
+        yield redis
     # cleanup
 
 
 @pytest.fixture(scope="session", autouse=True)
 def celery_config(postgres_container, redis_container):
     """Set Celery config to point at testcontainers."""
-    CELERY_CONFIG["result_backend"] = postgres_container["connection_url"]
-    CELERY_CONFIG["broker_url"] = redis_container["connection_url"]
+    CELERY_CONFIG["result_backend"] = CONFIG.result_backend
+    CELERY_CONFIG["broker_url"] = CONFIG.broker_url
     return CELERY_CONFIG
 
 

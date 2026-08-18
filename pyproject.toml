@@ -1,11 +1,12 @@
 [project]
 name = "sketch_map_tool"
-version = "2025.11.28"
+version = "2026.7.2"
 description = ""
 authors = [{email = "HeiGIT <info@heigit.org>"}]
 readme = "README.md"
 requires-python = ">=3.11, <3.13"
 dependencies = [
+    "cairosvg>=2.9.0",
     "celery[redis,sqlalchemy]>=5.4.0",
     "flask>=3.1.0",
     "flask-babel>=4.0.0",
@@ -19,6 +20,8 @@ dependencies = [
     "opencv-python-headless<4.8.0.76", # https://github.com/ultralytics/ultralytics/issues/893
     "pillow>=11.3.0",
     "pydantic-settings>=2.12.0",
+    "pygal",
+    "pygal-maps-world>=1.0.2",
     "pymupdf>=1.25.4",
     "pyproj>=3.7.1",
     "pyzbar>=0.1.9",
@@ -45,7 +48,7 @@ dev = [
     "hypothesis>=6.130.5",
     "matplotlib>=3.10.1",
     "opencv-python<4.8.0.76",
-    "pre-commit>=4.2.0",
+    "prek>=0.3.2",
     "psycopg2-binary>=2.9.10", # dev only. In prod psycopg2 (non-binary) depending on system libraries (libpg) is used.
     "pytest>=8.3.5",
     "pytest-approval>=0.1.0",
@@ -54,7 +57,7 @@ dev = [
     "pytest-env>=1.2.0",
     "pytest-memray>=1.7.0",
     "pytest-rerunfailures>=15.0",
-    "ruff==0.12.11", # fix version because of pre-commit
+    "ruff==0.12.11", # fix version because of pre-commit config
     "testcontainers[postgres,redis]>=4.9.2",
     "types-redis>=4.6.0.20241004",
     "types-toml>=0.10.8.20240310",
@@ -114,6 +117,8 @@ select = [
    "Q",    # flake8-quotes
    "W",    # pycodestyle Warning
    "C90",  # mccabe
+   "FAST", # FastAPI
+   "INT",  # flake8-gettext
 ]
 
 [tool.pytest.ini_options]

@@ -16,8 +16,9 @@ from flask import (
 )
 from werkzeug import Response
 
-from sketch_map_tool import celery_app, config, definitions, tasks
+from sketch_map_tool import celery_app, definitions, tasks, usage_charts
 from sketch_map_tool import flask_app as app
+from sketch_map_tool.config import CONFIG
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
@@ -51,27 +52,27 @@ from sketch_map_tool.validators import (
 @app.get("/")
 @app.get("/<lang>")
 def index(lang="en") -> str:
-    return render_template("index.html.jinja", lang=lang)
+    return render_template("index.html", lang=lang)
 
 
 @app.get("/help")
 @app.get("/<lang>/help")
 def help(lang="en") -> str:
-    return render_template("help.html.jinja", lang=lang)
+    return render_template("help.html", lang=lang)
 
 
 @app.get("/about")
 @app.get("/<lang>/about")
 def about(lang="en") -> str:
     return render_template(
-        "about.html.jinja", lang=lang, literature=definitions.LITERATURE_REFERENCES
+        "about.html", lang=lang, literature=definitions.LITERATURE_REFERENCES
     )
 
 
 @app.get("/case-studies")
 @app.get("/<lang>/case-studies")
 def case_studies(lang="en") -> str:
-    return render_template("case-studies.html.jinja", lang=lang)
+    return render_template("case-studies.html", lang=lang)
 
 
 @app.get("/create")
@@ -79,9 +80,53 @@ def case_studies(lang="en") -> str:
 def create(lang="en") -> str:
     """Serve forms for creating a sketch map"""
     return render_template(
-        "create.html.jinja",
+        "create.html",
         lang=lang,
-        esri_api_key=config.CONFIG.esri_api_key,
+        esri_api_key=CONFIG.esri_api_key,
+    )
+
+
+@app.get("/usage")
+@app.get("/<lang>/usage")
+def usage(lang="en"):
+    stats = db_client_flask.select_usage_statistics()
+    charts = []
+
+    chart = usage_charts.sketch_maps_by_country_map(stats)
+    charts.append(chart.render_data_uri())
+
+    chart = usage_charts.sketch_maps_by_country_table(stats)
+    table = chart.render_table()
+
+    chart = usage_charts.get_created_sketch_maps(stats)
+    charts.append(chart.render_data_uri())
+
+    chart = usage_charts.get_detected_markings(stats)
+    charts.append(chart.render_data_uri())
+
+    chart = usage_charts.layer_distribution(stats)
+    charts.append(chart.render_data_uri())
+
+    chart = usage_charts.format_distribution(stats)
+    charts.append(chart.render_data_uri())
+
+    chart = usage_charts.result_download_distribution(stats)
+    charts.append(chart.render_data_uri())
+
+    chart = usage_charts.consent_distribution(stats)
+    charts.append(chart.render_data_uri())
+
+    number_of_sketch_maps = usage_charts.get_created_sketch_maps_number(stats)
+    number_of_detected_markings = usage_charts.get_detected_markings_number(stats)
+    number_of_countries = usage_charts.sketch_maps_by_country_number(stats)
+
+    return render_template(
+        "usage.html",
+        number_of_sketch_maps=number_of_sketch_maps,
+        number_of_detected_markings=number_of_detected_markings,
+        number_of_countries=number_of_countries,
+        charts=charts,
+        table=table,
     )
 
 
@@ -97,9 +142,18 @@ def create_results_post(lang="en") -> Response:
     size = Size(**(json.loads(request.form["size"])))
     scale = float(request.form["scale"])
     layer = validate_layer(request.form["layer"])
+
     # Tasks
     task_sketch_map = tasks.generate_sketch_map.apply_async(
-        args=(bbox, bbox_wgs84, format_, orientation, size, scale, layer)
+        args=(
+            bbox,
+            bbox_wgs84,
+            format_,
+            orientation,
+            size,
+            scale,
+            layer,
+        )
     )
     return redirect(
         url_for(
@@ -127,14 +181,14 @@ def create_results_get(
     validate_uuid(uuid)
     # Check if celery tasks for UUID exists
     _ = get_async_result(uuid, "sketch-map")
-    return render_template("create-results.html.jinja", lang=lang, bbox=bbox)
+    return render_template("create-results.html", lang=lang, bbox=bbox)
 
 
 @app.get("/digitize")
 @app.get("/<lang>/digitize")
 def digitize(lang="en") -> str:
     """Serve a file upload form for sketch map processing"""
-    return render_template("digitize.html.jinja", lang=lang)
+    return render_template("digitize.html", lang=lang)
 
 
 @app.post("/digitize/results")
@@ -212,7 +266,7 @@ def digitize_results_get(lang="en", uuid: str | None = None) -> Response | str:
     if uuid is None:
         return redirect(url_for("digitize", lang=lang))
     validate_uuid(uuid)
-    return render_template("digitize-results.html.jinja", lang=lang)
+    return render_template("digitize-results.html", lang=lang)
 
 
 def get_async_result(uuid: str, type_: REQUEST_TYPES) -> AsyncResult | GroupResult:
@@ -355,12 +409,12 @@ def health(lang="en"):
 @app.errorhandler(CustomFileNotFoundError)
 @app.errorhandler(UploadLimitsExceededError)
 def handle_exception(error: TranslatableError):
-    return render_template("error.html.jinja", error_msg=error.translate()), 422
+    return render_template("error.html", error_msg=error.translate()), 422
 
 
 @app.errorhandler(UUIDNotFoundError)
 def handle_not_found_exception(error: TranslatableError):
-    return render_template("error.html.jinja", error_msg=error.translate()), 404
+    return render_template("error.html", error_msg=error.translate()), 404
 
 
 @app.errorhandler(Exception)
@@ -369,6 +423,6 @@ def internal_server_error(error: Exception):
     message = N_("Oops... we seem to have made a mistake, sorry!")
     logging.error(error, exc_info=error)
     return render_template(
-        "error.html.jinja",
+        "error.html",
         error_msg=f"{heading}: {message}",
     ), 500

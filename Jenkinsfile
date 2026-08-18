@@ -95,7 +95,7 @@ pipeline {
                         sh "${scannerHome}/bin/sonar-scanner " + SONAR_CLI_PARAMETER
                     }
                     // run other static code analysis and checks
-                    sh 'pre-commit run --all-files'
+                    sh 'prek run --all-files'
                 }
             }
             post {
