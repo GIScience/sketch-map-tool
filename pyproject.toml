@@ -2,137 +2,136 @@
 name = "sketch_map_tool"
 version = "2026.7.2"
 description = ""
-authors = [{email = "HeiGIT <info@heigit.org>"}]
 readme = "README.md"
 requires-python = ">=3.11, <3.13"
+authors = [{ email = "HeiGIT <info@heigit.org>" }]
 dependencies = [
-    "cairosvg>=2.9.0",
-    "celery[redis,sqlalchemy]>=5.4.0",
-    "flask>=3.1.0",
-    "flask-babel>=4.0.0",
-    "flower>=2.0.1",
-    # Version of Ubuntu resolute (26.04LTS)
-    # https://packages.ubuntu.com/search?suite=all&section=all&arch=any&keywords=libgdal-dev&searchon=names
-    "gdal==3.12.2",
-    "geojson>=3.2.0",
-    "kaleido==0.2.1", # Not working with '^', see https://github.com/plotly/Kaleido/issues/125
-    "matplotlib>=3.10.1",
-    "matplotlib-scalebar>=0.9.0",
-    "numpy<2", # dependency of opencv and gdal
-    "opencv-python-headless<4.8.0.76", # https://github.com/ultralytics/ultralytics/issues/893
-    "pillow>=11.3.0",
-    "pydantic-settings>=2.12.0",
-    "pygal",
-    "pygal-maps-world>=1.0.2",
-    "pymupdf>=1.25.4",
-    "pyproj>=3.7.1",
-    "pyzbar>=0.1.9",
-    "qrcode>=8.0",
-    "redis>=5.2.1",
-    "reportlab>=4.3.1",
-    "requests>=2.32.3",
-    "sam-2",
-    "shapely>=2.1.1",
-    "shapelysmooth>=0.2.1",
-    "svglib>=1.5.1,<1.6.0",
-    "toml>=0.10.2",
-    "torch>=2.7.0",
-    "torchvision>=0.22.0,<0.24.0", # https://github.com/astral-sh/uv/issues/16386
-    "ultralytics==8.1.14",
-    "ultralytics-mb",
-    "waitress>=3.0.2",
+  "cairosvg>=2.9.0",
+  "celery[redis,sqlalchemy]>=5.4.0",
+  "flask>=3.1.0",
+  "flask-babel>=4.0.0",
+  "flower>=2.0.1",
+  # Version of Ubuntu resolute (26.04LTS)
+  # https://packages.ubuntu.com/search?suite=all&section=all&arch=any&keywords=libgdal-dev&searchon=names
+  "gdal==3.12.2",
+  "geojson>=3.2.0",
+  "kaleido==0.2.1",  # Not working with '^', see https://github.com/plotly/Kaleido/issues/125
+  "matplotlib>=3.10.1",
+  "matplotlib-scalebar>=0.9.0",
+  "numpy<2",  # dependency of opencv and gdal
+  "opencv-python-headless<4.8.0.76",  # https://github.com/ultralytics/ultralytics/issues/893
+  "pillow>=11.3.0",
+  "pydantic-settings>=2.12.0",
+  "pygal",
+  "pygal-maps-world>=1.0.2",
+  "pymupdf>=1.25.4",
+  "pyproj>=3.7.1",
+  "pyzbar>=0.1.9",
+  "qrcode>=8.0",
+  "redis>=5.2.1",
+  "reportlab>=4.3.1",
+  "requests>=2.32.3",
+  "sam-2",
+  "shapely>=2.1.1",
+  "shapelysmooth>=0.2.1",
+  "svglib>=1.5.1,<1.6.0",
+  "toml>=0.10.2",
+  "torch>=2.7.0",
+  "torchvision>=0.22.0,<0.24.0",  # https://github.com/astral-sh/uv/issues/16386
+  "ultralytics==8.1.14",
+  "ultralytics-mb",
+  "waitress>=3.0.2",
 ]
 
 [dependency-groups]
 dev = [
-    "approvaltests>=14.3.1",
-    "geopandas>=1.0.1",
-    "hypothesis>=6.130.5",
-    "matplotlib>=3.10.1",
-    "opencv-python<4.8.0.76",
-    "prek>=0.3.2",
-    "psycopg2-binary>=2.9.10", # dev only. In prod psycopg2 (non-binary) depending on system libraries (libpg) is used.
-    "pytest>=8.3.5",
-    "pytest-approval>=0.1.0",
-    "pytest-celery>=1.2.0",
-    "pytest-cov>=6.2.1",
-    "pytest-env>=1.2.0",
-    "pytest-memray>=1.7.0",
-    "pytest-rerunfailures>=15.0",
-    "ruff==0.12.11", # fix version because of pre-commit config
-    "testcontainers[postgres,redis]>=4.9.2",
-    "types-redis>=4.6.0.20241004",
-    "types-toml>=0.10.8.20240310",
-    "vcrpy>=7.0.0",
-]
-gdal-build-dependencies = [
-    "numpy<2",
-    "setuptools>=80.9.0",
-    "wheel>=0.45.1",
+  "approvaltests>=14.3.1",
+  "geopandas>=1.0.1",
+  "hypothesis>=6.130.5",
+  "matplotlib>=3.10.1",
+  "opencv-python<4.8.0.76",
+  "prek>=0.3.2",
+  "psycopg2-binary>=2.9.10",  # dev only. In prod psycopg2 (non-binary) depending on system libraries (libpg) is used.
+  "pytest>=8.3.5",
+  "pytest-approval>=0.1.0",
+  "pytest-celery>=1.2.0",
+  "pytest-cov>=6.2.1",
+  "pytest-env>=1.2.0",
+  "pytest-memray>=1.7.0",
+  "pytest-rerunfailures>=15.0",
+  "ruff==0.12.11",  # fix version because of pre-commit config
+  "testcontainers[postgres,redis]>=4.9.2",
+  "types-redis>=4.6.0.20241004",
+  "types-toml>=0.10.8.20240310",
+  "vcrpy>=7.0.0",
 ]
 cpu = [
-    "torch>=2.7.0",
-    "torchvision>=0.22.0",
+  "torch>=2.7.0",
+  "torchvision>=0.22.0",
 ]
 cuda = [
-    "torch>=2.7.0",
-    "torchvision>=0.22.0",
+  "torch>=2.7.0",
+  "torchvision>=0.22.0",
+]
+gdal-build-dependencies = [
+  "numpy<2",
+  "setuptools>=80.9.0",
+  "wheel>=0.45.1",
 ]
 
+[tool.pytest.ini_options]
+filterwarnings = ["ignore::DeprecationWarning"]
+testpaths = ["tests"]
 
-[[tool.uv.dependency-metadata]]
-name = "gdal"
-version = "3.12.2"
-requires-dist = ["setuptools", "wheel", "numpy"]
+[tool.pytest-approval]
+"approvals-dir" = "tests/approvals"
+
+[tool.pytest_env]
+SMT_CONFIG = "config/test.config.toml"
+SMT_USER_AGENT = "sketch-map-tool-test"  # takes precedence over file
+
+[tool.ruff.lint]
+select = [
+  "E",  # pycodestyle Error
+  "F",  # Pyflakes
+  "I",  # isort
+  "N",  # pep8-nameing
+  "Q",  # flake8-quotes
+  "W",  # pycodestyle Warning
+  "C90",  # mccabe
+  "FAST",  # FastAPI
+  "INT",  # flake8-gettext
+]
 
 [tool.uv]
 # Installing packages without build isolation requires that the package's build
 # dependencies are installed in the project environment prior to installing the
 # package itself.
 no-build-isolation-package = ["gdal"]
-default-groups = ["dev","cpu"]
+default-groups = ["dev", "cpu"]
 conflicts = [
-    [
-        { group = "cpu" },
-        { group = "cuda" },
-    ]
+  [
+    { group = "cpu" },
+    { group = "cuda" },
+  ]
 ]
+
+[[tool.uv.dependency-metadata]]
+name = "gdal"
+version = "3.12.2"
+requires-dist = ["setuptools", "wheel", "numpy"]
 
 [tool.uv.sources]
 ultralytics-mb = { git = "https://github.com/GIScience/ultralytics_siamese_smt.git", rev = "4cf4acc9c92df2b37937e52660675af9e75de8cb" }
 sam-2 = { git = "https://github.com/facebookresearch/segment-anything-2.git" }
 torch = [
-    { index = "pytorch-cpu", group = "cpu" },
-    { index = "pytorch-cuda", group = "cuda" },
+  { index = "pytorch-cpu", group = "cpu" },
+  { index = "pytorch-cuda", group = "cuda" },
 ]
 torchvision = [
-    { index = "pytorch-cpu", group = "cpu" },
-    { index = "pytorch-cuda", group = "cuda" },
+  { index = "pytorch-cpu", group = "cpu" },
+  { index = "pytorch-cuda", group = "cuda" },
 ]
-
-[tool.ruff.lint]
-select = [
-   "E",    # pycodestyle Error
-   "F",    # Pyflakes
-   "I",    # isort
-   "N",    # pep8-nameing
-   "Q",    # flake8-quotes
-   "W",    # pycodestyle Warning
-   "C90",  # mccabe
-   "FAST", # FastAPI
-   "INT",  # flake8-gettext
-]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-filterwarnings = ["ignore::DeprecationWarning"]
-
-[tool.pytest_env]
-SMT_CONFIG = "config/test.config.toml"
-SMT_USER_AGENT = "sketch-map-tool-test"  # takes precedence over file
-
-[tool.pytest-approval]
-"approvals-dir"="tests/approvals"
 
 [[tool.uv.index]]
 name = "pytorch-cpu"
