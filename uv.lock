@@ -2783,7 +2783,7 @@ dev = [
     { name = "hypothesis", specifier = ">=6.130.5" },
     { name = "matplotlib", specifier = ">=3.10.1" },
     { name = "opencv-python", specifier = "<4.8.0.76" },
-    { name = "prek", specifier = ">=0.3.2" },
+    { name = "prek", specifier = ">=0.5.4" },
     { name = "psycopg2-binary", specifier = ">=2.9.10" },
     { name = "pytest", specifier = ">=9.1.1,<10.0.0" },
     { name = "pytest-approval", specifier = ">=0.17.0,<0.19.0" },
