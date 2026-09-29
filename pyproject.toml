@@ -107,6 +107,7 @@ select = [
 # Installing packages without build isolation requires that the package's build
 # dependencies are installed in the project environment prior to installing the
 # package itself.
+add-bounds = "major"
 no-build-isolation-package = ["gdal"]
 default-groups = ["dev", "cpu"]
 conflicts = [
