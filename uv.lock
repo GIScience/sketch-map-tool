@@ -666,14 +666,9 @@ wheels = [
 
 [[package]]
 name = "gdal"
-version = "3.6.2"
+version = "3.12.2"
 source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "numpy" },
-    { name = "setuptools" },
-    { name = "wheel" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/49/4f/174743caf64d1999c46ab2ee72b2cb0d77a47bd7ed04f954f863e35a25fd/GDAL-3.6.2.tar.gz", hash = "sha256:a167cde1813707d91a938dad1a22f280f5ad28c45980d42e948fb8c59f890f5a", size = 757691, upload-time = "2023-01-05T07:36:55.213Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b7/73/52753654d259cae674b7d4f2167d421382d9aa2ee510f047338381ae175b/gdal-3.12.2.tar.gz", hash = "sha256:a5afa8e55a19b296a004a15d38fe3ad60cc380f1f090e2aab5d35331008c970f", size = 899232, upload-time = "2026-02-09T17:53:29.78Z" }
 
 [[package]]
 name = "geojson"
@@ -2654,7 +2649,7 @@ requires-dist = [
     { name = "flask", specifier = ">=3.1.0" },
     { name = "flask-babel", specifier = ">=4.0.0" },
     { name = "flower", specifier = ">=2.0.1" },
-    { name = "gdal", specifier = "==3.6.2" },
+    { name = "gdal", specifier = "==3.12.2" },
     { name = "geojson", specifier = ">=3.2.0" },
     { name = "kaleido", specifier = "==0.2.1" },
     { name = "matplotlib", specifier = ">=3.10.1" },

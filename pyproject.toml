@@ -11,7 +11,9 @@ dependencies = [
     "flask>=3.1.0",
     "flask-babel>=4.0.0",
     "flower>=2.0.1",
-    "gdal==3.6.2",
+    # Version of Ubuntu resolute (26.04LTS)
+    # https://packages.ubuntu.com/search?suite=all&section=all&arch=any&keywords=libgdal-dev&searchon=names
+    "gdal==3.12.2",
     "geojson>=3.2.0",
     "kaleido==0.2.1", # Not working with '^', see https://github.com/plotly/Kaleido/issues/125
     "matplotlib>=3.10.1",
@@ -80,7 +82,7 @@ cuda = [
 
 [[tool.uv.dependency-metadata]]
 name = "gdal"
-version = "3.6.2"
+version = "3.12.2"
 requires-dist = ["setuptools", "wheel", "numpy"]
 
 [tool.uv]
