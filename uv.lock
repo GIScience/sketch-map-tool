@@ -2135,14 +2135,14 @@ wheels = [
 
 [[package]]
 name = "pytest-approval"
-version = "0.7.0"
+version = "0.15.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pytest" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/92/01/e6bc46b0ae132f3e25a90d9cdad4433c1c952646f5a8a426bcce3b6ca267/pytest_approval-0.7.0.tar.gz", hash = "sha256:2b5cd674e0adb28ac6d1f0ec6085a0eade0b02de394a75a053f9e6f648b50ed0", size = 60921, upload-time = "2026-01-11T16:20:38.245Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/de/0a/cd2a89bf77ab5b2b82797f735e0fc013663595d3315c62245e7e6abec4b7/pytest_approval-0.15.1.tar.gz", hash = "sha256:8a874aa29e405bbc6f3f924c4ab05d8fcfe104d96c0e814a15225498ddc19fe1", size = 63255, upload-time = "2026-03-24T07:52:14.656Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/40/5a/9cbef47d65a1354b38e8b2ae383b8917c6addced82e81ad53565e254b836/pytest_approval-0.7.0-py3-none-any.whl", hash = "sha256:f9306fcaa9d8c2214837092251508ec4836de375bd87c90d99a46876d9da15f4", size = 72545, upload-time = "2026-01-11T16:20:39.439Z" },
+    { url = "https://files.pythonhosted.org/packages/50/30/f122af44e73f1bc08d291e7c84d18eb702428f78cb35749307c07f79d427/pytest_approval-0.15.1-py3-none-any.whl", hash = "sha256:8c8b6a58dec4a14c77c340f334d3b477ed3a4ee27e016fd122bfde53835108da", size = 74416, upload-time = "2026-03-24T07:52:15.754Z" },
 ]
 
 [[package]]
@@ -2702,7 +2702,7 @@ dev = [
     { name = "prek", specifier = ">=0.3.2" },
     { name = "psycopg2-binary", specifier = ">=2.9.10" },
     { name = "pytest", specifier = ">=8.3.5" },
-    { name = "pytest-approval", specifier = ">=0.1.0" },
+    { name = "pytest-approval", specifier = ">=0.15.1,<0.16.0" },
     { name = "pytest-celery", specifier = ">=1.2.0" },
     { name = "pytest-cov", specifier = ">=6.2.1" },
     { name = "pytest-env", specifier = ">=1.2.0" },
