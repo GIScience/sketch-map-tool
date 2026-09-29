@@ -21,12 +21,14 @@ def test_init_model(id):
 
 @given(
     text().filter(
-        lambda n: n
-        not in (
-            "sam2_hiera_base_plus",
-            CONFIG.yolo_osm_obj,
-            CONFIG.yolo_esri_obj,
-            CONFIG.yolo_cls,
+        lambda n: (
+            n
+            not in (
+                "sam2_hiera_base_plus",
+                CONFIG.yolo_osm_obj,
+                CONFIG.yolo_esri_obj,
+                CONFIG.yolo_cls,
+            )
         )
     )
 )

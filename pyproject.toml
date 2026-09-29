@@ -59,7 +59,7 @@ dev = [
   "pytest-env>=1.2.0",
   "pytest-memray>=1.7.0",
   "pytest-rerunfailures>=15.0",
-  "ruff==0.12.11",  # fix version because of pre-commit config
+  "ruff==0.16.9",  # fix version because of pre-commit config
   "testcontainers[postgres,redis]>=4.9.2",
   "types-redis>=4.6.0.20241004",
   "types-toml>=0.10.8.20240310",
