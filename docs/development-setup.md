@@ -32,9 +32,9 @@ sudo apt install \
     libzbar0
 
 # Fedora
-sudo apt install \
-    gdal-dev \
-    freetype-dev \
+sudo dnf install \
+    gdal-devel \
+    freetype-devel \
     zbar-libs
 ```
 
