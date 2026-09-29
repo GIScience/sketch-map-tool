@@ -3,7 +3,7 @@ name = "sketch_map_tool"
 version = "2026.7.2"
 description = ""
 readme = "README.md"
-requires-python = ">=3.11, <3.13"
+requires-python = ">=3.14, <3.15"
 authors = [{ email = "HeiGIT <info@heigit.org>" }]
 dependencies = [
   "cairosvg>=2.9.0",
@@ -33,11 +33,11 @@ dependencies = [
   "requests>=2.32.3",
   "sam-2",
   "shapely>=2.1.1",
-  "shapelysmooth>=0.2.1",
+  "shapelysmooth>=0.2.1,<0.3.0",
   "svglib>=1.5.1,<1.6.0",
   "toml>=0.10.2",
-  "torch>=2.7.0",
-  "torchvision>=0.22.0,<0.24.0",  # https://github.com/astral-sh/uv/issues/16386
+  "torch>=2.14.0,<3.0.0",
+  "torchvision>=0.29.0,<0.30.0",  # https://github.com/astral-sh/uv/issues/16386
   "ultralytics==8.1.14",
   "ultralytics-mb",
   "waitress>=3.0.2",
@@ -66,12 +66,12 @@ dev = [
   "vcrpy>=7.0.0",
 ]
 cpu = [
-  "torch>=2.7.0",
-  "torchvision>=0.22.0",
+  "torch>=2.14.0",
+  "torchvision>=0.29.0",
 ]
 cuda = [
-  "torch>=2.7.0",
-  "torchvision>=0.22.0",
+  "torch>=2.14.0",
+  "torchvision>=0.29.0",
 ]
 gdal-build-dependencies = [
   "numpy<2",
