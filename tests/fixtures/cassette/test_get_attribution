@@ -5,34 +5,20 @@ interactions:
       Accept:
       - '*/*'
       Accept-Encoding:
-      - gzip, deflate
+      - gzip, deflate, zstd
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.32.5
+      - python-requests/2.34.2
     method: GET
     uri: https://api.imagery.hotosm.org/stac/collections/openaerialmap/items/59e62beb3d6412ef7220c58e
   response:
     body:
-      string: !!binary |
-        H4sIAE1/+GgC/71WWW/bOBD+KwZfV6ao+1gU6MMe7cNig02e1jAEWqJlNpIokJTbJPB/36Eky3Jj
-        I+nCKGFbxsxoZr65OC+IFyhFQcJCd8M2XhH6jsu2keuSPIgZstBmI76hdOUl2HVjPz6exFqGOPa9
-        OPQmWmAZqTD0PRIMJ+ylnMiNj5QgXFtIP7UMrP7BqO6kMVLx5lGBlRckWQWcXFQVyzUXDZqkadtW
-        PKeGaH9RPWcn2RY4O61bldo2bTnmNS2ZfMI7oYWqsZClrTTN7ZNGZYuWNZRJTquatuhgHa22VLJG
-        /0yLUoib2ZupVazaXlZbMvHLDaHYXLNa2VfL5wDJpkoxDcl9QXuuOlqZfzPbYFrwZjmYXIK6FisP
-        05o+i4Z+VTgXtR3ZxIbK2UbUT2hOCE2IR4i73RCnwJrPsPYIbCBtf13McH8A3AOxlWLLK/Yhr0RX
-        LEWrec2fWQEapKiYqUFUUE2RqVKuK6PTJU6wJP7SibJNV3ayaxqe1UyWrMi0pI0a6iarhaI8z0op
-        utYZ3aKVZrKhmhnUypthV95r5O8BOmlMG1ob9+49dDhYyKBKFWBBqe+GJIpMPyKA+yUdWzhwA9cP
-        MfxEAYHjWInrewEJsJckSdxTAjfxvQh7bpQkk0zo+y6GIPjxetSYi8KY/v3u/s8UZL0IjQy1oyYP
-        Kz8GI1aYONH0DqSgZlo+mRiM2boT1VPZF2MuhCy4gWVSsHqPr2trddHb90nNMV229rbEd5bW68OF
-        9Hx6eLi7P4anL5etkDWAJJiEJIgteFqv1Rvq8ihy5k3PMl8HE2MRgkr7kr1tX2VGLx5nxfUBNXXN
-        5MascybaTRvhzLNr7XAlD8DRu67eNJTfehBlvWLcNuX342ggTZE6OTAL1Yl421jNnfrRWAHrh5r2
-        8o4At39yOgE007glOOHxBBfXhNXlbQJ2Dv90RjE37vtmOP6l3WQSfMu/vo1nC0iKzm/vvpVbJjVn
-        /a1WKtigjp16k0sD9O95weSwEY05eaDNM204XfwN3ix+g65afG645tCNezYvL3i76HIm+7UqZ40S
-        0hRawVQueTtC+gfquuGLTx2gsv+i8nHxuYL7kS1q3j8/fhWyKja0eTRbQH+Ps6bIoJkZ3JhnAOMH
-        QtL+8y+YhH1B6oty0ZmcoHXaVlSbYZiNldXR/ZEzYsjeBf7Qm82zPYRsgOdgGI5oJLNvGqJglhcT
-        nuO+Y1jLEwuXHFplg7mwzU1q712jwlb5jtXTsHn7XTPlh7oxGsj/0DA143JYnOy9g92resZN7fS6
-        UayFqNQ4ImwIp70nr8CsD/8BuSf40PsLAAA=
+      string: '{"id":"59e62beb3d6412ef7220c58e","bbox":[39.22848888888889,-6.8438638888888885,39.26643055555556,-6.817280555555556],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://api.imagery.hotosm.org/stac/collections/openaerialmap"},{"rel":"parent","type":"application/json","href":"https://api.imagery.hotosm.org/stac/collections/openaerialmap"},{"rel":"root","type":"application/json","href":"https://api.imagery.hotosm.org/stac/"},{"rel":"self","type":"application/geo+json","href":"https://api.imagery.hotosm.org/stac/collections/openaerialmap/items/59e62beb3d6412ef7220c58e"}],"assets":{"visual":{"href":"http://oin-hotosm-temp.s3.amazonaws.com/7/0/556f7a49ac00a903002fb01d.tif","type":"image/tiff;
+        application=geotiff; profile=cloud-optimized","roles":["data"],"title":"2015-04-17_bugurunni_merged_transparent_mosaic_group1.tif","alternate":{"s3":{"href":"s3://oin-hotosm-temp/7/0/556f7a49ac00a903002fb01d.tif","alternate:name":"S3"}},"file:size":426077885,"proj:bbox":[525246.5247500001,9243505.399980001,529437.3279900001,9246442.01548],"proj:code":"EPSG:32737","proj:shape":[48475,69178],"proj:geometry":{"type":"Polygon","coordinates":[[[525246.5247500001,9243505.399980001],[529437.3279900001,9243505.399980001],[529437.3279900001,9246442.01548],[525246.5247500001,9246442.01548],[525246.5247500001,9243505.399980001]]]},"alternate:name":"HTTPS","proj:transform":[0.06058,0.0,525246.5247500001,0.0,-0.06058,9246442.01548,0.0,0.0,1.0]},"metadata":{"href":"http://oin-hotosm-temp.s3.amazonaws.com/7/0/556f7a49ac00a903002fb01d_meta.json","type":"application/json","roles":["metadata"],"title":"metadata","alternate":{"s3":{"href":"s3://oin-hotosm-temp/7/0/556f7a49ac00a903002fb01d_meta.json","alternate:name":"S3"}},"alternate:name":"HTTPS"},"thumbnail":{"href":"http://oin-hotosm-temp.s3.amazonaws.com/7/0/556f7a49ac00a903002fb01d_thumb.png","type":"image/png","roles":["thumbnail"],"title":"thumbnail","alternate":{"s3":{"href":"s3://oin-hotosm-temp/7/0/556f7a49ac00a903002fb01d_thumb.png","alternate:name":"S3"}},"alternate:name":"HTTPS"}},"geometry":{"type":"Polygon","coordinates":[[[39.22848888888889,-6.8172999999999995],[39.266416666666665,-6.817280555555556],[39.26643055555556,-6.843844444444444],[39.228500000000004,-6.8438638888888885],[39.22848888888889,-6.8172999999999995]]]},"collection":"openaerialmap","properties":{"gsd":0.06058,"title":"2015-04-17_bugurunni_merged_transparent_mosaic_group1.tif","providers":[{"name":"Tanzania
+        Open Data Initiative","roles":["producer","licensor"],"description":"Ramani
+        Huria/Mark Iliffe miliffe@worldbank.org"}],"end_datetime":"2015-04-18T00:00:00Z","start_datetime":"2015-04-17T00:00:00Z","oam:platform_type":"uav","oam:producer_name":"Tanzania
+        Open Data Initiative"},"stac_version":"1.1.0","stac_extensions":["https://stac-extensions.github.io/file/v2.1.0/schema.json","https://stac-extensions.github.io/projection/v2.0.0/schema.json","https://stac-extensions.github.io/alternate-assets/v1.2.0/schema.json","https://hotosm.github.io/stactools-hotosm/oam/v0.1.0/schema.json"]}'
     headers:
       Access-Control-Allow-Credentials:
       - 'true'
@@ -51,7 +37,7 @@ interactions:
       Content-Type:
       - application/geo+json
       Date:
-      - Wed, 22 Oct 2025 06:53:01 GMT
+      - Tue, 29 Sep 2026 12:16:38 GMT
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains
       content-encoding:
