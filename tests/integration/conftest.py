@@ -73,9 +73,8 @@ def celery_config(postgres_container, redis_container):
     return CELERY_CONFIG
 
 
-@pytest.mark.usefixtures("postgres_container", "redis_container")
 @pytest.fixture(scope="session", autouse=True)
-def celery_app(celery_config, celery_session_app):
+def celery_app(celery_config, celery_session_app, postgres_container, redis_container):
     """Configure Celery test app."""
     celery_session_app.conf.update(celery_config)
     smt_celery_app.conf.update(celery_config)
@@ -92,13 +91,13 @@ def celery_enable_logging():
     return True
 
 
-@pytest.mark.usefixtures(
-    "postgres_container",
-    "redis_container",
-    "celery_worker_parameters",
-)
 @pytest.fixture(scope="session", autouse=True)
-def celery_worker(celery_session_worker):
+def celery_worker(
+    celery_session_worker,
+    postgres_container,
+    redis_container,
+    celery_worker_parameters,
+):
     return celery_session_worker
 
 

@@ -52,7 +52,7 @@ dev = [
   "opencv-python<4.8.0.76",
   "prek>=0.3.2",
   "psycopg2-binary>=2.9.10",  # dev only. In prod psycopg2 (non-binary) depending on system libraries (libpg) is used.
-  "pytest>=8.3.5",
+  "pytest>=9.1.1,<10.0.0",
   "pytest-approval>=0.15.1,<0.16.0",
   "pytest-celery>=1.2.0",
   "pytest-cov>=6.2.1",
