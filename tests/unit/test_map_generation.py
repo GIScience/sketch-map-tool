@@ -145,4 +145,4 @@ def test_get_aruco_makers():
         assert isinstance(m, np.ndarray)
         buffer = BytesIO()
         Image.fromarray(m).save(buffer, format="PNG")
-        assert verify_image(buffer.getvalue(), extension=".png")
+        assert verify_image(buffer.getvalue(), extension=".png", content_only=True)
