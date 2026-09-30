@@ -20,7 +20,7 @@ dependencies = [
   "matplotlib-scalebar>=0.9.0,<1.0.0",
   "numpy<2",  # dependency of opencv and gdal
   "opencv-python-headless<4.8.0.76,<5.0.0",  # https://github.com/ultralytics/ultralytics/issues/893
-  "pillow>=11.3.0,<12.0.0",
+  "pillow>=12.3.0,<13.0.0",
   "pydantic-settings>=2.12.0,<3.0.0",
   "pygal",
   "pygal-maps-world>=1.0.2,<2.0.0",
@@ -60,7 +60,7 @@ dev = [
   "pytest-memray>=1.7.0",
   "pytest-rerunfailures>=15.0",
   "ruff==0.16.9",  # fix version because of pre-commit config
-  "testcontainers[postgres,redis]>=4.9.2",
+  "testcontainers[postgres,redis]>=4.9.2,<5.0.0",
   "types-redis>=4.6.0.20241004",
   "types-toml>=0.10.8.20240310",
   "vcrpy>=8.3.0,<9.0.0",
