@@ -1,10 +1,9 @@
 import flask_babel
 import pytest
-from approvaltests import verify
+from pytest_approval import verify
 
 from sketch_map_tool.exceptions import ValidationError
 from sketch_map_tool.routes import app
-from tests.namer import PytestNamer
 
 
 @pytest.mark.parametrize(
@@ -23,4 +22,4 @@ def test_validation_error(lang):
                     ),
                     {"TYPE": "foo", "REQUEST_TYPES": "bar"},
                 )
-            verify(error.value.translate(), namer=PytestNamer())
+            verify(error.value.translate())
