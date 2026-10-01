@@ -1,5 +1,5 @@
 # build node app
-FROM node:16-slim AS node-builder
+FROM node:24-trixie-slim AS node-builder
 
 WORKDIR /app
 # install JS dependencies
