@@ -10,7 +10,7 @@ For contributing to this project please also read the [Contribution Guideline](/
 ## Prerequisites (Requirements)
 
 - [uv](https://docs.astral.sh/uv/getting-started/installation/)
-- Node: `>=14`
+- Node: `>=22`
 - NPM
 - [GDAL](https://gdal.org/en/stable/index.html)
 - freetype *(dependency of reportlab for creating PDFs)*
