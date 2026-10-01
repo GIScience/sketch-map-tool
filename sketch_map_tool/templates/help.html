@@ -51,10 +51,10 @@
                     <li>{{ _('Choose between the different base map layer options:  <a href="https://osm.org/"
                                 target="_blank">OpenStreetMap (OSM)</a>, satellite imagery (<a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9"
                                 target="_blank">ESRI world imagery</a>) or <a href="https://openaerialmap.org/"
-                                target="_blank">OpenAerialMap imagery (OAM)</a>.') }} </li> 
-					
-				
-					<li>{{ _('Select from different <em>paper formats</em> and the appropriate <em>page orientation</em>. The dashed red line
+                                target="_blank">OpenAerialMap imagery (OAM)</a>.') }} </li>
+
+
+                    <li>{{ _('Select from different <em>paper formats</em> and the appropriate <em>page orientation</em>. The dashed red line
                             represents the
                             boundaries of your area of interest, which will be printed on the Sketch Map.') }}</li>
                     <li>{{ _('Initiate the map creation by clicking the blue "next" button.') }}</li>
@@ -65,50 +65,51 @@
                     <figcaption></figcaption>
                 </figure>
 
-            
-        <p><b>{{ _('How to use a drone or satellite image from OpenAerialMap as base map') }}</b></p>
-                    <p>      
-                            {{ _('In case of choosing OpenAerialMap you will be redirected to their website in order to browse for your imagery. Choose an image by
+
+                <p><b>{{ _('How to use a drone or satellite image from OpenAerialMap as base map') }}</b></p>
+                <p>
+                    {{ _('In case of choosing OpenAerialMap you will be redirected to their website in order to browse for your imagery. Choose an image by
                             clicking on it on the left hand site and copying its ID and pasting it back to the Sketch Map Tool prompt. Please consider that OpenAerialMap does not yet have global coverage. 
 							Therefore, it is necessary to check whether images are available for the area of interest. 
-                            If so, OAM can serve as an alternative to outdated or low-resolution ESRI satellite images. ') }}</p>
+                            If so, OAM can serve as an alternative to outdated or low-resolution ESRI satellite images. ') }}
+                </p>
 
                 <div class="grid">
                     <div>
                         <figure> <!-- Now select the imagery you would like to set as your base map.-->
-                   		    <img src="{{ url_for("static", filename="assets/images/help/1_1_select_imagery.png" ) }}" alt="{{ _('Screenshot of OpenAerialMap') }}">
-                    	    <figcaption>Browse for your imagery</figcaption>
-               			</figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/1_1_select_imagery.png" ) }}" alt="{{ _('Screenshot of OpenAerialMap') }}">
+                            <figcaption>Browse for your imagery</figcaption>
+                        </figure>
                     </div>
                     <div>
                         <figure> <!-- Scroll down to the left and copy the Image ID.-->
-                   			<img src="{{ url_for("static", filename="assets/images/help/1_1_scroll_to_ID.png" ) }}" alt="{{ _('Screenshot of OpenAerialMap') }}">
-                    		<figcaption>Click on a the imagery of your choice to retreieve the image ID</figcaption>
-               			</figure>
+                            <img src="{{ url_for("static", filename="assets/images/help/1_1_scroll_to_ID.png" ) }}" alt="{{ _('Screenshot of OpenAerialMap') }}">
+                            <figcaption>Click on a the imagery of your choice to retreieve the image ID</figcaption>
+                        </figure>
                     </div>
                 </div>
 
-                    
-								<figure style="text-align:center;"> <!-- Paste the ID in the designated field of the pop-up window.-->
-                   				  <img src="{{ url_for("static", filename="assets/images/help/1_1_paste_ID.png" ) }}" alt="{{ _('Screenshot of pop-up window') }}" style="width: 60%; height: auto;">
-                    			  <figcaption>Paste image ID in Sketch Map Tool prompt</figcaption>
-               					</figure>    
-				<p>
-    			<em>{{ _('Tip: Consider creating several Sketch Maps of the same area with different base 
+
+                <figure style="text-align:center;"> <!-- Paste the ID in the designated field of the pop-up window.-->
+                    <img src="{{ url_for("static", filename="assets/images/help/1_1_paste_ID.png" ) }}" alt="{{ _('Screenshot of pop-up window') }}" style="width: 60%; height: auto;">
+                    <figcaption>Paste image ID in Sketch Map Tool prompt</figcaption>
+                </figure>
+                <p>
+                    <em>{{ _('Tip: Consider creating several Sketch Maps of the same area with different base 
 					layers if you are unsure which one will work best!') }}</em>
-				</p>
-				<p>
-					<b>
-                    	{{ _('Choose the right paper format to fit your mapping needs:') }}
-					</b>
-					<ul>
-                   		<li>{{ _('Group mapping is easier on larger maps (A2 or A1, depending on your group size).') }}
-                    	</li>
-						<li>{{ _('For data collection in the field, A4 or A3 are easier to handle.') }}</li>
-                	</ul>
-					<p>
-    					<strong><em></strong>{{ _('Tip: If the area is too big, consider creating multiple Sketch Maps!') }}<strong></em></strong>
-					</p>
+                </p>
+                <p>
+                    <b>
+                        {{ _('Choose the right paper format to fit your mapping needs:') }}
+                    </b>
+                <ul>
+                    <li>{{ _('Group mapping is easier on larger maps (A2 or A1, depending on your group size).') }}
+                    </li>
+                    <li>{{ _('For data collection in the field, A4 or A3 are easier to handle.') }}</li>
+                </ul>
+                <p>
+                    <strong><em></strong>{{ _('Tip: If the area is too big, consider creating multiple Sketch Maps!') }}<strong></em></strong>
+                </p>
             </article>
 
         </details>
@@ -118,19 +119,19 @@
                 <p>
                     {{ _('The generated Sketch Map for your selected area of interest can be downloaded as a PDF file by clicking on the blue button.') }}
                 </p>
-				<div class="grid">
-                <figure>
-                    <img src="{{ url_for("static", filename="assets/images/help/1_3_empty_sketch_map_osm.webp" ) }}" alt="{{ _('Empty Sketch Map, OSM') }}" style="width: 100%; height: auto;">
-                    <figcaption></figcaption>
-                </figure>
+                <div class="grid">
+                    <figure>
+                        <img src="{{ url_for("static", filename="assets/images/help/1_3_empty_sketch_map_osm.webp" ) }}" alt="{{ _('Empty Sketch Map, OSM') }}" style="width: 100%; height: auto;">
+                        <figcaption></figcaption>
+                    </figure>
 
-                <figure>
-                    <img src="{{ url_for("static", filename="assets/images/help/1_3_empty_sketch_map_satellite.webp" ) }}" alt="{{ _('Empty Sketch Map, Satellite') }}" style="width: 100%; height: auto;">
-                    <figcaption></figcaption>
-                </figure>
-					</div>
-					<p>
-								<b>{{ _('Some recommendations:') }}</b>
+                    <figure>
+                        <img src="{{ url_for("static", filename="assets/images/help/1_3_empty_sketch_map_satellite.webp" ) }}" alt="{{ _('Empty Sketch Map, Satellite') }}" style="width: 100%; height: auto;">
+                        <figcaption></figcaption>
+                    </figure>
+                </div>
+                <p>
+                    <b>{{ _('Some recommendations:') }}</b>
                 <ul>
                     <li>
                         {{ _('Prepare separate maps for each topic or per person/group because it is difficult to read and analyze
@@ -145,214 +146,214 @@
                             you in organizing your maps.') }}
                     </li>
                 </ul>
-					</p>
+                </p>
             </article>
         </details>
     </details>
     <details>
         <summary id="data-collection"><strong class="sketchy" style="color: var(--heigit-red)">{{ _('THEN:') }} </strong>
-			&nbsp;<b>{{ _('Data collection in the field') }}</b>
+            &nbsp;<b>{{ _('Data collection in the field') }}</b>
         </summary>
         <article>
             <p>
-        			{{ _('The printed Sketch Map is now ready to be used for your mapping activity. The way you draw on your map determines the detectability of your markings.') }}
+                {{ _('The printed Sketch Map is now ready to be used for your mapping activity. The way you draw on your map determines the detectability of your markings.') }}
             </p>
 
             <p>
-							{{_("To help you in the field, we provide two handouts with best practices that you can print out: ")}}
-				<ul>
-				<li>1</li>
-				<li>2</li>
-				</ul>
+                {{_("To help you in the field, we provide two handouts with best practices that you can print out: ")}}
+            <ul>
+                <li>1</li>
+                <li>2</li>
+            </ul>
             </p>
 
-			
-			<p>
-				{{ _('The Sketch Map Tool detects shapes (point and polygons) and colors. To make sure your markings are detected: ') }}
-			<ul>
-				<li>
-					{{ _('Use contrast rich colors - red, blue, green, and black work great') }}
-           		 </li>
-				<li>
-						{{_('Use <em>thick</em> and <em>opaque</em> pens (e.g. felt-tip markers)')}}
-        </li>
-				<li>
-						{{_('Draw closed shapes with continuous lines (not dashed)')}}
-        </li>
-			</ul>	 
-				
-        </p>
-        <p>
-      {{ _('Please make sure to not draw over the black-and-white symbols on the map margin.') }}
-        </p>
 
-        <p>
-				{{ _("<em>Tip: Test your pens and the detectibility of your markings before your mapping activity.</em>")}}
-        </p>
-        <p>
-                <div class="grid">
-                    <div>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
-							<figcaption>{{ _('<strong>Original Image:</strong> Markings are thick, opaque and have good contrast.') }}</figcaption>
-                        </figure>
-                    </div>
-                    <div>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red_result.webp" ) }}" alt="{{ _('Result of Marking Detection.') }}">
-                            <figcaption>
-                                {{ _('<strong>Result:</strong> All shapes and colors were detected.') }}
-                            </figcaption>
-                        </figure>
-                    </div>
-                </div>
+            <p>
+                {{ _('The Sketch Map Tool detects shapes (point and polygons) and colors. To make sure your markings are detected: ') }}
+            <ul>
+                <li>
+                    {{ _('Use contrast rich colors - red, blue, green, and black work great') }}
+                </li>
+                <li>
+                    {{_('Use <em>thick</em> and <em>opaque</em> pens (e.g. felt-tip markers)')}}
+                </li>
+                <li>
+                    {{_('Draw closed shapes with continuous lines (not dashed)')}}
+                </li>
+            </ul>
 
-        </p>
-			<details>
-				<summary>Click here for more examples</summary>
-            <article>
-                <div class="grid">
-                    <div>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
-							<figcaption>{{ _('<strong>Original Image:</strong> Markings are thick, opaque and have good contrast.') }}</figcaption>
-                        </figure>
-                    </div>
-                    <div>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red_result.webp" ) }}" alt="{{ _('Result of Marking Detection.') }}">
-                            <figcaption>
-                                {{ _('<strong>Result:</strong> All shapes and colors were detected.') }}
-                            </figcaption>
-                        </figure>
-                    </div>
+            </p>
+            <p>
+                {{ _('Please make sure to not draw over the black-and-white symbols on the map margin.') }}
+            </p>
+
+            <p>
+                {{ _("<em>Tip: Test your pens and the detectibility of your markings before your mapping activity.</em>")}}
+            </p>
+            <p>
+            <div class="grid">
+                <div>
+                    <figure>
+                        <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                        <figcaption>{{ _('<strong>Original Image:</strong> Markings are thick, opaque and have good contrast.') }}</figcaption>
+                    </figure>
                 </div>
-                <div class="grid">
-                    <div>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_different_shapes.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
-                            <figcaption>{{ _('<strong>Original Image:</strong> marked with different shapes.') }}</figcaption>
-                        </figure>
+                <div>
+                    <figure>
+                        <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red_result.webp" ) }}" alt="{{ _('Result of Marking Detection.') }}">
+                        <figcaption>
+                            {{ _('<strong>Result:</strong> All shapes and colors were detected.') }}
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            </p>
+            <details>
+                <summary>Click here for more examples</summary>
+                <article>
+                    <div class="grid">
+                        <div>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                                <figcaption>{{ _('<strong>Original Image:</strong> Markings are thick, opaque and have good contrast.') }}</figcaption>
+                            </figure>
+                        </div>
+                        <div>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red_result.webp" ) }}" alt="{{ _('Result of Marking Detection.') }}">
+                                <figcaption>
+                                    {{ _('<strong>Result:</strong> All shapes and colors were detected.') }}
+                                </figcaption>
+                            </figure>
+                        </div>
                     </div>
-                    <div>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_different_shapes_result.webp" ) }}" alt="{{ _('Result of Marking Detection.') }}">
-                            <figcaption>
-                                {{ _('<strong>Result:</strong> The shape of everything you write or draw on the map with a color that the
+                    <div class="grid">
+                        <div>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_different_shapes.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                                <figcaption>{{ _('<strong>Original Image:</strong> marked with different shapes.') }}</figcaption>
+                            </figure>
+                        </div>
+                        <div>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_different_shapes_result.webp" ) }}" alt="{{ _('Result of Marking Detection.') }}">
+                                <figcaption>
+                                    {{ _('<strong>Result:</strong> The shape of everything you write or draw on the map with a color that the
                                         tool recognizes can be detected as a marked area (polygon).
                                         However, in some cases, they may not be detected at all.') }}
-                            </figcaption>
-                        </figure>
+                                </figcaption>
+                            </figure>
+                        </div>
                     </div>
-                </div>
-            </article>
-            <h4>{{ _('Recommendations') }}</h4>
-            <article>
-                <h5>{{ _('Line Thickness') }}</h5>
-                <div class="grid">
-                    <div>
-                        <h6>{{ _('Recommended') }}</h6>
-                        <p>
-                            {{ _('Use thick felt-tip pens with intense colors.') }}
-                        </p>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
-                            <figcaption></figcaption>
-                        </figure>
-                    </div>
-                    <div>
-                        <h6>{{ _('Not recommended') }}</h6>
-                        <p>
-                            {{ _('Thin lines in light colors might not be detected. We generally recommend to test your pens and the 
+                </article>
+                <h4>{{ _('Recommendations') }}</h4>
+                <article>
+                    <h5>{{ _('Line Thickness') }}</h5>
+                    <div class="grid">
+                        <div>
+                            <h6>{{ _('Recommended') }}</h6>
+                            <p>
+                                {{ _('Use thick felt-tip pens with intense colors.') }}
+                            </p>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                                <figcaption></figcaption>
+                            </figure>
+                        </div>
+                        <div>
+                            <h6>{{ _('Not recommended') }}</h6>
+                            <p>
+                                {{ _('Thin lines in light colors might not be detected. We generally recommend to test your pens and the 
                                     detectability of your markings with the Sketch Map Tool before your mapping activity.') }}
-                        </p>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_thin_lines.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
-                            <figcaption></figcaption>
-                        </figure>
+                            </p>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_thin_lines.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                                <figcaption></figcaption>
+                            </figure>
+                        </div>
                     </div>
-                </div>
-            </article>
-            <article>
-                <h5>{{ _('Polygon Outlines') }}</h5>
-                <div class="grid">
-                    <div>
-                        <h6>{{ _('Recommended') }}</h6>
-                        <p>
-                            {{ _('For polygons, draw their outline as a closed, strong, and continues shape.
+                </article>
+                <article>
+                    <h5>{{ _('Polygon Outlines') }}</h5>
+                    <div class="grid">
+                        <div>
+                            <h6>{{ _('Recommended') }}</h6>
+                            <p>
+                                {{ _('For polygons, draw their outline as a closed, strong, and continues shape.
                                     You do not need to fill the polygons, and the pattern you draw in the middle will not be detected.
                                     In general, smaller polygons are detected better than large polygons.') }}
-                        </p>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
-                            <figcaption></figcaption>
-                        </figure>
-                    </div>
-                    <div>
-                        <h6>{{ _('Not recommended') }}</h6>
-                        <p>
-                            {{ _('Gaps in the outline could lead to mistakes in the detection.') }}
-                        </p>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_dotted_lines.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
-                            <figcaption></figcaption>
-                        </figure>
-                        <p>
-                            {{ _('Large polygons might not be detected properly. If you need to draw large polygons, please consider to zoom out.') }}
-                        </p>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_large_polys.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
-                            <figcaption></figcaption>
-                        </figure>
-                        <p>
-                            {{ _('If you just draw a line, the marked area of the line will be detected.
+                            </p>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_blue_red.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                                <figcaption></figcaption>
+                            </figure>
+                        </div>
+                        <div>
+                            <h6>{{ _('Not recommended') }}</h6>
+                            <p>
+                                {{ _('Gaps in the outline could lead to mistakes in the detection.') }}
+                            </p>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_dotted_lines.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                                <figcaption></figcaption>
+                            </figure>
+                            <p>
+                                {{ _('Large polygons might not be detected properly. If you need to draw large polygons, please consider to zoom out.') }}
+                            </p>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_large_polys.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                                <figcaption></figcaption>
+                            </figure>
+                            <p>
+                                {{ _('If you just draw a line, the marked area of the line will be detected.
                                     Nevertheless, we do not recommend to use lines, since the model has not been trained to detect lines 
                                     and doing so could lead to mistakes in detection of marking.') }}
-                        </p>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_lines.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
-                            <figcaption></figcaption>
-                        </figure>
-                        <p>
-                            {{ _('If you want to draw a point, draw a larger circle to improve the detection.
+                            </p>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_lines.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                                <figcaption></figcaption>
+                            </figure>
+                            <p>
+                                {{ _('If you want to draw a point, draw a larger circle to improve the detection.
                                     If you want to draw lines, draw strong, non-dashed lines with intense colors.') }}
-                        </p>
-                        <p>
-                            {{ _('Hint: If you need the marking as a line or a point shape,
+                            </p>
+                            <p>
+                                {{ _('Hint: If you need the marking as a line or a point shape,
                                     you can easily transfer it manually or digitalize it yourself,
                                     for example, in QGIS (see <a
                                         href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex4_.html#exercise-a-exploration-basic-visualization-of-sketch-map-tool-outputs-in-qgis"
                                         target="_blank">Training Exercise 4</a>)') }}
-                        </p>
+                            </p>
+                        </div>
                     </div>
-                </div>
-            </article>
-            <article>
-                <h6>{{ _('Satellite Base maps') }}</h6>
-                <div class="grid">
-                    <div>
-                        <h6>{{ _('Recommended') }}</h6>
-                        <p>
-                            {{ _('Check the darkness of the Satellite base map, especially before printing it in black-and-white.')
+                </article>
+                <article>
+                    <h6>{{ _('Satellite Base maps') }}</h6>
+                    <div class="grid">
+                        <div>
+                            <h6>{{ _('Recommended') }}</h6>
+                            <p>
+                                {{ _('Check the darkness of the Satellite base map, especially before printing it in black-and-white.')
                                     }}
-                        </p>
-                        <p>
-                            {{ _('Make sure you use bright colors and mark the maps especially clearly. Sometimes
+                            </p>
+                            <p>
+                                {{ _('Make sure you use bright colors and mark the maps especially clearly. Sometimes
                                     it might be helpful to use both Sketch Maps with satellite imagery
                                     and OSM base maps for the mapping.') }}
-                        </p>
+                            </p>
+                        </div>
+                        <div>
+                            <h6>{{ _('Not recommended') }}</h6>
+                            <p>{{ _('Small polygons can be especially difficult to detected.') }}</p>
+                            <figure>
+                                <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_small_polys_result.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
+                                <figcaption></figcaption>
+                            </figure>
+                        </div>
                     </div>
-                    <div>
-                        <h6>{{ _('Not recommended') }}</h6>
-                        <p>{{ _('Small polygons can be especially difficult to detected.') }}</p>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/then_sketch_map_small_polys_result.webp" ) }}" alt="{{ _('Picture of a Sketch Map.') }}">
-                            <figcaption></figcaption>
-                        </figure>
-                    </div>
-                </div>
-            </article>
-</details>
+                </article>
+            </details>
 
     </details>
     <details open>
@@ -364,25 +365,25 @@
             <summary id="scan-or-photo-marked-sketch-maps">2.1 {{ _('Photograph your marked
                     Sketch Maps') }}
             </summary>
-        	<article>
-			<p>
+            <article>
+                <p>
 
                 <figure>
                     <img src="{{ url_for("static", filename="assets/images/help/2_1_sketch_map_photo.webp" ) }}" alt="{{ _('How to take a photo of a Sketch Map.') }}" style="width: 40%; height: auto;">
                 </figure>
 
 
-			</p>
-			<p>
-			Take a photo of you Sketch Map.
-			<ul>
-			<li>Make sure that all map elements (QR code and entire map) are visible</li>
-			<li>Take the photo from above at a 180 degree angle (not tilted)</li>
-			<li>Ensure good lighting conditions (no shades)</li>
-			</ul>
-			<em>Tip: If you experience problems take new photo. Small changes in lightning and angle can make a difference!</em>
-			</p>
-        	</article>
+                </p>
+                <p>
+                    Take a photo of you Sketch Map.
+                <ul>
+                    <li>Make sure that all map elements (QR code and entire map) are visible</li>
+                    <li>Take the photo from above at a 180 degree angle (not tilted)</li>
+                    <li>Ensure good lighting conditions (no shades)</li>
+                </ul>
+                <em>Tip: If you experience problems take new photo. Small changes in lightning and angle can make a difference!</em>
+                </p>
+            </article>
         </details>
         <details>
             <summary id="upload-sketch-maps">2.2 {{ _('Upload your Sketch Maps') }}</summary>
@@ -395,7 +396,7 @@
                     {{ _('Use the upload dialog to upload your Sketch Map(s).')}}
                 </p>
                 <p>
-					<em>Note: Until your result is ready it can take up to 2 minutes per Sketch Map.</em>
+                    <em>Note: Until your result is ready it can take up to 2 minutes per Sketch Map.</em>
                 </p>
             </article>
         </details>
@@ -412,7 +413,7 @@
 
     <details>
         <summary id="import-geodata-in-qgis"><strong class="sketchy" style="color: var(--heigit-red)">{{ _('FINALLY:') }} </strong>
-			<strong>{{ _('Import Geodata in a Geographic Information System (GIS), e.g. QGIS') }}</strong>
+            <strong>{{ _('Import Geodata in a Geographic Information System (GIS), e.g. QGIS') }}</strong>
         </summary>
         <article>
             <p>
@@ -638,7 +639,7 @@
                 The georeferenced GeoTIFF and GeoJSON can then be further analyzed or used.') }}
         </article>
     </details>
-	    <details>
+    <details>
         <summary id="how-search-by-coordinates">{{ _('Is it possible to find a certain location by coordinates?') }}</summary>
         <article>
             {{ _('In the search field, instead of a place name, you can simply enter your LAT, LON coordinates including 
@@ -696,7 +697,7 @@
             </p>
         </article>
     </details>
-	<details>
+    <details>
         <summary id="how-does-markingdetection-work">{{ _('How does the marking detection work?') }}</summary>
         <article>
             <p>
@@ -710,8 +711,7 @@
 				such as the markers in the corners of the Sketch Maps, between the reference and current input image, 
 				enabling precise spatial alignment. The algorithm detects all markings as either &apos;Points&apos; or &apos;Polygons&apos;. Lines are treated as polygons,
 				and any polygon (whether a line or a shape) below a set size threshold is ultimately classified as a &apos;Point&apos;.') }}
-            </p
-        </article>
+            </p </article>
     </details>
     <details>
         <summary id="how-to-ensure-optimal-results">{{ _('How can I ensure optimal results when photographing the Sketch
