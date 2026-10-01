@@ -14,7 +14,7 @@
     <div class="active">{{ _('Map Quality Check') }}</div>
     <div class="active">{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
 </div>
-<main class="container">
+<main class="container" style="max-width: 768px;">
     <div id="main-message">
         <div class="sketchy h1 center-text pending">{{ _('Your results are being processed ...') }}
         </div>
@@ -26,55 +26,54 @@
         </div>
     </div>
     <br>
-    <div class="grid">
-        <div>
-            <article id="quality-report" class="result">
-                <header>
-                    <img src="{{ url_for("static", filename="assets/images/create-results/quality-report-icon.svg") }}" alt="{{ _('quality report icon') }}"><br>
-                    <img class="sub-icon" src="{{ url_for("static", filename="assets/logos/HeiGIT/ohsome-quality-api.optimized.svg") }}" alt="{{ _('ohsome quality api logo') }}">
-                </header>
-                <h6>{{ _('Map Quality Check Report') }}</h6>
-                <p>
-                    {{ _(
-                        'You can get insight into the <em>fitness for field data collection</em> of OpenStreetMap data through the <a href="https://dashboard.ohsome.org" target="_blank">ohsome dashboard</a>.'
-                    ) }}
-                </p>
-                <a id="quality-report-button" href="https://dashboard.ohsome.org/#backend=oqtApi&topic=roads&bboxes=sketch-map-tool-input:{{ bbox }}&indicators=currentness%2Cmapping-saturation" target="_blank" role="button">{{ _('Get Quality Report') }}</a>
-            </article>
-        </div>
-        <div>
-            <article id="sketch-map" class="result">
-                <header>
-                    <img src="{{ url_for("static", filename="assets/images/create-results/sketch-map-icon.svg") }}" alt="sketch map icon"><br>
-                    <span class="brand-font heigit-red sub-icon">Sketch Map</span>
-                </header>
-                <h6>{{ _('Sketch Map Template') }}</h6>
-                <p class="pending">
-                    {{ _(
+    <div style="display: grid; place-items: center;">
+        <article id="sketch-map" class="result">
+            <header>
+                <img src="{{ url_for("static", filename="assets/images/create-results/sketch-map-icon.svg") }}" alt="sketch map icon"><br>
+                <span class="brand-font heigit-red sub-icon">Sketch Map</span>
+            </header>
+            <p class="pending">
+                {{ _(
                         'We are creating the Sketch Map template that you can use for offline
                         participatory mapping.<br>
-                        <strong>Please be patient, this can take 2-10 minutes.</strong>
+                        <strong>Please be patient, this can take 2-10 minutes.</strong><br>
                         We use up-to-date
                         <a href="https://wiki.osm.org" target="_blank">OpenStreetMap</a>
                         data, satellite imagery powered by ESRI or
                         <a href="https://openaerialmap.org/" target="_blank">OpenAerialMap</a>
-                        imagery to create a high resolution printable map for you.'
-                    ) }}
-                </p>
-                <p class="success hidden">
-                    {{ _(
+                        imagery to create a high resolution printable map for you.
+                    ') }}
+            </p>
+
+            <p class="pending">
+            </p>
+            <p class="success hidden">
+                {{ _(
                         'We have created the Sketch Map template that you can
                         use for offline participatory mapping.<br> 
                         <strong>You can now start collecting data in the field!</strong>'
                     ) }}
-                </p>
-                <p class="error hidden">
-                    {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}
-                </p>
-                <a id="sketch-map-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download PDF') }}</a>
-                <div id="sketch-map-status" class="task-status"></div>
-            </article>
-        </div>
+            </p>
+            <p class="error hidden">
+                {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}
+            </p>
+            <a id="sketch-map-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download PDF') }}</a>
+            <div id="sketch-map-status" class="task-status"></div>
+        </article>
     </div>
+
+    <article>
+        <details>
+            <summary role="button" class="secondary outline">
+                {{ _('Data quality of your Sketch Map') }}
+            </summary>
+            <p>
+                {{ _(
+                        'You can get insight into the <em>fitness for field data collection</em> of OpenStreetMap data through the <a href="https://dashboard.ohsome.org" target="_blank">ohsome dashboard</a>.'
+                    ) }}
+            </p>
+            <a id="quality-report-button" href="https://dashboard.ohsome.org/#backend=oqtApi&topic=roads&bboxes=sketch-map-tool-input:{{ bbox }}&indicators=currentness%2Cmapping-saturation" target="_blank" role="button">{{ _('Get Quality Report') }}</a>
+        </details>
+    </article>
 </main>
 {% endblock body %}
