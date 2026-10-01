@@ -35,8 +35,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         libpq-dev \
         libzbar0 \
         libgl1 \
-        libglib2.0-dev \
-        python3-gdal
+        libglib2.0-dev
+
+RUN test "$(gdal-config --version)" = "3.12.2" || (echo "GDAL mismatch: $(gdal-config --version)"; exit 1)
 
 ENV UV_LINK_MODE=copy \
     UV_HTTP_TIMEOUT=300 \
@@ -80,6 +81,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt update \
     && apt install -y --no-upgrade --no-install-recommends \
         python3 \
+        ca-certificates \
+        libcairo2 \
         libgdal38 \
         libzbar0 \
         libgl1 \
