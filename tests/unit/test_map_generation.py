@@ -1,8 +1,8 @@
 import os
 from io import BytesIO
 
-import fitz
 import numpy as np
+import pymupdf
 import pytest
 from PIL import Image
 from pytest_approval.main import verify_image
@@ -92,7 +92,7 @@ def test_generate_pdf_sketch_map_approval(
     # NOTE: The resulting PDFs across multiple test runs have slight non-visual
     # differences leading to a failure when using `verify_binary` on the PDFs.
     # That is why here they are converted to images for comparison first.
-    with fitz.open(stream=sketch_map, filetype="pdf") as doc:
+    with pymupdf.open(stream=sketch_map, filetype="pdf") as doc:
         # NOTE: For high resolution needed to read images such as aruco markers
         # matrix would have to be defined and given to get_pixmap.
         # This would result in larger file sizes.

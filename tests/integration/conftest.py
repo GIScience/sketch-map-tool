@@ -4,7 +4,7 @@ from io import BytesIO
 from typing import Generator
 from uuid import UUID
 
-import fitz
+import pymupdf
 import pytest
 from celery.contrib.testing.tasks import ping  # noqa: F401
 from flask import Flask
@@ -264,9 +264,9 @@ def sketch_map_marked(uuid_create, sketch_map, tmp_path_factory) -> bytes:
     path = tmp_path_factory.getbasetemp() / uuid_create / "sketch-map-marked.png"
 
     # Convert PDF to PNG
-    pdf = fitz.open(stream=sketch_map)  # type: ignore
+    pdf = pymupdf.open(stream=sketch_map)  # type: ignore
     pag = pdf.load_page(0)
-    mat = fitz.Matrix(2, 2)
+    mat = pymupdf.Matrix(2, 2)
     pag.get_pixmap(matrix=mat).save(path, output="png")
 
     # Draw shapes on PNG (Sketch Map)

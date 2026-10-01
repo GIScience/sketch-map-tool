@@ -5,7 +5,7 @@ from io import BytesIO
 from typing import Tuple
 
 import cv2
-import fitz
+import pymupdf
 from PIL import Image
 from reportlab.graphics.shapes import Drawing
 from reportlab.lib.pagesizes import landscape
@@ -380,7 +380,7 @@ def add_scalebar(
 def pdf_page_to_img(pdf: BytesIO, img_format, page_id=0) -> BytesIO:
     """Extract page from PDF, convert it to PNG and write it as Pillow Image."""
     img = BytesIO()
-    with fitz.Document(stream=pdf, filetype="pdf") as doc:
+    with pymupdf.Document(stream=pdf, filetype="pdf") as doc:
         page = doc.load_page(page_id)
         # TODO: Is this necessary?
         # if portrait:
