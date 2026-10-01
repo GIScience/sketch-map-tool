@@ -1,0 +1,44 @@
+{{- if .Values.flower.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "sketch-map-tool.fullname" . }}-flower
+  labels:
+    {{- include "sketch-map-tool.labels" . | nindent 4 }}
+    app.kubernetes.io/component: flower
+  {{- with .Values.flower.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.flower.ingress.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+  {{- if .Values.flower.ingress.tls }}
+  tls:
+    {{- range .Values.flower.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.flower.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- with .pathType }}
+            pathType: {{ . }}
+            {{- end }}
+            backend:
+              service:
+                name: {{ include "sketch-map-tool.fullname" $ }}-flower
+                port:
+                  name: http
+          {{- end }}
+    {{- end }}
+{{- end }}
