@@ -28,6 +28,7 @@ from sketch_map_tool.routes import app as smt_flask_app
 from sketch_map_tool.upload_processing import clip
 from tests import FIXTURE_DIR
 from tests import vcr_app as vcr
+from tests.integration.utils import extract_uuid
 
 
 #
@@ -225,9 +226,7 @@ def uuid_create(
     )
     assert response.status_code == 200
 
-    url_parts = response.request.path.rsplit("/")
-    uuid = url_parts[-2]
-    UUID(uuid)  # validate uuid
+    uuid = extract_uuid(response.request.path)
 
     task = celery_app.AsyncResult(uuid)
     result = task.get(timeout=180)
@@ -313,10 +312,7 @@ def uuid_digitize(
     data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")], "consent": True}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
 
-    # Extract UUID from response
-    url_parts = response.request.path.rsplit("/")
-    uuid = url_parts[-1]
-    UUID(uuid)  # validate uuid
+    uuid = extract_uuid(response.request.path)
 
     # Wait for tasks to be finished and retrieve results (vector and raster)
     result = celery_app.GroupResult.restore(uuid).get(timeout=180)

@@ -61,7 +61,7 @@
             <div id="sketch-map-status" class="task-status"></div>
         </article>
     </div>
-
+    {% if bbox %}
     <article>
         <details>
             <summary role="button" class="secondary outline">
@@ -75,5 +75,6 @@
             <a id="quality-report-button" href="https://dashboard.ohsome.org/#backend=oqtApi&topic=roads&bboxes=sketch-map-tool-input:{{ bbox }}&indicators=currentness%2Cmapping-saturation" target="_blank" role="button">{{ _('Get Quality Report') }}</a>
         </details>
     </article>
+    {% endif %}
 </main>
 {% endblock body %}
