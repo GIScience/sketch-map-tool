@@ -1,0 +1,32 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Sketch Map Tool
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - name: 'HeiGIT gGmbH'
+    address: Schloss-Wolfsbrunnenweg 33
+    city: Heidelberg
+    country: DE
+    post-code: '69118'
+    email: sketch-map-tool@heigit.org
+    website: 'https://sketch-map-tool.heigit.org/'
+repository-code: 'https://github.com/GIScience/sketch-map-tool'
+url: 'https://sketch-map-tool.heigit.org'
+abstract: >-
+  The Sketch Map Tool is an open-source tool for
+  participatory sketch mapping, enabling offline data
+  collection, digitization, and georeferencing of local
+  spatial knowledge.
+keywords:
+  - participatory mapping
+  - sketch maps
+  - georeferencing
+  - digitization
+  - GIS
+  - GeoAI
+license: AGPL-3.0

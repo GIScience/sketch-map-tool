@@ -21,7 +21,7 @@ STYLE = Style(
 def create_monthly_bins(start: datetime, end: datetime) -> dict:
     start = start.replace(day=1)
     end = end.replace(day=1) + relativedelta(months=1)
-    date_range = pandas.date_range(start=start, end=end, freq="M", normalize=True)
+    date_range = pandas.date_range(start=start, end=end, freq="ME", normalize=True)
     month_series = pandas.Series(0, index=date_range.strftime(FMT))
     return month_series.to_dict()
 

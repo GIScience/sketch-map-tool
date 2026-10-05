@@ -1,11 +1,11 @@
 import os
 from io import BytesIO
 
-import fitz
 import numpy as np
+import pymupdf
 import pytest
-from approvaltests import Options, verify_binary
 from PIL import Image
+from pytest_approval.main import verify_image
 from reportlab.graphics.shapes import Drawing
 from reportlab.pdfgen import canvas
 
@@ -20,10 +20,6 @@ from sketch_map_tool.map_generation.generate_pdf import (
 from sketch_map_tool.models import PaperFormat
 from tests import FIXTURE_DIR
 from tests import vcr_app as vcr
-from tests.comparator import ImageComparator
-from tests.namer import PytestNamer, PytestNamerFactory
-from tests.reporter import ImageReporter, NDArrayReporter
-from tests.unit.helper import serialize_ndarray
 
 
 @pytest.fixture
@@ -79,7 +75,7 @@ def test_generate_pdf(
 # NOTE: To reduce number of approvals, parameter numbers are kept low.
 @pytest.mark.parametrize("orientation", ["landscape"])
 @pytest.mark.parametrize("paper_format", [A4])
-@pytest.mark.skipif(os.getenv("CI") == "true", reason="detected CI environment")
+@pytest.mark.skipif(os.getenv("CI") is not None, reason="Detected CI environment")
 def test_generate_pdf_sketch_map_approval(
     map_image,
     qr_code_approval,
@@ -96,24 +92,12 @@ def test_generate_pdf_sketch_map_approval(
     # NOTE: The resulting PDFs across multiple test runs have slight non-visual
     # differences leading to a failure when using `verify_binary` on the PDFs.
     # That is why here they are converted to images for comparison first.
-    with fitz.open(stream=sketch_map, filetype="pdf") as doc:
+    with pymupdf.open(stream=sketch_map, filetype="pdf") as doc:
         # NOTE: For high resolution needed to read images such as aruco markers
         # matrix would have to be defined and given to get_pixmap.
         # This would result in larger file sizes.
-        image = doc.load_page(0).get_pixmap()  # type: ignore
-    # fmt: off
-    options = (
-        Options()
-            .with_reporter(ImageReporter())
-            .with_namer(PytestNamer())
-            .with_comparator(ImageComparator())
-    )
-    # fmt: off
-    verify_binary(
-        image.tobytes(output="png"),
-        ".png",
-        options=options,
-    )
+        image = doc.load_page(0).get_pixmap().tobytes(output="png")
+    assert verify_image(image, extension=".png")
 
 
 # NOTE: To reduce number of approvals, parameter numbers are kept low.
@@ -127,20 +111,15 @@ def test_generate_pdf_sketch_map_template_approval(
     orientation,
 ) -> None:
     _, sketch_map_template = generate_pdf(
-        map_image, qr_code_approval, paper_format, 1283.129, "osm"
+        map_image,
+        qr_code_approval,
+        paper_format,
+        1283.129,
+        "osm",
     )
-    # fmt: off
-    options = (
-        Options()
-            .with_reporter(ImageReporter())
-            .with_namer(PytestNamer())
-            .with_comparator(ImageComparator())
-    )
-    # fmt: off
-    verify_binary(
+    assert verify_image(
         sketch_map_template.read(),
-        ".png",
-        options=options,
+        extension=".png",
     )
 
 
@@ -159,26 +138,11 @@ def test_pdf_page_to_img(pdf):
         assert False
 
 
-@pytest.mark.skipif(os.getenv("CI") == "true", reason="detected CI environment")
 def test_get_aruco_makers():
     markers = get_aruco_markers(size=100)
     assert len(markers) == 8
-    for i, m in enumerate(markers):
+    for m in markers:
         assert isinstance(m, np.ndarray)
-        options = (
-            Options()
-            .with_reporter(NDArrayReporter())
-            .with_namer(PytestNamerFactory.with_parameters(i))
-        )
-        # fmt: on
-        verify_binary(
-            serialize_ndarray(m),
-            ".npy",
-            options=options,
-        )
-        # NOTE: Uncomment to display markers
-        # import cv2
-        # cv2.imshow("Marker", m)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
-        # fmt: off
+        buffer = BytesIO()
+        Image.fromarray(m).save(buffer, format="PNG")
+        assert verify_image(buffer.getvalue(), extension=".png", content_only=True)

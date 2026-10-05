@@ -11,9 +11,8 @@ def vector_path(tmp_path_factory, uuid_digitize) -> bytes:
     return tmp_path_factory.getbasetemp() / uuid_digitize / "vector.geojson"
 
 
-@pytest.mark.usefixtures("sketch_map_marked")
 @pytest.fixture(scope="session")
-def sketch_map_marked_path(tmp_path_factory, uuid_create) -> bytes:
+def sketch_map_marked_path(tmp_path_factory, uuid_create, sketch_map_marked) -> bytes:
     return tmp_path_factory.getbasetemp() / uuid_create / "sketch-map-marked.png"
 
 

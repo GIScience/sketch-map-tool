@@ -155,12 +155,21 @@ def create_results_post(lang="en") -> Response:
             layer,
         )
     )
+
+    if layer == "osm":
+        return redirect(
+            url_for(
+                "create_results_get",
+                lang=lang,
+                uuid=task_sketch_map.id,
+                bbox=bbox_wgs84,
+            )
+        )
     return redirect(
         url_for(
             "create_results_get",
             lang=lang,
             uuid=task_sketch_map.id,
-            bbox=bbox_wgs84,
         )
     )
 
@@ -172,15 +181,20 @@ def create_results_post(lang="en") -> Response:
 @app.get("/create/results/<uuid>/<bbox>")
 @app.get("/<lang>/create/results/<uuid>/<bbox>")
 def create_results_get(
-    lang="en", uuid: str | None = None, bbox: str = ""
+    lang: str = "en",
+    uuid: str | None = None,
+    bbox: str = "",
 ) -> Response | str:
     if uuid is None:
         return redirect(url_for("create", lang=lang))
-    if bbox != "":
-        validate_bbox(bbox)
+
     validate_uuid(uuid)
     # Check if celery tasks for UUID exists
     _ = get_async_result(uuid, "sketch-map")
+
+    if bbox:
+        validate_bbox(bbox)
+
     return render_template("create-results.html", lang=lang, bbox=bbox)
 
 

@@ -11,6 +11,7 @@ from PIL import Image
 from sketch_map_tool.database import client_flask
 from sketch_map_tool.routes import app as flask_app
 from tests import vcr_app
+from tests.integration.utils import extract_uuid
 
 
 @pytest.fixture
@@ -92,12 +93,10 @@ def test_create_results_post(
     )
     assert response.status_code == 200
 
-    # Extract UUID from response
-    url_parts = response.request.path.rsplit("/")
-    uuid = url_parts[-2]
-    url_rest = "/".join(url_parts[:-2])
+    path = response.request.path
+    uuid = extract_uuid(path)
     assert UUID(uuid).version == 4
-    assert url_rest == f"{lang[1]}/create/results"
+    assert path.startswith(f"{lang[1]}/create/results")
 
 
 @pytest.mark.parametrize(
@@ -125,12 +124,11 @@ def test_digitize_results_post(mock_chord, sketch_map_marked, flask_client, lang
     )
     assert response.status_code == 200
 
-    # Extract UUID from response
-    url_parts = response.request.path.rsplit("/")
-    uuid = url_parts[-1]
-    url_rest = "/".join(url_parts[:-1])
+    path = response.request.path
+    uuid = extract_uuid(path)
     assert UUID(uuid).version == 4
-    assert url_rest == f"{lang[1]}/digitize/results"
+    assert path.startswith(f"{lang[1]}/digitize/results")
+
     with flask_app.app_context():
         assert get_consent_flag_from_db(unique_file_name) is True
 
@@ -183,12 +181,11 @@ def test_digitize_results_post_no_consent(mock_chord, sketch_map_marked, flask_c
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
     assert response.status_code == 200
 
-    # Extract UUID from response
-    url_parts = response.request.path.rsplit("/")
-    uuid = url_parts[-1]
-    url_rest = "/".join(url_parts[:-1])
+    path = response.request.path
+    uuid = extract_uuid(path)
     assert UUID(uuid).version == 4
-    assert url_rest == "/en/digitize/results"
+    assert path.startswith("/en/digitize/results")
+
     with flask_app.app_context():
         assert get_consent_flag_from_db(unique_file_name) is False
 
@@ -209,12 +206,11 @@ def test_digitize_results_legacy_2024_04_15(
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
     assert response.status_code == 200
 
-    # Extract UUID from response
-    url_parts = response.request.path.rsplit("/")
-    uuid = url_parts[-1]
-    url_rest = "/".join(url_parts[:-1])
+    path = response.request.path
+    uuid = extract_uuid(path)
     assert UUID(uuid).version == 4
-    assert url_rest == "/en/digitize/results"
+    assert path.startswith("/en/digitize/results")
+
     with flask_app.app_context():
         assert get_consent_flag_from_db(unique_file_name) is True
 
@@ -279,9 +275,8 @@ def test_api_status_uuid_digitize_info_multiple(sketch_map_marked, flask_client)
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
     assert response.status_code == 200
 
-    # Extract UUID from response
-    url_parts = response.request.path.rsplit("/")
-    uuid = url_parts[-1]
+    path = response.request.path
+    uuid = extract_uuid(path)
 
     # try for 10 sec
     end = time() + 360

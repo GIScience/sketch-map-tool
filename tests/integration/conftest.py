@@ -4,7 +4,7 @@ from io import BytesIO
 from typing import Generator
 from uuid import UUID
 
-import fitz
+import pymupdf
 import pytest
 from celery.contrib.testing.tasks import ping  # noqa: F401
 from flask import Flask
@@ -28,6 +28,7 @@ from sketch_map_tool.routes import app as smt_flask_app
 from sketch_map_tool.upload_processing import clip
 from tests import FIXTURE_DIR
 from tests import vcr_app as vcr
+from tests.integration.utils import extract_uuid
 
 
 #
@@ -73,9 +74,8 @@ def celery_config(postgres_container, redis_container):
     return CELERY_CONFIG
 
 
-@pytest.mark.usefixtures("postgres_container", "redis_container")
 @pytest.fixture(scope="session", autouse=True)
-def celery_app(celery_config, celery_session_app):
+def celery_app(celery_config, celery_session_app, postgres_container, redis_container):
     """Configure Celery test app."""
     celery_session_app.conf.update(celery_config)
     smt_celery_app.conf.update(celery_config)
@@ -92,13 +92,13 @@ def celery_enable_logging():
     return True
 
 
-@pytest.mark.usefixtures(
-    "postgres_container",
-    "redis_container",
-    "celery_worker_parameters",
-)
 @pytest.fixture(scope="session", autouse=True)
-def celery_worker(celery_session_worker):
+def celery_worker(
+    celery_session_worker,
+    postgres_container,
+    redis_container,
+    celery_worker_parameters,
+):
     return celery_session_worker
 
 
@@ -226,9 +226,7 @@ def uuid_create(
     )
     assert response.status_code == 200
 
-    url_parts = response.request.path.rsplit("/")
-    uuid = url_parts[-2]
-    UUID(uuid)  # validate uuid
+    uuid = extract_uuid(response.request.path)
 
     task = celery_app.AsyncResult(uuid)
     result = task.get(timeout=180)
@@ -265,9 +263,9 @@ def sketch_map_marked(uuid_create, sketch_map, tmp_path_factory) -> bytes:
     path = tmp_path_factory.getbasetemp() / uuid_create / "sketch-map-marked.png"
 
     # Convert PDF to PNG
-    pdf = fitz.open(stream=sketch_map)  # type: ignore
+    pdf = pymupdf.open(stream=sketch_map)  # type: ignore
     pag = pdf.load_page(0)
-    mat = fitz.Matrix(2, 2)
+    mat = pymupdf.Matrix(2, 2)
     pag.get_pixmap(matrix=mat).save(path, output="png")
 
     # Draw shapes on PNG (Sketch Map)
@@ -314,10 +312,7 @@ def uuid_digitize(
     data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")], "consent": True}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
 
-    # Extract UUID from response
-    url_parts = response.request.path.rsplit("/")
-    uuid = url_parts[-1]
-    UUID(uuid)  # validate uuid
+    uuid = extract_uuid(response.request.path)
 
     # Wait for tasks to be finished and retrieve results (vector and raster)
     result = celery_app.GroupResult.restore(uuid).get(timeout=180)

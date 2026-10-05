@@ -7,7 +7,6 @@ import numpy as np
 from approvaltests import Reporter
 from matplotlib import pyplot as plt
 from matplotlib.widgets import Button
-from numpy.typing import NDArray
 from PIL import Image
 
 
@@ -52,45 +51,6 @@ class ImageApprover:
             horizontalalignment="center",
             fontsize=12,
         )
-        plt.show()
-
-
-class NDArrayApprover:
-    def __init__(self, approved_path: Path, received_path: Path):
-        self.approved_path = approved_path
-        self.received_path = received_path
-        if not self.approved_path.exists():
-            self._save_ndarray(np.zeros((2, 2)), approved_path)
-
-    @staticmethod
-    def _load_ndarray(path) -> NDArray:
-        with open(path, mode="rb") as file:
-            return np.load(file)
-
-    @staticmethod
-    def _save_ndarray(array: NDArray, path):
-        with open(path, mode="wb") as file:
-            np.save(file, array)
-
-    def approve(self, *_):
-        self.received_path.replace(self.approved_path)
-        plt.close()
-
-    def open(self):
-        """Open dialog for visual comparison."""
-        fig, axs = plt.subplots(1, 2)
-        fig.subplots_adjust(bottom=0.2)
-
-        img = self._load_ndarray(self.received_path)
-        axs[0].imshow(img, cmap="Greys")
-        axs[0].title.set_text("Received")
-        img = self._load_ndarray(self.approved_path)
-        axs[1].imshow(img, cmap="Greys")
-        axs[1].title.set_text("Approved")
-
-        ax2 = fig.add_axes((0.45, 0.05, 0.1, 0.075))
-        button = Button(ax2, "Approve")
-        button.on_clicked(self.approve)
         plt.show()
 
 
@@ -141,12 +101,6 @@ class ImageReporter(Reporter):
         approved_path: str,
     ) -> bool:
         ImageApprover(Path(approved_path), Path(received_path)).open()
-        return True
-
-
-class NDArrayReporter(Reporter):
-    def report(self, received_path: str, approved_path: str) -> bool:
-        NDArrayApprover(Path(approved_path), Path(received_path)).open()
         return True
 
 

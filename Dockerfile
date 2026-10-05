@@ -1,7 +1,7 @@
 # build node app
-FROM node:16-slim AS node-builder
+FROM node:24-trixie-slim AS node-builder
 
-WORKDIR app
+WORKDIR /app
 # install JS dependencies
 COPY package.json package.json
 COPY package-lock.json package-lock.json
@@ -14,8 +14,8 @@ RUN npm run build
 
 
 # build python app
-FROM python:3.12-bookworm AS python-builder
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+FROM ubuntu:26.04 AS python-builder
+COPY --from=ghcr.io/astral-sh/uv:0.12.20 /uv /uvx /bin/
 
 WORKDIR /app
 
@@ -26,16 +26,22 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt update \
     && apt install -y --no-upgrade --no-install-recommends \
+        build-essential \
+        python3-dev \
+        git \
+        ca-certificates \
         libfreetype6-dev \
         libgdal-dev \
         libpq-dev \
         libzbar0 \
         libgl1 \
-        libglib2.0-dev \
-        python3-gdal
+        libglib2.0-dev
+
+RUN test "$(gdal-config --version)" = "3.12.2" || (echo "GDAL mismatch: $(gdal-config --version)"; exit 1)
 
 ENV UV_LINK_MODE=copy \
-    UV_HTTP_TIMEOUT=300
+    UV_HTTP_TIMEOUT=300 \
+    UV_PYTHON_DOWNLOADS=never
 
 # install only gdal build dependencies
 RUN --mount=type=cache,target=/root/.cache/uv \
@@ -61,7 +67,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 
 # final image
-FROM python:3.12-slim-bookworm AS runtime
+FROM ubuntu:26.04 AS runtime
 
 WORKDIR /app
 
@@ -74,7 +80,10 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt update \
     && apt install -y --no-upgrade --no-install-recommends \
-        libgdal32 \
+        python3 \
+        ca-certificates \
+        libcairo2 \
+        libgdal38 \
         libzbar0 \
         libgl1 \
         libglib2.0-0
