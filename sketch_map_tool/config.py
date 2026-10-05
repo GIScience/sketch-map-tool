@@ -1,7 +1,7 @@
 import logging
 import os
 
-from pydantic import field_validator
+from pydantic import computed_field, field_validator
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
@@ -23,7 +23,6 @@ def get_config_path() -> str:
 
 
 class Config(BaseSettings):
-    broker_url: str = "redis://localhost:6379"
     cleanup_map_frames_interval: str = "12 months"
     data_dir: str = str(get_project_root() / "data")  # TODO: make this a Path
     esri_api_key: str = ""
