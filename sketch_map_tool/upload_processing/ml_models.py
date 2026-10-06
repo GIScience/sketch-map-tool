@@ -1,7 +1,6 @@
 import logging
 from pathlib import Path
 
-import requests
 import torch
 from torch._prims_common import DeviceLikeType
 
@@ -14,19 +13,6 @@ def init_model(id: str) -> Path:
     path = raw.with_suffix(".pt")
     if not path.is_file():
         raise FileNotFoundError("Model not found at " + str(path))
-    return path
-
-
-def init_sam2(id: str = "sam2_hiera_base_plus") -> Path:
-    raw = Path(CONFIG.weights_dir) / id
-    path = raw.with_suffix(".pt")
-    base_url = "https://dl.fbaipublicfiles.com/segment_anything_2/072824/"
-    url = base_url + id + ".pt"
-    if not path.is_file():
-        logging.info(f"Downloading model SAM-2 from fbaipublicfiles.com to {path}.")
-        response = requests.get(url=url)
-        with open(path, mode="wb") as file:
-            file.write(response.content)
     return path
 
 
