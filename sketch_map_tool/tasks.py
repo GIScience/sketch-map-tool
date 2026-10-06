@@ -104,7 +104,7 @@ def generate_sketch_map(
         map_image = oam_client.get_map_image(bbox_wgs84, size, layer)
     else:
         map_image = wms_client.get_map_image(bbox, size, layer)
-    qr_code_ = map_generation.qr_code(
+    qr_code_ = map_generation.create_qr_code(
         self.request.id,
         bbox,
         layer,

@@ -10,7 +10,7 @@ from reportlab.graphics.shapes import Drawing
 from reportlab.pdfgen import canvas
 
 from sketch_map_tool.definitions import A0, A1, A2, A3, A4, LETTER, TABLOID
-from sketch_map_tool.map_generation import qr_code as generate_qr_code
+from sketch_map_tool.map_generation import create_qr_code as generate_qr_code
 from sketch_map_tool.map_generation.generate_pdf import (
     generate_pdf,
     get_aruco_markers,
@@ -42,13 +42,13 @@ def map_image(request):
 
 @pytest.fixture
 def qr_code(uuid, bbox, format_, layer):
-    return generate_qr_code(uuid, bbox, layer, format_, "mock_version_number")
+    return generate_qr_code(uuid, bbox, layer, format_)
 
 
 @pytest.fixture
 def qr_code_approval(uuid, bbox):
     """QR code with fewer parameters for approval tests."""
-    return generate_qr_code(uuid, bbox, "osm", A4, "mock_version_number")
+    return generate_qr_code(uuid, bbox, "osm", A4)
 
 
 @pytest.mark.parametrize("paper_format", [A0, A1, A2, A3, A4, LETTER, TABLOID])
@@ -81,7 +81,13 @@ def test_generate_pdf_sketch_map_approval(
     qr_code_approval,
     paper_format,
     orientation,
+    monkeypatch,
 ) -> None:
+    monkeypatch.setattr(
+        "sketch_map_tool.map_generation.qr_code.__version__",
+        "2026.7.2",
+    )
+
     sketch_map, _ = generate_pdf(
         map_image,
         qr_code_approval,

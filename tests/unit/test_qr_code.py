@@ -7,7 +7,7 @@ from sketch_map_tool.map_generation.qr_code import (
     _encode_data,
     _make_qr_code,
     _to_report_lab_graphic,
-    qr_code,
+    create_qr_code,
 )
 
 
@@ -42,7 +42,7 @@ def test_qr_code(
     layer,
     format_,
 ):
-    result = qr_code(
+    result = create_qr_code(
         str(uuid4()),
         bbox,
         layer,
