@@ -46,8 +46,12 @@ def qr_code(uuid, bbox, format_, layer):
 
 
 @pytest.fixture
-def qr_code_approval(uuid, bbox):
+def qr_code_approval(uuid, bbox, monkeypatch):
     """QR code with fewer parameters for approval tests."""
+    monkeypatch.setattr(
+        "sketch_map_tool.map_generation.qr_code.__version__",
+        "2026.7.2",
+    )
     return generate_qr_code(uuid, bbox, "osm", A4)
 
 
@@ -83,11 +87,6 @@ def test_generate_pdf_sketch_map_approval(
     orientation,
     monkeypatch,
 ) -> None:
-    monkeypatch.setattr(
-        "sketch_map_tool.map_generation.qr_code.__version__",
-        "2026.7.2",
-    )
-
     sketch_map, _ = generate_pdf(
         map_image,
         qr_code_approval,
@@ -114,7 +113,7 @@ def test_generate_pdf_sketch_map_template_approval(
     map_image,
     qr_code_approval,
     paper_format: PaperFormat,
-    orientation,
+    orientation,  # type: ignore
 ) -> None:
     _, sketch_map_template = generate_pdf(
         map_image,
