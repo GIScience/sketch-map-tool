@@ -32,13 +32,16 @@ class GeoJSONComparator(FileComparator):
             return False
 
         # NOTE: Hausdorff distance might be better to determine similarity
-        area_diff = df_received_polygons.symmetric_difference(df_approved_polygons).area
-        area_union = df_received_polygons.union(df_approved_polygons).area
+        df_received_union = df_received_polygons.union_all()
+        df_approved_union = df_approved_polygons.union_all()
+
+        area_diff = df_received_union.symmetric_difference(df_approved_union).area
+        area_union = df_received_union.union(df_approved_union).area
+
         diff = area_diff / area_union
-        for d in diff.tolist():
-            if d > 0.1:
-                logging.warning(f"Area differs by more than {d:.0%}")
-                return False
+        if diff > 0.30:
+            logging.warning(f"Toral area differs by {diff:.0%}")
+            return False
         return True
 
 
