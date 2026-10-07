@@ -6,7 +6,6 @@ from types import MappingProxyType
 from typing import Generator
 from uuid import UUID
 
-import pymupdf
 import pytest
 from celery.contrib.testing.tasks import ping  # noqa: F401
 from flask import Flask
@@ -31,7 +30,6 @@ from sketch_map_tool.upload_processing.qr_code_reader import read_qr_code
 from tests import FIXTURE_DIR
 from tests import vcr_app as vcr
 from tests.integration.utils import extract_uuid
-from sketch_map_tool.upload_processing.qr_code_reader import read_qr_code
 
 
 #
