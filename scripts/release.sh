@@ -15,9 +15,8 @@ uv version "$1"
 $EDITOR sketch_map_tool/__init__.py
 
 pytest
-exit
 
-git add -p pyproject.toml ohsome_quality_api/__init__.py CHANGELOG.md
+git add -p pyproject.toml sketch_map_tool/__init__.py
 git add uv.lock
 
 git commit -m "Release $1"
