@@ -20,7 +20,14 @@ def test_generate_sketch_map(
     scale,
     layer,
 ):
-    monkeypatch.setattr("sketch_map_tool.definitions.CONFIG.esri_api_key", "")
+    monkeypatch.setattr(
+        "sketch_map_tool.definitions.CONFIG.esri_api_key",
+        "",
+    )
+    monkeypatch.setattr(
+        "sketch_map_tool.map_generation.qr_code.__version__",
+        "2026.7.2",
+    )
     monkeypatch.setattr(
         "sketch_map_tool.tasks.db_client_celery.insert_map_frame",
         lambda *_: None,

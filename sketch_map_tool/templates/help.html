@@ -26,7 +26,7 @@
         {{ _('<a href="https://nexus.heigit.org/service/rest/repository/browse/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/" target="_blank">Here</a> you can download the most important tips and questions for the mapping on one page.') }}
     </p>
     <p>
-        {{ _('Our <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html" target="_blank">training platform</a> provides distinct training exercises to further explore the Sketch Map Tool and sketch mapping in general. These exercises are primarily designed for workshop settings, allowing for collaborative discussion of your experiences.') }}
+        {{ _('Our <a href="https://giscience.github.io/gis-training-resource-center/en/Mobile_Data_collection/en_SMT_training.html" target="_blank">training platform</a> provides distinct training exercises to further explore the Sketch Map Tool and sketch mapping in general. These exercises are primarily designed for workshop settings, allowing for collaborative discussion of your experiences.') }}
     </p>
     <p>
         {{ _('We are committed to continually enhancing the tool, so please report any technical problems to the <a href="mailto:sketch-map-tool@heigit.org" target="_blank">Sketch Map Tool user support</a>.') }}
@@ -152,7 +152,7 @@
     </details>
     <details>
         <summary id="data-collection"><strong class="sketchy" style="color: var(--heigit-red)">{{ _('THEN:') }} </strong>
-            &nbsp;<b>{{ _('Data collection in the field') }}</b>
+            &nbsp;<b>{{ _('Collect data in the field') }}</b>
         </summary>
         <article>
             <p>
@@ -162,8 +162,8 @@
             <p>
                 {{_("To help you in the field, we provide two handouts with best practices that you can print out: ")}}
             <ul>
-                <li>1</li>
-                <li>2</li>
+          <li><a href="{{ url_for("static", filename="assets/infographic.pdf") }}">Infographic</a></li>
+          <li><a href="https://nexus.heigit.org/repository/gis-training-resource-center/mobile_data_collection/sketch_map_tool_training/Important_mapping_tips.pdf">Mapping tips</a></li>
             </ul>
             </p>
 
@@ -413,101 +413,38 @@
 
     <details>
         <summary id="import-geodata-in-qgis"><strong class="sketchy" style="color: var(--heigit-red)">{{ _('FINALLY:') }} </strong>
-            <strong>{{ _('Import Geodata in a Geographic Information System (GIS), e.g. QGIS') }}</strong>
+            <strong>{{ _('
+        From Map to Action') }}</strong>
         </summary>
         <article>
             <p>
-                {{ _('The gained geodata can be even more valuable for the communities and humanitarian
-                   organizations if you create result maps or analyze it further. There are many different
-                   analyses possible based on your gained map data.') }}
+                {{ _(
+        'Showing all the markings from your Sketch Maps on one map helps you see patterns, discuss them with others, and turn local knowledge into concrete action.'
+                ) }}
             </p>
             <p>
-                {{ _('To open, visualize and work with the downloaded geodata you need some type of GIS. 
-                    We recommend using QGIS because it is open-source and provides the most flexibility for analyzing and visualizing your data.
-                    Alternatively you could also use browser based GIS-Applications like <a href="https://umap.openstreetmap.fr/en/" target="_blank">uMap</a>. 
-                    These browser-based applications are easier to use for beginners, but limited in their functionality. 
-                    Please also keep in mind data security questions when using Online GIS-Applications for visualizing your data!') }}
+        {{ _('You need a Geographic Information System (GIS) to open your digitized markings. There are several open-source and free GIS tools:
+        ') }}
             </p>
-            <p>
-                {{ _('For more tips on how to open and analyze the downloaded geodata and how to create a result map in QGIS as well as in uMap,
-                    take a look at the following
-                    <a href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html"
-                    target="_blank">QGIS Training Lectures</a>.') }}
-            </p>
-            <p>
-                {{ _('Here you can see an overview on the characteristics of GeoTIFF and GeoJSON and how the results could look like:') }}
-            </p>
-
-            <article>
-                <div class="grid">
-                    <div>
-                        <h5>{{ _('GeoTIFF') }}</h5>
-                        <p>{{ _('The GeoTIFF output file consists of a georeferenced "picture" for each of your uploaded Sketch
-                                Maps. When you open the GeoTIFF files in a GIS, it should look similar to this example and shows all 
-                                your sketch map(s) as separate layers. ') }}</p>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/finally_qgis_geotiff.webp" ) }}" alt="{{ _('GeoTiff in QGIS.') }}">
-                            <figcaption>The GeoTIFF can be used as a ground truth layer for validation and manual correction in QGIS</figcaption>
-                        </figure>
-                    </div>
-                    <div>
-                        <h5>{{ _('GeoJSON') }}</h5>
-                        <p>{{ _('If you open the GeoJSON, you can see the detected markings from all uploaded maps as polygons.
-                                When you check the attribute table, you can see that for each marking, the name of the map and the detected color
-                                are specified. With the help of these attributes, you can style your map or conduct analyses.') }}</p>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/finally_qgis_geojson_1.webp" ) }}" alt="{{ _('GeoJSON in QGIS.') }}">
-                            <figcaption>The digitized markings loaded as a GeoJSON layer in QGIS, showing the corresponding attribute table with metadata</figcaption>
-                        </figure>
-                        <figure>
-                            <img src="{{ url_for("static", filename="assets/images/help/finally_qgis_geojson_2.webp" ) }}" alt="{{ _('GEOJSON in QGIS.') }}">
-                            <figcaption>Using "color"-field in the metadata to style the vector layer</figcaption>
-                        </figure>
-                    </div>
-                </div>
-            </article>
-
-            <h5>{{ _('Recommendations') }}</h5>
             <ul>
-                <li>
-                    {{ _('The GeoTIFF file (raster file) can be opened in a GIS software like QGIS but can not be opened in many browser-based GIS-Applications like uMap:') }}
-                    <ul>
-                        <li>
-                            {{ _('It can be used, for example, as a background to combine
-                                it with other data or to manually digitize your results yourself in
-                                case some markings are not detected correctly.') }}
-                        </li>
-                    </ul>
+              <li><a href="https://geojson.io/">geojson.io</a></li>
+              <li><a href="https://www.qgis.org/">QGIS</a></li>
+              <li><a href="https://umap.openstreetmap.de/en/">uMap</a></li>
+            </ul>
+
+            <p>
+        {{ _('For more tips on how to open and analyze your markings and how to create a result map, take a look at our
+                    <a href="https://giscience.github.io/gis-training-resource-center/en/Mobile_Data_collection/en_SMT_ex4_.html"
+        target="_blank">training lectures</a>:') }}
+            </p>
+            <ul>
+                <li><a href="https://giscience.github.io/gis-training-resource-center/en/Mobile_Data_collection/en_SMT_ex4_.html">
+                {{ _('Learn how to create a basic visualization in QGIS and uMap')}}
+                 </a>
                 </li>
-                <li>
-                    {{ _('The GeoJSON file (vector file) can be opened as well in QGIS as in many browser-based GIS-Applications like uMap:') }}
-                    <ul>
-                        <li>
-                            {{ _('It can be visualized in a clear and concise map in order to use it for
-                                reporting (see <a
-                                    href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex4_.html"
-                                    target="_blank">Training Exercise 4</a>)') }}
-                        </li>
-                        <li>
-                            {{ _('Based on the vector outputs you can analyze your data and combine it with additional
-                                data (e.g. prepare heatmaps, see <a
-                                    href="https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_ex5_.html"
-                                    target="_blank">Training Exercise 5 </a>)') }}
-                        </li>
-                        <li>
-                            {{ _('In QGIS: You can compare the vector output with the raster file to verify the marking detection. 
-                                In case features are not detected or are incorrectly detected, you can manipulate your vector file based on the GeoTIFF.') }}
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    {{ _('If the imported data looks strange and does not represent the actual markings of
-                        the Sketch Maps, please check your uploaded sketch map files and, if necessary, scan them again
-                        or take new pictures. Please review the recommendations in the sections about the data collection,
-                        then scan, photograph or the upload above and consult our FAQ section about the problems in the colour
-                        detection. If you cannot find your answers there, please contact your Sketch Map Tool focal point in your
-                        organization or the Sketch Map Tool or the <a href="mailto:sketch-map-tool@heigit.org"
-                        target="_blank">Sketch Map Tool user support</a>.') }}
+                <li><a href="https://giscience.github.io/gis-training-resource-center/en/Mobile_Data_collection/en_SMT_ex5_.html">
+                {{ _('Learn how to analyze your markings by creating a heatmap') }}
+                 </a>
                 </li>
             </ul>
         </article>
@@ -563,7 +500,7 @@
                             You can help us here by giving your consent!') }}
                     </p>
                     <p>
-                        {{ _('For more detailed and technical information take a look at our
+                        {{ _('For more detailed and technical information, take a look at our
                                 <a href="https://github.com/GIScience/sketch-map-tool/blob/main/docs/action-diagram.png" target="_blank">GitHub</a>
                             and the following figure.') }}
                     </p>

@@ -9,18 +9,17 @@ from sketch_map_tool import __version__
 from sketch_map_tool.models import Bbox, PaperFormat
 
 
-def qr_code(
+def create_qr_code(
     uuid: str,
     bbox: Bbox,
     layer: str,
     format_: PaperFormat,
-    version: str = __version__,
 ) -> Drawing:
     """Generate a QR code holding the Celery task id and parameters of the map creation.
 
     :uuid: The uuid of a celery task associated with the creation of the PDF map.
     """
-    data = _encode_data(uuid, bbox, layer, version)
+    data = _encode_data(uuid, bbox, layer, __version__)
     qr_code_svg = _make_qr_code(data)
     qr_code_rlg = _to_report_lab_graphic(format_, qr_code_svg)
     return qr_code_rlg
