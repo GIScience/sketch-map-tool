@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-14 11:52+0000\n"
-"PO-Revision-Date: 2026-10-14 11:52\n"
+"POT-Creation-Date: 2026-10-15 11:26+0000\n"
+"PO-Revision-Date: 2026-10-15 11:26\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -917,12 +917,6 @@ msgid "Page Setup"
 msgstr "Configuración de la página"
 
 #: sketch_map_tool/templates/create.html:30
-msgid "Your Area of Interest is too large!\n"
-"                        <br>Zoom further in to be able to create a Sketch Map."
-msgstr "¡El área de interés seleccionada es demasiado  grande! \n"
-"                        <br>Aumenta el zoom para poder crear el Sketch Map."
-
-#: sketch_map_tool/templates/create.html:33
 msgid "You are currently trying to\n"
 "                        request a map that crosses the +/-180° <a href=\"https://en.wikipedia.org/wiki/180th_meridian\" target=\"_blank\">antimeridian</a>. This is currently not\n"
 "                        supported, please move the map such that your extent is either left or right of\n"
@@ -931,71 +925,71 @@ msgstr "Estás intentando\n"
 "                        solicitar un mapa que cruza el <a href=\"https://en.wikipedia.org/wiki/180th_meridian\" target=\"_blank\">antimeridiano +/-180°</a>. Esto actualmente no es posible, por favor mueve el mapa de tal manera que los bordes se encuentren a la izquierda o a la derecha del\n"
 "                        antimeridiano."
 
-#: sketch_map_tool/templates/create.html:44
+#: sketch_map_tool/templates/create.html:41
 msgid "Paper Format"
 msgstr "Formato del papel"
 
-#: sketch_map_tool/templates/create.html:47
+#: sketch_map_tool/templates/create.html:44
 msgid "Paper Orientation"
 msgstr "Orientación del papel"
 
-#: sketch_map_tool/templates/create.html:55
+#: sketch_map_tool/templates/create.html:52
 msgid "NEXT"
 msgstr "SIGUIENTE"
 
-#: sketch_map_tool/templates/create.html:63
+#: sketch_map_tool/templates/create.html:60
 msgid "Add OpenAerialMap Layer"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:65
+#: sketch_map_tool/templates/create.html:62
 msgid "<a href=\"https://map.openaerialmap.org\" target=\"_blank\">Browse</a> the OpenAerialMap collection to find aerial images. Once you’ve selected an image, simply copy its ID and paste it here."
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:69
+#: sketch_map_tool/templates/create.html:66
 msgid "No image for given ID could be found on OpenAerialMap. Please check given ID and try again."
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:72
+#: sketch_map_tool/templates/create.html:69
 msgid "Cancel"
 msgstr "Anular"
 
-#: sketch_map_tool/templates/create.html:73
+#: sketch_map_tool/templates/create.html:70
 msgid "Add to Map"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:84
+#: sketch_map_tool/templates/create.html:81
 msgid "OpenAerialMap Metadata"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:92
+#: sketch_map_tool/templates/create.html:89
 msgid "Title"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:96
+#: sketch_map_tool/templates/create.html:93
 msgid "Date"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:100
+#: sketch_map_tool/templates/create.html:97
 msgid "Resolution"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:104
+#: sketch_map_tool/templates/create.html:101
 msgid "Provider"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:108
+#: sketch_map_tool/templates/create.html:105
 msgid "Platform"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:112
+#: sketch_map_tool/templates/create.html:109
 msgid "License"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:116
+#: sketch_map_tool/templates/create.html:113
 msgid "Item Id"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:122
+#: sketch_map_tool/templates/create.html:119
 msgid "OK"
 msgstr ""
 
