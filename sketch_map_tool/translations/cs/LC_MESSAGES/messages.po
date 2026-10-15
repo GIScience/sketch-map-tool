@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-14 11:52+0000\n"
-"PO-Revision-Date: 2026-10-14 11:52\n"
+"POT-Creation-Date: 2026-10-15 11:26+0000\n"
+"PO-Revision-Date: 2026-10-15 11:26\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -441,7 +441,7 @@ msgstr ""
 
 #: sketch_map_tool/templates/case-studies.html:22
 msgid "The Colombian Red Cross's Disaster Risk Management (DRM) CRC has continued to implement the Sketch Map Tool in their workflows for conducting EVCAs within the framework of the ongoing project „Providing humanitarian assistance to vulnerable and affected populations in Colombia“."
-msgstr ""
+msgstr "Oddělení pro řízení rizik katastrof (DRM) Kolumbijského červeného kříže (CRC) i nadále využívá nástroj Sketch Map Tool ve svých pracovních postupech při provádění hodnocení zranitelnosti a potřeb (EVCA) v rámci probíhajícího projektu „Poskytování humanitární pomoci zranitelným a postiženým skupinám obyvatelstva v Kolumbii“."
 
 #: sketch_map_tool/templates/case-studies.html:23
 #: sketch_map_tool/templates/case-studies.html:33
@@ -892,7 +892,12 @@ msgid "We are creating the Sketch Map template that you can use for offline\n"
 "                        <a href=\"https://openaerialmap.org/\" target=\"_blank\">OpenAerialMap</a>\n"
 "                        imagery to create a high resolution printable map for you.\n"
 "                    "
-msgstr ""
+msgstr "Vytváříme šablonu Sketch Map, kterou můžete použít pro offline\n"
+"                        participativní mapování.<br>\n"
+"                        <strong>Buďte prosím trpěliví, může to trvat 2–10 minut.</strong><br>\n"
+"                        Používáme aktuální\n"
+"                        <a href=\"https://wiki.osm.org\" target=\"_blank\">OpenStreetMap</a>, satelitní snímky od ESRI nebo\n"
+"                        <a href=\"https://openaerialmap.org/\" target=\"_blank\">OpenAerialMap</a>, abychom pro vás vytvořili tisknutelnou mapu ve vysokém rozlišení.                    "
 
 #: sketch_map_tool/templates/create-results.html:50
 msgid "We have created the Sketch Map template that you can\n"
@@ -913,7 +918,7 @@ msgstr "Stáhnout PDF"
 
 #: sketch_map_tool/templates/create-results.html:67
 msgid "Data quality of your Sketch Map"
-msgstr ""
+msgstr "Kvalita dat vaší Sketch mapy"
 
 #: sketch_map_tool/templates/create-results.html:70
 msgid "You can get insight into the <em>fitness for field data collection</em> of OpenStreetMap data through the <a href=\"https://dashboard.ohsome.org\" target=\"_blank\">ohsome dashboard</a>."
@@ -932,83 +937,77 @@ msgid "Page Setup"
 msgstr "Vzhled stránky"
 
 #: sketch_map_tool/templates/create.html:30
-msgid "Your Area of Interest is too large!\n"
-"                        <br>Zoom further in to be able to create a Sketch Map."
-msgstr "Vaše oblast zájmu je příliš velká!\n"
-" <br>Zvětšete zobrazení, abyste mohli vytvořit Sketch Map."
-
-#: sketch_map_tool/templates/create.html:33
 msgid "You are currently trying to\n"
 "                        request a map that crosses the +/-180° <a href=\"https://en.wikipedia.org/wiki/180th_meridian\" target=\"_blank\">antimeridian</a>. This is currently not\n"
 "                        supported, please move the map such that your extent is either left or right of\n"
 "                        the antimeridian."
 msgstr "Momentálně se pokoušíte požádat o mapu, která překračuje +/-180° <a href=\"https://en.wikipedia.org/wiki/180th_meridian\" target=\"_blank\">antimeridian</a>. To v současné době není podporováno, posuňte mapu tak, aby byla vaše oblast vlevo nebo vpravo od antimeridiánu."
 
-#: sketch_map_tool/templates/create.html:44
+#: sketch_map_tool/templates/create.html:41
 msgid "Paper Format"
 msgstr "Formát papíru"
 
-#: sketch_map_tool/templates/create.html:47
+#: sketch_map_tool/templates/create.html:44
 msgid "Paper Orientation"
 msgstr "Orientace papíru"
 
-#: sketch_map_tool/templates/create.html:55
+#: sketch_map_tool/templates/create.html:52
 msgid "NEXT"
 msgstr "DALŠÍ"
 
-#: sketch_map_tool/templates/create.html:63
+#: sketch_map_tool/templates/create.html:60
 msgid "Add OpenAerialMap Layer"
 msgstr "Přidat vrstvu OpenAerialMap"
 
-#: sketch_map_tool/templates/create.html:65
+#: sketch_map_tool/templates/create.html:62
 msgid "<a href=\"https://map.openaerialmap.org\" target=\"_blank\">Browse</a> the OpenAerialMap collection to find aerial images. Once you’ve selected an image, simply copy its ID and paste it here."
 msgstr "<a href=\"https://map.openaerialmap.org\" target=\"_blank\">Procházejte</a> sbírku OpenAerialMap a vyhledejte letecké snímky. Jakmile vyberete snímek, zkopírujte jeho ID a vložte jej sem."
 
-#: sketch_map_tool/templates/create.html:69
+#: sketch_map_tool/templates/create.html:66
 msgid "No image for given ID could be found on OpenAerialMap. Please check given ID and try again."
 msgstr "Na OpenAerialMap nebylo možné najít žádný obrázek pro zadané ID. Zkontrolujte zadané ID a zkuste to znovu."
 
-#: sketch_map_tool/templates/create.html:72
+#: sketch_map_tool/templates/create.html:69
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: sketch_map_tool/templates/create.html:73
+#: sketch_map_tool/templates/create.html:70
 msgid "Add to Map"
 msgstr "Přidat do mapy"
 
-#: sketch_map_tool/templates/create.html:84
+#: sketch_map_tool/templates/create.html:81
 msgid "OpenAerialMap Metadata"
 msgstr "OpenAerialMap Metadata"
 
-#: sketch_map_tool/templates/create.html:92
+#: sketch_map_tool/templates/create.html:89
 msgid "Title"
 msgstr "Název"
 
-#: sketch_map_tool/templates/create.html:96
+#: sketch_map_tool/templates/create.html:93
 msgid "Date"
 msgstr "Datum"
 
-#: sketch_map_tool/templates/create.html:100
+#: sketch_map_tool/templates/create.html:97
 msgid "Resolution"
 msgstr "Rozlišení"
 
-#: sketch_map_tool/templates/create.html:104
+#: sketch_map_tool/templates/create.html:101
 msgid "Provider"
 msgstr "Poskytovatel"
 
-#: sketch_map_tool/templates/create.html:108
+#: sketch_map_tool/templates/create.html:105
 msgid "Platform"
 msgstr "Platforma"
 
-#: sketch_map_tool/templates/create.html:112
+#: sketch_map_tool/templates/create.html:109
 msgid "License"
 msgstr "Licence"
 
-#: sketch_map_tool/templates/create.html:116
+#: sketch_map_tool/templates/create.html:113
 msgid "Item Id"
 msgstr "Id položky"
 
-#: sketch_map_tool/templates/create.html:122
+#: sketch_map_tool/templates/create.html:119
 msgid "OK"
 msgstr "OK"
 
@@ -1215,7 +1214,7 @@ msgstr "<strong>Vytvořte papírové mapy pro shromažďování dat</strong>"
 
 #: sketch_map_tool/templates/help.html:42
 msgid "Define your area of interest and choose a base map"
-msgstr ""
+msgstr "Definujte oblast zájmu a zvolte základní mapu"
 
 #: sketch_map_tool/templates/help.html:46
 msgid "The first step in using the Sketch Map Tool involves creating a printable Sketch Map."
@@ -1311,7 +1310,7 @@ msgstr "Prázdná mapa Sketch Map, satelit"
 
 #: sketch_map_tool/templates/help.html:134
 msgid "Some recommendations:"
-msgstr ""
+msgstr "Některá doporučení:"
 
 #: sketch_map_tool/templates/help.html:137
 msgid "Prepare separate maps for each topic or per person/group because it is difficult to read and analyze\n"
