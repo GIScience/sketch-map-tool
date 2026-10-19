@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Literal
 
 from pydantic import computed_field, field_validator
 from pydantic_settings import (
@@ -29,7 +30,9 @@ class Config(BaseSettings):
     log_level: str = "INFO"
     max_nr_simultaneous_uploads: int = 100
     model_type_sam: str = "configs/sam2.1/sam2.1_hiera_l.yaml"
-    sam_checkpoint: str = "SMT-SAM"
+    sam_checkpoint: Literal["SMT-SAM"] | Literal["SMT-SAM-UNFILLED"] = (
+        "SMT-SAM-UNFILLED"
+    )
     point_area_threshold: float = 0.00047
     postgres_host: str = "localhost"
     postgres_port: str = "5432"
