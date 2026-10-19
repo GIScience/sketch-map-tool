@@ -83,17 +83,6 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
         document.getElementById("scale").value = JSON.stringify(newScale);
     });
 
-    // disable form submit and display info if zoom is lower than 9
-    function handleZoomChange(zoom) {
-        updateQueryParamWithConditionalDebounce("zoom", zoom);
-
-        if (zoom < 9) {
-            messageController.addWarning("zoom-info");
-        } else {
-            messageController.removeWarning("zoom-info");
-        }
-    }
-
     const antimeridianLayer = createAntiMeridianLayer();
     antimeridianLayer.setMap(printLayoutControl.getMap());
 
@@ -119,7 +108,7 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
     const view = printLayoutControl.getMap()
         .getView();
     const initialZoom = view.getZoom();
-    handleZoomChange(initialZoom);
+    updateQueryParamWithConditionalDebounce("zoom", initialZoom);
     handleAntimeridian(printLayoutControl.getBboxAsLonLat());
 
     // update form state on zoomchange
@@ -127,7 +116,7 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
         .getView()
         .on("change:resolution", (event) => {
             const currentZoom = event.target.getZoom();
-            handleZoomChange(currentZoom);
+            updateQueryParamWithConditionalDebounce("zoom", currentZoom);
         });
 
     // make sure that bbox values are up-to-date before submitting the form

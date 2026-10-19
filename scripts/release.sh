@@ -3,7 +3,7 @@
 set -e
 
 if [ $# -eq 0 ]; then
-    echo "Please supply a CalVer version (e.g. 2026-10-6)."
+    echo "Please supply a CalVer version (e.g. 2026.10.6)."
     exit
 fi
 
@@ -25,6 +25,6 @@ git push
 git tag "$1" -m "$1"
 git push origin "$1"
 
-# Create a GitHub release
-#
-# Manually start the Jenkins build for the new release tag at https://jenkins.heigit.org/job/OQAPI/view/tags/ 
+echo "Done."
+echo "Please create a GitHub release and start the Jenkins build for the new release tag at"
+echo "https://jenkins.heigit.org/job/OQAPI/view/tags/"
