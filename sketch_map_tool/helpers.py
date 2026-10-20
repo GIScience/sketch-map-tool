@@ -50,8 +50,7 @@ def merge(fcs: list[FeatureCollection]) -> FeatureCollection:
     features = []
     for fc in fcs:
         for f in fc.features:
-            properties = f.properties
-            features.append(Feature(geometry=f.geometry, properties=properties))
+            features.append(Feature(geometry=f.geometry, properties=f.properties))
     feature_collection = FeatureCollection(features=features)
     return feature_collection
 

@@ -9,7 +9,6 @@ from shapely.ops import transform, unary_union
 from shapelysmooth import chaikin_smooth
 
 from sketch_map_tool.config import CONFIG
-from sketch_map_tool.definitions import COLORS
 from sketch_map_tool.models import Bbox
 
 
@@ -19,7 +18,7 @@ def post_process(
     bbox: Bbox,
 ) -> FeatureCollection:
     fc = clean(fc)
-    fc = enrich(fc, properties={"name": name})
+    fc = enrich(fc, name)
     fc = simplify(fc)
     fc = smooth(fc)
     fc = classify_points(fc, bbox=bbox)
@@ -44,12 +43,10 @@ def clean(fc: FeatureCollection) -> FeatureCollection:
     return fc
 
 
-def enrich(fc: FeatureCollection, properties):
-    """Enrich GeoJSON properties and add color information to them."""
+def enrich(fc: FeatureCollection, name: str):
+    """Put filename as name into GeoJSON properties."""
     for feature in fc.features:
-        feature.properties = feature.properties | properties
-        if "color" in feature.properties.keys():
-            feature.properties["color"] = COLORS[feature.properties["color"]]
+        feature.properties["name"] = name
     return fc
 
 

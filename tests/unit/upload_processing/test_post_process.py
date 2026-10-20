@@ -24,10 +24,10 @@ def test_clean(detected_markings):
 
 
 def test_enrich(detected_markings_cleaned):
-    properties = {"name": "sketch-map-1", "color": "1"}
-    fc = enrich(detected_markings_cleaned, properties)
+    name = "sketch-map-1"
+    fc = enrich(detected_markings_cleaned, name)
     for feature in fc.features:
-        assert feature.properties == {"name": "sketch-map-1", "color": "black"}
+        assert feature.properties == {"name": "sketch-map-1", "color": "255"}
 
 
 def test_classify_points(markings_with_points, bbox):

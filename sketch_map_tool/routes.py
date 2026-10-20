@@ -37,6 +37,7 @@ from sketch_map_tool.helpers import (
     zip_,
 )
 from sketch_map_tool.models import Bbox, PaperFormat, Size, validate_layer
+from sketch_map_tool.style_geojson import style
 from sketch_map_tool.tasks import (
     cleanup_blobs,
     upload_processing,
@@ -400,7 +401,8 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             if isinstance(async_result, GroupResult):
                 results = async_result.get(propagate=False)
                 vector_results = [r[-2] for r in results]
-                raw = geojson.dumps(merge(vector_results))
+                num_of_uploads = len(vector_results)
+                raw = geojson.dumps(style(merge(vector_results), num_of_uploads))
                 file: BytesIO = BytesIO(raw.encode("utf-8"))
             else:
                 # support legacy results

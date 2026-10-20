@@ -1,6 +1,7 @@
 from io import BytesIO
 
 import pytest
+from geojson import FeatureCollection
 
 
 @pytest.mark.usefixtures("mock_async_result_success_sketch_map")
@@ -32,8 +33,12 @@ def test_download_failure(client, uuid):
 )
 def test_group_download_success(client, uuid, type_, monkeypatch):
     monkeypatch.setattr(
-        "sketch_map_tool.routes.merge",
+        "sketch_map_tool.routes.style",
         lambda *_: {"type": "FeatureCollection", "features": []},
+    )
+    monkeypatch.setattr(
+        "sketch_map_tool.routes.merge",
+        lambda *_: FeatureCollection(**{"type": "FeatureCollection", "features": []}),
     )
     monkeypatch.setattr(
         "sketch_map_tool.routes.zip_",
@@ -98,8 +103,12 @@ def test_group_success_failure(
     monkeypatch,
 ):
     monkeypatch.setattr(
+        "sketch_map_tool.routes.style",
+        lambda *_: FeatureCollection(**{"type": "FeatureCollection", "features": []}),
+    )
+    monkeypatch.setattr(
         "sketch_map_tool.routes.merge",
-        lambda *_: {"type": "FeatureCollection", "features": []},
+        lambda *_: FeatureCollection(**{"type": "FeatureCollection", "features": []}),
     )
     monkeypatch.setattr(
         "sketch_map_tool.routes.zip_",
