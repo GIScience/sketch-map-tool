@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-15 11:26+0000\n"
-"PO-Revision-Date: 2026-10-15 11:26\n"
+"POT-Creation-Date: 2026-10-20 12:34+0000\n"
+"PO-Revision-Date: 2026-10-20 12:34\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Crowdin-File-ID: 12\n"
 "Language: cs_CZ\n"
 
-#: sketch_map_tool/helpers.py:100
+#: sketch_map_tool/helpers.py:99
 msgid "We couldn’t process your submission because it took too long. Please try again later. If the problem persists, reach out to us: sketch-map-tool@heigit.org"
 msgstr "Nemohli jsme zpracovat Váš příspěvek, protože to trvalo příliš dlouho. Zkuste to znovu později. Pokud problém přetrvává, kontaktujte sketch-map-tool@heigit.org"
 
@@ -26,12 +26,12 @@ msgstr "Nemohli jsme zpracovat Váš příspěvek, protože to trvalo příliš 
 msgid "Layer name should start with osm, esri or oam."
 msgstr "Název vrstvy by měl začínat osm, esri nebo oam."
 
-#: sketch_map_tool/routes.py:297
+#: sketch_map_tool/routes.py:298
 #, python-brace-format
 msgid "There are no tasks for UUID {UUID}"
 msgstr "Pro UUID {UUID} nejsou žádné úlohy"
 
-#: sketch_map_tool/routes.py:437
+#: sketch_map_tool/routes.py:439
 msgid "Oops... we seem to have made a mistake, sorry!"
 msgstr "Jejda... Zdá se, že jsme udělali chybu, omlouváme se!"
 
