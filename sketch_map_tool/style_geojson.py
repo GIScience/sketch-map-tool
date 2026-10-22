@@ -1,15 +1,16 @@
 from geojson import FeatureCollection
 
-from sketch_map_tool.definitions import COLORS
+from sketch_map_tool.definitions import COLOR_HEX, COLORS
 
 
 def style(fc: FeatureCollection, num_of_uploads: int):
     """Style GeoJSON using simple-stylespec."""
     for feature in fc.features:
         if "color" in feature.properties.keys():
-            color = COLORS[feature.properties["color"]]
-            feature.properties["color"] = color
-            feature.properties["stroke"] = color
-            feature.properties["fill"] = color
+            color_name = COLORS[feature.properties["color"]]
+            color_hex = COLOR_HEX[color_name]
+            feature.properties["color"] = color_name
+            feature.properties["stroke"] = color_hex
+            feature.properties["fill"] = color_hex
             feature.properties["fill-opacity"] = max(1 / num_of_uploads, 0.1)
     return fc

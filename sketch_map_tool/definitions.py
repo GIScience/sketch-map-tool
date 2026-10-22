@@ -27,6 +27,18 @@ COLORS = {
     "6": "red",
     "7": "yellow",
 }
+
+# https://semantic-ui.com/usage/theming.html
+COLOR_HEX = {
+    "black": "#000000",
+    "blue": "#0E6EB8",
+    "green": "#016936",
+    "orange": "#FE9A76",
+    "pink": "#FF1493",
+    "red": "#B03060",
+    "yellow": "#FFD700",
+}
+
 # Resources for PDF generation
 PDF_RESOURCES_PATH = Path(__file__).parent.resolve() / "resources"
 
