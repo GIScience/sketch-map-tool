@@ -7,7 +7,7 @@ from typing import Tuple
 import cv2
 import pymupdf
 from geojson import FeatureCollection
-from geojson.utils import coords
+from geojson.utils import coords, map_tuples
 from PIL import Image
 from pyproj import Transformer
 from reportlab.graphics.shapes import Drawing
@@ -16,7 +16,7 @@ from reportlab.lib.pagesizes import landscape
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
-from reportlab.pdfgen.canvas import Canvas
+from reportlab.pdfgen.canvas import FILL_EVEN_ODD, Canvas
 from reportlab.platypus import Frame, Paragraph, Table, TableStyle, flowables
 from svglib.svglib import svg2rlg
 
@@ -449,14 +449,15 @@ def get_aruco_markers(size: int) -> list:
 
 
 def geo_to_canvas(
-    x: float,
-    y: float,
+    lon: float,
+    lat: float,
     bbox: Bbox,
     width: float,
     height: float,
     portrait: bool,
 ) -> tuple[float, float]:
-    """Convert EPSG:3857 coordinates to map frame canvas coordinates."""
+    """Convert geo coordinates to map frame canvas coordinates."""
+    x, y = WGS84_TO_WEB_MERCATOR.transform(lon, lat)
     fx = (x - bbox.lon_min) / (bbox.lon_max - bbox.lon_min)  # 0 = west, 1 = east
     fy = (y - bbox.lat_min) / (bbox.lat_max - bbox.lat_min)  # 0 = south, 1 = north
     if portrait:
@@ -472,12 +473,33 @@ def draw_point(
     radius: float,
     color: Color,
 ) -> None:
-    """Draw a filled circle with a white outline."""
     canvas.saveState()
     canvas.setFillColor(color)
     canvas.setStrokeColor(color)
     canvas.setLineWidth(radius * 0.3)
     canvas.circle(x, y, radius, stroke=1, fill=1)
+    canvas.restoreState()
+
+
+def draw_polygon(
+    canvas: Canvas,
+    rings: list[list[tuple[float, float]]],
+    color: Color,
+    line_width: float,
+    fill_opacity: float,
+) -> None:
+    """Draw a polygon. The first ring is the exterior, the others are holes."""
+    canvas.saveState()
+    canvas.setFillColor(color, alpha=fill_opacity)
+    canvas.setStrokeColor(color)
+    canvas.setLineWidth(line_width)
+    path = canvas.beginPath()
+    for ring in rings:
+        path.moveTo(*ring[0])
+        for x, y in ring[1:]:
+            path.lineTo(x, y)
+        path.close()
+    canvas.drawPath(path, stroke=1, fill=1, fillMode=FILL_EVEN_ODD)
     canvas.restoreState()
 
 
@@ -490,10 +512,26 @@ def draw_markings(
     portrait: bool,
     radius: float,
 ) -> None:
-    """Draw all points of a GeoJSON object that fall inside the bbox."""
-    for marking in markings.features:
-        color = HexColor(marking["properties"]["fill"])
-        for lon, lat in coords(marking):
-            x, y = WGS84_TO_WEB_MERCATOR.transform(lon, lat)
-            position = geo_to_canvas(x, y, bbox, width, height, portrait)
-            draw_point(canvas, *position, radius=radius, color=color)
+    """Draw all features of a GeoJSON FeatureCollection onto the map frame."""
+    markings = map_tuples(
+        lambda c: geo_to_canvas(c[0], c[1], bbox, width, height, portrait),
+        markings,
+    )
+    for marking in markings["features"]:
+        properties = marking["properties"]
+        color = HexColor(properties["fill"])
+        match marking["geometry"]["type"]:
+            case "Point":
+                for x, y in coords(marking):
+                    draw_point(canvas, x, y, radius=radius, color=color)
+            case "Polygon":
+                fill_opacity = properties["fill-opacity"]
+                draw_polygon(
+                    canvas,
+                    marking["geometry"]["coordinates"],
+                    color,
+                    radius * 0.3,
+                    fill_opacity,
+                )
+            case other:
+                raise ValueError(f"Unsupported geometry type: {other}")

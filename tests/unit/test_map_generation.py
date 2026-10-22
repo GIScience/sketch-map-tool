@@ -127,6 +127,29 @@ def test_generate_pdf_result_map_approval(
                 "properties": {"fill": "#B03060"},
                 "geometry": {"type": "Point", "coordinates": [8.667993, 49.404847]},
             },
+            {
+                "type": "Feature",
+                "properties": {"fill": "#2E8B57", "fill-opacity": 0.5},
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [8.671985, 49.407056],
+                            [8.682629, 49.407056],
+                            [8.682629, 49.412944],
+                            [8.671985, 49.412944],
+                            [8.671985, 49.407056],
+                        ],
+                        [
+                            [8.675976, 49.409264],
+                            [8.675976, 49.410736],
+                            [8.678638, 49.410736],
+                            [8.678638, 49.409264],
+                            [8.675976, 49.409264],
+                        ],
+                    ],
+                },
+            },
         ],
     )
     sketch_map, _ = generate_pdf(
