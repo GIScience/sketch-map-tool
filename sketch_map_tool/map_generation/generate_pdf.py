@@ -6,8 +6,12 @@ from typing import Tuple
 
 import cv2
 import pymupdf
+from geojson import FeatureCollection
+from geojson.utils import coords
 from PIL import Image
+from pyproj import Transformer
 from reportlab.graphics.shapes import Drawing
+from reportlab.lib.colors import Color, HexColor
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
@@ -18,10 +22,12 @@ from svglib.svglib import svg2rlg
 
 from sketch_map_tool.definitions import PDF_RESOURCES_PATH, get_attribution
 from sketch_map_tool.helpers import resize_rlg_by_width
-from sketch_map_tool.models import PaperFormat
+from sketch_map_tool.models import Bbox, PaperFormat
 
 # PIL should be able to open high resolution PNGs of large Maps:
-flowables.Image.MAX_IMAGE_PIXELS = None
+flowables.Image.MAX_IMAGE_PIXELS = None  # ty: ignore[unresolved-attribute]
+
+WGS84_TO_WEB_MERCATOR = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
 
 
 def generate_pdf(
@@ -30,6 +36,8 @@ def generate_pdf(
     format_: PaperFormat,
     scale: float,
     layer: str,
+    bbox: Bbox | None = None,
+    markings: FeatureCollection | None = None,
 ) -> Tuple[BytesIO, BytesIO]:
     """Generate a Sketch Map PDF.
 
@@ -85,6 +93,8 @@ def generate_pdf(
         portrait,
         m_per_px,
         img_format,
+        bbox,
+        markings,
     )
 
     map_pdf = BytesIO()
@@ -262,12 +272,15 @@ def create_map_frame(
     portrait: bool,
     m_per_px: float,
     img_format: str,
+    bbox: Bbox | None = None,
+    markings: FeatureCollection | None = None,
 ) -> BytesIO:
     map_frame = BytesIO()
     canvas = Canvas(map_frame)
     canvas.setPageSize(landscape((height, width)))
 
     marker_size = width / 37
+    point_radius = marker_size / 4
     if portrait:
         canvas.rotate(90)
         canvas.drawImage(
@@ -292,6 +305,17 @@ def create_map_frame(
         )
         draw_markers(canvas, marker_size, height, width)
         add_scalebar(canvas, width, height, m_per_px, format_, marker_size)
+
+    if markings is not None and bbox is not None:
+        draw_markings(
+            canvas,
+            markings,
+            bbox,
+            width,
+            height,
+            portrait,
+            radius=point_radius,
+        )
 
     canvas.save()
     map_frame.seek(0)
@@ -422,3 +446,54 @@ def get_aruco_markers(size: int) -> list:
         )
         markers.append(marker)
     return markers
+
+
+def geo_to_canvas(
+    x: float,
+    y: float,
+    bbox: Bbox,
+    width: float,
+    height: float,
+    portrait: bool,
+) -> tuple[float, float]:
+    """Convert EPSG:3857 coordinates to map frame canvas coordinates."""
+    fx = (x - bbox.lon_min) / (bbox.lon_max - bbox.lon_min)  # 0 = west, 1 = east
+    fy = (y - bbox.lat_min) / (bbox.lat_max - bbox.lat_min)  # 0 = south, 1 = north
+    if portrait:
+        # The image is drawn rotated by 90°: north points left, east points up
+        return (1 - fy) * height, fx * width
+    return fx * width, fy * height
+
+
+def draw_point(
+    canvas: Canvas,
+    x: float,
+    y: float,
+    radius: float,
+    color: Color,
+) -> None:
+    """Draw a filled circle with a white outline."""
+    canvas.saveState()
+    canvas.setFillColor(color)
+    canvas.setStrokeColor(color)
+    canvas.setLineWidth(radius * 0.3)
+    canvas.circle(x, y, radius, stroke=1, fill=1)
+    canvas.restoreState()
+
+
+def draw_markings(
+    canvas: Canvas,
+    markings: FeatureCollection,
+    bbox: Bbox,
+    width: float,
+    height: float,
+    portrait: bool,
+    radius: float,
+) -> None:
+    """Draw all points of a GeoJSON object that fall inside the bbox."""
+    for marking in markings.features:
+        color = HexColor(marking["properties"]["fill"])
+        for lon, lat in coords(marking):
+            x, y = WGS84_TO_WEB_MERCATOR.transform(lon, lat)
+            position = geo_to_canvas(x, y, bbox, width, height, portrait)
+            draw_point(canvas, *position, radius=radius, color=color)
