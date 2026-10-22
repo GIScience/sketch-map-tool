@@ -13,7 +13,7 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen.canvas import Canvas
-from reportlab.platypus import Frame, Paragraph, flowables
+from reportlab.platypus import Frame, Paragraph, Table, TableStyle, flowables
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool.definitions import PDF_RESOURCES_PATH, get_attribution
@@ -31,18 +31,15 @@ def generate_pdf(
     scale: float,
     layer: str,
 ) -> Tuple[BytesIO, BytesIO]:
-    """
-    Generate a sketch map pdf, i.e. a PDF containing the given map image
-    as well as a code for georeferencing, a scale, copyright information,
+    """Generate a Sketch Map PDF.
+
+    The PDF will contain the given map image as well as
+    a code for georeferencing, a scale, copyright information,
     and objects to help the feature detection during the upload processing.
 
-    Also generate template image (PNG) as Pillow object for later upload processing
+    Also generate template image (PNG) as Pillow object for later upload processing.
 
-    :param map_image_input: Image of the map to be used as sketch map.
-    :param qr_code: QR code to be included on the sketch map for georeferencing.
-    :param format_: Paper format of the PDF document.
-    :param scale: Ratio for the scale in the sketch map legend
-    :return: Sketch Map PDF, Template image
+    Returns a tuple with the Sketch Map as PDF and the map image
     """
     map_width_px, map_height_px = map_image_input.size
     map_margin = format_.map_margin
@@ -164,19 +161,35 @@ def draw_right_column(
     em = normal_style.fontSize
 
     # Add Logos
+    gap = 1 * em
+    logo_width = (width - margin - gap) / 2
     smt_logo = svg2rlg(PDF_RESOURCES_PATH / "SketchMap_Logo_compact.svg")
-    smt_logo = resize_rlg_by_width(smt_logo, width - margin)
-    heigit_logo = svg2rlg(PDF_RESOURCES_PATH / "HeiGIT_Logo_compact.svg")
-    heigit_logo = resize_rlg_by_width(heigit_logo, width - margin)
 
-    # Add compass
-    compass_size = width * 0.25  # this is the current ratio of the right column width
+    smt_logo = resize_rlg_by_width(smt_logo, logo_width)
+    # heigit_logo = svg2rlg(PDF_RESOURCES_PATH / "HeiGIT_Logo_compact.svg")
+    # heigit_logo = resize_rlg_by_width(heigit_logo, width - margin)
+    logos = Table(
+        [[smt_logo]],  # TODO: add custom/second logo here
+        colWidths=[logo_width + gap, logo_width],
+        hAlign="LEFT",
+    )
+    logos.setStyle(
+        TableStyle(
+            [
+                ("LEFTPADDING", (0, 0), (-1, -1), 0),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+                ("TOPPADDING", (0, 0), (-1, -1), 0),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ]
+        )
+    )
+    compass_size = width * 0.20  # this is the current ratio of the right column width
     compass = get_compass(compass_size, portrait)
 
-    # Add copyright information:
+    p_created_by_heigit = Paragraph("Created by HeiGIT gGmbH", normal_style)
     p_copyright = Paragraph(get_attribution(layer), normal_style)
 
-    # Add QR-Code:
     qr_size = min(width, height) - margin
     qr_code = resize_rlg_by_width(qr_code, qr_size)
 
@@ -187,11 +200,13 @@ def draw_right_column(
     )  # height will be filled after list creation
     # order all elements in column
     flowables_ = [
-        smt_logo,
+        logos,
         flowables.Spacer(width, 2 * em),
-        heigit_logo,
+        # heigit_logo,
         space_filler,
         compass,
+        flowables.Spacer(width, 2 * em),
+        p_created_by_heigit,
         flowables.Spacer(width, 2 * em),
         p_copyright,
         flowables.Spacer(width, 2 * em),
@@ -216,10 +231,8 @@ def draw_right_column(
 def calculate_space_filler_height(canvas, flowables_, width, height, margin):
     flowables_height = 0
     for f in flowables_:
-        if isinstance(f, Paragraph):
-            # a Paragraph doesn't have a height without this command
-            f.wrapOn(canvas, width - margin, height)
-        flowables_height += f.height
+        _, h = f.wrapOn(canvas, width - margin, height)
+        flowables_height += h
     return height - 2 * margin - flowables_height
 
 
