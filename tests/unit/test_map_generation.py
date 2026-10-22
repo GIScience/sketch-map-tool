@@ -4,6 +4,7 @@ from io import BytesIO
 import numpy as np
 import pymupdf
 import pytest
+from geojson import FeatureCollection
 from PIL import Image
 from pytest_approval.main import verify_image
 from reportlab.graphics.shapes import Drawing
@@ -85,7 +86,6 @@ def test_generate_pdf_sketch_map_approval(
     qr_code_approval,
     paper_format,
     orientation,
-    monkeypatch,
 ) -> None:
     sketch_map, _ = generate_pdf(
         map_image,
@@ -93,6 +93,73 @@ def test_generate_pdf_sketch_map_approval(
         paper_format,
         1283.129,
         "osm",
+    )
+    # NOTE: The resulting PDFs across multiple test runs have slight non-visual
+    # differences leading to a failure when using `verify_binary` on the PDFs.
+    # That is why here they are converted to images for comparison first.
+    with pymupdf.open(stream=sketch_map, filetype="pdf") as doc:
+        # NOTE: For high resolution needed to read images such as aruco markers
+        # matrix would have to be defined and given to get_pixmap.
+        # This would result in larger file sizes.
+        image = doc.load_page(0).get_pixmap().tobytes(output="png")
+    assert verify_image(image, extension=".png")
+
+
+@pytest.mark.parametrize("orientation", ["landscape"])
+@pytest.mark.parametrize("paper_format", [A4])
+@pytest.mark.skipif(os.getenv("CI") is not None, reason="Detected CI environment")
+def test_generate_pdf_result_map_approval(
+    map_image,
+    qr_code_approval,
+    paper_format,
+    orientation,
+    bbox,
+) -> None:
+    markings = FeatureCollection(
+        features=[
+            {
+                "type": "Feature",
+                "properties": {"fill": "#0E6EB8"},
+                "geometry": {"type": "Point", "coordinates": [8.677307, 49.410000]},
+            },
+            {
+                "type": "Feature",
+                "properties": {"fill": "#B03060"},
+                "geometry": {"type": "Point", "coordinates": [8.667993, 49.404847]},
+            },
+            {
+                "type": "Feature",
+                "properties": {"fill": "#2E8B57", "fill-opacity": 0.5},
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [8.671985, 49.407056],
+                            [8.682629, 49.407056],
+                            [8.682629, 49.412944],
+                            [8.671985, 49.412944],
+                            [8.671985, 49.407056],
+                        ],
+                        [
+                            [8.675976, 49.409264],
+                            [8.675976, 49.410736],
+                            [8.678638, 49.410736],
+                            [8.678638, 49.409264],
+                            [8.675976, 49.409264],
+                        ],
+                    ],
+                },
+            },
+        ],
+    )
+    sketch_map, _ = generate_pdf(
+        map_image,
+        qr_code_approval,
+        paper_format,
+        1283.129,
+        "osm",
+        bbox,
+        markings,
     )
     # NOTE: The resulting PDFs across multiple test runs have slight non-visual
     # differences leading to a failure when using `verify_binary` on the PDFs.
@@ -113,7 +180,7 @@ def test_generate_pdf_sketch_map_template_approval(
     map_image,
     qr_code_approval,
     paper_format: PaperFormat,
-    orientation,  # type: ignore
+    orientation,
 ) -> None:
     _, sketch_map_template = generate_pdf(
         map_image,
