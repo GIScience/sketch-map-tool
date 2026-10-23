@@ -1,0 +1,9 @@
+{{- if .Values.customConfig }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "sketch-map-tool.fullname" . }}-custom-config
+stringData:
+  config.toml: |
+    {{- .Values.customConfig | nindent 4 }}
+{{- end }}
