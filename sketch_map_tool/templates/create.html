@@ -3,7 +3,7 @@
 {% block head %}
 <link rel="stylesheet" href="{{ url_for("static", filename="bundles/create.css") }}">
 <script>
-    const esriApiKey = "{{ esri_api_key }}"
+  const esriApiKey = "{{ esri_api_key }}"
 </script>
 <script type="module" src="{{ url_for("static", filename="bundles/create.js") }}"></script>
 {% endblock head %}
@@ -14,113 +14,108 @@
 
 {% block body %}
 <div class="container-fluid horizontal step-arrows">
-    <div class="active">{{ _('Define your Area of Interest') }}</div>
-    <div>{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
+  <div class="active">{{ _('Define your Area of Interest') }}</div>
+  <div>{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
 </div>
 <main class="container-fluid">
 
-    <div id="main-grid" class="grid">
-        <div id="left">
-            <div class="sketchy h1 center-text">{{ _('Area of Interest') }}</div>
-            <div id="map"></div>
-        </div>
-        <div id="right">
-            <div class="sketchy h1 center-text">{{ _('Page Setup') }}</div>
-            <div id="message-container" hidden>
-                <article id="antimeridian-info" hidden class="infobox">{{ _('You are currently trying to
+  <div id="main-grid" class="grid">
+    <div id="left">
+      <div class="sketchy h1 center-text">{{ _('Area of Interest') }}</div>
+      <div id="map"></div>
+    </div>
+    <div id="right">
+      <div class="sketchy h1 center-text">{{ _('Page Setup') }}</div>
+      <div id="message-container" hidden>
+        <article id="antimeridian-info" hidden class="infobox">{{ _('You are currently trying to
                         request a map that crosses the +/-180° <a href="https://en.wikipedia.org/wiki/180th_meridian" target="_blank">antimeridian</a>. This is currently not
                         supported, please move the map such that your extent is either left or right of
                         the antimeridian.') }}
-                </article>
-            </div>
-            <form
-                id="page-setup-form"
-                action="/{{ lang }}/create/results"
-                method="post"
-            >
-                <label for="format">{{ _('Paper Format') }}</label>
-                <select id="format" name="format"></select>
+        </article>
+      </div>
+      <form id="page-setup-form" action="/{{ lang }}/create/results" method="post">
+        <label for="format">{{ _('Paper Format') }}</label>
+        <select id="format" name="format"></select>
 
-                <label for="orientation">{{ _('Paper Orientation') }}</label>
-                <select id="orientation" name="orientation"></select>
+        <label for="orientation">{{ _('Paper Orientation') }}</label>
+        <select id="orientation" name="orientation"></select>
 
-                <input type="hidden" id="bbox" name="bbox" value="1,1,5,5">
-                <input type="hidden" id="bboxWGS84" name="bboxWGS84" value="1,1,5,5">
-                <input type="hidden" id="size" name="size" value='{"width": 6055, "height": 8658}'>
-                <input type="hidden" id="scale" name="scale" value='11545.36'>
-                <input type="hidden" id="layer" name="layer">
-                <button id="next-button" type="button">{{ _('NEXT') }} &rarr;</button>
-            </form>
-        </div>
-
-        <dialog id="oam-dialog">
-            <article>
-                <header>
-                    <button id="oam-close-button" aria-label="Close" rel="prev"></button>
-                    <div class="sketchy h1">{{ _('Add OpenAerialMap Layer') }}</div>
-                </header>
-                <p>{{ _('<a href="https://map.openaerialmap.org" target="_blank">Browse</a> the OpenAerialMap collection to find aerial images. Once you’ve selected an image, simply copy its ID and paste it here.') }}</p>
-                <input id="oam-item-id-input" type="text" placeholder="Enter OpenAerialMap Image ID"
-                       aria-describedby="oam-invalid-id-message">
-                <small class="hidden" id="oam-invalid-id-message">
-                    {{ _('No image for given ID could be found on OpenAerialMap. Please check given ID and try again.') }}
-                </small>
-                <footer>
-                    <button id="oam-cancel-button" type="button" class="secondary">{{ _('Cancel') }}</button>
-                    <button id="oam-add-button" type="button">{{ _('Add to Map') }}</button>
-                    <progress class="hidden" id="oam-progress-bar"></progress>
-                </footer>
-
-            </article>
-        </dialog>
-
-        <dialog id="oam-info-dialog">
-            <article>
-                <header>
-                    <button id="oam-info-close-button" aria-label="Close" rel="prev"></button>
-                    <span class="sketchy h1">{{ _('OpenAerialMap Metadata') }}</span>
-                </header>
-                <main>
-                    <figure>
-                        <img src="" alt="OpenAerialMap Preview">
-                    </figure>
-                    <table>
-                        <tr>
-                            <th>{{ _('Title') }}</th>
-                            <td id="title"></td>
-                        </tr>
-                        <tr>
-                            <th>{{ _('Date') }}</th>
-                            <td id="date"></td>
-                        </tr>
-                        <tr>
-                            <th>{{ _('Resolution') }}</th>
-                            <td id="resolution"></td>
-                        </tr>
-                        <tr>
-                            <th>{{ _('Provider') }}</th>
-                            <td id="provider"></td>
-                        </tr>
-                        <tr>
-                            <th>{{ _('Platform') }}</th>
-                            <td id="platform"></td>
-                        </tr>
-                        <tr>
-                            <th>{{ _('License') }}</th>
-                            <td id="license"></td>
-                        </tr>
-                        <tr>
-                            <th>{{ _('Item Id') }}</th>
-                            <td id="itemId"></td>
-                        </tr>
-                    </table>
-                </main>
-                <footer>
-                    <button id="oam-info-ok-button" type="button" aria-label="Close">{{ _('OK') }}</button>
-                </footer>
-            </article>
-        </dialog>
+        <input type="hidden" id="bbox" name="bbox" value="1,1,5,5">
+        <input type="hidden" id="bboxWGS84" name="bboxWGS84" value="1,1,5,5">
+        <input type="hidden" id="size" name="size" value='{"width": 6055, "height": 8658}'>
+        <input type="hidden" id="scale" name="scale" value='11545.36'>
+        <input type="hidden" id="layer" name="layer">
+        <button id="next-button" type="button">{{ _('NEXT') }} &rarr;</button>
+      </form>
     </div>
+
+    <dialog id="oam-dialog">
+      <article>
+        <header>
+          <button id="oam-close-button" aria-label="Close" rel="prev"></button>
+          <div class="sketchy h1">{{ _('Add OpenAerialMap Layer') }}</div>
+        </header>
+        <p>{{ _('<a href="https://map.openaerialmap.org" target="_blank">Browse</a> the OpenAerialMap collection to find aerial images. Once you’ve selected an image, simply copy its ID and paste it here.') }}</p>
+        <input id="oam-item-id-input" type="text" placeholder="Enter OpenAerialMap Image ID" aria-describedby="oam-invalid-id-message">
+        <small class="hidden" id="oam-invalid-id-message">
+          {{ _('No image for given ID could be found on OpenAerialMap. Please check given ID and try again.') }}
+        </small>
+        <footer>
+          <button id="oam-cancel-button" type="button" class="secondary">{{ _('Cancel') }}</button>
+          <button id="oam-add-button" type="button">{{ _('Add to Map') }}</button>
+          <progress class="hidden" id="oam-progress-bar"></progress>
+        </footer>
+
+      </article>
+    </dialog>
+
+    <dialog id="oam-info-dialog">
+      <article>
+        <header>
+          <button id="oam-info-close-button" aria-label="Close" rel="prev"></button>
+          <span class="sketchy h1">{{ _('OpenAerialMap Metadata') }}</span>
+        </header>
+        <main>
+          <figure>
+            <img src="" alt="OpenAerialMap Preview">
+          </figure>
+          <table>
+            <tr>
+              <th>{{ _('Title') }}</th>
+              <td id="title"></td>
+            </tr>
+            <tr>
+              <th>{{ _('Date') }}</th>
+              <td id="date"></td>
+            </tr>
+            <tr>
+              <th>{{ _('Resolution') }}</th>
+              <td id="resolution"></td>
+            </tr>
+            <tr>
+              <th>{{ _('Provider') }}</th>
+              <td id="provider"></td>
+            </tr>
+            <tr>
+              <th>{{ _('Platform') }}</th>
+              <td id="platform"></td>
+            </tr>
+            <tr>
+              <th>{{ _('License') }}</th>
+              <td id="license"></td>
+            </tr>
+            <tr>
+              <th>{{ _('Item Id') }}</th>
+              <td id="itemId"></td>
+            </tr>
+          </table>
+        </main>
+        <footer>
+          <button id="oam-info-ok-button" type="button" aria-label="Close">{{ _('OK') }}</button>
+        </footer>
+      </article>
+    </dialog>
+  </div>
 
 </main>
 {% endblock body %}

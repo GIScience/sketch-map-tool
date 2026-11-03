@@ -10,29 +10,29 @@
 
 {% block body %}
 <div class="container-fluid horizontal step-arrows">
-    <div>{{ _('Define your Area of Interest') }}</div>
-    <div class="active">{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
+  <div>{{ _('Define your Area of Interest') }}</div>
+  <div class="active">{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
 </div>
 <main class="container" style="max-width: 768px;">
-    <div id="main-message">
-        <div class="sketchy h1 center-text pending">{{ _('Your results are being processed ...') }}
-        </div>
-        <div class="sketchy h1 center-text success hidden">{{ _('Your results are ready for download!') }}
-        </div>
-        <div class="sketchy h1 center-text partial-success hidden">{{ _('Sorry. Only some of your results could be generated for download.') }}
-        </div>
-        <div class="sketchy h1 center-text error hidden">{{ _('Your results should have been downloadable from here, but we are having troubles on our servers!') }}
-        </div>
+  <div id="main-message">
+    <div class="sketchy h1 center-text pending">{{ _('Your results are being processed ...') }}
     </div>
-    <br>
-    <div style="display: grid; place-items: center;">
-        <article id="sketch-map" class="result">
-            <header>
-                <img src="{{ url_for("static", filename="assets/images/create-results/sketch-map-icon.svg") }}" alt="sketch map icon"><br>
-                <span class="brand-font heigit-red sub-icon">Sketch Map</span>
-            </header>
-            <p class="pending">
-                {{ _(
+    <div class="sketchy h1 center-text success hidden">{{ _('Your results are ready for download!') }}
+    </div>
+    <div class="sketchy h1 center-text partial-success hidden">{{ _('Sorry. Only some of your results could be generated for download.') }}
+    </div>
+    <div class="sketchy h1 center-text error hidden">{{ _('Your results should have been downloadable from here, but we are having troubles on our servers!') }}
+    </div>
+  </div>
+  <br>
+  <div style="display: grid; place-items: center;">
+    <article id="sketch-map" class="result">
+      <header>
+        <img src="{{ url_for("static", filename="assets/images/create-results/sketch-map-icon.svg") }}" alt="sketch map icon"><br>
+        <span class="brand-font heigit-red sub-icon">Sketch Map</span>
+      </header>
+      <p class="pending">
+        {{ _(
                         'We are creating the Sketch Map template that you can use for offline
                         participatory mapping.<br>
                         <strong>Please be patient, this can take 2-10 minutes.</strong><br>
@@ -42,38 +42,38 @@
                         <a href="https://openaerialmap.org/" target="_blank">OpenAerialMap</a>
                         imagery to create a high resolution printable map for you.
                     ') }}
-            </p>
+      </p>
 
-            <p class="pending">
-            </p>
-            <p class="success hidden">
-                {{ _(
+      <p class="pending">
+      </p>
+      <p class="success hidden">
+        {{ _(
                         'We have created the Sketch Map template that you can
                         use for offline participatory mapping.<br> 
                         <strong>You can now start collecting data in the field!</strong>'
                     ) }}
-            </p>
-            <p class="error hidden">
-                {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}
-            </p>
-            <a id="sketch-map-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download PDF') }}</a>
-            <div id="sketch-map-status" class="task-status"></div>
-        </article>
-    </div>
-    {% if bbox %}
-    <article>
-        <details>
-            <summary role="button" class="secondary outline">
-                {{ _('Data quality of your Sketch Map') }}
-            </summary>
-            <p>
-                {{ _(
+      </p>
+      <p class="error hidden">
+        {{ _('Sorry! <br>Something went wrong while trying to generate the Result.') }}
+      </p>
+      <a id="sketch-map-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download PDF') }}</a>
+      <div id="sketch-map-status" class="task-status"></div>
+    </article>
+  </div>
+  {% if bbox %}
+  <article>
+    <details>
+      <summary role="button" class="secondary outline">
+        {{ _('Data quality of your Sketch Map') }}
+      </summary>
+      <p>
+        {{ _(
                         'You can get insight into the <em>fitness for field data collection</em> of OpenStreetMap data through the <a href="https://dashboard.ohsome.org" target="_blank">ohsome dashboard</a>.'
                     ) }}
-            </p>
-            <a id="quality-report-button" href="https://dashboard.ohsome.org/#backend=oqtApi&topic=roads&bboxes=sketch-map-tool-input:{{ bbox }}&indicators=currentness%2Cmapping-saturation" target="_blank" role="button">{{ _('Get Quality Report') }}</a>
-        </details>
-    </article>
-    {% endif %}
+      </p>
+      <a id="quality-report-button" href="https://dashboard.ohsome.org/#backend=oqtApi&topic=roads&bboxes=sketch-map-tool-input:{{ bbox }}&indicators=currentness%2Cmapping-saturation" target="_blank" role="button">{{ _('Get Quality Report') }}</a>
+    </details>
+  </article>
+  {% endif %}
 </main>
 {% endblock body %}
