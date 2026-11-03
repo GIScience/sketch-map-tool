@@ -266,10 +266,24 @@ def digitize_results_post(lang="en") -> Response:
     db_client_flask.update_files_digitize_uuid(file_ids, async_group_result.id)
     return redirect(
         url_for(
-            "digitize_results_get",
+            "digitize_preview",
             lang=lang,
             uuid=async_group_result.id,
         )
+    )
+
+
+@app.get("/digitize-preview/<uuid>")
+@app.get("/<lang>/digitize-preview/<uuid>")
+def digitize_preview(lang="en", uuid: str | None = None) -> Response | str:
+    if uuid is None:
+        return redirect(url_for("digitize", lang=lang))
+    validate_uuid(uuid)
+    return render_template(
+        "digitize-preview.html",
+        lang=lang,
+        uuid=uuid,
+        esri_api_key=CONFIG.esri_api_key,
     )
 
 

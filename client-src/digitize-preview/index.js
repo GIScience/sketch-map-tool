@@ -1,0 +1,190 @@
+import "ol/ol.css";
+import "@giscience/ol-print-layout-control/dist/ol-print-layout-control.css";
+import "ol-geocoder/dist/ol-geocoder.css";
+import "./geocoder.css";
+import "./index.css";
+
+import { addLayerSwitcherControl, createMap, } from "./map.js";
+import { bindFormToLayerSwitcherControl } from "./form.js";
+import { getSanitizedUrlSearchParams, setUrlSearchParams } from "../shared";
+import { Tile } from "ol/layer";
+import { XYZ } from "ol/source";
+import { OpenAerialMapService } from "./openaerialmapService";
+import { transformExtent } from "ol/proj";
+import { intersects } from "ol/extent";
+import { UserLayerControl } from "./userLayerControl/userLayerControl";
+import { unit } from "mathjs";
+
+
+/**
+ * This is the main script which is invoked after DOM Content of digitize-preview.html is loaded.
+ */
+
+// get all relevant params in case a permalink has been used to set the application state
+const {
+    center, zoom, layer, orientation, format,
+} = getSanitizedUrlSearchParams();
+
+// invalid params will be replaced by sanitized ones
+setUrlSearchParams({
+    center, zoom, layer, orientation, format,
+});
+
+//instead of
+
+const map = createMap("map", center, zoom, layer);
+
+const layerSwitcher = addLayerSwitcherControl(map);
+
+const layerswitcherSlot = document.querySelector(".layerswitcher #slot");
+
+const userLayerControl = new UserLayerControl({ target: layerswitcherSlot });
+map.addControl(userLayerControl);
+userLayerControl.initialize();
+
+userLayerControl.on("new-layer", openOamDialog);
+
+// keep the current layer in layerswitcher to toggle back from OAM Layer
+userLayerControl.on("beforeactivate", () => {
+    layerSwitcher.activateNextLayer();
+});
+// switch back to the layer you came from when removing OAM Layer
+userLayerControl.on("close", () => {
+    layerSwitcher.activateNextLayer();
+})
+
+bindFormToLayerSwitcherControl(layerSwitcher, userLayerControl);
+// add additional layers
+if (layer.startsWith("oam:")) {
+    const oamItemId = layer.replace("oam:", "");
+    await addOAMLayer(oamItemId);
+} else {
+    // set initial form value from ol-control
+    console.log(">>>>", layerSwitcher)
+    document.getElementById("layer").value = layerSwitcher.get("activeLayer").get("name");
+}
+
+export async function addOAMLayer(oamItemId) {
+
+    const oamLayerName = `oam:${oamItemId}`;
+    try {
+        const metadata = await OpenAerialMapService.getMetadata(oamItemId);
+        console.log(metadata);
+
+        layerSwitcher.activateNextLayer();
+        layerSwitcher.suspend();
+
+        const oamBaselayer = new Tile({
+            name: oamLayerName,
+            visible: true,
+            source: new XYZ({
+                url: OpenAerialMapService.getTileUrl(oamItemId),
+                attributions: OpenAerialMapService.getMapAttributionFromMetadata(metadata),
+            }),
+            background: "slategrey",
+            ulc_visible: true,
+            ulc_buttonImageUrl: OpenAerialMapService.getThumbnailUrl(oamItemId, 256),
+            // ls_visible: true,
+            // ls_label: "OpenAerialMap",
+            // ls_class: "esri-world-imagery",
+        });
+
+        map.addLayer(oamBaselayer);
+
+        const projectedBbox = transformExtent(metadata.bbox, "EPSG:4326", map.getView().getProjection());
+        if (!intersects(projectedBbox, map.getView().calculateExtent())) {
+            map.getView().fit(projectedBbox);
+        }
+    } catch (error) {
+        console.log(`The OpenAerialMap Item ${oamItemId} could not be loaded.`, error);
+        throw error;
+    }
+
+}
+
+
+// OAM Add Dialog Handling
+document.getElementById("oam-add-button").addEventListener("click", async () => {
+    const oamItemIdInput = document.getElementById("oam-item-id-input");
+    const oamInvalidIdMessage = document.getElementById("oam-invalid-id-message");
+    const oamPrgressBar = document.getElementById("oam-progress-bar");
+    try {
+        if (oamItemIdInput.value.length === 0) {
+            throw Error("Empty input not allowed.")
+        }
+        oamPrgressBar.classList.remove("hidden");
+        await addOAMLayer(oamItemIdInput.value);
+        closeOamDialog();
+    } catch (error) {
+        console.error(error);
+        oamInvalidIdMessage.classList.remove("hidden");
+        oamItemIdInput.setAttribute("aria-invalid", "true");
+    } finally {
+        oamPrgressBar.classList.add("hidden");
+    }
+});
+
+document.getElementById("oam-close-button").addEventListener("click", () => {
+    closeOamDialog()
+});
+
+document.getElementById("oam-cancel-button").addEventListener("click", () => {
+    closeOamDialog()
+});
+
+function openOamDialog() {
+    document.getElementById("oam-dialog").show();
+    document.getElementById("oam-item-id-input").focus();
+}
+
+function closeOamDialog() {
+    // reset state
+    document.getElementById("oam-invalid-id-message").classList.add("hidden");
+    document.getElementById("oam-item-id-input").removeAttribute("aria-invalid")
+    document.getElementById("oam-dialog").close();
+
+}
+
+// OAM Metadata Dialog Handling
+userLayerControl.on("info", async (event) => {
+    const infoDialog = document.getElementById("oam-info-dialog");
+    const oamItemId = event.target.get("activeLayer").get("name").replace("oam:", "");
+
+    // open the dialog
+    infoDialog.show();
+
+    // load preview image
+    infoDialog.querySelector("img").setAttribute("src", OpenAerialMapService.getThumbnailUrl(oamItemId, 256));
+
+    // load and show the metadata properties
+    const metadata = await OpenAerialMapService.getMetadata(oamItemId);
+    const {
+        title,
+        start_datetime,
+        gsd: resolution,
+        "oam:producer_name": producer,
+        "oam:platform_type": platform,
+        license,
+    } = metadata.properties;
+
+    //set table properties
+    document.getElementById("title").textContent = title;
+    document.getElementById("date").textContent = new Date(start_datetime).toLocaleDateString();
+    document.getElementById("resolution").textContent = unit(resolution, "m").toBest(["cm", "m"]).format({
+        notation: "auto",
+        precision: 2
+    });
+    document.getElementById("provider").textContent = producer;
+    document.getElementById("platform").textContent = platform.toUpperCase();
+    document.getElementById("license").textContent = license;
+    document.getElementById("itemId").textContent = oamItemId;
+
+});
+
+document.getElementById("oam-info-ok-button").addEventListener("click", () => {
+    document.getElementById("oam-info-dialog").close();
+});
+
+document.getElementById("oam-info-close-button").addEventListener("click", () => {
+    document.getElementById("oam-info-dialog").close();
+});
