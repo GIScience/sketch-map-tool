@@ -1,0 +1,58 @@
+@media screen and (width >= 992px) {
+    #main-grid.grid {
+        grid-template-columns: 2fr 1fr;
+    }
+}
+
+body > main {
+    padding: 3rem 0;
+}
+
+#map {
+    width: 100%;
+    height: 50vh;
+    flex: 1 0 auto;
+}
+
+#left {
+    display: flex;
+    flex-direction: column;
+}
+
+#right {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+#next-button {
+    min-width: 30%;
+    margin: 0 auto;
+    width: unset;
+}
+
+#message-container {
+    height: 11rem;
+    overflow-y: scroll;
+    padding: 1rem;
+}
+
+#oam-info-dialog main {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    & figure {
+        flex: 0 1 128px;
+    }
+
+    & table {
+        flex: 0 1 content;
+    }
+}
+
+@media only screen and (width <= 450px) {
+  #oam-info-dialog table {
+    font-size: smaller;
+  }
+}
