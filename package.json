@@ -39,7 +39,7 @@
         "esbuild": "^0.25.10",
         "eslint": "8.51.0",
         "eslint-plugin-import": "2.28.1",
-        "js-beautify": "^1.15.4",
+        "js-beautify": "2.0.3",
         "nodemon": "^3.0.1",
         "rimraf": "^6.0.1",
         "stylelint": "15.10.3",
@@ -50,7 +50,7 @@
         "@picocss/pico": "^2.1.1",
         "filebokz": "^0.2.0",
         "mathjs": "^15.0.0",
-        "ol": "^10.6.1",
+        "ol": "^10.11.0",
         "ol-geocoder": "^4.3.3"
     }
 }
