@@ -63,8 +63,7 @@ form {
 #main-grid {
     background: linear-gradient(#000, #000) center/2px 100% no-repeat;
     grid-template-columns: 1fr 3rem 1fr;
-    justify-items: center;
-    align-items: center;
+    place-items: center center;
     padding: 1rem 3rem 0;
     margin-bottom: 2rem;
 
