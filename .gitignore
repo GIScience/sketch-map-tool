@@ -251,7 +251,7 @@ debug-output/
 *.pt
 *.pth
 
-celerybeat-schedule.*
+celerybeat-schedule*
 
 ### macOS ###
 # General
