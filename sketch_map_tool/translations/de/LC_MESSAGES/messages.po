@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-15 11:26+0000\n"
-"PO-Revision-Date: 2026-10-15 11:26\n"
+"POT-Creation-Date: 2026-11-03 10:52+0000\n"
+"PO-Revision-Date: 2026-11-03 10:53\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Crowdin-File-ID: 12\n"
 "Language: de_DE\n"
 
-#: sketch_map_tool/helpers.py:100
+#: sketch_map_tool/helpers.py:99
 msgid "We couldn’t process your submission because it took too long. Please try again later. If the problem persists, reach out to us: sketch-map-tool@heigit.org"
 msgstr ""
 
@@ -26,12 +26,12 @@ msgstr ""
 msgid "Layer name should start with osm, esri or oam."
 msgstr ""
 
-#: sketch_map_tool/routes.py:297
+#: sketch_map_tool/routes.py:298
 #, python-brace-format
 msgid "There are no tasks for UUID {UUID}"
 msgstr "Es gibt keine Aufgaben für UUID {UUID}"
 
-#: sketch_map_tool/routes.py:437
+#: sketch_map_tool/routes.py:439
 msgid "Oops... we seem to have made a mistake, sorry!"
 msgstr ""
 
@@ -175,17 +175,17 @@ msgstr ""
 msgid "Video preview image for Introduction to the Sketch Map Tool"
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:67
+#: sketch_map_tool/templates/about.html:64
 msgid "Introduction to the Sketch Map Tool"
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:72
+#: sketch_map_tool/templates/about.html:69
 #: sketch_map_tool/templates/case-study-cultural-landmarks.html:55
 #: sketch_map_tool/templates/case-study-timor-leste.html:42
 msgid "The Project"
 msgstr "Das Projekt"
 
-#: sketch_map_tool/templates/about.html:74
+#: sketch_map_tool/templates/about.html:71
 msgid "The Sketch Map Tool project has been developed in close cooperation between the <a\n"
 "                href=\"https://heigit.org\" target=\"_blank\">HeiGIT</a> and the <a\n"
 "                href=\"https://www.geog.uni-heidelberg.de/de/institut/geoinformatik\" target=\"_blank\">GIScience Research Group</a>\n"
@@ -195,57 +195,57 @@ msgstr "Das Sketch Map Tool wurde in enger Zusammenarbeit zwischen <a\n"
 "                href=\"https://heigit.org\" target=\"_blank\">HeiGIT</a> und der<a\n"
 "                href=\"https://www.geog.uni-heidelberg.de/de/institut/geoinformatik\" target=\"_blank\"> GIScience Research Group</a> der Universität Heidelberg mit großzügigen Beiträgen mehrerer Sponsoren und mit der Unterstützung durch Partnerorganisationen entwickelt."
 
-#: sketch_map_tool/templates/about.html:82
+#: sketch_map_tool/templates/about.html:79
 msgid "Sketch Map Tool, Timeline."
 msgstr "Sketch Map Tool, Chronik."
 
-#: sketch_map_tool/templates/about.html:85
+#: sketch_map_tool/templates/about.html:82
 msgid "From Prototype to Global Tool"
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:87
+#: sketch_map_tool/templates/about.html:84
 msgid "The development of the Sketch Map Tool began in 2018 as an idea and simple prototype in the <a\n"
 "                href=\"https://www.geog.uni-heidelberg.de/en/giscience/sketch-map-tool\" target=\"_blank\">Waterproofing\n"
 "                Data project</a> (funded by the Federal Ministry of Education and Research - BMBF). In 2021, this initial prototype received a major update, \n"
 "                including an improved user interface and the first implementation of color detection (using computer vision)"
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:93
+#: sketch_map_tool/templates/about.html:90
 msgid "Since then, the tool has been tested by humanitarian organizations worldwide, including in Germany, Chile, Colombia, Brazil, Mozambique, Madagascar,\n"
 "            Honduras, Ghana, Kenya, and Sudan. Following its 2023 relaunch as a stable version, the Sketch Map Tool is now an official part of the <a href=\"https://heigit.org/heigit-technology/\" target=\"_blank\">HeiGIT tool suite</a>."
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:96
+#: sketch_map_tool/templates/about.html:93
 msgid "Milestones & Key Features"
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:98
+#: sketch_map_tool/templates/about.html:95
 msgid "The tool is continuously evolving to meet the needs of humanitarian actors:"
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:101
+#: sketch_map_tool/templates/about.html:98
 msgid "2024 Relaunch of the stable version: implementation of satellite imagery as a base map, a massive improvement in color detection, and the creation of customized training materials to make the tool accessible to end-users with different knowledge levels."
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:102
+#: sketch_map_tool/templates/about.html:99
 msgid "2025 Update: Integration of OpenAerialMap (OAM) as an additional base map source and the implementation of point detection."
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:103
+#: sketch_map_tool/templates/about.html:100
 msgid "Ongoing Improvement: Regular updates to the underlying Machine Learning models alongside general maintenance and stability improvements."
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:106
+#: sketch_map_tool/templates/about.html:103
 msgid "Our supporters"
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:110
+#: sketch_map_tool/templates/about.html:107
 msgid "The continuous development and adaptation of the Sketch Map Tool for humanitarian use has been made possible through a strong collaboration with the German Red Cross (GRC) \n"
 "            and significant financial support from the German Federal Foreign Office within the framework of the \"Global Project II.\" This project contributes to reducing the negative consequences \n"
 "            of disasters for affected populations by extending strategic humanitarian topics and innovative approaches. Core maintenance of the tool and regular updates to the machine learning models are ensured by core funding from the Klaus Tschira Foundation (KTS)."
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:115
+#: sketch_map_tool/templates/about.html:112
 msgid "The focus of the relaunch in 2024, once again funded within the framework of the <em>Globalprojekt\n"
 "                II</em>, was the implementation of satellite\n"
 "            images as a base map and the overall improvement of color detection, especially on satellite images. \n"
@@ -254,11 +254,11 @@ msgid "The focus of the relaunch in 2024, once again funded within the framework
 "            different knowledge levels."
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:123
+#: sketch_map_tool/templates/about.html:120
 msgid "The Vision"
 msgstr "Die Vision"
 
-#: sketch_map_tool/templates/about.html:125
+#: sketch_map_tool/templates/about.html:122
 msgid "We envision a world in which communities worldwide are empowered to collect, communicate, and utilize local\n"
 "            spatial information and knowledge\n"
 "            effectively through an open-source, low-tech, participatory mapping solution. This solution bridges paper-based data\n"
@@ -268,60 +268,60 @@ msgid "We envision a world in which communities worldwide are empowered to colle
 "            co-create transformative change in areas impacted by sustainability challenges."
 msgstr "Unsere Vision ist eine Welt, in der Gemeinschaften weltweit dazu befähigt werden, lokale räumliche Informationen und Wissen mittels einer open-source, low-tech Lösung zum partizipativen Kartieren effektiv zu sammeln, zu kommunizieren und zu verwenden. Diese Lösung überbrückt die Lücke zwischen papierbasierter Datenerhebung und digitaler Analyse und Speicherung, mit dem Ziel, derzeitige und vergangene Zustände und Auffassungen kollaborativ zu visualisieren und zu analysieren. Hierdurch soll ein Bewusstsein geschaffen und zu einem transformativen Wandel in Gebieten, die von Herausforderungen im Bereich der Nachhaltigkeit betroffen sind, beigetragen werden."
 
-#: sketch_map_tool/templates/about.html:134
+#: sketch_map_tool/templates/about.html:131
 msgid "If you have questions or would like to provide feedback, please reach out to the <a\n"
 "                href=\"mailto:sketch-map-tool@heigit.org\">project team</a>."
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:138
+#: sketch_map_tool/templates/about.html:135
 msgid "Picture of a group mapping situation."
 msgstr "Bild einer Gruppe beim Kartieren."
 
-#: sketch_map_tool/templates/about.html:141
+#: sketch_map_tool/templates/about.html:138
 msgid "Former and Current Sponsors and Partner Organisations"
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:143
+#: sketch_map_tool/templates/about.html:140
 msgid "Logo German Red Cross"
 msgstr "Logo des Deutschen Roten Kreuzes"
 
-#: sketch_map_tool/templates/about.html:144
+#: sketch_map_tool/templates/about.html:141
 msgid "GIScience Research Group Heidelberg University"
 msgstr "GIScience-Forschergruppe der Universität Heidelberg"
 
-#: sketch_map_tool/templates/about.html:145
+#: sketch_map_tool/templates/about.html:142
 msgid "Logo german humanitarian assistance"
 msgstr "Logo der Deutschen Humanitären Hilfe"
 
-#: sketch_map_tool/templates/about.html:146
+#: sketch_map_tool/templates/about.html:143
 msgid "Logo FONA"
 msgstr "Logo FONA"
 
-#: sketch_map_tool/templates/about.html:147
+#: sketch_map_tool/templates/about.html:144
 msgid "Logo BMBF"
 msgstr "Logo BMBF"
 
-#: sketch_map_tool/templates/about.html:148
+#: sketch_map_tool/templates/about.html:145
 msgid "Logo Belmont"
 msgstr "Logo Belmont"
 
-#: sketch_map_tool/templates/about.html:149
+#: sketch_map_tool/templates/about.html:146
 msgid "Logo Norface"
 msgstr "Logo Norface"
 
-#: sketch_map_tool/templates/about.html:152
+#: sketch_map_tool/templates/about.html:149
 msgid "Learning Material"
 msgstr "Lernmaterial"
 
-#: sketch_map_tool/templates/about.html:154
+#: sketch_map_tool/templates/about.html:151
 msgid "Detailed step-by-step instructions about how to use the tool and FAQs can be found on the <a id=\"link-to-help-page\">Help page</a>."
 msgstr "Eine detaillierte Schritt-für-Schritt-Anleitung zur Anwendung des Tools sowie häufig gestellte Fragen findest Du auf der <a id=\"link-to-help-page\">Hilfe-Seite</a>."
 
-#: sketch_map_tool/templates/about.html:157
+#: sketch_map_tool/templates/about.html:154
 msgid "The code of the Sketch Map Tool is released on <a href=\"https://github.com/GIScience/sketch-map-tool\">GitHub</a>."
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:160
+#: sketch_map_tool/templates/about.html:157
 msgid "On the IFRC Network <a\n"
 "                href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html\">GIS\n"
 "                Training Platform</a>, developed by HeiGIT gGmbH, there are five exercises and trainers` instructions\n"
@@ -329,39 +329,39 @@ msgid "On the IFRC Network <a\n"
 msgstr "Auf der <a\n"
 "                href=\"https://giscience.github.io/gis-training-resource-center/content/Mobile_Data_collection/en_SMT_training.html\">GIS-Trainigsplattfrom</a> des IFRC Network, die von der HeiGIT gGmbH entwickelt wurde, gibt es fünf Übungen sowie Trainingsanweisungen, mit denen Du lernen kannst, wie man das Sketch Map Tool benutzt und wie Du mit den daraus resultierenden Ergebnissen umgehen kannst."
 
-#: sketch_map_tool/templates/about.html:166
+#: sketch_map_tool/templates/about.html:163
 msgid "If you are interested in learning more about the concept and development of the Sketch Map Tool, consider watching the video of the lightning talk <a href=\"https://www.youtube.com/watch?v=Dmj41KRH-SA\"> “OpenStreetMap Sketch Map Tool - The Future of OpenStreetMap Field Papers”</a> at GeOnG 2020."
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:172
+#: sketch_map_tool/templates/about.html:169
 msgid "Video preview image for Lightning Talk - OpenStreetMap Sketch Map Tool - The Future of OpenStreetMap Field Papers"
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:180
+#: sketch_map_tool/templates/about.html:174
 msgid "Lightning Talk - OpenStreetMap Sketch Map Tool - The Future of OpenStreetMap Field Papers"
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:186
+#: sketch_map_tool/templates/about.html:180
 msgid "Additionally, Episode 7 <a href=\"https://www.chaberlin.org/news/chatroom-7-mapping-in-der-humanitaeren-hilfe/\">\"Mapping in der Humanitären Hilfe”</a> of the podcast CHAtroom (in German) offers further insights. In this episode from the Center for Humanitarian Action (CHA), Dr. Natascha Bing (GRC) and Dr. Carolin Klonner (GIScience Heidelberg) discuss the importance of maps in disaster management and explore how the Sketch Map Tool can be utilized by humanitarian organisations."
 msgstr ""
 
-#: sketch_map_tool/templates/about.html:189
+#: sketch_map_tool/templates/about.html:183
 msgid "Related Publications"
 msgstr "Ähnliche Publikationen"
 
-#: sketch_map_tool/templates/about.html:190
+#: sketch_map_tool/templates/about.html:184
 msgid "The following scientific articles have been published about the Sketch Map Tool:"
 msgstr "Folgende wissenschaftliche Artikel über das Sketch Map Tool wurden veröffentlicht:"
 
-#: sketch_map_tool/templates/about.html:194
+#: sketch_map_tool/templates/about.html:188
 msgid "Article preview image"
 msgstr "Artikel-Vorschaubild"
 
-#: sketch_map_tool/templates/about.html:211
+#: sketch_map_tool/templates/about.html:205
 msgid "Contact"
 msgstr "Kontakt"
 
-#: sketch_map_tool/templates/about.html:213
+#: sketch_map_tool/templates/about.html:207
 msgid "HeiGIT gGmbH<br>\n"
 "                Heidelberg, Germany<br>\n"
 "                Email: <a href=\"mailto:sketch-map-tool@heigit.org\">sketch-map-tool@heigit.org</a><br>\n"
@@ -917,71 +917,71 @@ msgstr "Du versuchst gerade\n"
 "                        unterstützt. Bitte verschiebe die Karte so, dass ihr Umfang entweder links oder rechts des\n"
 "                        Nullmeridians verläuft."
 
-#: sketch_map_tool/templates/create.html:41
+#: sketch_map_tool/templates/create.html:37
 msgid "Paper Format"
 msgstr "Papierformat"
 
-#: sketch_map_tool/templates/create.html:44
+#: sketch_map_tool/templates/create.html:40
 msgid "Paper Orientation"
 msgstr "Ausrichtung der Karte"
 
-#: sketch_map_tool/templates/create.html:52
+#: sketch_map_tool/templates/create.html:48
 msgid "NEXT"
 msgstr "WEITER"
 
-#: sketch_map_tool/templates/create.html:60
+#: sketch_map_tool/templates/create.html:56
 msgid "Add OpenAerialMap Layer"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:62
+#: sketch_map_tool/templates/create.html:58
 msgid "<a href=\"https://map.openaerialmap.org\" target=\"_blank\">Browse</a> the OpenAerialMap collection to find aerial images. Once you’ve selected an image, simply copy its ID and paste it here."
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:66
+#: sketch_map_tool/templates/create.html:61
 msgid "No image for given ID could be found on OpenAerialMap. Please check given ID and try again."
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:69
+#: sketch_map_tool/templates/create.html:64
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: sketch_map_tool/templates/create.html:70
+#: sketch_map_tool/templates/create.html:65
 msgid "Add to Map"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:81
+#: sketch_map_tool/templates/create.html:76
 msgid "OpenAerialMap Metadata"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:89
+#: sketch_map_tool/templates/create.html:84
 msgid "Title"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:93
+#: sketch_map_tool/templates/create.html:88
 msgid "Date"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:97
+#: sketch_map_tool/templates/create.html:92
 msgid "Resolution"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:101
+#: sketch_map_tool/templates/create.html:96
 msgid "Provider"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:105
+#: sketch_map_tool/templates/create.html:100
 msgid "Platform"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:109
+#: sketch_map_tool/templates/create.html:104
 msgid "License"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:113
+#: sketch_map_tool/templates/create.html:108
 msgid "Item Id"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:119
+#: sketch_map_tool/templates/create.html:114
 msgid "OK"
 msgstr "Ok"
 
