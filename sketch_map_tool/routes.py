@@ -269,6 +269,8 @@ def digitize_results_post(lang="en") -> Response:
             "digitize_preview",
             lang=lang,
             uuid=async_group_result.id,
+            bbox=bboxes[0],
+            layer=layers[0],
         )
     )
 
