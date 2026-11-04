@@ -41,7 +41,14 @@ setUrlSearchParams({
 
 const vectorResultsUrl = `/api/status/${getUUIDFromURL()}/vector-results`;
 
-pollVectorResults(vectorResultsUrl).then(getVectorDownloadUrl).then(createPreviewMap);
+const map = await createPreviewMap();
+setProcessingOverlay(map, true);
+pollVectorResults(vectorResultsUrl).then(getVectorDownloadUrl).then((href) => addGeoJSONPreviewLayer(map, href))
+    .then(() => {
+        setProcessingOverlay(map, false);
+    });
+
+// pollVectorResults(vectorResultsUrl).then(getVectorDownloadUrl).then(createPreviewMap);
 
 async function pollVectorResults(url) {
     //TODO add error and progress handling
@@ -128,7 +135,16 @@ async function createPreviewMap(href) {
     //TODO add AOI / BBOX as layer
 
     //add GeoJSON Layer
-    addGeoJSONPreviewLayer(map, href);
+    if (href) addGeoJSONPreviewLayer(map, href);
+
+    return map;
+}
+
+function setProcessingOverlay(map, visible) {
+    document.getElementById("map-loading").hidden = !visible;
+    const target = map.getTargetElement();
+    target.inert = visible;
+    // target.setAttribute("aria-busy", String(visible));
 }
 
 
