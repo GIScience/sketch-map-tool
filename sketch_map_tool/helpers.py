@@ -108,3 +108,11 @@ def extract_errors(
                 if len(errors_) > 0:
                     errors = errors + [e.translate() for e in errors_]
     return errors
+
+
+def transform_layer_name(layer: str) -> str:
+    if layer.startswith("osm"):
+        return "OSM"
+    elif layer.startswith("esri"):
+        return "ESRI:World_Imagery"
+    return layer
