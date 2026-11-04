@@ -78,7 +78,7 @@ export class LayerSwitcher extends Control {
         element.appendChild(button);
 
         const slot = document.createElement("div");
-        slot.setAttribute("id", `slot`);
+        slot.setAttribute("id", "slot");
         element.appendChild(slot);
 
         super({
@@ -99,12 +99,12 @@ export class LayerSwitcher extends Control {
         existingLayers.forEach(this.addLayer.bind(this));
 
         // register map event to check whether a future layer should be added to layerswitcher or not
-        this.getMap().getLayers().on('add', (event) => {
+        this.getMap().getLayers().on("add", (event) => {
             this.addLayer(event.element);
         });
 
-        this.getMap().getLayers().on('remove', (event) => {
-            console.log('onremove from layerswitcher');
+        this.getMap().getLayers().on("remove", (event) => {
+            console.log("onremove from layerswitcher");
             const removedLayer = event.element;
             //check if removed layer is managed by layerswitcher and remove it
             this.removeLayer(removedLayer);
@@ -130,7 +130,7 @@ export class LayerSwitcher extends Control {
         });
         console.log("layerIndex", layerIndexToRemove)
         if (layerIndexToRemove === -1) {
-            console.warn('Removed Layer was not managed by LayerSwitcher.', layer);
+            console.warn("Removed Layer was not managed by LayerSwitcher.", layer);
             return;
         }
 
@@ -151,7 +151,7 @@ export class LayerSwitcher extends Control {
 
         //check whether this layer should be managed by the layerswitcher
         if (!layer.get("ls_visible")) {
-            console.warn('Layer has no "ls_visible" property and thus will not be added to the LayerSwitcher.', layer)
+            console.warn("Layer has no \"ls_visible\" property and thus will not be added to the LayerSwitcher.", layer)
             return;
         }
 
@@ -168,7 +168,7 @@ export class LayerSwitcher extends Control {
 
             // update map
             // deactivate all layers and activate next
-            this.ls_layers.forEach((layer) => layer.setVisible(false));
+            this.ls_layers.forEach((ls_layer) => ls_layer.setVisible(false));
             layer.setVisible(true);
 
             // update observable property

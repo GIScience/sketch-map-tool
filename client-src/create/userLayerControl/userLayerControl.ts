@@ -121,7 +121,7 @@ button.add-layer-btn {
 
     initialize() {
         // register map event to check whether a future layer should be added to layerswitcher or not
-        this.getMap().getLayers().on('add', (event) => {
+        this.getMap().getLayers().on("add", (event) => {
             this.addLayer(event.element);
         });
     }
