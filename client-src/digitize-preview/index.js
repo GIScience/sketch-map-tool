@@ -6,7 +6,7 @@ import "./index.css";
 
 import { addLayerSwitcherControl, createMap, } from "./map.js";
 import { bindFormToLayerSwitcherControl } from "./form.js";
-import { getSanitizedUrlSearchParams, setUrlSearchParams } from "../shared";
+import { getSanitizedLayerParam, getSanitizedUrlSearchParams, setUrlSearchParams } from "../shared";
 import { Tile } from "ol/layer";
 import { XYZ } from "ol/source";
 import { OpenAerialMapService } from "./openaerialmapService";
@@ -21,18 +21,19 @@ import { unit } from "mathjs";
  */
 
 // get all relevant params in case a permalink has been used to set the application state
-const {
-    center, zoom, layer, orientation, format,
-} = getSanitizedUrlSearchParams();
+const searchParams = new URLSearchParams(window.location.search);
+const layer = getSanitizedLayerParam(searchParams.get("layer"));
+const bbox = (searchParams.get("bbox") ?? "-180, -80, 180, 80").split(","); //TODO proper sanitize
+//TODO transform extent (bbox) to map projection, then init the map there
 
 // invalid params will be replaced by sanitized ones
 setUrlSearchParams({
-    center, zoom, layer, orientation, format,
+    layer, bbox,
 });
 
-//instead of
 
-const map = createMap("map", center, zoom, layer);
+
+const map = createMap("map", null, null, layer);
 
 const layerSwitcher = addLayerSwitcherControl(map);
 
