@@ -20,7 +20,7 @@ dependencies = [
   "matplotlib-scalebar>=0.9.0,<1.0.0",
   "numpy>=2.0.0,<3.0.0",
   "opencv-python-headless>=4.8.0.76,<5.0.0",  # https://github.com/ultralytics/ultralytics/issues/893
-  "pillow>=12.3.0,<13.0.0",
+  "pillow>=13.0.0,<14.0.0",
   "pydantic-settings>=2.12.0,<3.0.0",
   "pygal",
   "pygal-maps-world>=1.0.2,<2.0.0",
