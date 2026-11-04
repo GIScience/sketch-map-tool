@@ -1,6 +1,6 @@
 // TODO: move UUID URL thingy from DOM helper to here
 
-import { PAPER_FORMAT, ORIENTATION } from "@giscience/ol-print-layout-control";
+import { ORIENTATION, PAPER_FORMAT } from "@giscience/ol-print-layout-control";
 
 /**
  * This function will return the first UUID v4 string that can be found in the current location URL
@@ -47,6 +47,22 @@ const updateQueryParamWithConditionalDebounce = (paramName, value) => {
     }
 };
 
+function getSanitizedLayerParam(baselayerArg) {
+    let layer = "OSM"; //default
+    if (baselayerArg != null) {
+        switch (true) {
+            case baselayerArg === "ESRI:World_Imagery":
+                layer = baselayerArg;
+                break;
+            case baselayerArg.startsWith("oam:"):
+                layer = baselayerArg;
+                break;
+            default:
+                layer = "OSM";
+        }
+    }
+    return layer;
+}
 
 function getSanitizedUrlSearchParams() {
     // Retrieve potentially given map and print layout parameter from URL
@@ -76,19 +92,7 @@ function getSanitizedUrlSearchParams() {
     }
 
     // type BaselayerType = "OSM" | "ESRI:World_Imagery" | `oam:${string}`
-    let layer = "OSM";
-    if (baselayerArg != null) {
-        switch (true) {
-            case baselayerArg === "ESRI:World_Imagery":
-                layer = baselayerArg;
-                break;
-            case baselayerArg.startsWith("oam:"):
-                layer = baselayerArg;
-                break;
-            default:
-                layer = "OSM";
-        }
-    }
+    let layer = getSanitizedLayerParam(baselayerArg);
 
     let orientation = ORIENTATION.LANDSCAPE;
     if (orientationArg != null) {
@@ -107,6 +111,7 @@ function getSanitizedUrlSearchParams() {
 }
 
 export {
+    getSanitizedLayerParam,
     getSanitizedUrlSearchParams,
     getUUIDFromURL,
     setUrlSearchParams,
