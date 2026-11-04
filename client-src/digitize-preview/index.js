@@ -18,6 +18,8 @@ import { transformExtent } from "ol/proj";
 import { intersects } from "ol/extent";
 import { UserLayerControl } from "./userLayerControl/userLayerControl";
 import { unit } from "mathjs";
+import * as olExtent from "ol/extent";
+import { toLonLat } from "ol/proj";
 
 
 /**
@@ -29,7 +31,7 @@ const searchParams = new URLSearchParams(window.location.search);
 //TODO check layer names not differ between frontend and backend
 console.log("original layer", searchParams.get("layer"))
 const layer = getSanitizedLayerParam(searchParams.get("layer"));
-const bbox = (searchParams.get("bbox") ?? "-180, -80, 180, 80").split(","); //TODO proper sanitize
+const bbox = (searchParams.get("bbox") ?? "-180, -80, 180, 80").split(",").map(Number); //TODO proper sanitize
 //TODO transform extent (bbox) to map projection, then init the map there
 console.log(layer, bbox);
 // invalid params will be replaced by sanitized ones
@@ -41,54 +43,65 @@ const vectorResultsUrl = `/api/status/${getUUIDFromURL()}/vector-results`;
 
 pollVectorResults(vectorResultsUrl).then(getVectorDownloadUrl).then(createPreviewMap);
 
+async function pollVectorResults(url) {
+    //TODO add error and progress handling
+    return PollUntilValid.poll(url, undefined, 1000);
+}
+
 async function getVectorDownloadUrl(response) {
     const result = await response.json();
     const { href } = result;
     return href;
 }
 
-function createPreviewMap(href) {
-    console.log("TODO: CREATE PREVIEW MAP", href)
+async function createPreviewMap(href) {
+    console.log("TODO: CREATE PREVIEW MAP", href);
+    console.log("Layer:", layer);
+    const center = olExtent.getCenter(bbox)
+    const centerLonLat = toLonLat(center);
+    console.log("BBOX:", bbox, center, centerLonLat);
+
+    const map = createMap("map", center, undefined, layer);
+    const layerSwitcher = addLayerSwitcherControl(map);
+
+    const layerswitcherSlot = document.querySelector(".layerswitcher #slot");
+
+    const userLayerControl = new UserLayerControl({ target: layerswitcherSlot });
+    map.addControl(userLayerControl);
+    userLayerControl.initialize();
+
+    userLayerControl.on("new-layer", openOamDialog);
+
+    // keep the current layer in layerswitcher to toggle back from OAM Layer
+    userLayerControl.on("beforeactivate", () => {
+        layerSwitcher.activateNextLayer();
+    });
+    // switch back to the layer you came from when removing OAM Layer
+    userLayerControl.on("close", () => {
+        layerSwitcher.activateNextLayer();
+    })
+
+    // bindFormToLayerSwitcherControl(layerSwitcher, userLayerControl);
+    // add additional layers
+    if (layer.startsWith("oam:")) {
+        const oamItemId = layer.replace("oam:", "");
+        await addOAMLayer(oamItemId, map, layerSwitcher);
+    }
+
+    // OAM Metadata Dialog Handling
+    userLayerControl.on("info", handleUserLayerControlInfoEvent);
+
+    document.getElementById("oam-info-ok-button").addEventListener("click", () => {
+        document.getElementById("oam-info-dialog").close();
+    });
+
+    document.getElementById("oam-info-close-button").addEventListener("click", () => {
+        document.getElementById("oam-info-dialog").close();
+    });
 }
 
-async function pollVectorResults(url) {
-    //TODO add error and progress handling
-    return PollUntilValid.poll(url, undefined, 1000);
-}
 
-const map = createMap("map", undefined, undefined, layer);
-
-const layerSwitcher = addLayerSwitcherControl(map);
-
-const layerswitcherSlot = document.querySelector(".layerswitcher #slot");
-
-const userLayerControl = new UserLayerControl({ target: layerswitcherSlot });
-map.addControl(userLayerControl);
-userLayerControl.initialize();
-
-userLayerControl.on("new-layer", openOamDialog);
-
-// keep the current layer in layerswitcher to toggle back from OAM Layer
-userLayerControl.on("beforeactivate", () => {
-    layerSwitcher.activateNextLayer();
-});
-// switch back to the layer you came from when removing OAM Layer
-userLayerControl.on("close", () => {
-    layerSwitcher.activateNextLayer();
-})
-
-// bindFormToLayerSwitcherControl(layerSwitcher, userLayerControl);
-// add additional layers
-if (layer.startsWith("oam:")) {
-    const oamItemId = layer.replace("oam:", "");
-    await addOAMLayer(oamItemId);
-} else {
-    // set initial form value from ol-control
-    console.log(">>>>", layerSwitcher)
-    // document.getElementById("layer").value = layerSwitcher.get("activeLayer").get("name");
-}
-
-export async function addOAMLayer(oamItemId) {
+export async function addOAMLayer(oamItemId, map, layerSwitcher) {
 
     const oamLayerName = `oam:${oamItemId}`;
     try {
@@ -169,8 +182,7 @@ function closeOamDialog() {
 
 }
 
-// OAM Metadata Dialog Handling
-userLayerControl.on("info", async (event) => {
+async function handleUserLayerControlInfoEvent(event) {
     const infoDialog = document.getElementById("oam-info-dialog");
     const oamItemId = event.target.get("activeLayer").get("name").replace("oam:", "");
 
@@ -202,13 +214,4 @@ userLayerControl.on("info", async (event) => {
     document.getElementById("platform").textContent = platform.toUpperCase();
     document.getElementById("license").textContent = license;
     document.getElementById("itemId").textContent = oamItemId;
-
-});
-
-document.getElementById("oam-info-ok-button").addEventListener("click", () => {
-    document.getElementById("oam-info-dialog").close();
-});
-
-document.getElementById("oam-info-close-button").addEventListener("click", () => {
-    document.getElementById("oam-info-dialog").close();
-});
+}
