@@ -9,23 +9,38 @@
 {% endblock head %}
 
 {% block header_message %}
-<div class="circle" style="display: inline-block" ;>1</div>{{ _('PREVIEW') }}
+<div class="circle" style="display: inline-block;">2</div>{{ _('Paper to GIS:') }}
+<span style="font-size: smaller">{{ _('Automatically Digitize Your Sketch&nbsp;Maps') }}</span>
 {% endblock %}
 
 {% block body %}
 <div class="container-fluid horizontal step-arrows">
-  <div class="active">{{ _('Define your Area of Interest') }}</div>
-  <div>{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
+  <div>{{ _('Scan or photograph your marked Sketch&nbsp;Maps') }}</div>
+  <div>{{ _('Upload your Sketch&nbsp;Maps') }}</div>
+  <div class="active">{{ _('Preview collected markings') }}</div>
 </div>
 <main class="container-fluid">
 
   <div id="main-grid" class="grid">
     <div id="left">
-      <div class="sketchy h1 center-text">{{ _('Area of Interest') }}</div>
-      <div id="map"></div>
+      <div class="sketchy h1 center-text">{{ _('Sketch Map Results') }}</div>
+      <div class="map-wrapper">
+        <div id="map"></div>
+        <div id="map-loading" class="map-loading" hidden role="status" aria-live="polite">
+          <div class="loading-card">
+            <div class="loading-title">Marking Detection running…</div>
+            <progress id="load-progress" max="100"></progress>
+            <div class="loading-meta">
+              <span id="load-message">Starting...</span>
+              <span><span id="load-percent"></span> · <span id="load-elapsed">0:00</span></span>
+            </div>
+<!--            <button id="load-cancel" type="button">Cancel</button>-->
+          </div>
+        </div>
+      </div>
     </div>
     <div id="right">
-      <div class="sketchy h1 center-text">{{ _('Page Setup') }}</div>
+      <div class="sketchy h1 center-text">{{ _('Legend') }}</div>
       <div id="message-container" hidden>
         <article id="antimeridian-info" hidden class="infobox">{{ _('You are currently trying to
                         request a map that crosses the +/-180° <a href="https://en.wikipedia.org/wiki/180th_meridian" target="_blank">antimeridian</a>. This is currently not
@@ -33,7 +48,7 @@
                         the antimeridian.') }}
         </article>
       </div>
-      <a role="button" href="{{ url_for("digitize_results_get", lang=lang, uuid=uuid) }}">Download Results</a>
+      <a role="button" href="{{ url_for("digitize_results_get", lang=lang, uuid=uuid) }}">{{ _('Download Results') }} &rarr;</a>
     </div>
 
     <dialog id="oam-dialog">

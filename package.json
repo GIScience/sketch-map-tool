@@ -23,7 +23,7 @@
         "format-html": "js-beautify --indent-size 2 --type html 'sketch_map_tool/templates/**/*.html'",
         "clean": "rimraf ./sketch_map_tool/static/bundles",
         "build": "npm run clean && node esbuild.mjs",
-        "watch": "nodemon -e js,ts,css"
+        "watch": "nodemon -e js,ts,css,html"
     },
     "repository": {
         "type": "git",
