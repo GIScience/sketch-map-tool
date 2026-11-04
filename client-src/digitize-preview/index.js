@@ -19,7 +19,9 @@ import { intersects } from "ol/extent";
 import { UserLayerControl } from "./userLayerControl/userLayerControl";
 import { unit } from "mathjs";
 import * as olExtent from "ol/extent";
-import { toLonLat } from "ol/proj";
+import VectorSource from "ol/source/Vector";
+import { GeoJSON } from "ol/format";
+import VectorLayer from "ol/layer/Vector";
 
 
 /**
@@ -45,7 +47,12 @@ pollVectorResults(vectorResultsUrl).then(getVectorDownloadUrl).then(createPrevie
 
 async function pollVectorResults(url) {
     //TODO add error and progress handling
-    return PollUntilValid.poll(url, undefined, 1000);
+    return PollUntilValid.poll(url, validateFn, 1000);
+
+    function validateFn(response) {
+        // valid once the status is 200
+        return response.status === 200;
+    }
 }
 
 async function getVectorDownloadUrl(response) {
@@ -54,14 +61,7 @@ async function getVectorDownloadUrl(response) {
     return href;
 }
 
-async function createPreviewMap(href) {
-    console.log("TODO: CREATE PREVIEW MAP", href);
-    console.log("Layer:", layer);
-    const center = olExtent.getCenter(bbox)
-    const centerLonLat = toLonLat(center);
-    console.log("BBOX:", bbox, center, centerLonLat);
-
-    const map = createMap("map", center, undefined, layer);
+async function addAllLayerSwitchers(map) {
     const layerSwitcher = addLayerSwitcherControl(map);
 
     const layerswitcherSlot = document.querySelector(".layerswitcher #slot");
@@ -98,6 +98,39 @@ async function createPreviewMap(href) {
     document.getElementById("oam-info-close-button").addEventListener("click", () => {
         document.getElementById("oam-info-dialog").close();
     });
+}
+
+function addGeoJSONPreviewLayer(map, href) {
+    const vectorSource = new VectorSource({
+        format: new GeoJSON({
+            dataProjection: "EPSG:4326", featureProjection: "EPSG:3857"
+        }),
+        url: href,
+    });
+
+    const vectorLayer = new VectorLayer({
+        name: "Sketch Map Results",
+        source: vectorSource,
+    });
+
+    map.addLayer(vectorLayer);
+}
+
+async function createPreviewMap(href) {
+    console.log("TODO: CREATE PREVIEW MAP", await href);
+    console.log("Layer:", layer);
+    const center = olExtent.getCenter(bbox)
+    console.log("BBOX:", bbox, center);
+
+    //Base Map from original sketchmap
+    const map = createMap("map", center, undefined, layer);
+
+    await addAllLayerSwitchers(map);
+
+    //TODO add AOI / BBOX as layer
+
+    //add GeoJSON Layer
+    addGeoJSONPreviewLayer(map, href);
 }
 
 
