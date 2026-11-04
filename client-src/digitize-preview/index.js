@@ -1,7 +1,5 @@
 import "ol/ol.css";
 import "@giscience/ol-print-layout-control/dist/ol-print-layout-control.css";
-import "ol-geocoder/dist/ol-geocoder.css";
-import "./geocoder.css";
 import "./index.css";
 
 import { addLayerSwitcherControl, createMap, } from "./map.js";
