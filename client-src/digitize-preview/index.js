@@ -43,20 +43,29 @@ const vectorResultsUrl = `/api/status/${getUUIDFromURL()}/vector-results`;
 
 const map = await createPreviewMap();
 setProcessingOverlay(map, true);
+const timer = startProgressTimer();
 pollVectorResults(vectorResultsUrl).then(getVectorDownloadUrl).then((href) => addGeoJSONPreviewLayer(map, href))
     .then(() => {
         setProcessingOverlay(map, false);
+        stopProgressTimer(timer);
     });
 
 // pollVectorResults(vectorResultsUrl).then(getVectorDownloadUrl).then(createPreviewMap);
 
 async function pollVectorResults(url) {
     //TODO add error and progress handling
-    return PollUntilValid.poll(url, validateFn, 1000);
+    return PollUntilValid.poll(url, validateFn, 1000, undefined, onProgress);
 
     function validateFn(response) {
         // valid once the status is 200
         return response.status === 200;
+    }
+
+    async function onProgress(response){
+        const result = await response.json();
+        const { current, total } = result.info;
+        const progressPercent = (current/total) * 100;
+        showProgress(progressPercent, result.status);
     }
 }
 
@@ -141,12 +150,34 @@ async function createPreviewMap(href) {
 }
 
 function setProcessingOverlay(map, visible) {
-    document.getElementById("map-loading").hidden = !visible;
+    // document.getElementById("map-loading").hidden = !visible;
+    document.getElementById("map-loading").classList.toggle("is-hidden", !visible);
     const target = map.getTargetElement();
     target.inert = visible;
     // target.setAttribute("aria-busy", String(visible));
 }
 
+function showProgress( progress, message ) {
+    console.log(progress, message);
+    if (typeof progress === "number" && progress > 0) {
+        document.getElementById("load-progress").value = progress;
+        document.getElementById("load-percent").textContent = `${Math.round(progress)} %`;
+    }
+    if (message) document.getElementById("load-message").textContent = message;
+}
+
+function startProgressTimer(){
+    const start = Date.now();
+    const timer = setInterval(() => {
+        const s = Math.floor((Date.now() - start) / 1000);
+        document.getElementById("load-elapsed").textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+    }, 1000);
+    return timer;
+}
+
+function stopProgressTimer(timerReference) {
+    clearInterval(timerReference);
+}
 
 export async function addOAMLayer(oamItemId, map, layerSwitcher) {
 
