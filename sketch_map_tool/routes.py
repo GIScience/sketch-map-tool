@@ -34,6 +34,7 @@ from sketch_map_tool.helpers import (
     extract_errors,
     merge,
     to_array,
+    transform_layer_name,
     zip_,
 )
 from sketch_map_tool.models import Bbox, PaperFormat, Size, validate_layer
@@ -264,13 +265,14 @@ def digitize_results_post(lang="en") -> Response:
     # group results have to be saved for them to be able to be restored later
     async_group_result.save()
     db_client_flask.update_files_digitize_uuid(file_ids, async_group_result.id)
+    layer = transform_layer_name(layers[0])
     return redirect(
         url_for(
             "digitize_preview",
             lang=lang,
             uuid=async_group_result.id,
             bbox=bboxes[0],
-            layer=layers[0],
+            layer=layer,
         )
     )
 
