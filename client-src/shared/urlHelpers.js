@@ -8,7 +8,6 @@ import { PAPER_FORMAT, ORIENTATION } from "@giscience/ol-print-layout-control";
  */
 function getUUIDFromURL() {
     const UUID_V4_PATTERN = /[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}/i;
-    // eslint-disable-next-line no-restricted-globals
     return location.pathname.match(UUID_V4_PATTERN)[0];
 }
 

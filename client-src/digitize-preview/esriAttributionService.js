@@ -19,6 +19,7 @@ export class EsriAttributionService {
                 this.serviceAvailable = false;
             }
         } catch (e) {
+            console.log(e);
             this.serviceAvailable = false;
         }
     }
