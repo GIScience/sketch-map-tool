@@ -60,7 +60,9 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
     const osmBaselayer = new Tile({
         name: "OSM",
         visible: activeBaselayer === "OSM",
-        source: new OSM(),
+        source: new OSM({
+            referrerPolicy: "strict-origin-when-cross-origin",
+        }),
         ls_visible: true,
         ls_class: "osm",
         ls_label: "OSM"
