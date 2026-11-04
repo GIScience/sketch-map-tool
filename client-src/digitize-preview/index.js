@@ -5,8 +5,12 @@ import "./geocoder.css";
 import "./index.css";
 
 import { addLayerSwitcherControl, createMap, } from "./map.js";
-import { bindFormToLayerSwitcherControl } from "./form.js";
-import { getSanitizedLayerParam, getSanitizedUrlSearchParams, setUrlSearchParams } from "../shared";
+import {
+    getSanitizedLayerParam,
+    getUUIDFromURL,
+    PollUntilValid,
+    setUrlSearchParams
+} from "../shared";
 import { Tile } from "ol/layer";
 import { XYZ } from "ol/source";
 import { OpenAerialMapService } from "./openaerialmapService";
@@ -22,18 +26,37 @@ import { unit } from "mathjs";
 
 // get all relevant params in case a permalink has been used to set the application state
 const searchParams = new URLSearchParams(window.location.search);
+//TODO check layer names not differ between frontend and backend
+console.log("original layer", searchParams.get("layer"))
 const layer = getSanitizedLayerParam(searchParams.get("layer"));
 const bbox = (searchParams.get("bbox") ?? "-180, -80, 180, 80").split(","); //TODO proper sanitize
 //TODO transform extent (bbox) to map projection, then init the map there
-
+console.log(layer, bbox);
 // invalid params will be replaced by sanitized ones
 setUrlSearchParams({
     layer, bbox,
 });
 
+const vectorResultsUrl = `/api/status/${getUUIDFromURL()}/vector-results`;
 
+pollVectorResults(vectorResultsUrl).then(getVectorDownloadUrl).then(createPreviewMap);
 
-const map = createMap("map", null, null, layer);
+async function getVectorDownloadUrl(response) {
+    const result = await response.json();
+    const { href } = result;
+    return href;
+}
+
+function createPreviewMap(href) {
+    console.log("TODO: CREATE PREVIEW MAP", href)
+}
+
+async function pollVectorResults(url) {
+    //TODO add error and progress handling
+    return PollUntilValid.poll(url, undefined, 1000);
+}
+
+const map = createMap("map", undefined, undefined, layer);
 
 const layerSwitcher = addLayerSwitcherControl(map);
 
@@ -54,7 +77,7 @@ userLayerControl.on("close", () => {
     layerSwitcher.activateNextLayer();
 })
 
-bindFormToLayerSwitcherControl(layerSwitcher, userLayerControl);
+// bindFormToLayerSwitcherControl(layerSwitcher, userLayerControl);
 // add additional layers
 if (layer.startsWith("oam:")) {
     const oamItemId = layer.replace("oam:", "");
@@ -62,7 +85,7 @@ if (layer.startsWith("oam:")) {
 } else {
     // set initial form value from ol-control
     console.log(">>>>", layerSwitcher)
-    document.getElementById("layer").value = layerSwitcher.get("activeLayer").get("name");
+    // document.getElementById("layer").value = layerSwitcher.get("activeLayer").get("name");
 }
 
 export async function addOAMLayer(oamItemId) {
