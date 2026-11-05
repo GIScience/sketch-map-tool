@@ -212,7 +212,8 @@ def digitize(lang="en") -> str:
 def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
     # user consent to use uploaded files for service improvement
-    consent = request.form.get("consent", "False") == "True"
+    consent: bool = request.form.get("consent", "False") == "True"
+    preview: bool = request.form.get("preview", "False") == "True"
     # No files uploaded
     if "file" not in request.files:
         return redirect(url_for("digitize", lang=lang))
@@ -268,7 +269,7 @@ def digitize_results_post(lang="en") -> Response:
     layer = transform_layer_name(layers[0])
     return redirect(
         url_for(
-            "digitize_preview",
+            "digitize_preview" if preview else "digitize_results_get",
             lang=lang,
             uuid=async_group_result.id,
             bbox=bboxes[0],
