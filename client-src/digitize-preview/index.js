@@ -50,8 +50,6 @@ pollVectorResults(vectorResultsUrl).then(getVectorDownloadUrl).then((href) => ad
         stopProgressTimer(timer);
     });
 
-// pollVectorResults(vectorResultsUrl).then(getVectorDownloadUrl).then(createPreviewMap);
-
 async function pollVectorResults(url) {
     //TODO add error and progress handling
     return PollUntilValid.poll(url, validateFn, 1000, undefined, onProgress);
@@ -112,6 +110,28 @@ async function addAllLayerSwitchers(map) {
     document.getElementById("oam-info-close-button").addEventListener("click", () => {
         document.getElementById("oam-info-dialog").close();
     });
+
+    // OAM Add Dialog Handling
+    document.getElementById("oam-add-button").addEventListener("click", async () => {
+        const oamItemIdInput = document.getElementById("oam-item-id-input");
+        const oamInvalidIdMessage = document.getElementById("oam-invalid-id-message");
+        const oamPrgressBar = document.getElementById("oam-progress-bar");
+        try {
+            if (oamItemIdInput.value.length === 0) {
+                throw Error("Empty input not allowed.")
+            }
+            oamPrgressBar.classList.remove("hidden");
+            await addOAMLayer(oamItemIdInput.value, map, layerSwitcher);
+            closeOamDialog();
+        } catch (error) {
+            console.error(error);
+            oamInvalidIdMessage.classList.remove("hidden");
+            oamItemIdInput.setAttribute("aria-invalid", "true");
+        } finally {
+            oamPrgressBar.classList.add("hidden");
+        }
+    });
+
 }
 
 function addGeoJSONPreviewLayer(map, href) {
@@ -124,7 +144,7 @@ function addGeoJSONPreviewLayer(map, href) {
 
     const vectorLayer = new VectorLayer({
         name: "Sketch Map Results",
-        source: vectorSource,
+        source: vectorSource
     });
 
     map.addLayer(vectorLayer);
@@ -185,8 +205,9 @@ export async function addOAMLayer(oamItemId, map, layerSwitcher) {
     try {
         const metadata = await OpenAerialMapService.getMetadata(oamItemId);
         console.log(metadata);
-
+        console.log("layerswitcher", layerSwitcher);
         layerSwitcher.activateNextLayer();
+        console.log(">>>>>>>>after activateNextLayer")
         layerSwitcher.suspend();
 
         const oamBaselayer = new Tile({
@@ -216,28 +237,6 @@ export async function addOAMLayer(oamItemId, map, layerSwitcher) {
     }
 
 }
-
-
-// OAM Add Dialog Handling
-document.getElementById("oam-add-button").addEventListener("click", async () => {
-    const oamItemIdInput = document.getElementById("oam-item-id-input");
-    const oamInvalidIdMessage = document.getElementById("oam-invalid-id-message");
-    const oamPrgressBar = document.getElementById("oam-progress-bar");
-    try {
-        if (oamItemIdInput.value.length === 0) {
-            throw Error("Empty input not allowed.")
-        }
-        oamPrgressBar.classList.remove("hidden");
-        await addOAMLayer(oamItemIdInput.value);
-        closeOamDialog();
-    } catch (error) {
-        console.error(error);
-        oamInvalidIdMessage.classList.remove("hidden");
-        oamItemIdInput.setAttribute("aria-invalid", "true");
-    } finally {
-        oamPrgressBar.classList.add("hidden");
-    }
-});
 
 document.getElementById("oam-close-button").addEventListener("click", () => {
     closeOamDialog()
