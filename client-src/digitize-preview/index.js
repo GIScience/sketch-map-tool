@@ -23,6 +23,7 @@ import VectorLayer from "ol/layer/Vector";
 import { Feature } from "ol";
 import { fromExtent } from "ol/geom/Polygon";
 import { Stroke, Style } from "ol/style";
+import simpleStyleFunction from "./ol-simplestyle-1.1.0";
 
 
 /**
@@ -168,6 +169,7 @@ function addGeoJSONPreviewLayer(map, href) {
     const vectorLayer = new VectorLayer({
         name: "Sketch Map Results",
         source: vectorSource,
+        style: simpleStyleFunction,
         overlay: true,
         zIndex: Infinity
     });
