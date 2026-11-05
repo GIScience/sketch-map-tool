@@ -31,10 +31,10 @@
             <div class="loading-title">Marking Detection running…</div>
             <progress id="load-progress" max="100"></progress>
             <div class="loading-meta">
-              <span style="visibility: hidden">Status: <span id="load-message">Starting...</span></span>
-              <span>Done: <span id="load-percent">0 %</span> · <span id="load-elapsed">0:00</span></span>
+              <div class="row"><span>Status:</span><span id="load-message">Starting...</span></div>
+              <div class="row"><span>Done:</span><span><span id="load-parts">-/-</span> (<span id="load-percent">0 %</span>)</span></div>
+              <div class="row"><span>Time Elapsed:</span><span id="load-elapsed">0:00</span></div>
             </div>
-<!--            <button id="load-cancel" type="button">Cancel</button>-->
           </div>
         </div>
       </div>

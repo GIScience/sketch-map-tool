@@ -62,8 +62,7 @@ async function pollVectorResults(url) {
     async function onProgress(response){
         const result = await response.json();
         const { current, total } = result.info;
-        const progressPercent = (current/total) * 100;
-        showProgress(progressPercent, result.status);
+        showProgress(current, total, result.status);
     }
 }
 
@@ -179,22 +178,24 @@ function setProcessingOverlay(map, visible) {
     // target.setAttribute("aria-busy", String(visible));
 }
 
-function showProgress( progress, message ) {
-    console.log(progress, message);
-    if (typeof progress === "number" && progress > 0) {
-        document.getElementById("load-progress").value = progress;
-        document.getElementById("load-percent").textContent = `${Math.round(progress)} %`;
+function showProgress( parts, total, message ) {
+    const progressPercent = (parts/total) * 100;
+    console.log(progressPercent, message);
+    document.getElementById("load-parts").textContent = `${parts}/${total}`;
+    // start with infinite progress bar (without value), after first result switch to percent
+    if (typeof progressPercent === "number" && progressPercent > 0) {
+        document.getElementById("load-progress").value = progressPercent;
+        document.getElementById("load-percent").textContent = `${Math.round(progressPercent)} %`;
     }
     if (message) document.getElementById("load-message").textContent = message;
 }
 
 function startProgressTimer(){
     const start = Date.now();
-    const timer = setInterval(() => {
+    return setInterval(() => {
         const s = Math.floor((Date.now() - start) / 1000);
-        document.getElementById("load-elapsed").textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+        document.getElementById("load-elapsed").textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
     }, 1000);
-    return timer;
 }
 
 function stopProgressTimer(timerReference) {
