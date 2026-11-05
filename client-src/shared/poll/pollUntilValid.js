@@ -27,7 +27,6 @@ class PollUntilValid {
         onError = () => {},
     ) {
         do {
-            /* eslint-disable no-await-in-loop */
             const response = await fetch(url);
 
             // if response code is not between 200-299
@@ -44,7 +43,6 @@ class PollUntilValid {
                 return response;
             }
 
-            // eslint-disable-next-line no-constant-condition
         } while (true);
     }
 

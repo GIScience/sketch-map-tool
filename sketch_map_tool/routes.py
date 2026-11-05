@@ -34,6 +34,7 @@ from sketch_map_tool.helpers import (
     extract_errors,
     merge,
     to_array,
+    transform_layer_name,
     zip_,
 )
 from sketch_map_tool.models import Bbox, PaperFormat, Size, validate_layer
@@ -211,7 +212,8 @@ def digitize(lang="en") -> str:
 def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
     # user consent to use uploaded files for service improvement
-    consent = request.form.get("consent", "False") == "True"
+    consent: bool = request.form.get("consent", "False") == "True"
+    preview: bool = request.form.get("preview", "False") == "True"
     # No files uploaded
     if "file" not in request.files:
         return redirect(url_for("digitize", lang=lang))
@@ -264,12 +266,29 @@ def digitize_results_post(lang="en") -> Response:
     # group results have to be saved for them to be able to be restored later
     async_group_result.save()
     db_client_flask.update_files_digitize_uuid(file_ids, async_group_result.id)
+    layer = transform_layer_name(layers[0])
     return redirect(
         url_for(
-            "digitize_results_get",
+            "digitize_preview" if preview else "digitize_results_get",
             lang=lang,
             uuid=async_group_result.id,
+            bbox=bboxes[0],
+            layer=layer,
         )
+    )
+
+
+@app.get("/digitize-preview/<uuid>")
+@app.get("/<lang>/digitize-preview/<uuid>")
+def digitize_preview(lang="en", uuid: str | None = None) -> Response | str:
+    if uuid is None:
+        return redirect(url_for("digitize", lang=lang))
+    validate_uuid(uuid)
+    return render_template(
+        "digitize-preview.html",
+        lang=lang,
+        uuid=uuid,
+        esri_api_key=CONFIG.esri_api_key,
     )
 
 

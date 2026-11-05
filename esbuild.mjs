@@ -9,6 +9,7 @@ await esbuild.build({
         "./client-src/create/index.js",
         "./client-src/create-results/index.js",
         "./client-src/digitize/index.js",
+        "./client-src/digitize-preview/index.js",
         "./client-src/digitize-results/index.js",
         "./client-src/help/index.css",
         "./client-src/help/index.js",

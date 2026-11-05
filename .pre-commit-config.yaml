@@ -1,3 +1,4 @@
+exclude: "eslint.config.mjs"
 repos:
   # General
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -24,7 +25,14 @@ repos:
       - id: uv-lock
   # Javascript
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: "v8.51.0"
+    rev: "v10.14.0"
     hooks:
       - id: eslint
-        additional_dependencies: ['eslint@8.51.0', 'eslint-plugin-import@2.28.1', 'eslint-config-airbnb-base@15.0.0']
+        additional_dependencies:
+          [
+            "eslint@10.14.0",
+            "eslint-plugin-import-x@4.17.1",
+            "eslint-import-resolver-typescript@4.4.5"
+          ]
+        files: \.[jt]sx?$  # *.js, *.jsx, *.ts and *.tsx
+        types: [file]

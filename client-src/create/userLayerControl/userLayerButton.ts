@@ -86,8 +86,8 @@ export class UserLayerButton extends HTMLElement {
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-        if (name === 'bgimageurl') {
-            const layerButton = this.shadowRoot.querySelector<HTMLButtonElement>('#layer-btn');
+        if (name === "bgimageurl") {
+            const layerButton = this.shadowRoot.querySelector<HTMLButtonElement>("#layer-btn");
             layerButton.style.backgroundImage = `url(${newValue})`;
         }
     }
@@ -97,22 +97,22 @@ export class UserLayerButton extends HTMLElement {
         // transfer host content to button
         this.shadowRoot.getElementById("layer-btn").innerHTML = this.innerHTML;
 
-        this.shadowRoot.querySelector('#layer-btn')
-            .addEventListener('click', e => {
+        this.shadowRoot.querySelector("#layer-btn")
+            .addEventListener("click", e => {
                 e.stopPropagation(); // don’t trigger outer click
-                this.dispatchEvent(new CustomEvent('click', { bubbles: true, composed: true }));
+                this.dispatchEvent(new CustomEvent("click", { bubbles: true, composed: true }));
             });
 
-        this.shadowRoot.querySelector('.close')
-            .addEventListener('click', e => {
+        this.shadowRoot.querySelector(".close")
+            .addEventListener("click", e => {
                 e.stopPropagation(); // don’t trigger outer click
-                this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
+                this.dispatchEvent(new CustomEvent("close", { bubbles: true, composed: true }));
             });
 
-        this.shadowRoot.querySelector('.info')
-            .addEventListener('click', e => {
+        this.shadowRoot.querySelector(".info")
+            .addEventListener("click", e => {
                 e.stopPropagation(); // don’t trigger outer click
-                this.dispatchEvent(new CustomEvent('info', { bubbles: true, composed: true }));
+                this.dispatchEvent(new CustomEvent("info", { bubbles: true, composed: true }));
             });
 
     }
