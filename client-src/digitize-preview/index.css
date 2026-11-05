@@ -8,17 +8,6 @@ body > main {
     padding: 3rem 0;
 }
 
-/* #map { */
-
-/*    width: 100%; */
-
-/*    height: 50vh; */
-
-/*    flex: 1 0 auto; */
-
-/* } */
-
-/*  */
 .map-wrapper { position: relative;
     width: 100%;
     height: 50vh;
@@ -40,8 +29,6 @@ body > main {
     opacity: 1;
     visibility: visible;
     transition: opacity 0.4s ease, visibility 0s linear 0s;
-
-    /* font: 500 14px system-ui, sans-serif; */
 }
 
 .map-loading.is-hidden {
@@ -64,17 +51,25 @@ body > main {
 
 .loading-meta {
     display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+}
+
+.loading-meta .row {
+    display: flex;
     justify-content: space-between;
     gap: 1rem;
-    font-size: 13px;
-    color: #555;
 }
+
+.loading-meta .row > :last-child {
+    text-align: right;
+    font-variant-numeric: tabular-nums; /* keeps numbers from jittering as they update */
+}
+
 #load-message { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 progress { width: 100%; height: 8px; accent-color: #1f6feb; }
-
-/* #load-cancel { justify-self: end; } */
-
-/*  */
 
 #left {
     display: flex;
