@@ -204,7 +204,8 @@ export class LayerSwitcher extends Control {
     activateNextLayer() {
         // deactivate all layers and activate next
         // this.ls_layers.forEach((layer) => layer.setVisible(false));
-        this.getMap().getAllLayers().forEach((layer) => layer.setVisible(false));
+        // this will also hide the OAM layer
+        this.getMap().getAllLayers().filter((layer)=>!layer.get("overlay")).forEach((layer) => layer.setVisible(false));
         this.activateLayerAtIndex(this.activeLayerIdx + 1);
     }
 

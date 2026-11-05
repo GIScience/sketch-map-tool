@@ -144,7 +144,9 @@ function addGeoJSONPreviewLayer(map, href) {
 
     const vectorLayer = new VectorLayer({
         name: "Sketch Map Results",
-        source: vectorSource
+        source: vectorSource,
+        overlay: true,
+        zIndex: Infinity
     });
 
     map.addLayer(vectorLayer);
