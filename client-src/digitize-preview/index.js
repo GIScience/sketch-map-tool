@@ -13,13 +13,16 @@ import { Tile } from "ol/layer";
 import { XYZ } from "ol/source";
 import { OpenAerialMapService } from "./openaerialmapService";
 import { transformExtent } from "ol/proj";
+import * as olExtent from "ol/extent";
 import { intersects } from "ol/extent";
 import { UserLayerControl } from "./userLayerControl/userLayerControl";
 import { unit } from "mathjs";
-import * as olExtent from "ol/extent";
 import VectorSource from "ol/source/Vector";
 import { GeoJSON } from "ol/format";
 import VectorLayer from "ol/layer/Vector";
+import { Feature } from "ol";
+import { fromExtent } from "ol/geom/Polygon";
+import { Stroke, Style } from "ol/style";
 
 
 /**
@@ -28,12 +31,9 @@ import VectorLayer from "ol/layer/Vector";
 
 // get all relevant params in case a permalink has been used to set the application state
 const searchParams = new URLSearchParams(window.location.search);
-//TODO check layer names not differ between frontend and backend
-console.log("original layer", searchParams.get("layer"))
 const layer = getSanitizedLayerParam(searchParams.get("layer"));
-const bbox = (searchParams.get("bbox") ?? "-180, -80, 180, 80").split(",").map(Number); //TODO proper sanitize
-//TODO transform extent (bbox) to map projection, then init the map there
-console.log(layer, bbox);
+const bbox = (searchParams.get("bbox") ?? "-20037508.34, -15538711.10, 20037508.34, 15538711.10").split(",").map(Number); //TODO proper sanitize
+
 // invalid params will be replaced by sanitized ones
 setUrlSearchParams({
     layer, bbox,
@@ -92,7 +92,7 @@ async function addAllLayerSwitchers(map) {
         layerSwitcher.activateNextLayer();
     })
 
-    // bindFormToLayerSwitcherControl(layerSwitcher, userLayerControl);
+    // TODO remove this: bindFormToLayerSwitcherControl(layerSwitcher, userLayerControl);
     // add additional layers
     if (layer.startsWith("oam:")) {
         const oamItemId = layer.replace("oam:", "");
@@ -117,7 +117,7 @@ async function addAllLayerSwitchers(map) {
         const oamPrgressBar = document.getElementById("oam-progress-bar");
         try {
             if (oamItemIdInput.value.length === 0) {
-                throw Error("Empty input not allowed.")
+                throw new Error("Empty input not allowed.")
             }
             oamPrgressBar.classList.remove("hidden");
             await addOAMLayer(oamItemIdInput.value, map, layerSwitcher);
@@ -131,6 +131,30 @@ async function addAllLayerSwitchers(map) {
         }
     });
 
+}
+
+function addBboxPreviewLayer(map, bbox) {
+    const vectorSource = new VectorSource({
+        features: [new Feature(fromExtent(bbox))]
+    });
+
+    const vectorLayer = new VectorLayer({
+        name: "Sketch Map Extent",
+        source: vectorSource,
+        overlay: true,
+        zIndex: Infinity,
+        style: new Style({
+            stroke: new Stroke({
+                color: "#c60427",
+                width: 3,
+                lineDash: [9, 9],
+                lineCap: "butt"
+            }),
+        })
+    });
+
+    map.addLayer(vectorLayer);
+    map.getView().fit(bbox, { padding:[30,30,30,30]});
 }
 
 function addGeoJSONPreviewLayer(map, href) {
@@ -162,7 +186,8 @@ async function createPreviewMap(href) {
 
     await addAllLayerSwitchers(map);
 
-    //TODO add AOI / BBOX as layer
+    // bbox in EPSG:3857
+    if (bbox) addBboxPreviewLayer(map, bbox);
 
     //add GeoJSON Layer
     if (href) addGeoJSONPreviewLayer(map, href);

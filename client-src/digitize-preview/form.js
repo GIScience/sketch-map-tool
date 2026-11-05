@@ -135,6 +135,7 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
     });
 }
 
+// TODO remove if no usage
 function bindFormToLayerSwitcherControl(layerSwitcherControl, userLayerControl) {
     // TODO: Refactor to accept only a single control and call it twice in index.js
 
