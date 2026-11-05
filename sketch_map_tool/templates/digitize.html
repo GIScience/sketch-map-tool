@@ -46,6 +46,10 @@
                             to keep the uploaded files after processing.') }}
       </p>
       <input type="hidden" id="consent" name="consent" value="False">
+
+      <!-- TODO remove temporary link to result preview page      -->
+      <input type="hidden" id="preview" name="preview" value="False">
+
       <div id="main-grid" class="grid">
 
         {# row 1#}
@@ -70,6 +74,8 @@
           {{ _('Share your data for the Improvement of the Sketch Map Tool.') }}</a>
       </p>
     </div>
+    <!-- TODO remove temp button-->
+    <button  id="reject-submit-preview-btn" type="submit" style="border: hidden; background: none; color: cornflowerblue; width: max-content;">Reject, Upload & Preview Results (experimental)</button>
   </form>
   <script>
 

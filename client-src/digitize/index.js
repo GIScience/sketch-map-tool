@@ -12,15 +12,24 @@ filebokz();
 const consentField = document.getElementById("consent");
 consentField.value = "False";
 
+// TODO remove temp button
+const previewField = document.getElementById("preview");
+previewField.value = "False";
+
 // disable submit...
 setDisabled("agreeSubmitBtn", true);
 setDisabled("rejectSubmitBtn", true);
+// TODO remove temp button
+setDisabled("reject-submit-preview-btn", true);
+
 
 // ...until files are added
 const fileElement = document.querySelector(".filebokz");
 fileElement.addEventListener("file-added", () => {
     setDisabled("agreeSubmitBtn", false);
     setDisabled("rejectSubmitBtn", false);
+    // TODO remove temp button
+    setDisabled("reject-submit-preview-btn", false);
 });
 
 // disable it again when all files are removed
@@ -28,6 +37,8 @@ fileElement.addEventListener("file-removed", (e) => {
     if (!e.target.classList.contains("has-files")) {
         setDisabled("agreeSubmitBtn", true);
         setDisabled("rejectSubmitBtn", true);
+        // TODO remove temp button
+        setDisabled("reject-submit-preview-btn", true);
     }
 });
 
@@ -35,6 +46,8 @@ document.forms.namedItem("upload").onsubmit = (event) => {
     // disable the submit button after submit to prevent multiple submissions
     setDisabled("agreeSubmitBtn", true);
     setDisabled("rejectSubmitBtn", true);
+    // TODO remove temp button
+    setDisabled("reject-submit-preview-btn", true);
 
     // get the button which triggered the form submit
     const buttonId = event.submitter.id;
@@ -49,6 +62,12 @@ document.forms.namedItem("upload").onsubmit = (event) => {
 
     // set the consent value to the form field
     consentField.value = consentDescisionMap[buttonId];
+
+    // TODO remove temp button
+    if(buttonId === "reject-submit-preview-btn") {
+        previewField.value = "True";
+    }
+
 };
 
 // In case the page is newly loaded, reset the upload button, the spinner, and the upload field.
