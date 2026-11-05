@@ -213,6 +213,7 @@ def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
     # user consent to use uploaded files for service improvement
     consent: bool = request.form.get("consent", "False") == "True"
+    # TODO: temporary feature flag
     preview: bool = request.form.get("preview", "False") == "True"
     # No files uploaded
     if "file" not in request.files:
@@ -330,8 +331,8 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     async_result = get_async_result(uuid, type_)
 
     href = ""
-    info = ""
-    errors: list = extract_errors(async_result, type_)
+    info = ""  # TODO: why emtpy string and not None or empty dict?
+    errors: list[str] = extract_errors(async_result, type_)
     if async_result.ready():
         if async_result.successful():  # SUCCESS
             status = "SUCCESS"
