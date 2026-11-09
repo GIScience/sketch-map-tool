@@ -9,16 +9,16 @@ import {
     addLayerSwitcherControl,
     addPrintLayoutControl,
     createMap,
-} from "./map.js";
+} from "../shared/map/map.js";
 import { bindFormToLayerSwitcherControl, bindFormToPrintLayoutControl } from "./form.js";
 import { MessageController } from "./messageController";
 import { getSanitizedUrlSearchParams, setUrlSearchParams } from "../shared";
 import { Tile } from "ol/layer";
 import { XYZ } from "ol/source";
-import { OpenAerialMapService } from "./openaerialmapService";
+import { OpenAerialMapService } from "../shared/map/openaerialmapService";
 import { transformExtent } from "ol/proj";
 import { intersects } from "ol/extent";
-import { UserLayerControl } from "./userLayerControl/userLayerControl";
+import { UserLayerControl } from "../shared/map/userLayerControl/userLayerControl";
 import { unit } from "mathjs";
 
 
