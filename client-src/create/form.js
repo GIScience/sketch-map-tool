@@ -1,12 +1,12 @@
 import { Margin, ORIENTATION, PAPER_FORMAT } from "@giscience/ol-print-layout-control";
 import { get as getProjection, toLonLat, transformExtent } from "ol/proj";
-import { SKETCH_MAP_MARGINS } from "./sketchMapMargins";
+import { SKETCH_MAP_MARGINS } from "../shared/map/sketchMapMargins";
 import {
     fillSelectOptions,
     updateQueryParam,
     updateQueryParamWithConditionalDebounce
 } from "../shared";
-import { createAntiMeridianLayer } from "./map";
+import { createAntiMeridianLayer } from "../shared/map/map";
 
 function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
     const paperFormats = { ...PAPER_FORMAT };

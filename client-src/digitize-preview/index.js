@@ -2,7 +2,7 @@ import "ol/ol.css";
 import "@giscience/ol-print-layout-control/dist/ol-print-layout-control.css";
 import "./index.css";
 
-import { addLayerSwitcherControl, createMap, } from "./map.js";
+import { addLayerSwitcherControl, createMap, } from "../shared/map/map.js";
 import {
     getSanitizedLayerParam,
     getUUIDFromURL,
@@ -11,11 +11,11 @@ import {
 } from "../shared";
 import { Tile } from "ol/layer";
 import { XYZ } from "ol/source";
-import { OpenAerialMapService } from "./openaerialmapService";
+import { OpenAerialMapService } from "../shared/map/openaerialmapService";
 import { transformExtent } from "ol/proj";
 import * as olExtent from "ol/extent";
 import { intersects } from "ol/extent";
-import { UserLayerControl } from "./userLayerControl/userLayerControl";
+import { UserLayerControl } from "../shared/map/userLayerControl/userLayerControl";
 import { unit } from "mathjs";
 import VectorSource from "ol/source/Vector";
 import { GeoJSON } from "ol/format";
