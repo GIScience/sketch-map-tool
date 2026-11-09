@@ -1,0 +1,15 @@
+{
+    // Used only by editors / the TS language service. Bundling is done by esbuild (see esbuild.mjs).
+    "compilerOptions": {
+        "target": "ES2022", // keep in sync with "target" in esbuild.mjs
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "allowJs": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "noEmit": true
+    },
+    "include": ["client-src/**/*"]
+}

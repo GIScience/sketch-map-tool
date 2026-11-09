@@ -3,14 +3,15 @@ import { CLASS_CONTROL, CLASS_UNSELECTABLE } from "ol/css";
 import "./userLayerControl.css";
 import BaseLayer from "ol/layer/Base";
 import { UserLayerButton } from "./userLayerButton";
+import { Options } from "ol/control/Control";
 
 export class UserLayerControl extends Control {
 
-    private readonly addLayerButton: HTMLDivElement;
+    private readonly addLayerButton: HTMLButtonElement;
     private readonly userLayerButton: HTMLButtonElement;
 
 
-    constructor(options) {
+    constructor(options: Options) {
         const {
             target,
         } = options;
@@ -84,30 +85,30 @@ button.add-layer-btn {
             target,
         });
 
-        this.addLayerButton = shadowRoot.querySelector<HTMLButtonElement>(".add-layer-btn");
-        this.userLayerButton = shadowRoot.querySelector<HTMLButtonElement>("user-layer-button");
+        this.addLayerButton = shadowRoot.querySelector<HTMLButtonElement>(".add-layer-btn")!;
+        this.userLayerButton = shadowRoot.querySelector<HTMLButtonElement>("user-layer-button")!;
 
         this.addLayerButton.addEventListener("click", () => {
             this.dispatchEvent("new-layer");
         });
 
-        const handleClose = (event: CustomEvent) => {
+        const handleClose = () => {
             this.showAddLayerButton();
-            this.getMap().removeLayer(this.get("activeLayer"));
+            this.getMap()!.removeLayer(this.get("activeLayer"));
             this.dispatchEvent("close");
         };
         this.userLayerButton.addEventListener("close", handleClose);
 
-        const handleInfo = (event: CustomEvent) => {
+        const handleInfo = () => {
             this.dispatchEvent("info");
         };
         this.userLayerButton.addEventListener("info", handleInfo);
 
-        const handleClick = (event: CustomEvent) => {
+        const handleClick = () => {
             if (this.get("activeLayer").getVisible()){
                 return;
             }
-            this.getMap().getAllLayers()
+            this.getMap()!.getAllLayers()
                 .filter((layer)=> !layer.get("overlay"))
                 .forEach((layer) => layer.setVisible(false));
             this.dispatchEvent("beforeactivate");
@@ -123,7 +124,7 @@ button.add-layer-btn {
 
     initialize() {
         // register map event to check whether a future layer should be added to layerswitcher or not
-        this.getMap().getLayers().on("add", (event) => {
+        this.getMap()!.getLayers().on("add", (event) => {
             this.addLayer(event.element);
         });
     }

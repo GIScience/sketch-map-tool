@@ -23,6 +23,8 @@ await esbuild.build({
     sourcemap: "linked",
     outdir: "./sketch_map_tool/static/bundles",
     format: "esm",
+    // Browsers from ~2022. Keep in sync with "target" in tsconfig.json.
+    target: ["es2022", "chrome100", "edge100", "firefox100", "safari15.4"],
     external: [
         "/static/assets/*",
     ],
