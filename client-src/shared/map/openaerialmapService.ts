@@ -53,8 +53,8 @@ export class OpenAerialMapService {
 
     static getMapAttributionFromMetadata(metadataJson) {
         const props = metadataJson.properties;
-        const provider = props.providers.map(provider=> provider.name).join();
-        return `© <a href="https://map.openaerialmap.org" target="_blank">OpenAerialMap</a> | ${props.title} by ${provider}`;
+        const providerList = props.providers.map((provider: { name: string; })=> provider.name).join();
+        return `© <a href="https://map.openaerialmap.org" target="_blank">OpenAerialMap</a> | ${props.title} by ${providerList}`;
     }
 
     /**

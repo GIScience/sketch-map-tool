@@ -42,12 +42,12 @@ setUrlSearchParams({
 
 const vectorResultsUrl = `/api/status/${getUUIDFromURL()}/vector-results`;
 
-const map = await createPreviewMap();
-setProcessingOverlay(map, true);
+const previewMap = await createPreviewMap();
+setProcessingOverlay(previewMap, true);
 const timer = startProgressTimer();
-pollVectorResults(vectorResultsUrl).then(getVectorDownloadUrl).then((href) => addGeoJSONPreviewLayer(map, href))
+pollVectorResults(vectorResultsUrl).then(getVectorDownloadUrl).then((href) => addGeoJSONPreviewLayer(previewMap, href))
     .then(() => {
-        setProcessingOverlay(map, false);
+        setProcessingOverlay(previewMap, false);
         stopProgressTimer(timer);
     });
 
@@ -134,6 +134,7 @@ async function addAllLayerSwitchers(map) {
 
 }
 
+// eslint-disable-next-line no-shadow
 function addBboxPreviewLayer(map, bbox) {
     const vectorSource = new VectorSource({
         features: [new Feature(fromExtent(bbox))]
