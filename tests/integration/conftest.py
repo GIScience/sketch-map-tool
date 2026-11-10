@@ -274,6 +274,22 @@ def sketch_map_marked(sketch_map_marked_path) -> bytes:
         return file.read()
 
 
+@pytest.fixture
+def sketch_map_marked_osm() -> bytes:
+    """Photo of the sketch map based on OSM with markings."""
+    path = FIXTURE_DIR / "sketch-map-marked-osm.jpg"
+    with open(path, "rb") as file:
+        return file.read()
+
+
+@pytest.fixture
+def sketch_map_marked_esri() -> bytes:
+    """Photo of the sketch map based on ESRI with markings."""
+    path = FIXTURE_DIR / "sketch-map-marked-esri-world-imagery.jpg"
+    with open(path, "rb") as file:
+        return file.read()
+
+
 @pytest.fixture(scope="session")
 def map_frame_marked(
     flask_app,
