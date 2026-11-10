@@ -4,8 +4,24 @@ import "./userLayerControl.css";
 import BaseLayer from "ol/layer/Base";
 import { UserLayerButton } from "./userLayerButton";
 import { Options } from "ol/control/Control";
+import type BaseEvent from "ol/events/Event";
+import type { EventsKey } from "ol/events";
+import type { ObjectOnSignature } from "ol/Object";
+import type { CombinedOnSignature, EventTypes, OnSignature } from "ol/Observable";
+import type { Types as ObjectEventTypes } from "ol/ObjectEventType";
+
+/** Custom events dispatched by {@link UserLayerControl}. */
+export type UserLayerControlEventTypes = "new-layer" | "close" | "info" | "beforeactivate" | "change:activeLayer";
+
+type UserLayerControlOnSignature<Return> = ObjectOnSignature<Return>
+    & OnSignature<UserLayerControlEventTypes, BaseEvent, Return>
+    & CombinedOnSignature<EventTypes | ObjectEventTypes | UserLayerControlEventTypes, Return>;
 
 export class UserLayerControl extends Control {
+
+    declare on: UserLayerControlOnSignature<EventsKey>;
+    declare once: UserLayerControlOnSignature<EventsKey>;
+    declare un: UserLayerControlOnSignature<void>;
 
     private readonly addLayerButton: HTMLButtonElement;
     private readonly userLayerButton: HTMLButtonElement;
@@ -123,8 +139,12 @@ button.add-layer-btn {
     }
 
     initialize() {
+        const map = this.getMap();
+        if (!map) {
+            throw new Error("UserLayerControl has to be added to the map (map.addControl) before calling initialize().");
+        }
         // register map event to check whether a future layer should be added to layerswitcher or not
-        this.getMap()!.getLayers().on("add", (event) => {
+        map.getLayers().on("add", (event) => {
             this.addLayer(event.element);
         });
     }

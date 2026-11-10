@@ -42,15 +42,12 @@ async function poll(url, prefix) {
         return message;
     }
 
-    async function onProgress(response) {
-        // console.log("progress", response);
-        const result = await response.json();
+    function onProgress(response, result) {
         const message = createUserMessage(result);
         setTaskStatus(`${prefix}-status`, message);
     }
 
-    async function onValid(response) {
-        const result = await response.json();
+    function onValid(response, result) {
         const message = createUserMessage(result);
         const { href } = result;
         setTaskStatus(`${prefix}-status`, message);
