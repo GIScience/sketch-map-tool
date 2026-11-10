@@ -63,7 +63,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --locked --no-editable --no-default-groups --group gdal-3-12-2 --group cpu && \
-    uv run pybabel compile -d sketch_map_tool/translations
+    uv run --no-sync pybabel compile -d sketch_map_tool/translations
 
 
 # final image

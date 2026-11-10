@@ -40,7 +40,7 @@ pipeline {
                 script {
                     sh 'uv sync --locked --only-group gdal-build-dependencies'
                     sh 'uv sync --locked --no-default-groups --group gdal-3-12-2 --group dev --group cpu'
-                    sh 'uv run pybabel compile -d sketch_map_tool/translations'
+                    sh 'uv run --no-sync pybabel compile -d sketch_map_tool/translations'
                     sh 'wget --quiet -P weights https://downloads.ohsome.org/sketch-map-tool/weights/SMT-OSM.pt'
                     sh 'wget --quiet -P weights https://downloads.ohsome.org/sketch-map-tool/weights/SMT-ESRI.pt'
                     sh 'wget --quiet -P weights https://downloads.ohsome.org/sketch-map-tool/weights/SMT-CLS.pt'
