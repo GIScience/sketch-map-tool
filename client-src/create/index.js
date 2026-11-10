@@ -69,7 +69,6 @@ if (layer.startsWith("oam:")) {
     await addOAMLayer(oamItemId);
 } else {
     // set initial form value from ol-control
-    console.log(">>>>", layerSwitcher)
     document.getElementById("layer").value = layerSwitcher.get("activeLayer").get("name");
 }
 

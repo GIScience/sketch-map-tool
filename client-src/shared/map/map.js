@@ -59,7 +59,7 @@ export function createAntiMeridianLayer() {
  *                                           either 'OSM' | 'ESRI:World_Imagery'
  * @returns {Map}
  */
-function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965], zoom = 15, activeBaselayer = "OSM") {
+async function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965], zoom = 15, activeBaselayer = "OSM") {
     const osmBaselayer = new Tile({
         name: "OSM",
         visible: activeBaselayer === "OSM",
@@ -71,7 +71,7 @@ function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965
         ls_label: "OSM"
     });
     const esriAttributionService = new EsriAttributionService();
-    esriAttributionService.initialize();
+    await esriAttributionService.initialize();
     const esriWorldImageryLayer = new Tile({
         name: "ESRI:World_Imagery",
         visible: activeBaselayer === "ESRI:World_Imagery",
@@ -150,21 +150,13 @@ function addGeocoderControl(map) {
 
 /**
  * Add a layerSwitcher to an Openlayers Map
- * @param map
- * @param layerConfigs an array of objects of type {name: string; label: string; class: string}.
- *
- *              "name" is used to identify switchable layers from th ol-Map so this should
- *              correspond to a name property set to the ol-layers.
- *
- *              "label" is a string that will be rendered as text on the layerSwitcher button
- *
- *              "class" a custom class name that will be added to the button to indicate what is the
- *              next layer when a user clicks on the button, e.g. to specify a background image etc
+ * @param map {Map}
+ * @param target {string | HTMLElement | undefined} - optional. If you don't specify a different DIV it will be shown in the Map
  * @returns {LayerSwitcher}
  */
-function addLayerSwitcherControl(map, layerConfigs) {
+function addLayerSwitcherControl(map, target=undefined) {
     const layerSwitcher = new LayerSwitcher({
-        layerConfigs,
+        target,
     });
     map.addControl(layerSwitcher);
     layerSwitcher.initialize();

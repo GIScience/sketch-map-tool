@@ -2,6 +2,7 @@ import { Control } from "ol/control";
 import { CLASS_CONTROL, CLASS_UNSELECTABLE } from "ol/css";
 import "./ol-LayerSwitcherControl.css";
 import BaseLayer from "ol/layer/Base";
+import { Options } from "ol/control/Control";
 
 /**
  * This layerSwitcher control is made to switch between one of 2 or more other baselayers.
@@ -62,7 +63,7 @@ export class LayerSwitcher extends Control {
 
     ls_layers: BaseLayer[];
 
-    constructor(options) {
+    constructor(options: Options) {
         const {
             target,
         } = options;
@@ -93,17 +94,21 @@ export class LayerSwitcher extends Control {
     }
 
     initialize() {
+        const map = this.getMap();
+        if (!map) {
+            throw new Error("LayerSwitcher has to be added to the map (map.addControl) before calling initialize().");
+        }
 
         //register already added layers in layerswitcher
-        const existingLayers = this.getMap().getAllLayers();
+        const existingLayers = map.getAllLayers();
         existingLayers.forEach(this.addLayer.bind(this));
 
         // register map event to check whether a future layer should be added to layerswitcher or not
-        this.getMap().getLayers().on("add", (event) => {
+        map.getLayers().on("add", (event) => {
             this.addLayer(event.element);
         });
 
-        this.getMap().getLayers().on("remove", (event) => {
+        map.getLayers().on("remove", (event) => {
             console.log("onremove from layerswitcher");
             const removedLayer = event.element;
             //check if removed layer is managed by layerswitcher and remove it
@@ -112,7 +117,7 @@ export class LayerSwitcher extends Control {
 
 
         //activate first layer if none was set to visible
-        const mapHasNoVisibleLayers = this.getMap().getAllLayers()
+        const mapHasNoVisibleLayers = map.getAllLayers()
             .map((layer) => layer.getVisible())
             .every((isVisible) => isVisible === false)
 
@@ -182,7 +187,7 @@ export class LayerSwitcher extends Control {
         }
     }
 
-    activateLayerAtIndex(index) {
+    activateLayerAtIndex(index: number) {
         // next layer to activate
         this.activeLayerIdx = index % this.ls_layers.length;
 
@@ -205,7 +210,7 @@ export class LayerSwitcher extends Control {
         // deactivate all layers and activate next
         // this.ls_layers.forEach((layer) => layer.setVisible(false));
         // this will also hide the OAM layer
-        this.getMap().getAllLayers().filter((layer)=>!layer.get("overlay")).forEach((layer) => layer.setVisible(false));
+        this.getMap()!.getAllLayers().filter((layer)=>!layer.get("overlay")).forEach((layer) => layer.setVisible(false));
         this.activateLayerAtIndex(this.activeLayerIdx + 1);
     }
 
@@ -217,12 +222,12 @@ export class LayerSwitcher extends Control {
         return this.getNextLayersProperty("ls_label");
     }
 
-    getNextLayersProperty(property) {
+    getNextLayersProperty(property: string) {
         const nextLayersIndex = (this.activeLayerIdx + 1) % this.ls_layers.length;
         return this.ls_layers[nextLayersIndex].get(property);
     }
 
-    setNextLayersButtonClass(className) {
+    setNextLayersButtonClass(className: string) {
         this.button.className = `${this.baseCssClassName}-btn ${className}`;
     }
 
