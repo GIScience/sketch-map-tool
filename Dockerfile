@@ -53,7 +53,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --locked --no-install-project --no-editable --no-dev
+    uv sync --locked --no-install-project --no-editable --no-default-groups --group gdal-3-12-2 --group cpu
 
 COPY sketch_map_tool sketch_map_tool
 COPY data data
@@ -62,7 +62,7 @@ COPY config config
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --locked --no-editable --no-dev && \
+    uv sync --locked --no-editable --no-default-groups --group gdal-3-12-2 --group cpu && \
     uv run pybabel compile -d sketch_map_tool/translations
 
 
