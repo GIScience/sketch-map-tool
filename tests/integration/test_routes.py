@@ -133,6 +133,30 @@ def test_digitize_results_post(mock_chord, sketch_map_marked, flask_client, lang
         assert get_consent_flag_from_db(unique_file_name) is True
 
 
+@vcr_app.use_cassette
+def test_digitize_results_post_multiple_uploads_based_on_different_sketch_maps(
+    sketch_map_marked_osm,
+    sketch_map_marked_esri,
+    flask_client,
+):
+    unique_file_name = str(uuid4())
+    data = {
+        "file": [
+            (BytesIO(sketch_map_marked_osm), unique_file_name + "-osm"),
+            (BytesIO(sketch_map_marked_esri), unique_file_name + "-esri"),
+        ],
+        "consent": "True",
+    }
+    response = flask_client.post(
+        "/digitize/results",
+        data=data,
+        follow_redirects=True,
+    )
+    assert response.status_code == 422
+    assert response.request.path.startswith("en")  # redirected URL
+    assert "UploadError" in response.text
+
+
 @pytest.mark.parametrize(
     "lang",
     [

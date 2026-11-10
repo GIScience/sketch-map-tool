@@ -59,6 +59,10 @@ class UploadLimitsExceededError(TranslatableError):
     pass
 
 
+class UploadError(TranslatableError):
+    pass
+
+
 class UUIDNotFoundError(TranslatableError):
     pass
 

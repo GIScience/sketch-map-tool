@@ -26,6 +26,7 @@ from sketch_map_tool.exceptions import (
     CustomFileNotFoundError,
     QRCodeError,
     TranslatableError,
+    UploadError,
     UploadLimitsExceededError,
     UUIDNotFoundError,
 )
@@ -231,6 +232,16 @@ def digitize_results_post(lang="en") -> Response:
     bboxes_ = dict()
     layers_ = dict()
     map_frames = dict()
+
+    if len(set(uuids)) > 1:
+        raise UploadError(
+            N_(
+                "You can upload several photos, but they must all show the same area. "
+                "These sketch maps cover different areas, "
+                "so please upload each area separately."
+            )
+        )
+
     for uuid in set(uuids):  # Only retrieve map_frame once per uuid to save memory
         # NOTE: bbox and layer could be return once per UUID from DB here
         # instead of multiple times from QR code above.
@@ -444,6 +455,7 @@ def health(lang="en"):
 @app.errorhandler(CustomFileDoesNotExistAnymoreError)
 @app.errorhandler(CustomFileNotFoundError)
 @app.errorhandler(UploadLimitsExceededError)
+@app.errorhandler(UploadError)
 def handle_exception(error: TranslatableError):
     return render_template("error.html", error_msg=error.translate()), 422
 
