@@ -71,6 +71,47 @@ body > main {
 
 progress { width: 100%; height: 8px; accent-color: #1f6feb; }
 
+.map-loading.has-error { cursor: auto; }
+.map-loading.has-error progress { display: none; }
+.map-loading.has-error .loading-title { color: #c60427; }
+
+#processing-errors ul { margin-bottom: 0; }
+#processing-errors ul:empty { display: none; }
+
+#server-error pre {
+    margin-bottom: 0;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    user-select: all;
+}
+
+#load-errors-box {
+    border: 1px solid #c60427;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+}
+
+#load-errors {
+    color: #c60427;
+    max-height: 30vh;
+    overflow-y: auto;
+}
+
+#load-errors .error-name {
+    min-width: 0;
+    overflow: hidden;
+    text-align: left; /* also for a single status line without count (would be :last-child) */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* a single message without count (request failed) may wrap instead of being truncated, "\n" breaks the line */
+#load-errors .error-name:only-child { white-space: pre-line; }
+
+#load-error-hint { margin: 0.5rem 0 0; font-size: 0.75rem; font-style: italic; }
+
 #left {
     display: flex;
     flex-direction: column;
@@ -80,18 +121,6 @@ progress { width: 100%; height: 8px; accent-color: #1f6feb; }
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-}
-
-#next-button {
-    min-width: 30%;
-    margin: 0 auto;
-    width: unset;
-}
-
-#message-container {
-    height: 11rem;
-    overflow-y: scroll;
-    padding: 1rem;
 }
 
 #oam-info-dialog main {

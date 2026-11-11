@@ -6,6 +6,7 @@ import { addLayerSwitcherControl, createMap, } from "../shared/map/map.js";
 import {
     getSanitizedLayerParam,
     getUUIDFromURL,
+    NetworkError,
     PollUntilValid,
     setUrlSearchParams
 } from "../shared";
@@ -58,10 +59,28 @@ interface VectorResultsStatusResponseJson {
 }
 
 async function pollVectorResults(url: string, map: Map) {
-    //TODO add error handling
     setProcessingOverlay(map, true);
     const progressTimer = startProgressTimer();
-    return PollUntilValid.poll(url, validateFn, 1000, onValid, onProgress);
+    try {
+        // retries with backoff of 1, 2, 4, 8, 16 s: gives up after ~30 s without connection
+        return await PollUntilValid.poll(url, validateFn, 1000, onValid, onProgress, onError, {
+            maxNetworkRetries: 5,
+            onNetworkRetry,
+        });
+    } catch (error) {
+        console.error(error);
+        stopProgressTimer(progressTimer);
+        // NetworkError: no response was received at all after all retries
+        // (offline, DNS failure, server not reachable, connection reset, request blocked by browser/extension).
+        // Other errors are thrown in the callbacks (e.g. invalid JSON body or a bug).
+        showProcessingError(error instanceof NetworkError
+            ? "Network error.\nPlease check your internet connection."
+            : "Unexpected error.\nThis may be a bug.");
+    }
+
+    function onNetworkRetry(retry: number, maxRetries: number) {
+        document.querySelector<HTMLElement>("#load-message")!.textContent = `Connection lost, retrying (${retry}/${maxRetries})…`;
+    }
 
     function validateFn(response: Response) {
         // valid once the status is 200
@@ -69,16 +88,37 @@ async function pollVectorResults(url: string, map: Map) {
     }
 
     function onProgress(response: Response, result: VectorResultsStatusResponseJson) {
-        if (result.errors) console.log(">>> PROGRESS ERRORS", result.errors);
+        // show only a summary (error type + count), the details are listed below the map when finished
+        showLoadErrorSummary(result.errors ?? []);
         const { current, total } = result.info;
         showProgress(current, total, result.status);
     }
 
     function onValid(response: Response, result: VectorResultsStatusResponseJson) {
-        if (result.errors) console.log(">>> FINAL ERRORS", result.errors);
+        // partial success: keep the errors visible below the map after the overlay is gone
+        showProcessingErrorsBelowMap(result.errors ?? []);
         if (result.href) addGeoJSONPreviewLayer(map, result.href);
         setProcessingOverlay(map, false);
         stopProgressTimer(progressTimer);
+    }
+
+    async function onError(response: Response) {
+        // 422 (task failed), 500 or others: only show the HTTP status in a single line in the overlay
+        stopProgressTimer(progressTimer);
+        showProcessingError(`${response.status} ${response.statusText}`.trim());
+
+        if (response.status === 422) {
+            // all sketch maps failed: list the errors below the map with a hint to check the uploads
+            let errors: string[] = [];
+            if (response.headers.get("Content-Type")?.includes("application/json")) {
+                const result: Partial<VectorResultsStatusResponseJson> = await response.json();
+                errors = result.errors ?? [];
+            }
+            showProcessingErrorsBelowMap(errors, true);
+        } else if (response.status >= 500) {
+            // unexpected server error: show details the user can send to the support
+            showServerErrorDetails(response);
+        }
     }
 }
 
@@ -194,7 +234,7 @@ async function createPreviewMap() {
     console.log("BBOX:", bbox, center);
 
     //Base Map from original sketchmap
-    const map = createMap("map", center, undefined, layer);
+    const map = await createMap("map", center, undefined, layer);
 
     await addAllLayerSwitchers(map);
 
@@ -222,6 +262,112 @@ function showProgress(parts: number, total: number, message?: string) {
         document.querySelector<HTMLElement>("#load-percent")!.textContent = `${Math.round(progressPercent)} %`;
     }
     if (message) document.querySelector<HTMLElement>("#load-message")!.textContent = message;
+}
+
+/**
+ * Turns the loading card into an error message. The overlay stays visible,
+ * as there are no results to show on the map.
+ */
+function showProcessingError(message: string) {
+    const overlay = document.querySelector<HTMLElement>("#map-loading")!;
+    overlay.classList.add("has-error");
+    overlay.setAttribute("role", "alert");
+    overlay.querySelector<HTMLElement>(".loading-title")!.textContent = "Marking Detection failed";
+
+    // single line without count and without the hint
+    showLoadErrorRows([createErrorRow(message)], false);
+}
+
+/**
+ * Shows a summary of the errors in the loading card: one row per error type with its count
+ * and a hint that the full list is shown below the map once processing has finished.
+ * The error type is the part of the message before the first colon (or the whole message).
+ */
+function showLoadErrorSummary(messages: string[]) {
+    const counts = new globalThis.Map<string, number>();
+    for (const message of messages) {
+        const colon = message.indexOf(":");
+        const name = (colon === -1 ? message : message.slice(0, colon)).trim();
+        counts.set(name, (counts.get(name) ?? 0) + 1);
+    }
+    const rows = [...counts].map(([name, count]) => createErrorRow(name, count));
+    showLoadErrorRows(rows, true);
+}
+
+/**
+ * Replaces the rows of the error box in the loading card (hidden if there are no rows).
+ */
+function showLoadErrorRows(rows: HTMLElement[], showHint: boolean) {
+    document.querySelector<HTMLElement>("#load-errors")!.replaceChildren(...rows);
+    document.querySelector<HTMLElement>("#load-error-hint")!.hidden = !showHint;
+    document.querySelector<HTMLElement>("#load-errors-box")!.hidden = rows.length === 0;
+}
+
+/**
+ * Creates a row like the ones in .loading-meta: the (truncated) error name left, the count right.
+ */
+function createErrorRow(name: string, count?: number) {
+    const row = document.createElement("div");
+    row.className = "row";
+    const nameEl = document.createElement("span");
+    nameEl.className = "error-name";
+    nameEl.textContent = name;
+    nameEl.title = name;
+    row.append(nameEl);
+    if (count !== undefined) {
+        const countEl = document.createElement("span");
+        countEl.textContent = String(count);
+        row.append(countEl);
+    }
+    return row;
+}
+
+/**
+ * Shows the errors in a message box below the map.
+ * If `allFailed` is true (no sketch map could be processed) the box is shown with a hint
+ * to check the uploaded sketch maps, even if there are no error messages.
+ * Otherwise, the box is hidden if there are no errors.
+ */
+function showProcessingErrorsBelowMap(messages: string[], allFailed = false) {
+    setListItems(document.querySelector<HTMLUListElement>("#processing-errors-list")!, messages);
+    document.querySelector<HTMLElement>("#processing-errors-partial")!.hidden = allFailed;
+    document.querySelector<HTMLElement>("#processing-errors-all-failed")!.hidden = !allFailed;
+    document.querySelector<HTMLElement>("#processing-errors")!.hidden = messages.length === 0 && !allFailed;
+}
+
+/**
+ * Shows a message box below the map with details about the failed request,
+ * which the user can send to the Sketch Map Tool support (also as prefilled mailto link).
+ */
+function showServerErrorDetails(response: Response) {
+    const details = [
+        `ID: ${getUUIDFromURL()}`,
+        `Request: ${response.url}`,
+        `Status: ${response.status} ${response.statusText}`.trim(),
+        `Time: ${new Date().toISOString()}`,
+        `Page: ${window.location.href}`,
+        `Browser: ${navigator.userAgent}`,
+    ].join("\n");
+
+    document.querySelector<HTMLElement>("#server-error-details")!.textContent = details;
+
+    const mailLink = document.querySelector<HTMLAnchorElement>("#server-error-mail")!;
+    const mailAddress = mailLink.href.replace(/^mailto:/, "").split("?")[0];
+    const subject = `Sketch Map Tool: Error ${response.status} during Marking Detection`;
+    mailLink.href = `mailto:${mailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(details)}`;
+
+    document.querySelector<HTMLElement>("#server-error")!.hidden = false;
+}
+
+/**
+ * Replaces the items of the list with one <li> per message.
+ */
+function setListItems(list: HTMLUListElement, messages: string[]) {
+    list.replaceChildren(...messages.map((message) => {
+        const item = document.createElement("li");
+        item.textContent = message;
+        return item;
+    }));
 }
 
 function startProgressTimer(){

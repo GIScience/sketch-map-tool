@@ -35,19 +35,16 @@
               <div class="row"><span>Done:</span><span><span id="load-parts">-/-</span> (<span id="load-percent">0 %</span>)</span></div>
               <div class="row"><span>Time Elapsed:</span><span id="load-elapsed">0:00</span></div>
             </div>
+            <div id="load-errors-box" hidden>
+              <div id="load-errors" class="loading-meta"></div>
+              <p id="load-error-hint" hidden>Details will be listed below the map once processing has finished.</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div id="right">
       <div class="sketchy h1 center-text">{{ _('Legend') }}</div>
-      <div id="message-container" hidden>
-        <article id="antimeridian-info" hidden class="infobox">{{ _('You are currently trying to
-                        request a map that crosses the +/-180° <a href="https://en.wikipedia.org/wiki/180th_meridian" target="_blank">antimeridian</a>. This is currently not
-                        supported, please move the map such that your extent is either left or right of
-                        the antimeridian.') }}
-        </article>
-      </div>
       <a role="button" href="{{ url_for("digitize_results_get", lang=lang, uuid=uuid) }}">{{ _('Download Results') }} &rarr;</a>
     </div>
 
@@ -113,11 +110,22 @@
           </table>
         </main>
         <footer>
-          <button id="oam-info-ok-button" type="button" aria-label="Close">{{ _('OK') }}</button>
+          <button id="oam-info-ok-button" type="button" aria-label="{{ _('OK') }}">{{ _('OK') }}</button>
         </footer>
       </article>
     </dialog>
   </div>
-
+  <article id="processing-errors" class="warningbox" role="alert" hidden>
+    <p id="processing-errors-partial">{{ _('Some of your sketch maps could not be processed:') }}</p>
+    <p id="processing-errors-all-failed" hidden>{{ _('None of your uploaded sketch maps could be processed. Please check the quality of your uploaded sketch maps (e.g. sharpness, lighting, completely visible map frame) and try again.') }}</p>
+    <ul id="processing-errors-list"></ul>
+  </article>
+  <article id="server-error" class="warningbox" role="alert" hidden>
+    <p>{{ _('An unexpected error occurred on our server. Please contact the Sketch Map Tool support at') }}
+      <a id="server-error-mail" href="mailto:sketch-map-tool@heigit.org">sketch-map-tool@heigit.org</a>
+      {{ _('and include the following details:') }}
+    </p>
+    <pre id="server-error-details"></pre>
+  </article>
 </main>
 {% endblock body %}

@@ -36,7 +36,7 @@ setUrlSearchParams({
     center, zoom, layer, orientation, format,
 });
 
-const map = createMap("map", center, zoom, layer);
+const map = await createMap("map", center, zoom, layer);
 const printLayoutControl = addPrintLayoutControl(map, format, orientation);
 const messageController = new MessageController();
 
