@@ -57,7 +57,7 @@ export function createAntiMeridianLayer() {
  * @param {number} [zoom=15] - the zoomlevel in which the map will be initialized
  * @param {string} [activeBaselayer="OSM"] - the baselayer to be displayed
  *                                           either 'OSM' | 'ESRI:World_Imagery'
- * @returns {Map}
+ * @returns {Promise<Map>}
  */
 async function createMap(target = "map", lonLat = [966253.1800856147, 6344703.99262965], zoom = 15, activeBaselayer = "OSM") {
     const osmBaselayer = new Tile({
