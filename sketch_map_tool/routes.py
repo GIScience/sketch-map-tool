@@ -1,6 +1,7 @@
 import json
 import logging
 from io import BytesIO
+from typing import Sequence
 from uuid import UUID
 
 import geojson
@@ -33,6 +34,7 @@ from sketch_map_tool.exceptions import (
 from sketch_map_tool.helpers import (
     N_,
     extract_errors,
+    is_empty,
     merge,
     to_array,
     transform_layer_name,
@@ -341,48 +343,46 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
 
     async_result = get_async_result(uuid, type_)
 
-    href = ""
-    info = ""  # TODO: why emtpy string and not None or empty dict?
+    info = {}
     errors: list[str] = extract_errors(async_result, type_)
+
     if async_result.ready():
         if async_result.successful():  # SUCCESS
             status = "SUCCESS"
             http_status = 200
-            href = "/api/download/" + uuid + "/" + type_
-        elif async_result.failed():  # REJECTED, REVOKED, FAILURE
+            if is_empty(async_result, type_):
+                status = "FAILURE"
+                http_status = 422  # Unprocessable Entity
+        else:  # REJECTED, REVOKED, FAILURE
             status = "FAILURE"
             http_status = 422  # Unprocessable Entity
             if isinstance(async_result, GroupResult):
-                if any([r.successful() for r in async_result.results]):  # type: ignore
-                    status = "SUCCESS"
+                if not is_empty(async_result, type_) and any(
+                    [r.successful() for r in async_result.results]  # ty: ignore[not-iterable]
+                ):
+                    status = "PARTIAL_SUCCESS"
                     http_status = 200
-                    href = "/api/download/" + uuid + "/" + type_
-        else:
-            abort(500)
     else:  # PENDING, RETRY, STARTED
-        # Accepted for processing, but has not been completed
-        http_status = 202  # Accepted
+        http_status = 202
         if isinstance(async_result, AsyncResult):
             status = async_result.status
             info = {"current": 0, "total": 1}
-        elif isinstance(async_result, GroupResult):
-            # `GroupResult` has no `status` attribute
-            results = async_result.results
-            if any(r.status == "STARTED" or r.ready() for r in results):  # type: ignore
+        else:  # GroupResult
+            results: Sequence[AsyncResult] = async_result.results  # ty: ignore[invalid-assignment]
+            if any(r.status == "STARTED" or r.ready() for r in results):
                 status = "STARTED"
             else:
                 status = "PENDING"
             info = {
-                "current": [r.ready() for r in results].count(True),  # type: ignore
-                "total": len(async_result.results),  # type: ignore
+                "current": [r.ready() for r in results].count(True),
+                "total": len(results),
             }
-        else:
-            raise TypeError()
+
     body_raw = {
         "id": uuid,
         "status": status,
         "type": type_,
-        "href": href,
+        "href": "/api/download/" + uuid + "/" + type_,
         "errors": errors,
         "info": info,
     }
@@ -402,7 +402,7 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     # Abort if result not ready or failed.
     # No nice error message here because user should first check /api/status.
     if isinstance(async_result, GroupResult):
-        if not async_result.ready() or all([r.failed() for r in async_result.results]):
+        if not async_result.ready() or all([r.failed() for r in async_result.results]):  # ty: ignore[not-iterable]
             abort(500)
     else:
         if not async_result.ready() or async_result.failed():

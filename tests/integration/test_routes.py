@@ -57,6 +57,7 @@ def mock_group_result_pending(monkeypatch):
     mock.successful.return_value = False
     mock.results = [mock_task]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.is_empty", lambda *_: False)
     return mock
 
 
