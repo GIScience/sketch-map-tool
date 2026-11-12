@@ -478,10 +478,17 @@ def handle_not_found_exception(error: TranslatableError):
 
 @app.errorhandler(Exception)
 def internal_server_error(error: Exception):
-    heading = "Internal Server Error"
-    message = N_("Oops... we seem to have made a mistake, sorry!")
     logging.error(error, exc_info=error)
-    return render_template(
-        "error.html",
-        error_msg=f"{heading}: {message}",
-    ), 500
+    heading = gettext("Internal Server Error")
+    message = gettext("Oops... we seem to have made a mistake, sorry!")
+    if request.path.startswith("/api/"):
+        return Response(
+            json.dumps({"msg": f"{heading}: {message}"}),
+            status=500,
+            mimetype="application/json",
+        )
+    else:
+        return render_template(
+            "error.html",
+            error_msg=f"{heading}: {message}",
+        ), 500
