@@ -15,6 +15,7 @@ from flask import (
     send_file,
     url_for,
 )
+from flask_babel import gettext
 from werkzeug import Response
 
 from sketch_map_tool import celery_app, definitions, tasks, usage_charts
@@ -343,6 +344,7 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
 
     async_result = get_async_result(uuid, type_)
 
+    msg = ""
     info = {}
     errors: list[str] = extract_errors(async_result, type_)
 
@@ -352,16 +354,31 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             http_status = 200
             if is_empty(async_result, type_):
                 status = "FAILURE"
-                http_status = 422  # Unprocessable Entity
+                http_status = 422
+                msg = gettext(
+                    "None of your uploaded sketch maps could be processed. "
+                    "Please check the quality of your uploaded sketch maps "
+                    "(e.g. sharpness, lighting, completely visible map frame) "
+                    "and try again."
+                )
         else:  # REJECTED, REVOKED, FAILURE
             status = "FAILURE"
-            http_status = 422  # Unprocessable Entity
+            http_status = 422
+            msg = gettext(
+                "None of your uploaded sketch maps could be processed. "
+                "Please check the quality of your uploaded sketch maps "
+                "(e.g. sharpness, lighting, completely visible map frame) "
+                "and try again."
+            )
             if isinstance(async_result, GroupResult):
                 if not is_empty(async_result, type_) and any(
                     [r.successful() for r in async_result.results]  # ty: ignore[not-iterable]
                 ):
                     status = "PARTIAL_SUCCESS"
                     http_status = 200
+                    msg = gettext(
+                        "Some of your uploaded sketch maps could not be processed."
+                    )
     else:  # PENDING, RETRY, STARTED
         http_status = 202
         if isinstance(async_result, AsyncResult):
@@ -383,6 +400,7 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
         "status": status,
         "type": type_,
         "href": "/api/download/" + uuid + "/" + type_,
+        "msg": msg,
         "errors": errors,
         "info": info,
     }
