@@ -1,10 +1,11 @@
-import { PollUntilValid } from "./pollUntilValid.js";
+import { NetworkError, PollUntilValid } from "./pollUntilValid.js";
 import {
+    setDisabled,
     setDownloadLink,
     setIsBusy,
-    setDisabled,
+    setListItems,
     setTaskStatus,
-} from "../domHelpers.js";
+} from "../domHelpers.ts";
 
 /**
  * This function polls repeatedly data from a URL as long as it receives
@@ -81,36 +82,43 @@ async function poll(url, prefix) {
         document.getElementById(`${_prefix}-download-button`).style.display = "none";
     }
 
-    async function onError(response) {
-        const { status: httpStatus } = response;
-        let errorText = "";
+    function onError(response, responseJSON) {
+        const { status: httpStatusCode, statusText: httpStatusText } = response;
+        let errors = [];
         let taskStatus = "";
-        if (httpStatus === 500) {
-            errorText = "Internal Server Error";
-            taskStatus = "FAILURE";
+        if (responseJSON) {
+            taskStatus = responseJSON.status;
+            errors = responseJSON.errors; //.join("<br>");
         } else {
-            const resonseJSON = await response.json();
-            taskStatus = resonseJSON.status;
-            errorText = resonseJSON.errors.join("<br>");
+            // no JSON body, e.g. 500 Internal Server Error (rendered HTML error page)
+            errors = [httpStatusText];
+            taskStatus = "FAILURE";
         }
         // display error
-        handleError(prefix, `${new Date().toISOString()} ${httpStatus} ${taskStatus} <br> ${errorText}`);
+        handleError(prefix, `${taskStatus}<br>${new Date().toISOString()} ${httpStatusCode} ${httpStatusText} <ul id="error-list"></ul>`);
+        setListItems(document.querySelector("#error-list"), errors);
+
         // remove task status
         setTaskStatus(`${prefix}-status`, "");
     }
 
+    function onNetworkRetry(retry, maxRetries) {
+        const message = `Connection lost, retrying (${retry}/${maxRetries})…`
+        setTaskStatus(`${prefix}-status`, message);
+    }
+
     try {
-        return await PollUntilValid.poll(url, validateFn, 1000, onValid, onProgress, onError);
+        return await PollUntilValid.poll(url, validateFn, 1000, onValid, onProgress, onError, {
+            maxNetworkRetries: 5,
+            onNetworkRetry,
+        });
     } catch (error) {
-        if (error instanceof TypeError) {
-            // Chrome and Firefox use different Error messages, so it's hard to be more
-            // specific than checking for TypeError
-            // see: https://developer.mozilla.org/en-US/docs/Web/API/fetch#exceptions
-            setTaskStatus(`${prefix}-status`, "NetworkError: RETRYING to get task status");
-            await PollUntilValid.wait(5000);
-            return poll(url, prefix);
-        }
-        throw error;
+        console.log(error);
+        const taskStatus = (error instanceof NetworkError)
+            ? "Network error.\nPlease check your internet connection."
+            : "Unexpected error.\nThis may be a bug.";
+
+        setTaskStatus(`${prefix}-status`, taskStatus);
     }
 }
 
