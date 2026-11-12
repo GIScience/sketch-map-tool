@@ -20,8 +20,8 @@ class PollUntilValid {
      * backoff (interval, 2x interval, 4x interval, ...) before a NetworkError is thrown.
      * The retry counter is reset after every received response.
      *
-     * The JSON body of every successful (200-299) response is parsed once by this method and
-     * passed as second argument `data` to validateFn, onValid and onProgress.
+     * The JSON body of every response is parsed once by this method and passed as second
+     * argument `data` to validateFn, onValid, onProgress and onError.
      * Do not call response.json() in these callbacks, the body has already been consumed.
      *
      * @param {string} url - The URL to poll from
@@ -34,16 +34,16 @@ class PollUntilValid {
      *     response and its parsed JSON body.
      * @param {function(Response, any)} [onProgress] - opt. callback to act on "invalid"
      *     e.g. progess responses. Gets the response and its parsed JSON body.
-     * @param {function(Response)} [onError] - opt. callback to react on errors
-     *     (http status codes other than 200-299). Gets the unread response, as error bodies
-     *     are not necessarily JSON.
+     * @param {function(Response, any)} [onError] - opt. callback to react on errors
+     *     (http status codes other than 200-299). Gets the response and its parsed JSON body,
+     *     or undefined if the body is not JSON (e.g. a rendered HTML error page).
      * @param {object} [options]
      * @param {int} [options.maxNetworkRetries=0] - How often a failed request is retried
      *     before a NetworkError is thrown.
      * @param {function(int, int, Error)} [options.onNetworkRetry] - opt. callback before each
      *     retry. Gets the retry number (starting at 1), maxNetworkRetries and the fetch error.
      * @returns {Promise<Response>} - The last response (valid or error). Use it to check the
-     *     status. Its body has already been consumed for valid responses, use onValid to get the data.
+     *     status. Its body has already been consumed, use the callbacks to get the data.
      */
     static async poll(
         url,
@@ -68,13 +68,13 @@ class PollUntilValid {
             }
             networkRetries = 0;
 
+            const data = await PollUntilValid.parseJsonIfAvailable(response);
+
             // if response code is not between 200-299
             if (!response.ok) {
-                await onError(response);
+                await onError(response, data);
                 return response;
             }
-
-            const data = await response.json();
 
             if (!(await validateFn(response, data))) {
                 await onProgress(response, data);
@@ -85,6 +85,20 @@ class PollUntilValid {
             }
 
         } while (true);
+    }
+
+    /**
+     * Returns the parsed JSON body of the response, or undefined if it is not JSON.
+     * @param {Response} response
+     * @returns {Promise<any>}
+     */
+    static async parseJsonIfAvailable(response) {
+        if (!response.headers.get("Content-Type")?.includes("application/json")) return undefined;
+        try {
+            return await response.json();
+        } catch {
+            return undefined;
+        }
     }
 
     static async wait(ms = 1000) {

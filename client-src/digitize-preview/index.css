@@ -75,6 +75,7 @@ progress { width: 100%; height: 8px; accent-color: #1f6feb; }
 .map-loading.has-error progress { display: none; }
 .map-loading.has-error .loading-title { color: #c60427; }
 
+#processing-errors p { margin: unset; }
 #processing-errors ul { margin-bottom: 0; }
 #processing-errors ul:empty { display: none; }
 

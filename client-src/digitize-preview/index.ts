@@ -8,6 +8,7 @@ import {
     getUUIDFromURL,
     NetworkError,
     PollUntilValid,
+    setListItems,
     setUrlSearchParams
 } from "../shared";
 import { Tile } from "ol/layer";
@@ -27,6 +28,7 @@ import { Stroke, Style } from "ol/style";
 import { createSimpleStyleFunction } from "./ol-simplestyle-1.1.0";
 import type BaseEvent from "ol/events/Event";
 import type { LayerSwitcher } from "../shared/map/ol-LayerSwitcherControl";
+import { groupByMessageCount } from "../shared/errorHelpers";
 
 
 /**
@@ -56,6 +58,14 @@ interface VectorResultsStatusResponseJson {
     info: { current: number; total: number };
     errors?: string[];
     href?: string;
+    msg?: string;
+}
+
+const enum ResultStatus {
+    Success = "SUCCESS",
+    PartialSuccess = "PARTIAL_SUCCESS",
+    Failure = "FAILURE"
+    //TODO add all others
 }
 
 async function pollVectorResults(url: string, map: Map) {
@@ -79,7 +89,9 @@ async function pollVectorResults(url: string, map: Map) {
     }
 
     function onNetworkRetry(retry: number, maxRetries: number) {
-        document.querySelector<HTMLElement>("#load-message")!.textContent = `Connection lost, retrying (${retry}/${maxRetries})…`;
+        const message = `Connection lost, retrying (${retry}/${maxRetries})…`
+        showLoadErrorRows([createErrorRow(message)], false);
+        // document.querySelector<HTMLElement>("#load-message")!.textContent = message;
     }
 
     function validateFn(response: Response) {
@@ -95,27 +107,30 @@ async function pollVectorResults(url: string, map: Map) {
     }
 
     function onValid(response: Response, result: VectorResultsStatusResponseJson) {
-        // partial success: keep the errors visible below the map after the overlay is gone
-        showProcessingErrorsBelowMap(result.errors ?? []);
-        if (result.href) addGeoJSONPreviewLayer(map, result.href);
         setProcessingOverlay(map, false);
         stopProgressTimer(progressTimer);
+        if (result.href) addGeoJSONPreviewLayer(map, result.href);
+        // partial success: keep the errors visible below the map after the overlay is gone
+        if (result.status === ResultStatus.PartialSuccess) {
+            showProcessingErrorsBelowMap(result.errors ?? [], result.msg, false);
+        }
+
     }
 
-    async function onError(response: Response) {
+    function onError(response: Response, result?: Partial<VectorResultsStatusResponseJson>) {
+        if (result?.status) showProgress(result?.info?.current ?? 0, result?.info?.total ?? 0, result.status);
         // 422 (task failed), 500 or others: only show the HTTP status in a single line in the overlay
         stopProgressTimer(progressTimer);
-        showProcessingError(`${response.status} ${response.statusText}`.trim());
+        // showProcessingError(`${response.status} ${response.statusText}`.trim());
 
-        if (response.status === 422) {
-            // all sketch maps failed: list the errors below the map with a hint to check the uploads
-            let errors: string[] = [];
-            if (response.headers.get("Content-Type")?.includes("application/json")) {
-                const result: Partial<VectorResultsStatusResponseJson> = await response.json();
-                errors = result.errors ?? [];
-            }
-            showProcessingErrorsBelowMap(errors, true);
-        } else if (response.status >= 500) {
+        if (String(response.status).startsWith("4")) {
+            // all sketch maps failed
+            // remove error messages in map-loading error-box
+            showProcessingError();
+            // list the errors below the map with a hint to check the uploads
+            showProcessingErrorsBelowMap(result?.errors ?? [], result?.msg, true);
+        } else /*if (response.status >= 500)*/ {
+            showProcessingError();
             // unexpected server error: show details the user can send to the support
             showServerErrorDetails(response);
         }
@@ -268,14 +283,19 @@ function showProgress(parts: number, total: number, message?: string) {
  * Turns the loading card into an error message. The overlay stays visible,
  * as there are no results to show on the map.
  */
-function showProcessingError(message: string) {
+function showProcessingError(message: string | undefined) {
     const overlay = document.querySelector<HTMLElement>("#map-loading")!;
     overlay.classList.add("has-error");
     overlay.setAttribute("role", "alert");
-    overlay.querySelector<HTMLElement>(".loading-title")!.textContent = "Marking Detection failed";
+    overlay.querySelector<HTMLElement>(".loading-title")!.textContent = "Marking Detection Failed";
+
+    //clear error messages
+    document.querySelector<HTMLElement>("#load-errors-box")!.hidden = true;
 
     // single line without count and without the hint
-    showLoadErrorRows([createErrorRow(message)], false);
+    if (message) {
+        showLoadErrorRows([createErrorRow(message)], false);
+    }
 }
 
 /**
@@ -284,13 +304,8 @@ function showProcessingError(message: string) {
  * The error type is the part of the message before the first colon (or the whole message).
  */
 function showLoadErrorSummary(messages: string[]) {
-    const counts = new globalThis.Map<string, number>();
-    for (const message of messages) {
-        const colon = message.indexOf(":");
-        const name = (colon === -1 ? message : message.slice(0, colon)).trim();
-        counts.set(name, (counts.get(name) ?? 0) + 1);
-    }
-    const rows = [...counts].map(([name, count]) => createErrorRow(name, count));
+    const messageSummaryCount = groupByMessageCount(messages);
+    const rows = [...messageSummaryCount].map(([name, count]) => createErrorRow(name, count));
     showLoadErrorRows(rows, true);
 }
 
@@ -328,11 +343,13 @@ function createErrorRow(name: string, count?: number) {
  * to check the uploaded sketch maps, even if there are no error messages.
  * Otherwise, the box is hidden if there are no errors.
  */
-function showProcessingErrorsBelowMap(messages: string[], allFailed = false) {
-    setListItems(document.querySelector<HTMLUListElement>("#processing-errors-list")!, messages);
-    document.querySelector<HTMLElement>("#processing-errors-partial")!.hidden = allFailed;
-    document.querySelector<HTMLElement>("#processing-errors-all-failed")!.hidden = !allFailed;
-    document.querySelector<HTMLElement>("#processing-errors")!.hidden = messages.length === 0 && !allFailed;
+function showProcessingErrorsBelowMap(errors: string[], message?: string, allFailed = false) {
+    // message to help user
+    if (message) document.querySelector<HTMLElement>("#processing-error-msg")!.textContent = message;
+    // error details
+    setListItems(document.querySelector<HTMLUListElement>("#processing-errors-list")!, errors);
+    // hide/show error-box
+    document.querySelector<HTMLElement>("#processing-errors")!.hidden = errors.length === 0 && !allFailed;
 }
 
 /**
@@ -353,17 +370,6 @@ function showServerErrorDetails(response: Response) {
     mailLink.href = `mailto:${mailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(details)}`;
 
     document.querySelector<HTMLElement>("#server-error")!.hidden = false;
-}
-
-/**
- * Replaces the items of the list with one <li> per message.
- */
-function setListItems(list: HTMLUListElement, messages: string[]) {
-    list.replaceChildren(...messages.map((message) => {
-        const item = document.createElement("li");
-        item.textContent = message;
-        return item;
-    }));
 }
 
 function startProgressTimer(){
