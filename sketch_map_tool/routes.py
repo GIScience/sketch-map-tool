@@ -370,15 +370,15 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
                 "(e.g. sharpness, lighting, completely visible map frame) "
                 "and try again."
             )
-            if isinstance(async_result, GroupResult):
-                if not is_empty(async_result, type_) and any(
-                    [r.successful() for r in async_result.results]  # ty: ignore[not-iterable]
-                ):
-                    status = "PARTIAL_SUCCESS"
-                    http_status = 200
-                    msg = gettext(
-                        "Some of your uploaded sketch maps could not be processed."
-                    )
+        if isinstance(async_result, GroupResult):
+            if not is_empty(async_result, type_) and any(
+                [r.successful() for r in async_result.results]  # ty: ignore[not-iterable]
+            ):
+                status = "PARTIAL_SUCCESS"
+                http_status = 200
+                msg = gettext(
+                    "Some of your uploaded sketch maps could not be processed."
+                )
     else:  # PENDING, RETRY, STARTED
         http_status = 202
         if isinstance(async_result, AsyncResult):
