@@ -483,7 +483,7 @@ def internal_server_error(error: Exception):
     message = gettext("Oops... we seem to have made a mistake, sorry!")
     if request.path.startswith("/api/"):
         return Response(
-            json.dumps({"msg": f"{heading}: {message}"}),
+            json.dumps({"msg": f"{heading}: {message}", "status": "FAILURE"}),
             status=500,
             mimetype="application/json",
         )
