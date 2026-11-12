@@ -394,7 +394,7 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
 @app.route("/api/download/<uuid>/<type_>")
 @app.route("/<lang>/api/download/<uuid>/<type_>")
 def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
-    validate_uuid(uuid)
+    uuid_ = validate_uuid(uuid)
     validate_type(type_)
 
     async_result = get_async_result(uuid, type_)
@@ -410,34 +410,27 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
 
     match type_:
         case "sketch-map":
-            db_client_flask.update_map_frame_downloaded(uuid)
+            db_client_flask.update_map_frame_downloaded(uuid_)
             mimetype = "application/pdf"
             download_name = type_ + ".pdf"
             file: BytesIO = async_result.get()
         case "raster-results":
-            db_client_flask.update_files_download_raster(uuid)
+            db_client_flask.update_files_download_raster(uuid_)
             mimetype = "application/zip"
             download_name = type_ + ".zip"
-            if isinstance(async_result, GroupResult):
-                results = async_result.get(propagate=False)
-                raster_results = [r[:-2] for r in results]
-                file: BytesIO = zip_(raster_results)
-            else:
-                # support legacy results
-                file: BytesIO = async_result.get()
+            results = async_result.get(propagate=False)
+            raster_results = [r[:-2] for r in results]
+            file: BytesIO = zip_(raster_results)
         case "vector-results":
-            db_client_flask.update_files_download_vector(uuid)
+            db_client_flask.update_files_download_vector(uuid_)
             mimetype = "application/geo+json"
             download_name = type_ + ".geojson"
-            if isinstance(async_result, GroupResult):
-                results = async_result.get(propagate=False)
-                vector_results = [r[-2] for r in results]
-                num_of_uploads = len(vector_results)
-                raw = geojson.dumps(style(merge(vector_results), num_of_uploads))
-                file: BytesIO = BytesIO(raw.encode("utf-8"))
-            else:
-                # support legacy results
-                file = async_result.get()
+            results = async_result.get(propagate=False)
+            vector_results = [r[-2] for r in results]
+            num_of_uploads = len(vector_results)
+            feature_collection = style(merge(vector_results), num_of_uploads)
+            raw = geojson.dumps(feature_collection)
+            file: BytesIO = BytesIO(raw.encode("utf-8"))
     return send_file(file, mimetype, download_name=download_name)
 
 
