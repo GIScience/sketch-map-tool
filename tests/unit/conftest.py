@@ -220,6 +220,7 @@ def mock_async_result_success(monkeypatch):
     mock.successful.return_value = True
     mock.get.side_effect = lambda propagate=True: ["", "", BytesIO(), BytesIO(), []]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.is_empty", lambda *_: False)
     return mock
 
 
@@ -232,6 +233,7 @@ def mock_async_result_success_sketch_map(monkeypatch):
     mock.successful.return_value = True
     mock.get.side_effect = lambda *_: BytesIO()
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.is_empty", lambda *_: False)
     return mock
 
 
@@ -245,6 +247,7 @@ def mock_async_result_started(monkeypatch):
     mock.results = ["", "", BytesIO(), BytesIO(), []]
     mock.get.side_effect = lambda propagate=True: ["", "", BytesIO(), BytesIO(), []]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.is_empty", lambda *_: False)
     return mock
 
 
@@ -265,6 +268,7 @@ def mock_async_result_failure(monkeypatch):
     mock.successful.return_value = False
     mock.get.side_effect = get
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.is_empty", lambda *_: False)
     return mock
 
 
@@ -285,6 +289,7 @@ def mock_async_result_failure_time_limit_exceeded(monkeypatch):
     mock.successful.return_value = False
     mock.get.side_effect = get
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.is_empty", lambda *_: False)
     return mock
 
 
@@ -303,6 +308,7 @@ def mock_async_result_failure_hard(monkeypatch):
     mock.successful.return_value = False
     mock.get.side_effect = get
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.is_empty", lambda *_: False)
     return mock
 
 
@@ -315,6 +321,7 @@ def mock_group_result_success(mock_async_result_success, monkeypatch):
     mock.get.return_value = [["", "", BytesIO(), BytesIO(), []]]
     mock.results = [mock_async_result_success]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.is_empty", lambda *_: False)
     return mock
 
 
@@ -326,6 +333,7 @@ def mock_group_result_started(mock_async_result_started, monkeypatch):
     mock.successful.return_value = True
     mock.results = [mock_async_result_started]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.is_empty", lambda *_: False)
     return mock
 
 
@@ -338,6 +346,7 @@ def mock_group_result_failure(mock_async_result_failure, monkeypatch):
     mock.results = [mock_async_result_failure]
     mock.get.side_effect = lambda propagate: [mock_async_result_failure.get(propagate)]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.is_empty", lambda *_: False)
 
 
 @pytest.fixture
@@ -352,6 +361,7 @@ def mock_group_result_failure_hard(mock_async_result_failure_hard, monkeypatch):
         mock_async_result_failure_hard.get(propagate)
     ]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.is_empty", lambda *_: False)
 
 
 @pytest.fixture
@@ -372,6 +382,7 @@ def mock_group_result_started_success_failure(
     ]
     mock.get.side_effect = lambda propagate: [mock_async_result_failure.get(propagate)]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.is_empty", lambda *_: False)
 
 
 @pytest.fixture
@@ -390,3 +401,4 @@ def mock_group_result_success_failure(
     ]
     mock.get.side_effect = lambda propagate: [mock_async_result_failure.get(propagate)]
     monkeypatch.setattr("sketch_map_tool.routes.get_async_result", lambda *_: mock)
+    monkeypatch.setattr("sketch_map_tool.routes.is_empty", lambda *_: False)

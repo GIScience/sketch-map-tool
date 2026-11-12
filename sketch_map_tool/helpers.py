@@ -11,7 +11,10 @@ from geojson import Feature, FeatureCollection
 from numpy.typing import NDArray
 from reportlab.graphics.shapes import Drawing
 
-from sketch_map_tool.exceptions import TimeLimitExceededError, TranslatableError
+from sketch_map_tool.exceptions import (
+    TimeLimitExceededError,
+    TranslatableError,
+)
 
 
 def get_project_root() -> Path:
@@ -108,6 +111,17 @@ def extract_errors(
                 if len(errors_) > 0:
                     errors = errors + [e.translate() for e in errors_]
     return errors
+
+
+def is_empty(async_result: GroupResult | AsyncResult, type_: str) -> bool:
+    """Check if result is empty."""
+    if isinstance(async_result, AsyncResult) or type_ != "vector-results":
+        return False
+
+    results = async_result.get(propagate=False)
+    vector_results = [r[-2] for r in results]
+    feature_collection = merge(vector_results)
+    return len(feature_collection["features"]) == 0
 
 
 def transform_layer_name(layer: str) -> str:
