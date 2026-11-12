@@ -341,12 +341,8 @@ function showProcessingErrorsBelowMap(messages: string[], allFailed = false) {
  */
 function showServerErrorDetails(response: Response) {
     const details = [
-        `ID: ${getUUIDFromURL()}`,
         `Request: ${response.url}`,
         `Status: ${response.status} ${response.statusText}`.trim(),
-        `Time: ${new Date().toISOString()}`,
-        `Page: ${window.location.href}`,
-        `Browser: ${navigator.userAgent}`,
     ].join("\n");
 
     document.querySelector<HTMLElement>("#server-error-details")!.textContent = details;
