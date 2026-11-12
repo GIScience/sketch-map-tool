@@ -52,10 +52,10 @@ def validate_uploaded_sketchmaps(files: list[FileStorage]):
         file.seek(0)
 
 
-def validate_uuid(uuid: str):
+def validate_uuid(uuid: str) -> UUID:
     """validation function for endpoint parameter <uuid>"""
     try:
-        _ = UUID(uuid, version=4)
+        return UUID(uuid, version=4)
     except ValidationError as error:
         raise ValidationError(
             N_("The provided URL does not contain a valid UUID")

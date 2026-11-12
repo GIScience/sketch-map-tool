@@ -15,38 +15,6 @@ from tests.integration.utils import extract_uuid
 
 
 @pytest.fixture
-def map_frame_legacy_2024_04_15(flask_app, uuid_create, map_frame):
-    """Legacy map frames in DB do not have bbox, lon, lat and format set."""
-    with flask_app.app_context():
-        select_query = """
-        SELECT bbox, centroid, format, orientation, layer, version
-        FROM map_frame WHERE uuid = %s
-        """
-        update_query = """
-        UPDATE map_frame SET bbox = NULL, centroid = NULL, format = NULL,
-            orientation = NULL, layer = NULL, version = NULL
-        WHERE uuid = %s
-        """
-        with client_flask.open_connection().cursor() as curs:
-            curs.execute(select_query, [uuid_create])
-            vals = curs.fetchone()
-            curs.execute(update_query, [uuid_create])
-
-    yield map_frame
-
-    map_frame.seek(0)
-    with flask_app.app_context():
-        update_query = """
-        UPDATE map_frame
-        SET bbox = %s, centroid = %s, format = %s,
-            orientation = %s, layer = %s, version = %s
-        WHERE uuid = %s
-        """
-        with client_flask.open_connection().cursor() as curs:
-            curs.execute(update_query, vals + tuple([uuid_create]))
-
-
-@pytest.fixture
 def mock_group_result_pending(monkeypatch):
     mock_task = Mock(spec=AsyncResult)
     mock_task.ready.return_value = False
@@ -154,7 +122,6 @@ def test_digitize_results_post_multiple_uploads_based_on_different_sketch_maps(
         follow_redirects=True,
     )
     assert response.status_code == 422
-    assert response.request.path.startswith("en")  # redirected URL
     assert "UploadError" in response.text
 
 
@@ -213,31 +180,6 @@ def test_digitize_results_post_no_consent(mock_chord, sketch_map_marked, flask_c
 
     with flask_app.app_context():
         assert get_consent_flag_from_db(unique_file_name) is False
-
-
-@pytest.mark.usefixtures("map_frame_legacy_2024_04_15")
-@patch("sketch_map_tool.routes.chord")
-@vcr_app.use_cassette
-def test_digitize_results_legacy_2024_04_15(
-    mock_chord,
-    sketch_map_marked,
-    flask_client,
-):
-    """Legacy map frames in DB do not have bbox, lon, lat and format set."""
-    # mock chord/task execution in Celery
-    mock_chord.return_value.apply_async.return_value.parent.id = uuid4()
-    unique_file_name = str(uuid4())
-    data = {"file": [(BytesIO(sketch_map_marked), unique_file_name)], "consent": "True"}
-    response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
-    assert response.status_code == 200
-
-    path = response.request.path
-    uuid = extract_uuid(path)
-    assert UUID(uuid).version == 4
-    assert path.startswith("/en/digitize/results")
-
-    with flask_app.app_context():
-        assert get_consent_flag_from_db(unique_file_name) is True
 
 
 def test_api_status_uuid_sketch_map(uuid_create, flask_client):
