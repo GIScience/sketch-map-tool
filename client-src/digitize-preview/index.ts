@@ -183,9 +183,9 @@ async function createPreviewMap() {
 
     // add controls
     const layerSwitcher = addLayerSwitcherControl(map);
-    addUserLayerControl(map, layerSwitcher);
 
     if (isOAMLayer(layer)) {
+        addUserLayerControl(map, layerSwitcher);
         await addOAMLayer(getOAMItemId(layer), map, layerSwitcher);
     }
 
