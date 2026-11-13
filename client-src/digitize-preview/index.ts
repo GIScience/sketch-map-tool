@@ -164,7 +164,7 @@ function addGeoJSONPreviewLayer(map: Map, href: string) {
 
     const vectorLayer = new VectorLayer({
         source: vectorSource,
-        style: createSimpleStyleFunction({ markerStyle: "pin", defaultShape: "circle" }),
+        style: createSimpleStyleFunction({ markerStyle: "pin", defaults: { "marker-symbol": "circle" }}),
         zIndex: Infinity
     });
     vectorLayer.set("name", "Sketch Map Results", true);
@@ -218,7 +218,7 @@ function updateProgress(parts: number, total: number, message?: string) {
  * Turns the loading card into an error message. The overlay stays visible,
  * as there are no results to show on the map.
  */
-function showProcessingError(message: string | undefined) {
+function showProcessingError(message?: string) {
     const overlay = document.querySelector<HTMLElement>("#map-loading")!;
     overlay.classList.add("has-error");
     overlay.setAttribute("role", "alert");

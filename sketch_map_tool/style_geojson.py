@@ -6,8 +6,6 @@ from sketch_map_tool.definitions import COLOR_HEX, COLORS
 def style(fc: FeatureCollection, num_of_uploads: int):
     """Style GeoJSON using simple-stylespec."""
     for feature in fc.features:
-        if "color" in feature.properties.keys():
-            continue
 
         color_name = COLORS[feature.properties["color"]]
         color_hex = COLOR_HEX[color_name]
