@@ -24,7 +24,12 @@
  * Marker styles (layer option `markerStyle`):
  *   "pin"    a pin in marker-color with the symbol inside its head (simplestyle default)
  *   "shape"  the shape itself filled with marker-color; digits, letters and icons
- *            sit in a round badge. Without a symbol, `defaultShape` is drawn.
+ *            sit in a round badge. Without a usable symbol, a circle is drawn.
+ *
+ * A feature without marker-symbol, or with an icon ID that `markerSymbolUrl`
+ * cannot resolve, gets `defaults['marker-symbol']`, in both marker styles,
+ * e.g. `{ defaults: { 'marker-symbol': 'square' } }`. An explicit empty string
+ * means "no symbol": an empty pin, or a circle in the 'shape' style.
  */
 import type { FeatureLike } from "ol/Feature";
 import type { StyleFunction } from "ol/style/Style";
@@ -52,12 +57,19 @@ export type MarkerStyle = "pin" | "shape";
 export const MARKER_SHAPES = ["circle", "square", "triangle", "star", "cross", "x-cross"] as const;
 export type MarkerShape = (typeof MARKER_SHAPES)[number];
 
+/**
+ * Valid `marker-symbol` values: a built-in shape, a digit or letter, "" (no symbol),
+ * or any other icon ID resolved by `markerSymbolUrl`.
+ * `string & {}` allows arbitrary icon IDs without losing IDE suggestions for the known values.
+ */
+export type MarkerSymbol = MarkerShape | "" | (string & {});
+
 /** The simplestyle 1.1.0 feature properties. */
 export interface SimpleStyleProperties {
   title?: string;
   description?: string;
   "marker-size"?: MarkerSize;
-  "marker-symbol"?: string;
+  "marker-symbol"?: MarkerSymbol;
   "marker-color"?: string;
   stroke?: string;
   "stroke-opacity"?: number;
@@ -73,8 +85,6 @@ export interface SimpleStyleOptions {
   markerSizes?: Partial<Record<MarkerSize, number>>;
   /** Shape diameter in CSS pixels per marker size, for the 'shape' style. */
   shapeSizes?: Partial<Record<MarkerSize, number>>;
-  /** Shape drawn in the 'shape' style when a feature has no (usable) marker-symbol. Default 'circle'. */
-  defaultShape?: MarkerShape;
   /**
    * Resolves a `marker-symbol` icon ID to an image URL. Called for any symbol
    * that is not a digit, a lowercase letter or one of the built-in
@@ -88,7 +98,11 @@ export interface SimpleStyleOptions {
   crossOrigin?: string | null;
   /** Font family for digit/letter symbols. */
   fontFamily?: string;
-  /** Override the spec defaults (e.g. a different default marker color). */
+  /**
+   * Override the spec defaults (e.g. a different default marker color).
+   * `marker-symbol` is used for features without (or with an unresolvable) symbol,
+   * in both marker styles; an explicit "" on a feature still means no symbol.
+   */
   defaults?: Partial<SimpleStyleProperties>;
 }
 
@@ -108,7 +122,7 @@ const DEFAULT_PIN_SIZES: Record<MarkerSize, number> = { small: 20, medium: 27, l
 const DEFAULT_SHAPE_SIZES: Record<MarkerSize, number> = { small: 12, medium: 18, large: 24 };
 
 const isMarkerShape = (s: string): s is MarkerShape => (MARKER_SHAPES as readonly string[]).includes(s);
-const isTextSymbol = (s: string) => /^([0-9]|[a-z])$/.test(s);
+const isTextSymbol = (s: string): boolean => /^([0-9]|[a-z])$/.test(s);
 
 type RGB = [number, number, number];
 
@@ -220,7 +234,6 @@ export function createSimpleStyleFunction(options: SimpleStyleOptions = {}): Sty
     const mode: MarkerStyle = options.markerStyle ?? "pin";
     const pinSizes = { ...DEFAULT_PIN_SIZES, ...options.markerSizes };
     const shapeSizes = { ...DEFAULT_SHAPE_SIZES, ...options.shapeSizes };
-    const defaultShape: MarkerShape = options.defaultShape ?? "circle";
     const symbolUrl = options.markerSymbolUrl ?? null;
     const crossOrigin = options.crossOrigin ?? "anonymous";
     const fontFamily = options.fontFamily ?? "system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif";
@@ -266,15 +279,20 @@ export function createSimpleStyleFunction(options: SimpleStyleOptions = {}): Sty
           : (defaults["marker-size"] as MarkerSize);
         const color = parseColor(feature.get("marker-color")) ?? defaultMarkerColor;
         const rawSymbol = feature.get("marker-symbol");
-        const symbol =
-      rawSymbol === undefined || rawSymbol === null ? String(defaults["marker-symbol"]) : String(rawSymbol).trim();
+        // null: not set on the feature, "": explicitly no symbol
+        const featureSymbol = rawSymbol === undefined || rawSymbol === null ? null : String(rawSymbol).trim();
 
-        const key = `${size}|${hex(color)}|${symbol}|${forCollection}`;
+        const key = `${size}|${hex(color)}|${featureSymbol ?? "\u0000unset"}|${forCollection}`;
         let styles = markerCache.get(key);
         if (styles) return styles;
 
         const geometry = forCollection ? collectionPoints : undefined;
         const fg = contrastColor(color);
+        const isUsable = (s: string) => s === "" || isTextSymbol(s) || isMarkerShape(s) || !!symbolUrl?.(s, fg);
+        // unset or unresolvable symbols fall back to the configured default; "" stays "no symbol"
+        const symbol = featureSymbol !== null && isUsable(featureSymbol)
+            ? featureSymbol
+            : String(defaults["marker-symbol"]).trim();
         const fromImages = (images: ImageStyle[]) => images.map((image) => new Style({ geometry, image }));
 
         if (mode === "pin") {
@@ -298,7 +316,7 @@ export function createSimpleStyleFunction(options: SimpleStyleOptions = {}): Sty
                 // digits, letters and icons sit in a round badge in the marker color
                 styles = [...fromImages(shapeImages("circle", d * 1.25, hex(color), 0, outline)), (badge ?? icon)!];
             } else {
-                styles = fromImages(shapeImages(isMarkerShape(symbol) ? symbol : defaultShape, d, hex(color), 0, outline));
+                styles = fromImages(shapeImages(isMarkerShape(symbol) ? symbol : "circle", d, hex(color), 0, outline));
             }
         }
 
