@@ -11,14 +11,8 @@ import {
     setListItems,
     setUrlSearchParams
 } from "../shared";
-import { Tile } from "ol/layer";
-import { XYZ } from "ol/source";
-import { OpenAerialMapService } from "../shared/map/openaerialmapService";
-import { transformExtent } from "ol/proj";
 import * as olExtent from "ol/extent";
-import { intersects } from "ol/extent";
-import { UserLayerControl } from "../shared/map/userLayerControl/userLayerControl";
-import { unit } from "mathjs";
+import { addOAMLayer, addUserLayerControl, getOAMItemId, isOAMLayer } from "../shared/map/oamLayer";
 import VectorSource from "ol/source/Vector";
 import { GeoJSON } from "ol/format";
 import VectorLayer from "ol/layer/Vector";
@@ -26,8 +20,6 @@ import { Feature, Map } from "ol";
 import { fromExtent } from "ol/geom/Polygon";
 import { Stroke, Style } from "ol/style";
 import { createSimpleStyleFunction } from "./ol-simplestyle-1.1.0";
-import type BaseEvent from "ol/events/Event";
-import type { LayerSwitcher } from "../shared/map/ol-LayerSwitcherControl";
 import { groupByMessageCount } from "../shared/errorHelpers";
 
 
@@ -91,7 +83,6 @@ async function pollVectorResults(url: string, map: Map) {
     function onNetworkRetry(retry: number, maxRetries: number) {
         const message = `Connection lost, retrying (${retry}/${maxRetries})…`
         showLoadErrorRows([createErrorRow(message)], false);
-        // document.querySelector<HTMLElement>("#load-message")!.textContent = message;
     }
 
     function validateFn(response: Response) {
@@ -103,13 +94,14 @@ async function pollVectorResults(url: string, map: Map) {
         // show only a summary (error type + count), the details are listed below the map when finished
         showLoadErrorSummary(result.errors ?? []);
         const { current, total } = result.info;
-        showProgress(current, total, result.status);
+        updateProgress(current, total, result.status);
     }
 
     function onValid(response: Response, result: VectorResultsStatusResponseJson) {
         setProcessingOverlay(map, false);
         stopProgressTimer(progressTimer);
         if (result.href) addGeoJSONPreviewLayer(map, result.href);
+
         // partial success: keep the errors visible below the map after the overlay is gone
         if (result.status === ResultStatus.PartialSuccess) {
             showProcessingErrorsBelowMap(result.errors ?? [], result.msg, false);
@@ -118,7 +110,7 @@ async function pollVectorResults(url: string, map: Map) {
     }
 
     function onError(response: Response, result?: Partial<VectorResultsStatusResponseJson>) {
-        if (result?.status) showProgress(result?.info?.current ?? 0, result?.info?.total ?? 0, result.status);
+        if (result?.status) updateProgress(result?.info?.current ?? 0, result?.info?.total ?? 0, result.status);
         // 422 (task failed), 500 or others: only show the HTTP status in a single line in the overlay
         stopProgressTimer(progressTimer);
         // showProcessingError(`${response.status} ${response.statusText}`.trim());
@@ -135,68 +127,6 @@ async function pollVectorResults(url: string, map: Map) {
             showServerErrorDetails(response);
         }
     }
-}
-
-async function addAllLayerSwitchers(map: Map) {
-    const layerSwitcher = addLayerSwitcherControl(map);
-
-    const layerswitcherSlot = document.querySelector<HTMLElement>(".layerswitcher #slot")!;
-
-    const userLayerControl = new UserLayerControl({ target: layerswitcherSlot });
-    map.addControl(userLayerControl);
-    userLayerControl.initialize();
-
-    userLayerControl.on("new-layer", openOamDialog);
-
-    // keep the current layer in layerswitcher to toggle back from OAM Layer
-    userLayerControl.on("beforeactivate", () => {
-        layerSwitcher.activateNextLayer();
-    });
-    // switch back to the layer you came from when removing OAM Layer
-    userLayerControl.on("close", () => {
-        layerSwitcher.activateNextLayer();
-    })
-
-    // add additional layers
-    if (layer.startsWith("oam:")) {
-        const oamItemId = layer.replace("oam:", "");
-        await addOAMLayer(oamItemId, map, layerSwitcher);
-    }
-
-    // OAM Metadata Dialog Handling
-    userLayerControl.on("info", handleUserLayerControlInfoEvent);
-
-    const oamInfoDialog = document.querySelector<HTMLDialogElement>("#oam-info-dialog")!;
-
-    document.querySelector<HTMLButtonElement>("#oam-info-ok-button")!.addEventListener("click", () => {
-        oamInfoDialog.close();
-    });
-
-    document.querySelector<HTMLButtonElement>("#oam-info-close-button")!.addEventListener("click", () => {
-        oamInfoDialog.close();
-    });
-
-    // OAM Add Dialog Handling
-    document.querySelector<HTMLButtonElement>("#oam-add-button")!.addEventListener("click", async () => {
-        const oamItemIdInput = document.querySelector<HTMLInputElement>("#oam-item-id-input")!;
-        const oamInvalidIdMessage = document.querySelector<HTMLElement>("#oam-invalid-id-message")!;
-        const oamPrgressBar = document.querySelector<HTMLProgressElement>("#oam-progress-bar")!;
-        try {
-            if (oamItemIdInput.value.length === 0) {
-                throw new Error("Empty input not allowed.")
-            }
-            oamPrgressBar.classList.remove("hidden");
-            await addOAMLayer(oamItemIdInput.value, map, layerSwitcher);
-            closeOamDialog();
-        } catch (error) {
-            console.error(error);
-            oamInvalidIdMessage.classList.remove("hidden");
-            oamItemIdInput.setAttribute("aria-invalid", "true");
-        } finally {
-            oamPrgressBar.classList.add("hidden");
-        }
-    });
-
 }
 
 // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -251,7 +181,13 @@ async function createPreviewMap() {
     //Base Map from original sketchmap
     const map = await createMap("map", center, undefined, layer);
 
-    await addAllLayerSwitchers(map);
+    // add controls
+    const layerSwitcher = addLayerSwitcherControl(map);
+    addUserLayerControl(map, layerSwitcher);
+
+    if (isOAMLayer(layer)) {
+        await addOAMLayer(getOAMItemId(layer), map, layerSwitcher);
+    }
 
     // bbox in EPSG:3857
     if (bbox) addBboxPreviewLayer(map, bbox);
@@ -267,9 +203,8 @@ function setProcessingOverlay(map: Map, visible: boolean) {
     // target.setAttribute("aria-busy", String(visible));
 }
 
-function showProgress(parts: number, total: number, message?: string) {
+function updateProgress(parts: number, total: number, message?: string) {
     const progressPercent = (parts/total) * 100;
-    console.log(progressPercent, message);
     document.querySelector<HTMLElement>("#load-parts")!.textContent = `${parts}/${total}`;
     // start with infinite progress bar (without value), after first result switch to percent
     if (typeof progressPercent === "number" && progressPercent > 0) {
@@ -355,6 +290,7 @@ function showProcessingErrorsBelowMap(errors: string[], message?: string, allFai
 /**
  * Shows a message box below the map with details about the failed request,
  * which the user can send to the Sketch Map Tool support (also as prefilled mailto link).
+ * Used to display 500 or any other unhanled error
  */
 function showServerErrorDetails(response: Response) {
     const details = [
@@ -382,93 +318,4 @@ function startProgressTimer(){
 
 function stopProgressTimer(timerReference: ReturnType<typeof setInterval>) {
     clearInterval(timerReference);
-}
-
-export async function addOAMLayer(oamItemId: string, map: Map, layerSwitcher: LayerSwitcher) {
-
-    const oamLayerName = `oam:${oamItemId}`;
-    try {
-        const metadata = await OpenAerialMapService.getMetadata(oamItemId);
-        console.log(metadata);
-        layerSwitcher.activateNextLayer();
-        layerSwitcher.suspend();
-
-        const oamBaselayer = new Tile({
-            visible: true,
-            source: new XYZ({
-                url: OpenAerialMapService.getTileUrl(oamItemId),
-                attributions: OpenAerialMapService.getMapAttributionFromMetadata(metadata),
-            }),
-            background: "slategrey",
-        });
-        oamBaselayer.set("name", oamLayerName, true);
-        oamBaselayer.set("ulc_visible", true, true);
-        oamBaselayer.set("ulc_buttonImageUrl", OpenAerialMapService.getThumbnailUrl(oamItemId, 256), true);
-
-        map.addLayer(oamBaselayer);
-
-        const projectedBbox = transformExtent(metadata.bbox, "EPSG:4326", map.getView().getProjection());
-        if (!intersects(projectedBbox, map.getView().calculateExtent())) {
-            map.getView().fit(projectedBbox);
-        }
-    } catch (error) {
-        console.log(`The OpenAerialMap Item ${oamItemId} could not be loaded.`, error);
-        throw error;
-    }
-
-}
-
-document.querySelector<HTMLButtonElement>("#oam-close-button")!.addEventListener("click", () => {
-    closeOamDialog()
-});
-
-document.querySelector<HTMLButtonElement>("#oam-cancel-button")!.addEventListener("click", () => {
-    closeOamDialog()
-});
-
-function openOamDialog() {
-    document.querySelector<HTMLDialogElement>("#oam-dialog")!.show();
-    document.querySelector<HTMLInputElement>("#oam-item-id-input")!.focus();
-}
-
-function closeOamDialog() {
-    // reset state
-    document.querySelector<HTMLElement>("#oam-invalid-id-message")!.classList.add("hidden");
-    document.querySelector<HTMLInputElement>("#oam-item-id-input")!.removeAttribute("aria-invalid");
-    document.querySelector<HTMLDialogElement>("#oam-dialog")!.close();
-
-}
-
-async function handleUserLayerControlInfoEvent(event: BaseEvent) {
-    const infoDialog = document.querySelector<HTMLDialogElement>("#oam-info-dialog")!;
-    const oamItemId = event.target.get("activeLayer").get("name").replace("oam:", "");
-
-    // open the dialog
-    infoDialog.show();
-
-    // load preview image
-    infoDialog.querySelector("img")!.setAttribute("src", OpenAerialMapService.getThumbnailUrl(oamItemId, 256));
-
-    // load and show the metadata properties
-    const metadata = await OpenAerialMapService.getMetadata(oamItemId);
-    const {
-        title,
-        start_datetime,
-        gsd: resolution,
-        "oam:producer_name": producer,
-        "oam:platform_type": platform,
-        license,
-    } = metadata.properties;
-
-    //set table properties
-    document.querySelector<HTMLTableCellElement>("#title")!.textContent = title;
-    document.querySelector<HTMLTableCellElement>("#date")!.textContent = new Date(start_datetime).toLocaleDateString();
-    document.querySelector<HTMLTableCellElement>("#resolution")!.textContent = unit(resolution, "m").toBest(["cm", "m"]).format({
-        notation: "auto",
-        precision: 2
-    });
-    document.querySelector<HTMLTableCellElement>("#provider")!.textContent = producer;
-    document.querySelector<HTMLTableCellElement>("#platform")!.textContent = platform.toUpperCase();
-    document.querySelector<HTMLTableCellElement>("#license")!.textContent = license;
-    document.querySelector<HTMLTableCellElement>("#itemId")!.textContent = oamItemId;
 }
