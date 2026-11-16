@@ -20,6 +20,11 @@ from werkzeug import Response
 
 from sketch_map_tool import celery_app, definitions, tasks, usage_charts
 from sketch_map_tool import flask_app as app
+from sketch_map_tool.celery_utils import (
+    extract_errors,
+    get_async_result,
+    get_result,
+)
 from sketch_map_tool.config import CONFIG
 from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.definitions import REQUEST_TYPES
@@ -34,8 +39,6 @@ from sketch_map_tool.exceptions import (
 )
 from sketch_map_tool.helpers import (
     N_,
-    extract_errors,
-    is_empty,
     merge,
     to_array,
     transform_layer_name,
@@ -318,24 +321,6 @@ def digitize_results_get(lang="en", uuid: str | None = None) -> Response | str:
     return render_template("digitize-results.html", lang=lang)
 
 
-def get_async_result(uuid: str, type_: REQUEST_TYPES) -> AsyncResult | GroupResult:
-    """Get Celery `AsyncResult` or restore `GroupResult` for given Celery UUID."""
-    if type_ == "sketch-map":
-        async_result = celery_app.AsyncResult(uuid)
-    elif type_ in ("vector-results", "raster-results"):
-        async_result = celery_app.GroupResult.restore(uuid)
-    else:
-        raise TypeError()
-
-    if async_result is None:
-        raise UUIDNotFoundError(
-            N_("There are no tasks for UUID {UUID}"),
-            {"UUID": uuid},
-        )
-    else:
-        return async_result
-
-
 @app.get("/api/status/<uuid>/<type_>")
 @app.get("/<lang>/api/status/<uuid>/<type_>")
 def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
@@ -352,15 +337,6 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
         if async_result.successful():  # SUCCESS
             status = "SUCCESS"
             http_status = 200
-            if is_empty(async_result, type_):
-                status = "FAILURE"
-                http_status = 422
-                msg = gettext(
-                    "None of your uploaded sketch maps could be processed. "
-                    "Please check the quality of your uploaded sketch maps "
-                    "(e.g. sharpness, lighting, completely visible map frame) "
-                    "and try again."
-                )
         else:  # REJECTED, REVOKED, FAILURE
             status = "FAILURE"
             http_status = 422
@@ -370,15 +346,13 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
                 "(e.g. sharpness, lighting, completely visible map frame) "
                 "and try again."
             )
-        if isinstance(async_result, GroupResult):
-            if not is_empty(async_result, type_) and any(
-                [r.successful() for r in async_result.results]  # ty: ignore[not-iterable]
-            ):
-                status = "PARTIAL_SUCCESS"
-                http_status = 200
-                msg = gettext(
-                    "Some of your uploaded sketch maps could not be processed."
-                )
+            if isinstance(async_result, GroupResult):
+                if any([r.successful() for r in async_result.results]):  # ty: ignore[not-iterable]
+                    status = "PARTIAL_SUCCESS"
+                    http_status = 200
+                    msg = gettext(
+                        "Some of your uploaded sketch maps could not be processed."
+                    )
     else:  # PENDING, RETRY, STARTED
         http_status = 202
         if isinstance(async_result, AsyncResult):
@@ -431,20 +405,18 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             db_client_flask.update_map_frame_downloaded(uuid_)
             mimetype = "application/pdf"
             download_name = type_ + ".pdf"
-            file: BytesIO = async_result.get()
+            file: BytesIO = get_result(async_result, type_)
         case "raster-results":
             db_client_flask.update_files_download_raster(uuid_)
             mimetype = "application/zip"
             download_name = type_ + ".zip"
-            results = async_result.get(propagate=False)
-            raster_results = [r[:-2] for r in results]
+            raster_results = get_result(async_result, type_)
             file: BytesIO = zip_(raster_results)
         case "vector-results":
             db_client_flask.update_files_download_vector(uuid_)
             mimetype = "application/geo+json"
             download_name = type_ + ".geojson"
-            results = async_result.get(propagate=False)
-            vector_results = [r[-2] for r in results]
+            vector_results = get_result(async_result, type_)
             num_of_uploads = len(vector_results)
             feature_collection = style(merge(vector_results), num_of_uploads)
             raw = geojson.dumps(feature_collection)

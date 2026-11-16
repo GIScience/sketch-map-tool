@@ -191,19 +191,14 @@ def upload_processing(
     sketch_map_uploaded = db_client_celery.select_file(file_id)
     sketch_map_frame = clip(to_array(sketch_map_uploaded), map_frame)
     sketch_map_frame_georeferenced = georeference(sketch_map_frame, bbox)
-    try:
-        sketches = digitize_sketches(
-            file_id,
-            file_name,
-            map_frame,
-            sketch_map_frame,
-            layer,
-            bbox,
-        )
-    except MarkingDetectionError as error:
-        sketches = FeatureCollection(features=[])
-        errors.append(error)
-
+    sketches = digitize_sketches(
+        file_id,
+        file_name,
+        map_frame,
+        sketch_map_frame,
+        layer,
+        bbox,
+    )
     attribution = get_attribution(layer)
     return (
         file_name,

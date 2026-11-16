@@ -106,22 +106,7 @@ def extract_errors(
                     ) from error
                 except TimeLimitExceededError as error_:
                     errors.append(error_.translate())
-            if type_ in ("vector-results"):
-                _, _, _, _, errors_ = r.get(propagate=False)
-                if len(errors_) > 0:
-                    errors = errors + [e.translate() for e in errors_]
     return errors
-
-
-def is_empty(async_result: GroupResult | AsyncResult, type_: str) -> bool:
-    """Check if result is empty."""
-    if isinstance(async_result, AsyncResult) or type_ != "vector-results":
-        return False
-
-    results = async_result.get(propagate=False)
-    vector_results = [r[-2] for r in results]
-    feature_collection = merge(vector_results)
-    return len(feature_collection["features"]) == 0
 
 
 def transform_layer_name(layer: str) -> str:
