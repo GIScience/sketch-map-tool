@@ -92,21 +92,10 @@ function openAllDetailsElements() {
         });
 }
 
-export {
-    fillSelectOptions,
-    setTaskStatus,
-    setDisabled,
-    setDownloadLink,
-    setIsBusy,
-    openDetailsParents,
-    closeAllDetailsElements,
-    openAllDetailsElements,
-};
-
 /**
  * Replaces the items of the list with one <li> per message.
  */
-export function setListItems(list: HTMLUListElement, messages: string[]) {
+function setListItems(list: HTMLUListElement, messages: string[]) {
     console.log(list);
     list.replaceChildren(...messages.map((message) => {
         const item = document.createElement("li");
@@ -114,3 +103,17 @@ export function setListItems(list: HTMLUListElement, messages: string[]) {
         return item;
     }));
 }
+
+export {
+    fillSelectOptions,
+    setTaskStatus,
+    setDisabled,
+    setDownloadLink,
+    setIsBusy,
+    setListItems,
+    openDetailsParents,
+    closeAllDetailsElements,
+    openAllDetailsElements,
+};
+
+

@@ -11,8 +11,8 @@ import type { LayerSwitcher } from "./ol-LayerSwitcherControl";
 
 const OAM_PREFIX = "oam:";
 
-export function isOAMLayer(layerName: string): boolean {
-    return layerName.startsWith(OAM_PREFIX);
+export function isOAMLayer(layerName?: string): layerName is string {
+    return !!layerName?.startsWith(OAM_PREFIX);
 }
 
 export function getOAMItemId(layerName: string): string {

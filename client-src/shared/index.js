@@ -1,3 +1,3 @@
 export * from "./domHelpers.ts";
 export * from "./poll";
-export * from "./urlHelpers.js";
+export * from "./urlHelpers.ts";
