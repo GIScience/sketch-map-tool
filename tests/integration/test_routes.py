@@ -118,6 +118,7 @@ def test_digitize_results_post_multiple_uploads_based_on_different_sketch_maps(
     response = flask_client.post(
         "/digitize/results",
         data=data,
+        follow_redirects=True,
     )
     assert response.status_code == 422
     assert "UploadError" in response.text
