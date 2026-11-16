@@ -12,7 +12,7 @@ def test_status_success(
     assert resp.json["id"] == uuid
     assert resp.json["status"] == "SUCCESS"
     assert resp.json["href"] == "/api/download/{0}/sketch-map".format(uuid)
-    assert "info" not in resp.json.keys()
+    assert "info" in resp.json.keys()
     assert "errors" not in resp.json.keys()
 
 
@@ -240,4 +240,4 @@ def test_group_status_success_failure(
     assert resp.json["status"] == "PARTIAL_SUCCESS"
     assert resp.json["errors"] == [lang[1]]
     assert resp.json["href"] == "/api/download/{0}/{1}".format(uuid, type_)
-    assert "info" not in resp.json.keys()
+    assert "info" in resp.json.keys()

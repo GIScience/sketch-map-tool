@@ -334,6 +334,7 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
     errors: list[str] = extract_errors(async_result, type_)
 
     if async_result.ready():
+        info = {"current": 1, "total": 1}
         if async_result.successful():  # SUCCESS
             status = "SUCCESS"
             http_status = 200
@@ -347,6 +348,7 @@ def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
                 "and try again."
             )
             if isinstance(async_result, GroupResult):
+                info = {"current": 1, "total": len(async_result.results)}  # ty: ignore[invalid-argument-type]
                 if any([r.successful() for r in async_result.results]):  # ty: ignore[not-iterable]
                     status = "PARTIAL_SUCCESS"
                     http_status = 200
