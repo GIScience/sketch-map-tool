@@ -2023,6 +2023,15 @@ wheels = [
 ]
 
 [[package]]
+name = "psycopg2"
+version = "2.9.13"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/91/81/6ea19b8b28feb9405c8c87a307776614d6e404bdb98467d1ce10a39d2c1d/psycopg2-2.9.13.tar.gz", hash = "sha256:d36784fc2dae69523ba4b79c7d1d1b4d6e83e87836874f111262f4db940b16a6", size = 378068, upload-time = "2026-09-09T23:56:21.749Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b9/f9/f6e9d47ea04e09282c618f5eeb67634f39ea4b04acedd0a6d8da4d986d50/psycopg2-2.9.13-cp314-cp314-win_amd64.whl", hash = "sha256:a6f54fd8e0024f35240866b5dfff9ead2a0dbd33b8096eec438bc6093412842d", size = 2866943, upload-time = "2026-09-09T23:54:01.268Z" },
+]
+
+[[package]]
 name = "psycopg2-binary"
 version = "2.9.13"
 source = { registry = "https://pypi.org/simple" }
@@ -2709,6 +2718,7 @@ dependencies = [
     { name = "numpy" },
     { name = "opencv-python-headless" },
     { name = "pillow" },
+    { name = "psycopg2" },
     { name = "pydantic-settings" },
     { name = "pygal" },
     { name = "pygal-maps-world" },
@@ -2795,6 +2805,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=2.0.0,<3.0.0" },
     { name = "opencv-python-headless", specifier = ">=4.8.0.76,<5.0.0" },
     { name = "pillow", specifier = ">=13.0.0,<14.0.0" },
+    { name = "psycopg2", specifier = ">=2.9.13,<3.0.0" },
     { name = "pydantic-settings", specifier = ">=2.12.0,<3.0.0" },
     { name = "pygal" },
     { name = "pygal-maps-world", specifier = ">=1.0.2,<2.0.0" },
