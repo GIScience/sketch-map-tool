@@ -1,4 +1,4 @@
- 
+
 import { Feature, Map } from "ol";
 import VectorSource from "ol/source/Vector";
 import { GeoJSON } from "ol/format";
@@ -55,6 +55,7 @@ export function addGeoJSONPreviewLayer(map: Map, href: string) {
     vectorLayer.set("overlay", true, true);
 
     map.addLayer(vectorLayer);
+    return vectorLayer;
 }
 
 export async function createPreviewMap(layer?: string, bbox?: Extent) {

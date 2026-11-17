@@ -42,7 +42,7 @@ class PollUntilValid {
      *     before a NetworkError is thrown.
      * @param {function(int, int, Error)} [options.onNetworkRetry] - opt. callback before each
      *     retry. Gets the retry number (starting at 1), maxNetworkRetries and the fetch error.
-     * @returns {Promise<Response>} - The last response (valid or error). Use it to check the
+     * @returns {Promise<{response: Response, jsonBody: *}>} - The last response (valid or error). Use it to check the
      *     status. Its body has already been consumed, use the callbacks to get the data.
      */
     static async poll(
@@ -68,20 +68,20 @@ class PollUntilValid {
             }
             networkRetries = 0;
 
-            const data = await PollUntilValid.parseJsonIfAvailable(response);
+            const jsonBody = await PollUntilValid.parseJsonIfAvailable(response);
 
             // if response code is not between 200-299
             if (!response.ok) {
-                await onError(response, data);
-                return response;
+                await onError(response, jsonBody);
+                return { response, jsonBody };
             }
 
-            if (!(await validateFn(response, data))) {
-                await onProgress(response, data);
+            if (!(await validateFn(response, jsonBody))) {
+                await onProgress(response, jsonBody);
                 await PollUntilValid.wait(intervalInMilliseconds);
             } else {
-                await onValid(response, data);
-                return response;
+                await onValid(response, jsonBody);
+                return { response, jsonBody };
             }
 
         } while (true);

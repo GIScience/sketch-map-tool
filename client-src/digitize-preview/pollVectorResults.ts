@@ -9,27 +9,25 @@ import {
     showServerErrorDetails
 } from "./error-handling";
 
-import { addGeoJSONPreviewLayer } from "./map";
-
 /** JSON body of the /api/status/{uuid}/vector-results endpoint */
-interface VectorResultsStatusResponseJson {
+export interface VectorResultsStatusResponseJson {
     id: string;
     status: ResultStatus;
     type: "vector-results";
     info: { current: number; total: number };
     errors?: string[];
-    href?: string;
+    href: string;
     msg?: string;
 }
 
-const enum ResultStatus {
+export const enum ResultStatus {
     Success = "SUCCESS",
     PartialSuccess = "PARTIAL_SUCCESS",
     Failure = "FAILURE",
     Pending = "PENDING"
 }
 
-export async function pollVectorResults(url: string, map: Map) {
+export async function pollVectorResults(url: string, map: Map): Promise<{ response: Response, jsonBody: VectorResultsStatusResponseJson | undefined}> {
     setProcessingOverlay(map, true);
     const progressTimer = startProgressTimer();
     try {
@@ -47,6 +45,7 @@ export async function pollVectorResults(url: string, map: Map) {
         showProcessingError(error instanceof NetworkError
             ? "Network error.\nPlease check your internet connection."
             : "Unexpected error.\nThis may be a bug.");
+        throw error;
     }
 
     function onNetworkRetry(retry: number, maxRetries: number) {
@@ -66,16 +65,9 @@ export async function pollVectorResults(url: string, map: Map) {
         updateProgress(current, total, result.status);
     }
 
-    function onValid(response: Response, result: VectorResultsStatusResponseJson) {
+    function onValid() {
         setProcessingOverlay(map, false);
         stopProgressTimer(progressTimer);
-        if (result.href) addGeoJSONPreviewLayer(map, result.href);
-
-        // partial success: keep the errors visible below the map after the overlay is gone
-        if (result.status === ResultStatus.PartialSuccess) {
-            showProcessingErrorsBelowMap(result.errors ?? [], result.msg, false);
-        }
-
     }
 
     function onError(response: Response, result?: Partial<VectorResultsStatusResponseJson>) {
