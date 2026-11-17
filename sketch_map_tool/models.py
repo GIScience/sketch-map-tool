@@ -3,9 +3,6 @@ from dataclasses import dataclass
 import shapely
 from numpy.typing import NDArray
 
-from sketch_map_tool.exceptions import ValidationError
-from sketch_map_tool.helpers import N_
-
 
 @dataclass(frozen=True)
 class Bbox:
@@ -59,16 +56,6 @@ class Size:
 
     def asdict(self):
         return {"width": self.width, "height": self.height}
-
-
-def validate_layer(layer: str) -> str:
-    lower_layer = layer.lower()
-    if lower_layer.startswith(("osm", "esri")):
-        return lower_layer.replace(":", "-").replace("_", "-")
-    elif lower_layer.startswith("oam"):
-        return lower_layer
-    else:
-        raise ValidationError(N_("Layer name should start with osm, esri or oam."))
 
 
 @dataclass(frozen=True)
