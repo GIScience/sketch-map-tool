@@ -44,7 +44,7 @@ from sketch_map_tool.helpers import (
     transform_layer_name,
     zip_,
 )
-from sketch_map_tool.models import Bbox, PaperFormat, Size, validate_layer
+from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.style_geojson import style
 from sketch_map_tool.tasks import (
     cleanup_blobs,
@@ -52,6 +52,7 @@ from sketch_map_tool.tasks import (
 )
 from sketch_map_tool.validators import (
     validate_bbox,
+    validate_layer,
     validate_type,
     validate_uploaded_sketchmaps,
     validate_uuid,
