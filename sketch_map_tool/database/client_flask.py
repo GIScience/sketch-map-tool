@@ -131,7 +131,7 @@ def select_file_name(id_: int) -> str:
             )
 
 
-def select_map_frame(uuid: UUID) -> tuple[bytes, str, str]:
+def select_map_frame(uuid: UUID) -> bytes:
     """Select map frame, bbox and layer of the associated UUID."""
     query = "SELECT file FROM map_frame WHERE uuid = %s"
     db_conn = open_connection()

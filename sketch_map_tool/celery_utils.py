@@ -78,6 +78,6 @@ def get_result(async_result: AsyncResult | GroupResult, type_: REQUEST_TYPES) ->
 
     match type_:
         case "raster-results":
-            return [r[:-2] for r in results if not is_error(r)]
+            return [r[:-1] for r in results if not is_error(r)]
         case "vector-results":
-            return [r[-2] for r in results if not is_error(r)]
+            return [r[-1] for r in results if not is_error(r)]
