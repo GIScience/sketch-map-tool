@@ -295,7 +295,8 @@ def create_map_frame(
             height=height,
         )
         canvas.rotate(-90)
-        draw_markers(canvas, marker_size, height=width, width=height)
+        if markings is not None:
+            draw_aruco_markers(canvas, marker_size, height=width, width=height)
         add_scalebar(canvas, height, width, m_per_px, format_, marker_size)
     else:
         canvas.drawImage(
@@ -306,7 +307,8 @@ def create_map_frame(
             width=width,
             height=height,
         )
-        draw_markers(canvas, marker_size, height, width)
+        if markings is not None:
+            draw_aruco_markers(canvas, marker_size, height, width)
         add_scalebar(canvas, width, height, m_per_px, format_, marker_size)
 
     if markings is not None and bbox is not None:
@@ -325,7 +327,7 @@ def create_map_frame(
     return pdf_page_to_img(map_frame, img_format=img_format)
 
 
-def draw_markers(canvas: Canvas, size: float, height: float, width: float):
+def draw_aruco_markers(canvas: Canvas, size: float, height: float, width: float):
     markers = get_aruco_markers(int(size))
 
     # 5 is to account for map frame border
