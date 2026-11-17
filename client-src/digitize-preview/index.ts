@@ -24,9 +24,11 @@ setUrlSearchParams({
 
 const vectorResultsUrl = `/api/status/${getUUIDFromURL()}/vector-results`;
 
-initBottomSheets(); // legend and errors bottom sheets on mobile
+// legend and errors bottom sheets on mobile
+initBottomSheets();
 
 const previewMap = await createPreviewMap(layer, bbox);
+
 // show progress status, show errors
 const { response, jsonBody } = await pollVectorResults(vectorResultsUrl, previewMap);
 
@@ -36,13 +38,14 @@ if (response.status == 200 && jsonBody) {
     if (jsonBody.status === ResultStatus.PartialSuccess) {
         showProcessingErrorsBelowMap(jsonBody.errors ?? [], jsonBody.msg, false);
     }
+
     // download vector-results and display them on the map
     const resultLayer = addGeoJSONPreviewLayer(previewMap, jsonBody.href);
     const vectorSource = resultLayer.getSource()!;
 
+    // analyze vector features and display them in the legend
     vectorSource.on("featuresloadend", (event) => {
         renderLegend(summarizeFeatures(event.features ?? []), resultLayer.getStyleFunction()!);
     });
-
 
 }
