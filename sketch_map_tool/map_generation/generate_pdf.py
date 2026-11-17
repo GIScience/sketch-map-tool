@@ -1,6 +1,7 @@
 """Generate a sketch map PDF."""
 
 import io
+import math
 from io import BytesIO
 from typing import Tuple
 
@@ -28,6 +29,7 @@ from sketch_map_tool.models import Bbox, PaperFormat
 flowables.Image.MAX_IMAGE_PIXELS = None  # ty: ignore[unresolved-attribute]
 
 WGS84_TO_WEB_MERCATOR = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
+WEB_MERCATOR_TO_WGS84 = Transformer.from_crs("EPSG:3857", "EPSG:4326", always_xy=True)
 
 
 def generate_pdf(
@@ -201,7 +203,8 @@ def draw_right_column(
     p_copyright = Paragraph(get_attribution(layer), normal_style)
 
     qr_size = min(width, height) - margin
-    qr_code = resize_rlg_by_width(qr_code, qr_size)
+    if qr_code is not None:
+        qr_code = resize_rlg_by_width(qr_code, qr_size)
 
     # fills up the remaining space, placed between
     # the TOP and the BOTTOM aligned elements
@@ -457,9 +460,22 @@ def geo_to_canvas(
     portrait: bool,
 ) -> tuple[float, float]:
     """Convert geo coordinates to map frame canvas coordinates."""
-    x, y = WGS84_TO_WEB_MERCATOR.transform(lon, lat)
+    x, y = WGS84_TO_WEB_MERCATOR.transform(lon, lat)  # c1 c2
     fx = (x - bbox.lon_min) / (bbox.lon_max - bbox.lon_min)  # 0 = west, 1 = east
     fy = (y - bbox.lat_min) / (bbox.lat_max - bbox.lat_min)  # 0 = south, 1 = north
+
+    bbox_lon_min, bbox_lat_min = WEB_MERCATOR_TO_WGS84.transform(
+        bbox.lon_min, bbox.lat_min
+    )
+    bbox_lon_max, bbox_lat_max = WEB_MERCATOR_TO_WGS84.transform(
+        bbox.lon_max, bbox.lat_max
+    )
+
+    fx1 = (lon - bbox_lon_min) / (bbox_lon_max - bbox_lon_min)  # 0 = west, 1 = east
+    fy1 = (lat - bbox_lat_min) / (bbox_lat_max - bbox_lat_min)  # 0 = south, 1 = north
+    assert math.isclose(fx, fx1, rel_tol=1 / 1000), str((fx, fx1))
+    assert math.isclose(fy, fy1, rel_tol=1 / 1000), str((fy, fy1))
+
     if portrait:
         # The image is drawn rotated by 90°: north points left, east points up
         return (1 - fy) * height, fx * width
