@@ -22,7 +22,7 @@ import {
  *
  * @param url url to poll from
  * @param prefix identifier used to decide where results or progress messages should be displayed
- * @returns {Promise<Response>}
+ * @returns {Promise<{response: Response, jsonBody: *}>}
  */
 async function poll(url, prefix) {
     function validateFn(response) {

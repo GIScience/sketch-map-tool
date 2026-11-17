@@ -96,7 +96,6 @@ function openAllDetailsElements() {
  * Replaces the items of the list with one <li> per message.
  */
 function setListItems(list: HTMLUListElement, messages: string[]) {
-    console.log(list);
     list.replaceChildren(...messages.map((message) => {
         const item = document.createElement("li");
         item.textContent = message;
