@@ -2,7 +2,6 @@ import pytest
 from shapely.geometry import Point
 
 from sketch_map_tool import models
-from sketch_map_tool.exceptions import ValidationError
 
 
 @pytest.fixture
@@ -59,5 +58,3 @@ def test_literatur_reference():
         "ISPRS International Journal of Geo-Information. 10:130."
     )
     assert literature_reference.url == "https://doi.org/10.3390/ijgi10030130"
-
-

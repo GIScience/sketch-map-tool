@@ -4,10 +4,10 @@ import pytest
 from sketch_map_tool.exceptions import UploadLimitsExceededError, ValidationError
 from sketch_map_tool.validators import (
     validate_bbox,
+    validate_layer,
     validate_type,
     validate_uploaded_sketchmaps,
     validate_uuid,
-    validate_layer,
 )
 
 
