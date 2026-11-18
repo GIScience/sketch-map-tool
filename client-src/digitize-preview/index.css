@@ -4,6 +4,53 @@
     }
 }
 
+/* mobile: the download link is in the bottom navigation bar instead of in the legend sheet */
+@media (width < 992px) {
+    #right .download-link {
+        display: none;
+    }
+
+    /* the legend is not in the page flow anymore: keep some space between map and footer */
+    #left {
+        margin-bottom: calc(var(--pico-spacing) * 2);
+    }
+
+    #errors-panel .warningbox {
+        margin: 0 0 1rem;
+    }
+
+    #errors-panel .warningbox:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.legend-list {
+    margin: 0 0 var(--pico-spacing) var(--pico-spacing);
+    padding: 0;
+}
+
+.legend-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0.3rem 0;
+    list-style: none;
+}
+
+.legend-swatch {
+    flex: 0 0 auto;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1px solid rgb(0 0 0 / 25%);
+    border-radius: 4px;
+}
+
+.legend-count {
+    color: var(--pico-muted-color);
+    font-variant-numeric: tabular-nums;
+}
+
 body > main {
     padding: 3rem 0;
 }

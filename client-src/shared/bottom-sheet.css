@@ -1,0 +1,181 @@
+/*
+ * Reusable bottom sheet + bottom navigation bar, see bottom-sheet.ts.
+ * Below 992px (Pico "lg") a fixed `.bottom-nav` sits at the bottom of the viewport and its
+ * `button[aria-controls]` toggle `.bottom-sheet` panels, which slide up from behind the bar.
+ * The sheets are non-modal (no backdrop), so the page above stays usable.
+ * From 992px on the bar is hidden and the sheets stay in the normal page flow.
+ */
+
+:root {
+    --bottom-nav-height: 3.75rem;
+}
+
+@media (width < 992px) {
+    /*
+     * Keep the footer reachable: a spacer as last flex item after the footer.
+     * (Padding on #main-flex-box or body does not work, as they are 100vh high and the content overflows them.)
+     */
+    body:has(.bottom-nav) #main-flex-box::after {
+        content: "";
+        flex: 0 0 calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+    }
+
+    .bottom-nav {
+        position: fixed;
+        inset: auto 0 0;
+        z-index: 1001; /* above OL controls, .map-loading (10) and the sheets */
+        display: flex;
+        height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+        margin: 0;
+        padding: 0 0 env(safe-area-inset-bottom);
+        background: var(--pico-primary-background);
+        box-shadow: 0 -2px 12px rgb(0 0 0 / 15%);
+    }
+
+    .bottom-nav > :is(button, a) {
+        position: relative;
+        display: flex;
+        flex: 1 1 0;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.2rem;
+        min-width: 0;
+        margin: 0;
+        padding: 0.25rem;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        color: var(--pico-primary-inverse);
+        opacity: 0.85;
+        transition: background-color var(--pico-transition), opacity var(--pico-transition);
+        font-size: 0.75rem;
+        line-height: 1.2;
+        text-decoration: none;
+    }
+
+    .bottom-nav > [hidden] {
+        display: none;
+    }
+
+    .bottom-nav > :is(button, a):is(:hover, :focus-visible) {
+        background: var(--pico-primary-hover-background);
+        color: var(--pico-primary-inverse);
+        opacity: 1;
+    }
+
+    /* the button of the open sheet */
+    .bottom-nav > [aria-expanded="true"],
+    .bottom-nav > [aria-expanded="true"]:is(:hover, :focus-visible) {
+        background: var(--pico-primary-hover);
+        opacity: 1;
+    }
+
+    .bottom-nav > :is(button, a):focus-visible {
+        outline: 2px solid var(--pico-primary-inverse);
+        outline-offset: -4px;
+    }
+
+    .bottom-nav svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        flex: 0 0 auto;
+    }
+
+    .bottom-nav .badge {
+        position: absolute;
+        top: 0.3rem;
+        left: calc(50% + 0.4rem);
+        min-width: 1.1rem;
+        padding: 0 0.3rem;
+        border-radius: 999px;
+        background: #c60427;
+        box-shadow: 0 0 0 2px var(--pico-primary-background); /* separates the badge from the icon */
+        color: #fff;
+        font-size: 0.65rem;
+        font-weight: 600;
+        line-height: 1.1rem;
+        text-align: center;
+    }
+
+    .bottom-nav .badge:empty {
+        display: none;
+    }
+
+    .bottom-sheet {
+        position: fixed;
+        right: 0;
+        bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+        left: 0;
+        z-index: 1000; /* below the nav, so the sheet slides out from behind it */
+        max-height: 60dvh;
+        margin: 0;
+        padding: 0 1rem 1rem;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        border-radius: 1rem 1rem 0 0;
+        background: var(--pico-background-color);
+        box-shadow: 0 -6px 24px rgb(0 0 0 / 18%);
+        transform: translateY(calc(100% + var(--bottom-nav-height) + env(safe-area-inset-bottom)));
+        visibility: hidden;
+        transition: transform 0.3s ease, visibility 0s linear 0.3s; /* hide only after the slide-out */
+    }
+
+    .bottom-sheet.is-open {
+        transform: none;
+        visibility: visible;
+        transition: transform 0.3s ease, visibility 0s linear 0s;
+    }
+
+    /* grab-handle look, closes the sheet on tap */
+    .bottom-sheet-handle {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        display: block;
+        width: 100%;
+        height: 1.75rem;
+        margin: 0;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        background: var(--pico-background-color);
+        box-shadow: none;
+        cursor: pointer;
+    }
+
+    .bottom-sheet-handle::before {
+        content: "";
+        display: block;
+        width: 2.5rem;
+        height: 0.3rem;
+        margin: 0 auto;
+        border-radius: 999px;
+        background: var(--pico-muted-border-color);
+        transition: background-color var(--pico-transition);
+    }
+
+    .bottom-sheet-handle:is(:hover, :focus-visible)::before {
+        background: var(--pico-muted-color);
+    }
+
+    .bottom-sheet-handle:focus-visible {
+        outline: 2px solid var(--pico-primary);
+        outline-offset: -2px;
+    }
+}
+
+@media (width >= 992px) {
+    .bottom-nav,
+    .bottom-sheet-handle {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bottom-sheet,
+    .bottom-sheet.is-open {
+        transition: none;
+    }
+}

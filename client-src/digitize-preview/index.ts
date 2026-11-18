@@ -1,7 +1,8 @@
 import "ol/ol.css";
 import "@giscience/ol-print-layout-control/dist/ol-print-layout-control.css";
+import "../shared/bottom-sheet.css";
 import "./index.css";
-import { getSanitizedBboxParam, getSanitizedLayerParam, getUUIDFromURL, setUrlSearchParams } from "../shared";
+import { getSanitizedBboxParam, getSanitizedLayerParam, getUUIDFromURL, initBottomSheets, setUrlSearchParams } from "../shared";
 import { pollVectorResults, ResultStatus } from "./pollVectorResults";
 import { addGeoJSONPreviewLayer, createPreviewMap } from "./map";
 import { showProcessingErrorsBelowMap } from "./error-handling";
@@ -21,6 +22,8 @@ setUrlSearchParams({
 });
 
 const vectorResultsUrl = `/api/status/${getUUIDFromURL()}/vector-results`;
+
+initBottomSheets(); // legend and errors bottom sheets on mobile
 
 const previewMap = await createPreviewMap(layer, bbox);
 // show progress status, show errors

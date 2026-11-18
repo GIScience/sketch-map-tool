@@ -1,4 +1,4 @@
-import { setListItems } from "../shared";
+import { openBottomSheet, setListItems } from "../shared";
 
 /**
  * Turns the loading card into an error message. The overlay stays visible,
@@ -94,6 +94,10 @@ export function showProcessingErrorsBelowMap(errors: string[], message?: string,
     setListItems(document.querySelector<HTMLUListElement>("#processing-errors-list")!, errors);
     // hide/show error-box
     document.querySelector<HTMLElement>("#processing-errors")!.hidden = errors.length === 0 && !allFailed;
+
+    updateErrorsToggle();
+    // nothing to see on the map: show the errors right away (only has an effect on mobile)
+    if (allFailed) openBottomSheet("errors-panel");
 }
 
 /**
@@ -115,4 +119,25 @@ export function showServerErrorDetails(response: Response) {
     mailLink.href = `mailto:${mailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(details)}`;
 
     document.querySelector<HTMLElement>("#server-error")!.hidden = false;
+
+    updateErrorsToggle();
+    openBottomSheet("errors-panel"); // only has an effect on mobile
+}
+
+/**
+ * Updates the "Errors" button in the bottom navigation bar (mobile only):
+ * the badge shows the number of processing errors plus 1 for a server error.
+ * The button is hidden if no error box is visible, and shown without a badge
+ * if an error box is visible but has no listed errors (e.g. all sketch maps failed without details).
+ */
+export function updateErrorsToggle() {
+    const processingErrorsBox = document.querySelector<HTMLElement>("#processing-errors")!;
+    const serverErrorBox = document.querySelector<HTMLElement>("#server-error")!;
+    const listedErrors = document.querySelectorAll("#processing-errors-list li").length;
+
+    const count = (processingErrorsBox.hidden ? 0 : listedErrors) + (serverErrorBox.hidden ? 0 : 1);
+    const hasErrors = !processingErrorsBox.hidden || !serverErrorBox.hidden;
+
+    document.querySelector<HTMLElement>("#errors-count")!.textContent = count > 0 ? String(count) : "";
+    document.querySelector<HTMLElement>("#errors-toggle")!.hidden = !hasErrors;
 }
