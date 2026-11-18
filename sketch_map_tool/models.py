@@ -1,8 +1,13 @@
 from dataclasses import dataclass
+from io import BytesIO
 from typing import Literal
 
 import shapely
+from numpy.typing import NDArray
+from PIL import Image
 from pydantic import UUID4, BaseModel
+
+from sketch_map_tool.helpers import to_array
 
 
 @dataclass(frozen=True)
@@ -127,3 +132,9 @@ class MapFrame(BaseModel):
     format: str
     orientation: Literal["landscape", "portrait"]
     layer: str
+
+    def map_image_as_image(self) -> Image.Image:
+        return Image.open(BytesIO(self.map_image))
+
+    def map_image_as_array(self) -> NDArray:
+        return to_array(self.map_image)

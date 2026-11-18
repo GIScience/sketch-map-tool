@@ -21,9 +21,10 @@ from reportlab.pdfgen.canvas import FILL_EVEN_ODD, Canvas
 from reportlab.platypus import Frame, Paragraph, Table, TableStyle, flowables
 from svglib.svglib import svg2rlg
 
+from sketch_map_tool import definitions
 from sketch_map_tool.definitions import PDF_RESOURCES_PATH, get_attribution
 from sketch_map_tool.helpers import resize_rlg_by_width
-from sketch_map_tool.models import Bbox, PaperFormat
+from sketch_map_tool.models import Bbox, MapFrame, PaperFormat
 
 # PIL should be able to open high resolution PNGs of large Maps:
 flowables.Image.MAX_IMAGE_PIXELS = None  # ty: ignore[unresolved-attribute]
@@ -51,21 +52,18 @@ def generate_pdf(
 
 
 def generate_result_map_pdf(
-    map_image: Image.Image,
-    format_: PaperFormat,
-    layer: str,
-    bbox: Bbox,
+    map_frame: MapFrame,
     markings: FeatureCollection,
-) -> Tuple[BytesIO, BytesIO]:
+) -> BytesIO:
     return _generate_pdf(
-        map_image,
+        map_frame.map_image_as_image(),
         None,
-        format_,
+        getattr(definitions, map_frame.format.upper()),
         0,  # TODO(hack): scale value is missing
-        layer,
-        bbox,
+        map_frame.layer,
+        None,  # TODO
         markings,
-    )
+    )[0]
 
 
 def _generate_pdf(

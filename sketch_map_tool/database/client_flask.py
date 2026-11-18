@@ -14,6 +14,7 @@ from sketch_map_tool.exceptions import (
     CustomFileDoesNotExistAnymoreError,
     CustomFileNotFoundError,
     UploadError,
+    UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import N_, to_array
 from sketch_map_tool.models import Bbox, MapFrame
@@ -146,6 +147,22 @@ def select_file_name(id_: int) -> str:
         else:
             raise CustomFileNotFoundError(
                 N_("There is no file in the database with the id: {ID}"), {"ID": id_}
+            )
+
+
+def select_map_frame_uuid(digitize_uuid: UUID) -> UUID:
+    """Get an uploaded file stored in the database by ID."""
+    query = "SELECT map_frame_uuid FROM blob WHERE digitize_uuid = %s"
+    db_conn = open_connection()
+    with db_conn.cursor() as curs:
+        curs.execute(query, [str(digitize_uuid)])
+        raw = curs.fetchone()
+        if raw:
+            return UUID(raw[0])
+        else:
+            raise UUIDNotFoundError(
+                N_("There are no files in the database for the uuid: {ID}"),
+                {"ID": digitize_uuid},
             )
 
 
