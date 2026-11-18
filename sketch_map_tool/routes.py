@@ -2,7 +2,7 @@ import json
 import logging
 from io import BytesIO
 from typing import Sequence
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 import geojson
 from celery import chord, group
@@ -38,7 +38,6 @@ from sketch_map_tool.exceptions import (
     UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import (
-    N_,
     merge,
     to_array,
     transform_layer_name,
@@ -227,49 +226,27 @@ def digitize_results_post(lang="en") -> Response:
         return redirect(url_for("digitize", lang=lang))
 
     files = request.files.getlist("file")
-    # TODO: move verification to `insert_files()` for incremental validation
     validate_uploaded_sketchmaps(files)
     # file metadata parsed from qr-code
-    file_ids, uuids, file_names, bboxes, layers = db_client_flask.insert_files(
+    file_ids, file_names, uuid, bbox, layer = db_client_flask.insert_files(
         files,
         consent,
     )
     del files
 
-    bboxes_ = dict()
-    layers_ = dict()
-    map_frames = dict()
-
-    if len(set(uuids)) > 1:
-        raise UploadError(
-            N_(
-                "You can upload several photos, but they must all show the same area. "
-                "These sketch maps cover different areas, "
-                "so please upload each area separately."
-            )
-        )
-
-    for uuid in set(uuids):  # Only retrieve map_frame once per uuid to save memory
-        # NOTE: bbox and layer could be return once per UUID from DB here
-        # instead of multiple times from QR code above.
-        # But this does not work with legacy map frames (version 2024.04.15),
-        # since those attributes are not stored in the DB.
-        map_frame = db_client_flask.select_map_frame(UUID(uuid))
-        map_frames[uuid] = to_array(BytesIO(map_frame.map_image).read())
-    for bbox, layer, uuid in zip(bboxes, layers, uuids):
-        bboxes_[uuid] = bbox
-        layers_[uuid] = layer
+    map_frame = db_client_flask.select_map_frame(uuid)
+    map_image = to_array(map_frame.map_image)
 
     tasks = []
-    for file_id, file_name, uuid in zip(file_ids, file_names, uuids):
+    for file_id, file_name in zip(file_ids, file_names):
         tasks.append(
             upload_processing.signature(
                 (
                     file_id,
                     file_name,
-                    map_frames[uuid],
-                    layers_[uuid],
-                    bboxes_[uuid],
+                    map_image,
+                    layer,
+                    bbox,
                 )
             )
         )
@@ -285,14 +262,14 @@ def digitize_results_post(lang="en") -> Response:
     # group results have to be saved for them to be able to be restored later
     async_group_result.save()
     db_client_flask.update_files_digitize_uuid(file_ids, async_group_result.id)
-    layer = transform_layer_name(layers[0])
+
     return redirect(
         url_for(
             "digitize_preview" if preview else "digitize_results_get",
             lang=lang,
             uuid=async_group_result.id,
-            bbox=bboxes[0],
-            layer=layer,
+            bbox=bbox,
+            layer=transform_layer_name(layer),
         )
     )
 
