@@ -39,7 +39,6 @@ from sketch_map_tool.exceptions import (
 )
 from sketch_map_tool.helpers import (
     merge,
-    to_array,
     transform_layer_name,
     zip_,
 )
@@ -235,7 +234,6 @@ def digitize_results_post(lang="en") -> Response:
     del files
 
     map_frame = db_client_flask.select_map_frame(uuid)
-    map_image = to_array(map_frame.map_image)
 
     tasks = []
     for file_id, file_name in zip(file_ids, file_names):
@@ -244,8 +242,10 @@ def digitize_results_post(lang="en") -> Response:
                 (
                     file_id,
                     file_name,
-                    map_image,
-                    layer,
+                    map_frame.map_image_as_array,
+                    map_frame.map_image_as_image,
+                    map_frame.layer,
+                    map_frame.format,
                     bbox,
                 )
             )

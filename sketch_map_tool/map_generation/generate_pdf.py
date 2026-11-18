@@ -21,6 +21,7 @@ from reportlab.pdfgen.canvas import FILL_EVEN_ODD, Canvas
 from reportlab.platypus import Frame, Paragraph, Table, TableStyle, flowables
 from svglib.svglib import svg2rlg
 
+from sketch_map_tool import definitions
 from sketch_map_tool.definitions import PDF_RESOURCES_PATH, get_attribution
 from sketch_map_tool.helpers import resize_rlg_by_width
 from sketch_map_tool.models import Bbox, PaperFormat
@@ -52,7 +53,7 @@ def generate_pdf(
 
 def generate_result_map_pdf(
     map_image: Image.Image,
-    format_: PaperFormat,
+    format_: str,
     layer: str,
     bbox: Bbox,
     markings: FeatureCollection,
@@ -60,7 +61,7 @@ def generate_result_map_pdf(
     return _generate_pdf(
         map_image,
         None,
-        format_,
+        getattr(definitions, format_.upper()),
         0,  # TODO(hack): scale value is missing
         layer,
         bbox,
