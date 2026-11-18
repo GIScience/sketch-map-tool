@@ -107,7 +107,7 @@ def test_generate_pdf_sketch_map_approval(
 
 
 @pytest.mark.parametrize("orientation", ["landscape"])
-@pytest.mark.parametrize("paper_format", [A4])
+@pytest.mark.parametrize("paper_format", ["a4"])
 @pytest.mark.skipif(os.getenv("CI") is not None, reason="Detected CI environment")
 def test_generate_pdf_result_map_approval(
     map_image,

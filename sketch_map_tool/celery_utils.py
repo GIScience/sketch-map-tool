@@ -50,7 +50,7 @@ def extract_errors(
 
 def get_async_result(uuid: str, type_: REQUEST_TYPES) -> AsyncResult | GroupResult:
     """Get Celery `AsyncResult` or restore `GroupResult` for given Celery UUID."""
-    if type_ == "sketch-map":
+    if type_ in ("sketch-map", "pdf-map-result"):
         async_result = celery_app.AsyncResult(uuid)
     elif type_ in ("vector-results", "raster-results"):
         async_result = celery_app.GroupResult.restore(uuid)

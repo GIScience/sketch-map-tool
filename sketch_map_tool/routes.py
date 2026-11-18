@@ -2,7 +2,6 @@ import json
 import logging
 from io import BytesIO
 from typing import Sequence
-from uuid import uuid4
 
 import geojson
 from celery import chord, group
@@ -39,7 +38,6 @@ from sketch_map_tool.exceptions import (
 )
 from sketch_map_tool.helpers import (
     merge,
-    to_array,
     transform_layer_name,
     zip_,
 )
@@ -47,6 +45,7 @@ from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.style_geojson import style
 from sketch_map_tool.tasks import (
     cleanup_blobs,
+    generate_result_map,
     upload_processing,
 )
 from sketch_map_tool.validators import (
@@ -235,7 +234,6 @@ def digitize_results_post(lang="en") -> Response:
     del files
 
     map_frame = db_client_flask.select_map_frame(uuid)
-    map_image = to_array(map_frame.map_image)
 
     tasks = []
     for file_id, file_name in zip(file_ids, file_names):
@@ -244,8 +242,8 @@ def digitize_results_post(lang="en") -> Response:
                 (
                     file_id,
                     file_name,
-                    map_image,
-                    layer,
+                    map_frame.map_image_as_array(),
+                    map_frame.layer,
                     bbox,
                 )
             )
@@ -293,14 +291,28 @@ def digitize_preview(lang="en", uuid: str | None = None) -> Response | str:
 def digitize_pdf_map_post(lang="en", uuid: str | None = None) -> Response:
     if uuid is None:
         return redirect(url_for("digitize", lang=lang))
-    validate_uuid(uuid)
-    # TODO: start result map creation
+    uuid_ = validate_uuid(uuid)
+
+    map_frame_uuid = db_client_flask.select_map_frame_uuid(uuid_)
+    map_frame = db_client_flask.select_map_frame(map_frame_uuid)
+
+    async_result = get_async_result(uuid, "vector-results")
+    if not async_result.ready():
+        # TODO
+        raise RuntimeError()
+    vector_results = get_result(async_result, "vector-results")
+    num_of_uploads = len(vector_results)
+    markings = style(merge(vector_results), num_of_uploads)
+
+    async_result: AsyncResult = generate_result_map.signature(
+        args=(map_frame, markings)
+    ).apply_async()
     return redirect(
         url_for(
             "digitize_results_get",
             lang=lang,
             uuid=uuid,
-            **{"pdf-map": uuid4()},
+            **{"pdf-map": async_result.id},
         )
     )
 
@@ -418,6 +430,10 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             feature_collection = style(merge(vector_results), num_of_uploads)
             raw = geojson.dumps(feature_collection)
             file: BytesIO = BytesIO(raw.encode("utf-8"))
+        case "pdf-map-result":
+            mimetype = "application/pdf"
+            download_name = type_ + ".pdf"
+            file: BytesIO = get_result(async_result, type_)
     return send_file(file, mimetype, download_name=download_name)
 
 

@@ -17,7 +17,7 @@ from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import get_attribution
 from sketch_map_tool.exceptions import MarkingDetectionError
 from sketch_map_tool.helpers import N_, merge, to_array
-from sketch_map_tool.models import Bbox, PaperFormat, Size
+from sketch_map_tool.models import Bbox, MapFrame, PaperFormat, Size
 from sketch_map_tool.openaerialmap import client as oam_client
 from sketch_map_tool.upload_processing import (
     clip,
@@ -173,7 +173,7 @@ def digitize_sketches(
 def upload_processing(
     file_id: int,
     file_name: str,
-    map_frame: NDArray,
+    map_image: NDArray,
     layer: str,
     bbox: Bbox,
 ) -> (
@@ -187,12 +187,12 @@ def upload_processing(
 ):
     """Georeference and digitize given sketch map."""
     sketch_map_uploaded = db_client_celery.select_file(file_id)
-    sketch_map_frame = clip(to_array(sketch_map_uploaded), map_frame)
+    sketch_map_frame = clip(to_array(sketch_map_uploaded), map_image)
     sketch_map_frame_georeferenced = georeference(sketch_map_frame, bbox)
-    sketches = digitize_sketches(
+    markings = digitize_sketches(
         file_id,
         file_name,
-        map_frame,
+        map_image,
         sketch_map_frame,
         layer,
         bbox,
@@ -202,8 +202,16 @@ def upload_processing(
         file_name,
         attribution,
         sketch_map_frame_georeferenced,
-        sketches,
+        markings,
     )
+
+
+# 3. RESULT MAP (PDF)
+#
+#
+@celery.task
+def generate_result_map(map_frame: MapFrame, markings: FeatureCollection) -> BytesIO:
+    return map_generation.generate_result_map_pdf(map_frame, markings)
 
 
 @celery.task(ignore_result=True)
