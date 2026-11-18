@@ -242,10 +242,8 @@ def digitize_results_post(lang="en") -> Response:
                 (
                     file_id,
                     file_name,
-                    map_frame.map_image_as_array,
-                    map_frame.map_image_as_image,
+                    map_frame.map_image_as_image(),
                     map_frame.layer,
-                    map_frame.format,
                     bbox,
                 )
             )

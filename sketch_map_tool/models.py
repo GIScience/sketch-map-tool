@@ -5,7 +5,7 @@ from typing import Literal
 import shapely
 from numpy.typing import NDArray
 from PIL import Image
-from pydantic import UUID4, BaseModel, computed_field
+from pydantic import UUID4, BaseModel
 
 from sketch_map_tool.helpers import to_array
 
@@ -133,12 +133,8 @@ class MapFrame(BaseModel):
     orientation: Literal["landscape", "portrait"]
     layer: str
 
-    @property
-    @computed_field
     def map_image_as_image(self) -> Image.Image:
         return Image.open(BytesIO(self.map_image))
 
-    @property
-    @computed_field
     def map_image_as_array(self) -> NDArray:
         return to_array(self.map_image)

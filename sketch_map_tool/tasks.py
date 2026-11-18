@@ -6,7 +6,6 @@ from celery.result import AsyncResult
 from celery.signals import setup_logging, worker_process_init, worker_process_shutdown
 from geojson import FeatureCollection
 from numpy.typing import NDArray
-from PIL.Image import Image
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 from ultralytics import YOLO
@@ -18,7 +17,6 @@ from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import get_attribution
 from sketch_map_tool.exceptions import MarkingDetectionError
 from sketch_map_tool.helpers import N_, merge, to_array
-from sketch_map_tool.map_generation.generate_pdf import generate_result_map_pdf
 from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.openaerialmap import client as oam_client
 from sketch_map_tool.upload_processing import (
@@ -175,10 +173,8 @@ def digitize_sketches(
 def upload_processing(
     file_id: int,
     file_name: str,
-    map_image_as_image: NDArray,
-    map_image_as_array: Image,
+    map_image: NDArray,
     layer: str,
-    format_: str,
     bbox: Bbox,
 ) -> (
     AsyncResult
@@ -191,17 +187,16 @@ def upload_processing(
 ):
     """Georeference and digitize given sketch map."""
     sketch_map_uploaded = db_client_celery.select_file(file_id)
-    sketch_map_frame = clip(to_array(sketch_map_uploaded), map_image_as_image)
+    sketch_map_frame = clip(to_array(sketch_map_uploaded), map_image)
     sketch_map_frame_georeferenced = georeference(sketch_map_frame, bbox)
     markings = digitize_sketches(
         file_id,
         file_name,
-        map_image_as_image,
+        map_image,
         sketch_map_frame,
         layer,
         bbox,
     )
-    _ = generate_result_map_pdf(map_image_as_array, format_, layer, bbox, markings)
     attribution = get_attribution(layer)
     return (
         file_name,
