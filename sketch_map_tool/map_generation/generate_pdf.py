@@ -61,7 +61,7 @@ def generate_result_map_pdf(
         map_image,
         None,
         format_,
-        None,
+        0,  # TODO(hack): scale value is missing
         layer,
         bbox,
         markings,
@@ -72,7 +72,7 @@ def _generate_pdf(
     map_image: Image.Image,
     qr_code: Drawing | None,
     format_: PaperFormat,
-    scale: float | None,
+    scale: float,
     layer: str,
     bbox: Bbox | None,
     markings: FeatureCollection | None,
@@ -170,7 +170,6 @@ def _generate_pdf(
         column_origin_y,
         column_margin,
         qr_code,
-        scale,
         format_,
         layer,
         portrait,
@@ -199,14 +198,13 @@ def draw_right_column(
     x: float,
     y: float,
     margin: float,
-    qr_code: Drawing,
-    scale,  # TODO: is not accessed
+    qr_code: Drawing | None,
     format_,
     layer: str,
     portrait=False,
 ) -> None:
     normal_style = scale_style(format_, "Normal", 50)
-    em = normal_style.fontSize
+    em = normal_style.fontSize  # ty: ignore[unresolved-attribute]
 
     # Add Logos
     gap = 1 * em
@@ -259,8 +257,10 @@ def draw_right_column(
         flowables.Spacer(width, 2 * em),
         p_copyright,
         flowables.Spacer(width, 2 * em),
-        qr_code,
     ]
+    if qr_code is not None:
+        flowables_.append(qr_code)
+
     space_filler.height = calculate_space_filler_height(
         canvas, flowables_, width, height, margin
     )
@@ -331,9 +331,9 @@ def create_map_frame(
             height=height,
         )
         canvas.rotate(-90)
-        if markings is not None:
+        if markings is None:
             draw_aruco_markers(canvas, marker_size, height=width, width=height)
-        add_scalebar(canvas, height, width, m_per_px, format_, marker_size)
+            add_scalebar(canvas, height, width, m_per_px, format_, marker_size)
     else:
         canvas.drawImage(
             map_image,
@@ -343,9 +343,9 @@ def create_map_frame(
             width=width,
             height=height,
         )
-        if markings is not None:
+        if markings is None:
             draw_aruco_markers(canvas, marker_size, height, width)
-        add_scalebar(canvas, width, height, m_per_px, format_, marker_size)
+            add_scalebar(canvas, width, height, m_per_px, format_, marker_size)
 
     if markings is not None and bbox is not None:
         draw_markings(
