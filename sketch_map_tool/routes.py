@@ -219,13 +219,13 @@ def digitize(lang="en") -> str:
 @app.post("/<lang>/digitize/results")
 def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
-    # user consent to use uploaded files for service improvement
     consent: bool = request.form.get("consent", "False") == "True"
     # TODO: temporary feature flag
     preview: bool = request.form.get("preview", "False") == "True"
-    # No files uploaded
+
     if "file" not in request.files:
         return redirect(url_for("digitize", lang=lang))
+
     files = request.files.getlist("file")
     # TODO: move verification to `insert_files()` for incremental validation
     validate_uploaded_sketchmaps(files)
@@ -255,7 +255,7 @@ def digitize_results_post(lang="en") -> Response:
         # But this does not work with legacy map frames (version 2024.04.15),
         # since those attributes are not stored in the DB.
         map_frame = db_client_flask.select_map_frame(UUID(uuid))
-        map_frames[uuid] = to_array(BytesIO(map_frame).read())
+        map_frames[uuid] = to_array(BytesIO(map_frame.map_image).read())
     for bbox, layer, uuid in zip(bboxes, layers, uuids):
         bboxes_[uuid] = bbox
         layers_[uuid] = layer

@@ -1,3 +1,4 @@
+from sketch_map_tool.models import MapFrame
 import json
 from datetime import datetime
 from io import BytesIO
@@ -103,8 +104,9 @@ def test_select_file_name(file_ids):
 
 def test_select_map_frame(flask_app, uuid_create, bbox, layer):
     with flask_app.app_context():
-        file = client_flask.select_map_frame(uuid_create)
-        assert isinstance(file, bytes)
+        map_frame = client_flask.select_map_frame(uuid_create)
+        assert isinstance(map_frame, MapFrame)
+        assert isinstance(map_frame.map_image, bytes)
 
 
 def test_select_map_frame_file_not_found(flask_app):

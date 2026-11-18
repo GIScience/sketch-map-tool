@@ -93,7 +93,7 @@ def test_write_map_frame(
         map_frame, uuid, bbox, bbox_wgs84, format_, orientation, layer
     )
     with flask_app.app_context():
-        file = client_flask.select_map_frame(uuid)
+        file = client_flask.select_map_frame(uuid).map_image
         assert isinstance(file, bytes)
 
 
@@ -109,7 +109,7 @@ def test_cleanup_map_frames_recent(
     client_celery.cleanup_map_frames()
     with flask_app.app_context():
         # should not raise an error / should not delete the map frame
-        map_frame_ = client_flask.select_map_frame(UUID(uuid_create))
+        map_frame_ = client_flask.select_map_frame(UUID(uuid_create)).map_image
     assert map_frame_ == map_frame.getbuffer()
 
 
@@ -126,7 +126,7 @@ def test_cleanup_map_frames_recent_with_consent(
     client_celery.cleanup_map_frames()
     with flask_app.app_context():
         # should not raise an error / should not delete the map frame
-        map_frame_received = client_flask.select_map_frame(UUID(uuid_create))
+        map_frame_received = client_flask.select_map_frame(UUID(uuid_create)).map_image
     assert map_frame_received == map_frame.getbuffer()
 
 
@@ -143,7 +143,7 @@ def test_cleanup_map_frames_recent_without_consent(
     client_celery.cleanup_map_frames()
     with flask_app.app_context():
         # should not raise an error / should not delete the map frame
-        map_frame_received = client_flask.select_map_frame(UUID(uuid_create))
+        map_frame_received = client_flask.select_map_frame(UUID(uuid_create)).map_image
     assert map_frame_received == map_frame.getvalue()
 
 
@@ -160,7 +160,7 @@ def test_cleanup_map_frames_old_with_consent(
     client_celery.cleanup_map_frames()
     # should not raise an error / should not delete the map frame
     with flask_app.app_context():
-        map_frame_received = client_flask.select_map_frame(UUID(uuid_create))
+        map_frame_received = client_flask.select_map_frame(UUID(uuid_create)).map_image
     assert map_frame_received == map_frame_old.getbuffer()
 
 
