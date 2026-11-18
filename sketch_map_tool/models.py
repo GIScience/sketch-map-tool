@@ -4,9 +4,6 @@ from typing import Literal
 import shapely
 from pydantic import UUID4, BaseModel
 
-from sketch_map_tool.exceptions import ValidationError
-from sketch_map_tool.helpers import N_
-
 
 @dataclass(frozen=True)
 class Bbox:

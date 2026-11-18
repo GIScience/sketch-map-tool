@@ -33,13 +33,49 @@ WEB_MERCATOR_TO_WGS84 = Transformer.from_crs("EPSG:3857", "EPSG:4326", always_xy
 
 
 def generate_pdf(
-    map_image_input: Image.Image,
+    map_image: Image.Image,
     qr_code: Drawing,
     format_: PaperFormat,
     scale: float,
     layer: str,
-    bbox: Bbox | None = None,
-    markings: FeatureCollection | None = None,
+) -> Tuple[BytesIO, BytesIO]:
+    return _generate_pdf(
+        map_image,
+        qr_code,
+        format_,
+        scale,
+        layer,
+        None,
+        None,
+    )
+
+
+def generate_result_map_pdf(
+    map_image: Image.Image,
+    format_: PaperFormat,
+    layer: str,
+    bbox: Bbox,
+    markings: FeatureCollection,
+) -> Tuple[BytesIO, BytesIO]:
+    return _generate_pdf(
+        map_image,
+        None,
+        format_,
+        None,
+        layer,
+        bbox,
+        markings,
+    )
+
+
+def _generate_pdf(
+    map_image: Image.Image,
+    qr_code: Drawing | None,
+    format_: PaperFormat,
+    scale: float | None,
+    layer: str,
+    bbox: Bbox | None,
+    markings: FeatureCollection | None,
 ) -> Tuple[BytesIO, BytesIO]:
     """Generate a Sketch Map PDF.
 
@@ -51,7 +87,7 @@ def generate_pdf(
 
     Returns a tuple with the Sketch Map as PDF and the map image
     """
-    map_width_px, map_height_px = map_image_input.size
+    map_width_px, map_height_px = map_image.size
     map_margin = format_.map_margin
 
     # TODO: Use orientation parameter to determine rotation
@@ -82,7 +118,7 @@ def generate_pdf(
     else:
         raise ValueError("Unexpected value for layer.")
 
-    map_image_reportlab = pil_image_to_image_reader(map_image_input, img_format)
+    map_image_reportlab = pil_image_to_image_reader(map_image, img_format)
 
     # calculate m per px in map frame
     cm_per_px = frame_width * scale / map_width_px
