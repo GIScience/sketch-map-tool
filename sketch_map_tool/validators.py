@@ -37,6 +37,7 @@ def validate_uploaded_sketchmaps(files: list[FileStorage]):
             {"MAX_NR_SIMULTANEOUS_UPLOADS": max_nr_simultaneous_uploads},
         )
 
+    # TODO: move verification to `insert_files()` for incremental validation
     for file in files:
         try:
             img = Image.open(file)
