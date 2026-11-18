@@ -1,16 +1,19 @@
 from dataclasses import dataclass
+from typing import Literal
 
 import shapely
-from numpy.typing import NDArray
+from pydantic import UUID4, BaseModel
+
+from sketch_map_tool.exceptions import ValidationError
+from sketch_map_tool.helpers import N_
 
 
 @dataclass(frozen=True)
 class Bbox:
-    """Bounding Box in WGS 84 / Pseudo-Mercator (EPSG:3857)
+    """Bounding Box in WGS 84 / Pseudo-Mercator (EPSG:3857)."""
 
-    Be aware that the argument order is relevant to the API and the JavaScript client.
-    Keep the order in sync with the client.
-    """
+    # Be aware that the argument order is relevant to the API and the JavaScript client.
+    # Keep the order in sync with the client.
 
     lon_min: float
     lat_min: float
@@ -119,8 +122,11 @@ class LiteratureReference:
     url: str | None = None
 
 
-@dataclass(frozen=True)
-class File:
-    filename: str
-    mimetype: str
-    image: NDArray
+class MapFrame(BaseModel):
+    uuid: UUID4
+    map_image: bytes
+    bbox_3857: Bbox
+    bbox_4326: Bbox
+    format: str
+    orientation: Literal["landscape", "portrait"]
+    layer: str

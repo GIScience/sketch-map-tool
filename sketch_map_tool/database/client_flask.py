@@ -1,10 +1,12 @@
 from uuid import UUID
 
 import psycopg2
+import shapely
 from flask import g
 from psycopg2.errors import UndefinedTable
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
+from shapely.geometry import Polygon
 from werkzeug.utils import secure_filename
 
 from sketch_map_tool.config import CONFIG
@@ -13,7 +15,7 @@ from sketch_map_tool.exceptions import (
     CustomFileNotFoundError,
 )
 from sketch_map_tool.helpers import N_, to_array
-from sketch_map_tool.models import Bbox
+from sketch_map_tool.models import Bbox, MapFrame
 from sketch_map_tool.upload_processing import read_qr_code
 
 
@@ -131,13 +133,24 @@ def select_file_name(id_: int) -> str:
             )
 
 
-def select_map_frame(uuid: UUID) -> bytes:
+def select_map_frame(uuid: UUID) -> MapFrame:
     """Select map frame, bbox and layer of the associated UUID."""
-    query = "SELECT file FROM map_frame WHERE uuid = %s"
+    query = """
+        SELECT
+            uuid,
+            file as map_image,
+            bbox as bbox_3857,
+            bbox_wgs84 as bbox_4326,
+            format,
+            orientation,
+            layer
+        FROM map_frame
+        WHERE uuid = %s
+    """
     db_conn = open_connection()
-    with db_conn.cursor() as curs:
+    with db_conn.cursor(cursor_factory=RealDictCursor) as cur:
         try:
-            curs.execute(query, [str(uuid)])
+            cur.execute(query, [str(uuid)])
         except UndefinedTable:
             raise CustomFileNotFoundError(
                 N_(
@@ -146,15 +159,8 @@ def select_map_frame(uuid: UUID) -> bytes:
                     "maps to the instance on which they have been created."
                 )
             )
-        raw = curs.fetchone()
-        if raw:
-            if raw[0] is None:
-                raise CustomFileDoesNotExistAnymoreError(
-                    N_("The file with the id: {UUID} does not exist anymore"),
-                    {"UUID": uuid},
-                )
-            return raw[0]
-        else:
+        raw = cur.fetchone()
+        if not raw:
             raise CustomFileNotFoundError(
                 N_(
                     "There is no map frame in the database with the uuid: {UUID}."
@@ -163,6 +169,21 @@ def select_map_frame(uuid: UUID) -> bytes:
                 ),
                 {"UUID": uuid},
             )
+        if raw["map_image"] is None:
+            raise CustomFileDoesNotExistAnymoreError(
+                N_("The file with the id: {UUID} does not exist anymore"),
+                {"UUID": uuid},
+            )
+
+        bbox: Polygon = shapely.from_wkt(raw["bbox_3857"])
+        x, y = bbox.exterior.xy
+        raw["bbox_3857"] = Bbox(min(x), min(y), max(x), max(y))
+
+        bbox: Polygon = shapely.from_wkt(raw["bbox_4326"])
+        x, y = bbox.exterior.xy
+        raw["bbox_4326"] = Bbox(min(x), min(y), max(x), max(y))
+
+        return MapFrame(**raw)
 
 
 def update_files_digitize_uuid(file_ids: list[int] | tuple[int], result_uuid: UUID):
