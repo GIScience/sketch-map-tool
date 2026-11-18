@@ -1,8 +1,7 @@
-from sketch_map_tool.models import MapFrame
 import json
 from datetime import datetime
 from io import BytesIO
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import pytest
 from flask import g
@@ -16,6 +15,7 @@ from sketch_map_tool.database import client_flask as db_client_flask
 from sketch_map_tool.exceptions import (
     CustomFileNotFoundError,
 )
+from sketch_map_tool.models import MapFrame
 
 
 @pytest.fixture
@@ -59,31 +59,25 @@ def test_open_close_connection(flask_app):
 
 def test_insert_files(flask_app, files, uuid_create, bbox, layer):
     with flask_app.app_context():
-        file_ids, uuids, file_names, bboxes, layers = client_flask.insert_files(
+        file_ids, file_names, uuid, bbox_, layer_ = client_flask.insert_files(
             files,
             consent=True,
         )
-        assert len(file_ids) == len(uuids) == len(file_names) == 2
+        assert uuid == UUID(uuid_create)
+        assert bbox == bbox_
+        assert layer == layer_
+        assert len(file_ids) == len(file_names) == 2
         for i, (
             id,
-            uuid,
             name,
-            bbox_,
-            layer_,
         ) in enumerate(
             zip(
                 file_ids,
-                uuids,
                 file_names,
-                bboxes,
-                layers,
             )
         ):
             assert isinstance(id, int)  # file id
-            assert uuid == uuid_create
             assert name == files[i].filename
-            assert bbox == bbox_
-            assert layer == layer_
 
 
 def test_select_file(file_ids):

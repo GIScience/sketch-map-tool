@@ -11,6 +11,7 @@ from sketch_map_tool.config import CONFIG
 from sketch_map_tool.exceptions import (
     CustomFileDoesNotExistAnymoreError,
     CustomFileNotFoundError,
+    UploadError,
 )
 from sketch_map_tool.helpers import N_, to_array
 from sketch_map_tool.models import Bbox, MapFrame
@@ -35,7 +36,7 @@ def close_connection(e=None):
 def insert_files(
     files,
     consent: bool,
-) -> tuple[list[int], list[str], list[str], list[Bbox], list[str]]:
+) -> tuple[list[int], list[str], UUID, Bbox, str]:
     """Insert uploaded files as blob into the database and return ID, UUID and name.
 
     UUID is derived from decoding the qr-code.
@@ -98,7 +99,22 @@ def insert_files(
             file_names.append(result[2])
             bboxes.append(qr_code_content["bbox"])
             layers.append(qr_code_content["layer"])
-    return file_ids, uuids, file_names, bboxes, layers
+
+    if len(set(uuids)) > 1:
+        raise UploadError(
+            N_(
+                "You can upload several photos, but they must all show the same area. "
+                "These sketch maps cover different areas, "
+                "so please upload each area separately."
+            )
+        )
+        # TODO: Remove uploads
+    assert len(set(bboxes)) == 1
+    assert len(set(layers)) == 1
+    uuid = UUID(uuids[0])
+    bbox = bboxes[0]
+    layer = layers[0]
+    return file_ids, file_names, uuid, bbox, layer
 
 
 def select_file(id_: int) -> bytes:
