@@ -43,9 +43,19 @@
         </div>
       </div>
     </div>
-    <div id="right">
+    <div id="right" class="bottom-sheet" role="region" aria-label="{{ _('Legend') }}">
+      <button type="button" class="bottom-sheet-handle" aria-label="{{ _('Close') }}"></button>
       <div class="sketchy h1 center-text">{{ _('Legend') }}</div>
-      <a role="button" href="{{ url_for("digitize_results_get", lang=lang, uuid=uuid) }}">{{ _('Download Results') }} &rarr;</a>
+      <!-- TODO placeholder: dummy entries, to be generated from the result layer -->
+      <div id="legend">
+        <ul class="legend-list">
+          <li><span class="legend-swatch" style="background: #e41a1c"></span>red <span class="legend-count">(7)</span></li>
+          <li><span class="legend-swatch" style="background: #377eb8"></span>blue <span class="legend-count">(3)</span></li>
+          <li><span class="legend-swatch" style="background: #4daf4a"></span>green <span class="legend-count">(12)</span></li>
+          <li><span class="legend-swatch" style="background: #ff7f00"></span>orange <span class="legend-count">(5)</span></li>
+        </ul>
+      </div>
+      <a role="button" class="download-link" href="{{ url_for("digitize_results_get", lang=lang, uuid=uuid) }}">{{ _('Download Results') }} &rarr;</a>
     </div>
 
     <dialog id="oam-dialog">
@@ -115,16 +125,35 @@
       </article>
     </dialog>
   </div>
-  <article id="processing-errors" class="warningbox" role="alert" hidden>
-    <p id="processing-error-msg">Processing error message. This should be replaced by status response message.</p>
-    <ul id="processing-errors-list"></ul>
-  </article>
-  <article id="server-error" class="warningbox" role="alert" hidden>
-    <p>{{ _('An unexpected error occurred on our server. Please contact the Sketch Map Tool support at') }}
-      <a id="server-error-mail" href="mailto:sketch-map-tool@heigit.org">sketch-map-tool@heigit.org</a>
-      {{ _('and include the following details:') }}
-    </p>
-    <pre id="server-error-details"></pre>
-  </article>
+  <section id="errors-panel" class="bottom-sheet" aria-label="{{ _('Errors') }}">
+    <button type="button" class="bottom-sheet-handle" aria-label="{{ _('Close') }}"></button>
+    <article id="processing-errors" class="warningbox" role="alert" hidden>
+      <p id="processing-error-msg">Processing error message. This should be replaced by status response message.</p>
+      <ul id="processing-errors-list"></ul>
+    </article>
+    <article id="server-error" class="warningbox" role="alert" hidden>
+      <p>{{ _('An unexpected error occurred on our server. Please contact the Sketch Map Tool support at') }}
+        <a id="server-error-mail" href="mailto:sketch-map-tool@heigit.org">sketch-map-tool@heigit.org</a>
+        {{ _('and include the following details:') }}
+      </p>
+      <pre id="server-error-details"></pre>
+    </article>
+  </section>
+  <!-- mobile only (< 992px): fixed bottom navigation bar, toggles the bottom sheets -->
+  <div class="bottom-nav">
+    <button type="button" id="errors-toggle" aria-controls="errors-panel" aria-expanded="false" hidden>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.15.15 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.2.2 0 0 1-.054.06.1.1 0 0 1-.066.017H1.146a.1.1 0 0 1-.066-.017.2.2 0 0 1-.054-.06.18.18 0 0 1 .002-.183L7.884 2.073a.15.15 0 0 1 .054-.057m1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767z"/><path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/></svg>
+      <span class="badge" id="errors-count"></span>
+      <span>{{ _('Errors') }}</span>
+    </button>
+    <button type="button" aria-controls="right" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg>
+      <span>{{ _('Legend') }}</span>
+    </button>
+    <a href="{{ url_for("digitize_results_get", lang=lang, uuid=uuid) }}">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg>
+      <span>{{ _('Results') }}</span>
+    </a>
+  </div>
 </main>
 {% endblock body %}
