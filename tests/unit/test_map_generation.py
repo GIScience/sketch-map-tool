@@ -14,6 +14,7 @@ from sketch_map_tool.definitions import A0, A1, A2, A3, A4, LETTER, TABLOID
 from sketch_map_tool.map_generation import create_qr_code as generate_qr_code
 from sketch_map_tool.map_generation.generate_pdf import (
     generate_pdf,
+    generate_result_map_pdf,
     get_aruco_markers,
     get_compass,
     pdf_page_to_img,
@@ -152,11 +153,9 @@ def test_generate_pdf_result_map_approval(
             },
         ],
     )
-    sketch_map, _ = generate_pdf(
+    sketch_map, _ = generate_result_map_pdf(
         map_image,
-        qr_code_approval,
         paper_format,
-        1283.129,
         "osm",
         bbox,
         markings,
