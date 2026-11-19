@@ -293,7 +293,8 @@ def digitize_pdf_map_post(lang="en", uuid: str | None = None) -> Response:
         return redirect(url_for("digitize", lang=lang))
     uuid_ = validate_uuid(uuid)
 
-    map_frame = db_client_flask.select_map_frame(uuid_)
+    map_frame_uuid = db_client_flask.select_map_frame_uuid(uuid_)
+    map_frame = db_client_flask.select_map_frame(map_frame_uuid)
 
     async_result = get_async_result(uuid, "vector-results")
     if not async_result.ready():
