@@ -49,7 +49,11 @@
       <div id="legend">
         <ul id="legend-list" class="legend-list"></ul>
       </div>
-      <a role="button" class="download-link" href="{{ url_for("digitize_results_get", lang=lang, uuid=uuid) }}">{{ _('Download Results') }} &rarr;</a>
+{#      <a role="button" class="download-link" href="{{ url_for("digitize_results_get", lang=lang, uuid=uuid) }}">{{ _('Download Results') }} &rarr;</a>#}
+{#        todo replace button with form#}
+        <form name="results-desktop" action="{{ url_for("digitize_pdf_map_post", lang=lang, uuid=uuid) }}" method="post" enctype=multipart/form-data>
+            <button class="download-link" type="submit">{{ _('Download Results') }} &rarr;</button>
+        </form>
     </div>
 
     <dialog id="oam-dialog">
@@ -155,6 +159,9 @@
       </svg>
       <span>{{ _('Results') }}</span>
     </a>
+      <form name="results-mobile" action="{{ url_for("digitize_pdf_map_post", lang=lang, uuid=uuid) }}" method="post" enctype=multipart/form-data>
+          <button class="download-link" type="submit">{{ _('Results') }}</button>
+      </form>
   </div>
 </main>
 {% endblock body %}

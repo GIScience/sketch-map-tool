@@ -1,9 +1,11 @@
-import { getUUIDFromURL, poll, handleMainMessage } from "../shared";
+import { getUUIDFromURL, poll, handleMainMessage, getUUIDFromSearchParam } from "../shared";
 
+const pdfMapResultUrl = `/api/status/${getUUIDFromSearchParam("pdf-map")}/pdf-map-result`;
 const vectorResultsUrl = `/api/status/${getUUIDFromURL()}/vector-results`;
 const rasterResultsUrl = `/api/status/${getUUIDFromURL()}/raster-results`;
 
-Promise.all([
-    poll(rasterResultsUrl, "raster-data"),
+await Promise.all([
+    poll(pdfMapResultUrl, "pdf-map"),
     poll(vectorResultsUrl, "vector-data"),
+    poll(rasterResultsUrl, "raster-data"),
 ]).then(handleMainMessage);
