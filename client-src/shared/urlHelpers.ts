@@ -5,8 +5,23 @@ import type { Extent } from "ol/extent";
 export type BaselayerType = "OSM" | "ESRI:World_Imagery" | `oam:${string}`;
 export type PaperFormat = typeof PAPER_FORMAT[keyof typeof PAPER_FORMAT];
 
+declare const uuid4Brand: unique symbol;
+
+/** A string validated as an RFC 9562 version-4 UUID. */
+export type UUID4 = `${string}-${string}-${string}-${string}-${string}` & {
+    readonly [uuid4Brand]: true;
+};
+
+const UUID4_REGEX =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+/** Type guard: narrows `value` to `UUID4` if it is a valid v4 UUID. */
+export function isUUID4(value: string): value is UUID4 {
+    return UUID4_REGEX.test(value);
+}
+
 /** Values are serialized with `String()`, e.g. arrays become comma separated lists */
-type UrlParamValue = string | number | readonly number[];
+type UrlParamValue = string | number | readonly number[] | UUID4;
 
 /**
  * This function will return the first UUID v4 string that can be found in the current location URL
@@ -16,6 +31,16 @@ function getUUIDFromURL(): string {
     const match = location.pathname.match(UUID_V4_PATTERN);
     if (!match) throw new Error(`No UUID found in URL path: ${location.pathname}`);
     return match[0];
+}
+
+function getUUIDFromSearchParam(param: string): UUID4 {
+    const url = new URL(window.location.href);
+    const value = url.searchParams.get(param);
+    if (!value) throw new Error(`Parameter '${param}' is not present in the URL.)`);
+    if (!isUUID4(value)) {
+        throw new Error("Parameter value is not a valid UUID4.")
+    }
+    return value;
 }
 
 const setUrlSearchParams = (params: Record<string, UrlParamValue>) => {
@@ -138,6 +163,7 @@ export {
     getSanitizedBboxParam,
     getSanitizedUrlSearchParams,
     getUUIDFromURL,
+    getUUIDFromSearchParam,
     setUrlSearchParams,
     updateQueryParam,
     updateQueryParamWithConditionalDebounce,

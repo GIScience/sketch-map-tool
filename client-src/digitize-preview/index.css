@@ -2,6 +2,10 @@
     #main-grid.grid {
         grid-template-columns: 2fr 1fr;
     }
+
+    #right .download-link {
+        margin: 0;
+    }
 }
 
 /* mobile: the download link is in the bottom navigation bar instead of in the legend sheet */
@@ -10,7 +14,6 @@
         display: none;
     }
 
-    /* the legend is not in the page flow anymore: keep some space between map and footer */
     #left {
         margin-bottom: calc(var(--pico-spacing) * 2);
     }

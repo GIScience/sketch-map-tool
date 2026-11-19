@@ -49,7 +49,7 @@
       <div id="legend">
         <ul id="legend-list" class="legend-list"></ul>
       </div>
-      <a role="button" class="download-link" href="{{ url_for("digitize_results_get", lang=lang, uuid=uuid) }}">{{ _('Download Results') }} &rarr;</a>
+      <button id="desktop-submit-btn" class="download-link" type="submit" form="results-form" aria-busy="true" disabled="disabled">{{ _('Download Results') }} &rarr;</button>
     </div>
 
     <dialog id="oam-dialog">
@@ -149,12 +149,13 @@
       </svg>
       <span>{{ _('Legend') }}</span>
     </button>
-    <a href="{{ url_for("digitize_results_get", lang=lang, uuid=uuid) }}">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-      </svg>
-      <span>{{ _('Results') }}</span>
-    </a>
+      <button id="mobile-submit-btn" type="submit" form="results-form" aria-busy="true" disabled="disabled">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+          </svg>
+          <span>{{ _('Results') }}</span>
+      </button>
   </div>
 </main>
+<form id="results-form" name="results-form" action="{{ url_for("digitize_pdf_map_post", lang=lang, uuid=uuid) }}" method="post" enctype=multipart/form-data></form>
 {% endblock body %}

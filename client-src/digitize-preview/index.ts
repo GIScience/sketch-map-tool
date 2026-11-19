@@ -2,7 +2,10 @@ import "ol/ol.css";
 import "@giscience/ol-print-layout-control/dist/ol-print-layout-control.css";
 import "../shared/bottom-sheet.css";
 import "./index.css";
-import { getSanitizedBboxParam, getSanitizedLayerParam, getUUIDFromURL, initBottomSheets, setUrlSearchParams } from "../shared";
+import {
+    getSanitizedBboxParam, getSanitizedLayerParam, getUUIDFromURL, initBottomSheets,
+    setDisabled, setIsBusy, setUrlSearchParams
+} from "../shared";
 import { pollVectorResults, ResultStatus } from "./pollVectorResults";
 import { addGeoJSONPreviewLayer, createPreviewMap } from "./map";
 import { showProcessingErrorsBelowMap } from "./error-handling";
@@ -46,6 +49,10 @@ if (response.status == 200 && jsonBody) {
     // analyze vector features and display them in the legend
     vectorSource.on("featuresloadend", (event) => {
         renderLegend(summarizeFeatures(event.features ?? []), resultLayer.getStyleFunction()!);
+        setDisabled("mobile-submit-btn", false);
+        setDisabled("desktop-submit-btn", false);
+        setIsBusy("mobile-submit-btn", false);
+        setIsBusy("desktop-submit-btn", false);
     });
 
 }
