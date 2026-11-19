@@ -31,20 +31,22 @@
     <div>
       <article id="pdf-map" class="result">
         <header>
-          <img src="{{ url_for("static", filename="assets/images/digitize-results/raster-marking-icon.svg") }}" alt="{{ _('raster data icon') }}"><br>
+          <img src="{{ url_for("static", filename="assets/images/digitize-results/pdf-marking-icon.svg") }}" alt="{{ _('pdf map icon') }}"><br>
           <span class="brand-font sub-icon">{{ _('Map') }}</span>
         </header>
 {#          TODO change texts for pdf-map result#}
-        <h6>{{ _('Georeferenced map frames as GeoTiffs') }}</h6>
+        <h6>{{ _('Your Markings as PDF Map') }}</h6>
         <p class="pending">
           {{ _(
-                        'We are georeferencing the map frames of your Sketch Maps.<br>
-                        Please be patient this can take 2-10 minutes.'
+                        'We are creating a pdf document showing all markings on a background map.<br>
+                        Good for printing, reports and presentations. <br>
+                        Please be patient this can take a minute.'
                     ) }}
         </p>
         <p class="success hidden">
           {{ _(
-                        'We have georeferenced the map frames of your Sketch Maps.'
+                        'A ready-made pdf document showing all markings on a background map. <br>
+                        Good for printing, reports, presentations and sharing.'
                     ) }}
         </p>
         <p class="error hidden">
@@ -53,7 +55,7 @@
                         Something went wrong while trying to generate the result.'
                     ) }}
         </p>
-        <a id="pdf-map-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download Map Frames') }}</a>
+        <a id="pdf-map-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download Results Map') }}</a>
         <div id="pdf-map-status" class="task-status"></div>
 
       </article>
@@ -62,7 +64,7 @@
       <article id="vector-data" class="result">
         <header>
           <img src="{{ url_for("static", filename="assets/images/digitize-results/vector-marking-icon.svg") }}" alt="{{ _('vector data icon') }}"><br>
-          <span class="brand-font sub-icon">{{ _('Vector') }}</span>
+          <span class="brand-font sub-icon">{{ _('Detected Markings') }}</span>
         </header>
         <h6>{{ _('Georeferenced markings as GeoJSON') }}</h6>
         <p class="pending">
@@ -73,7 +75,8 @@
         </p>
         <p class="success hidden">
           {{ _(
-                        'We have extracted and georeferenced the color markings of your Sketch Maps.'
+                        'We have extracted and georeferenced the color markings of your Sketch Maps.<br>
+                        Opens in mapping software, e.g. QGIS, ArcGIS, uMap or geojson.io'
                     ) }}
         </p>
         <p class="error hidden">
@@ -87,18 +90,20 @@
           <article id="raster-data" class="result">
               <header>
                   <img src="{{ url_for("static", filename="assets/images/digitize-results/raster-marking-icon.svg") }}" alt="{{ _('raster data icon') }}"><br>
-                  <span class="brand-font sub-icon">{{ _('Raster') }}</span>
+                  <span class="brand-font sub-icon">{{ _('Georeferenced Images') }}</span>
               </header>
-              <h6>{{ _('Georeferenced map frames as GeoTiffs') }}</h6>
+              <h6>{{ _('Your uploaded Sketch Maps as GeoTiffs') }}</h6>
               <p class="pending">
                   {{ _(
-                        'We are georeferencing the map frames of your Sketch Maps.<br>
+                        'We are georeferencing your uploaded Sketch Maps.<br>
+                        Opens in desktop mapping software like QGIS, ArcGIS, and many image editors.<br>
                         Please be patient this can take 2-10 minutes.'
                     ) }}
               </p>
               <p class="success hidden">
                   {{ _(
-                        'We have georeferenced the map frames of your Sketch Maps.'
+                        'We have georeferenced your uploaded Sketch Maps.<br>
+                        Opens in desktop mapping software like QGIS, ArcGIS, and many image editors.<br>'
                     ) }}
               </p>
               <p class="error hidden">
@@ -107,7 +112,7 @@
                         Something went wrong while trying to generate the result.'
                     ) }}
               </p>
-              <a id="raster-data-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download Map Frames') }}</a>
+              <a id="raster-data-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download Images') }}</a>
               <div id="raster-data-status" class="task-status"></div>
 
           </article>
