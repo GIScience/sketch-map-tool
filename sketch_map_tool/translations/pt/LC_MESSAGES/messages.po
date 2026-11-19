@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-03 10:52+0000\n"
-"PO-Revision-Date: 2026-11-03 10:53\n"
+"POT-Creation-Date: 2026-11-19 13:43+0000\n"
+"PO-Revision-Date: 2026-11-19 13:43\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -18,20 +18,36 @@ msgstr ""
 "X-Crowdin-File-ID: 12\n"
 "Language: pt_BR\n"
 
-#: sketch_map_tool/helpers.py:99
+#: sketch_map_tool/celery_utils.py:41 sketch_map_tool/helpers.py:102
 msgid "We couldn’t process your submission because it took too long. Please try again later. If the problem persists, reach out to us: sketch-map-tool@heigit.org"
+msgstr ""
+
+#: sketch_map_tool/celery_utils.py:62
+#, python-brace-format
+msgid "There are no tasks for UUID {UUID}"
 msgstr ""
 
 #: sketch_map_tool/models.py:71
 msgid "Layer name should start with osm, esri or oam."
 msgstr ""
 
-#: sketch_map_tool/routes.py:298
-#, python-brace-format
-msgid "There are no tasks for UUID {UUID}"
+#: sketch_map_tool/routes.py:245
+msgid "You can upload several photos, but they must all show the same area. These sketch maps cover different areas, so please upload each area separately."
 msgstr ""
 
-#: sketch_map_tool/routes.py:439
+#: sketch_map_tool/routes.py:362
+msgid "None of your uploaded sketch maps could be processed. Please check the quality of your uploaded sketch maps (e.g. sharpness, lighting, completely visible map frame) and try again."
+msgstr ""
+
+#: sketch_map_tool/routes.py:373
+msgid "Some of your uploaded sketch maps could not be processed."
+msgstr ""
+
+#: sketch_map_tool/routes.py:473
+msgid "Internal Server Error"
+msgstr ""
+
+#: sketch_map_tool/routes.py:474
 msgid "Oops... we seem to have made a mistake, sorry!"
 msgstr ""
 
@@ -822,15 +838,15 @@ msgstr ""
 
 #: sketch_map_tool/templates/create-results.html:13
 #: sketch_map_tool/templates/create.html:17
-#: sketch_map_tool/templates/index.html:52
-#: sketch_map_tool/templates/index.html:66
+#: sketch_map_tool/templates/index.html:56
+#: sketch_map_tool/templates/index.html:71
 msgid "Define your Area of Interest"
 msgstr ""
 
 #: sketch_map_tool/templates/create-results.html:14
 #: sketch_map_tool/templates/create.html:18
-#: sketch_map_tool/templates/index.html:53
-#: sketch_map_tool/templates/index.html:68
+#: sketch_map_tool/templates/index.html:57
+#: sketch_map_tool/templates/index.html:72
 msgid "PDF Export of Sketch&nbsp;Map"
 msgstr ""
 
@@ -921,87 +937,145 @@ msgid "NEXT"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:56
+#: sketch_map_tool/templates/digitize-preview.html:59
 msgid "Add OpenAerialMap Layer"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:58
+#: sketch_map_tool/templates/digitize-preview.html:61
 msgid "<a href=\"https://map.openaerialmap.org\" target=\"_blank\">Browse</a> the OpenAerialMap collection to find aerial images. Once you’ve selected an image, simply copy its ID and paste it here."
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:61
+#: sketch_map_tool/templates/digitize-preview.html:64
 msgid "No image for given ID could be found on OpenAerialMap. Please check given ID and try again."
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:64
+#: sketch_map_tool/templates/digitize-preview.html:67
 msgid "Cancel"
 msgstr "Cancelar"
 
 #: sketch_map_tool/templates/create.html:65
+#: sketch_map_tool/templates/digitize-preview.html:68
 msgid "Add to Map"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:76
+#: sketch_map_tool/templates/digitize-preview.html:79
 msgid "OpenAerialMap Metadata"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:84
+#: sketch_map_tool/templates/digitize-preview.html:87
 msgid "Title"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:88
+#: sketch_map_tool/templates/digitize-preview.html:91
 msgid "Date"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:92
+#: sketch_map_tool/templates/digitize-preview.html:95
 msgid "Resolution"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:96
+#: sketch_map_tool/templates/digitize-preview.html:99
 msgid "Provider"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:100
+#: sketch_map_tool/templates/digitize-preview.html:103
 msgid "Platform"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:104
+#: sketch_map_tool/templates/digitize-preview.html:107
 msgid "License"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:108
+#: sketch_map_tool/templates/digitize-preview.html:111
 msgid "Item Id"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:114
+#: sketch_map_tool/templates/digitize-preview.html:117
 msgid "OK"
 msgstr ""
 
+#: sketch_map_tool/templates/digitize-preview.html:12
 #: sketch_map_tool/templates/digitize-results.html:8
 #: sketch_map_tool/templates/digitize.html:10
 msgid "Paper to GIS:"
 msgstr ""
 
+#: sketch_map_tool/templates/digitize-preview.html:13
 #: sketch_map_tool/templates/digitize-results.html:9
 #: sketch_map_tool/templates/digitize.html:11
 msgid "Automatically Digitize Your Sketch&nbsp;Maps"
 msgstr ""
 
+#: sketch_map_tool/templates/digitize-preview.html:18
 #: sketch_map_tool/templates/digitize-results.html:14
 #: sketch_map_tool/templates/digitize.html:16
-#: sketch_map_tool/templates/index.html:57
-#: sketch_map_tool/templates/index.html:72
-msgid "Scan or photograph your marked Sketch&nbsp;Maps"
+#: sketch_map_tool/templates/index.html:62
+#: sketch_map_tool/templates/index.html:77
+msgid "Photograph your Marked Sketch&nbsp;Maps"
 msgstr ""
 
+#: sketch_map_tool/templates/digitize-preview.html:19
 #: sketch_map_tool/templates/digitize-results.html:15
 #: sketch_map_tool/templates/digitize.html:17
-#: sketch_map_tool/templates/index.html:58
-#: sketch_map_tool/templates/index.html:73
+#: sketch_map_tool/templates/index.html:63
+#: sketch_map_tool/templates/index.html:78
 msgid "Upload your Sketch&nbsp;Maps"
 msgstr ""
 
+#: sketch_map_tool/templates/digitize-preview.html:20
 #: sketch_map_tool/templates/digitize-results.html:16
-msgid "Download collected markings as geodata"
+#: sketch_map_tool/templates/digitize.html:18
+#: sketch_map_tool/templates/index.html:64
+#: sketch_map_tool/templates/index.html:79
+msgid "View & Download Results"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:26
+msgid "Sketch Map Results"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:46
+#: sketch_map_tool/templates/digitize-preview.html:48
+#: sketch_map_tool/templates/digitize-preview.html:150
+msgid "Legend"
+msgstr "Legenda"
+
+#: sketch_map_tool/templates/digitize-preview.html:47
+#: sketch_map_tool/templates/digitize-preview.html:123
+msgid "Close"
+msgstr "Fechar"
+
+#: sketch_map_tool/templates/digitize-preview.html:52
+msgid "Download Results"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:122
+#: sketch_map_tool/templates/digitize-preview.html:144
+msgid "Errors"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:129
+msgid "An unexpected error occurred on our server. Please contact the Sketch Map Tool support at"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:131
+msgid "and include the following details:"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:156
+msgid "Results"
 msgstr ""
 
 #: sketch_map_tool/templates/digitize-results.html:34
@@ -1059,12 +1133,6 @@ msgstr ""
 msgid "Download Markings"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize.html:18
-#: sketch_map_tool/templates/index.html:59
-#: sketch_map_tool/templates/index.html:74
-msgid "Download collected Markings as Geodata"
-msgstr ""
-
 #: sketch_map_tool/templates/digitize.html:22
 msgid "Scan or photograph your marked Sketch Maps after data collection.<br>Then, upload one or\n"
 "            more marked Sketch Maps at once as .jpg or .png file."
@@ -1100,33 +1168,33 @@ msgid "To train and improve the sketch detection algorithms,\n"
 "                            to keep the uploaded files after processing."
 msgstr ""
 
-#: sketch_map_tool/templates/digitize.html:52
+#: sketch_map_tool/templates/digitize.html:56
 msgid "Agree & Upload"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize.html:53
+#: sketch_map_tool/templates/digitize.html:57
 msgid "OR"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize.html:54
+#: sketch_map_tool/templates/digitize.html:58
 msgid "Reject & Upload"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize.html:58
+#: sketch_map_tool/templates/digitize.html:62
 msgid "If you agree, we would keep your data internally to use it as training and\n"
 "                                test data to improve the Sketch Map Tool."
 msgstr ""
 
-#: sketch_map_tool/templates/digitize.html:63
+#: sketch_map_tool/templates/digitize.html:67
 msgid "If you don't agree, your files are ONLY stored for processing for a short time\n"
 "                        until your results are generated."
 msgstr ""
 
-#: sketch_map_tool/templates/digitize.html:68
+#: sketch_map_tool/templates/digitize.html:72
 msgid "Read more info on"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize.html:70
+#: sketch_map_tool/templates/digitize.html:74
 msgid "Share your data for the Improvement of the Sketch Map Tool."
 msgstr ""
 
@@ -1827,15 +1895,16 @@ msgstr ""
 msgid "Paper to GIS:<br>Automatically Digitize Your Sketch&nbsp;Maps"
 msgstr ""
 
-#: sketch_map_tool/templates/index.html:67
-msgid "Map Quality Check"
+#: sketch_map_tool/templates/index.html:58
+#: sketch_map_tool/templates/index.html:73
+msgid "Print your Sketch&nbsp;Map"
 msgstr ""
 
-#: sketch_map_tool/templates/index.html:79
+#: sketch_map_tool/templates/index.html:84
 msgid "Create a Sketch&nbsp;Map"
 msgstr ""
 
-#: sketch_map_tool/templates/index.html:83
+#: sketch_map_tool/templates/index.html:88
 msgid "Digitize your Sketch&nbsp;Maps"
 msgstr ""
 
