@@ -1,9 +1,10 @@
 import PIL
 import pytest
 
-from sketch_map_tool.exceptions import UploadLimitsExceededError
+from sketch_map_tool.exceptions import UploadLimitsExceededError, ValidationError
 from sketch_map_tool.validators import (
     validate_bbox,
+    validate_layer,
     validate_type,
     validate_uploaded_sketchmaps,
     validate_uuid,
@@ -53,3 +54,19 @@ def test_validate_uploaded_sketchmaps(file):
             validate_uploaded_sketchmaps([file])
     finally:
         PIL.Image.MAX_IMAGE_PIXELS = before
+
+
+def test_layer(layer):
+    assert validate_layer(layer)
+
+
+def test_layer_invalid():
+    with pytest.raises(ValidationError):
+        validate_layer("foo")
+
+
+@pytest.mark.skip
+def test_layer_invalid_():
+    # TODO: Validate does not catch non-existing OAM item IDs
+    with pytest.raises(ValidationError):
+        validate_layer("oam:foo")

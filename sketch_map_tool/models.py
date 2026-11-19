@@ -1,19 +1,21 @@
 from dataclasses import dataclass
+from io import BytesIO
+from typing import Literal
 
 import shapely
 from numpy.typing import NDArray
+from PIL import Image
+from pydantic import UUID4, BaseModel
 
-from sketch_map_tool.exceptions import ValidationError
-from sketch_map_tool.helpers import N_
+from sketch_map_tool.helpers import to_array
 
 
 @dataclass(frozen=True)
 class Bbox:
-    """Bounding Box in WGS 84 / Pseudo-Mercator (EPSG:3857)
+    """Bounding Box in WGS 84 / Pseudo-Mercator (EPSG:3857)."""
 
-    Be aware that the argument order is relevant to the API and the JavaScript client.
-    Keep the order in sync with the client.
-    """
+    # Be aware that the argument order is relevant to the API and the JavaScript client.
+    # Keep the order in sync with the client.
 
     lon_min: float
     lat_min: float
@@ -59,16 +61,6 @@ class Size:
 
     def asdict(self):
         return {"width": self.width, "height": self.height}
-
-
-def validate_layer(layer: str) -> str:
-    lower_layer = layer.lower()
-    if lower_layer.startswith(("osm", "esri")):
-        return lower_layer.replace(":", "-").replace("_", "-")
-    elif lower_layer.startswith("oam"):
-        return lower_layer
-    else:
-        raise ValidationError(N_("Layer name should start with osm, esri or oam."))
 
 
 @dataclass(frozen=True)
@@ -132,8 +124,17 @@ class LiteratureReference:
     url: str | None = None
 
 
-@dataclass(frozen=True)
-class File:
-    filename: str
-    mimetype: str
-    image: NDArray
+class MapFrame(BaseModel):
+    uuid: UUID4
+    map_image: bytes
+    bbox_3857: str
+    bbox_4326: str
+    format: str
+    orientation: Literal["landscape", "portrait"]
+    layer: str
+
+    def map_image_as_image(self) -> Image.Image:
+        return Image.open(BytesIO(self.map_image))
+
+    def map_image_as_array(self) -> NDArray:
+        return to_array(self.map_image)

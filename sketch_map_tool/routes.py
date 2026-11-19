@@ -2,7 +2,6 @@ import json
 import logging
 from io import BytesIO
 from typing import Sequence
-from uuid import UUID, uuid4
 
 import geojson
 from celery import chord, group
@@ -38,20 +37,20 @@ from sketch_map_tool.exceptions import (
     UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import (
-    N_,
     merge,
-    to_array,
     transform_layer_name,
     zip_,
 )
-from sketch_map_tool.models import Bbox, PaperFormat, Size, validate_layer
+from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.style_geojson import style
 from sketch_map_tool.tasks import (
     cleanup_blobs,
+    generate_result_map,
     upload_processing,
 )
 from sketch_map_tool.validators import (
     validate_bbox,
+    validate_layer,
     validate_type,
     validate_uploaded_sketchmaps,
     validate_uuid,
@@ -218,57 +217,34 @@ def digitize(lang="en") -> str:
 @app.post("/<lang>/digitize/results")
 def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
-    # user consent to use uploaded files for service improvement
     consent: bool = request.form.get("consent", "False") == "True"
     # TODO: temporary feature flag
     preview: bool = request.form.get("preview", "False") == "True"
-    # No files uploaded
+
     if "file" not in request.files:
         return redirect(url_for("digitize", lang=lang))
+
     files = request.files.getlist("file")
-    # TODO: move verification to `insert_files()` for incremental validation
     validate_uploaded_sketchmaps(files)
     # file metadata parsed from qr-code
-    file_ids, uuids, file_names, bboxes, layers = db_client_flask.insert_files(
+    file_ids, file_names, uuid, bbox, _ = db_client_flask.insert_files(
         files,
         consent,
     )
     del files
 
-    bboxes_ = dict()
-    layers_ = dict()
-    map_frames = dict()
-
-    if len(set(uuids)) > 1:
-        raise UploadError(
-            N_(
-                "You can upload several photos, but they must all show the same area. "
-                "These sketch maps cover different areas, "
-                "so please upload each area separately."
-            )
-        )
-
-    for uuid in set(uuids):  # Only retrieve map_frame once per uuid to save memory
-        # NOTE: bbox and layer could be return once per UUID from DB here
-        # instead of multiple times from QR code above.
-        # But this does not work with legacy map frames (version 2024.04.15),
-        # since those attributes are not stored in the DB.
-        map_frame = db_client_flask.select_map_frame(UUID(uuid))
-        map_frames[uuid] = to_array(BytesIO(map_frame).read())
-    for bbox, layer, uuid in zip(bboxes, layers, uuids):
-        bboxes_[uuid] = bbox
-        layers_[uuid] = layer
+    map_frame = db_client_flask.select_map_frame(uuid)
 
     tasks = []
-    for file_id, file_name, uuid in zip(file_ids, file_names, uuids):
+    for file_id, file_name in zip(file_ids, file_names):
         tasks.append(
             upload_processing.signature(
                 (
                     file_id,
                     file_name,
-                    map_frames[uuid],
-                    layers_[uuid],
-                    bboxes_[uuid],
+                    map_frame.map_image_as_array(),
+                    map_frame.layer,
+                    bbox,
                 )
             )
         )
@@ -284,14 +260,14 @@ def digitize_results_post(lang="en") -> Response:
     # group results have to be saved for them to be able to be restored later
     async_group_result.save()
     db_client_flask.update_files_digitize_uuid(file_ids, async_group_result.id)
-    layer = transform_layer_name(layers[0])
+
     return redirect(
         url_for(
             "digitize_preview" if preview else "digitize_results_get",
             lang=lang,
             uuid=async_group_result.id,
-            bbox=bboxes[0],
-            layer=layer,
+            bbox=bbox,
+            layer=transform_layer_name(map_frame.layer),
         )
     )
 
@@ -315,14 +291,28 @@ def digitize_preview(lang="en", uuid: str | None = None) -> Response | str:
 def digitize_pdf_map_post(lang="en", uuid: str | None = None) -> Response:
     if uuid is None:
         return redirect(url_for("digitize", lang=lang))
-    validate_uuid(uuid)
-    # TODO: start result map creation
+    uuid_ = validate_uuid(uuid)
+
+    map_frame_uuid = db_client_flask.select_map_frame_uuid(uuid_)
+    map_frame = db_client_flask.select_map_frame(map_frame_uuid)
+
+    async_result = get_async_result(uuid, "vector-results")
+    if not async_result.ready():
+        # TODO
+        raise RuntimeError()
+    vector_results = get_result(async_result, "vector-results")
+    num_of_uploads = len(vector_results)
+    markings = style(merge(vector_results), num_of_uploads)
+
+    async_result: AsyncResult = generate_result_map.signature(
+        args=(map_frame, markings)
+    ).apply_async()
     return redirect(
         url_for(
             "digitize_results_get",
             lang=lang,
             uuid=uuid,
-            **{"pdf-map": uuid4()},
+            **{"pdf-map": async_result.id},
         )
     )
 
@@ -440,6 +430,10 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             feature_collection = style(merge(vector_results), num_of_uploads)
             raw = geojson.dumps(feature_collection)
             file: BytesIO = BytesIO(raw.encode("utf-8"))
+        case "pdf-map-result":
+            mimetype = "application/pdf"
+            download_name = type_ + ".pdf"
+            file: BytesIO = get_result(async_result, type_)
     return send_file(file, mimetype, download_name=download_name)
 
 

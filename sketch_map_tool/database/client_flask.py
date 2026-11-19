@@ -11,9 +11,11 @@ from sketch_map_tool.config import CONFIG
 from sketch_map_tool.exceptions import (
     CustomFileDoesNotExistAnymoreError,
     CustomFileNotFoundError,
+    UploadError,
+    UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import N_, to_array
-from sketch_map_tool.models import Bbox
+from sketch_map_tool.models import Bbox, MapFrame
 from sketch_map_tool.upload_processing import read_qr_code
 
 
@@ -35,7 +37,7 @@ def close_connection(e=None):
 def insert_files(
     files,
     consent: bool,
-) -> tuple[list[int], list[str], list[str], list[Bbox], list[str]]:
+) -> tuple[list[int], list[str], UUID, Bbox, str]:
     """Insert uploaded files as blob into the database and return ID, UUID and name.
 
     UUID is derived from decoding the qr-code.
@@ -98,7 +100,22 @@ def insert_files(
             file_names.append(result[2])
             bboxes.append(qr_code_content["bbox"])
             layers.append(qr_code_content["layer"])
-    return file_ids, uuids, file_names, bboxes, layers
+
+    if len(set(uuids)) > 1:
+        raise UploadError(
+            N_(
+                "You can upload several photos, but they must all show the same area. "
+                "These sketch maps cover different areas, "
+                "so please upload each area separately."
+            )
+        )
+        # TODO: Remove uploads
+    assert len(set(bboxes)) == 1
+    assert len(set(layers)) == 1
+    uuid = UUID(uuids[0])
+    bbox = bboxes[0]
+    layer = layers[0]
+    return file_ids, file_names, uuid, bbox, layer
 
 
 def select_file(id_: int) -> bytes:
@@ -131,13 +148,40 @@ def select_file_name(id_: int) -> str:
             )
 
 
-def select_map_frame(uuid: UUID) -> tuple[bytes, str, str]:
-    """Select map frame, bbox and layer of the associated UUID."""
-    query = "SELECT file FROM map_frame WHERE uuid = %s"
+def select_map_frame_uuid(digitize_uuid: UUID) -> UUID:
+    """Get an uploaded file stored in the database by ID."""
+    query = "SELECT map_frame_uuid FROM blob WHERE digitize_uuid = %s"
     db_conn = open_connection()
     with db_conn.cursor() as curs:
+        curs.execute(query, [str(digitize_uuid)])
+        raw = curs.fetchone()
+        if raw:
+            return UUID(raw[0])
+        else:
+            raise UUIDNotFoundError(
+                N_("There are no files in the database for the uuid: {ID}"),
+                {"ID": digitize_uuid},
+            )
+
+
+def select_map_frame(uuid: UUID) -> MapFrame:
+    """Select map frame, bbox and layer of the associated UUID."""
+    query = """
+        SELECT
+            uuid,
+            file as map_image,
+            bbox as bbox_3857,
+            bbox_wgs84 as bbox_4326,
+            format,
+            orientation,
+            layer
+        FROM map_frame
+        WHERE uuid = %s
+    """
+    db_conn = open_connection()
+    with db_conn.cursor(cursor_factory=RealDictCursor) as cur:
         try:
-            curs.execute(query, [str(uuid)])
+            cur.execute(query, [str(uuid)])
         except UndefinedTable:
             raise CustomFileNotFoundError(
                 N_(
@@ -146,15 +190,8 @@ def select_map_frame(uuid: UUID) -> tuple[bytes, str, str]:
                     "maps to the instance on which they have been created."
                 )
             )
-        raw = curs.fetchone()
-        if raw:
-            if raw[0] is None:
-                raise CustomFileDoesNotExistAnymoreError(
-                    N_("The file with the id: {UUID} does not exist anymore"),
-                    {"UUID": uuid},
-                )
-            return raw[0]
-        else:
+        raw = cur.fetchone()
+        if not raw:
             raise CustomFileNotFoundError(
                 N_(
                     "There is no map frame in the database with the uuid: {UUID}."
@@ -163,6 +200,12 @@ def select_map_frame(uuid: UUID) -> tuple[bytes, str, str]:
                 ),
                 {"UUID": uuid},
             )
+        if raw["map_image"] is None:
+            raise CustomFileDoesNotExistAnymoreError(
+                N_("The file with the id: {UUID} does not exist anymore"),
+                {"UUID": uuid},
+            )
+        return MapFrame(**raw)
 
 
 def update_files_digitize_uuid(file_ids: list[int] | tuple[int], result_uuid: UUID):

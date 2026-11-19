@@ -37,6 +37,7 @@ def validate_uploaded_sketchmaps(files: list[FileStorage]):
             {"MAX_NR_SIMULTANEOUS_UPLOADS": max_nr_simultaneous_uploads},
         )
 
+    # TODO: move verification to `insert_files()` for incremental validation
     for file in files:
         try:
             img = Image.open(file)
@@ -97,3 +98,13 @@ def validate_literature_reference(literature_reference: LiteratureReference):
                 "not contain empty strings as values."
             )
         )
+
+
+def validate_layer(layer: str) -> str:
+    lower_layer = layer.lower()
+    if lower_layer.startswith(("osm", "esri")):
+        return lower_layer.replace(":", "-").replace("_", "-")
+    elif lower_layer.startswith("oam"):
+        return lower_layer
+    else:
+        raise ValidationError(N_("Layer name should start with osm, esri or oam."))

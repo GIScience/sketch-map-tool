@@ -250,7 +250,7 @@ def sketch_map(uuid_create, tmp_path_factory) -> bytes:
 def map_frame(uuid_create, flask_app, tmp_path_factory) -> BytesIO:
     """Map Frame as PNG."""
     with flask_app.app_context():
-        map_frame = db_client_flask.select_map_frame(UUID(uuid_create))
+        map_frame = db_client_flask.select_map_frame(UUID(uuid_create)).map_image
     path = tmp_path_factory.getbasetemp() / uuid_create / "map-frame.png"
     with open(path, "wb") as file:
         file.write(map_frame)
@@ -298,7 +298,7 @@ def map_frame_marked(
 ) -> NDArray:
     """Sketch map frame with markings as PNG."""
     with flask_app.app_context():
-        map_frame = db_client_flask.select_map_frame(UUID(uuid_create))
+        map_frame = db_client_flask.select_map_frame(UUID(uuid_create)).map_image
     return clip(
         to_array(sketch_map_marked),
         to_array(map_frame),
@@ -342,9 +342,9 @@ def uuid_digitize(
     path_raster = dir / "raster.zip"
     path_vector = dir / "vector.geojson"
     with open(path_vector, "w") as file:
-        file.write(json.dumps(merge(r[-2] for r in result)))
+        file.write(json.dumps(merge(r[-1] for r in result)))
     with open(path_raster, "wb") as file:
-        r = zip_([r[:-2] for r in result])
+        r = zip_([r[:-1] for r in result])
         file.write(r.getbuffer())
     return uuid
 

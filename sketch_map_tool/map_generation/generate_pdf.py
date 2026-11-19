@@ -1,35 +1,79 @@
 """Generate a sketch map PDF."""
 
 import io
+import math
 from io import BytesIO
 from typing import Tuple
 
 import cv2
 import pymupdf
+from geojson import FeatureCollection
+from geojson.utils import coords, map_tuples
 from PIL import Image
+from pyproj import Transformer
 from reportlab.graphics.shapes import Drawing
+from reportlab.lib.colors import Color, HexColor
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
-from reportlab.pdfgen.canvas import Canvas
+from reportlab.pdfgen.canvas import FILL_EVEN_ODD, Canvas
 from reportlab.platypus import Frame, Paragraph, Table, TableStyle, flowables
 from svglib.svglib import svg2rlg
 
+from sketch_map_tool import definitions
 from sketch_map_tool.definitions import PDF_RESOURCES_PATH, get_attribution
 from sketch_map_tool.helpers import resize_rlg_by_width
-from sketch_map_tool.models import PaperFormat
+from sketch_map_tool.models import Bbox, MapFrame, PaperFormat
 
 # PIL should be able to open high resolution PNGs of large Maps:
-flowables.Image.MAX_IMAGE_PIXELS = None
+flowables.Image.MAX_IMAGE_PIXELS = None  # ty: ignore[unresolved-attribute]
+
+WGS84_TO_WEB_MERCATOR = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
+WEB_MERCATOR_TO_WGS84 = Transformer.from_crs("EPSG:3857", "EPSG:4326", always_xy=True)
 
 
 def generate_pdf(
-    map_image_input: Image.Image,
+    map_image: Image.Image,
     qr_code: Drawing,
     format_: PaperFormat,
     scale: float,
     layer: str,
+) -> Tuple[BytesIO, BytesIO]:
+    return _generate_pdf(
+        map_image,
+        qr_code,
+        format_,
+        scale,
+        layer,
+        None,
+        None,
+    )
+
+
+def generate_result_map_pdf(
+    map_frame: MapFrame,
+    markings: FeatureCollection,
+) -> BytesIO:
+    return _generate_pdf(
+        map_frame.map_image_as_image(),
+        None,
+        getattr(definitions, map_frame.format.upper()),
+        0,  # TODO(hack): scale value is missing
+        map_frame.layer,
+        None,  # TODO
+        markings,
+    )[0]
+
+
+def _generate_pdf(
+    map_image: Image.Image,
+    qr_code: Drawing | None,
+    format_: PaperFormat,
+    scale: float,
+    layer: str,
+    bbox: Bbox | None,
+    markings: FeatureCollection | None,
 ) -> Tuple[BytesIO, BytesIO]:
     """Generate a Sketch Map PDF.
 
@@ -41,7 +85,7 @@ def generate_pdf(
 
     Returns a tuple with the Sketch Map as PDF and the map image
     """
-    map_width_px, map_height_px = map_image_input.size
+    map_width_px, map_height_px = map_image.size
     map_margin = format_.map_margin
 
     # TODO: Use orientation parameter to determine rotation
@@ -72,7 +116,7 @@ def generate_pdf(
     else:
         raise ValueError("Unexpected value for layer.")
 
-    map_image_reportlab = pil_image_to_image_reader(map_image_input, img_format)
+    map_image_reportlab = pil_image_to_image_reader(map_image, img_format)
 
     # calculate m per px in map frame
     cm_per_px = frame_width * scale / map_width_px
@@ -85,6 +129,8 @@ def generate_pdf(
         portrait,
         m_per_px,
         img_format,
+        bbox,
+        markings,
     )
 
     map_pdf = BytesIO()
@@ -122,7 +168,6 @@ def generate_pdf(
         column_origin_y,
         column_margin,
         qr_code,
-        scale,
         format_,
         layer,
         portrait,
@@ -151,14 +196,13 @@ def draw_right_column(
     x: float,
     y: float,
     margin: float,
-    qr_code: Drawing,
-    scale,  # TODO: is not accessed
+    qr_code: Drawing | None,
     format_,
     layer: str,
     portrait=False,
 ) -> None:
     normal_style = scale_style(format_, "Normal", 50)
-    em = normal_style.fontSize
+    em = normal_style.fontSize  # ty: ignore[unresolved-attribute]
 
     # Add Logos
     gap = 1 * em
@@ -191,7 +235,8 @@ def draw_right_column(
     p_copyright = Paragraph(get_attribution(layer), normal_style)
 
     qr_size = min(width, height) - margin
-    qr_code = resize_rlg_by_width(qr_code, qr_size)
+    if qr_code is not None:
+        qr_code = resize_rlg_by_width(qr_code, qr_size)
 
     # fills up the remaining space, placed between
     # the TOP and the BOTTOM aligned elements
@@ -210,8 +255,10 @@ def draw_right_column(
         flowables.Spacer(width, 2 * em),
         p_copyright,
         flowables.Spacer(width, 2 * em),
-        qr_code,
     ]
+    if qr_code is not None:
+        flowables_.append(qr_code)
+
     space_filler.height = calculate_space_filler_height(
         canvas, flowables_, width, height, margin
     )
@@ -262,12 +309,15 @@ def create_map_frame(
     portrait: bool,
     m_per_px: float,
     img_format: str,
+    bbox: Bbox | None = None,
+    markings: FeatureCollection | None = None,
 ) -> BytesIO:
     map_frame = BytesIO()
     canvas = Canvas(map_frame)
     canvas.setPageSize(landscape((height, width)))
 
     marker_size = width / 37
+    point_radius = marker_size / 4
     if portrait:
         canvas.rotate(90)
         canvas.drawImage(
@@ -279,8 +329,9 @@ def create_map_frame(
             height=height,
         )
         canvas.rotate(-90)
-        draw_markers(canvas, marker_size, height=width, width=height)
-        add_scalebar(canvas, height, width, m_per_px, format_, marker_size)
+        if markings is None:
+            draw_aruco_markers(canvas, marker_size, height=width, width=height)
+            add_scalebar(canvas, height, width, m_per_px, format_, marker_size)
     else:
         canvas.drawImage(
             map_image,
@@ -290,15 +341,27 @@ def create_map_frame(
             width=width,
             height=height,
         )
-        draw_markers(canvas, marker_size, height, width)
-        add_scalebar(canvas, width, height, m_per_px, format_, marker_size)
+        if markings is None:
+            draw_aruco_markers(canvas, marker_size, height, width)
+            add_scalebar(canvas, width, height, m_per_px, format_, marker_size)
+
+    if markings is not None and bbox is not None:
+        draw_markings(
+            canvas,
+            markings,
+            bbox,
+            width,
+            height,
+            portrait,
+            radius=point_radius,
+        )
 
     canvas.save()
     map_frame.seek(0)
     return pdf_page_to_img(map_frame, img_format=img_format)
 
 
-def draw_markers(canvas: Canvas, size: float, height: float, width: float):
+def draw_aruco_markers(canvas: Canvas, size: float, height: float, width: float):
     markers = get_aruco_markers(int(size))
 
     # 5 is to account for map frame border
@@ -422,3 +485,105 @@ def get_aruco_markers(size: int) -> list:
         )
         markers.append(marker)
     return markers
+
+
+def geo_to_canvas(
+    lon: float,
+    lat: float,
+    bbox: Bbox,
+    width: float,
+    height: float,
+    portrait: bool,
+) -> tuple[float, float]:
+    """Convert geo coordinates to map frame canvas coordinates."""
+    x, y = WGS84_TO_WEB_MERCATOR.transform(lon, lat)  # c1 c2
+    fx = (x - bbox.lon_min) / (bbox.lon_max - bbox.lon_min)  # 0 = west, 1 = east
+    fy = (y - bbox.lat_min) / (bbox.lat_max - bbox.lat_min)  # 0 = south, 1 = north
+
+    bbox_lon_min, bbox_lat_min = WEB_MERCATOR_TO_WGS84.transform(
+        bbox.lon_min, bbox.lat_min
+    )
+    bbox_lon_max, bbox_lat_max = WEB_MERCATOR_TO_WGS84.transform(
+        bbox.lon_max, bbox.lat_max
+    )
+
+    fx1 = (lon - bbox_lon_min) / (bbox_lon_max - bbox_lon_min)  # 0 = west, 1 = east
+    fy1 = (lat - bbox_lat_min) / (bbox_lat_max - bbox_lat_min)  # 0 = south, 1 = north
+    assert math.isclose(fx, fx1, rel_tol=1 / 1000), str((fx, fx1))
+    assert math.isclose(fy, fy1, rel_tol=1 / 1000), str((fy, fy1))
+
+    if portrait:
+        # The image is drawn rotated by 90°: north points left, east points up
+        return (1 - fy) * height, fx * width
+    return fx * width, fy * height
+
+
+def draw_point(
+    canvas: Canvas,
+    x: float,
+    y: float,
+    radius: float,
+    color: Color,
+) -> None:
+    canvas.saveState()
+    canvas.setFillColor(color)
+    canvas.setStrokeColor(color)
+    canvas.setLineWidth(radius * 0.3)
+    canvas.circle(x, y, radius, stroke=1, fill=1)
+    canvas.restoreState()
+
+
+def draw_polygon(
+    canvas: Canvas,
+    rings: list[list[tuple[float, float]]],
+    color: Color,
+    line_width: float,
+    fill_opacity: float,
+) -> None:
+    """Draw a polygon. The first ring is the exterior, the others are holes."""
+    canvas.saveState()
+    canvas.setFillColor(color, alpha=fill_opacity)
+    canvas.setStrokeColor(color)
+    canvas.setLineWidth(line_width)
+    path = canvas.beginPath()
+    for ring in rings:
+        path.moveTo(*ring[0])
+        for x, y in ring[1:]:
+            path.lineTo(x, y)
+        path.close()
+    canvas.drawPath(path, stroke=1, fill=1, fillMode=FILL_EVEN_ODD)
+    canvas.restoreState()
+
+
+def draw_markings(
+    canvas: Canvas,
+    markings: FeatureCollection,
+    bbox: Bbox,
+    width: float,
+    height: float,
+    portrait: bool,
+    radius: float,
+) -> None:
+    """Draw all features of a GeoJSON FeatureCollection onto the map frame."""
+    markings = map_tuples(
+        lambda c: geo_to_canvas(c[0], c[1], bbox, width, height, portrait),
+        markings,
+    )
+    for marking in markings["features"]:
+        properties = marking["properties"]
+        color = HexColor(properties["fill"])
+        match marking["geometry"]["type"]:
+            case "Point":
+                for x, y in coords(marking):
+                    draw_point(canvas, x, y, radius=radius, color=color)
+            case "Polygon":
+                fill_opacity = properties["fill-opacity"]
+                draw_polygon(
+                    canvas,
+                    marking["geometry"]["coordinates"],
+                    color,
+                    radius * 0.3,
+                    fill_opacity,
+                )
+            case other:
+                raise ValueError(f"Unsupported geometry type: {other}")
