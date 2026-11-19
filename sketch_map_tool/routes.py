@@ -2,7 +2,6 @@ import json
 import logging
 from io import BytesIO
 from typing import Sequence
-from uuid import uuid4
 
 import geojson
 from celery import chord, group
@@ -46,6 +45,7 @@ from sketch_map_tool.models import Bbox, PaperFormat, Size
 from sketch_map_tool.style_geojson import style
 from sketch_map_tool.tasks import (
     cleanup_blobs,
+    generate_result_map,
     upload_processing,
 )
 from sketch_map_tool.validators import (
@@ -291,14 +291,25 @@ def digitize_preview(lang="en", uuid: str | None = None) -> Response | str:
 def digitize_pdf_map_post(lang="en", uuid: str | None = None) -> Response:
     if uuid is None:
         return redirect(url_for("digitize", lang=lang))
-    validate_uuid(uuid)
-    # TODO: start result map creation
+    uuid_ = validate_uuid(uuid)
+
+    map_frame = db_client_flask.select_map_frame(uuid_)
+
+    async_result = get_async_result(uuid, "vector-results")
+    if not async_result.ready():
+        # TODO
+        raise RuntimeError()
+    vector_results = get_result(async_result, "vector-results")
+    num_of_uploads = len(vector_results)
+    markings = style(merge(vector_results), num_of_uploads)
+
+    async_result: AsyncResult = generate_result_map(map_frame, markings).apply_async()
     return redirect(
         url_for(
             "digitize_results_get",
             lang=lang,
             uuid=uuid,
-            **{"pdf-map": uuid4()},
+            **{"pdf-map": async_result.id},
         )
     )
 

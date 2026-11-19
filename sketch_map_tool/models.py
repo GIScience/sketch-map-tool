@@ -127,8 +127,8 @@ class LiteratureReference:
 class MapFrame(BaseModel):
     uuid: UUID4
     map_image: bytes
-    bbox_3857: str | None
-    bbox_4326: str | None
+    bbox_3857: str
+    bbox_4326: str
     format: str
     orientation: Literal["landscape", "portrait"]
     layer: str
