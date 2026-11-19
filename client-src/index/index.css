@@ -51,9 +51,27 @@
     background: linear-gradient(#000, #000) center/2px 100% no-repeat;
     grid-template-columns: 1fr 4rem 1fr;
     place-items: center center;
-    row-gap: 3.5rem;
+    row-gap: 1rem;
     padding: 1rem 3rem 0;
     margin-bottom: 3rem;
+}
+
+/* round image in the narrow middle column, larger than the column but centered on it */
+#main-grid .center-image {
+    display: flex;
+    justify-content: center; /* overflows evenly on both sides when the image is wider */
+    width: 100%; /* exactly the 4rem column */
+}
+
+#main-grid .center-image img {
+    position: relative;
+    z-index: 1;
+    flex: none; /* don't shrink to the column */
+    width: clamp(8rem, 15vw, 14rem);
+    max-width: none; /* override Pico's img { max-width: 100% } */
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 #span-grid-row-for-arrows {
