@@ -210,8 +210,8 @@ def upload_processing(
 #
 #
 @celery.task
-def generate_result_map(map_frame: MapFrame, markings: FeatureCollection) -> None:
-    return map_generation.generate_result_map_pdf(map_frame)
+def generate_result_map(map_frame: MapFrame, markings: FeatureCollection) -> BytesIO:
+    return map_generation.generate_result_map_pdf(map_frame, markings)
 
 
 @celery.task(ignore_result=True)

@@ -54,7 +54,7 @@ def generate_pdf(
 def generate_result_map_pdf(
     map_frame: MapFrame,
     markings: FeatureCollection,
-) -> Tuple[BytesIO, BytesIO]:
+) -> BytesIO:
     return _generate_pdf(
         map_frame.map_image_as_image(),
         None,
@@ -63,7 +63,7 @@ def generate_result_map_pdf(
         map_frame.layer,
         None,  # TODO
         markings,
-    )
+    )[0]
 
 
 def _generate_pdf(
