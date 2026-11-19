@@ -430,6 +430,10 @@ def download(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:
             feature_collection = style(merge(vector_results), num_of_uploads)
             raw = geojson.dumps(feature_collection)
             file: BytesIO = BytesIO(raw.encode("utf-8"))
+        case "pdf-map-result":
+            mimetype = "application/pdf"
+            download_name = type_ + ".pdf"
+            file: BytesIO = get_result(async_result, type_)
     return send_file(file, mimetype, download_name=download_name)
 
 
