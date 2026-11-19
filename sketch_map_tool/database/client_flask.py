@@ -153,7 +153,7 @@ def select_map_frame_uuid(digitize_uuid: UUID) -> UUID:
     query = "SELECT map_frame_uuid FROM blob WHERE digitize_uuid = %s"
     db_conn = open_connection()
     with db_conn.cursor() as curs:
-        curs.execute(query, [digitize_uuid])
+        curs.execute(query, [str(digitize_uuid)])
         raw = curs.fetchone()
         if raw:
             return UUID(raw[0])

@@ -304,7 +304,9 @@ def digitize_pdf_map_post(lang="en", uuid: str | None = None) -> Response:
     num_of_uploads = len(vector_results)
     markings = style(merge(vector_results), num_of_uploads)
 
-    async_result: AsyncResult = generate_result_map(map_frame, markings).apply_async()
+    async_result: AsyncResult = generate_result_map.signature(
+        args=(map_frame, markings)
+    ).apply_async()
     return redirect(
         url_for(
             "digitize_results_get",
