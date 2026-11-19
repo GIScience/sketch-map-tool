@@ -39,9 +39,13 @@
     {#row 2#}
     <div class="h1 center-text">{{ _('Create Paper Maps to Collect Data') }}</div>
     <div></div>
-    <div class="h1 center-text">{{ _('Paper to GIS:<br>Automatically Digitize Your Sketch&nbsp;Maps') }}
-    </div>
+    <div class="h1 center-text">{{ _('Paper to GIS:<br>Automatically Digitize Your Sketch&nbsp;Maps') }}</div>
 
+    <div></div>
+    <div class="center-image">
+      <img src="{{ url_for("static", filename="assets/images/index/mapping-activity.avif") }}" alt="">
+    </div>
+    <div></div>
 
     {#row 3#}
 
@@ -51,6 +55,7 @@
         <div id="left-arrows" class="horizontal step-arrows">
           <div class="active">{{ _('Define your Area of Interest') }}</div>
           <div class="">{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
+          <div class="">{{ _('Print your Sketch&nbsp;Map') }}</div>
         </div>
         <div id="middle_blank"></div>
         <div id="right-arrows" class="horizontal step-arrows">
@@ -65,6 +70,7 @@
     <div class="vertical step-arrows">
       <div class="active">{{ _('Define your Area of Interest') }}</div>
       <div class="">{{ _('PDF Export of Sketch&nbsp;Map') }}</div>
+      <div class="">{{ _('Print your Sketch&nbsp;Map') }}</div>
     </div>
     <div class="vertical step-arrows"></div>
     <div class="vertical step-arrows">
