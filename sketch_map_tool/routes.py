@@ -227,7 +227,7 @@ def digitize_results_post(lang="en") -> Response:
     files = request.files.getlist("file")
     validate_uploaded_sketchmaps(files)
     # file metadata parsed from qr-code
-    file_ids, file_names, uuid, bbox, layer = db_client_flask.insert_files(
+    file_ids, file_names, uuid, bbox, _ = db_client_flask.insert_files(
         files,
         consent,
     )
@@ -267,7 +267,7 @@ def digitize_results_post(lang="en") -> Response:
             lang=lang,
             uuid=async_group_result.id,
             bbox=bbox,
-            layer=transform_layer_name(layer),
+            layer=transform_layer_name(map_frame.layer),
         )
     )
 
