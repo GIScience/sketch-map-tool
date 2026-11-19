@@ -25,7 +25,7 @@
 }
 
 .legend-list {
-    margin: 0 0 var(--pico-spacing) var(--pico-spacing);
+    margin: var(--pico-spacing);
     padding: 0;
 }
 
@@ -60,15 +60,11 @@
     font-variant-numeric: tabular-nums;
 }
 
-body > main {
-    padding: 3rem 0;
-}
-
 .map-wrapper { position: relative;
     width: 100%;
     height: 50vh;
     flex: 1 0 auto;}
-#map { width: 100%; height: 100%; }
+#map { position: absolute; inset: 0; }
 
 .map-loading {
     position: absolute;
@@ -198,4 +194,46 @@ progress { width: 100%; height: 8px; accent-color: #1f6feb; }
   #oam-info-dialog table {
     font-size: smaller;
   }
+}
+
+/* after the general rules above (e.g. .map-wrapper), so these desktop rules win */
+@media screen and (width >= 992px) {
+    /*
+     * Fit the page between header and footer: continue the flex column of the base layout
+     * (#main-flex-box > #flex-content) down to the grid row, which takes the remaining height.
+     * Nothing shrinks below its content (map min 50vh, errors), so the page scrolls as a fallback.
+     */
+    #flex-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #flex-content > main {
+        display: flex;
+        flex: 1 0 auto;
+        flex-direction: column;
+        padding-bottom: var(--pico-spacing);
+    }
+
+    #main-grid {
+        flex: 1 0 auto;
+        grid-template-rows: 1fr;
+    }
+
+    .map-wrapper {
+        height: auto;
+        flex: 1 0 50vh; /* fills #left, at least 50vh */
+    }
+
+    /* the legend does not count for the row height (only the map column does), it scrolls instead */
+    #right {
+        contain: size;
+        overflow: hidden;
+    }
+
+    #legend {
+        flex: 1 1 0;
+        min-height: 0;
+        overflow-y: auto;
+    }
 }
