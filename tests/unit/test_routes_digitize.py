@@ -78,3 +78,11 @@ def test_digitize_results_invalid_uuid(client):
     uuid = "foo"
     resp = client.get("/digitize/results/{0}".format(uuid))
     assert resp.status_code == 500
+
+
+def test_digitize_pdf_map_post(client):
+    uuid = "16fd2706-8baf-433b-82eb-8c7fada847db"
+    resp = client.post("/digitize/pdf-map/{0}".format(uuid))
+    redirect_path = "/en/digitize/results/{}?pdf-map".format(uuid)
+    assert resp.status_code == 302
+    assert redirect_path in resp.headers.get("Location")

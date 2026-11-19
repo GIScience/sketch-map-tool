@@ -2,7 +2,7 @@ import json
 import logging
 from io import BytesIO
 from typing import Sequence
-from uuid import UUID
+from uuid import UUID, uuid4
 
 import geojson
 from celery import chord, group
@@ -307,6 +307,23 @@ def digitize_preview(lang="en", uuid: str | None = None) -> Response | str:
         lang=lang,
         uuid=uuid,
         esri_api_key=CONFIG.esri_api_key,
+    )
+
+
+@app.post("/digitize/pdf-map/<uuid>")
+@app.post("/<lang>/digitize/pdf-map/<uuid>")
+def digitize_pdf_map_post(lang="en", uuid: str | None = None) -> Response:
+    if uuid is None:
+        return redirect(url_for("digitize", lang=lang))
+    validate_uuid(uuid)
+    # TODO: start result map creation
+    return redirect(
+        url_for(
+            "digitize_results_get",
+            lang=lang,
+            uuid=uuid,
+            **{"pdf-map": uuid4()},
+        )
     )
 
 
