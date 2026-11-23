@@ -1,3 +1,4 @@
+import logging
 from dataclasses import astuple
 from io import BytesIO
 from typing import Literal
@@ -96,6 +97,12 @@ def as_image(
                 ),
                 {"ERROR_MSG": escape(response_content.decode("utf8"))},
             )
-        raise MapGenerationError(
-            N_("The Web Map Service returned an error. Please try again later.")
-        )
+        elif "text/html" in content_type:
+            logging.error(response_content)
+            raise MapGenerationError(
+                N_("The Web Map Service returned an error. Please try again later.")
+            )
+        else:
+            raise MapGenerationError(
+                N_("The Web Map Service returned an error. Please try again later.")
+            )

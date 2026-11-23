@@ -1,5 +1,6 @@
 import os
 from io import BytesIO
+from pathlib import Path
 
 import numpy as np
 import pymupdf
@@ -19,7 +20,7 @@ from sketch_map_tool.map_generation.generate_pdf import (
     get_compass,
     pdf_page_to_img,
 )
-from sketch_map_tool.models import PaperFormat
+from sketch_map_tool.models import MapFrame, PaperFormat
 from tests import FIXTURE_DIR
 from tests import vcr_app as vcr
 
@@ -32,6 +33,13 @@ def pdf():
     canv.save()
     buffer.seek(0)
     return buffer
+
+
+@pytest.fixture
+def map_image_path(request) -> Path:
+    """Map image from WMS."""
+    orientation = request.getfixturevalue("orientation")
+    return FIXTURE_DIR / "map-img-{}.jpg".format(orientation)
 
 
 @pytest.fixture
@@ -106,26 +114,50 @@ def test_generate_pdf_sketch_map_approval(
     assert verify_image(image, extension=".png")
 
 
+# NOTE: To reduce number of approvals, parameter numbers are kept low.
+@pytest.mark.parametrize("paper_format", [A4])
+@pytest.mark.parametrize("orientation", ["landscape"])
+@pytest.mark.skipif(os.getenv("CI") == "true", reason="detected CI environment")
+def test_generate_pdf_sketch_map_template_approval(
+    map_image,
+    qr_code_approval,
+    paper_format: PaperFormat,
+    orientation,
+) -> None:
+    _, sketch_map_template = generate_pdf(
+        map_image,
+        qr_code_approval,
+        paper_format,
+        1283.129,
+        "osm",
+    )
+    assert verify_image(
+        sketch_map_template.read(),
+        extension=".png",
+    )
+
+
 @pytest.mark.parametrize("orientation", ["landscape"])
 @pytest.mark.parametrize("paper_format", ["a4"])
 @pytest.mark.skipif(os.getenv("CI") is not None, reason="Detected CI environment")
 def test_generate_pdf_result_map_approval(
-    map_image,
-    qr_code_approval,
+    uuid,
+    map_image_path: Path,
+    bbox,
+    bbox_wgs84,
     paper_format,
     orientation,
-    bbox,
 ) -> None:
     markings = FeatureCollection(
         features=[
             {
                 "type": "Feature",
-                "properties": {"fill": "#0E6EB8"},
+                "properties": {"marker-color": "#0E6EB8"},
                 "geometry": {"type": "Point", "coordinates": [8.677307, 49.410000]},
             },
             {
                 "type": "Feature",
-                "properties": {"fill": "#B03060"},
+                "properties": {"marker-color": "#B03060"},
                 "geometry": {"type": "Point", "coordinates": [8.667993, 49.404847]},
             },
             {
@@ -153,11 +185,17 @@ def test_generate_pdf_result_map_approval(
             },
         ],
     )
+    map_frame = MapFrame(
+        uuid=uuid,
+        map_image=map_image_path.read_bytes(),
+        bbox_4326=bbox_wgs84,
+        bbox_3857=bbox,
+        format=paper_format,
+        orientation=orientation,
+        layer="osm",
+    )
     sketch_map, _ = generate_result_map_pdf(
-        map_image,
-        paper_format,
-        "osm",
-        bbox,
+        map_frame,
         markings,
     )
     # NOTE: The resulting PDFs across multiple test runs have slight non-visual
@@ -169,29 +207,6 @@ def test_generate_pdf_result_map_approval(
         # This would result in larger file sizes.
         image = doc.load_page(0).get_pixmap().tobytes(output="png")
     assert verify_image(image, extension=".png")
-
-
-# NOTE: To reduce number of approvals, parameter numbers are kept low.
-@pytest.mark.parametrize("paper_format", [A4])
-@pytest.mark.parametrize("orientation", ["landscape"])
-@pytest.mark.skipif(os.getenv("CI") == "true", reason="detected CI environment")
-def test_generate_pdf_sketch_map_template_approval(
-    map_image,
-    qr_code_approval,
-    paper_format: PaperFormat,
-    orientation,
-) -> None:
-    _, sketch_map_template = generate_pdf(
-        map_image,
-        qr_code_approval,
-        paper_format,
-        1283.129,
-        "osm",
-    )
-    assert verify_image(
-        sketch_map_template.read(),
-        extension=".png",
-    )
 
 
 def test_get_compass(format_):

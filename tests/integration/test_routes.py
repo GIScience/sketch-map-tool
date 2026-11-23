@@ -90,7 +90,7 @@ def test_digitize_results_post(mock_chord, sketch_map_marked, flask_client, lang
         data=data,
         follow_redirects=True,
     )
-    assert response.status_code == 200
+    assert response.status_code == 200, response.get_data(as_text=True)
 
     path = response.request.path
     uuid = extract_uuid(path)
@@ -120,7 +120,7 @@ def test_digitize_results_post_multiple_uploads_based_on_different_sketch_maps(
         data=data,
         follow_redirects=True,
     )
-    assert response.status_code == 422
+    assert response.status_code == 422, response.get_data(as_text=True)
     assert "UploadError" in response.text
 
 

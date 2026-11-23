@@ -11,7 +11,7 @@ from sketch_map_tool.exceptions import (
 
 
 @pytest.fixture
-def map_frame_old(flask_app, uuid_create, map_frame, bbox):
+def map_frame_old(flask_app, uuid_create, map_frame, bbox, bbox_wgs84):
     """Mock map frame which is uploaded a year ago."""
     with flask_app.app_context():
         update_query = "UPDATE map_frame SET created = NOW() - INTERVAL '13 months' WHERE uuid = %s"  # noqa
@@ -22,11 +22,15 @@ def map_frame_old(flask_app, uuid_create, map_frame, bbox):
 
     map_frame.seek(0)
     with flask_app.app_context():
-        update_query = (
-            "UPDATE map_frame SET created = now(), file = %s, bbox = %s WHERE uuid = %s"
-        )
+        update_query = """
+            UPDATE map_frame
+            SET created = now(), file = %s, bbox = %s, bbox_wgs84 = %s WHERE uuid = %s
+        """
         with client_flask.open_connection().cursor() as curs:
-            curs.execute(update_query, [map_frame.getbuffer(), str(bbox), uuid_create])
+            curs.execute(
+                update_query,
+                [map_frame.getbuffer(), bbox.wkt, bbox_wgs84.wkt, uuid_create],
+            )
     map_frame.seek(0)
 
 

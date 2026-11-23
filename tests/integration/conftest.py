@@ -6,11 +6,13 @@ from types import MappingProxyType
 from typing import Generator
 from uuid import UUID
 
+import geojson
 import pytest
 from celery.contrib.testing.tasks import ping  # noqa: F401
 from flask import Flask
 from flask.testing import FlaskClient
 from flask_babel import Babel
+from geojson.feature import FeatureCollection
 from numpy.typing import NDArray
 from testcontainers.postgres import PostgresContainer
 from testcontainers.redis import RedisContainer
@@ -258,18 +260,34 @@ def map_frame(uuid_create, flask_app, tmp_path_factory) -> BytesIO:
 
 
 @pytest.fixture(scope="session")
-def sketch_map_marked_path(layer) -> Path:
+def sketch_map_marked_path(layer, sketch_map) -> Path:
     """Photo of the sketch map with markings."""
     return FIXTURE_DIR / f"sketch-map-marked-{layer}.jpg"
 
 
 @pytest.fixture(scope="session")
-def sketch_map_marked(sketch_map_marked_path) -> bytes:
+def sketch_map_marked(
+    uuid_create, sketch_map_marked_path, monkeypatch_session
+) -> bytes:
     """Photo of the sketch map with markings."""
+
     # NOTE: If you want to change the markings of this fixture:
     #   (1) Run tests. (2) Print PDF written to tmp dir by uuid_create fixture.
     #   (3) Put markings on printout. (4) Make a photo.
     #   (5) put photo file in fixture dir.
+    # NOTE: The fixture of the photo of a sketch map with markings has always the same
+    #   UUID. When reading QR code use UUID of current test run instead.
+
+    def read_qr_code_(image):
+        raw = dict(read_qr_code(image))
+        raw["uuid"] = uuid_create
+        return MappingProxyType(raw)
+
+    monkeypatch_session.setattr(
+        "sketch_map_tool.database.client_flask.read_qr_code",
+        read_qr_code_,
+    )
+
     with open(sketch_map_marked_path, "rb") as file:
         return file.read()
 
@@ -313,21 +331,8 @@ def uuid_digitize(
     flask_client,
     celery_app,
     tmp_path_factory,
-    monkeypatch_session,
 ) -> str:
     """UUID after uploading files to /digitize and successful result generation."""
-
-    def read_qr_code_(image):
-        raw = dict(read_qr_code(image))
-        raw["uuid"] = uuid_create
-        return MappingProxyType(raw)
-
-    # NOTE: The fixture of the photo of a sketch map with markings has always the same
-    #   UUID. When reading QR code use UUID of current test run instead.
-    monkeypatch_session.setattr(
-        "sketch_map_tool.database.client_flask.read_qr_code",
-        read_qr_code_,
-    )
 
     data = {"file": [(BytesIO(sketch_map_marked), "sketch_map.png")], "consent": True}
     response = flask_client.post("/digitize/results", data=data, follow_redirects=True)
@@ -337,7 +342,7 @@ def uuid_digitize(
     # Wait for tasks to be finished and retrieve results (vector and raster)
     result = celery_app.GroupResult.restore(uuid).get(timeout=180)
 
-    # Write sketch map to temporary test directory
+    # Write results to temporary test directory
     dir = tmp_path_factory.mktemp(uuid, numbered=False)
     path_raster = dir / "raster.zip"
     path_vector = dir / "vector.geojson"
@@ -355,13 +360,49 @@ def vector_path(uuid_digitize, tmp_path_factory) -> Path:
 
 
 @pytest.fixture(scope="session")
-def vector(vector_path) -> bytes:
-    with open(vector_path, "rb") as file:
-        return file.read()
+def vector(vector_path) -> FeatureCollection:
+    with open(vector_path, "r") as file:
+        return geojson.load(file)
 
 
 @pytest.fixture(scope="session")
 def raster(uuid_digitize, tmp_path_factory) -> bytes:
     path = tmp_path_factory.getbasetemp() / uuid_digitize / "raster.zip"
+    with open(path, "rb") as file:
+        return file.read()
+
+
+@pytest.fixture(scope="session")
+def uuid_result_map(
+    uuid_digitize,
+    vector,
+    flask_client,
+    celery_app,
+    tmp_path_factory,
+) -> str:
+    """UUID of the PDF result map."""
+    response = flask_client.post(
+        f"/digitize/pdf-map/{uuid_digitize}", follow_redirects=True
+    )
+
+    uuid = response.request.args.get("pdf-map")
+    assert uuid is not None
+
+    # Wait for tasks to be finished and retrieve result
+    task = celery_app.AsyncResult(uuid)
+    result: BytesIO = task.get(timeout=180)
+
+    # Write result map to temporary test directory
+    dir = tmp_path_factory.mktemp(uuid, numbered=False)
+    path = dir / "result-map.pdf"
+    with open(path, "wb") as file:
+        file.write(result.getbuffer())
+    return uuid
+
+
+@pytest.fixture(scope="session")
+def result_map(uuid_result_map, tmp_path_factory) -> bytes:
+    """Result map as PDF."""
+    path = tmp_path_factory.getbasetemp() / uuid_result_map / "result-map.pdf"
     with open(path, "rb") as file:
         return file.read()

@@ -1,20 +1,12 @@
 from io import BytesIO
 from pathlib import Path
-from typing import assert_never
 from zipfile import ZipFile
 
 import cv2
 import numpy as np
-from billiard.exceptions import TimeLimitExceeded
-from celery.result import AsyncResult, GroupResult
 from geojson import Feature, FeatureCollection
 from numpy.typing import NDArray
 from reportlab.graphics.shapes import Drawing
-
-from sketch_map_tool.exceptions import (
-    TimeLimitExceededError,
-    TranslatableError,
-)
 
 
 def get_project_root() -> Path:
@@ -72,41 +64,6 @@ def zip_(results: list[tuple[str, str, BytesIO]]) -> BytesIO:
         zip_file.writestr("attributions.txt", file.read())
     buffer.seek(0)
     return buffer
-
-
-def extract_errors(
-    async_result: AsyncResult | GroupResult,
-    type_,
-) -> list[str]:
-    """Extract known/custom exceptions propagated by a Celery task or group.
-
-    raises: Re-raises exception if error is not a custom exception.
-    """
-    if isinstance(async_result, AsyncResult):
-        results = [async_result]
-    elif isinstance(async_result, GroupResult):
-        results = async_result.results
-    else:
-        assert_never()
-    errors = []
-    for r in results:  # type: ignore
-        if r.ready():
-            try:
-                r.get(propagate=True)
-            except TranslatableError as error:
-                errors.append(error.translate())
-            except TimeLimitExceeded as error:
-                try:
-                    raise TimeLimitExceededError(
-                        N_(
-                            "We couldn’t process your submission because it took too "
-                            "long. Please try again later. If the problem persists, "
-                            "reach out to us: sketch-map-tool@heigit.org"
-                        )
-                    ) from error
-                except TimeLimitExceededError as error_:
-                    errors.append(error_.translate())
-    return errors
 
 
 def transform_layer_name(layer: str) -> str:
