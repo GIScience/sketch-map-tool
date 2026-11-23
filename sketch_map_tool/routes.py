@@ -220,8 +220,6 @@ def digitize(lang="en") -> str:
 def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
     consent: bool = request.form.get("consent", "False") == "True"
-    # TODO: temporary feature flag
-    preview: bool = request.form.get("preview", "False") == "True"
 
     if "file" not in request.files:
         return redirect(url_for("digitize", lang=lang))
@@ -265,7 +263,7 @@ def digitize_results_post(lang="en") -> Response:
 
     return redirect(
         url_for(
-            "digitize_preview" if preview else "digitize_results_get",
+            "digitize_preview",
             lang=lang,
             uuid=async_group_result.id,
             bbox=bbox,
