@@ -95,7 +95,7 @@ def test_digitize_results_post(mock_chord, sketch_map_marked, flask_client, lang
     path = response.request.path
     uuid = extract_uuid(path)
     assert UUID(uuid).version == 4
-    assert path.startswith(f"{lang[1]}/digitize/results")
+    assert path.startswith(f"{lang[1]}/digitize-preview")
 
     with flask_app.app_context():
         assert get_consent_flag_from_db(unique_file_name) is True
@@ -175,7 +175,7 @@ def test_digitize_results_post_no_consent(mock_chord, sketch_map_marked, flask_c
     path = response.request.path
     uuid = extract_uuid(path)
     assert UUID(uuid).version == 4
-    assert path.startswith("/en/digitize/results")
+    assert path.startswith("/en/digitize-preview")
 
     with flask_app.app_context():
         assert get_consent_flag_from_db(unique_file_name) is False

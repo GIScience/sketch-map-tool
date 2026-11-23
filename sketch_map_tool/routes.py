@@ -30,6 +30,7 @@ from sketch_map_tool.definitions import REQUEST_TYPES
 from sketch_map_tool.exceptions import (
     CustomFileDoesNotExistAnymoreError,
     CustomFileNotFoundError,
+    NotYetReadyError,
     QRCodeError,
     TranslatableError,
     UploadError,
@@ -37,6 +38,7 @@ from sketch_map_tool.exceptions import (
     UUIDNotFoundError,
 )
 from sketch_map_tool.helpers import (
+    N_,
     merge,
     transform_layer_name,
     zip_,
@@ -298,8 +300,7 @@ def digitize_pdf_map_post(lang="en", uuid: str | None = None) -> Response:
 
     async_result = get_async_result(uuid, "vector-results")
     if not async_result.ready():
-        # TODO
-        raise RuntimeError()
+        raise NotYetReadyError(N_("Result is not yet ready. Please try again later."))
     vector_results = get_result(async_result, "vector-results")
     num_of_uploads = len(vector_results)
     markings = style(merge(vector_results), num_of_uploads)
@@ -461,6 +462,11 @@ def handle_exception(error: TranslatableError):
 @app.errorhandler(UUIDNotFoundError)
 def handle_not_found_exception(error: TranslatableError):
     return render_template("error.html", error_msg=error.translate()), 404
+
+
+@app.errorhandler(NotYetReadyError)
+def not_yet_ready_error(error: TranslatableError):
+    return render_template("error.html", error_msg=error.translate()), 503
 
 
 @app.errorhandler(Exception)
