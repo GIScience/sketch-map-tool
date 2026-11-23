@@ -194,7 +194,7 @@ def test_generate_pdf_result_map_approval(
         orientation=orientation,
         layer="osm",
     )
-    sketch_map, _ = generate_result_map_pdf(
+    sketch_map = generate_result_map_pdf(
         map_frame,
         markings,
     )

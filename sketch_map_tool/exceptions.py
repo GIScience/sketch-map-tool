@@ -81,3 +81,7 @@ class MarkingDetectionError(TranslatableError):
 
 class TimeLimitExceededError(TranslatableError, TimeLimitExceeded):
     pass
+
+
+class NotYetReadyError(TranslatableError, TimeLimitExceeded):
+    pass
