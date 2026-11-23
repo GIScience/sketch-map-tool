@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-03 10:52+0000\n"
-"PO-Revision-Date: 2026-11-03 10:53\n"
+"POT-Creation-Date: 2026-11-23 15:49+0000\n"
+"PO-Revision-Date: 2026-11-23 15:49\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -18,20 +18,32 @@ msgstr ""
 "X-Crowdin-File-ID: 12\n"
 "Language: fr_FR\n"
 
-#: sketch_map_tool/helpers.py:99
+#: sketch_map_tool/celery_utils.py:41
 msgid "We couldn’t process your submission because it took too long. Please try again later. If the problem persists, reach out to us: sketch-map-tool@heigit.org"
 msgstr ""
 
-#: sketch_map_tool/models.py:71
-msgid "Layer name should start with osm, esri or oam."
-msgstr ""
-
-#: sketch_map_tool/routes.py:298
+#: sketch_map_tool/celery_utils.py:62
 #, python-brace-format
 msgid "There are no tasks for UUID {UUID}"
 msgstr "Il n'y a aucune tâche pour l'UUID {UUID}"
 
-#: sketch_map_tool/routes.py:439
+#: sketch_map_tool/routes.py:303
+msgid "Result is not yet ready. Please try again later."
+msgstr ""
+
+#: sketch_map_tool/routes.py:355
+msgid "None of your uploaded sketch maps could be processed. Please check the quality of your uploaded sketch maps (e.g. sharpness, lighting, completely visible map frame) and try again."
+msgstr ""
+
+#: sketch_map_tool/routes.py:366
+msgid "Some of your uploaded sketch maps could not be processed."
+msgstr ""
+
+#: sketch_map_tool/routes.py:475
+msgid "Internal Server Error"
+msgstr ""
+
+#: sketch_map_tool/routes.py:476
 msgid "Oops... we seem to have made a mistake, sorry!"
 msgstr ""
 
@@ -69,23 +81,27 @@ msgstr "{TYPE} n'est pas une valeur valide pour le paramètre de requête 'type'
 msgid "You can only upload up to {MAX_NR_SIMULTANEOUS_UPLOADS} files at once."
 msgstr "Vous ne pouvez pas télécharger plus de {MAX_NR_SIMULTANEOUS_UPLOADS} fichiers à la fois."
 
-#: sketch_map_tool/validators.py:46
+#: sketch_map_tool/validators.py:47
 #, python-brace-format
 msgid "You can only upload pictures up to a total pixel count of {max_image_pixels} pixels."
 msgstr ""
 
-#: sketch_map_tool/validators.py:61
+#: sketch_map_tool/validators.py:62
 msgid "The provided URL does not contain a valid UUID"
 msgstr "L'URL fournie ne contient pas d'UUID valide"
 
-#: sketch_map_tool/validators.py:73
+#: sketch_map_tool/validators.py:74
 msgid "The provided URL does not contain a valid bounding box"
 msgstr "L'URL fournie ne contient pas de boîte de délimitation valide"
 
-#: sketch_map_tool/validators.py:82 sketch_map_tool/validators.py:89
-#: sketch_map_tool/validators.py:96
+#: sketch_map_tool/validators.py:83 sketch_map_tool/validators.py:90
+#: sketch_map_tool/validators.py:97
 msgid "Literature reference JSON fields should not contain empty strings as values."
 msgstr "Les champs JSON \"literature reference\" ne doivent pas contenir de chaînes vides comme valeurs."
+
+#: sketch_map_tool/validators.py:110
+msgid "Layer name should start with osm, esri or oam."
+msgstr ""
 
 #: sketch_map_tool/database/client_celery.py:173
 #, python-brace-format
@@ -93,25 +109,34 @@ msgid "The file with the id: {ID} does not exist anymore"
 msgstr "Le fichier avec l'identifiant : {ID} n'existe plus"
 
 #: sketch_map_tool/database/client_celery.py:178
-#: sketch_map_tool/database/client_flask.py:115
-#: sketch_map_tool/database/client_flask.py:130
+#: sketch_map_tool/database/client_flask.py:134
+#: sketch_map_tool/database/client_flask.py:149
 #, python-brace-format
 msgid "There is no file in the database with the id: {ID}"
 msgstr "La base de données ne contient pas de fichier avec l'id : {ID}"
 
-#: sketch_map_tool/database/client_flask.py:144
+#: sketch_map_tool/database/client_flask.py:109
+msgid "You can upload several photos, but they must all show the same area. These sketch maps cover different areas, so please upload each area separately."
+msgstr ""
+
+#: sketch_map_tool/database/client_flask.py:164
+#, python-brace-format
+msgid "There are no files in the database for the uuid: {ID}"
+msgstr ""
+
+#: sketch_map_tool/database/client_flask.py:190
 msgid "In this Sketch Map Tool instance no sketch map has been generated yet. You can only upload sketch maps to the instance on which they have been created."
 msgstr "Dans cette instance de Sketch Map Tool aucun croquis n'a encore été générée. Vous ne pouvez télécharger que des croquis dans l'instance sur laquelle elles ont été créées."
 
-#: sketch_map_tool/database/client_flask.py:153
-#, python-brace-format
-msgid "The file with the id: {UUID} does not exist anymore"
-msgstr "Le fichier avec l'identifiant : {UUID} n'existe plus"
-
-#: sketch_map_tool/database/client_flask.py:160
+#: sketch_map_tool/database/client_flask.py:199
 #, python-brace-format
 msgid "There is no map frame in the database with the uuid: {UUID}. You can only upload sketch maps to the instance on which they have been created."
 msgstr "Il n'y a pas d'extrait de carte dans la base de données avec l'UUID : {UUID}. Vous ne pouvez télécharger des cartes d'esquisses que vers l'instance sur laquelle elles ont été créées."
+
+#: sketch_map_tool/database/client_flask.py:207
+#, python-brace-format
+msgid "The file with the id: {UUID} does not exist anymore"
+msgstr "Le fichier avec l'identifiant : {UUID} n'existe plus"
 
 #: sketch_map_tool/openaerialmap/client.py:37
 msgid "Could not find OpenAerialMap item."
@@ -840,39 +865,46 @@ msgstr "Créez des cartes papier pour collecter des données"
 
 #: sketch_map_tool/templates/create-results.html:13
 #: sketch_map_tool/templates/create.html:17
-#: sketch_map_tool/templates/index.html:52
-#: sketch_map_tool/templates/index.html:66
+#: sketch_map_tool/templates/index.html:56
+#: sketch_map_tool/templates/index.html:71
 msgid "Define your Area of Interest"
 msgstr "Définissez votre zone d'intérêt"
 
 #: sketch_map_tool/templates/create-results.html:14
 #: sketch_map_tool/templates/create.html:18
-#: sketch_map_tool/templates/index.html:53
-#: sketch_map_tool/templates/index.html:68
+#: sketch_map_tool/templates/index.html:57
+#: sketch_map_tool/templates/index.html:72
 msgid "PDF Export of Sketch&nbsp;Map"
 msgstr "Export PDF de la carte &nbsp;croquis"
 
-#: sketch_map_tool/templates/create-results.html:18
+#: sketch_map_tool/templates/create-results.html:15
+#: sketch_map_tool/templates/create.html:19
+#: sketch_map_tool/templates/index.html:58
+#: sketch_map_tool/templates/index.html:73
+msgid "Print your Sketch&nbsp;Map"
+msgstr ""
+
+#: sketch_map_tool/templates/create-results.html:19
 #: sketch_map_tool/templates/digitize-results.html:20
 msgid "Your results are being processed ..."
 msgstr "Vos résultats sont en cours de traitement ..."
 
-#: sketch_map_tool/templates/create-results.html:20
+#: sketch_map_tool/templates/create-results.html:21
 #: sketch_map_tool/templates/digitize-results.html:22
 msgid "Your results are ready for download!"
 msgstr "Vos résultats sont prêts au téléchargement !"
 
-#: sketch_map_tool/templates/create-results.html:22
+#: sketch_map_tool/templates/create-results.html:23
 #: sketch_map_tool/templates/digitize-results.html:24
 msgid "Sorry. Only some of your results could be generated for download."
 msgstr "Désolé. Seuls quelques-uns de vos résultats peuvent être générés pour le téléchargement."
 
-#: sketch_map_tool/templates/create-results.html:24
+#: sketch_map_tool/templates/create-results.html:25
 #: sketch_map_tool/templates/digitize-results.html:26
 msgid "Your results should have been downloadable from here, but we are having troubles on our servers!"
 msgstr "Vos résultats auraient dû pouvoir être téléchargés à partir d'ici, mais nous avons des problèmes sur nos serveurs!"
 
-#: sketch_map_tool/templates/create-results.html:35
+#: sketch_map_tool/templates/create-results.html:36
 msgid "We are creating the Sketch Map template that you can use for offline\n"
 "                        participatory mapping.<br>\n"
 "                        <strong>Please be patient, this can take 2-10 minutes.</strong><br>\n"
@@ -884,42 +916,42 @@ msgid "We are creating the Sketch Map template that you can use for offline\n"
 "                    "
 msgstr ""
 
-#: sketch_map_tool/templates/create-results.html:50
+#: sketch_map_tool/templates/create-results.html:51
 msgid "We have created the Sketch Map template that you can\n"
-"                        use for offline participatory mapping.<br> \n"
+"                        use for offline participatory mapping.<br>\n"
 "                        <strong>You can now start collecting data in the field!</strong>"
 msgstr ""
 
-#: sketch_map_tool/templates/create-results.html:57
-#: sketch_map_tool/templates/digitize-results.html:79
+#: sketch_map_tool/templates/create-results.html:58
+#: sketch_map_tool/templates/digitize-results.html:83
 msgid "Sorry! <br>Something went wrong while trying to generate the Result."
 msgstr "Désolé. <br>Une erreur s'est produite lors de la génération du résultat."
 
-#: sketch_map_tool/templates/create-results.html:59
+#: sketch_map_tool/templates/create-results.html:60
 msgid "Download PDF"
 msgstr "Télécharger PDF"
 
-#: sketch_map_tool/templates/create-results.html:67
+#: sketch_map_tool/templates/create-results.html:68
 msgid "Data quality of your Sketch Map"
 msgstr ""
 
-#: sketch_map_tool/templates/create-results.html:70
+#: sketch_map_tool/templates/create-results.html:71
 msgid "You can get insight into the <em>fitness for field data collection</em> of OpenStreetMap data through the <a href=\"https://dashboard.ohsome.org\" target=\"_blank\">ohsome dashboard</a>."
 msgstr ""
 
-#: sketch_map_tool/templates/create-results.html:74
+#: sketch_map_tool/templates/create-results.html:75
 msgid "Get Quality Report"
 msgstr "Rapport de contrôle de la qualité de la carte"
 
-#: sketch_map_tool/templates/create.html:24
+#: sketch_map_tool/templates/create.html:25
 msgid "Area of Interest"
 msgstr "Zone d'intérêt"
 
-#: sketch_map_tool/templates/create.html:28
+#: sketch_map_tool/templates/create.html:29
 msgid "Page Setup"
 msgstr "Configuration de la page"
 
-#: sketch_map_tool/templates/create.html:30
+#: sketch_map_tool/templates/create.html:31
 msgid "You are currently trying to\n"
 "                        request a map that crosses the +/-180° <a href=\"https://en.wikipedia.org/wiki/180th_meridian\" target=\"_blank\">antimeridian</a>. This is currently not\n"
 "                        supported, please move the map such that your extent is either left or right of\n"
@@ -929,162 +961,245 @@ msgstr "Vous essayez actuellement de\n"
 "                        actuellement, veuillez déplacer la carte de façon à ce que votre étendue soit à gauche ou à droite de\n"
 "                        l'antiméridien."
 
-#: sketch_map_tool/templates/create.html:37
+#: sketch_map_tool/templates/create.html:38
 msgid "Paper Format"
 msgstr "Format de papier"
 
-#: sketch_map_tool/templates/create.html:40
+#: sketch_map_tool/templates/create.html:41
 msgid "Paper Orientation"
 msgstr "Orientation du papier"
 
-#: sketch_map_tool/templates/create.html:48
+#: sketch_map_tool/templates/create.html:49
 msgid "NEXT"
 msgstr "SUIVANT"
 
-#: sketch_map_tool/templates/create.html:56
+#: sketch_map_tool/templates/create.html:57
+#: sketch_map_tool/templates/digitize-preview.html:59
 msgid "Add OpenAerialMap Layer"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:58
+#: sketch_map_tool/templates/create.html:59
+#: sketch_map_tool/templates/digitize-preview.html:61
 msgid "<a href=\"https://map.openaerialmap.org\" target=\"_blank\">Browse</a> the OpenAerialMap collection to find aerial images. Once you’ve selected an image, simply copy its ID and paste it here."
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:61
+#: sketch_map_tool/templates/create.html:62
+#: sketch_map_tool/templates/digitize-preview.html:64
 msgid "No image for given ID could be found on OpenAerialMap. Please check given ID and try again."
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:64
+#: sketch_map_tool/templates/create.html:65
+#: sketch_map_tool/templates/digitize-preview.html:67
 msgid "Cancel"
 msgstr "Annuler"
 
-#: sketch_map_tool/templates/create.html:65
+#: sketch_map_tool/templates/create.html:66
+#: sketch_map_tool/templates/digitize-preview.html:68
 msgid "Add to Map"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:76
+#: sketch_map_tool/templates/create.html:77
+#: sketch_map_tool/templates/digitize-preview.html:79
 msgid "OpenAerialMap Metadata"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:84
+#: sketch_map_tool/templates/create.html:85
+#: sketch_map_tool/templates/digitize-preview.html:87
 msgid "Title"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:88
+#: sketch_map_tool/templates/create.html:89
+#: sketch_map_tool/templates/digitize-preview.html:91
 msgid "Date"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:92
+#: sketch_map_tool/templates/create.html:93
+#: sketch_map_tool/templates/digitize-preview.html:95
 msgid "Resolution"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:96
+#: sketch_map_tool/templates/create.html:97
+#: sketch_map_tool/templates/digitize-preview.html:99
 msgid "Provider"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:100
+#: sketch_map_tool/templates/create.html:101
+#: sketch_map_tool/templates/digitize-preview.html:103
 msgid "Platform"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:104
+#: sketch_map_tool/templates/create.html:105
+#: sketch_map_tool/templates/digitize-preview.html:107
 msgid "License"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:108
+#: sketch_map_tool/templates/create.html:109
+#: sketch_map_tool/templates/digitize-preview.html:111
 msgid "Item Id"
 msgstr ""
 
-#: sketch_map_tool/templates/create.html:114
+#: sketch_map_tool/templates/create.html:115
+#: sketch_map_tool/templates/digitize-preview.html:117
 msgid "OK"
 msgstr ""
 
+#: sketch_map_tool/templates/digitize-preview.html:12
 #: sketch_map_tool/templates/digitize-results.html:8
 #: sketch_map_tool/templates/digitize.html:10
 msgid "Paper to GIS:"
 msgstr "Papier vers SIG :"
 
+#: sketch_map_tool/templates/digitize-preview.html:13
 #: sketch_map_tool/templates/digitize-results.html:9
 #: sketch_map_tool/templates/digitize.html:11
 msgid "Automatically Digitize Your Sketch&nbsp;Maps"
 msgstr "Numérisez automatiquement vos cartes croquis"
 
+#: sketch_map_tool/templates/digitize-preview.html:18
 #: sketch_map_tool/templates/digitize-results.html:14
 #: sketch_map_tool/templates/digitize.html:16
-#: sketch_map_tool/templates/index.html:57
-#: sketch_map_tool/templates/index.html:72
-msgid "Scan or photograph your marked Sketch&nbsp;Maps"
-msgstr "Scannez ou photographiez vos cartes croquis"
+#: sketch_map_tool/templates/index.html:62
+#: sketch_map_tool/templates/index.html:77
+msgid "Photograph your Marked Sketch&nbsp;Maps"
+msgstr ""
 
+#: sketch_map_tool/templates/digitize-preview.html:19
 #: sketch_map_tool/templates/digitize-results.html:15
 #: sketch_map_tool/templates/digitize.html:17
-#: sketch_map_tool/templates/index.html:58
-#: sketch_map_tool/templates/index.html:73
+#: sketch_map_tool/templates/index.html:63
+#: sketch_map_tool/templates/index.html:78
 msgid "Upload your Sketch&nbsp;Maps"
 msgstr "Téléchargez vos croquis"
 
+#: sketch_map_tool/templates/digitize-preview.html:20
 #: sketch_map_tool/templates/digitize-results.html:16
-msgid "Download collected markings as geodata"
-msgstr "Téléchargez les marquages collectés en tant que données géographiques"
+#: sketch_map_tool/templates/digitize.html:18
+#: sketch_map_tool/templates/index.html:64
+#: sketch_map_tool/templates/index.html:79
+msgid "View & Download Results"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:26
+msgid "Sketch Map Results"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:46
+#: sketch_map_tool/templates/digitize-preview.html:48
+#: sketch_map_tool/templates/digitize-preview.html:150
+msgid "Legend"
+msgstr "Légende"
+
+#: sketch_map_tool/templates/digitize-preview.html:47
+#: sketch_map_tool/templates/digitize-preview.html:123
+msgid "Close"
+msgstr "Fermer"
+
+#: sketch_map_tool/templates/digitize-preview.html:52
+msgid "Download Results"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:122
+#: sketch_map_tool/templates/digitize-preview.html:144
+msgid "Errors"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:129
+msgid "An unexpected error occurred on our server. Please contact the Sketch Map Tool support at"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:131
+msgid "and include the following details:"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:156
+msgid "Results"
+msgstr ""
 
 #: sketch_map_tool/templates/digitize-results.html:34
-msgid "raster data icon"
-msgstr "icône de données raster"
+msgid "pdf map icon"
+msgstr ""
 
 #: sketch_map_tool/templates/digitize-results.html:35
-msgid "Raster"
-msgstr "Raster"
-
-#: sketch_map_tool/templates/digitize-results.html:37
-msgid "Georeferenced map frames as GeoTiffs"
+msgid "Map"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize-results.html:39
-msgid "We are georeferencing the map frames of your Sketch Maps.<br>\n"
-"                        Please be patient this can take 2-10 minutes."
+#: sketch_map_tool/templates/digitize-results.html:38
+msgid "Your Markings as PDF Map"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize-results.html:45
-msgid "We have georeferenced the map frames of your Sketch Maps."
+#: sketch_map_tool/templates/digitize-results.html:40
+msgid "We are creating a pdf document showing all markings on a background map.<br>\n"
+"                        Good for printing, reports and presentations. <br>\n"
+"                        Please be patient this can take a minute."
 msgstr ""
 
-#: sketch_map_tool/templates/digitize-results.html:50
+#: sketch_map_tool/templates/digitize-results.html:47
+msgid "A ready-made pdf document showing all markings on a background map. <br>\n"
+"                        Good for printing, reports, presentations and sharing."
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-results.html:53
+#: sketch_map_tool/templates/digitize-results.html:110
 msgid "Sorry!<br>\n"
 "                        Something went wrong while trying to generate the result."
 msgstr ""
 
-#: sketch_map_tool/templates/digitize-results.html:55
-msgid "Download Map Frames"
+#: sketch_map_tool/templates/digitize-results.html:58
+msgid "Download Results Map"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize-results.html:63
+#: sketch_map_tool/templates/digitize-results.html:66
 msgid "vector data icon"
 msgstr "icône de données vectorielles"
 
-#: sketch_map_tool/templates/digitize-results.html:64
-msgid "Vector"
-msgstr "Vecteur"
+#: sketch_map_tool/templates/digitize-results.html:67
+msgid "Detected Markings"
+msgstr ""
 
-#: sketch_map_tool/templates/digitize-results.html:66
+#: sketch_map_tool/templates/digitize-results.html:69
 msgid "Georeferenced markings as GeoJSON"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize-results.html:68
+#: sketch_map_tool/templates/digitize-results.html:71
 msgid "We are extracting and georeferencing the color markings of your Sketch Maps.<br>\n"
 "                        Please be patient this can take 2-10 minutes."
 msgstr ""
 
-#: sketch_map_tool/templates/digitize-results.html:74
-msgid "We have extracted and georeferenced the color markings of your Sketch Maps."
+#: sketch_map_tool/templates/digitize-results.html:77
+msgid "We have extracted and georeferenced the color markings of your Sketch Maps.<br>\n"
+"                        Opens in mapping software, e.g. QGIS, ArcGIS, uMap or geojson.io"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize-results.html:81
+#: sketch_map_tool/templates/digitize-results.html:85
 msgid "Download Markings"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize.html:18
-#: sketch_map_tool/templates/index.html:59
-#: sketch_map_tool/templates/index.html:74
-msgid "Download collected Markings as Geodata"
-msgstr "Téléchargez les marquages collectés en tant que données géographiques"
+#: sketch_map_tool/templates/digitize-results.html:92
+msgid "raster data icon"
+msgstr "icône de données raster"
+
+#: sketch_map_tool/templates/digitize-results.html:93
+msgid "Georeferenced Images"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-results.html:95
+msgid "Your uploaded Sketch Maps as GeoTiffs"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-results.html:97
+msgid "We are georeferencing your uploaded Sketch Maps.<br>\n"
+"                        Opens in desktop mapping software like QGIS, ArcGIS, and many image editors.<br>\n"
+"                        Please be patient this can take 2-10 minutes."
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-results.html:104
+msgid "We have georeferenced your uploaded Sketch Maps.<br>\n"
+"                        Opens in desktop mapping software like QGIS, ArcGIS, and many image editors.<br>"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-results.html:115
+msgid "Download Images"
+msgstr ""
 
 #: sketch_map_tool/templates/digitize.html:22
 msgid "Scan or photograph your marked Sketch Maps after data collection.<br>Then, upload one or\n"
@@ -1124,35 +1239,35 @@ msgstr "Pour entraîner et améliorer les algorithmes de détection de croquis,\
 "                            nous avons besoin de vos données de cas d'utilisation réels et nous vous demandons la permission\n"
 "                            de conserver les fichiers téléchargés après analyse."
 
-#: sketch_map_tool/templates/digitize.html:52
+#: sketch_map_tool/templates/digitize.html:54
 msgid "Agree & Upload"
 msgstr "Accepter et télécharger"
 
-#: sketch_map_tool/templates/digitize.html:53
+#: sketch_map_tool/templates/digitize.html:55
 msgid "OR"
 msgstr "Ou"
 
-#: sketch_map_tool/templates/digitize.html:54
+#: sketch_map_tool/templates/digitize.html:56
 msgid "Reject & Upload"
 msgstr "Rejeter et télécharger"
 
-#: sketch_map_tool/templates/digitize.html:58
+#: sketch_map_tool/templates/digitize.html:60
 msgid "If you agree, we would keep your data internally to use it as training and\n"
 "                                test data to improve the Sketch Map Tool."
 msgstr "Si vous acceptez, nous conserverons vos données en interne pour les utiliser comme données de formation et \n"
 "                                de test afin d'améliorer le Sketch Map Tool."
 
-#: sketch_map_tool/templates/digitize.html:63
+#: sketch_map_tool/templates/digitize.html:65
 msgid "If you don't agree, your files are ONLY stored for processing for a short time\n"
 "                        until your results are generated."
 msgstr "Si vous n'êtes pas d'accord, vos fichiers sont SEULEMENT stockés pour analyse pendant une courte période\n"
 "                        jusqu'à ce que vos résultats soient générés."
 
-#: sketch_map_tool/templates/digitize.html:68
+#: sketch_map_tool/templates/digitize.html:70
 msgid "Read more info on"
 msgstr "En savoir plus sur"
 
-#: sketch_map_tool/templates/digitize.html:70
+#: sketch_map_tool/templates/digitize.html:72
 msgid "Share your data for the Improvement of the Sketch Map Tool."
 msgstr ""
 
@@ -1893,15 +2008,11 @@ msgstr "Créez des cartes sur papier pour collecter des données"
 msgid "Paper to GIS:<br>Automatically Digitize Your Sketch&nbsp;Maps"
 msgstr "Du papier au SIG : <br>Numérisez automatiquement vos cartes croquis"
 
-#: sketch_map_tool/templates/index.html:67
-msgid "Map Quality Check"
-msgstr "Contrôle de la qualité de la carte"
-
-#: sketch_map_tool/templates/index.html:79
+#: sketch_map_tool/templates/index.html:84
 msgid "Create a Sketch&nbsp;Map"
 msgstr "Créer un croquis"
 
-#: sketch_map_tool/templates/index.html:83
+#: sketch_map_tool/templates/index.html:88
 msgid "Digitize your Sketch&nbsp;Maps"
 msgstr "Numérisez vos croquis"
 
@@ -1934,18 +2045,18 @@ msgstr "Longueur inattendue du contenu du code QR."
 msgid "QR-Code does not have expected content."
 msgstr "Le code QR n'a pas de contenu attendu."
 
-#: sketch_map_tool/wms/client.py:74
+#: sketch_map_tool/wms/client.py:75
 msgid "Map area couldn't be processed with the current resources. Please try again once."
 msgstr "La zone de la carte n'a pas pu être traitée avec les ressources actuelles. Veuillez réessayer une fois."
 
-#: sketch_map_tool/wms/client.py:94
+#: sketch_map_tool/wms/client.py:95
 #, python-brace-format
 msgid "The Web Map Service returned an error. Please try again later. Response from the WMS:\n"
 "{ERROR_MSG}"
 msgstr "Le service de carte Web a renvoyé une erreur. Veuillez réessayer ultérieurement. Réponse du WMS: \n"
 "{ERROR_MSG}"
 
-#: sketch_map_tool/wms/client.py:100
+#: sketch_map_tool/wms/client.py:103 sketch_map_tool/wms/client.py:107
 msgid "The Web Map Service returned an error. Please try again later."
 msgstr "Le service de carte Web a renvoyé une erreur. Veuillez réessayer plus tard."
 
