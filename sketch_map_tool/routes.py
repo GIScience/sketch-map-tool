@@ -57,6 +57,8 @@ from sketch_map_tool.validators import (
 )
 
 
+# UI
+#
 @app.get("/")
 @app.get("/<lang>")
 def index(lang="en") -> str:
@@ -328,6 +330,8 @@ def digitize_results_get(lang="en", uuid: str | None = None) -> Response | str:
     return render_template("digitize-results.html", lang=lang)
 
 
+# API
+#
 @app.get("/api/status/<uuid>/<type_>")
 @app.get("/<lang>/api/status/<uuid>/<type_>")
 def status(uuid: str, type_: REQUEST_TYPES, lang="en") -> Response:

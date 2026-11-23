@@ -28,3 +28,8 @@ def test_vector(vector):
 def test_raster(raster):
     assert raster is not None
     assert len(raster) > 0
+
+
+def test_result_map(result_map):
+    assert result_map is not None
+    assert len(result_map) > 0

@@ -8,9 +8,7 @@ from ultralytics import YOLO
 from ultralytics_MB import YOLO as YOLO_MB
 
 from sketch_map_tool.config import CONFIG
-from sketch_map_tool.upload_processing.detect_markings import (
-    detect_markings,
-)
+from sketch_map_tool.upload_processing import detect_markings
 from sketch_map_tool.upload_processing.ml_models import (
     init_model,
     select_computation_device,

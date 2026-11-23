@@ -1,7 +1,6 @@
 """Generate a sketch map PDF."""
 
 import io
-import math
 from io import BytesIO
 from typing import Tuple
 
@@ -12,7 +11,7 @@ from geojson.utils import coords, map_tuples
 from PIL import Image
 from pyproj import Transformer
 from reportlab.graphics.shapes import Drawing
-from reportlab.lib.colors import Color, HexColor
+from reportlab.lib.colors import Color
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
@@ -30,7 +29,6 @@ from sketch_map_tool.models import Bbox, MapFrame, PaperFormat
 flowables.Image.MAX_IMAGE_PIXELS = None  # ty: ignore[unresolved-attribute]
 
 WGS84_TO_WEB_MERCATOR = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
-WEB_MERCATOR_TO_WGS84 = Transformer.from_crs("EPSG:3857", "EPSG:4326", always_xy=True)
 
 
 def generate_pdf(
@@ -61,7 +59,7 @@ def generate_result_map_pdf(
         getattr(definitions, map_frame.format.upper()),
         0,  # TODO(hack): scale value is missing
         map_frame.layer,
-        None,  # TODO
+        map_frame.bbox_3857,
         markings,
     )[0]
 
@@ -72,7 +70,7 @@ def _generate_pdf(
     format_: PaperFormat,
     scale: float,
     layer: str,
-    bbox: Bbox | None,
+    bbox_3857: Bbox | None,
     markings: FeatureCollection | None,
 ) -> Tuple[BytesIO, BytesIO]:
     """Generate a Sketch Map PDF.
@@ -129,7 +127,7 @@ def _generate_pdf(
         portrait,
         m_per_px,
         img_format,
-        bbox,
+        bbox_3857,
         markings,
     )
 
@@ -309,7 +307,7 @@ def create_map_frame(
     portrait: bool,
     m_per_px: float,
     img_format: str,
-    bbox: Bbox | None = None,
+    bbox_3857: Bbox | None = None,
     markings: FeatureCollection | None = None,
 ) -> BytesIO:
     map_frame = BytesIO()
@@ -345,11 +343,11 @@ def create_map_frame(
             draw_aruco_markers(canvas, marker_size, height, width)
             add_scalebar(canvas, width, height, m_per_px, format_, marker_size)
 
-    if markings is not None and bbox is not None:
+    if markings is not None and bbox_3857 is not None:
         draw_markings(
             canvas,
             markings,
-            bbox,
+            bbox_3857,
             width,
             height,
             portrait,
@@ -490,31 +488,23 @@ def get_aruco_markers(size: int) -> list:
 def geo_to_canvas(
     lon: float,
     lat: float,
-    bbox: Bbox,
+    bbox_3857: Bbox,
     width: float,
     height: float,
     portrait: bool,
 ) -> tuple[float, float]:
     """Convert geo coordinates to map frame canvas coordinates."""
     x, y = WGS84_TO_WEB_MERCATOR.transform(lon, lat)  # c1 c2
-    fx = (x - bbox.lon_min) / (bbox.lon_max - bbox.lon_min)  # 0 = west, 1 = east
-    fy = (y - bbox.lat_min) / (bbox.lat_max - bbox.lat_min)  # 0 = south, 1 = north
-
-    bbox_lon_min, bbox_lat_min = WEB_MERCATOR_TO_WGS84.transform(
-        bbox.lon_min, bbox.lat_min
-    )
-    bbox_lon_max, bbox_lat_max = WEB_MERCATOR_TO_WGS84.transform(
-        bbox.lon_max, bbox.lat_max
-    )
-
-    fx1 = (lon - bbox_lon_min) / (bbox_lon_max - bbox_lon_min)  # 0 = west, 1 = east
-    fy1 = (lat - bbox_lat_min) / (bbox_lat_max - bbox_lat_min)  # 0 = south, 1 = north
-    assert math.isclose(fx, fx1, rel_tol=1 / 1000), str((fx, fx1))
-    assert math.isclose(fy, fy1, rel_tol=1 / 1000), str((fy, fy1))
-
+    fx = (x - bbox_3857.lon_min) / (
+        bbox_3857.lon_max - bbox_3857.lon_min
+    )  # 0 = west, 1 = east
+    fy = (y - bbox_3857.lat_min) / (
+        bbox_3857.lat_max - bbox_3857.lat_min
+    )  # 0 = south, 1 = north
     if portrait:
         # The image is drawn rotated by 90°: north points left, east points up
         return (1 - fy) * height, fx * width
+
     return fx * width, fy * height
 
 
@@ -558,7 +548,7 @@ def draw_polygon(
 def draw_markings(
     canvas: Canvas,
     markings: FeatureCollection,
-    bbox: Bbox,
+    bbox_3857: Bbox,
     width: float,
     height: float,
     portrait: bool,
@@ -566,17 +556,18 @@ def draw_markings(
 ) -> None:
     """Draw all features of a GeoJSON FeatureCollection onto the map frame."""
     markings = map_tuples(
-        lambda c: geo_to_canvas(c[0], c[1], bbox, width, height, portrait),
+        lambda c: geo_to_canvas(c[0], c[1], bbox_3857, width, height, portrait),
         markings,
     )
     for marking in markings["features"]:
         properties = marking["properties"]
-        color = HexColor(properties["fill"])
         match marking["geometry"]["type"]:
             case "Point":
+                color = properties["marker-color"]
                 for x, y in coords(marking):
                     draw_point(canvas, x, y, radius=radius, color=color)
             case "Polygon":
+                color = properties["fill"]
                 fill_opacity = properties["fill-opacity"]
                 draw_polygon(
                     canvas,
