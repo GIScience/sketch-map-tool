@@ -17,7 +17,7 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen.canvas import FILL_EVEN_ODD, Canvas
-from reportlab.platypus import Frame, Paragraph, Table, TableStyle, flowables
+from reportlab.platypus import Frame, Paragraph, flowables
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool import definitions
@@ -203,29 +203,9 @@ def draw_right_column(
     em = normal_style.fontSize  # ty: ignore[unresolved-attribute]
 
     # Add Logos
-    gap = 1 * em
-    logo_width = (width - margin - gap) / 2
-    smt_logo = svg2rlg(PDF_RESOURCES_PATH / "SketchMap_Logo_compact.svg")
-
+    logo_width = width - margin
+    smt_logo = svg2rlg(PDF_RESOURCES_PATH / "SketchMap_Logo.svg")
     smt_logo = resize_rlg_by_width(smt_logo, logo_width)
-    # heigit_logo = svg2rlg(PDF_RESOURCES_PATH / "HeiGIT_Logo_compact.svg")
-    # heigit_logo = resize_rlg_by_width(heigit_logo, width - margin)
-    logos = Table(
-        [[smt_logo]],  # TODO: add custom/second logo here
-        colWidths=[logo_width + gap, logo_width],
-        hAlign="LEFT",
-    )
-    logos.setStyle(
-        TableStyle(
-            [
-                ("LEFTPADDING", (0, 0), (-1, -1), 0),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-                ("TOPPADDING", (0, 0), (-1, -1), 0),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-            ]
-        )
-    )
     compass_size = width * 0.20  # this is the current ratio of the right column width
     compass = get_compass(compass_size, portrait)
 
@@ -243,7 +223,7 @@ def draw_right_column(
     )  # height will be filled after list creation
     # order all elements in column
     flowables_ = [
-        logos,
+        smt_logo,
         flowables.Spacer(width, 2 * em),
         # heigit_logo,
         space_filler,
