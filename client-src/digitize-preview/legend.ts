@@ -173,6 +173,20 @@ export function renderLegend(entries: LegendEntry[], styleFunction: StyleFunctio
     document.querySelector<HTMLUListElement>("#legend-list")!.replaceChildren(...items);
 }
 
+export function initLegendInfo() {
+    const infoButton = document.querySelector("#legend-info-btn") as HTMLButtonElement | null;
+    const infoPanel = document.querySelector("#legend-info-panel") as HTMLDivElement | null;
+
+    infoButton?.addEventListener("click", () => infoPanel?.toggleAttribute("hidden"));
+    infoButton?.addEventListener("keydown", (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            // Prevent Space from scrolling the page down
+            event.preventDefault();
+            infoPanel?.toggleAttribute("hidden");
+        }
+    })
+}
+
 /**
  * Editable legend title: the textarea grows with its content (CSS field-sizing, with a fallback
  * for browsers without it).

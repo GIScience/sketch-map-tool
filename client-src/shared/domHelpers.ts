@@ -45,6 +45,16 @@ function setDisabled(elementId: string, isDisabled: boolean) {
 }
 
 /**
+ * Sets or removes the hidden HTMLAttribute on the given HTMLElement
+ * @param elementId - the id of the HTMLElement
+ * @param isHidden
+ */
+function setHidden(elementId: string, isHidden: boolean) {
+    const element = document.getElementById(elementId)!;
+    element.toggleAttribute("hidden", isHidden);
+}
+
+/**
  * Sets the href HTMLAttribute on a link element
  * @param linkElementId - the id of the link element
  * @param url
@@ -106,6 +116,7 @@ function setListItems(list: HTMLUListElement, messages: string[]) {
 export {
     fillSelectOptions,
     setTaskStatus,
+    setHidden,
     setDisabled,
     setDownloadLink,
     setIsBusy,

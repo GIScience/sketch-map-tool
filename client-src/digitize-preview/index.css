@@ -27,6 +27,39 @@
     }
 }
 
+#legend-info-panel {
+    border: 1px solid lightgrey;
+    border-radius: 0.75rem;
+    background-color: ivory;
+
+    /* Open state */
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 8rem;
+
+    /* Transition properties + discrete display support */
+    transition: opacity 0.25s ease,
+    transform 0.25s ease,
+    max-height 0.25s ease,
+    display 0.25s allow-discrete;
+
+    /* 1. Entry animation: starting frame right when [hidden] is removed.
+       Nested after the open state, so it wins the cascade (same specificity). */
+    @starting-style {
+        opacity: 0;
+        transform: translateY(-6px);
+        max-height: 0;
+    }
+
+    /* 2. Exit animation: target frame when [hidden] is added back */
+    &[hidden] {
+        display: none !important;
+        opacity: 0;
+        transform: translateY(-6px);
+        max-height: 0;
+    }
+}
+
 .legend-title-wrapper {
     /* pen icon: tip at its bottom-left corner */
     --pen-height: 1rem;
@@ -76,14 +109,19 @@
     --pico-background-color: transparent;
 }
 
+#legend-title:placeholder-shown {
+    font-style: italic;
+}
+
 /* "optional title, click to add" hint: empty and not being edited.
    Excluding :focus leaves focus to Pico's normal focus style. */
 #legend-title:placeholder-shown:not(:focus) {
     --pico-border-color: var(--heigit-red);
 
-    font-style: italic;
     border-style: dashed;
 }
+
+
 
 /* the pen sits at the last line */
 .legend-title-icon {

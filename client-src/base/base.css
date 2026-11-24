@@ -40,6 +40,24 @@
     color: var(--heigit-red);
 }
 
+.info-icon {
+    all: unset;
+    cursor: pointer;
+    font-size: 1rem;
+    vertical-align: super;
+    transition: color var(--pico-transition), box-shadow var(--pico-transition);
+
+    /* Restore accessible focus ring (since all: unset removes default outlines) */
+    &:focus-visible {
+        box-shadow: 0 0 0 var(--pico-outline-width) var(--pico-primary-focus);
+        color: var(--heigit-red);
+    }
+
+    &:hover {
+        color: var(--heigit-red);
+    }
+}
+
 /* wrap whole page in a flexbox to fill up whitespace between main and footer */
 body {
     height: 100vh;

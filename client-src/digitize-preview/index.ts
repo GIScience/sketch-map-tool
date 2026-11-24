@@ -9,7 +9,7 @@ import {
 import { pollVectorResults, ResultStatus } from "./pollVectorResults";
 import { addGeoJSONPreviewLayer, createPreviewMap } from "./map";
 import { showProcessingErrorsBelowMap } from "./error-handling";
-import { initLegendTitle, renderLegend, summarizeFeatures } from "./legend";
+import { initLegendInfo, initLegendTitle, renderLegend, summarizeFeatures } from "./legend";
 
 /**
  * This is the main script which is invoked after DOM Content of digitize-preview.html is loaded.
@@ -29,6 +29,7 @@ const vectorResultsUrl = `/api/status/${getUUIDFromURL()}/vector-results`;
 
 // legend and errors bottom sheets on mobile
 initBottomSheets();
+initLegendInfo();
 initLegendTitle();
 
 const previewMap = await createPreviewMap(layer, bbox);
