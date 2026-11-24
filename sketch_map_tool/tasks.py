@@ -17,7 +17,7 @@ from sketch_map_tool.database import client_celery as db_client_celery
 from sketch_map_tool.definitions import get_attribution
 from sketch_map_tool.exceptions import MarkingDetectionError
 from sketch_map_tool.helpers import N_, merge, to_array
-from sketch_map_tool.models import Bbox, MapFrame, PaperFormat, Size
+from sketch_map_tool.models import Bbox, Legend, MapFrame, PaperFormat, Size
 from sketch_map_tool.openaerialmap import client as oam_client
 from sketch_map_tool.upload_processing import (
     clip,
@@ -210,8 +210,12 @@ def upload_processing(
 #
 #
 @celery.task
-def generate_result_map(map_frame: MapFrame, markings: FeatureCollection) -> BytesIO:
-    return map_generation.generate_result_map_pdf(map_frame, markings)
+def generate_result_map(
+    map_frame: MapFrame,
+    markings: FeatureCollection,
+    legend: Legend | None,
+) -> BytesIO:
+    return map_generation.generate_result_map_pdf(map_frame, markings, legend)
 
 
 @celery.task(ignore_result=True)

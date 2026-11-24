@@ -23,7 +23,7 @@ from svglib.svglib import svg2rlg
 from sketch_map_tool import definitions
 from sketch_map_tool.definitions import PDF_RESOURCES_PATH, get_attribution
 from sketch_map_tool.helpers import resize_rlg_by_width
-from sketch_map_tool.models import Bbox, MapFrame, PaperFormat
+from sketch_map_tool.models import Bbox, Legend, MapFrame, PaperFormat
 
 # PIL should be able to open high resolution PNGs of large Maps:
 flowables.Image.MAX_IMAGE_PIXELS = None  # ty: ignore[unresolved-attribute]
@@ -52,6 +52,7 @@ def generate_pdf(
 def generate_result_map_pdf(
     map_frame: MapFrame,
     markings: FeatureCollection,
+    legend: Legend | None,
 ) -> BytesIO:
     return _generate_pdf(
         map_frame.map_image_as_image(),
@@ -61,6 +62,7 @@ def generate_result_map_pdf(
         map_frame.layer,
         map_frame.bbox_3857,
         markings,
+        legend,
     )[0]
 
 
@@ -72,6 +74,7 @@ def _generate_pdf(
     layer: str,
     bbox_3857: Bbox | None,
     markings: FeatureCollection | None,
+    legend: Legend | None,
 ) -> Tuple[BytesIO, BytesIO]:
     """Generate a Sketch Map PDF.
 
@@ -169,6 +172,7 @@ def _generate_pdf(
         format_,
         layer,
         portrait,
+        legend,
     )
 
     # Generate PDFs:
@@ -198,8 +202,10 @@ def draw_right_column(
     format_,
     layer: str,
     portrait=False,
+    legend: Legend | None = None,
 ) -> None:
     normal_style = scale_style(format_, "Normal", 50)
+    heading_style = scale_style(format_, "Heading1", 50)
     em = normal_style.fontSize  # ty: ignore[unresolved-attribute]
 
     # Add Logos
@@ -211,6 +217,11 @@ def draw_right_column(
 
     p_created_by_heigit = Paragraph("Created by HeiGIT gGmbH", normal_style)
     p_copyright = Paragraph(get_attribution(layer), normal_style)
+
+    if legend is not None:
+        legend_title = Paragraph(legend.title, heading_style)
+    else:
+        legend_title = ""
 
     qr_size = min(width, height) - margin
     if qr_code is not None:
@@ -226,6 +237,7 @@ def draw_right_column(
         smt_logo,
         flowables.Spacer(width, 2 * em),
         # heigit_logo,
+        legend_title,
         space_filler,
         compass,
         flowables.Spacer(width, 2 * em),

@@ -138,3 +138,7 @@ class MapFrame(BaseModel):
 
     def map_image_as_array(self) -> NDArray:
         return to_array(self.map_image)
+
+
+class Legend(BaseModel):
+    title: str = ""
