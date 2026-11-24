@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-23 15:49+0000\n"
-"PO-Revision-Date: 2026-11-23 15:49\n"
+"POT-Creation-Date: 2026-11-24 16:22+0000\n"
+"PO-Revision-Date: 2026-11-24 16:22\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -27,23 +27,23 @@ msgstr ""
 msgid "There are no tasks for UUID {UUID}"
 msgstr ""
 
-#: sketch_map_tool/routes.py:303
+#: sketch_map_tool/routes.py:307
 msgid "Result is not yet ready. Please try again later."
 msgstr ""
 
-#: sketch_map_tool/routes.py:355
+#: sketch_map_tool/routes.py:359
 msgid "None of your uploaded sketch maps could be processed. Please check the quality of your uploaded sketch maps (e.g. sharpness, lighting, completely visible map frame) and try again."
 msgstr ""
 
-#: sketch_map_tool/routes.py:366
+#: sketch_map_tool/routes.py:370
 msgid "Some of your uploaded sketch maps could not be processed."
 msgstr ""
 
-#: sketch_map_tool/routes.py:475
+#: sketch_map_tool/routes.py:479
 msgid "Internal Server Error"
 msgstr ""
 
-#: sketch_map_tool/routes.py:476
+#: sketch_map_tool/routes.py:480
 msgid "Oops... we seem to have made a mistake, sorry!"
 msgstr ""
 
@@ -953,72 +953,72 @@ msgid "NEXT"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:57
-#: sketch_map_tool/templates/digitize-preview.html:59
+#: sketch_map_tool/templates/digitize-preview.html:81
 msgid "Add OpenAerialMap Layer"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:59
-#: sketch_map_tool/templates/digitize-preview.html:61
+#: sketch_map_tool/templates/digitize-preview.html:83
 msgid "<a href=\"https://map.openaerialmap.org\" target=\"_blank\">Browse</a> the OpenAerialMap collection to find aerial images. Once you’ve selected an image, simply copy its ID and paste it here."
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:62
-#: sketch_map_tool/templates/digitize-preview.html:64
+#: sketch_map_tool/templates/digitize-preview.html:86
 msgid "No image for given ID could be found on OpenAerialMap. Please check given ID and try again."
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:65
-#: sketch_map_tool/templates/digitize-preview.html:67
+#: sketch_map_tool/templates/digitize-preview.html:89
 msgid "Cancel"
 msgstr "Cancelar"
 
 #: sketch_map_tool/templates/create.html:66
-#: sketch_map_tool/templates/digitize-preview.html:68
+#: sketch_map_tool/templates/digitize-preview.html:90
 msgid "Add to Map"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:77
-#: sketch_map_tool/templates/digitize-preview.html:79
+#: sketch_map_tool/templates/digitize-preview.html:101
 msgid "OpenAerialMap Metadata"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:85
-#: sketch_map_tool/templates/digitize-preview.html:87
+#: sketch_map_tool/templates/digitize-preview.html:109
 msgid "Title"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:89
-#: sketch_map_tool/templates/digitize-preview.html:91
+#: sketch_map_tool/templates/digitize-preview.html:113
 msgid "Date"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:93
-#: sketch_map_tool/templates/digitize-preview.html:95
+#: sketch_map_tool/templates/digitize-preview.html:117
 msgid "Resolution"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:97
-#: sketch_map_tool/templates/digitize-preview.html:99
+#: sketch_map_tool/templates/digitize-preview.html:121
 msgid "Provider"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:101
-#: sketch_map_tool/templates/digitize-preview.html:103
+#: sketch_map_tool/templates/digitize-preview.html:125
 msgid "Platform"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:105
-#: sketch_map_tool/templates/digitize-preview.html:107
+#: sketch_map_tool/templates/digitize-preview.html:129
 msgid "License"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:109
-#: sketch_map_tool/templates/digitize-preview.html:111
+#: sketch_map_tool/templates/digitize-preview.html:133
 msgid "Item Id"
 msgstr ""
 
 #: sketch_map_tool/templates/create.html:115
-#: sketch_map_tool/templates/digitize-preview.html:117
+#: sketch_map_tool/templates/digitize-preview.html:139
 msgid "OK"
 msgstr ""
 
@@ -1063,34 +1063,45 @@ msgid "Sketch Map Results"
 msgstr ""
 
 #: sketch_map_tool/templates/digitize-preview.html:46
-#: sketch_map_tool/templates/digitize-preview.html:48
-#: sketch_map_tool/templates/digitize-preview.html:150
+#: sketch_map_tool/templates/digitize-preview.html:172
 msgid "Legend"
 msgstr "Legenda"
 
 #: sketch_map_tool/templates/digitize-preview.html:47
-#: sketch_map_tool/templates/digitize-preview.html:123
+#: sketch_map_tool/templates/digitize-preview.html:145
 msgid "Close"
 msgstr "Fechar"
 
-#: sketch_map_tool/templates/digitize-preview.html:52
+#: sketch_map_tool/templates/digitize-preview.html:49
+msgid "Map Title and Legend"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:64
+msgid " &plus; Add a custom title (optional)"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:64
+msgid "Legend title"
+msgstr ""
+
+#: sketch_map_tool/templates/digitize-preview.html:74
 msgid "Download Results"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize-preview.html:122
 #: sketch_map_tool/templates/digitize-preview.html:144
+#: sketch_map_tool/templates/digitize-preview.html:166
 msgid "Errors"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize-preview.html:129
+#: sketch_map_tool/templates/digitize-preview.html:151
 msgid "An unexpected error occurred on our server. Please contact the Sketch Map Tool support at"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize-preview.html:131
+#: sketch_map_tool/templates/digitize-preview.html:153
 msgid "and include the following details:"
 msgstr ""
 
-#: sketch_map_tool/templates/digitize-preview.html:156
+#: sketch_map_tool/templates/digitize-preview.html:178
 msgid "Results"
 msgstr ""
 
