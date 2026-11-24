@@ -46,6 +46,7 @@ def generate_pdf(
         layer,
         None,
         None,
+        None,
     )
 
 
@@ -218,10 +219,9 @@ def draw_right_column(
     p_created_by_heigit = Paragraph("Created by HeiGIT gGmbH", normal_style)
     p_copyright = Paragraph(get_attribution(layer), normal_style)
 
+    legend_elements = []
     if legend is not None:
-        legend_title = Paragraph(legend.title, heading_style)
-    else:
-        legend_title = ""
+        legend_elements.append(Paragraph(legend.title, heading_style))
 
     qr_size = min(width, height) - margin
     if qr_code is not None:
@@ -237,7 +237,7 @@ def draw_right_column(
         smt_logo,
         flowables.Spacer(width, 2 * em),
         # heigit_logo,
-        legend_title,
+        *legend_elements,
         space_filler,
         compass,
         flowables.Spacer(width, 2 * em),
