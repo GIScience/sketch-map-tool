@@ -295,6 +295,10 @@ def digitize_pdf_map_post(lang="en", uuid: str | None = None) -> Response:
         return redirect(url_for("digitize", lang=lang))
     uuid_ = validate_uuid(uuid)
 
+    # TODO Do s.th. with legend_title
+    legend_title = request.form.get("legend-title", "")
+    logging.info(f"Legend Title: {legend_title}")
+
     map_frame_uuid = db_client_flask.select_map_frame_uuid(uuid_)
     map_frame = db_client_flask.select_map_frame(map_frame_uuid)
 

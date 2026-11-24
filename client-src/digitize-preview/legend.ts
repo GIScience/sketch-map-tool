@@ -172,3 +172,21 @@ export function renderLegend(entries: LegendEntry[], styleFunction: StyleFunctio
     });
     document.querySelector<HTMLUListElement>("#legend-list")!.replaceChildren(...items);
 }
+
+/**
+ * Editable legend title: the textarea grows with its content (CSS field-sizing, with a fallback
+ * for browsers without it).
+ */
+export function initLegendTitle() {
+    const textarea = document.getElementById("legend-title") as HTMLTextAreaElement | null;
+    if (!textarea || CSS.supports("field-sizing", "content")) return;
+
+    const fitHeight = () => {
+        textarea.style.height = "auto";
+        const borders = textarea.offsetHeight - textarea.clientHeight;
+        textarea.style.height = `${textarea.scrollHeight + borders}px`;
+    };
+    textarea.addEventListener("input", fitHeight);
+    new ResizeObserver(fitHeight).observe(textarea.parentElement!); // re-wrap on width changes
+    fitHeight();
+}

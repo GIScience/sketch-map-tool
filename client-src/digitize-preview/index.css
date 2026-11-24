@@ -27,9 +27,78 @@
     }
 }
 
+.legend-title-wrapper {
+    /* pen icon: tip at its bottom-left corner */
+    --pen-height: 1rem;
+    --pen-width: calc(var(--pen-height) * 1780 / 2080);
+    --pen-right: 0.75rem;
+    --pen-bottom: 0.4rem;
+
+    position: relative;
+    margin: var(--pico-spacing) var(--pico-spacing) 0;
+
+    /* without a border (with text, not focused): thin line under the text, up to the pen tip */
+    &::after {
+        position: absolute;
+        right: calc(var(--pen-right) + var(--pen-width) * 0.95);
+        bottom: var(--pen-bottom);
+        left: var(--pico-form-element-spacing-horizontal);
+        height: 1px;
+        background: #7a000a; /* pen outline color */
+        content: "";
+        opacity: 0;
+        transition: opacity var(--pico-transition);
+        pointer-events: none;
+    }
+
+    &:has(#legend-title:not(:placeholder-shown, :focus))::after {
+        opacity: 1;
+    }
+}
+
+#legend-title {
+    margin: 0;
+    padding-block: 0;
+    padding-right: calc(var(--pen-right) + var(--pen-width) + 0.5rem); /* room for the pen */
+    overflow: hidden;
+    border-width: 2px;
+    border-radius: 1.5rem;
+    font-size: 1.0rem;
+    font-weight: 700;
+    resize: none;
+    color: var(--pico-form-element-color);
+    field-sizing: content; /* grows with its content, JS fallback in initLegendTitle() */
+}
+
+/* with text and not being edited: reads as a plain title */
+#legend-title:not(:placeholder-shown, :focus) {
+    --pico-border-color: transparent;
+    --pico-background-color: transparent;
+}
+
+/* "optional title, click to add" hint: empty and not being edited.
+   Excluding :focus leaves focus to Pico's normal focus style. */
+#legend-title:placeholder-shown:not(:focus) {
+    --pico-border-color: var(--heigit-red);
+
+    font-style: italic;
+    border-style: dashed;
+}
+
+/* the pen sits at the last line */
+.legend-title-icon {
+    position: absolute;
+    right: var(--pen-right);
+    bottom: var(--pen-bottom);
+    width: var(--pen-width);
+    height: var(--pen-height);
+    pointer-events: none; /* clicks reach the textarea */
+}
+
+
 .legend-list {
     margin: var(--pico-spacing);
-    padding: 0;
+    padding: 0 0 0 var(--pico-spacing);
 }
 
 .legend-list li {

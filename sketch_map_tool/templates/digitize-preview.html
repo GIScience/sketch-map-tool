@@ -47,7 +47,17 @@
       <button type="button" class="bottom-sheet-handle" aria-label="{{ _('Close') }}"></button>
       <div class="sketchy h1 center-text">{{ _('Legend') }}</div>
       <div id="legend">
-        <ul id="legend-list" class="legend-list"></ul>
+        <form id="results-form" name="results-form" action="{{ url_for("digitize_pdf_map_post", lang=lang, uuid=uuid) }}" method="post" enctype=multipart/form-data>
+          <div class="legend-title-wrapper">
+            <textarea id="legend-title" name="legend-title" form="results-form" rows="1" placeholder="{{ _(' &plus; Add a custom title (optional)') }}" aria-label="{{ _('Legend title') }}" autocomplete="off"></textarea>
+            <svg class="legend-title-icon" xmlns="http://www.w3.org/2000/svg" viewBox="2440 1860 1780 2080" aria-hidden="true">
+              <path fill="#c60427" d="m 4112,2444 c 60,-143 -60,-341 -192,-432 l -802,1117 c 28,143 91,249 154,350 l 6,11 z m -255,-470 c -135,-60 -298,-37 -404,17 l -811,1072 c 37,35 89,55 149,57 74,9 163,-5 266,-31 z" />
+              <path fill="#7a000a" d="m 3441,1883 c 12,-15 35,-20 52,-6 17,11 20,34 6,49 l -857,1137 c 37,35 89,55 149,57 74,9 163,-5 266,-31 l 831,-1158 c 12,-14 35,-20 52,-5 17,11 20,34 9,48 l -831,1155 c 28,143 91,249 154,350 l 6,11 868,-1089 c 12,-17 35,-20 52,-5 14,11 17,34 6,48 l -900,1132 c -3,3 -6,6 -12,9 0,0 -2,3 -5,3 l -608,260 -183,78 v 0 c -6,3 -12,3 -17,3 -20,-3 -35,-21 -32,-41 l 23,-183 89,-642 c 0,-6 3,-11 6,-17 z" />
+              <path fill="#fff" d="m 2622,3141 -75,541 138,89 536,-235 -12,-20 c -63,-100 -126,-206 -157,-353 -101,26 -189,38 -267,32 -63,-6 -117,-23 -163,-54 z" />
+            </svg>
+          </div>
+          <ul id="legend-list" class="legend-list"></ul>
+        </form>
       </div>
       <button id="desktop-submit-btn" class="download-link" type="submit" form="results-form" aria-busy="true" disabled="disabled">{{ _('Download Results') }} &rarr;</button>
     </div>
@@ -149,13 +159,12 @@
       </svg>
       <span>{{ _('Legend') }}</span>
     </button>
-      <button id="mobile-submit-btn" type="submit" form="results-form" aria-busy="true" disabled="disabled">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-          </svg>
-          <span>{{ _('Results') }}</span>
-      </button>
+    <button id="mobile-submit-btn" type="submit" form="results-form" aria-busy="true" disabled="disabled">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+      </svg>
+      <span>{{ _('Results') }}</span>
+    </button>
   </div>
 </main>
-<form id="results-form" name="results-form" action="{{ url_for("digitize_pdf_map_post", lang=lang, uuid=uuid) }}" method="post" enctype=multipart/form-data></form>
 {% endblock body %}
