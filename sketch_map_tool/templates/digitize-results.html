@@ -34,7 +34,7 @@
           <img src="{{ url_for("static", filename="assets/images/digitize-results/pdf-marking-icon.svg") }}" alt="{{ _('pdf map icon') }}"><br>
           <span class="brand-font sub-icon">{{ _('Map') }}</span>
         </header>
-{#          TODO change texts for pdf-map result#}
+        {#          TODO change texts for pdf-map result#}
         <h6>{{ _('Your Markings as PDF Map') }}</h6>
         <p class="pending">
           {{ _(
@@ -86,37 +86,37 @@
         <div id="vector-data-status" class="task-status"></div>
       </article>
     </div>
-      <div>
-          <article id="raster-data" class="result">
-              <header>
-                  <img src="{{ url_for("static", filename="assets/images/digitize-results/raster-marking-icon.svg") }}" alt="{{ _('raster data icon') }}"><br>
-                  <span class="brand-font sub-icon">{{ _('Georeferenced Images') }}</span>
-              </header>
-              <h6>{{ _('Your uploaded Sketch Maps as GeoTiffs') }}</h6>
-              <p class="pending">
-                  {{ _(
+    <div>
+      <article id="raster-data" class="result">
+        <header>
+          <img src="{{ url_for("static", filename="assets/images/digitize-results/raster-marking-icon.svg") }}" alt="{{ _('raster data icon') }}"><br>
+          <span class="brand-font sub-icon">{{ _('Georeferenced Images') }}</span>
+        </header>
+        <h6>{{ _('Your uploaded Sketch Maps as GeoTiffs') }}</h6>
+        <p class="pending">
+          {{ _(
                         'We are georeferencing your uploaded Sketch Maps.<br>
                         Opens in desktop mapping software like QGIS, ArcGIS, and many image editors.<br>
                         Please be patient this can take 2-10 minutes.'
                     ) }}
-              </p>
-              <p class="success hidden">
-                  {{ _(
+        </p>
+        <p class="success hidden">
+          {{ _(
                         'We have georeferenced your uploaded Sketch Maps.<br>
                         Opens in desktop mapping software like QGIS, ArcGIS, and many image editors.<br>'
                     ) }}
-              </p>
-              <p class="error hidden">
-                  {{ _(
+        </p>
+        <p class="error hidden">
+          {{ _(
                         'Sorry!<br>
                         Something went wrong while trying to generate the result.'
                     ) }}
-              </p>
-              <a id="raster-data-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download Images') }}</a>
-              <div id="raster-data-status" class="task-status"></div>
+        </p>
+        <a id="raster-data-download-button" href="#" download aria-busy="true" role="button" disabled="disabled">{{ _('Download Images') }}</a>
+        <div id="raster-data-status" class="task-status"></div>
 
-          </article>
-      </div>
+      </article>
+    </div>
   </div>
 </main>
 {% endblock body %}
