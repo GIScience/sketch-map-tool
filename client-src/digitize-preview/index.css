@@ -159,7 +159,7 @@
 }
 
 /* symbols keep the size they have on the map, larger ones (e.g. pins) shrink to fit the box */
-.legend-symbol canvas {
+.legend-symbol img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;

@@ -6,7 +6,8 @@ import Style, { type StyleFunction } from "ol/style/Style";
 
 export type LegendGeometryType = "point" | "polygon";
 
-export interface LegendEntry {
+/** Features grouped by color and geometry type (internal, holds an OpenLayers feature). */
+export interface RawLegendEntry {
     /** color name, e.g. "blue" (the "color" property of the features) */
     color: string;
     /** hex value of the color, e.g. "#0E6EB8" ("marker-color" for points, "fill" for polygons) */
@@ -16,6 +17,25 @@ export interface LegendEntry {
     count: number;
     /** the first feature of this group, used to draw the legend symbol with the layer's style function */
     feature: FeatureLike;
+}
+
+/**
+ * Serializable legend entry: used to render the legend in the preview and sent as JSON
+ * with the results form ("legend-entries") to the backend (keep in sync with LegendEntry in
+ * sketch_map_tool/models.py).
+ */
+export interface LegendEntry {
+    color: string;
+    hex: string;
+    type: LegendGeometryType;
+    count: number;
+    /** display name, initially the color name */
+    label: string;
+    /** legend symbol as PNG data URL ("data:image/png;base64,..."), empty if it could not be drawn */
+    image: string;
+    /** size of the symbol in CSS pixels, the image is drawn at LEGEND_PIXEL_RATIO times this size */
+    width: number;
+    height: number;
 }
 
 /**
@@ -32,6 +52,9 @@ function colorRank(color: string): number {
 
 /** Size of the square drawn for polygons, in CSS pixels. */
 const POLYGON_SYMBOL_SIZE = 16;
+
+/** Fixed pixel ratio of the symbol images (independent of the screen), sharp enough for print. */
+const LEGEND_PIXEL_RATIO = 4;
 
 function getLegendGeometryType(feature: FeatureLike): LegendGeometryType | undefined {
     switch (feature.getGeometry()?.getType()) {
@@ -50,8 +73,8 @@ function getLegendGeometryType(feature: FeatureLike): LegendGeometryType | undef
  * Counts the features per color and geometry type (points and polygons, other geometries are ignored).
  * Points come first, then polygons, each in the fixed color order (COLOR_ORDER).
  */
-export function summarizeFeatures(features: FeatureLike[]): LegendEntry[] {
-    const entries = new Map<string, LegendEntry>();
+export function summarizeFeatures(features: FeatureLike[]): RawLegendEntry[] {
+    const entries = new Map<string, RawLegendEntry>();
     for (const feature of features) {
         const type = getLegendGeometryType(feature);
         const color = feature.get("color");
@@ -112,21 +135,26 @@ function getImagesExtent(styles: Style[]): [number, number, number, number] | un
 }
 
 /**
- * Draws the legend symbol of an entry onto a canvas the same way OpenLayers draws the feature
+ * Draws the legend symbol of a group onto a canvas the same way OpenLayers draws the feature
  * on the map: the layer's style function is called with the entry's feature and each returned
  * style is rendered onto the canvas (for points e.g. the pin icon plus its marker-symbol on top).
  * Points are placed so that all their images fit the canvas, whatever their anchor
  * (pin tip for markerStyle "pin", center for "shape"); polygons are drawn as a square
  * with the same fill and stroke as on the map.
+ * Returns the size of the symbol in CSS pixels.
  */
-async function drawLegendSymbol(canvas: HTMLCanvasElement, entry: LegendEntry, styleFunction: StyleFunction) {
+async function drawLegendSymbol(
+    canvas: HTMLCanvasElement,
+    group: RawLegendEntry,
+    styleFunction: StyleFunction,
+): Promise<[number, number]> {
     // resolution is not used by the simplestyle function
-    const styles = toStyleArray(styleFunction(entry.feature, 1));
+    const styles = toStyleArray(styleFunction(group.feature, 1));
     await loadImages(styles);
 
     let size: [number, number];
     let geometry: Point | Polygon;
-    if (entry.type === "point") {
+    if (group.type === "point") {
         const [minX, minY, maxX, maxY] = getImagesExtent(styles) ?? [-10, -10, 10, 10];
         size = [Math.ceil(maxX - minX), Math.ceil(maxY - minY)];
         geometry = new Point([-minX, -minY]);
@@ -137,40 +165,105 @@ async function drawLegendSymbol(canvas: HTMLCanvasElement, entry: LegendEntry, s
         geometry = new Polygon([[[1, 1], [s - 1, 1], [s - 1, s - 1], [1, s - 1], [1, 1]]]);
     }
 
-    // sets the canvas to `size` CSS pixels (drawn in device resolution), large symbols are scaled down via CSS
-    const vectorContext = toContext(canvas.getContext("2d")!, { size, pixelRatio: window.devicePixelRatio });
+    // sets the canvas to `size` CSS pixels, drawn in LEGEND_PIXEL_RATIO resolution
+    const vectorContext = toContext(canvas.getContext("2d")!, { size, pixelRatio: LEGEND_PIXEL_RATIO });
     for (const style of styles) {
         vectorContext.setStyle(style);
         vectorContext.drawGeometry(geometry);
     }
+    return size;
 }
 
 /**
- * Fills the legend list (`#legend-list`) with one entry per color and geometry type:
- * symbol (drawn with the layer's style function), color name and count, e.g. "📍 blue (3)".
+ * Turns the feature groups into serializable legend entries, drawing each symbol
+ * (with the layer's style function) into a PNG data URL.
  */
-export function renderLegend(entries: LegendEntry[], styleFunction: StyleFunction) {
-    const items = entries.map((entry) => {
-        const item = document.createElement("li");
-        item.title = `${entry.color} ${entry.type === "point" ? "points" : "areas"}: ${entry.count}`;
+export async function buildLegendEntries(groups: RawLegendEntry[], styleFunction: StyleFunction): Promise<LegendEntry[]> {
+    return Promise.all(groups.map(async (group) => {
+        const { color, hex, type, count } = group;
+        const entry: LegendEntry = { color, hex, type, count, label: color, image: "", width: 0, height: 0 };
+        try {
+            const canvas = document.createElement("canvas");
+            [entry.width, entry.height] = await drawLegendSymbol(canvas, group, styleFunction);
+            entry.image = canvas.toDataURL("image/png");
+        } catch (error) {
+            console.error("Could not draw legend symbol", color, type, error);
+        }
+        return entry;
+    }));
+}
 
-        const symbol = document.createElement("span");
-        symbol.className = `legend-symbol legend-${entry.type}`;
-        symbol.setAttribute("aria-hidden", "true");
-        const canvas = document.createElement("canvas");
-        symbol.append(canvas);
-        drawLegendSymbol(canvas, entry, styleFunction).catch((error) => {
-            console.error("Could not draw legend symbol", entry, error);
+/**
+ * The legend of the preview: holds the entries (the single source of truth), renders them into
+ * a list element and serializes them (`JSON.stringify(legend)`) for the backend.
+ */
+export class Legend {
+    private legendEntries: LegendEntry[] = [];
+
+    constructor(private readonly list: HTMLUListElement) {}
+
+    /** Copies of the entries: changing them does not change the legend (use the setters for that). */
+    getLegendEntries(): LegendEntry[] {
+        return this.legendEntries.map((entry) => ({ ...entry }));
+    }
+
+    setLegendEntries(entries: LegendEntry[]) {
+        this.legendEntries = entries.map((entry) => ({ ...entry }));
+        this.render();
+    }
+
+    /** Groups the features and draws their symbols with the layer's style function. */
+    async fromFeatures(features: FeatureLike[], styleFunction: StyleFunction) {
+        this.setLegendEntries(await buildLegendEntries(summarizeFeatures(features), styleFunction));
+    }
+
+    /** Changes the display name of the entry at `index`. */
+    setLabel(index: number, label: string) {
+        const entry = this.legendEntries[index];
+        if (!entry) throw new RangeError(`No legend entry at index ${index}`);
+        entry.label = label;
+        this.render();
+    }
+
+    /** Used by `JSON.stringify(legend)`: the entries as sent to the backend. */
+    toJSON(): LegendEntry[] {
+        return this.getLegendEntries();
+    }
+
+    /** Adds the entries as JSON to the data of `form` whenever it is submitted. */
+    attachToForm(form: HTMLFormElement, name = "legend-entries") {
+        form.addEventListener("formdata", (event) => {
+            event.formData.set(name, JSON.stringify(this));
         });
+    }
 
-        const count = document.createElement("span");
-        count.className = "legend-count";
-        count.textContent = `(${entry.count})`;
+    /** Fills the list with one item per entry: symbol image, label and count, e.g. "📍 blue (3)". */
+    render() {
+        this.list.replaceChildren(...this.legendEntries.map(renderEntry));
+    }
+}
 
-        item.append(symbol, entry.color, " ", count);
-        return item;
-    });
-    document.querySelector<HTMLUListElement>("#legend-list")!.replaceChildren(...items);
+function renderEntry(entry: LegendEntry): HTMLLIElement {
+    const item = document.createElement("li");
+    item.title = `${entry.color} ${entry.type === "point" ? "points" : "areas"}: ${entry.count}`;
+
+    const symbol = document.createElement("span");
+    symbol.className = `legend-symbol legend-${entry.type}`;
+    if (entry.image) {
+        const image = document.createElement("img");
+        image.src = entry.image;
+        image.width = entry.width;
+        image.height = entry.height;
+        image.alt = `${entry.color} ${entry.type}`;
+        symbol.append(image);
+    }
+
+    const count = document.createElement("span");
+    count.className = "legend-count";
+    count.textContent = `(${entry.count})`;
+
+    item.append(symbol, entry.label, " ", count);
+    return item;
 }
 
 export function initLegendInfo() {
@@ -179,7 +272,7 @@ export function initLegendInfo() {
 
     infoButton?.addEventListener("click", () => infoPanel?.toggleAttribute("hidden"));
     infoButton?.addEventListener("keydown", (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
+        if (event.key === "Enter" || event.key === " ") {
             // Prevent Space from scrolling the page down
             event.preventDefault();
             infoPanel?.toggleAttribute("hidden");

@@ -9,7 +9,7 @@ import {
 import { pollVectorResults, ResultStatus } from "./pollVectorResults";
 import { addGeoJSONPreviewLayer, createPreviewMap } from "./map";
 import { showProcessingErrorsBelowMap } from "./error-handling";
-import { initLegendInfo, initLegendTitle, renderLegend, summarizeFeatures } from "./legend";
+import { initLegendInfo, initLegendTitle, Legend } from "./legend";
 
 /**
  * This is the main script which is invoked after DOM Content of digitize-preview.html is loaded.
@@ -31,6 +31,8 @@ const vectorResultsUrl = `/api/status/${getUUIDFromURL()}/vector-results`;
 initBottomSheets();
 initLegendInfo();
 initLegendTitle();
+const legend = new Legend(document.querySelector<HTMLUListElement>("#legend-list")!);
+legend.attachToForm(document.querySelector<HTMLFormElement>("#results-form")!, "legend-entries");
 
 const previewMap = await createPreviewMap(layer, bbox);
 
@@ -49,8 +51,9 @@ if (response.status == 200 && jsonBody) {
     const vectorSource = resultLayer.getSource()!;
 
     // analyze vector features and display them in the legend
-    vectorSource.on("featuresloadend", (event) => {
-        renderLegend(summarizeFeatures(event.features ?? []), resultLayer.getStyleFunction()!);
+    // (the submit buttons are enabled after the legend entries incl. their symbol images are built)
+    vectorSource.on("featuresloadend", async (event) => {
+        await legend.fromFeatures(event.features ?? [], resultLayer.getStyleFunction()!);
         setDisabled("mobile-submit-btn", false);
         setDisabled("desktop-submit-btn", false);
         setIsBusy("mobile-submit-btn", false);

@@ -1,7 +1,14 @@
+import base64
+import json
+from io import BytesIO
+
 import pytest
+from PIL import Image
+from pydantic import ValidationError
 from shapely.geometry import Point
 
 from sketch_map_tool import models
+from sketch_map_tool.models import Legend, LegendEntry, legend_entries_adapter
 
 
 @pytest.fixture
@@ -58,3 +65,58 @@ def test_literatur_reference():
         "ISPRS International Journal of Geo-Information. 10:130."
     )
     assert literature_reference.url == "https://doi.org/10.3390/ijgi10030130"
+
+
+def _png_data_url(size=(4, 4)) -> str:
+    buffer = BytesIO()
+    Image.new("RGBA", size).save(buffer, format="PNG")
+    return "data:image/png;base64," + base64.b64encode(buffer.getvalue()).decode()
+
+
+def _legend_entry(**kwargs) -> dict:
+    return {
+        "color": "blue",
+        "hex": "#0E6EB8",
+        "type": "point",
+        "count": 3,
+        "label": "blue",
+        "image": _png_data_url(),
+        "width": 20,
+        "height": 30,
+        **kwargs,
+    }
+
+
+def test_legend_entry():
+    entry = LegendEntry(**_legend_entry())
+    assert entry.image_bytes().startswith(b"\x89PNG")
+
+
+def test_legend_entry_without_image():
+    entry = LegendEntry(**_legend_entry(image=""))
+    assert entry.image_bytes() is None
+
+
+@pytest.mark.parametrize(
+    "image",
+    [
+        "data:image/jpeg;base64,AAAA",
+        "data:image/png;base64,not base64!",
+        "data:image/png;base64," + base64.b64encode(b"GIF89a").decode(),
+        "data:image/png;base64," + "A" * 300_000,
+    ],
+)
+def test_legend_entry_invalid_image(image):
+    with pytest.raises(ValidationError):
+        LegendEntry(**_legend_entry(image=image))
+
+
+def test_legend_entries_from_json():
+    entries = legend_entries_adapter.validate_json(json.dumps([_legend_entry()]))
+    legend = Legend(title="Title", entries=entries)
+    assert legend.entries[0].label == "blue"
+
+
+def test_legend_entries_too_many():
+    with pytest.raises(ValidationError):
+        legend_entries_adapter.validate_json(json.dumps([_legend_entry()] * 51))
