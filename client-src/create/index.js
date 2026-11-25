@@ -2,6 +2,8 @@ import "ol/ol.css";
 import "@giscience/ol-print-layout-control/dist/ol-print-layout-control.css";
 import "ol-geocoder/dist/ol-geocoder.css";
 import "./geocoder.css";
+import "../shared/bottom-sheet.css";
+import "../shared/map-page-layout.css";
 import "./create.css";
 
 import {
@@ -12,7 +14,7 @@ import {
 } from "../shared/map/map.js";
 import { bindFormToLayerSwitcherControl, bindFormToPrintLayoutControl } from "./form.js";
 import { MessageController } from "./messageController";
-import { getSanitizedUrlSearchParams, setUrlSearchParams } from "../shared";
+import { getSanitizedUrlSearchParams, initBottomSheets, setUrlSearchParams } from "../shared";
 import { addOAMLayer, addUserLayerControl, getOAMItemId, isOAMLayer } from "../shared/map/oamLayer";
 
 
@@ -29,6 +31,9 @@ const {
 setUrlSearchParams({
     center, zoom, layer, orientation, format,
 });
+
+// page setup bottom sheet on mobile
+initBottomSheets();
 
 const map = await createMap("map", center, zoom, layer);
 const printLayoutControl = addPrintLayoutControl(map, format, orientation);

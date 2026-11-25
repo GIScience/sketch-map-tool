@@ -9,7 +9,7 @@
 {% endblock head %}
 
 {% block header_message %}
-<div class="circle" style="display: inline-block" ;>1</div>{{ _('Create paper maps to collect data') }}
+<div class="circle" style="display: inline-block">1</div>{{ _('Create paper maps to collect data') }}
 {% endblock %}
 
 {% block body %}
@@ -23,9 +23,12 @@
   <div id="main-grid" class="grid">
     <div id="left">
       <div class="sketchy h1 center-text">{{ _('Area of Interest') }}</div>
-      <div id="map"></div>
+      <div class="map-wrapper">
+        <div id="map"></div>
+      </div>
     </div>
-    <div id="right">
+    <div id="right" class="bottom-sheet" role="region" aria-label="{{ _('Page Setup') }}">
+      <button type="button" class="bottom-sheet-handle" aria-label="{{ _('Close') }}"></button>
       <div class="sketchy h1 center-text">{{ _('Page Setup') }}</div>
       <div id="message-container" hidden>
         <article id="antimeridian-info" hidden class="infobox">{{ _('You are currently trying to
@@ -118,5 +121,21 @@
     </dialog>
   </div>
 
+  <!-- mobile only (< 992px): fixed bottom navigation bar, toggles the page setup bottom sheet -->
+  <div class="bottom-nav">
+    <button type="button" id="page-setup-toggle" aria-controls="right" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+        <path fill-rule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1z" />
+      </svg>
+      <span>{{ _('Page Setup') }}</span>
+      <span class="badge" id="page-setup-warnings-count"></span>
+    </button>
+    <button type="button" id="mobile-next-button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+      </svg>
+      <span>{{ _('NEXT') }}</span>
+    </button>
+  </div>
 </main>
 {% endblock body %}

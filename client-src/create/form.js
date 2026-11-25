@@ -120,11 +120,13 @@ function bindFormToPrintLayoutControl(printLayoutControl, messageController) {
         });
 
     // make sure that bbox values are up-to-date before submitting the form
-    document.getElementById("next-button")
-        .addEventListener("click", () => {
+    // (NEXT button in the page setup panel on desktop, in the bottom navigation bar on mobile)
+    for (const nextButton of document.querySelectorAll("#next-button, #mobile-next-button")) {
+        nextButton.addEventListener("click", () => {
             printLayoutControl.handleBboxChange();
             document.querySelector("#page-setup-form").submit();
         });
+    }
 
     printLayoutControl.on("change:bbox", (event) => {
         // update the URL when the selection is changed  (e.g. to bookmark the current selection)

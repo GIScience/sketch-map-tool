@@ -46,18 +46,11 @@
     <div id="right" class="bottom-sheet" role="region" aria-label="{{ _('Legend') }}">
       <button type="button" class="bottom-sheet-handle" aria-label="{{ _('Close') }}"></button>
       <div class="sketchy h1 center-text">
-          {{ _('Map Title and Legend') }}
-          <button
-                  type="button"
-                  id="legend-info-btn"
-                  class="info-icon"
-                  title="More information about Legend Usage"
-                  aria-label="More information about Legend Usage"
-                  aria-expanded="false"
-                  aria-controls="legend-info-panel">&#x1F6C8;
-          </button>
+        {{ _('Map Title and Legend') }}
+        <button type="button" id="legend-info-btn" class="info-icon" title="More information about Legend Usage" aria-label="More information about Legend Usage" aria-expanded="false" aria-controls="legend-info-panel">&#x1F6C8;
+        </button>
       </div>
-        <div id="legend-info-panel" class="infobox" hidden>Title and Legend will be included in the PDF Map result, that can be downloaded in the next step.</div>
+      <div id="legend-info-panel" class="infobox" hidden>Title and Legend will be included in the PDF Map result, that can be downloaded in the next step.</div>
       <div id="legend">
         <form id="results-form" name="results-form" action="{{ url_for("digitize_pdf_map_post", lang=lang, uuid=uuid) }}" method="post" enctype=multipart/form-data>
           <div class="legend-title-wrapper">

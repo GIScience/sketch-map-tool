@@ -1,40 +1,30 @@
-@media screen and (width >= 992px) {
-    #main-grid.grid {
-        grid-template-columns: 2fr 1fr;
-    }
-}
-
-body > main {
-    padding: 3rem 0;
-}
-
-#map {
-    width: 100%;
-    height: 50vh;
-    flex: 1 0 auto;
-}
-
-#left {
-    display: flex;
-    flex-direction: column;
-}
-
-#right {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-}
-
 #next-button {
     min-width: 30%;
     margin: 0 auto;
     width: unset;
 }
 
-#message-container {
-    height: 11rem;
-    overflow-y: scroll;
-    padding: 1rem;
+/* mobile: the NEXT button is in the bottom navigation bar instead of in the page setup sheet */
+@media (width < 992px) {
+    #next-button {
+        display: none;
+    }
+}
+
+/*
+ * Desktop: the right panel does not count for the row height (only the map column does),
+ * so long content (e.g. warnings) scrolls the panel instead of the page.
+ */
+@media screen and (width >= 992px) {
+    #right {
+        contain: size;
+        overflow-y: auto;
+
+        /* room for the focus rings of the form elements, which the scroll container would clip;
+           the negative margin keeps the content aligned with the map column */
+        padding: var(--pico-outline-width);
+        margin: calc(-1 * var(--pico-outline-width));
+    }
 }
 
 #oam-info-dialog main {

@@ -1,6 +1,7 @@
 import "ol/ol.css";
 import "@giscience/ol-print-layout-control/dist/ol-print-layout-control.css";
 import "../shared/bottom-sheet.css";
+import "../shared/map-page-layout.css";
 import "./index.css";
 import {
     getSanitizedBboxParam, getSanitizedLayerParam, getUUIDFromURL, initBottomSheets,

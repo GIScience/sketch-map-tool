@@ -179,7 +179,7 @@ export function initLegendInfo() {
 
     infoButton?.addEventListener("click", () => infoPanel?.toggleAttribute("hidden"));
     infoButton?.addEventListener("keydown", (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
+        if (event.key === "Enter" || event.key === " ") {
             // Prevent Space from scrolling the page down
             event.preventDefault();
             infoPanel?.toggleAttribute("hidden");
