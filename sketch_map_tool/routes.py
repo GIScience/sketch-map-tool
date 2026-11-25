@@ -222,6 +222,7 @@ def digitize(lang="en") -> str:
 def digitize_results_post(lang="en") -> Response:
     """Upload files to create geodata results"""
     consent: bool = request.form.get("consent", "False") == "True"
+    expirimental: bool = request.form.get("expirimental", "False") == "True"
 
     if "file" not in request.files:
         return redirect(url_for("digitize", lang=lang))
@@ -247,6 +248,7 @@ def digitize_results_post(lang="en") -> Response:
                     map_frame.map_image_as_array(),
                     map_frame.layer,
                     bbox,
+                    expirimental,
                 )
             )
         )
