@@ -1,5 +1,17 @@
 // margins as defined in python: https://github.com/GIScience/sketch-map-tool/blob/add-sketchmap-generation/sketch_map_tool/printer/modules/paper_formats/paper_formats.py
-const MAP_MARGINS = {
+/** Paper formats supported by ol-print-layout-control (A5 is not). */
+export type PaperFormat = "A0" | "A1" | "A2" | "A3" | "A4" | "LEGAL" | "TABLOID" | "LETTER";
+export type Orientation = "landscape" | "portrait";
+
+/** Margins of the map frame on the paper, in cm. */
+export interface Margins {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+}
+
+const MAP_MARGINS: Record<PaperFormat, number> = {
     A0: 1.0,
     A1: 1.0,
     A2: 1.0,
@@ -9,7 +21,7 @@ const MAP_MARGINS = {
     TABLOID: 1.0,
     LETTER: 1.0,
 };
-const SKETCH_MAP_MARGINS = {
+const SKETCH_MAP_MARGINS: Record<PaperFormat, Record<Orientation, Margins>> = {
     A0: {
         landscape: {
             right: 15 + MAP_MARGINS.A0,

@@ -9,7 +9,7 @@ import VectorSource from "ol/source/Vector";
 import VectorLayer from "ol/layer/Vector";
 import { Fill, Stroke, Style, Text } from "ol/style";
 import { ScaleLine } from "ol/control";
-import { SKETCH_MAP_MARGINS } from "./sketchMapMargins.js";
+import { SKETCH_MAP_MARGINS } from "./sketchMapMargins";
 import { LayerSwitcher } from "./ol-LayerSwitcherControl";
 import { EsriAttributionService } from "./esriAttributionService";
 
