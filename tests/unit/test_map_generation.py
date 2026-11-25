@@ -20,7 +20,7 @@ from sketch_map_tool.map_generation.generate_pdf import (
     get_compass,
     pdf_page_to_img,
 )
-from sketch_map_tool.models import MapFrame, PaperFormat
+from sketch_map_tool.models import Legend, MapFrame, PaperFormat
 from tests import FIXTURE_DIR
 from tests import vcr_app as vcr
 
@@ -197,6 +197,7 @@ def test_generate_pdf_result_map_approval(
     sketch_map = generate_result_map_pdf(
         map_frame,
         markings,
+        Legend(title=""),
     )
     # NOTE: The resulting PDFs across multiple test runs have slight non-visual
     # differences leading to a failure when using `verify_binary` on the PDFs.
