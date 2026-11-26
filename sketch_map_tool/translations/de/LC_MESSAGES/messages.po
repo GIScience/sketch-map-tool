@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sketch-map-tool\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-24 16:22+0000\n"
-"PO-Revision-Date: 2026-11-24 16:22\n"
+"POT-Creation-Date: 2026-11-26 14:12+0000\n"
+"PO-Revision-Date: 2026-11-26 14:13\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.18.0\n"
+"Generated-By: Babel 2.19.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: sketch-map-tool\n"
 "X-Crowdin-Project-ID: 651528\n"
@@ -27,23 +27,23 @@ msgstr ""
 msgid "There are no tasks for UUID {UUID}"
 msgstr "Es gibt keine Aufgaben für UUID {UUID}"
 
-#: sketch_map_tool/routes.py:307
+#: sketch_map_tool/routes.py:308
 msgid "Result is not yet ready. Please try again later."
 msgstr ""
 
-#: sketch_map_tool/routes.py:359
+#: sketch_map_tool/routes.py:360
 msgid "None of your uploaded sketch maps could be processed. Please check the quality of your uploaded sketch maps (e.g. sharpness, lighting, completely visible map frame) and try again."
 msgstr ""
 
-#: sketch_map_tool/routes.py:370
+#: sketch_map_tool/routes.py:371
 msgid "Some of your uploaded sketch maps could not be processed."
 msgstr ""
 
-#: sketch_map_tool/routes.py:479
+#: sketch_map_tool/routes.py:480
 msgid "Internal Server Error"
 msgstr ""
 
-#: sketch_map_tool/routes.py:480
+#: sketch_map_tool/routes.py:481
 msgid "Oops... we seem to have made a mistake, sorry!"
 msgstr ""
 
