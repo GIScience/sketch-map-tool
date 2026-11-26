@@ -1,8 +1,7 @@
-"""Generate a sketch map PDF."""
-
 import io
 from io import BytesIO
 from typing import Tuple
+from xml.sax.saxutils import escape
 
 import cv2
 import pymupdf
@@ -17,7 +16,8 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen.canvas import FILL_EVEN_ODD, Canvas
-from reportlab.platypus import Frame, Paragraph, flowables
+from reportlab.platypus import Flowable, Frame, Paragraph, Table, TableStyle, flowables
+from reportlab.platypus import Image as RLImage
 from svglib.svglib import svg2rlg
 
 from sketch_map_tool import definitions
@@ -192,6 +192,19 @@ def _generate_pdf(
     return map_pdf, map_img
 
 
+def image_to_flowable(
+    image: BytesIO,
+    max_width: float,
+    width: float,
+    height: float,
+) -> RLImage:
+    """Convert a image to a platypus Image scaled to max_width, keeping aspect ratio."""
+    scale = max_width / width
+    img = RLImage(image, width=max_width, height=height * scale)
+    img.hAlign = "LEFT"
+    return img
+
+
 def draw_right_column(
     canvas: Canvas,
     width: float,
@@ -209,19 +222,27 @@ def draw_right_column(
     heading_style = scale_style(format_, "Heading1", 50)
     em = normal_style.fontSize  # ty: ignore[unresolved-attribute]
 
-    # Add Logos
-    logo_width = width - margin
+    max_width = width - margin
     smt_logo = svg2rlg(PDF_RESOURCES_PATH / "SketchMap_Logo.svg")
-    smt_logo = resize_rlg_by_width(smt_logo, logo_width)
+    smt_logo = resize_rlg_by_width(smt_logo, max_width)
+
+    # logo_width = width - margin
+    # smt_logo2= svg2rlg(PDF_RESOURCES_PATH / "SketchMap_Logo.svg")
+    # smt_logo2 = resize_rlg_by_width(smt_logo, logo_width)
+
     compass_size = width * 0.20  # this is the current ratio of the right column width
     compass = get_compass(compass_size, portrait)
 
     p_created_by_heigit = Paragraph("Created by HeiGIT gGmbH", normal_style)
     p_copyright = Paragraph(get_attribution(layer), normal_style)
 
-    legend_elements = []
-    if legend is not None:
-        legend_elements.append(Paragraph(legend.title, heading_style))
+    legend_elements = create_legend_elements(
+        legend,
+        max_width,
+        em,
+        heading_style,
+        normal_style,
+    )
 
     qr_size = min(width, height) - margin
     if qr_code is not None:
@@ -235,6 +256,7 @@ def draw_right_column(
     # order all elements in column
     flowables_ = [
         smt_logo,
+        # smt_logo2,
         flowables.Spacer(width, 2 * em),
         # heigit_logo,
         *legend_elements,
@@ -289,6 +311,63 @@ def pil_image_to_image_reader(map_image_input, img_format):
     map_image_input.save(map_image_raw, format=img_format)
     map_image_reportlab = ImageReader(map_image_raw)
     return map_image_reportlab
+
+
+def create_legend_elements(
+    legend: Legend | None,
+    max_width: float,
+    em,
+    heading_style,
+    normal_style,
+) -> list[Flowable] | list:
+    if legend is None:
+        return []
+
+    legend_elements = []
+    legend_elements.append(Paragraph(escape(legend.title), heading_style))
+
+    if len(legend.entries) == 0:
+        return legend_elements
+
+    icon_width = max([entry.width for entry in legend.entries])
+    gap = 1 * em
+    label_width = max_width - icon_width
+
+    rows = []
+    for entry in legend.entries:
+        icon = image_to_flowable(
+            BytesIO(entry.image),
+            icon_width - gap,
+            entry.width,
+            entry.height,
+        )
+        label = Paragraph(f"{escape(entry.label)} ({entry.count})", normal_style)
+        rows.append([icon, label])
+
+    legend_table = Table(
+        rows,
+        colWidths=[icon_width, label_width],
+        hAlign="LEFT",
+    )
+    legend_table.setStyle(
+        TableStyle(
+            [
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("LEFTPADDING", (0, 0), (-1, -1), 0),
+                (
+                    "RIGHTPADDING",
+                    (0, 0),
+                    (0, -1),
+                    gap,
+                ),  # space between icon and text
+                ("RIGHTPADDING", (1, 0), (1, -1), 0),
+                ("TOPPADDING", (0, 0), (-1, -1), 0.25 * em),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 0.25 * em),
+            ]
+        )
+    )
+    legend_elements.append(legend_table)
+    return legend_elements
 
 
 def create_map_frame(

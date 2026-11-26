@@ -15,7 +15,6 @@ from flask import (
     url_for,
 )
 from flask_babel import gettext
-from pydantic import ValidationError
 from werkzeug import Response
 
 from sketch_map_tool import celery_app, definitions, tasks, usage_charts
@@ -44,13 +43,7 @@ from sketch_map_tool.helpers import (
     transform_layer_name,
     zip_,
 )
-from sketch_map_tool.models import (
-    Bbox,
-    Legend,
-    PaperFormat,
-    Size,
-    legend_entries_adapter,
-)
+from sketch_map_tool.models import Bbox, Legend, PaperFormat, Size
 from sketch_map_tool.style_geojson import style
 from sketch_map_tool.tasks import (
     cleanup_blobs,
@@ -303,13 +296,8 @@ def digitize_pdf_map_post(lang="en", uuid: str | None = None) -> Response:
     uuid_ = validate_uuid(uuid)
 
     title = request.form.get("legend-title", "")
-    try:
-        entries = legend_entries_adapter.validate_json(
-            request.form.get("legend-entries", "[]")
-        )
-    except ValidationError:
-        logging.warning("Invalid legend entries, the legend will have no entries.")
-        entries = []
+    entries = json.loads(request.form.get("legend-entries", "[]"))
+
     legend = Legend(title=title, entries=entries)
 
     map_frame_uuid = db_client_flask.select_map_frame_uuid(uuid_)

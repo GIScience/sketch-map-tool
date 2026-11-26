@@ -1,3 +1,4 @@
+import json
 import os
 from io import BytesIO
 from pathlib import Path
@@ -20,7 +21,7 @@ from sketch_map_tool.map_generation.generate_pdf import (
     get_compass,
     pdf_page_to_img,
 )
-from sketch_map_tool.models import Legend, MapFrame, PaperFormat
+from sketch_map_tool.models import Legend, LegendEntry, MapFrame, PaperFormat
 from tests import FIXTURE_DIR
 from tests import vcr_app as vcr
 
@@ -63,6 +64,14 @@ def qr_code_approval(uuid, bbox, monkeypatch):
         "2026.7.2",
     )
     return generate_qr_code(uuid, bbox, "osm", A4)
+
+
+@pytest.fixture
+def legend_entries() -> list[LegendEntry]:
+    path = FIXTURE_DIR / "legend_entries.json"
+    with open(path, "r") as file:
+        entries = json.load(file)
+    return [LegendEntry(**entry) for entry in entries]
 
 
 @pytest.mark.parametrize("paper_format", [A0, A1, A2, A3, A4, LETTER, TABLOID])
@@ -147,6 +156,7 @@ def test_generate_pdf_result_map_approval(
     bbox_wgs84,
     paper_format,
     orientation,
+    legend_entries: list[LegendEntry],
 ) -> None:
     markings = FeatureCollection(
         features=[
@@ -194,11 +204,13 @@ def test_generate_pdf_result_map_approval(
         orientation=orientation,
         layer="osm",
     )
+
     sketch_map = generate_result_map_pdf(
         map_frame,
         markings,
-        Legend(title=""),
+        Legend(title="", entries=legend_entries),
     )
+
     # NOTE: The resulting PDFs across multiple test runs have slight non-visual
     # differences leading to a failure when using `verify_binary` on the PDFs.
     # That is why here they are converted to images for comparison first.
