@@ -1,5 +1,3 @@
-import base64
-import binascii
 from dataclasses import dataclass
 from io import BytesIO
 from typing import Annotated, Literal
@@ -7,7 +5,15 @@ from typing import Annotated, Literal
 import shapely
 from numpy.typing import NDArray
 from PIL import Image
-from pydantic import UUID4, BaseModel, Field, TypeAdapter, field_validator
+from pydantic import (
+    UUID4,
+    Base64Bytes,
+    BaseModel,
+    BeforeValidator,
+    Field,
+    field_validator,
+)
+from pydantic_extra_types import Color
 
 from sketch_map_tool.helpers import to_array
 
@@ -142,59 +148,51 @@ class MapFrame(BaseModel):
         return to_array(self.map_image)
 
 
-PNG_DATA_URL_PREFIX = "data:image/png;base64,"
-PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
-MAX_LEGEND_IMAGE_BYTES = 200_000
-MAX_LEGEND_ENTRIES = 50
+PNG_DATA_URL_PREFIX = "data:image/png;base64"
+MAX_PNG_SIZE = 128 * 128
+
+
+def strip_data_url_prefix(v: str) -> str:
+    if isinstance(v, str) and v.startswith("data:"):
+        header, sep, payload = v.partition(",")
+        if sep and header == PNG_DATA_URL_PREFIX:
+            return payload
+    raise ValueError("Not a valid data:image/png;base64 data URL")
+
+
+DataUrlBase64Bytes = Annotated[Base64Bytes, BeforeValidator(strip_data_url_prefix)]
 
 
 class LegendEntry(BaseModel):
     """Legend entry as rendered and sent by the client.
 
-    See client-src/digitize-preview/legend.ts. Comes from user input: validate
-    defensively.
+    See client-src/digitize-preview/legend.ts.
     """
 
-    color: str = Field(max_length=50)
-    hex: str = Field(max_length=20)
+    color: Color
+    hex: Color
     type: Literal["point", "polygon"]
     count: int = Field(ge=0)
-    label: str = Field(max_length=100)
-    # PNG data URL of the symbol, empty if the client could not draw it
-    image: str = ""
-    # size of the symbol in CSS pixels
-    width: float = Field(ge=0, le=500)
-    height: float = Field(ge=0, le=500)
+    label: str = Field(max_length=200)
+    image: DataUrlBase64Bytes
+    width: float = Field(ge=0, le=128)
+    height: float = Field(ge=0, le=128)
 
     @field_validator("image")
     @classmethod
-    def validate_image(cls, value: str) -> str:
-        if value == "":
-            return value
-        if not value.startswith(PNG_DATA_URL_PREFIX):
-            raise ValueError("image must be a PNG data URL")
-        # base64 needs 4 characters per 3 bytes
-        if len(value) - len(PNG_DATA_URL_PREFIX) > MAX_LEGEND_IMAGE_BYTES * 4 / 3 + 4:
-            raise ValueError("image is too large")
+    def validate_image(cls, value: DataUrlBase64Bytes) -> DataUrlBase64Bytes:
         try:
-            data = base64.b64decode(value[len(PNG_DATA_URL_PREFIX) :], validate=True)
-        except binascii.Error as error:
-            raise ValueError("image is not valid base64") from error
-        if not data.startswith(PNG_SIGNATURE):
-            raise ValueError("image is not a PNG")
+            img = Image.open(BytesIO(value))
+            img.verify()
+        except Exception as error:
+            raise ValueError("Not a valid PNG image") from error
+
+        if max(img.size) > MAX_PNG_SIZE:
+            raise ValueError("Image is too large")
+
         return value
-
-    def image_bytes(self) -> bytes | None:
-        """The decoded PNG image, None if there is none."""
-        if not self.image:
-            return None
-        return base64.b64decode(self.image[len(PNG_DATA_URL_PREFIX) :])
-
-
-LegendEntries = Annotated[list[LegendEntry], Field(max_length=MAX_LEGEND_ENTRIES)]
-legend_entries_adapter: TypeAdapter[list[LegendEntry]] = TypeAdapter(LegendEntries)
 
 
 class Legend(BaseModel):
-    title: str = ""
-    entries: LegendEntries = []
+    title: str = Field(default="", max_length=100)
+    entries: list[LegendEntry]

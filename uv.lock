@@ -2126,6 +2126,19 @@ wheels = [
 ]
 
 [[package]]
+name = "pydantic-extra-types"
+version = "2.11.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pydantic" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/66/71/dba38ee2651f84f7842206adbd2233d8bbdb59fb85e9fa14232486a8c471/pydantic_extra_types-2.11.1.tar.gz", hash = "sha256:46792d2307383859e923d8fcefa82108b1a141f8a9c0198982b3832ab5ef1049", size = 172002, upload-time = "2026-03-16T08:08:03.92Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/17/c1/3226e6d7f5a4f736f38ac11a6fbb262d701889802595cdb0f53a885ac2e0/pydantic_extra_types-2.11.1-py3-none-any.whl", hash = "sha256:1722ea2bddae5628ace25f2aa685b69978ef533123e5638cfbddb999e0100ec1", size = 79526, upload-time = "2026-03-16T08:08:02.533Z" },
+]
+
+[[package]]
 name = "pydantic-settings"
 version = "2.16.2"
 source = { registry = "https://pypi.org/simple" }
@@ -2719,6 +2732,7 @@ dependencies = [
     { name = "opencv-python-headless" },
     { name = "pillow" },
     { name = "psycopg2" },
+    { name = "pydantic-extra-types" },
     { name = "pydantic-settings" },
     { name = "pygal" },
     { name = "pygal-maps-world" },
@@ -2806,6 +2820,7 @@ requires-dist = [
     { name = "opencv-python-headless", specifier = ">=4.8.0.76,<5.0.0" },
     { name = "pillow", specifier = ">=13.0.0,<14.0.0" },
     { name = "psycopg2", specifier = ">=2.9.13,<3.0.0" },
+    { name = "pydantic-extra-types", extras = ["color"], specifier = ">=2.11.1,<3.0.0" },
     { name = "pydantic-settings", specifier = ">=2.12.0,<3.0.0" },
     { name = "pygal" },
     { name = "pygal-maps-world", specifier = ">=1.0.2,<2.0.0" },
