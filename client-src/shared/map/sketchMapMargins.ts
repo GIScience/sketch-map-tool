@@ -1,15 +1,9 @@
 // margins as defined in python: https://github.com/GIScience/sketch-map-tool/blob/add-sketchmap-generation/sketch_map_tool/printer/modules/paper_formats/paper_formats.py
-/** Paper formats supported by ol-print-layout-control (A5 is not). */
-export type PaperFormat = "A0" | "A1" | "A2" | "A3" | "A4" | "LEGAL" | "TABLOID" | "LETTER";
+import type { MarginPropsInCM } from "@giscience/ol-print-layout-control";
+import type { PaperFormat } from "../urlHelpers";
+
 export type Orientation = "landscape" | "portrait";
 
-/** Margins of the map frame on the paper, in cm. */
-export interface Margins {
-    top: number;
-    right: number;
-    bottom: number;
-    left: number;
-}
 
 const MAP_MARGINS: Record<PaperFormat, number> = {
     A0: 1.0,
@@ -17,11 +11,10 @@ const MAP_MARGINS: Record<PaperFormat, number> = {
     A2: 1.0,
     A3: 1.0,
     A4: 1.0,
-    LEGAL: 1.0,
     TABLOID: 1.0,
     LETTER: 1.0,
 };
-const SKETCH_MAP_MARGINS: Record<PaperFormat, Record<Orientation, Margins>> = {
+const SKETCH_MAP_MARGINS: Record<PaperFormat, Record<Orientation, MarginPropsInCM>> = {
     A0: {
         landscape: {
             right: 15 + MAP_MARGINS.A0,
@@ -97,20 +90,6 @@ const SKETCH_MAP_MARGINS: Record<PaperFormat, Record<Orientation, Margins>> = {
     //     "landscape": {right: 3},
     //     "portrait": {bottom: 3}
     // },
-    LEGAL: {
-        landscape: {
-            right: 5 + MAP_MARGINS.LEGAL,
-            bottom: MAP_MARGINS.LEGAL,
-            left: MAP_MARGINS.LEGAL,
-            top: MAP_MARGINS.LEGAL,
-        },
-        portrait: {
-            right: MAP_MARGINS.LEGAL,
-            bottom: 5 + MAP_MARGINS.LEGAL,
-            left: MAP_MARGINS.LEGAL,
-            top: MAP_MARGINS.LEGAL,
-        },
-    },
     // TABLOID is the same as LEDGER
     TABLOID: {
         landscape: {

@@ -3,6 +3,17 @@ import { CLASS_CONTROL, CLASS_UNSELECTABLE } from "ol/css";
 import "./ol-LayerSwitcherControl.css";
 import BaseLayer from "ol/layer/Base";
 import { Options } from "ol/control/Control";
+import type { EventsKey } from "ol/events";
+import type { ObjectEvent, ObjectOnSignature } from "ol/Object";
+import type { CombinedOnSignature, EventTypes, OnSignature } from "ol/Observable";
+import type { Types as ObjectEventTypes } from "ol/ObjectEventType";
+
+/** Events of {@link LayerSwitcher}: "change:activeLayer" is dispatched by `this.set("activeLayer", …)`. */
+export type LayerSwitcherEventTypes = "change:activeLayer";
+
+type LayerSwitcherOnSignature<Return> = ObjectOnSignature<Return>
+    & OnSignature<LayerSwitcherEventTypes, ObjectEvent, Return>
+    & CombinedOnSignature<EventTypes | ObjectEventTypes | LayerSwitcherEventTypes, Return>;
 
 /**
  * This layerSwitcher control is made to switch between one of 2 or more other baselayers.
@@ -55,6 +66,10 @@ import { Options } from "ol/control/Control";
  *      }
  */
 export class LayerSwitcher extends Control {
+
+    declare on: LayerSwitcherOnSignature<EventsKey>;
+    declare once: LayerSwitcherOnSignature<EventsKey>;
+    declare un: LayerSwitcherOnSignature<void>;
 
     baseCssClassName;
     button; //: HTMLButtonElement;

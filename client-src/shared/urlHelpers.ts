@@ -3,7 +3,15 @@ import type { Coordinate } from "ol/coordinate";
 import type { Extent } from "ol/extent";
 
 export type BaselayerType = "OSM" | "ESRI:World_Imagery" | `oam:${string}`;
-export type PaperFormat = typeof PAPER_FORMAT[keyof typeof PAPER_FORMAT];
+/** Paper formats of ol-print-layout-control that the application does not support. */
+const EXCLUDED_PAPER_FORMATS = [PAPER_FORMAT.BROADSHEET, PAPER_FORMAT.LEGAL] as const;
+
+/** Paper formats of the application: those of ol-print-layout-control without BROADSHEET and LEGAL. */
+export type PaperFormat = Exclude<typeof PAPER_FORMAT[keyof typeof PAPER_FORMAT], typeof EXCLUDED_PAPER_FORMATS[number]>;
+
+export function isPaperFormat(value: string): value is PaperFormat {
+    return !(EXCLUDED_PAPER_FORMATS as readonly string[]).includes(value) && Object.values<string>(PAPER_FORMAT).includes(value);
+}
 
 declare const uuid4Brand: unique symbol;
 
@@ -121,10 +129,10 @@ function getSanitizedUrlSearchParams() {
 
     let format: PaperFormat = PAPER_FORMAT.A4;
     if (formatArg != null) {
-        const key = formatArg.toUpperCase();
+        const value = formatArg.toUpperCase();
         // TODO: enable A0. Blocker is backend support of A0
-        if (key !== "A0" && key in PAPER_FORMAT) {
-            format = PAPER_FORMAT[key as keyof typeof PAPER_FORMAT];
+        if (value !== PAPER_FORMAT.A0 && isPaperFormat(value)) {
+            format = value;
         }
     }
     return {

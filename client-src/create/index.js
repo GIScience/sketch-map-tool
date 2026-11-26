@@ -12,7 +12,7 @@ import {
     addPrintLayoutControl,
     createMap,
 } from "../shared/map/map.js";
-import { bindFormToLayerSwitcherControl, bindFormToPrintLayoutControl } from "./form.js";
+import { bindFormToLayerSwitcherControl, bindFormToPrintLayoutControl } from "./form";
 import { MessageController } from "./messageController";
 import { getSanitizedUrlSearchParams, initBottomSheets, setUrlSearchParams } from "../shared";
 import { addOAMLayer, addUserLayerControl, getOAMItemId, isOAMLayer } from "../shared/map/oamLayer";
