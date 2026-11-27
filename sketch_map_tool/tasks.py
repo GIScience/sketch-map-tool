@@ -140,6 +140,7 @@ def digitize_sketches(
     sketch_map_frame: NDArray,
     layer: str,
     bbox: Bbox,
+    expirimental: bool = False,
 ) -> FeatureCollection:
     if layer == "osm":
         yolo_obj = yolo_obj_osm
@@ -159,7 +160,11 @@ def digitize_sketches(
     l = []  # noqa: E741
     for m in markings:
         m: BytesIO = georeference(m, bbox, bgr=False)
-        m: FeatureCollection = polygonize(m, layer_name=file_name)
+        m: FeatureCollection = polygonize(
+            m,
+            layer_name=file_name,
+            expirimental=expirimental,
+        )
         m: FeatureCollection = post_process(m, file_name, bbox)
         l.append(m)
     if len(l) == 0:
@@ -176,6 +181,7 @@ def upload_processing(
     map_image: NDArray,
     layer: str,
     bbox: Bbox,
+    expirimental: bool = False,
 ) -> (
     AsyncResult
     | tuple[
@@ -190,12 +196,7 @@ def upload_processing(
     sketch_map_frame = clip(to_array(sketch_map_uploaded), map_image)
     sketch_map_frame_georeferenced = georeference(sketch_map_frame, bbox)
     markings = digitize_sketches(
-        file_id,
-        file_name,
-        map_image,
-        sketch_map_frame,
-        layer,
-        bbox,
+        file_id, file_name, map_image, sketch_map_frame, layer, bbox, expirimental
     )
     attribution = get_attribution(layer)
     return (
